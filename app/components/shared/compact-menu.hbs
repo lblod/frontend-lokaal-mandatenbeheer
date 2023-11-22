@@ -5,24 +5,6 @@
   @title="Menu modules"
   @buttonLabel="Account settings"
 >
-  {{#if this.currentSession.canAccessToezicht}}
-    <AuLink @route="supervision.submissions" role="menuitem">
-      <AuIcon @icon="search-folder" @alignment="left" />
-      Toezicht
-    </AuLink>
-  {{/if}}
-  {{#if this.currentSession.canAccessBerichten}}
-    <AuLink @route="berichtencentrum.berichten" role="menuitem">
-      <AuIcon @icon="message" @alignment="left" />
-      Berichtencentrum
-    </AuLink>
-  {{/if}}
-  {{#if this.currentSession.canAccessBbcdr}}
-    <AuLink @route="bbcdr.rapporten" role="menuitem">
-      <AuIcon @icon="document" @alignment="left" />
-      BBC DR
-    </AuLink>
-  {{/if}}
   {{#if this.currentSession.canAccessMandaat}}
     <AuLink @route="mandatenbeheer.mandatarissen" role="menuitem">
       <AuIcon @icon="user-fill" @alignment="left" />
@@ -35,58 +17,10 @@
       Bedienarenbeheer
     </AuLink>
   {{/if}}
-  {{#if this.currentSession.canAccessLeidinggevenden}}
-    <AuLink @route="leidinggevendenbeheer.bestuursfuncties" role="menuitem">
-      <AuIcon @icon="user-popup" @alignment="left" />
-      Leidinggevendenbeheer
-    </AuLink>
-  {{/if}}
-  {{#if this.currentSession.canAccessPersoneelsbeheer}}
-    <AuLink @route="personeelsbeheer.personeelsaantallen.index" role="menuitem">
-      <AuIcon @icon="users" @alignment="left" />
-      Personeelsbeheer
-    </AuLink>
-  {{/if}}
-  {{#if this.currentSession.canAccessSubsidies}}
-    <AuLink @route="subsidy.applications.index" role="menuitem">
-      <AuIcon @icon="documents" @alignment="left" />
-      Subsidiebeheer
-    </AuLink>
-  {{/if}}
   {{#if this.currentSession.canAccessEredienstMandatenbeheer}}
     <AuLink @route="eredienst-mandatenbeheer.mandatarissen" role="menuitem">
       <AuIcon @icon="users-four-of-four" @alignment="left" />
       Mandatenbeheer
     </AuLink>
-  {{/if}}
-  {{#if this.currentSession.canAccessPublicServices}}
-    <AuLinkExternal
-      @icon="link-external"
-      @iconAlignment="left"
-      href={{(lpdc-url)}}
-      role="menuitem"
-    >
-      Producten- en dienstencatalogus
-    </AuLinkExternal>
-  {{/if}}
-  {{#if this.currentSession.canAccessWorshipDecisionsDb}}
-    <AuLinkExternal
-      @icon="link-external"
-      @iconAlignment="left"
-      href={{(worship-decisions-database-url)}}
-      role="menuitem"
-    >
-      Databank Erediensten
-    </AuLinkExternal>
-  {{/if}}
-  {{#if this.currentSession.canAccessWorshipOrganisationsDb}}
-    <AuLinkExternal
-      @icon="link-external"
-      @iconAlignment="left"
-      href={{(worship-organisations-database-url)}}
-      role="menuitem"
-    >
-      Organisaties Erediensten
-    </AuLinkExternal>
   {{/if}}
 </AuDropdown>
