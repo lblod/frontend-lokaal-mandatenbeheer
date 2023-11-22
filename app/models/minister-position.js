@@ -16,12 +16,6 @@ export default class MinisterPositionModel extends Post {
   })
   worshipService;
 
-  @belongsTo('representative-body', {
-    async: true,
-    inverse: 'ministerPosition',
-  })
-  representativeBody;
-
   @hasMany('minister', {
     async: true,
     inverse: 'ministerPosition',

@@ -7,18 +7,6 @@ export default class MinisterModel extends AgentInPosition {
     inverse: 'heldByMinisters',
   })
   ministerPosition;
-
-  @belongsTo('financing-code', {
-    async: true,
-    inverse: null,
-  })
-  financing;
-
-  @hasMany('minister-condition', {
-    async: true,
-    inverse: null,
-  })
-  conditions;
 }
 
 export async function validateFunctie(worshipMinister) {

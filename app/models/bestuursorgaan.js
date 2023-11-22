@@ -14,23 +14,11 @@ export default class BestuursorgaanModel extends Model {
   })
   bestuurseenheid;
 
-  @belongsTo('bestuursorgaan-classificatie-code', {
-    async: true,
-    inverse: null,
-  })
-  classificatie;
-
   @belongsTo('bestuursorgaan', {
     async: true,
     inverse: 'heeftTijdsspecialisaties',
   })
   isTijdsspecialisatieVan;
-
-  @belongsTo('rechtstreekse-verkiezing', {
-    async: true,
-    inverse: 'steltSamen',
-  })
-  wordtSamengesteldDoor;
 
   @hasMany('bestuursorgaan', {
     async: true,
