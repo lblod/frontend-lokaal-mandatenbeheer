@@ -1,4 +1,7 @@
-# frontend-loket
+# frontend-lokaal mandatenbeheer
+
+[!CAUTION]
+This readme is outdated at this stage.
 
 Frontend of the loket application
 
