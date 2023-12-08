@@ -1,0 +1,36 @@
+{{page-title "New"}}
+<div class="au-c-main-container">
+  <div
+    class="au-c-main-container__content au-c-main-container__content--scroll"
+  >
+    <section class="au-o-region-large">
+      <div class="au-o-layout">
+        <RdfForm
+          @groupClass="au-o-grid__item"
+          @form={{@model.form}}
+          @show={{false}}
+          @graphs={{this.model.graphs}}
+          @sourceNode={{this.model.sourceNode}}
+          @formStore={{this.model.formStore}}
+          @forceShowErrors={{true}}
+          @useNewListingLayout={{true}}
+          @level={{2}}
+          class="au-u-max-width-medium"
+        />
+        {{outlet}}
+      </div>
+    </section>
+    <section class="au-o-region-large">
+      <div class="au-o-layout">
+        <AuHeading
+          @level="2"
+          @skin="3"
+          class="au-u-margin-bottom"
+        >Content</AuHeading>
+        <p>
+          {{this.sourceTriples}}
+        </p>
+      </div>
+    </section>
+  </div>
+</div>
