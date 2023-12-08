@@ -11,43 +11,5 @@
         </AuNavigationLink>
       </li>
     {{/if}}
-    {{#if this.currentSession.canAccessWorshipMinisterManagement}}
-      <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="worship-ministers-management">
-          <AuIcon @icon="user" @alignment="left" />
-          Bedienarenbeheer
-        </AuNavigationLink>
-      </li>
-    {{/if}}
-    {{#if this.currentSession.canAccessEredienstMandatenbeheer}}
-      <AuNavigationLink @route="eredienst-mandatenbeheer.mandatarissen">
-        <AuIcon @icon="users-four-of-four" @alignment="left" />
-        Mandatenbeheer
-      </AuNavigationLink>
-    {{/if}}
-    {{#if this.currentSession.canAccessWorshipDecisionsDb}}
-      <li class="au-c-list-navigation__item">
-        <AuLinkExternal
-          @icon="link-external"
-          @iconAlignment="left"
-          class="au-c-list-navigation__link"
-          href={{(worship-decisions-database-url)}}
-        >
-          Databank Erediensten
-        </AuLinkExternal>
-      </li>
-    {{/if}}
-    {{#if this.currentSession.canAccessWorshipOrganisationsDb}}
-      <li class="au-c-list-navigation__item">
-        <AuLinkExternal
-          @icon="link-external"
-          @iconAlignment="left"
-          class="au-c-list-navigation__link"
-          href={{(worship-organisations-database-url)}}
-        >
-          Organisaties Erediensten
-        </AuLinkExternal>
-      </li>
-    {{/if}}
   </ul>
 </nav>
