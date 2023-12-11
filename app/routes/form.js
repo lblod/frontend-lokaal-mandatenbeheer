@@ -4,8 +4,10 @@ import { inject as service } from '@ember/service';
 export default class FormRoute extends Route {
   @service store;
   @service router;
+  @service session;
 
-  beforeModel() {
+  beforeModel(transition) {
+    this.session.requireAuthentication(transition, 'login');
     return this.router.replaceWith('form.new');
   }
 
