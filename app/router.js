@@ -36,35 +36,6 @@ Router.map(function () {
     this.route('fracties', function () {});
   });
 
-  this.route('eredienst-mandatenbeheer', function () {
-    this.route('mandatarissen');
-
-    this.route('mandataris', { path: '/mandataris/:mandateeId' }, function () {
-      this.route('details');
-      this.route('edit');
-    });
-    this.route('new');
-    this.route('new-person');
-  });
-
-  this.route(
-    'worship-ministers-management',
-    { path: 'bedienarenbeheer' },
-    function () {
-      this.route('new', { path: '/nieuw' });
-      this.route('new-person', { path: '/nieuw-bedienaar' });
-
-      this.route(
-        'minister',
-        { path: '/bedienaar/:worshipMinisterId' },
-        function () {
-          this.route('details', { path: '/bekijk' });
-          this.route('edit', { path: '/bewerk' });
-        }
-      );
-    }
-  );
-
   this.route('route-not-found', {
     path: '/*wildcard',
   });
