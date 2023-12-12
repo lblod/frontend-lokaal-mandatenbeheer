@@ -1,0 +1,20 @@
+steps:
+  install:
+    image: danlynn/ember-cli:4.8.0
+    commands:
+      - npm ci
+  release:
+    image: plugins/npm
+    settings:
+      token:
+        from_secret: npm_access_token
+  push-tagged-build:
+    image: plugins/docker
+    settings:
+      repo: lblod/frontend-lokaal-mandatenbeheer
+      tags: "${CI_COMMIT_TAG##v}"
+      purge: true
+    secrets: [docker_username, docker_password]
+when:
+  event: tag
+  ref: refs/tags/v*
