@@ -4,11 +4,6 @@ steps:
     commands:
       - npm ci
   release:
-    image: plugins/npm
-    settings:
-      token:
-        from_secret: npm_access_token
-  push-tagged-build:
     image: plugins/docker
     settings:
       repo: lblod/frontend-lokaal-mandatenbeheer
