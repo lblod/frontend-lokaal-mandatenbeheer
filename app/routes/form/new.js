@@ -3,10 +3,8 @@ import { inject as service } from '@ember/service';
 import { RDF, FORM } from '@lblod/submission-form-helpers';
 import { NamedNode } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-
-const FORM_GRAPH = new NamedNode('http://data.lblod.info/form');
-const META_GRAPH = new NamedNode('http://data.lblod.info/metagraph');
-const SOURCE_GRAPH = new NamedNode(`http://data.lblod.info/sourcegraph`);
+import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
+import { v4 as uuid } from 'uuid';
 
 export default class FormNewRoute extends Route {
   @service store;
@@ -15,7 +13,8 @@ export default class FormNewRoute extends Route {
     const instance = this.store.createRecord('form-instance', {
       definition: this.modelFor('form'),
       sourceTtl: '',
-      uri: 'http://data.lblod.info/form-data/instances/1',
+      // TODO allow forms to define their own prefix for uri generation: LMB-38
+      uri: `http://data.lblod.info/form-data/instances/${uuid()}`,
     });
 
     const formStore = new ForkingStore();
@@ -38,6 +37,7 @@ export default class FormNewRoute extends Route {
 
     return {
       instance,
+      definition,
       form: formNode,
       formStore,
       graphs,

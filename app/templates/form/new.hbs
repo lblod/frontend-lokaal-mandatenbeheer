@@ -20,6 +20,11 @@
         {{outlet}}
       </div>
     </section>
+    <div class="au-o-layout">
+      <AuButton {{on "click" this.createInstance}} @disabled={{this.isSaving}}>
+        Bewaar
+      </AuButton>
+    </div>
     <section class="au-o-region-large">
       <div class="au-o-layout">
         <AuHeading
