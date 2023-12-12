@@ -17,10 +17,6 @@ steps:
     image: danlynn/ember-cli:4.8.0
     commands:
       - npm run test:ember
-  precompile:
-    image: danlynn/ember-cli:4.8.0
-    commands:
-      - ember ts:precompile
 when:
   event:
     - pull_request
