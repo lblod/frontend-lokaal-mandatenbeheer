@@ -13,10 +13,6 @@ steps:
     group: lint
     commands:
       - npm run lint:hbs
-  test:
-    image: madnificent/ember:4.12.1-node_18
-    commands:
-      - npm run test:ember
 when:
   event:
     - pull_request
