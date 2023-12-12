@@ -6,7 +6,7 @@ import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { scheduleOnce } from '@ember/runloop';
 import { removeSimpleFormValue } from '@lblod/submission-form-helpers';
-import { MU, QB, RDF, XSD } from 'frontend-loket/rdf/namespaces';
+import { MU, QB, RDF, XSD } from 'frontend-lmb/rdf/namespaces';
 
 const climateBaseUri = 'http://data.lblod.info/vocabularies/subsidie/climate/';
 const climateTableBaseUri = 'http://data.lblod.info/climate-tables';

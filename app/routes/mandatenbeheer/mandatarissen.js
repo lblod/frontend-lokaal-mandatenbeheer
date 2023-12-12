@@ -3,7 +3,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { hash } from 'rsvp';
-import { getUniqueBestuursorganen } from 'frontend-loket/models/mandataris';
+import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
 export default class MandatenbeheerMandatarissenRoute extends Route.extend(

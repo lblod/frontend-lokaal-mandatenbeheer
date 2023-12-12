@@ -2,7 +2,7 @@
 
 module.exports = function (environment) {
   const ENV = {
-    modulePrefix: 'frontend-loket',
+    modulePrefix: 'frontend-lmb',
     environment,
     rootURL: '/',
     locationType: 'history',

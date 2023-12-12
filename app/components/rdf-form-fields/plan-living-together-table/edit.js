@@ -6,7 +6,7 @@ import { triplesForPath } from '@lblod/submission-form-helpers';
 import { scheduleOnce } from '@ember/runloop';
 import { NamedNode } from 'rdflib';
 import { v4 as uuidv4 } from 'uuid';
-import { MU, RDF } from 'frontend-loket/rdf/namespaces';
+import { MU, RDF } from 'frontend-lmb/rdf/namespaces';
 
 const planBaseUri =
   'http://lblod.data.gift/vocabularies/subsidie/plan-samenleven/';

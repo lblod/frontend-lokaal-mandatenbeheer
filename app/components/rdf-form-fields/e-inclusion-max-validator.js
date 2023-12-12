@@ -5,7 +5,7 @@ import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { NamedNode } from 'rdflib';
 import { scheduleOnce } from '@ember/runloop';
-import { LBLOD_SUBSIDIE } from 'frontend-loket/rdf/namespaces';
+import { LBLOD_SUBSIDIE } from 'frontend-lmb/rdf/namespaces';
 
 const lblodSubsidieBaseUri = 'http://lblod.data.gift/vocabularies/subsidie/';
 const amountPredicate = new NamedNode(`${lblodSubsidieBaseUri}amount`);

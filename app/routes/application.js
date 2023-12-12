@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { warn } from '@ember/debug';
-import ENV from 'frontend-loket/config/environment';
+import ENV from 'frontend-lmb/config/environment';
 import 'moment';
 import 'moment-timezone';
 

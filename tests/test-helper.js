@@ -1,5 +1,5 @@
-import Application from 'frontend-loket/app';
-import config from 'frontend-loket/config/environment';
+import Application from 'frontend-lmb/app';
+import config from 'frontend-lmb/config/environment';
 import * as QUnit from 'qunit';
 import { setApplication } from '@ember/test-helpers';
 import { setup } from 'qunit-dom';

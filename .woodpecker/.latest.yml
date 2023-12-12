@@ -1,0 +1,10 @@
+steps:
+  push-latest:
+    image: plugins/docker
+    settings:
+      repo: lblod/frontend-lokaal-mandatenbeheer
+      tags: latest
+    secrets: [docker_username, docker_password]
+when:
+  branch: master
+  event: push

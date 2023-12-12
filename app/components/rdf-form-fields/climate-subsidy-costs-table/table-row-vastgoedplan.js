@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { scheduleOnce } from '@ember/runloop';
-import { MU, RDF, XSD } from 'frontend-loket/rdf/namespaces';
+import { MU, RDF, XSD } from 'frontend-lmb/rdf/namespaces';
 
 const climateBaseUri = 'http://data.lblod.info/vocabularies/subsidie/climate/';
 const climateTableBaseUri = 'http://data.lblod.info/climate-tables';

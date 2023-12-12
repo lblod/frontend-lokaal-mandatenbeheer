@@ -17,7 +17,7 @@ import {
   costPredicate,
   validEstimatedCostTable,
 } from './base-table';
-import { MU, RDF } from 'frontend-loket/rdf/namespaces';
+import { MU, RDF } from 'frontend-lmb/rdf/namespaces';
 
 import commasToDecimalPointsFix from '../../../helpers/subsidies/subsidies-decimal-point';
 

@@ -6,7 +6,7 @@ import { literal, NamedNode } from 'rdflib';
 import { v4 as uuidv4 } from 'uuid';
 import { next } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
-import { LBLOD_SUBSIDIE, MU, RDF, XSD } from 'frontend-loket/rdf/namespaces';
+import { LBLOD_SUBSIDIE, MU, RDF, XSD } from 'frontend-lmb/rdf/namespaces';
 
 const applicationFormTableBaseUri =
   'http://data.lblod.info/application-form-tables';

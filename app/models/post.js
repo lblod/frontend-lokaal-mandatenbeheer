@@ -1,4 +1,4 @@
-import Model, { hasMany, belongsTo } from '@ember-data/model';
+import Model, { hasMany } from '@ember-data/model';
 
 export default class PostModel extends Model {
   @hasMany('agent-in-position', {
