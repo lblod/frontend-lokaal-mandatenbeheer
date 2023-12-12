@@ -10,7 +10,7 @@ import {
   isBirthDateKnown,
   isGenderKnown,
   isValidRijksregisternummer,
-} from 'frontend-loket/utils/rijksregisternummer';
+} from 'frontend-lmb/utils/rijksregisternummer';
 import moment from 'moment';
 
 const maleId = '5ab0e9b8a3b2ca7c5e000028';

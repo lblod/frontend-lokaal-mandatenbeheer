@@ -1,5 +1,5 @@
 import { init as initSentry } from '@sentry/ember';
-import config from 'frontend-loket/config/environment';
+import config from 'frontend-lmb/config/environment';
 
 export const SHOULD_ENABLE_SENTRY = config.sentry.dsn !== '{{SENTRY_DSN}}';
 

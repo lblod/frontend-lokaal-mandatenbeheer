@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import config from 'frontend-loket/config/environment';
+import config from 'frontend-lmb/config/environment';
 
 export default class GlobalSystemNotification extends Component {
   get notification() {

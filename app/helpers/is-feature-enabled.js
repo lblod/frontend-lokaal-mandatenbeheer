@@ -1,4 +1,4 @@
-import config from 'frontend-loket/config/environment';
+import config from 'frontend-lmb/config/environment';
 import { assert } from '@ember/debug';
 
 export default function isFeatureEnabled(featureName) {

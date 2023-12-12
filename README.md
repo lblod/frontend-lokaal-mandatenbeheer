@@ -1,7 +1,7 @@
 # frontend-lokaal-mandatenbeheer
 
 [!CAUTION]
-This readme is outdated at this stage. It was copied from frontend-loket and needs to be updated with the changed scope
+This readme is outdated at this stage. It was copied from frontend-lmb and needs to be updated with the changed scope
 
 Frontend of the loket application
 

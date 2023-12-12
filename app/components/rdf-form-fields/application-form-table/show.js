@@ -2,7 +2,7 @@ import InputFieldComponent from '@lblod/ember-submission-form-fields/components/
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { NamedNode } from 'rdflib';
-import { LBLOD_SUBSIDIE } from 'frontend-loket/rdf/namespaces';
+import { LBLOD_SUBSIDIE } from 'frontend-lmb/rdf/namespaces';
 
 const extBaseUri = 'http://mu.semte.ch/vocabularies/ext/';
 
