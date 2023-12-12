@@ -39,4 +39,7 @@ Router.map(function () {
   this.route('route-not-found', {
     path: '/*wildcard',
   });
+  this.route('form', { path: '/form/:id' }, function () {
+    this.route('new');
+  });
 });
