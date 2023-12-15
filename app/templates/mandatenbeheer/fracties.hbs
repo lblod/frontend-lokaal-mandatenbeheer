@@ -85,19 +85,19 @@
               </thead>
               <tbody>
                 {{#if this.newFractie}}
-                  {{mandatenbeheer/fractie-table-row
-                      onCancel=this.cancelEdit
-                      onSave=(perform this.saveFractie)
-                      fractie=this.newFractie
-                      editMode=true
-                  }}
+                  <Mandatenbeheer::FractieTableRow
+                    @onCancel={{this.cancelEdit}}
+                    @onSave={{(perform this.saveFractie)}}
+                    @fractie={{this.newFractie}}
+                    @editMode={{true}}
+                  />
                 {{/if}}
                 {{#each this.model as |row|}}
-                  {{mandatenbeheer/fractie-table-row
-                      onCancel=this.cancelEdit
-                      onSave=(perform this.saveFractie)
-                      fractie=row
-                  }}
+                  <Mandatenbeheer::FractieTableRow
+                    @onCancel={{this.cancelEdit}}
+                    @onSave={{(perform this.saveFractie)}}
+                    @fractie={{row}}
+                  />
                 {{else}}
                   {{#unless this.newFractie}}
                     <tr>
