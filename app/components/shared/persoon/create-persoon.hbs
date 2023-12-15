@@ -139,22 +139,20 @@
         </AuLabel>
         <div class="au-o-grid au-o-grid--tiny">
           <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-            <AuControlRadio
-              @label="Vrouw"
-              checked={{this.isFemale}}
+            <AuRadio
+              @checked={{this.isFemale}}
               @value={{this.female}}
               @onChange={{this.setGender}}
               @name="gender"
-            />
+            >Vrouw</AuRadio>
           </div>
           <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-            <AuControlRadio
-              @label="Man"
-              checked={{this.isMale}}
+            <AuRadio
+              @checked={{this.isMale}}
               @value={{this.male}}
               @name="gender"
               @onChange={{this.setGender}}
-            />
+            >Man</AuRadio>
           </div>
           {{#if this.errors.geslacht}}
             <AuHelpText @error="true">{{this.errors.geslacht}}</AuHelpText>

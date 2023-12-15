@@ -4,13 +4,12 @@
     <ul>
       {{#each this.subjectOptions as |option|}}
         <li>
-          <AuControlRadio
-            @label={{option.label}}
+          <AuRadio
             @value={{or option.subject option.label}}
             @name="contact-subject"
             @onChange={{fn (mut this.selected) option}}
-            checked={{eq this.subject option}}
-          />
+            @checked={{eq this.subject option}}
+          >{{option.label}}</AuRadio>
         </li>
       {{/each}}
     </ul>
