@@ -49,3 +49,5 @@ add|ember-template-lint|no-curly-component-invocation|89|14|89|14|725adc11514463
 add|ember-template-lint|no-curly-component-invocation|235|14|235|14|725adc1151446359f9c21ea54af318b7c01e474e|1678838400000|||app/components/mandatenbeheer/mandataris-edit.hbs
 add|ember-template-lint|no-curly-component-invocation|88|18|88|18|daf746c4fb4e39be85dc6448f01c0db64cd22fd3|1678838400000|||app/templates/mandatenbeheer/fracties.hbs
 add|ember-template-lint|no-curly-component-invocation|96|18|96|18|e3b84a15c08219bf7b7baae06f7aba4dcaba2ef9|1678838400000|||app/templates/mandatenbeheer/fracties.hbs
+remove|ember-template-lint|no-curly-component-invocation|88|18|88|18|daf746c4fb4e39be85dc6448f01c0db64cd22fd3|1678838400000|||app/templates/mandatenbeheer/fracties.hbs
+remove|ember-template-lint|no-curly-component-invocation|96|18|96|18|e3b84a15c08219bf7b7baae06f7aba4dcaba2ef9|1678838400000|||app/templates/mandatenbeheer/fracties.hbs
