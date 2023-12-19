@@ -23,7 +23,40 @@ export default class FormInstanceController extends Controller {
 
   @keepLatestTask
   *save() {
-    // TODO
+    const triples = this.sourceTriples;
+    const definition = this.model.definition;
+    const instanceId = this.model.instanceId;
+    this.errorMessage = null;
+    // post triples to backend
+    const result = yield fetch(
+      `/form-content/${definition.id}/instances/${instanceId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+        },
+        body: JSON.stringify({
+          contentTtl: triples,
+          instanceUri: this.model.sourceNode.value,
+        }),
+      }
+    );
+
+    if (!result.ok) {
+      this.errorMessage =
+        'Er ging iets mis bij het opslaan van het formulier. Probeer het later opnieuw.';
+      return;
+    }
+
+    const { id } = yield result.json();
+
+    if (!id) {
+      this.errorMessage =
+        'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.';
+      return;
+    }
+
+    this.router.refresh();
   }
 
   @action
