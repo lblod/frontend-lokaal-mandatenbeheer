@@ -8,7 +8,6 @@ export default class FormRoute extends Route {
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
-    return this.router.replaceWith('form.new');
   }
 
   async model({ id: semanticFormID }) {
