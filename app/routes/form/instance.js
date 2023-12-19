@@ -42,6 +42,11 @@ export default class FormInstanceRoute extends Route {
     };
   }
 
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.registerObserver();
+  }
+
   async loadForm(definition, store, instance, graphs) {
     store.parse(definition.formTtl, graphs.formGraph, 'text/turtle');
     store.parse(definition.metaTtl || '', graphs.metaGraph, 'text/turtle');
