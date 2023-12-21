@@ -33,7 +33,7 @@ export default class FormInstanceRoute extends Route {
     const sourceNode = new NamedNode(instanceUri);
 
     return {
-      instance: instanceUri,
+      instanceId: params.instance_id,
       definition,
       form: formNode,
       formStore,
