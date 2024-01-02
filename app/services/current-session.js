@@ -5,18 +5,8 @@ import config from 'frontend-lmb/config/environment';
 import { SHOULD_ENABLE_SENTRY } from 'frontend-lmb/utils/sentry';
 
 const MODULE = {
-  SUPERVISION: 'LoketLB-toezichtGebruiker',
-  BERICHTENCENTRUM: 'LoketLB-berichtenGebruiker',
-  BBCDR: 'LoketLB-bbcdrGebruiker',
   MANDATENBEHEER: 'LoketLB-mandaatGebruiker',
   LEIDINGGEVENDENBEHEER: 'LoketLB-leidinggevendenGebruiker',
-  PERSONEELSBEHEER: 'LoketLB-personeelsbeheer',
-  SUBSIDIES: 'LoketLB-subsidies',
-  WORSHIP_MINISTER_MANAGEMENT: 'LoketLB-eredienstBedienaarGebruiker',
-  EREDIENSTMANDATENBEHEER: 'LoketLB-eredienstMandaatGebruiker',
-  PUBLIC_SERVICES: 'LoketLB-LPDCGebruiker',
-  WORSHIP_DECISIONS_DB: 'LoketLB-databankEredienstenGebruiker',
-  WORSHIP_ORGANISATIONS_DB: 'LoketLB-eredienstOrganisatiesGebruiker',
 };
 
 export default class CurrentSessionService extends Service {
@@ -68,69 +58,11 @@ export default class CurrentSessionService extends Service {
     return this.roles.includes(role);
   }
 
-  get hasViewOnlyWorshipMinistersManagementData() {
-    return !!this.group.viewOnlyModules?.includes(
-      MODULE.WORSHIP_MINISTER_MANAGEMENT
-    );
-  }
-
-  get hasViewOnlyWorshipMandateesManagementData() {
-    return !!this.group.viewOnlyModules?.includes(
-      MODULE.EREDIENSTMANDATENBEHEER
-    );
-  }
-
-  get canAccessWorshipDecisionsDb() {
-    return (
-      this.canAccess(MODULE.WORSHIP_DECISIONS_DB) &&
-      !config.worshipDecisionsDatabaseUrl.startsWith('{{')
-    );
-  }
-
-  get canAccessWorshipOrganisationsDb() {
-    return (
-      this.canAccess(MODULE.WORSHIP_ORGANISATIONS_DB) &&
-      !config.worshipOrganisationsDatabaseUrl.startsWith('{{')
-    );
-  }
-
-  get canAccessToezicht() {
-    return this.canAccess(MODULE.SUPERVISION);
-  }
-
-  get canAccessBbcdr() {
-    return this.canAccess(MODULE.BBCDR);
-  }
-
   get canAccessMandaat() {
     return this.canAccess(MODULE.MANDATENBEHEER);
   }
 
-  get canAccessBerichten() {
-    return this.canAccess(MODULE.BERICHTENCENTRUM);
-  }
-
   get canAccessLeidinggevenden() {
     return this.canAccess(MODULE.LEIDINGGEVENDENBEHEER);
-  }
-
-  get canAccessPersoneelsbeheer() {
-    return this.canAccess(MODULE.PERSONEELSBEHEER);
-  }
-
-  get canAccessSubsidies() {
-    return this.canAccess(MODULE.SUBSIDIES);
-  }
-
-  get canAccessWorshipMinisterManagement() {
-    return this.canAccess(MODULE.WORSHIP_MINISTER_MANAGEMENT);
-  }
-
-  get canAccessEredienstMandatenbeheer() {
-    return this.canAccess(MODULE.EREDIENSTMANDATENBEHEER);
-  }
-
-  get canAccessPublicServices() {
-    return this.canAccess(MODULE.PUBLIC_SERVICES);
   }
 }
