@@ -9,6 +9,14 @@ export default class Bestuurseenheid extends Model {
   @attr isTrialUser;
   @attr viewOnlyModules;
 
+  @belongsTo('werkingsgebied', {
+    async: true,
+    inverse: 'bestuurseenheid',
+    polymorphic: true,
+    as: 'bestuurseenheid',
+  })
+  werkingsgebied;
+
   @belongsTo('bestuurseenheid-classificatie-code', {
     async: true,
     inverse: null,
