@@ -37,6 +37,76 @@ export default class SharedBreadCrumbComponent extends Component {
         { label: 'Beheer fracties' },
       ],
     },
+    {
+      route: 'leidinggevendenbeheer.bestuursfuncties.index',
+      crumbs: [{ label: 'Leidinggevendenbeheer' }],
+    },
+    {
+      route:
+        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.index',
+      crumbs: [
+        {
+          label: 'Leidinggevendenbeheer',
+          link: 'leidinggevendenbeheer.bestuursfuncties',
+        },
+        { label: 'Functionaris' },
+      ],
+    },
+    {
+      route:
+        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.edit',
+      crumbs: [
+        {
+          label: 'Leidinggevendenbeheer',
+          link: 'leidinggevendenbeheer.bestuursfuncties',
+        },
+        { label: 'Bewerk functionaris' },
+      ],
+    },
+    {
+      route:
+        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new.index',
+      crumbs: [
+        {
+          label: 'Leidinggevendenbeheer',
+          link: 'leidinggevendenbeheer.bestuursfuncties',
+        },
+        { label: 'Nieuwe aanstellingsperiode' },
+      ],
+    },
+    {
+      route:
+        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new.periode',
+      crumbs: [
+        {
+          label: 'Leidinggevendenbeheer',
+          link: 'leidinggevendenbeheer.bestuursfuncties',
+        },
+        { label: 'Nieuwe aanstellingsperiode' },
+      ],
+    },
+    {
+      route:
+        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new-person',
+      crumbs: [
+        {
+          label: 'Leidinggevendenbeheer',
+          link: 'leidinggevendenbeheer.bestuursfuncties',
+        },
+        { label: 'Voeg nieuwe persoon toe' },
+      ],
+    },
+    {
+      route:
+        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.contact-info',
+      crumbs: [
+        {
+          label: 'Leidinggevendenbeheer',
+          link: 'leidinggevendenbeheer.bestuursfuncties',
+        },
+        { label: 'Bewerk contactgegevens' },
+      ],
+    },
   ];
 
   get crumbsForRoute() {
