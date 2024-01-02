@@ -14,9 +14,7 @@ export default class WerkingsgebiedModel extends Model {
   bestuurseenheid;
 
   get longName() {
-    let niveau = this.niveau;
-    let naam = this.naam;
-    return `${naam} (${niveau})`;
+    return `${this.naam} (${this.niveau})`;
   }
 
   rdfaBindings = {
