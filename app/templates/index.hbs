@@ -38,6 +38,25 @@
           </LoketModuleCard>
         </li>
       {{/if}}
+      {{#if this.currentSession.canAccessLeidinggevenden}}
+        <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+          <LoketModuleCard
+            @icon="user-popup"
+            @extraInformationLink="https://www.vlaanderen.be/lokaal-bestuur/loket-voor-lokale-besturen/leidinggevendenbeheer"
+            @userManualLink="https://abb-vlaanderen.gitbook.io/handleiding-loket/modules/leidinggevendenbeheer"
+          >
+            <:title>Leidinggevendenbeheer</:title>
+            <:description>Hou hier de leidinggevende functies voor uw bestuur
+              bij.</:description>
+            <:link>
+              <AuLink
+                @route="leidinggevendenbeheer.bestuursfuncties"
+                @skin="button"
+              >Ga naar leidinggevendenbeheer</AuLink>
+            </:link>
+          </LoketModuleCard>
+        </li>
+      {{/if}}
     </ul>
   </div>
 </div>
