@@ -11,16 +11,4 @@
       Mandatenbeheer
     </AuLink>
   {{/if}}
-  {{#if this.currentSession.canAccessWorshipMinisterManagement}}
-    <AuLink @route="worship-ministers-management" role="menuitem">
-      <AuIcon @icon="user" @alignment="left" />
-      Bedienarenbeheer
-    </AuLink>
-  {{/if}}
-  {{#if this.currentSession.canAccessEredienstMandatenbeheer}}
-    <AuLink @route="eredienst-mandatenbeheer.mandatarissen" role="menuitem">
-      <AuIcon @icon="users-four-of-four" @alignment="left" />
-      Mandatenbeheer
-    </AuLink>
-  {{/if}}
 </AuDropdown>
