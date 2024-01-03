@@ -22,6 +22,12 @@ export default class FormRoute extends Route {
 
   async retrieveForm(id) {
     const response = await fetch(`/form-content/${id}`);
+    if (!response.ok) {
+      console.log(response);
+      let error = new Error(response.statusText);
+      error.status = response.status;
+      throw error;
+    }
     const form = await response.json();
     return form;
   }
