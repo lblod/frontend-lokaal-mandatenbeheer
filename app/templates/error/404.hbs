@@ -1,15 +1,1 @@
-{{page-title "Error 404"}}
-
-<AuToolbar @border="bottom" @size="large" as |Group|>
-  <Group>
-    <AuHeading @skin="2">404</AuHeading>
-  </Group>
-</AuToolbar>
-
-<div class="au-c-body-container au-c-body-container--scroll">
-    <div class="au-o-box">
-      <AuAlert @icon="info-circle" @size="small">
-        <p>Page not found.</p>
-      </AuAlert>
-    </div>
-</div>
+<Error @statusCode="404" @statusMessage="Page not found."></Error>
