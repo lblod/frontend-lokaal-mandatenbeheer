@@ -1,0 +1,15 @@
+{{page-title "Error " @statusCode}}
+
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">{{@statusCode}}</AuHeading>
+  </Group>
+</AuToolbar>
+
+<div class="au-c-body-container au-c-body-container--scroll">
+    <div class="au-o-box">
+      <AuAlert @icon="info-circle" @size="small">
+        <p>{{@statusMessage}}</p>
+      </AuAlert>
+    </div>
+</div>
