@@ -55,6 +55,11 @@ export default class FormInstanceRoute extends Route {
 
   async retrieveFormInstance(formId, id) {
     const response = await fetch(`/form-content/${formId}/instances/${id}`);
+    if (!response.ok) {
+      let error = new Error(response.statusText);
+      error.status = response.status;
+      throw error;
+    }
     const { formDataTtl, instanceUri } = await response.json();
     return { formDataTtl, instanceUri };
   }
