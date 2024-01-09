@@ -1,0 +1,16 @@
+<tr>
+  <td>
+    {{@instance.uri}}
+  </td>
+  <td>
+    {{@instance.id}}
+  </td>
+  <td>
+    {{@instance.label}}
+  </td>
+
+  <td><LinkTo @route={{@editRoute}} @model={{@instance.id}} class="au-c-link">
+    <AuIcon @icon="pencil" @alignment="left" />
+    Bewerk </LinkTo>
+  </td>
+</tr>
