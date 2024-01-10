@@ -13,11 +13,16 @@ export default class FormRoute extends Route {
   async model({ id: semanticFormID }) {
     const form = await this.retrieveForm(semanticFormID);
 
-    return this.store.createRecord('form-definition', {
+    const definition = this.store.createRecord('form-definition', {
       id: semanticFormID,
       formTtl: form.formTtl,
       metaTtl: form.metaTtl,
     });
+
+    return {
+      definition,
+      prefix: form.prefix,
+    };
   }
 
   async retrieveForm(id) {
