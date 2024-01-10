@@ -9,12 +9,11 @@ import { v4 as uuid } from 'uuid';
 export default class FormNewRoute extends Route {
   @service store;
   async model() {
-    const definition = this.modelFor('form');
+    const formModel = this.modelFor('form');
     const instance = this.store.createRecord('form-instance', {
-      definition: this.modelFor('form'),
+      definition: formModel.definition,
       sourceTtl: '',
-      // TODO allow forms to define their own prefix for uri generation: LMB-38
-      uri: `http://data.lblod.info/form-data/instances/${uuid()}`,
+      uri: `${formModel.prefix}${uuid()}`,
     });
 
     const formStore = new ForkingStore();
@@ -25,7 +24,7 @@ export default class FormNewRoute extends Route {
       sourceGraph: SOURCE_GRAPH,
     };
 
-    this.loadForm(definition, formStore, graphs);
+    this.loadForm(formModel.definition, formStore, graphs);
 
     const formNode = formStore.any(
       undefined,
@@ -37,7 +36,7 @@ export default class FormNewRoute extends Route {
 
     return {
       instance,
-      definition,
+      definition: formModel.definition,
       form: formNode,
       formStore,
       graphs,

@@ -8,9 +8,9 @@ import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
 export default class FormInstanceRoute extends Route {
   @service store;
   async model(params) {
-    const definition = this.modelFor('form');
+    const formModel = this.modelFor('form');
     const { formDataTtl, instanceUri } = await this.retrieveFormInstance(
-      definition.id,
+      formModel.definition.id,
       params.instance_id
     );
 
@@ -22,7 +22,7 @@ export default class FormInstanceRoute extends Route {
       sourceGraph: SOURCE_GRAPH,
     };
 
-    this.loadForm(definition, formStore, formDataTtl, graphs);
+    this.loadForm(formModel.definition, formStore, formDataTtl, graphs);
 
     const formNode = formStore.any(
       undefined,
@@ -34,7 +34,7 @@ export default class FormInstanceRoute extends Route {
 
     return {
       instanceId: params.instance_id,
-      definition,
+      definition: formModel.definition,
       form: formNode,
       formStore,
       graphs,
