@@ -2,8 +2,9 @@ import Route from '@ember/routing/route';
 
 export default class FormInstancesRoute extends Route {
   async model() {
-    const definition = this.modelFor('form');
-    const response = await fetch(`/form-content/${definition.id}/instances`);
+    const formModel = this.modelFor('form');
+    const id = formModel.definition.id;
+    const response = await fetch(`/form-content/${id}/instances`);
     if (!response.ok) {
       let error = new Error(response.statusText);
       error.status = response.status;
@@ -12,7 +13,7 @@ export default class FormInstancesRoute extends Route {
     const { instances } = await response.json();
     return {
       instances: instances,
-      formId: definition.id,
+      formId: id,
     };
   }
 }
