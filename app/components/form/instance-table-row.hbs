@@ -13,6 +13,7 @@
     <LinkTo @route={{@editRoute}} @model={{@instance.id}} class="au-c-link">
       <AuIcon @icon="pencil" @alignment="left" />
       Bewerk </LinkTo>
+    {{!-- TODO: this should only be possible with certain roles --}}
     <AuButton @icon="bin" @alert={{true}} {{on "click" this.remove}}>Verwijder</AuButton>
   </td>
 </tr>
