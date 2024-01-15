@@ -13,7 +13,7 @@ export default class FormNewRoute extends Route {
     const instance = this.store.createRecord('form-instance', {
       definition: formModel.definition,
       sourceTtl: '',
-      uri: `${formModel.prefix}/${uuid()}`,
+      uri: `${formModel.prefix}${uuid()}`,
     });
 
     const formStore = new ForkingStore();
