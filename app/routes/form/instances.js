@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 
 export default class FormInstancesRoute extends Route {
   async model() {
@@ -15,5 +16,10 @@ export default class FormInstancesRoute extends Route {
       instances: instances,
       formId: id,
     };
+  }
+
+  @action
+  reloadModel() {
+    this.refresh();
   }
 }

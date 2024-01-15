@@ -27,5 +27,6 @@ export default class FormInstancesController extends Controller {
         'Er ging iets mis bij het verwijderen van het formulier. Probeer het later opnieuw.';
       return;
     }
+    this.send('reloadModel');
   }
 }
