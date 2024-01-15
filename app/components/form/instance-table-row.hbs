@@ -9,9 +9,10 @@
     {{@instance.label}}
   </td>
 
-  <AuButton @icon="bin" @alert={{true}} {{on "click" this.remove}}>Verwijder</AuButton>
-  <td><LinkTo @route={{@editRoute}} @model={{@instance.id}} class="au-c-link">
-    <AuIcon @icon="pencil" @alignment="left" />
-    Bewerk </LinkTo>
+  <td class="au-u-text-right">
+    <LinkTo @route={{@editRoute}} @model={{@instance.id}} class="au-c-link">
+      <AuIcon @icon="pencil" @alignment="left" />
+      Bewerk </LinkTo>
+    <AuButton @icon="bin" @alert={{true}} {{on "click" this.remove}}>Verwijder</AuButton>
   </td>
 </tr>
