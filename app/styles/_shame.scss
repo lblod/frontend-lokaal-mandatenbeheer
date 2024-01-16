@@ -52,14 +52,6 @@
   padding-top: 0;
 }
 
-// Small
-.au-c-small-text {
-  @include au-font-size($au-base);
-  font-family: $au-font;
-  font-weight: $au-regular;
-  color: $au-gray-800;
-}
-
 // Info text
 .au-c-info-text {
   @include au-font-size($au-base);
@@ -83,34 +75,6 @@
   font-weight: $au-medium;
   color: $au-gray-800;
 }
-
-
-// Close button
-.au-c-close {
-  position: absolute;
-  appearance: none;
-  border: 0;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  top: $au-unit-small;
-  right: $au-unit-small;
-  color: $au-gray-700;
-
-  &:hover {
-    color: $au-gray-600;
-  }
-
-  &:focus {
-    outline: $au-outline;
-  }
-}
-
-.au-c-close--large {
-  top: $au-unit;
-  right: $au-unit;
-}
-
 
 // Vertical list
 .au-c-list-vertical__item {
@@ -153,124 +117,6 @@
   .js-accordion--open & {
     display: block;
   }
-}
-
-// Table
-.au-c-table-wrapper {
-  flex-grow: 999;
-  overflow: auto;
-  position: relative;
-  border-top: 1px solid $au-gray-300;
-  width: 100%;
-}
-
-.au-c-table {
-  @include au-font-size($au-base);
-  position: relative;
-  min-width: 70rem;
-  width: 100%;
-  border-collapse: collapse;
-
-  thead {
-    border-top: .2rem solid $au-gray-300;
-    border-bottom: .2rem solid $au-gray-300;
-  }
-
-  tbody {
-    border-bottom: .2rem solid $au-gray-300;
-  }
-
-  th,
-  strong {
-    font-weight: $au-medium;
-  }
-
-  thead th {
-    color: $au-gray-600;
-  }
-
-  tbody th,
-  td,
-  strong {
-    color: $au-gray-800;
-  }
-
-  th,
-  td {
-    vertical-align: top;
-  }
-
-  th {
-    font-weight: $au-medium;
-    text-align: left;
-    padding: $au-unit-tiny $au-unit-small;
-    border-radius: 0;
-  }
-
-  td {
-    padding: $au-unit-small;
-  }
-
-  th:first-child,
-  td:first-child {
-    padding-left: $au-unit;
-  }
-
-  th:last-child,
-  td:last-child {
-    padding-right: $au-unit;
-  }
-
-  thead th,
-  tbody th {
-    border-right: .2rem solid $au-gray-300;
-  }
-
-  thead th:last-child,
-  tbody th:last-child {
-    border-right: 0;
-  }
-
-  tbody td {
-    border-right: .2rem solid $au-gray-300;
-  }
-
-  tbody td:last-child {
-    border-right: 0;
-  }
-
-  thead tr + tr {
-    border-top: .2rem solid $au-gray-300;
-  }
-
-  tbody tr + tr {
-    border-top: .1rem solid $au-gray-300;
-  }
-}
-
-.au-c-table--zebra {
-  tbody tr:nth-child(odd) {
-    background-color: $au-gray-100;
-  }
-
-  tbody tr:nth-child(even) {
-    background-color: $au-white;
-  }
-}
-
-.au-c-table__row-indent {
-  th:first-child,
-  td:first-child {
-    padding-left: $au-unit-small;
-  }
-}
-
-.u-table-cell-shrink-content {
-  width: 1px !important;
-}
-
-.say-content ul {
-  margin-left: $au-unit-small + $au-unit-tiny;
 }
 
 /*
