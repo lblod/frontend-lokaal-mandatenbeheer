@@ -1,10 +1,15 @@
-{{page-title "Mandatenbeheer " this.bestuurseenheid.classificatie.label " " this.bestuurseenheid.naam}}
+{{page-title
+  "Mandatenbeheer "
+  this.bestuurseenheid.classificatie.label
+  " "
+  this.bestuurseenheid.naam
+}}
 <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
   <Group>
     <AuHeading @skin="2">Beheer Fracties</AuHeading>
   </Group>
   <Group>
-    <AuButton {{on 'click' this.createNewFractie}}>Voeg fractie toe</AuButton>
+    <AuButton {{on "click" this.createNewFractie}}>Voeg fractie toe</AuButton>
   </Group>
 </AuToolbar>
 <AuToolbar @size="large" as |Group|>
@@ -52,8 +57,15 @@
               {{#unless this.newFractie}}
                 <tr>
                   <td colspan="3" class="au-u-text-center">
-                    <AuHeading @level="3" @skin="4" class="au-u-margin-bottom-small">Geen fracties gevonden</AuHeading>
-                    <AuButton {{on "click" this.createNewFractie}} @skin="secondary">
+                    <AuHeading
+                      @level="3"
+                      @skin="4"
+                      class="au-u-margin-bottom-small"
+                    >Geen fracties gevonden</AuHeading>
+                    <AuButton
+                      {{on "click" this.createNewFractie}}
+                      @skin="secondary"
+                    >
                       <AuIcon @icon="add" @alignment="left" />
                       Voeg een nieuwe fractie toe
                     </AuButton>
@@ -74,9 +86,9 @@
           </div>
         {{else}}
           <div class="container-flex--scroll">
-            <table class="data-table data-table--nowrap">
+            <table class="au-c-data-table__table">
               <thead>
-                <tr class="data-table__header">
+                <tr class="au-c-data-table__header">
                   <th>Fractienaam</th>
                   <th>Bestuursperiode</th>
                   <th></th>
@@ -103,7 +115,10 @@
                     <tr>
                       <td colspan="3">
                         Geen fracties gevonden.
-                        <AuButton @skin="link" {{on "click" this.createNewFractie}}>
+                        <AuButton
+                          @skin="link"
+                          {{on "click" this.createNewFractie}}
+                        >
                           Voeg een nieuwe fractie toe
                         </AuButton>
                       </td>
