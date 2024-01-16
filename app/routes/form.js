@@ -1,10 +1,17 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { registerFormFields } from '@lblod/ember-submission-form-fields';
+import RdfInputFieldsInputComponent from 'frontend-lmb/components/rdf-input-fields/input';
 
 export default class FormRoute extends Route {
   @service store;
   @service router;
   @service session;
+
+  constructor() {
+    super(...arguments);
+    this.registerCustomFormFields();
+  }
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
@@ -34,5 +41,14 @@ export default class FormRoute extends Route {
     }
     const form = await response.json();
     return form;
+  }
+
+  registerCustomFormFields() {
+    registerFormFields([
+      {
+        displayType: 'http://lblod.data.gift/display-types/defaultInput2',
+        edit: RdfInputFieldsInputComponent,
+      },
+    ]);
   }
 }
