@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { registerFormFields } from '@lblod/ember-submission-form-fields';
-import RdfInputFieldsInputComponent from 'frontend-lmb/components/rdf-input-fields/input';
+import RdfInstanceSelectorComponent from 'frontend-lmb/components/rdf-input-fields/instance-selector';
 
 export default class FormRoute extends Route {
   @service store;
@@ -46,8 +46,8 @@ export default class FormRoute extends Route {
   registerCustomFormFields() {
     registerFormFields([
       {
-        displayType: 'http://lblod.data.gift/display-types/defaultInput2',
-        edit: RdfInputFieldsInputComponent,
+        displayType: 'http://lblod.data.gift/display-types/instanceSelector',
+        edit: RdfInstanceSelectorComponent,
       },
     ]);
   }

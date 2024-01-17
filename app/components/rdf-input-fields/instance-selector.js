@@ -4,7 +4,7 @@ import InputFieldComponent from '@lblod/ember-submission-form-fields/components/
 import { tracked } from '@glimmer/tracking';
 import { updateSimpleFormValue } from '@lblod/submission-form-helpers';
 
-export default class RdfInputFieldsInputComponent extends InputFieldComponent {
+export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
 
   @tracked selected = null;
