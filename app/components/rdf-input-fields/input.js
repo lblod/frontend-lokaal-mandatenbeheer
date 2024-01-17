@@ -1,9 +1,10 @@
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
-import SimpleInputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/simple-value-input-field';
+import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { tracked } from '@glimmer/tracking';
+import { updateSimpleFormValue } from '@lblod/submission-form-helpers';
 
-export default class RdfInputFieldsInputComponent extends SimpleInputFieldComponent {
+export default class RdfInputFieldsInputComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
 
   @tracked selected = null;
@@ -26,6 +27,10 @@ export default class RdfInputFieldsInputComponent extends SimpleInputFieldCompon
   @action
   updateSelection(option) {
     this.selected = option;
+
+    if (option) {
+      updateSimpleFormValue(this.storeOptions, option.subject);
+    }
 
     this.hasBeenFocused = true;
     super.updateValidations();
