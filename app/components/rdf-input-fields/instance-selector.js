@@ -2,7 +2,10 @@ import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { tracked } from '@glimmer/tracking';
-import { updateSimpleFormValue } from '@lblod/submission-form-helpers';
+import {
+  updateSimpleFormValue,
+  triplesForPath,
+} from '@lblod/submission-form-helpers';
 
 export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -14,6 +17,7 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   constructor() {
     super(...arguments);
     this.loadOptions();
+    this.loadProvidedValue();
   }
 
   loadOptions() {
@@ -22,6 +26,15 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
       { subject: 'testSubject1', label: 'testLabel1' },
       { subject: 'testSubject2', label: 'testLabel2' },
     ];
+  }
+
+  loadProvidedValue() {
+    const matches = triplesForPath(this.storeOptions, true).values.map((t) => {
+      return t.value;
+    });
+    this.selected = this.options.find((opt) =>
+      matches.find((m) => m == opt.subject)
+    );
   }
 
   @action
