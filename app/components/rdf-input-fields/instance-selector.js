@@ -38,10 +38,12 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   }
 
   loadProvidedValue() {
-    const matches = triplesForPath(this.storeOptions, true).values;
-    this.selected = this.options.find((opt) =>
-      matches.find((m) => m.equals(opt.subject))
-    );
+    if (this.isValid) {
+      const matches = triplesForPath(this.storeOptions, true).values;
+      this.selected = this.options.find((opt) =>
+        matches.find((m) => m.equals(opt.subject))
+      );
+    }
   }
 
   @action
