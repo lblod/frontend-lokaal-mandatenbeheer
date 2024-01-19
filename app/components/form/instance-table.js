@@ -13,6 +13,13 @@ export default class InstanceTableComponent extends Component {
     return this.formInfo !== null;
   }
 
+  get editRoute() {
+    if (this.args.editRoute) {
+      return this.args.editRoute;
+    }
+    return 'form.instance';
+  }
+
   @action
   async removeInstance(instanceId) {
     const result = await fetch(

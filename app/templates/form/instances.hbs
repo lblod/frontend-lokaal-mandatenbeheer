@@ -1,36 +1,6 @@
-
-{{page-title "Instances" }}
-<AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
-  <Group>
-    <AuHeading @skin="2">Beheer {{@model.formId}} Form Instances</AuHeading>
-  </Group>
-  <Group>
-    <AuButton {{on 'click' this.createNewInstance}}>Voeg form instance toe</AuButton>
-  </Group>
-</AuToolbar>
-
-<div class="au-c-body-container">
-  <div class="au-c-data-table">
-    <div class="au-c-data-table__wrapper">
-      <table class="au-c-data-table__table">
-        <thead>
-          <tr class="au-c-data-table__header">
-            <th>Uri</th>
-            <th>Id</th>
-            <th>Label</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each @model.instances as |instance|}}
-            <Form::InstanceTableRow
-              @instance={{instance}}
-              @editRoute="form.instance"
-              @remove={{this.removeInstance}}
-            />
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+{{page-title "Instances"}}
+<Form::InstanceTable
+  @onCreate={{this.onCreate}}
+  @form={{this.model.form}}
+  @onRemoveInstance={{this.onRemoveInstance}}
+/>

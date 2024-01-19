@@ -27,7 +27,7 @@
               {{#each this.formInfo.instances as |instance|}}
                 <Form::InstanceTableRow
                   @instance={{instance}}
-                  @editRoute="mandatenbeheer.fracties-new.instance"
+                  @editRoute={{this.editRoute}}
                   @remove={{this.removeInstance}}
                 />
               {{/each}}

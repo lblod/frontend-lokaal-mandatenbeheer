@@ -1,38 +1,6 @@
 {{page-title "Instance"}}
-<div class="au-c-main-container">
-  <div
-    class="au-c-main-container__content au-c-main-container__content--scroll"
-  >
-    <div class="au-o-layout">
-      <section class="au-o-region-large">
-        <RdfForm
-          @groupClass="au-o-grid__item"
-          @form={{@model.form}}
-          @show={{false}}
-          @graphs={{this.model.graphs}}
-          @sourceNode={{this.model.sourceNode}}
-          @formStore={{this.model.formStore}}
-          @forceShowErrors={{true}}
-          @useNewListingLayout={{true}}
-          @level={{2}}
-          class="au-u-max-width-medium"
-        />
-        {{outlet}}
-
-      </section>
-      <AuButton {{on "click" this.saveInstance}} @disabled={{this.isSaving}}>
-        Bewaar
-      </AuButton>
-      <section class="au-o-region-large">
-        <AuHeading
-          @level="2"
-          @skin="3"
-          class="au-u-margin-bottom"
-        >Content</AuHeading>
-        <p>
-          {{this.sourceTriples}}
-        </p>
-      </section>
-    </div>
-  </div>
-</div>
+<Form::Instance
+  @instanceId={{this.model.instanceId}}
+  @form={{this.model.form}}
+  @onSave={{this.onSave}}
+/>
