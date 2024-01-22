@@ -52,10 +52,9 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
           return await this.uriSearch(m.value);
         })
       );
-      options = options.map((m) => m[0]);
-      this.selected = options.filter((opt) =>
-        matches.find((m) => m.equals(opt.subject))
-      );
+      this.selected = options
+        .map((m) => m[0])
+        .filter((opt) => matches.find((m) => m.equals(opt.subject)));
     }
   }
 
