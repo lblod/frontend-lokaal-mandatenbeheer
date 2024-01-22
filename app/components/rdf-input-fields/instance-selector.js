@@ -30,8 +30,8 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   }
 
   async loadOptions() {
-    const instanceLabelProperty = this.getInstanceLabelProperty();
-    const instanceApiUrl = this.getInstanceLabelApiUrl();
+    const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
+    const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
     const pageSize = 5;
     const response = await fetch(`${instanceApiUrl}?page[size]=${pageSize}`, {
@@ -83,8 +83,8 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   @task(function* (term) {
     yield timeout(200);
 
-    const instanceLabelProperty = this.getInstanceLabelProperty();
-    const instanceApiUrl = this.getInstanceApiUrl();
+    const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
+    const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
     //let url = `/${instanceApiUrl}?filter=${term}?page[size]=${pageSize}`;
     let url = `${instanceApiUrl}?filter=${term}`;
@@ -98,25 +98,13 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   })
   searchRepo;
 
-  getInstanceLabelProperty() {
+  getFormProperty(property) {
     const formGraph = this.args.graphs.formGraph;
     const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
 
     return this.args.formStore.match(
       this.args.field.uri,
-      FORM('instanceLabelProperty'),
-      undefined,
-      formGraph
-    )[0].object.value;
-  }
-
-  getInstanceApiUrl() {
-    const formGraph = this.args.graphs.formGraph;
-    const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
-
-    return this.args.formStore.match(
-      this.args.field.uri,
-      FORM('instanceApiUrl'),
+      FORM(property),
       undefined,
       formGraph
     )[0].object.value;
