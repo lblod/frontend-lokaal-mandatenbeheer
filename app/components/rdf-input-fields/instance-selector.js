@@ -23,7 +23,7 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
 
   async load() {
     await this.loadOptions();
-    this.loadProvidedValue();
+    await this.loadProvidedValue();
   }
 
   async loadOptions() {
@@ -40,10 +40,11 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
     this.options = await this.parseResponse(response, instanceLabelProperty);
   }
 
-  loadProvidedValue() {
+  async loadProvidedValue() {
     if (this.isValid) {
       const matches = triplesForPath(this.storeOptions, true).values;
-      this.selected = this.options.find((opt) =>
+      const options = await this.uriSearch(matches[0].value);
+      this.selected = options.find((opt) =>
         matches.find((m) => m.equals(opt.subject))
       );
     }
@@ -73,7 +74,6 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
 
   searchRepo = restartableTask(async (term) => {
     await timeout(200);
-
     const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
@@ -111,5 +111,18 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
       return { subject: subject, label: m.attributes[instanceLabelProperty] };
     });
     return options;
+  }
+
+  async uriSearch(term) {
+    const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
+    const instanceApiUrl = this.getFormProperty('instanceApiUrl');
+
+    const url = `${instanceApiUrl}?filter[:uri:]=${term}`;
+    const response = await fetch(url, {
+      headers: {
+        Accept: 'application/vnd.api+json',
+      },
+    });
+    return await this.parseResponse(response, instanceLabelProperty);
   }
 }
