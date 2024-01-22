@@ -45,7 +45,7 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
       const matches = triplesForPath(this.storeOptions, true).values;
       let options = await Promise.all(
         matches.map(async (m) => {
-          return await this.uriSearch(m.value);
+          return await this.fetchSelectedOption(m.value);
         })
       );
       this.selected = options
@@ -124,7 +124,7 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
   // TODO we want to do this with one call, something like the following unfortunately this doesn't work at this moment.
   // const url = `${instanceApiUrl}?filter[:uri:]=uri1,uri2`;
   // const url = `${instanceApiUrl}?filter[:or:][:uri:]=uri1&[:or:][:uri:]=uri2`;
-  async uriSearch(term) {
+  async fetchSelectedOption(term) {
     const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 

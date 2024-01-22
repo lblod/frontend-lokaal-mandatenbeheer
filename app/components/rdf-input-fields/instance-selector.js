@@ -43,7 +43,7 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   async loadProvidedValue() {
     if (this.isValid) {
       const matches = triplesForPath(this.storeOptions, true).values;
-      const options = await this.uriSearch(matches[0].value);
+      const options = await this.fetchSelectedOption(matches[0].value);
       this.selected = options.find((opt) =>
         matches.find((m) => m.equals(opt.subject))
       );
@@ -113,7 +113,7 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
     return options;
   }
 
-  async uriSearch(term) {
+  async fetchSelectedOption(term) {
     const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
