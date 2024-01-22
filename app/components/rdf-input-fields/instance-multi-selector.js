@@ -7,7 +7,7 @@ import {
 } from '@lblod/submission-form-helpers';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { NamedNode } from 'rdflib';
+import { NamedNode, Namespace } from 'rdflib';
 
 export default class RdfInstanceMultiSelectorComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
@@ -22,22 +22,26 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
 
   constructor() {
     super(...arguments);
-    this.loadOptions();
+    this.load();
+  }
+
+  async load() {
+    await this.loadOptions();
     this.loadProvidedValue();
   }
 
-  loadOptions() {
-    // TODO hardcoded for now
-    this.options = [
-      {
-        subject: new NamedNode('http://example.org/MultiTest1'),
-        label: 'testLabel1',
+  async loadOptions() {
+    const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
+    const instanceApiUrl = this.getFormProperty('instanceApiUrl');
+
+    const pageSize = 5;
+    const response = await fetch(`${instanceApiUrl}?page[size]=${pageSize}`, {
+      headers: {
+        Accept: 'application/vnd.api+json',
       },
-      {
-        subject: new NamedNode('http://example.org/MultiTest2'),
-        label: 'testLabel2',
-      },
-    ];
+    });
+
+    this.options = await this.parseResponse(response, instanceLabelProperty);
   }
 
   loadProvidedValue() {
@@ -76,9 +80,43 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
   }
 
   search = restartableTask(async (term) => {
-    await timeout(600);
-    return this.options.filter((value) =>
-      value.label.toLowerCase().includes(term.toLowerCase())
-    );
+    await timeout(200);
+
+    const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
+    const instanceApiUrl = this.getFormProperty('instanceApiUrl');
+
+    const url = `${instanceApiUrl}?filter=${term}`;
+    const response = await fetch(url, {
+      headers: {
+        Accept: 'application/vnd.api+json',
+      },
+    });
+    return await this.parseResponse(response, instanceLabelProperty);
   });
+
+  getFormProperty(property) {
+    const formGraph = this.args.graphs.formGraph;
+    const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
+
+    return this.args.formStore.match(
+      this.args.field.uri,
+      FORM(property),
+      undefined,
+      formGraph
+    )[0].object.value;
+  }
+
+  async parseResponse(response, instanceLabelProperty) {
+    if (!response.ok) {
+      let error = new Error(response.statusText);
+      error.status = response.status;
+      throw error;
+    }
+    const result = await response.json();
+    const options = result.data.map((m) => {
+      const subject = new NamedNode(m.attributes['uri']);
+      return { subject: subject, label: m.attributes[instanceLabelProperty] };
+    });
+    return options;
+  }
 }
