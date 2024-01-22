@@ -51,7 +51,7 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   }
 
   @action
-  updateSelection(option) {
+  updateSelectedItems(option) {
     this.selected = option;
 
     // Cleanup old value(s) in the store

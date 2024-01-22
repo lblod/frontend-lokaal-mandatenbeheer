@@ -55,7 +55,7 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
   }
 
   @action
-  updateSelection(options) {
+  updateSelectedItems(options) {
     this.selected = options;
 
     // Retrieve options in store
