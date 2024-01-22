@@ -78,8 +78,7 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
     const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
-    //let url = `/${instanceApiUrl}?filter=${term}?page[size]=${pageSize}`;
-    const url = `${instanceApiUrl}?filter=${term}`;
+    const url = `${instanceApiUrl}?filter=${term}&page[size]=${PAGESIZE}`;
     const response = await fetch(url, {
       headers: {
         Accept: 'application/vnd.api+json',
