@@ -2,7 +2,6 @@ import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
 import {
   updateSimpleFormValue,
   triplesForPath,
@@ -12,8 +11,6 @@ import { task, timeout } from 'ember-concurrency';
 
 export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
-
-  @service store;
 
   @tracked selected = null;
   @tracked options = [];
