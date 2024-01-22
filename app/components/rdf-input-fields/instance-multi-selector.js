@@ -87,7 +87,7 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
     const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
-    const url = `${instanceApiUrl}?filter=${term}&page[size]=${PAGESIZE}`;
+    const url = `${instanceApiUrl}?filter[${instanceLabelProperty}]=${term}&page[size]=${PAGESIZE}`;
     const response = await fetch(url, {
       headers: {
         Accept: 'application/vnd.api+json',
