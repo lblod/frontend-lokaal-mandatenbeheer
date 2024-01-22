@@ -9,6 +9,8 @@ import {
 import { NamedNode, Namespace } from 'rdflib';
 import { restartableTask, timeout } from 'ember-concurrency';
 
+const PAGESIZE = 10;
+
 export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
 
@@ -30,8 +32,7 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
     const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
-    const pageSize = 5;
-    const response = await fetch(`${instanceApiUrl}?page[size]=${pageSize}`, {
+    const response = await fetch(`${instanceApiUrl}?page[size]=${PAGESIZE}`, {
       headers: {
         Accept: 'application/vnd.api+json',
       },

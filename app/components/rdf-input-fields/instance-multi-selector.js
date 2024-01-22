@@ -9,6 +9,8 @@ import InputFieldComponent from '@lblod/ember-submission-form-fields/components/
 import { restartableTask, timeout } from 'ember-concurrency';
 import { NamedNode, Namespace } from 'rdflib';
 
+const PAGESIZE = 10;
+
 export default class RdfInstanceMultiSelectorComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
 
@@ -30,8 +32,7 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
     const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
-    const pageSize = 5;
-    const response = await fetch(`${instanceApiUrl}?page[size]=${pageSize}`, {
+    const response = await fetch(`${instanceApiUrl}?page[size]=${PAGESIZE}`, {
       headers: {
         Accept: 'application/vnd.api+json',
       },
