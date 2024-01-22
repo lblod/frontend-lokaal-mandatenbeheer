@@ -10,8 +10,9 @@
 <div class={{if this.hasErrors "ember-power-select--error"}}>
   <PowerSelect
     @triggerId={{this.inputId}}
-    @searchField="label"
     @searchEnabled={{this.searchEnabled}}
+    @search={{perform this.searchRepo}}
+    @searchField="label"
     @selected={{this.selected}}
     @options={{this.options}}
     @onClose={{fn (mut this.hasBeenFocused) true}}
