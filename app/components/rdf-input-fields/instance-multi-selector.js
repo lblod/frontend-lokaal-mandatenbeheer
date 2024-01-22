@@ -16,10 +16,6 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
   @tracked options = [];
   @tracked searchEnabled = true;
 
-  get subset() {
-    return this.options.slice(0, 50);
-  }
-
   constructor() {
     super(...arguments);
     this.load();
