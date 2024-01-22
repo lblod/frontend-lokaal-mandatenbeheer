@@ -29,22 +29,9 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
     this.loadProvidedValue();
   }
 
-  async fetchInput() {
-    const formGraph = this.args.graphs.formGraph;
-    const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
-
-    const instanceLabelProperty = this.args.formStore.match(
-      this.args.field.uri,
-      FORM('instanceLabelProperty'),
-      undefined,
-      formGraph
-    )[0].object.value;
-    const instanceApiUrl = this.args.formStore.match(
-      this.args.field.uri,
-      FORM('instanceApiUrl'),
-      undefined,
-      formGraph
-    )[0].object.value;
+  async loadOptions() {
+    const instanceLabelProperty = this.getInstanceLabelProperty();
+    const instanceApiUrl = this.getInstanceLabelApiUrl();
 
     const pageSize = 5;
     const response = await fetch(`${instanceApiUrl}?page[size]=${pageSize}`, {
@@ -59,16 +46,7 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
     }
     const result = await response.json();
 
-    const options = result.data.map((m) => {
-      const subject = new NamedNode(m.attributes['uri']);
-      return { subject: subject, label: m.attributes[instanceLabelProperty] };
-    });
-    return options;
-  }
-
-  async loadOptions() {
-    const instances = await this.fetchInput();
-    this.options = instances;
+    this.options = this.parseResponse(result, instanceLabelProperty);
   }
 
   loadProvidedValue() {
@@ -104,25 +82,51 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
 
   @task(function* (term) {
     yield timeout(200);
-    // let url = `${instanceApiUrl}?page[size]=${pageSize}`;
-    // let url = `/fracties?page[size]=5?filter=${term}`;
-    let url = `/fracties?filter=${term}`;
+
+    const instanceLabelProperty = this.getInstanceLabelProperty();
+    const instanceApiUrl = this.getInstanceApiUrl();
+
+    //let url = `/${instanceApiUrl}?filter=${term}?page[size]=${pageSize}`;
+    let url = `${instanceApiUrl}?filter=${term}`;
     return fetch(url, {
       headers: {
         Accept: 'application/vnd.api+json',
       },
     })
       .then((resp) => resp.json())
-      .then((json) => json.data)
-      .then((data) =>
-        data.map((m) => {
-          const subject = new NamedNode(m.attributes['uri']);
-          return {
-            subject: subject,
-            label: m.attributes['naam'],
-          };
-        })
-      );
+      .then((result) => this.parseResponse(result, instanceLabelProperty));
   })
   searchRepo;
+
+  getInstanceLabelProperty() {
+    const formGraph = this.args.graphs.formGraph;
+    const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
+
+    return this.args.formStore.match(
+      this.args.field.uri,
+      FORM('instanceLabelProperty'),
+      undefined,
+      formGraph
+    )[0].object.value;
+  }
+
+  getInstanceApiUrl() {
+    const formGraph = this.args.graphs.formGraph;
+    const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
+
+    return this.args.formStore.match(
+      this.args.field.uri,
+      FORM('instanceApiUrl'),
+      undefined,
+      formGraph
+    )[0].object.value;
+  }
+
+  parseResponse(result, instanceLabelProperty) {
+    const options = result.data.map((m) => {
+      const subject = new NamedNode(m.attributes['uri']);
+      return { subject: subject, label: m.attributes[instanceLabelProperty] };
+    });
+    return options;
+  }
 }
