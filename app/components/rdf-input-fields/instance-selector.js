@@ -7,7 +7,7 @@ import {
   triplesForPath,
 } from '@lblod/submission-form-helpers';
 import { NamedNode, Namespace } from 'rdflib';
-import { task, timeout } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -36,14 +36,8 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
         Accept: 'application/vnd.api+json',
       },
     });
-    if (!response.ok) {
-      let error = new Error(response.statusText);
-      error.status = response.status;
-      throw error;
-    }
-    const result = await response.json();
 
-    this.options = this.parseResponse(result, instanceLabelProperty);
+    this.options = await this.parseResponse(response, instanceLabelProperty);
   }
 
   loadProvidedValue() {
@@ -77,23 +71,21 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
     super.updateValidations();
   }
 
-  @task(function* (term) {
-    yield timeout(200);
+  searchRepo = restartableTask(async (term) => {
+    await timeout(200);
 
     const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
     //let url = `/${instanceApiUrl}?filter=${term}?page[size]=${pageSize}`;
-    let url = `${instanceApiUrl}?filter=${term}`;
-    return fetch(url, {
+    const url = `${instanceApiUrl}?filter=${term}`;
+    const response = await fetch(url, {
       headers: {
         Accept: 'application/vnd.api+json',
       },
-    })
-      .then((resp) => resp.json())
-      .then((result) => this.parseResponse(result, instanceLabelProperty));
-  })
-  searchRepo;
+    });
+    return await this.parseResponse(response, instanceLabelProperty);
+  });
 
   getFormProperty(property) {
     const formGraph = this.args.graphs.formGraph;
@@ -107,7 +99,13 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
     )[0].object.value;
   }
 
-  parseResponse(result, instanceLabelProperty) {
+  async parseResponse(response, instanceLabelProperty) {
+    if (!response.ok) {
+      let error = new Error(response.statusText);
+      error.status = response.status;
+      throw error;
+    }
+    const result = await response.json();
     const options = result.data.map((m) => {
       const subject = new NamedNode(m.attributes['uri']);
       return { subject: subject, label: m.attributes[instanceLabelProperty] };
