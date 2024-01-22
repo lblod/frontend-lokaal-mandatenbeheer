@@ -27,7 +27,7 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
 
   async load() {
     await this.loadOptions();
-    this.loadProvidedValue();
+    await this.loadProvidedValue();
   }
 
   async loadOptions() {
@@ -44,10 +44,16 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
     this.options = await this.parseResponse(response, instanceLabelProperty);
   }
 
-  loadProvidedValue() {
+  async loadProvidedValue() {
     if (this.isValid) {
       const matches = triplesForPath(this.storeOptions, true).values;
-      this.selected = this.options.filter((opt) =>
+      let options = await Promise.all(
+        matches.map(async (m) => {
+          return await this.uriSearch(m.value);
+        })
+      );
+      options = options.map((m) => m[0]);
+      this.selected = options.filter((opt) =>
         matches.find((m) => m.equals(opt.subject))
       );
     }
@@ -118,5 +124,21 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
       return { subject: subject, label: m.attributes[instanceLabelProperty] };
     });
     return options;
+  }
+
+  // TODO we want to do this with one call, something like the following unfortunately this doesn't work at this moment.
+  // const url = `${instanceApiUrl}?filter[:uri:]=uri1,uri2`;
+  // const url = `${instanceApiUrl}?filter[:or:][:uri:]=uri1&[:or:][:uri:]=uri2`;
+  async uriSearch(term) {
+    const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
+    const instanceApiUrl = this.getFormProperty('instanceApiUrl');
+
+    const url = `${instanceApiUrl}?filter[:uri:]=${encodeURIComponent(term)}`;
+    const response = await fetch(url, {
+      headers: {
+        Accept: 'application/vnd.api+json',
+      },
+    });
+    return await this.parseResponse(response, instanceLabelProperty);
   }
 }
