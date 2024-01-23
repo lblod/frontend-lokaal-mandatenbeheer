@@ -123,7 +123,7 @@ export default class SharedBreadCrumbComponent extends Component {
       crumbs: [
         { label: 'Formbeheer', link: 'formbeheer' },
         { label: 'Form', link: 'formbeheer.form.instances' },
-        { label: 'New form instance' },
+        { label: 'Nieuwe form instance' },
       ],
     },
     {
