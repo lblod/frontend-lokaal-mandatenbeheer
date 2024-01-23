@@ -2,11 +2,16 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class FormInstanceController extends Controller {
+export default class FormInstancesController extends Controller {
   @service router;
 
   @action
-  onSave() {
+  onCreate() {
+    this.router.transitionTo('mandatenbeheer.fracties-new.new');
+  }
+
+  @action
+  async onRemoveInstance() {
     this.router.refresh();
   }
 }

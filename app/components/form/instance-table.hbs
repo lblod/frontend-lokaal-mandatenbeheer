@@ -1,0 +1,42 @@
+<div {{did-insert this.onInit}}>
+  {{#if this.initialized}}
+    <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
+      <Group>
+        <AuHeading @skin="2">Beheer
+          {{this.formInfo.form.definition.id}}
+          Form Instances</AuHeading>
+      </Group>
+      <Group>
+        <AuButton {{on "click" @onCreate}}>Voeg form instance toe</AuButton>
+      </Group>
+    </AuToolbar>
+
+    <div class="au-c-body-container">
+      <div class="au-c-data-table">
+        <div class="au-c-data-table__wrapper">
+          <table class="au-c-data-table__table">
+            <thead>
+              <tr class="au-c-data-table__header">
+                <th>Uri</th>
+                <th>Id</th>
+                <th>Label</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each this.formInfo.instances as |instance|}}
+                <Form::InstanceTableRow
+                  @instance={{instance}}
+                  @editRoute={{this.editRoute}}
+                  @remove={{this.removeInstance}}
+                />
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  {{else}}
+    <div>loading...</div>
+  {{/if}}
+</div>
