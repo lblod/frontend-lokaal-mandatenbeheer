@@ -17,7 +17,7 @@ export default class InstanceTableComponent extends Component {
     if (this.args.editRoute) {
       return this.args.editRoute;
     }
-    return 'form.instance';
+    return 'formbeheer.form.instance';
   }
 
   @action
