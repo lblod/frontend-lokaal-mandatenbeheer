@@ -52,7 +52,7 @@ export default class FormNewController extends Controller {
       return;
     }
 
-    this.router.transitionTo('form.instance', definition.id, id);
+    this.router.transitionTo('formbeheer.form.instance', definition.id, id);
   }
 
   @action

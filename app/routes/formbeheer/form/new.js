@@ -1,15 +1,15 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { RDF, FORM } from '../../rdf/namespaces';
+import { RDF, FORM } from '../../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
+import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../../utils/constants';
 import { v4 as uuid } from 'uuid';
 
 export default class FormNewRoute extends Route {
   @service store;
   async model() {
-    const formModel = this.modelFor('form');
+    const formModel = this.modelFor('formbeheer.form');
     const instance = this.store.createRecord('form-instance', {
       definition: formModel.definition,
       sourceTtl: '',

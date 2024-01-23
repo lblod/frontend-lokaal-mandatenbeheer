@@ -1,11 +1,10 @@
-
-{{page-title "Instances" }}
+{{page-title "Instances"}}
 <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
   <Group>
     <AuHeading @skin="2">Beheer {{@model.formId}} Form Instances</AuHeading>
   </Group>
   <Group>
-    <AuButton {{on 'click' this.createNewInstance}}>Voeg form instance toe</AuButton>
+    <AuButton {{on "click" this.createNewInstance}}>Voeg form instance toe</AuButton>
   </Group>
 </AuToolbar>
 
@@ -25,7 +24,7 @@
           {{#each @model.instances as |instance|}}
             <Form::InstanceTableRow
               @instance={{instance}}
-              @editRoute="form.instance"
+              @editRoute="formbeheer.form.instance"
               @remove={{this.removeInstance}}
             />
           {{/each}}

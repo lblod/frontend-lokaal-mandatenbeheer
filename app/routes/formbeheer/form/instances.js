@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 
 export default class FormInstancesRoute extends Route {
   async model() {
-    const formModel = this.modelFor('form');
+    const formModel = this.modelFor('formbeheer.form');
     const id = formModel.definition.id;
     const response = await fetch(`/form-content/${id}/instances`);
     if (!response.ok) {
