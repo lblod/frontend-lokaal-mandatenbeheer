@@ -1,0 +1,39 @@
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <div class="au-o-grid au-o-grid--small">
+      <div class="au-o-grid__item au-u-2-5@medium">
+        <AuContent class="au-u-margin-bottom">
+          <AuHeading @skin="2">Formbeheer</AuHeading>
+        </AuContent>
+      </div>
+    </div>
+    <AuHeading @level="2" @skin="3" class="au-u-margin-bottom">Beschikbare forms</AuHeading>
+
+    <ul class="au-o-grid au-o-grid--small">
+      {{#each this.model as |form|}}
+        <li class="au-o-grid__item au-u-1-3@small au-u-1-6@large">
+          <AuCard @flex="true" ...attributes as |c|>
+            <c.header @badgeSkin="brand" @badgeIcon={{@icon}}>
+              <AuHeading
+                @level="2"
+                @skin="4"
+                data-test-loket-module-card="title"
+              >
+                {{form}}
+              </AuHeading>
+            </c.header>
+            <c.content>
+              <p data-test-loket-module-card="link">
+                <AuLink
+                  @route="formbeheer.form.instances"
+                  @model={{form}}
+                  @skin="button"
+                >Ga naar form</AuLink>
+              </p>
+            </c.content>
+          </AuCard>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>
