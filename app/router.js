@@ -62,7 +62,7 @@ Router.map(function () {
   });
 
   this.route('formbeheer', function () {
-    this.route('form', { path: '/form/:id' }, function () {
+    this.route('form', { path: '/:id' }, function () {
       this.route('new');
       this.route('instances');
       this.route('instance', { path: '/instance/:instance_id' });
