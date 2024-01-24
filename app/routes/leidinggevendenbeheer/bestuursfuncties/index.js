@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { BESTUURSEENHEID_CLASSIFICATIECODE_OCMW_URI } from 'frontend-lmb/utils/constants';
 
 export default class LeidinggevendenbeheerBestuursfunctiesIndexRoute extends Route {
   @service currentSession;
@@ -23,7 +24,7 @@ export default class LeidinggevendenbeheerBestuursfunctiesIndexRoute extends Rou
 
     if (
       bestuurseenheidClassificatie.uri !==
-      'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000002'
+      BESTUURSEENHEID_CLASSIFICATIECODE_OCMW_URI
     ) {
       controller.allowed = true;
     }

@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { FUNCTIONARIS_STATUS_CODE_AANGESTELD_URI } from 'frontend-lmb/utils/constants';
 
 export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieFunctionarissenNewPeriodeRoute extends Route {
   @service store;
@@ -9,8 +10,7 @@ export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieFunctio
     const status = await this.store.query('functionaris-status-code', {
       // aangesteld status
       filter: {
-        ':uri:':
-          'http://data.vlaanderen.be/id/concept/functionarisStatusCode/45b4b155-d22a-4eaf-be3a-97022c6b7fcd',
+        ':uri:': FUNCTIONARIS_STATUS_CODE_AANGESTELD_URI,
       },
       page: { size: 1 },
     });
