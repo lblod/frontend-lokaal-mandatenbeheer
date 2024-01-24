@@ -6,9 +6,10 @@ import {
   updateSimpleFormValue,
   triplesForPath,
 } from '@lblod/submission-form-helpers';
-import { NamedNode, Namespace } from 'rdflib';
+import { NamedNode } from 'rdflib';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ACCEPT_HEADER } from 'frontend-lmb/utils/constants';
+import { FORM } from 'frontend-lmb/rdf/namespaces';
 
 const PAGESIZE = 10;
 
@@ -85,7 +86,6 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
 
   getFormProperty(property) {
     const formGraph = this.args.graphs.formGraph;
-    const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
 
     return this.args.formStore.match(
       this.args.field.uri,
