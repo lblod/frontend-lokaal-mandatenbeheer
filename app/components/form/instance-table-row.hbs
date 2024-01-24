@@ -1,19 +1,24 @@
 <tr>
-  <td>
+  <td class="au-u-word-break">
     {{@instance.uri}}
   </td>
-  <td>
+  <td class="au-u-word-break">
     {{@instance.id}}
   </td>
-  <td>
+  <td class="au-u-word-break">
     {{@instance.label}}
   </td>
 
   <td class="au-u-text-right">
     <LinkTo @route={{@editRoute}} @model={{@instance.id}} class="au-c-link">
       <AuIcon @icon="pencil" @alignment="left" />
-      Bewerk </LinkTo>
-    {{!-- TODO: this should only be possible with certain roles --}}
-    <AuButton @icon="bin" @alert={{true}} {{on "click" this.remove}}>Verwijder</AuButton>
+      Bewerk
+    </LinkTo>
+    {{! TODO: this should only be possible with certain roles }}
+    <AuButton
+      @icon="bin"
+      @alert={{true}}
+      {{on "click" this.remove}}
+    >Verwijder</AuButton>
   </td>
 </tr>
