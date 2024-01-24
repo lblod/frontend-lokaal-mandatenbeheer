@@ -18,6 +18,11 @@ export default class NewInstanceComponent extends Component {
   @tracked formInfo = null;
   formStore = null;
 
+  constructor() {
+    super(...arguments);
+    this.onInit();
+  }
+
   get initialized() {
     return this.formInfo !== null;
   }
@@ -67,7 +72,6 @@ export default class NewInstanceComponent extends Component {
     this.save.perform();
   }
 
-  @action
   onInit() {
     const form = this.args.form;
     const uri = `${form.prefix}${uuid()}`;

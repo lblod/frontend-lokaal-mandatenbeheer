@@ -9,6 +9,11 @@ export default class InstanceTableComponent extends Component {
 
   @tracked formInfo = null;
 
+  constructor() {
+    super(...arguments);
+    this.onInit();
+  }
+
   get initialized() {
     return this.formInfo !== null;
   }
@@ -42,7 +47,6 @@ export default class InstanceTableComponent extends Component {
     }
   }
 
-  @action
   async onInit() {
     const form = this.args.form;
     const id = form.definition.id;
