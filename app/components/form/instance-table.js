@@ -9,6 +9,11 @@ export default class InstanceTableComponent extends Component {
 
   @tracked formInfo = null;
 
+  constructor() {
+    super(...arguments);
+    this.onInit();
+  }
+
   get initialized() {
     return this.formInfo !== null;
   }

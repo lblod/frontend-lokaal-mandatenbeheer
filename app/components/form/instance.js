@@ -17,6 +17,11 @@ export default class InstanceComponent extends Component {
   @tracked formInfo = null;
   formStore = null;
 
+  constructor() {
+    super(...arguments);
+    this.onInit();
+  }
+
   get initialized() {
     return this.formInfo !== null;
   }
