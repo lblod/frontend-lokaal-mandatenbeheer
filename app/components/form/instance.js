@@ -5,7 +5,12 @@ import { tracked } from '@glimmer/tracking';
 import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { CONTENT_HEADER, FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
+import {
+  CONTENT_HEADER,
+  FORM_GRAPH,
+  META_GRAPH,
+  SOURCE_GRAPH,
+} from '../../utils/constants';
 import { inject as service } from '@ember/service';
 import { keepLatestTask } from 'ember-concurrency';
 
