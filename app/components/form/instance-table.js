@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 import { inject as service } from '@ember/service';
+import { CONTENT_HEADER } from 'frontend-lmb/utils/constants';
 
 export default class InstanceTableComponent extends Component {
   @service store;
@@ -31,9 +32,7 @@ export default class InstanceTableComponent extends Component {
       `/form-content/${this.formInfo.form.definition.id}/instances/${instanceId}`,
       {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/vnd.api+json',
-        },
+        headers: CONTENT_HEADER,
       }
     );
 

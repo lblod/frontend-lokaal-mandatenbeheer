@@ -8,6 +8,7 @@ import {
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { NamedNode, Namespace } from 'rdflib';
+import { ACCEPT_HEADER } from 'frontend-lmb/utils/constants';
 
 const PAGESIZE = 10;
 
@@ -32,11 +33,10 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
     const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
-    const response = await fetch(`${instanceApiUrl}?page[size]=${PAGESIZE}`, {
-      headers: {
-        Accept: 'application/vnd.api+json',
-      },
-    });
+    const response = await fetch(
+      `${instanceApiUrl}?page[size]=${PAGESIZE}`,
+      ACCEPT_HEADER
+    );
 
     this.options = await this.parseResponse(response, instanceLabelProperty);
   }
@@ -86,11 +86,7 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
     const url = `${instanceApiUrl}?filter[${instanceLabelProperty}]=${term}&page[size]=${PAGESIZE}`;
-    const response = await fetch(url, {
-      headers: {
-        Accept: 'application/vnd.api+json',
-      },
-    });
+    const response = await fetch(url, ACCEPT_HEADER);
     return await this.parseResponse(response, instanceLabelProperty);
   });
 
@@ -128,11 +124,7 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
     const url = `${instanceApiUrl}?filter[:uri:]=${encodeURIComponent(term)}`;
-    const response = await fetch(url, {
-      headers: {
-        Accept: 'application/vnd.api+json',
-      },
-    });
+    const response = await fetch(url, ACCEPT_HEADER);
     const result = await this.parseResponse(response, instanceLabelProperty);
     return result[0];
   }
