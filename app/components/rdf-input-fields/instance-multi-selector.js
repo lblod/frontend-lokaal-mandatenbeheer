@@ -49,9 +49,7 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
           return await this.fetchSelectedOption(m.value);
         })
       );
-      this.selected = options
-        .map((m) => m[0])
-        .filter((opt) => matches.find((m) => m.equals(opt.subject)));
+      this.selected = options.filter((opt) => opt);
     }
   }
 
@@ -135,6 +133,7 @@ export default class RdfInstanceMultiSelectorComponent extends InputFieldCompone
         Accept: 'application/vnd.api+json',
       },
     });
-    return await this.parseResponse(response, instanceLabelProperty);
+    const result = await this.parseResponse(response, instanceLabelProperty);
+    return result[0];
   }
 }
