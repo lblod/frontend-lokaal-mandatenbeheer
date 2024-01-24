@@ -72,7 +72,6 @@ export default class NewInstanceComponent extends Component {
     this.save.perform();
   }
 
-  @action
   onInit() {
     const form = this.args.form;
     const uri = `${form.prefix}${uuid()}`;

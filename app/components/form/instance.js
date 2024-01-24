@@ -75,7 +75,6 @@ export default class InstanceComponent extends Component {
     this.save.perform();
   }
 
-  @action
   async onInit() {
     const form = this.args.form;
     const instanceId = this.args.instanceId;

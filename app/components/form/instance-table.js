@@ -47,7 +47,6 @@ export default class InstanceTableComponent extends Component {
     }
   }
 
-  @action
   async onInit() {
     const form = this.args.form;
     const id = form.definition.id;
