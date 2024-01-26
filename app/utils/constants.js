@@ -23,3 +23,6 @@ export const FRACTIETYPE_SAMENWERKINGSVERBAND_URI =
   'http://data.vlaanderen.be/id/concept/Fractietype/Samenwerkingsverband';
 export const BESTUURSEENHEID_CLASSIFICATIECODE_OCMW_URI =
   'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000002';
+
+export const MALE_ID = '5ab0e9b8a3b2ca7c5e000028';
+export const FEMALE_ID = '5ab0e9b8a3b2ca7c5e000029';

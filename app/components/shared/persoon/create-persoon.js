@@ -12,9 +12,8 @@ import {
   isValidRijksregisternummer,
 } from 'frontend-lmb/utils/rijksregisternummer';
 import moment from 'moment';
+import { FEMALE_ID, MALE_ID } from 'frontend-lmb/utils/constants';
 
-const maleId = '5ab0e9b8a3b2ca7c5e000028';
-const femaleId = '5ab0e9b8a3b2ca7c5e000029';
 const requiredFields = [
   'geslacht',
   'voornaam',
@@ -33,9 +32,6 @@ export default class SharedPersoonCreatePersoonComponent extends Component {
   @tracked nationaliteit;
   @tracked birthDate;
   @tracked errors;
-
-  male = maleId;
-  female = femaleId;
 
   constructor() {
     super(...arguments);
@@ -62,12 +58,20 @@ export default class SharedPersoonCreatePersoonComponent extends Component {
     }
   }
 
+  get male() {
+    return MALE_ID;
+  }
+
+  get female() {
+    return FEMALE_ID;
+  }
+
   get isMale() {
-    return this.geslacht === maleId;
+    return this.geslacht === MALE_ID;
   }
 
   get isFemale() {
-    return this.geslacht === femaleId;
+    return this.geslacht === FEMALE_ID;
   }
 
   get isNationalityFieldRequired() {
@@ -196,8 +200,8 @@ export default class SharedPersoonCreatePersoonComponent extends Component {
         : this.birthDate;
       if (isGenderKnown(this.rijksregisternummer)) {
         isBiologicalFemale(this.rijksregisternummer)
-          ? this.setGender(femaleId)
-          : this.setGender(maleId);
+          ? this.setGender(FEMALE_ID)
+          : this.setGender(MALE_ID);
       }
     }
   }
