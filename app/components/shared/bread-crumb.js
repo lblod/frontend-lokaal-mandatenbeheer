@@ -12,28 +12,40 @@ export default class SharedBreadCrumbComponent extends Component {
     {
       route: 'legacy.mandatenbeheer.mandatarissen.edit',
       crumbs: [
-        { label: 'Mandatenbeheer', link: 'legacy.mandatenbeheer.mandatarissen' },
+        {
+          label: 'Mandatenbeheer',
+          link: 'legacy.mandatenbeheer.mandatarissen',
+        },
         { label: 'Bewerk' },
       ],
     },
     {
       route: 'legacy.mandatenbeheer.mandatarissen.new',
       crumbs: [
-        { label: 'Mandatenbeheer', link: 'legacy.mandatenbeheer.mandatarissen' },
+        {
+          label: 'Mandatenbeheer',
+          link: 'legacy.mandatenbeheer.mandatarissen',
+        },
         { label: 'Voeg mandaat toe' },
       ],
     },
     {
       route: 'legacy.mandatenbeheer.mandatarissen.new-person',
       crumbs: [
-        { label: 'Mandatenbeheer', link: 'legacy.mandatenbeheer.mandatarissen' },
+        {
+          label: 'Mandatenbeheer',
+          link: 'legacy.mandatenbeheer.mandatarissen',
+        },
         { label: 'Voeg nieuwe persoon toe' },
       ],
     },
     {
       route: 'legacy.mandatenbeheer.fracties.index',
       crumbs: [
-        { label: 'Mandatenbeheer', link: 'legacy.mandatenbeheer.mandatarissen' },
+        {
+          label: 'Mandatenbeheer',
+          link: 'legacy.mandatenbeheer.mandatarissen',
+        },
         { label: 'Beheer fracties' },
       ],
     },
