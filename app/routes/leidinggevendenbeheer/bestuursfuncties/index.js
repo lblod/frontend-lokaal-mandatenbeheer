@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { BESTUURSEENHEID_CLASSIFICATIECODE_OCMW_URI } from 'frontend-lmb/utils/constants';
+import { BESTUURSEENHEID_CLASSIFICATIECODE_OCMW } from 'frontend-lmb/utils/well-known-uris';
 
 export default class LeidinggevendenbeheerBestuursfunctiesIndexRoute extends Route {
   @service currentSession;
@@ -24,7 +24,7 @@ export default class LeidinggevendenbeheerBestuursfunctiesIndexRoute extends Rou
 
     if (
       bestuurseenheidClassificatie.uri !==
-      BESTUURSEENHEID_CLASSIFICATIECODE_OCMW_URI
+      BESTUURSEENHEID_CLASSIFICATIECODE_OCMW
     ) {
       controller.allowed = true;
     }

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { FUNCTIONARIS_STATUS_CODE_AANGESTELD_URI } from 'frontend-lmb/utils/constants';
+import { FUNCTIONARIS_STATUS_CODE_AANGESTELD } from 'frontend-lmb/utils/well-known-uris';
 
 export default class LeidinggevendenbeheerFunctionarisFormComponent extends Component {
   @service() store;
@@ -31,7 +31,7 @@ export default class LeidinggevendenbeheerFunctionarisFormComponent extends Comp
     if (bestuursfunctieCode.isLeidinggevendAmbtenaar) {
       queryParams = {
         filter: {
-          ':uri:': FUNCTIONARIS_STATUS_CODE_AANGESTELD_URI,
+          ':uri:': FUNCTIONARIS_STATUS_CODE_AANGESTELD,
         },
       };
     } else {

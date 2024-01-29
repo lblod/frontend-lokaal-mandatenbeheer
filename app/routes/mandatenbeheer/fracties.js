@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { FRACTIETYPE_SAMENWERKINGSVERBAND_URI } from 'frontend-lmb/utils/constants';
+import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatenbeheerFractiesRoute extends Route {
   @service store;
@@ -26,7 +26,7 @@ export default class MandatenbeheerFractiesRoute extends Route {
     const defaultFractieType = (
       await this.store.query('fractietype', {
         page: { size: 1 },
-        'filter[:uri:]': FRACTIETYPE_SAMENWERKINGSVERBAND_URI,
+        'filter[:uri:]': FRACTIETYPE_SAMENWERKINGSVERBAND,
       })
     ).at(0);
 

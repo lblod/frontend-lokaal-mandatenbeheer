@@ -12,16 +12,5 @@ export const ACCEPT_HEADER = {
   },
 };
 
-export const FUNCTIONARIS_STATUS_CODE_AANGESTELD_URI =
-  'http://data.vlaanderen.be/id/concept/functionarisStatusCode/45b4b155-d22a-4eaf-be3a-97022c6b7fcd';
-export const BESTUURSFUNCTIE_CODE_LEIDINGGEVEND_AMBTENAAR_URI =
-  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/855489b9-b584-4f34-90b2-39aea808cd9f';
-export const FRACTIETYPE_ONAFHANKELIJK_URI =
-  'http://data.vlaanderen.be/id/concept/Fractietype/Onafhankelijk';
-export const FRACTIETYPE_SAMENWERKINGSVERBAND_URI =
-  'http://data.vlaanderen.be/id/concept/Fractietype/Samenwerkingsverband';
-export const BESTUURSEENHEID_CLASSIFICATIECODE_OCMW_URI =
-  'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000002';
-
 export const MALE_ID = '5ab0e9b8a3b2ca7c5e000028';
 export const FEMALE_ID = '5ab0e9b8a3b2ca7c5e000029';
