@@ -22,13 +22,13 @@ export default class MandatenbeheerMandatarissenNewPersonController extends Cont
   @action
   onCreate(user) {
     this.router.transitionTo(
-      'mandatenbeheer.mandatarissen.edit',
+      'legacy.mandatenbeheer.mandatarissen.edit',
       user.get('id')
     );
   }
 
   @action
   onCancel() {
-    this.router.transitionTo('mandatenbeheer.mandatarissen.new');
+    this.router.transitionTo('legacy.mandatenbeheer.mandatarissen.new');
   }
 }

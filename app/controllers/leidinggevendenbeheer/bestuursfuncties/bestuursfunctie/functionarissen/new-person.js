@@ -22,7 +22,7 @@ export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieFunctio
   @action
   onCreate(user) {
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new.periode',
+      'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new.periode',
       user.get('id')
     );
   }
@@ -30,7 +30,7 @@ export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieFunctio
   @action
   onCancel() {
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new'
+      'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new'
     );
   }
 }

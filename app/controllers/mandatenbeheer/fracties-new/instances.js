@@ -7,7 +7,7 @@ export default class FormInstancesController extends Controller {
 
   @action
   onCreate() {
-    this.router.transitionTo('mandatenbeheer.fracties-new.new');
+    this.router.transitionTo('legacy.mandatenbeheer.fracties-new.new');
   }
 
   @action

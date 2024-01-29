@@ -48,7 +48,7 @@ export default class MandatenbeheerFractiesController extends Controller {
 
   @action
   selectPeriod(period) {
-    this.router.transitionTo('mandatenbeheer.fracties', {
+    this.router.transitionTo('legacy.mandatenbeheer.fracties', {
       queryParams: {
         startDate: period.startDate,
         endDate: period.endDate,

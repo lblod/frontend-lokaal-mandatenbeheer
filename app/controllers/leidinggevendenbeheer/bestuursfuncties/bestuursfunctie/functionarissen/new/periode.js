@@ -10,21 +10,21 @@ export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieFunctio
   *save() {
     yield this.model.save();
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.index'
+      'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.index'
     );
   }
 
   @action
   goBackToSearch() {
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new'
+      'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new'
     );
   }
 
   @action
   cancel() {
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.index'
+      'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.index'
     );
   }
 }

@@ -23,6 +23,6 @@ export default class FormNewController extends Controller {
 
   @action
   onCreate(id) {
-    this.router.transitionTo('mandatenbeheer.fracties-new.instance', id);
+    this.router.transitionTo('legacy.mandatenbeheer.fracties-new.instance', id);
   }
 }

@@ -32,8 +32,10 @@
             <:description>Hou de mandaten binnen de gemeenten, OCMW's,
               districten en provincies bij.</:description>
             <:link>
-              <AuLink @route="mandatenbeheer.mandatarissen" @skin="button">Ga
-                naar mandatenbeheer</AuLink>
+              <AuLink
+                @route="legacy.mandatenbeheer.mandatarissen"
+                @skin="button"
+              >Ga naar mandatenbeheer</AuLink>
             </:link>
           </LoketModuleCard>
         </li>
@@ -50,7 +52,7 @@
               bij.</:description>
             <:link>
               <AuLink
-                @route="leidinggevendenbeheer.bestuursfuncties"
+                @route="legacy.leidinggevendenbeheer.bestuursfuncties"
                 @skin="button"
               >Ga naar leidinggevendenbeheer</AuLink>
             </:link>
@@ -62,7 +64,7 @@
           <:title>Formbeheer</:title>
           <:description>Hier vind je een overzicht van de huidige forms.</:description>
           <:link>
-            <AuLink @route="formbeheer" @skin="button">Ga naar formbeheer</AuLink>
+            <AuLink @route="legacy.formbeheer" @skin="button">Ga naar formbeheer</AuLink>
           </:link>
         </LoketModuleCard>
       </li>

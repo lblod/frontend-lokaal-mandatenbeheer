@@ -12,6 +12,6 @@ export default class MandatenbeheerMandatarissenEditController extends Controlle
 
   @action
   finish() {
-    this.router.transitionTo('mandatenbeheer.mandatarissen');
+    this.router.transitionTo('legacy.mandatenbeheer.mandatarissen');
   }
 }

@@ -9,6 +9,6 @@ export default class MandatenbeheerMandatarisTableComponent extends Component {
   async removeMandataris(mandataris) {
     await mandataris.destroyRecord();
 
-    this.router.refresh('mandatenbeheer.mandatarissen');
+    this.router.refresh('legacy.mandatenbeheer.mandatarissen');
   }
 }

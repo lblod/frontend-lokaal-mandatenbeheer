@@ -21,7 +21,7 @@ export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieContact
   exit() {
     this.showConfirmationDialog = false;
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen',
+      'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen',
       this.bestuursfunctie.id
     );
   }

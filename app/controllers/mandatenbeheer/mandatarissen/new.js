@@ -8,7 +8,7 @@ export default class MandatenbeheerMandatarissenNewController extends Controller
   @action
   selectPersoon(persoon) {
     this.router.transitionTo(
-      'mandatenbeheer.mandatarissen.edit',
+      'legacy.mandatenbeheer.mandatarissen.edit',
       persoon.get('id')
     );
   }
@@ -16,14 +16,14 @@ export default class MandatenbeheerMandatarissenNewController extends Controller
   @action
   createNewPerson(hasData) {
     hasData
-      ? this.router.transitionTo('mandatenbeheer.mandatarissen.new-person', {
+      ? this.router.transitionTo('legacy.mandatenbeheer.mandatarissen.new-person', {
           queryParams: hasData,
         })
-      : this.router.transitionTo('mandatenbeheer.mandatarissen.new-person');
+      : this.router.transitionTo('legacy.mandatenbeheer.mandatarissen.new-person');
   }
 
   @action
   cancel() {
-    this.router.transitionTo('mandatenbeheer.mandatarissen');
+    this.router.transitionTo('legacy.mandatenbeheer.mandatarissen');
   }
 }

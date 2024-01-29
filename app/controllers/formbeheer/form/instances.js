@@ -8,7 +8,7 @@ export default class FormInstancesController extends Controller {
   @action
   onCreate() {
     this.router.transitionTo(
-      'formbeheer.form.new',
+      'legacy.formbeheer.form.new',
       this.model.form.definition.id
     );
   }

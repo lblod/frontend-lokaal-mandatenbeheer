@@ -26,8 +26,8 @@ export default class MandatenbeheerMandatarissenController extends Controller {
   get hasActiveChildRoute() {
     return (
       this.router.currentRouteName.startsWith(
-        'mandatenbeheer.mandatarissen.'
-      ) && this.router.currentRouteName != 'mandatenbeheer.mandatarissen.index'
+        'legacy.mandatenbeheer.mandatarissen.'
+      ) && this.router.currentRouteName != 'legacy.mandatenbeheer.mandatarissen.index'
     );
   }
 
@@ -44,14 +44,14 @@ export default class MandatenbeheerMandatarissenController extends Controller {
 
   @action
   handleAddMandatarisClick() {
-    if (this.router.currentRouteName === 'mandatenbeheer.mandatarissen.new')
-      this.router.transitionTo('mandatenbeheer.mandatarissen.index');
-    else this.router.transitionTo('mandatenbeheer.mandatarissen.new');
+    if (this.router.currentRouteName === 'legacy.mandatenbeheer.mandatarissen.new')
+      this.router.transitionTo('legacy.mandatenbeheer.mandatarissen.index');
+    else this.router.transitionTo('legacy.mandatenbeheer.mandatarissen.new');
   }
 
   @action
   handleBeheerFractiesClick() {
-    this.router.transitionTo('mandatenbeheer.fracties');
+    this.router.transitionTo('legacy.mandatenbeheer.fracties');
   }
 
   @action
@@ -63,7 +63,7 @@ export default class MandatenbeheerMandatarissenController extends Controller {
 
     queryParams['endDate'] = period.endDate;
 
-    this.router.transitionTo('mandatenbeheer.mandatarissen', {
+    this.router.transitionTo('legacy.mandatenbeheer.mandatarissen', {
       queryParams,
     });
   }

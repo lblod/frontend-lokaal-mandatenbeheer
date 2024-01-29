@@ -15,7 +15,7 @@ export default class LeidinggevendenbeheerBestuursfunctiesIndexController extend
   @action
   displayBestuursfunctie(bestuursfunctie) {
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen',
+      'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen',
       bestuursfunctie.id
     );
   }

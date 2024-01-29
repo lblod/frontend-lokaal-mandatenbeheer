@@ -5,7 +5,7 @@
   <ul class="au-c-list-navigation">
     {{#if this.currentSession.canAccessMandaat}}
       <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="mandatenbeheer.mandatarissen">
+        <AuNavigationLink @route="legacy.mandatenbeheer.mandatarissen">
           <AuIcon @icon="user-fill" @alignment="left" />
           Mandatenbeheer
         </AuNavigationLink>
@@ -13,14 +13,16 @@
     {{/if}}
     {{#if this.currentSession.canAccessLeidinggevenden}}
       <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="leidinggevendenbeheer.bestuursfuncties">
+        <AuNavigationLink
+          @route="legacy.leidinggevendenbeheer.bestuursfuncties"
+        >
           <AuIcon @icon="user-popup" @alignment="left" />
           Leidinggevendenbeheer
         </AuNavigationLink>
       </li>
     {{/if}}
     <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="formbeheer">
+      <AuNavigationLink @route="legacy.formbeheer">
         <AuIcon @icon="draft" @alignment="left" />
         Formbeheer
       </AuNavigationLink>

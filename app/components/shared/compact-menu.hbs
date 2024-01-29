@@ -6,18 +6,21 @@
   @buttonLabel="Account settings"
 >
   {{#if this.currentSession.canAccessMandaat}}
-    <AuLink @route="mandatenbeheer.mandatarissen" role="menuitem">
+    <AuLink @route="legacy.mandatenbeheer.mandatarissen" role="menuitem">
       <AuIcon @icon="user-fill" @alignment="left" />
       Mandatenbeheer
     </AuLink>
   {{/if}}
   {{#if this.currentSession.canAccessLeidinggevenden}}
-    <AuLink @route="leidinggevendenbeheer.bestuursfuncties" role="menuitem">
+    <AuLink
+      @route="legacy.leidinggevendenbeheer.bestuursfuncties"
+      role="menuitem"
+    >
       <AuIcon @icon="user-popup" @alignment="left" />
       Leidinggevendenbeheer
     </AuLink>
   {{/if}}
-  <AuLink @route="formbeheer" role="menuitem">
+  <AuLink @route="legacy.formbeheer" role="menuitem">
     <AuIcon @icon="draft" @alignment="left" />
     Formbeheer
   </AuLink>
