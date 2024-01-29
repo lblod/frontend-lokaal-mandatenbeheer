@@ -10,22 +10,13 @@ export default class ContactFormComponent extends Component {
       subject: 'Vraag of probleem',
     },
     {
-      label: 'Toezicht',
-    },
-    {
-      label: 'Berichtencentrum',
-    },
-    {
-      label: 'BBC-DR',
-    },
-    {
       label: 'Mandatenbeheer',
     },
     {
       label: 'Leidinggevendenbeheer',
     },
     {
-      label: 'Personeelsbeheer',
+      label: 'Andere',
     },
   ];
 

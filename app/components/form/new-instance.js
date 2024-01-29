@@ -6,7 +6,12 @@ import { v4 as uuid } from 'uuid';
 import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
+import {
+  JSON_API_TYPE,
+  FORM_GRAPH,
+  META_GRAPH,
+  SOURCE_GRAPH,
+} from '../../utils/constants';
 import { inject as service } from '@ember/service';
 import { keepLatestTask } from 'ember-concurrency';
 
@@ -40,7 +45,7 @@ export default class NewInstanceComponent extends Component {
     const result = yield fetch(`/form-content/${definition.id}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/vnd.api+json',
+        'Content-Type': JSON_API_TYPE,
       },
       body: JSON.stringify({
         contentTtl: triples,

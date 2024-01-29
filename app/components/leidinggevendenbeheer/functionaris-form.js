@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { FUNCTIONARIS_STATUS_CODE_AANGESTELD } from 'frontend-lmb/utils/well-known-uris';
 
 export default class LeidinggevendenbeheerFunctionarisFormComponent extends Component {
   @service() store;
@@ -30,9 +31,8 @@ export default class LeidinggevendenbeheerFunctionarisFormComponent extends Comp
     if (bestuursfunctieCode.isLeidinggevendAmbtenaar) {
       queryParams = {
         filter: {
-          ':uri:':
-            'http://data.vlaanderen.be/id/concept/functionarisStatusCode/45b4b155-d22a-4eaf-be3a-97022c6b7fcd',
-        }, // aangesteld
+          ':uri:': FUNCTIONARIS_STATUS_CODE_AANGESTELD,
+        },
       };
     } else {
       queryParams = {

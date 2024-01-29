@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 import { inject as service } from '@ember/service';
+import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 
 export default class InstanceTableComponent extends Component {
   @service store;
@@ -32,7 +33,7 @@ export default class InstanceTableComponent extends Component {
       {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/vnd.api+json',
+          'Content-Type': JSON_API_TYPE,
         },
       }
     );
