@@ -1,5 +1,5 @@
 import Model, { attr } from '@ember-data/model';
-import { MALE_ID } from 'frontend-lmb/utils/constants';
+import { MALE_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class GeslachtCodeModel extends Model {
   @attr uri;

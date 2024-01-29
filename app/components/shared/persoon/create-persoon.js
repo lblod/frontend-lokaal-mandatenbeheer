@@ -12,7 +12,7 @@ import {
   isValidRijksregisternummer,
 } from 'frontend-lmb/utils/rijksregisternummer';
 import moment from 'moment';
-import { FEMALE_ID, MALE_ID } from 'frontend-lmb/utils/constants';
+import { FEMALE_ID, MALE_ID } from 'frontend-lmb/utils/well-known-ids';
 
 const requiredFields = [
   'geslacht',
