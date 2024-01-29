@@ -6,7 +6,7 @@ import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import {
-  CONTENT_HEADER,
+  JSON_API_TYPE,
   FORM_GRAPH,
   META_GRAPH,
   SOURCE_GRAPH,
@@ -46,7 +46,9 @@ export default class InstanceComponent extends Component {
       `/form-content/${definition.id}/instances/${instanceId}`,
       {
         method: 'PUT',
-        headers: CONTENT_HEADER,
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
         body: JSON.stringify({
           contentTtl: triples,
           instanceUri: this.formInfo.sourceNode.value,

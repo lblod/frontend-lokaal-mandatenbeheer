@@ -7,7 +7,7 @@ import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import {
-  CONTENT_HEADER,
+  JSON_API_TYPE,
   FORM_GRAPH,
   META_GRAPH,
   SOURCE_GRAPH,
@@ -44,7 +44,9 @@ export default class NewInstanceComponent extends Component {
     // post triples to backend
     const result = yield fetch(`/form-content/${definition.id}`, {
       method: 'POST',
-      headers: CONTENT_HEADER,
+      headers: {
+        'Content-Type': JSON_API_TYPE,
+      },
       body: JSON.stringify({
         contentTtl: triples,
         instanceUri: this.formInfo.sourceNode.value,
