@@ -1,6 +1,8 @@
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
-    <AuHeading @skin="2">Bewerk algemene contactgegevens {{this.bestuursfunctie.rol.label}} {{this.bestuurseenheid.naam}}</AuHeading>
+    <AuHeading @skin="2">Bewerk algemene contactgegevens
+      {{this.bestuursfunctie.rol.label}}
+      {{this.bestuurseenheid.naam}}</AuHeading>
   </Group>
 </AuToolbar>
 
@@ -28,7 +30,7 @@
           name="bestuursfunctie-telefoon"
         />
       </div>
-      <AdressenregisterSelector
+      <Legacy::Extra::AdressenregisterSelector
         @address={{this.model.adres}}
         @onChange={{perform this.updateAdres}}
       />
@@ -38,20 +40,27 @@
 
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>
-    <AuButton {{on "click" (perform this.save)}} @loading={{not this.save.isIdle}}>
+    <AuButton
+      {{on "click" (perform this.save)}}
+      @loading={{not this.save.isIdle}}
+    >
       Bewaar contactgegevens
     </AuButton>
-    <AuButton {{on "click" (perform this.resetChanges)}} @skin="secondary" @disabled={{not this.isDirty}}>
+    <AuButton
+      {{on "click" (perform this.resetChanges)}}
+      @skin="secondary"
+      @disabled={{not this.isDirty}}
+    >
       Verwerp wijzigingen
     </AuButton>
   </Group>
   <Group>
-    <AuButton {{on 'click' this.cancel}} @skin="secondary">Sluit</AuButton>
+    <AuButton {{on "click" this.cancel}} @skin="secondary">Sluit</AuButton>
   </Group>
 </AuToolbar>
 
 {{#if this.showConfirmationDialog}}
-  <ExitConfirmationModal
+  <Legacy::Extra::ExitConfirmationModal
     @onSave={{perform this.save}}
     @onDiscard={{perform this.resetChanges}}
     @onCancel={{fn (mut this.showConfirmationDialog) false}}

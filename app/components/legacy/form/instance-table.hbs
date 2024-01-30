@@ -25,7 +25,7 @@
           </thead>
           <tbody>
             {{#each this.formInfo.instances as |instance|}}
-              <Form::InstanceTableRow
+              <Legacy::Form::InstanceTableRow
                 @instance={{instance}}
                 @editRoute={{this.editRoute}}
                 @remove={{this.removeInstance}}
