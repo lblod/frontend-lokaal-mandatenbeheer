@@ -15,7 +15,7 @@
 <AuToolbar @size="large" as |Group|>
   <Group>
     <div class="power-select">
-      <Mandatenbeheer::BestuursperiodenSelector
+      <Legacy::Mandatenbeheer::BestuursperiodenSelector
         @options={{this.mandatenbeheer.bestuursperiods}}
         @selectedPeriod={{this.mandatenbeheer.selectedPeriod}}
         @onSelect={{this.selectPeriod}}
@@ -40,7 +40,7 @@
           </thead>
           <tbody>
             {{#if this.newFractie}}
-              <Mandatenbeheer::FractieTableRow
+              <Legacy::Mandatenbeheer::FractieTableRow
                 @onCancel={{this.cancelEdit}}
                 @onSave={{perform this.saveFractie}}
                 @fractie={{this.newFractie}}
@@ -48,7 +48,7 @@
               />
             {{/if}}
             {{#each this.model as |row|}}
-              <Mandatenbeheer::FractieTableRow
+              <Legacy::Mandatenbeheer::FractieTableRow
                 @onCancel={{this.cancelEdit}}
                 @onSave={{perform this.saveFractie}}
                 @fractie={{row}}
@@ -97,7 +97,7 @@
               </thead>
               <tbody>
                 {{#if this.newFractie}}
-                  <Mandatenbeheer::FractieTableRow
+                  <Legacy::Mandatenbeheer::FractieTableRow
                     @onCancel={{this.cancelEdit}}
                     @onSave={{(perform this.saveFractie)}}
                     @fractie={{this.newFractie}}
@@ -105,7 +105,7 @@
                   />
                 {{/if}}
                 {{#each this.model as |row|}}
-                  <Mandatenbeheer::FractieTableRow
+                  <Legacy::Mandatenbeheer::FractieTableRow
                     @onCancel={{this.cancelEdit}}
                     @onSave={{(perform this.saveFractie)}}
                     @fractie={{row}}
