@@ -23,7 +23,7 @@ export default class InstanceTableComponent extends Component {
     if (this.args.editRoute) {
       return this.args.editRoute;
     }
-    return 'formbeheer.form.instance';
+    return 'legacy.formbeheer.form.instance';
   }
 
   @action

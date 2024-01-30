@@ -1,0 +1,34 @@
+import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+
+export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieFunctionarissenNewIndexController extends Controller {
+  @service() router;
+
+  @action
+  choosePeriode(person) {
+    this.router.transitionTo(
+      'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new.periode',
+      person.get('id')
+    );
+  }
+
+  @action
+  createNewPerson(hasData) {
+    hasData
+      ? this.router.transitionTo(
+          'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new-person',
+          { queryParams: hasData }
+        )
+      : this.router.transitionTo(
+          'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new-person'
+        );
+  }
+
+  @action
+  cancel() {
+    this.router.transitionTo(
+      'legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.index'
+    );
+  }
+}
