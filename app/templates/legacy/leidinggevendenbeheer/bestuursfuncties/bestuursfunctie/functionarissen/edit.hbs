@@ -8,7 +8,10 @@
   </Group>
 </AuToolbar>
 
-<Leidinggevendenbeheer::FunctionarisForm @model={{this.model}} as |isValid|>
+<Legacy::Leidinggevendenbeheer::FunctionarisForm
+  @model={{this.model}}
+  as |isValid|
+>
   <div class="au-o-box">
     <AuAlert @icon="info-circle">
       <AuContent @skin="small">
@@ -46,4 +49,4 @@
       </AuButtonGroup>
     </Group>
   </AuToolbar>
-</Leidinggevendenbeheer::FunctionarisForm>
+</Legacy::Leidinggevendenbeheer::FunctionarisForm>
