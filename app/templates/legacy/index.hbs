@@ -4,7 +4,8 @@
       <div class="au-o-grid__item au-u-2-5@medium">
         <AuContent class="au-u-margin-bottom">
           <AuHeading @skin="2">{{this.currentSession.groupClassification.label}}
-            {{this.currentSession.group.naam}}</AuHeading>
+            {{this.currentSession.group.naam}}
+            - Legacy</AuHeading>
           <p>Indien u toegang mist tot een van de modules in het loket, neem
             contact op met uw
             <strong>interne beheerder</strong>. Indien er zich een probleem
@@ -18,7 +19,7 @@
       </div>
     </div>
     <AuHeading @level="2" @skin="3" class="au-u-margin-bottom">Beschikbare
-      modules</AuHeading>
+      modules - Legacy</AuHeading>
 
     <ul class="au-o-grid au-o-grid--small">
       {{#if this.currentSession.canAccessMandaat}}
@@ -28,7 +29,7 @@
             @extraInformationLink="https://www.vlaanderen.be/lokaal-bestuur/loket-voor-lokale-besturen/mandatenbeheer-lokale-besturen"
             @userManualLink="https://abb-vlaanderen.gitbook.io/handleiding-loket/modules/mandatenbeheer"
           >
-            <:title>Mandatenbeheer</:title>
+            <:title>Mandatenbeheer - Legacy</:title>
             <:description>Hou de mandaten binnen de gemeenten, OCMW's,
               districten en provincies bij.</:description>
             <:link>
@@ -47,7 +48,7 @@
             @extraInformationLink="https://www.vlaanderen.be/lokaal-bestuur/loket-voor-lokale-besturen/leidinggevendenbeheer"
             @userManualLink="https://abb-vlaanderen.gitbook.io/handleiding-loket/modules/leidinggevendenbeheer"
           >
-            <:title>Leidinggevendenbeheer</:title>
+            <:title>Leidinggevendenbeheer - Legacy</:title>
             <:description>Hou hier de leidinggevende functies voor uw bestuur
               bij.</:description>
             <:link>
@@ -61,19 +62,10 @@
       {{/if}}
       <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
         <LoketModuleCard @icon="draft">
-          <:title>Formbeheer</:title>
+          <:title>Formbeheer - Legacy</:title>
           <:description>Hier vind je een overzicht van de huidige forms.</:description>
           <:link>
             <AuLink @route="legacy.formbeheer" @skin="button">Ga naar formbeheer</AuLink>
-          </:link>
-        </LoketModuleCard>
-      </li>
-      <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
-        <LoketModuleCard @icon="draft">
-          <:title>Legacy</:title>
-          <:description>Hier vind je een overzicht van legacy pages.</:description>
-          <:link>
-            <AuLink @route="legacy" @skin="button">Ga naar legacy pages</AuLink>
           </:link>
         </LoketModuleCard>
       </li>

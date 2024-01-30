@@ -14,7 +14,7 @@
     <Group>
       <div class="au-o-flow">
         <AuHeading @skin="2">Mandatenbeheer</AuHeading>
-        <Mandatenbeheer::MandatarissenTotals
+        <Legacy::Mandatenbeheer::MandatarissenTotals
           class="js-accordion"
           @bestuursorganen={{this.bestuursorganen}}
         />
@@ -39,7 +39,7 @@
   <AuToolbar @size="large" as |Group|>
     <Group>
       <div class="">
-        <Mandatenbeheer::BestuursperiodenSelector
+        <Legacy::Mandatenbeheer::BestuursperiodenSelector
           @options={{this.mandatenbeheer.bestuursperiods}}
           @selectedPeriod={{this.mandatenbeheer.selectedPeriod}}
           @onSelect={{this.selectPeriod}}
@@ -58,7 +58,7 @@
     </Group>
   </AuToolbar>
 
-  <Mandatenbeheer::MandatarisTable
+  <Legacy::Mandatenbeheer::MandatarisTable
     class="au-c-body-container"
     @content={{this.model}}
     @isLoading={{this.isLoadingModel}}
