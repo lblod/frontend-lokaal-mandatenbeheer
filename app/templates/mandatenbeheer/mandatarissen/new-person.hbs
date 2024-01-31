@@ -1,0 +1,15 @@
+<AuToolbar @size="large" @border="bottom" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Voeg persoon toe buiten de lijst van verkozenen</AuHeading>
+  </Group>
+</AuToolbar>
+
+<AuAlert @icon="alert-triangle" @title="TODO " @skin="warning">
+  <p>Add person create form!</p>
+</AuAlert>
+
+<AuToolbar @border="top" @size="large" as |Group|>
+  <Group>
+    <AuButton @skin="secondary" {{on "click" this.cancel}}>Annuleer</AuButton>
+  </Group>
+</AuToolbar>
