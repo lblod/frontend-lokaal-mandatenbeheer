@@ -17,6 +17,13 @@ export default class MandatenbeheerFractiesController extends Controller {
     return this.mandatenbeheer.bestuursorganen;
   }
 
+  get hasActiveChildRoute() {
+    return (
+      this.router.currentRouteName.startsWith('mandatenbeheer.fracties.') &&
+      this.router.currentRouteName != 'mandatenbeheer.fracties.index'
+    );
+  }
+
   @action
   createNewFractie() {
     this.router.transitionTo('mandatenbeheer.fracties.new');
