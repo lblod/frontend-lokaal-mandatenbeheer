@@ -1,0 +1,29 @@
+{{page-title
+  "Mandatenbeheer "
+  this.bestuurseenheid.classificatie.label
+  " "
+  this.bestuurseenheid.naam
+}}
+
+<AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Beheer Fracties</AuHeading>
+  </Group>
+  <Group>
+    <AuButton {{on "click" this.createNewFractie}}>Voeg fractie toe</AuButton>
+  </Group>
+</AuToolbar>
+
+<AuToolbar @size="large" as |Group|>
+  <Group>
+    <div class="power-select">
+      <Legacy::Mandatenbeheer::BestuursperiodenSelector
+        @options={{this.mandatenbeheer.bestuursperiods}}
+        @selectedPeriod={{this.mandatenbeheer.selectedPeriod}}
+        @onSelect={{this.selectPeriod}}
+      />
+    </div>
+  </Group>
+</AuToolbar>
+
+<Tmp::Todo>Add fractie table!</Tmp::Todo>
