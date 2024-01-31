@@ -38,13 +38,11 @@
 
   <AuToolbar @size="large" as |Group|>
     <Group>
-      <div class="">
-        <Legacy::Mandatenbeheer::BestuursperiodenSelector
-          @options={{this.mandatenbeheer.bestuursperiods}}
-          @selectedPeriod={{this.mandatenbeheer.selectedPeriod}}
-          @onSelect={{this.selectPeriod}}
-        />
-      </div>
+      <Mandatenbeheer::BestuursperiodenSelector
+        @options={{this.mandatenbeheer.bestuursperiods}}
+        @selectedPeriod={{this.mandatenbeheer.selectedPeriod}}
+        @onSelect={{this.selectPeriod}}
+      />
     </Group>
     <Group class="au-u-1-3@medium">
       <AuInput

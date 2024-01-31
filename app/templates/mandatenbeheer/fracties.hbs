@@ -17,13 +17,11 @@
 
   <AuToolbar @size="large" as |Group|>
     <Group>
-      <div class="power-select">
-        <Legacy::Mandatenbeheer::BestuursperiodenSelector
-          @options={{this.mandatenbeheer.bestuursperiods}}
-          @selectedPeriod={{this.mandatenbeheer.selectedPeriod}}
-          @onSelect={{this.selectPeriod}}
-        />
-      </div>
+      <Mandatenbeheer::BestuursperiodenSelector
+        @options={{this.mandatenbeheer.bestuursperiods}}
+        @selectedPeriod={{this.mandatenbeheer.selectedPeriod}}
+        @onSelect={{this.selectPeriod}}
+      />
     </Group>
   </AuToolbar>
 
