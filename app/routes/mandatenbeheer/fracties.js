@@ -6,13 +6,15 @@ import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-
 export default class MandatenbeheerFractiesRoute extends Route {
   @service store;
 
-  beforeModel(transition) {
-    transition.data.mandatenbeheer = this.modelFor('mandatenbeheer');
+  beforeModel() {
+    const mandatenbeheer = this.modelFor('mandatenbeheer');
+    this.mandatenbeheer = mandatenbeheer;
   }
 
-  model(params, transition) {
-    const bestuursorganenIds =
-      transition.data.mandatenbeheer.bestuursorganen.map((o) => o.get('id'));
+  model() {
+    const bestuursorganenIds = this.mandatenbeheer.bestuursorganen.map((o) =>
+      o.get('id')
+    );
 
     return this.store.query('fractie', {
       sort: 'naam',
@@ -22,7 +24,7 @@ export default class MandatenbeheerFractiesRoute extends Route {
     });
   }
 
-  async afterModel(model, transition) {
+  async afterModel() {
     const defaultFractieType = (
       await this.store.query('fractietype', {
         page: { size: 1 },
@@ -30,13 +32,13 @@ export default class MandatenbeheerFractiesRoute extends Route {
       })
     ).at(0);
 
-    transition.data.defaultFractieType = defaultFractieType;
+    this.defaultFractieType = defaultFractieType;
   }
 
-  setupController(controller, model, transition) {
+  setupController(controller) {
     super.setupController(...arguments);
-    controller.mandatenbeheer = transition.data.mandatenbeheer;
-    controller.defaultFractieType = transition.data.defaultFractieType;
+    controller.mandatenbeheer = this.mandatenbeheer;
+    controller.defaultFractieType = this.defaultFractieType;
   }
 
   @action

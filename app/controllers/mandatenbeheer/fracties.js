@@ -9,6 +9,14 @@ export default class MandatenbeheerFractiesController extends Controller {
   @tracked defaultFractieType;
   @tracked mandatenbeheer;
 
+  get startDate() {
+    return this.mandatenbeheer.selectedPeriod.startDate;
+  }
+
+  get endDate() {
+    return this.mandatenbeheer.selectedPeriod.endDate;
+  }
+
   get bestuurseenheid() {
     return this.mandatenbeheer.bestuurseenheid;
   }
@@ -27,6 +35,11 @@ export default class MandatenbeheerFractiesController extends Controller {
   @action
   createNewFractie() {
     this.router.transitionTo('mandatenbeheer.fracties.new');
+  }
+
+  @action
+  editFractie(fractie) {
+    this.router.transitionTo('mandatenbeheer.fracties.edit', fractie.id);
   }
 
   @action

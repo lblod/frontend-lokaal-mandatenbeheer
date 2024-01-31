@@ -27,7 +27,52 @@
     </Group>
   </AuToolbar>
 
-  <Tmp::Todo>Add fractie table!</Tmp::Todo>
+  <Tmp::Todo>Refactor fractie table!
+
+    <div class="au-c-body-container">
+      <div class="au-c-data-table">
+        <div class="au-c-data-table__wrapper">
+          <table class="au-c-data-table__table">
+            <thead>
+              <tr class="au-c-data-table__header">
+                <th>Fractienaam</th>
+                <th>Bestuursperiode</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each this.model as |fractie|}}
+                <tr>
+                  <td>
+                    <strong>{{fractie.naam}}</strong>
+                  </td>
+
+                  <td>
+                    {{moment-format this.startDate "YYYY"}}
+                    -
+                    {{#if this.endDate}}
+                      {{moment-format this.endDate "YYYY"}}
+                    {{else}}
+                      heden
+                    {{/if}}
+                  </td>
+                  <td class="au-u-text-right">
+                    <AuButton
+                      {{on "click" (fn this.editFractie fractie)}}
+                      @skin="link"
+                    >
+                      <AuIcon @icon="pencil" @alignment="left" />
+                      Bewerk
+                    </AuButton>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </Tmp::Todo>
 </div>
 
 {{outlet}}

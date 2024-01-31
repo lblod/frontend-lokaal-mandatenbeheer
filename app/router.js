@@ -35,7 +35,7 @@ Router.map(function () {
 
     this.route('fracties', function () {
       this.route('new');
-      this.route('edit', { path: '/:instance_id/edit' });
+      this.route('edit', { path: '/:id/edit' });
     });
   });
 
