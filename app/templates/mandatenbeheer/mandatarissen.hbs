@@ -58,17 +58,20 @@
     </Group>
   </AuToolbar>
 
-  <Legacy::Mandatenbeheer::MandatarisTable
-    class="au-c-body-container"
-    @content={{this.model}}
-    @isLoading={{this.isLoadingModel}}
-    @sort={{this.sort}}
-    @page={{this.page}}
-    @size={{this.size}}
-    @editRoute="mandatenbeheer.mandatarissen.edit"
-    @displaySubset={{this.hasActiveChildRoute}}
-    @mandatarisBestuursorganen={{this.mandatarisBestuursorganen}}
-  />
+  <Tmp::Todo>
+    Refactor mandataris table!
+    <Legacy::Mandatenbeheer::MandatarisTable
+      class="au-c-body-container"
+      @content={{this.model}}
+      @isLoading={{this.isLoadingModel}}
+      @sort={{this.sort}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @editRoute="mandatenbeheer.mandatarissen.edit"
+      @displaySubset={{this.hasActiveChildRoute}}
+      @mandatarisBestuursorganen={{this.mandatarisBestuursorganen}}
+    />
+  </Tmp::Todo>
 
 </div>
 
