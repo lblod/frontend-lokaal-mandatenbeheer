@@ -6,12 +6,8 @@
   @searchEnabled={{false}}
   as |period|
 >
-  Bestuursperiode
-  {{moment-format period.startDate "YYYY"}}
-  -
-  {{#if period.endDate}}
-    {{moment-format period.endDate "YYYY"}}
-  {{else}}
-    heden
-  {{/if}}
+  <Tmp::Periode
+    @start={{period.startDate}}
+    @end={{period.endDate}}
+  >Bestuursperiode</Tmp::Periode>
 </PowerSelect>

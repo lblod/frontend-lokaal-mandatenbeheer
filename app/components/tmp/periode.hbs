@@ -1,0 +1,10 @@
+<div class="au-u-flex--inline {{@class}}">
+  {{yield}}
+  {{moment-format @start "YYYY"}}
+  -
+  {{#if @end}}
+    {{moment-format @end "YYYY"}}
+  {{else}}
+    heden
+  {{/if}}
+</div>

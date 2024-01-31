@@ -46,13 +46,10 @@
                   </td>
 
                   <td>
-                    {{moment-format this.startDate "YYYY"}}
-                    -
-                    {{#if this.endDate}}
-                      {{moment-format this.endDate "YYYY"}}
-                    {{else}}
-                      heden
-                    {{/if}}
+                    <Tmp::Periode
+                      @start={{this.startDate}}
+                      @end={{this.endDate}}
+                    />
                   </td>
                   <td class="au-u-text-right">
                     <AuButton
