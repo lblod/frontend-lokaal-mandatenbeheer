@@ -1,24 +1,46 @@
 # frontend-lokaal-mandatenbeheer
 
-> [!CAUTION]
-> This readme is outdated at this stage. It was copied from frontend-lmb and needs to be updated with the changed scope
-
 Frontend of the lokaal mandatenbeheer application
+
+## Tutorial
+
+1. Make sure that the backend server is running. If this is not the case yet, first follow the instructions at: <https://github.com/lblod/app-lokaal-mandatenbeheer>
+
+2. [Install docker-ember](https://github.com/madnificent/docker-ember)
+
+3. Run the command
+
+   ```
+   ed npm install
+   ```
+
+   in your terminal. This will install all current node modules.
+
+4. Run the command
+
+   ```
+   eds --proxy http://host:90
+   ```
+
+   in your terminal. This will launch the Ember server and proxy to your localhost on port 90.
+
+5. Browse to: <http://localhost:4200>. This is the view that the unauthenticated users will see. For the view of authenticated users, browse to: <http://localhost:4200/mock-login>.
 
 ## Environment variables
 
-The [ember-proxy-service](https://github.com/mu-semtech/ember-proxy-service#configure-environment-variables-in-the-frontends-container) docker image (which we use to host the frontend) supports configuring environment variables. The following options are available for the loket image.
+This frontend is hosted by the [static-file-service](https://github.com/mu-semtech/static-file-service) microservice. It supports configuring our Ember application at runtime using environment variables. The following options are available for the lokaal mandatenbeheer image.
 
 ### General
 
-| Name                                       | Description                                                                             |
-| ------------------------------------------ | --------------------------------------------------------------------------------------- |
-| `EMBER_LPDC_URL`                           | Link to the LPDC application (only required when the feature flag is enabled)           |
-| `EMBER_WORSHIP_DECISIONS_DATABASE_URL`     | Link to the worship decisions database                                                  |
-| `EMBER_WORSHIP_ORGANISATIONS_DATABASE_URL` | Link to the worship organisations database                                              |
-| `EMBER_GLOBAL_SYSTEM_NOTIFICATION`         | This can be used to display a message at the top of the application. HTML is supported. |
+> TODO This functionality is not supported yet.
+
+| Name             | Description                                                                   |
+| ---------------- | ----------------------------------------------------------------------------- |
+| `EMBER_LPDC_URL` | Link to the LPDC application (only required when the feature flag is enabled) |
 
 ### ACM/IDM
+
+> TODO This functionality is not supported yet. It will be added in the near future.
 
 | Name                               | Description                                                                                                                                              |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -32,11 +54,15 @@ The [ember-proxy-service](https://github.com/mu-semtech/ember-proxy-service#conf
 
 ### Feature flags
 
+> TODO This functionality is not supported yet.
+
 Feature flags are new / experimental features that can be enabled by setting them to "true".
 
 > There are no feature flags available right now.
 
 ### Plausible
+
+> TODO This functionality is not supported yet.
 
 | Name                         | Description                                                                      |
 | ---------------------------- | -------------------------------------------------------------------------------- |
@@ -46,6 +72,8 @@ Feature flags are new / experimental features that can be enabled by setting the
 > Analytics will only be enabled when both variables are configured.
 
 ### Sentry
+
+> TODO This functionality is not supported yet.
 
 | Name                       | Description                                                                                     |
 | -------------------------- | ----------------------------------------------------------------------------------------------- |
