@@ -52,14 +52,6 @@ This frontend is hosted by the [static-file-service](https://github.com/mu-semte
 
 > When ACM/IDM is not configured, the frontend will default to the "mock login" setup instead.
 
-### Feature flags
-
-> TODO This functionality is not supported yet.
-
-Feature flags are new / experimental features that can be enabled by setting them to "true".
-
-> There are no feature flags available right now.
-
 ### Plausible
 
 > TODO This functionality is not supported yet.
