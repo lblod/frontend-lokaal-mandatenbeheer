@@ -9,6 +9,9 @@ export default class MandatenbeheerRoute extends Route {
   @service router;
   @service store;
 
+  startDate;
+  endDate;
+
   queryParams = {
     startDate: { refreshModel: true },
     endDate: { refreshModel: true },
@@ -49,6 +52,14 @@ export default class MandatenbeheerRoute extends Route {
     });
   }
 
+  async getRelevantBestuursorganen(bestuurseenheidId) {
+    return await this.store.query('bestuursorgaan', {
+      'filter[is-tijdsspecialisatie-van][bestuurseenheid][id]':
+        bestuurseenheidId,
+      'filter[:has:bevat]': true, // only organs with a political mandate
+    });
+  }
+
   calculateUniqueBestuursperiods(bestuursorganen) {
     const periods = bestuursorganen.map((b) => ({
       startDate: moment(b.bindingStart).format('YYYY-MM-DD'),
@@ -66,11 +77,9 @@ export default class MandatenbeheerRoute extends Route {
   }
 
   calculateSelectedPeriod(periods, { startDate, endDate }) {
-    //Note: the assumptions: no messy data, i.e.
+    // Note: the assumptions: no messy data, i.e.
     // - no intersection between periods
     // - start < end
-    //So, basically it assumes e.g.
-    //  - [2001-2003][2003-2023] and possibly [2024-2025|null]
     const sortedPeriods = periods.sortBy('startDate');
     if (!(startDate || endDate)) {
       const today = moment(new Date()).format('YYYY-MM-DD');
@@ -95,22 +104,5 @@ export default class MandatenbeheerRoute extends Route {
         : null;
       return start == period.startDate && end == period.endDate;
     });
-  }
-
-  /*
-   * Get all the bestuursorganen in tijd of a bestuursorgaan with at least 1 political or worship mandate.
-   * @return Array of bestuursorganen in tijd ressembling the bestuursperiodes
-   * TODO: keep in sync with routes/eredienst-mandatenbeheer.
-   *       Extract common code once we are sure of the common pattern.
-   * TODO: note, this is going to fail once we have more then 20 organen, oh well...
-   */
-  async getRelevantBestuursorganen(bestuurseenheidId) {
-    return (
-      await this.store.query('bestuursorgaan', {
-        'filter[is-tijdsspecialisatie-van][bestuurseenheid][id]':
-          bestuurseenheidId,
-        'filter[:has:bevat]': true, // only organs with a political mandate
-      })
-    ).slice(); // TODO, it should be possible to remove .slice after updating to EmberData v5. Something calls toArray and triggers a deprecation on v4.
   }
 }
