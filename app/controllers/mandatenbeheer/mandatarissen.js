@@ -7,19 +7,10 @@ import { tracked } from '@glimmer/tracking';
 export default class MandatenbeheerMandatarissenController extends Controller {
   @service() router;
 
-  @tracked mandatenbeheer;
   @tracked filter = '';
   @tracked page = 0;
   sort = 'is-bestuurlijke-alias-van.achternaam';
   size = 20;
-
-  get startDate() {
-    return this.mandatenbeheer.startDate;
-  }
-
-  get endDate() {
-    return this.mandatenbeheer.endDate;
-  }
 
   get hasActiveChildRoute() {
     return (
@@ -27,16 +18,6 @@ export default class MandatenbeheerMandatarissenController extends Controller {
         'mandatenbeheer.mandatarissen.'
       ) && this.router.currentRouteName != 'mandatenbeheer.mandatarissen.index'
     );
-  }
-
-  get bestuursperioden() {
-    return this.mandatenbeheer.bestuursperioden;
-  }
-  get bestuurseenheid() {
-    return this.mandatenbeheer.bestuurseenheid;
-  }
-  get bestuursorganen() {
-    return this.mandatenbeheer.bestuursorganen;
   }
 
   @restartableTask
@@ -48,9 +29,7 @@ export default class MandatenbeheerMandatarissenController extends Controller {
 
   @action
   handleAddMandatarisClick() {
-    if (this.router.currentRouteName === 'mandatenbeheer.mandatarissen.new')
-      this.router.transitionTo('mandatenbeheer.mandatarissen.index');
-    else this.router.transitionTo('mandatenbeheer.mandatarissen.new');
+    this.router.transitionTo('mandatenbeheer.mandatarissen.new');
   }
 
   @action

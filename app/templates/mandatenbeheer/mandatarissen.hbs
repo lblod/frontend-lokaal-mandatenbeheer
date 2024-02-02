@@ -1,8 +1,8 @@
 {{page-title
   "Mandatenbeheer "
-  this.bestuurseenheid.classificatie.label
+  @model.mandatenbeheer.bestuurseenheid.classificatie.label
   " "
-  this.bestuurseenheid.naam
+  @model.mandatenbeheer.bestuurseenheid.naam
 }}
 <div class="au-c-body-container {{if this.hasActiveChildRoute 'au-u-hidden'}}">
   <AuToolbar
@@ -16,7 +16,7 @@
         <AuHeading @skin="2">Mandatenbeheer</AuHeading>
         <Mandatenbeheer::Mandataris::MandatarissenTotals
           class="js-accordion"
-          @bestuursorganen={{this.bestuursorganen}}
+          @bestuursorganen={{@model.mandatenbeheer.bestuursorganen}}
         />
       </div>
     </Group>
@@ -39,8 +39,8 @@
   <AuToolbar @size="large" as |Group|>
     <Group>
       <Mandatenbeheer::BestuursperiodenSelector
-        @options={{this.mandatenbeheer.bestuursperiods}}
-        @selectedPeriod={{this.mandatenbeheer.selectedPeriod}}
+        @options={{@model.mandatenbeheer.bestuursperiods}}
+        @selectedPeriod={{@model.mandatenbeheer.selectedPeriod}}
         @onSelect={{this.selectPeriod}}
       />
     </Group>
@@ -60,14 +60,14 @@
     Refactor mandataris table!
     <Legacy::Mandatenbeheer::MandatarisTable
       class="au-c-body-container"
-      @content={{this.model}}
+      @content={{@model.mandatarissen}}
       @isLoading={{this.isLoadingModel}}
       @sort={{this.sort}}
       @page={{this.page}}
       @size={{this.size}}
       @editRoute="mandatenbeheer.mandatarissen.edit"
       @displaySubset={{this.hasActiveChildRoute}}
-      @mandatarisBestuursorganen={{this.mandatarisBestuursorganen}}
+      @mandatarisBestuursorganen={{@model.mandatarisBestuursorganen}}
     />
   </Tmp::Todo>
 
