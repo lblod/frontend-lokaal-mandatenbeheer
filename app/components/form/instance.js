@@ -83,7 +83,7 @@ export default class InstanceComponent extends Component {
   async onInit() {
     const form = this.args.form;
     const instanceId = this.args.instanceId;
-    const { formDataTtl, instanceUri } = await this.retrieveFormInstance(
+    const { formInstanceTtl, instanceUri } = await this.retrieveFormInstance(
       form.definition.id,
       instanceId
     );
@@ -96,7 +96,7 @@ export default class InstanceComponent extends Component {
       sourceGraph: SOURCE_GRAPH,
     };
 
-    this.loadForm(form.definition, formStore, formDataTtl, graphs);
+    this.loadForm(form.definition, formStore, formInstanceTtl, graphs);
 
     const formNode = formStore.any(
       undefined,
@@ -131,8 +131,8 @@ export default class InstanceComponent extends Component {
       error.status = response.status;
       throw error;
     }
-    const { formDataTtl, instanceUri } = await response.json();
-    return { formDataTtl, instanceUri };
+    const { formInstanceTtl, instanceUri } = await response.json();
+    return { formInstanceTtl, instanceUri };
   }
 
   registerObserver(formStore) {
