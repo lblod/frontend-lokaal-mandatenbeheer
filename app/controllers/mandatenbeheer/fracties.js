@@ -1,13 +1,9 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
 export default class MandatenbeheerFractiesController extends Controller {
   @service router;
-
-  @tracked defaultFractieType;
-  @tracked mandatenbeheer;
 
   get startDate() {
     return this.mandatenbeheer.selectedPeriod.startDate;
