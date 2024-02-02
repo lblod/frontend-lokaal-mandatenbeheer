@@ -5,22 +5,6 @@ import { inject as service } from '@ember/service';
 export default class MandatenbeheerFractiesController extends Controller {
   @service router;
 
-  get startDate() {
-    return this.mandatenbeheer.selectedPeriod.startDate;
-  }
-
-  get endDate() {
-    return this.mandatenbeheer.selectedPeriod.endDate;
-  }
-
-  get bestuurseenheid() {
-    return this.mandatenbeheer.bestuurseenheid;
-  }
-
-  get bestuursorganen() {
-    return this.mandatenbeheer.bestuursorganen;
-  }
-
   get hasActiveChildRoute() {
     return (
       this.router.currentRouteName.startsWith('mandatenbeheer.fracties.') &&
