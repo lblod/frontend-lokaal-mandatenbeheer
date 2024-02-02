@@ -2,7 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-import { RDF, FORM } from '../../../rdf/namespaces';
+import { v4 as uuid } from 'uuid';
+import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import {
@@ -10,11 +11,11 @@ import {
   FORM_GRAPH,
   META_GRAPH,
   SOURCE_GRAPH,
-} from '../../../utils/constants';
+} from '../../utils/constants';
 import { inject as service } from '@ember/service';
 import { keepLatestTask } from 'ember-concurrency';
 
-export default class InstanceComponent extends Component {
+export default class NewInstanceComponent extends Component {
   @service store;
 
   @tracked sourceTriples;
@@ -39,22 +40,18 @@ export default class InstanceComponent extends Component {
   *save() {
     const triples = this.sourceTriples;
     const definition = this.formInfo.definition;
-    const instanceId = this.formInfo.instanceId;
     this.errorMessage = null;
     // post triples to backend
-    const result = yield fetch(
-      `/form-content/${definition.id}/instances/${instanceId}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': JSON_API_TYPE,
-        },
-        body: JSON.stringify({
-          contentTtl: triples,
-          instanceUri: this.formInfo.sourceNode.value,
-        }),
-      }
-    );
+    const result = yield fetch(`/form-content/${definition.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': JSON_API_TYPE,
+      },
+      body: JSON.stringify({
+        contentTtl: triples,
+        instanceUri: this.formInfo.sourceNode.value,
+      }),
+    });
 
     if (!result.ok) {
       this.errorMessage =
@@ -70,23 +67,27 @@ export default class InstanceComponent extends Component {
       return;
     }
 
-    if (this.args.onSave) {
-      this.args.onSave(id);
+    if (this.args.onCreate) {
+      this.args.onCreate(id);
     }
   }
 
   @action
-  async saveInstance() {
+  async createInstance() {
     this.save.perform();
   }
 
-  async onInit() {
+  onInit() {
     const form = this.args.form;
-    const instanceId = this.args.instanceId;
-    const { formDataTtl, instanceUri } = await this.retrieveFormInstance(
-      form.definition.id,
-      instanceId
-    );
+    const uri = `${form.prefix}${uuid()}`;
+    const sourceTtl = this.args.buildSourceTtl
+      ? this.args.buildSourceTtl(uri)
+      : '';
+    const instance = this.store.createRecord('form-instance', {
+      definition: form.definition,
+      sourceTtl,
+      uri,
+    });
 
     const formStore = new ForkingStore();
 
@@ -96,7 +97,7 @@ export default class InstanceComponent extends Component {
       sourceGraph: SOURCE_GRAPH,
     };
 
-    this.loadForm(form.definition, formStore, formDataTtl, graphs);
+    this.loadForm(form.definition, formStore, sourceTtl, graphs);
 
     const formNode = formStore.any(
       undefined,
@@ -104,10 +105,10 @@ export default class InstanceComponent extends Component {
       FORM('Form'),
       FORM_GRAPH
     );
-    const sourceNode = new NamedNode(instanceUri);
+    const sourceNode = new NamedNode(instance.uri);
 
     this.formInfo = {
-      instanceId,
+      instance,
       definition: form.definition,
       formNode,
       formStore,
@@ -122,17 +123,6 @@ export default class InstanceComponent extends Component {
     store.parse(definition.formTtl, graphs.formGraph, 'text/turtle');
     store.parse(definition.metaTtl || '', graphs.metaGraph, 'text/turtle');
     store.parse(sourceTtl || '', graphs.sourceGraph, 'text/turtle');
-  }
-
-  async retrieveFormInstance(formId, id) {
-    const response = await fetch(`/form-content/${formId}/instances/${id}`);
-    if (!response.ok) {
-      let error = new Error(response.statusText);
-      error.status = response.status;
-      throw error;
-    }
-    const { formDataTtl, instanceUri } = await response.json();
-    return { formDataTtl, instanceUri };
   }
 
   registerObserver(formStore) {
