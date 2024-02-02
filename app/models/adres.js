@@ -10,6 +10,7 @@ export default class AdresModel extends Model {
   @attr volledigAdres;
   @attr adresRegisterId;
   @attr adresRegisterUri;
+  @attr uri;
 }
 
 export function combineFullAddress(address) {

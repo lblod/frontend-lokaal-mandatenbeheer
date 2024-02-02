@@ -67,7 +67,7 @@ export default class AdressenregisterSelectorComponent extends Component {
 
   @keepLatestTask
   *search(searchData) {
-    yield timeout(400);
+    yield timeout(800);
     const addressSuggestions = yield this.addressregister.suggest(searchData);
     return addressSuggestions;
   }

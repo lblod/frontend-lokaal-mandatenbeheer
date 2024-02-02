@@ -4,6 +4,7 @@ import { warn } from '@ember/debug';
 import ENV from 'frontend-lmb/config/environment';
 import 'moment';
 import 'moment-timezone';
+import { registerCustomFormFields } from 'frontend-lmb/utils/register-form-fields';
 
 export default class ApplicationRoute extends Route {
   @service currentSession;
@@ -21,6 +22,7 @@ export default class ApplicationRoute extends Route {
     moment.set('defaultFormat', 'DD MMM YYYY, HH:mm');
 
     this.startAnalytics();
+    registerCustomFormFields();
 
     return this._loadCurrentSession();
   }

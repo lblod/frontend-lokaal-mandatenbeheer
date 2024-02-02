@@ -20,7 +20,7 @@
   <div class="au-u-2-3@medium au-u-margin-top">
     <AuLabel for="busnumber">Busnummer</AuLabel>
 
-    <Legacy::Extra::AdressenregisterBusnumberSelector
+    <Extra::AdressenregisterBusnumberSelector
       @address={{this.addressWithBusnumber}}
       @options={{this.addressesWithBusnumbers}}
       @onChange={{this.selectAddressWithBusnumber}}
@@ -50,7 +50,7 @@
         searchMessage="Typ om te zoeken"
       )
       BusSelector=(component
-        "legacy/extra/adressenregister-busnumber-selector"
+        "extra/adressenregister-busnumber-selector"
         address=this.addressWithBusnumber
         options=this.addressesWithBusnumbers
         onChange=this.selectAddressWithBusnumber
