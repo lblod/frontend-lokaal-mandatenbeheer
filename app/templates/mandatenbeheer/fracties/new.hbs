@@ -6,6 +6,12 @@
 
 <Tmp::Todo>Add create fractie form!</Tmp::Todo>
 
+<Form::NewInstance
+  @onCreate={{this.onCreate}}
+  @form={{this.model.form}}
+  @buildSourceTtl={{this.buildSourceTtl}}
+/>
+
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>
     <AuButton @skin="secondary" {{on "click" this.cancel}}>Annuleer</AuButton>
