@@ -76,7 +76,7 @@
           {{/if}}
         </td>
         <td><LinkTo
-            @route="legacy.leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.edit"
+            @route={{@onEdit}}
             @model={{row.id}}
             class="au-c-link"
           >Bewerk periode</LinkTo></td>
