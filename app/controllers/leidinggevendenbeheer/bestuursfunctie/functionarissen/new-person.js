@@ -21,6 +21,8 @@ export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenNewPerso
 
   @action
   onCreate(user) {
+    // TODO this might need to change, because we would like only one form.
+    // Actually it could be that this page dissapears in that case.
     this.router.transitionTo(
       'leidinggevendenbeheer.bestuursfunctie.functionarissen.new.periode',
       user.get('id')
