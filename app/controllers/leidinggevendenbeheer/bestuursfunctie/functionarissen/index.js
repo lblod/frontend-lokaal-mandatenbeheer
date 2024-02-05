@@ -12,7 +12,7 @@ export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenIndexCon
   @action
   handleVoegNieuweAanstellingsperiodeClick() {
     this.router.transitionTo(
-      'leidinggevendenbeheerbestuursfunctie.functionarissen.new'
+      'leidinggevendenbeheer.bestuursfunctie.functionarissen.new'
     );
   }
 }
