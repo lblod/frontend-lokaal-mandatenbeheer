@@ -5,6 +5,7 @@ export default class PersoonModel extends Model {
   @attr achternaam;
   @attr alternatieveNaam;
   @attr gebruikteVoornaam;
+  @attr uri;
 
   @belongsTo('geboorte', {
     async: true,

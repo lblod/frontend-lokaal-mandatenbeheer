@@ -103,6 +103,9 @@ export default class SharedPersoonCreatePersoonComponent extends Component {
 
   @task
   *loadOrCreateGeboorte() {
+    if (!this.birthDate) {
+      return null;
+    }
     let geboorte;
     let queryResult = yield this.store.query('geboorte', {
       filter: { datum: this.birthDate.toISOString().substring(0, 10) },

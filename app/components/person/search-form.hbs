@@ -75,7 +75,7 @@
           <ul class="au-c-list-vertical">
             {{#each this.personen as |persoon|}}
               <li class="au-c-list-vertical__item">
-                <Legacy::Persoon::PersoonSearchResult
+                <Person::SearchResult
                   @persoon={{persoon}}
                   @onSelect={{this.selectPersoon}}
                 />
@@ -142,7 +142,7 @@
 {{#unless this.isQuerying}}
   {{#if this.hasSearched}}
     {{#if this.personen}}
-      <Legacy::Persoon::PersoonSearchFormPagination
+      <Person::SearchFormPagination
         @page={{this.page}}
         @size={{this.pageSize}}
         @nbOfItems={{this.personen.length}}
