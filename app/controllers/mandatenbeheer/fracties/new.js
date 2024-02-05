@@ -25,7 +25,7 @@ export default class MandatenbeheerFractiesNewController extends Controller {
 
   @action
   onCreate(id) {
-    this.router.transitionTo('mandatenbeheer.fracties.new.instance', id);
+    this.router.transitionTo('mandatenbeheer.fracties.instance', id);
   }
 
   @action
