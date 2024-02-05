@@ -1,0 +1,77 @@
+{{page-title
+  "Mandatenbeheer "
+  @model.mandatenbeheer.bestuurseenheid.classificatie.label
+  " "
+  @model.mandatenbheer.bestuurseenheid.naam
+}}
+
+<div class="au-c-body-container {{if this.hasActiveChildRoute 'au-u-hidden'}}">
+  <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
+    <Group>
+      <AuHeading @skin="2">Beheer Fracties</AuHeading>
+    </Group>
+    <Group>
+      <AuButton {{on "click" this.createNewFractie}}>Voeg fractie toe</AuButton>
+    </Group>
+  </AuToolbar>
+
+  <AuToolbar @size="large" as |Group|>
+    <Group>
+      <Mandatenbeheer::BestuursperiodenSelector
+        @options={{@model.mandatenbeheer.bestuursperiods}}
+        @selectedPeriod={{@model.mandatenbeheer.selectedPeriod}}
+        @onSelect={{this.selectPeriod}}
+      />
+    </Group>
+  </AuToolbar>
+
+  <div class="au-c-body-container au-c-body-container--scroll">
+    <div class="au-o-box">
+      <Tmp::Todo>Refactor fractie table!
+
+        <div class="au-c-body-container">
+          <div class="au-c-data-table">
+            <div class="au-c-data-table__wrapper">
+              <table class="au-c-data-table__table">
+                <thead>
+                  <tr class="au-c-data-table__header">
+                    <th>Fractienaam</th>
+                    <th>Bestuursperiode</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each @model.fracties as |fractie|}}
+                    <tr>
+                      <td>
+                        <strong>{{fractie.naam}}</strong>
+                      </td>
+
+                      <td>
+                        <Shared::Periode
+                          @start={{@model.mandatenbeheer.selectedPeriod.startDate}}
+                          @end={{@model.mandatenbeheer.selectedPeriod.endDate}}
+                        />
+                      </td>
+                      <td class="au-u-text-right">
+                        <AuButton
+                          {{on "click" (fn this.editFractie fractie)}}
+                          @skin="link"
+                        >
+                          <AuIcon @icon="pencil" @alignment="left" />
+                          Bewerk
+                        </AuButton>
+                      </td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </Tmp::Todo>
+    </div>
+  </div>
+</div>
+
+{{outlet}}

@@ -11,3 +11,5 @@ export const ACCEPT_HEADER = {
     Accept: JSON_API_TYPE,
   },
 };
+
+export const SEARCH_TIMEOUT = 500;

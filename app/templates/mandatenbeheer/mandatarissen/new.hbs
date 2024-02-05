@@ -1,0 +1,18 @@
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Voeg mandataris toe uit de lijst van verkozenen</AuHeading>
+  </Group>
+  <Group>
+    <AuButton @skin="primary" {{on "click" this.createNewPerson}}>
+      Voeg iemand buiten de lijst toe
+    </AuButton>
+  </Group>
+</AuToolbar>
+
+<Tmp::Todo>Add person search form!</Tmp::Todo>
+
+<AuToolbar @border="top" @size="large" as |Group|>
+  <Group>
+    <AuButton @skin="secondary" {{on "click" this.cancel}}>Annuleer</AuButton>
+  </Group>
+</AuToolbar>

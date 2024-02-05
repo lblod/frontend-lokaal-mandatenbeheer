@@ -4,7 +4,82 @@ import { inject as service } from '@ember/service';
 export default class SharedBreadCrumbComponent extends Component {
   @service router;
 
-  bread = [
+  mandatenbeheer = [
+    {
+      route: 'mandatenbeheer.mandatarissen.index',
+      crumbs: [{ label: 'Mandatenbeheer' }],
+    },
+    {
+      route: 'mandatenbeheer.mandatarissen.edit',
+      crumbs: [
+        {
+          label: 'Mandatenbeheer',
+          link: 'mandatenbeheer.mandatarissen',
+        },
+        { label: 'Bewerk' },
+      ],
+    },
+    {
+      route: 'mandatenbeheer.mandatarissen.new',
+      crumbs: [
+        {
+          label: 'Mandatenbeheer',
+          link: 'mandatenbeheer.mandatarissen',
+        },
+        { label: 'Voeg mandaat toe' },
+      ],
+    },
+    {
+      route: 'mandatenbeheer.mandatarissen.new-person',
+      crumbs: [
+        {
+          label: 'Mandatenbeheer',
+          link: 'mandatenbeheer.mandatarissen',
+        },
+        { label: 'Voeg nieuwe persoon toe' },
+      ],
+    },
+    {
+      route: 'mandatenbeheer.fracties.index',
+      crumbs: [
+        {
+          label: 'Mandatenbeheer',
+          link: 'mandatenbeheer.mandatarissen',
+        },
+        { label: 'Beheer fracties' },
+      ],
+    },
+    {
+      route: 'mandatenbeheer.fracties.new',
+      crumbs: [
+        {
+          label: 'Mandatenbeheer',
+          link: 'mandatenbeheer.mandatarissen',
+        },
+        {
+          label: 'Fractiebeheer',
+          link: 'mandatenbeheer.fracties',
+        },
+        { label: 'Voeg fractie toe' },
+      ],
+    },
+    {
+      route: 'mandatenbeheer.fracties.edit',
+      crumbs: [
+        {
+          label: 'Mandatenbeheer',
+          link: 'mandatenbeheer.mandatarissen',
+        },
+        {
+          label: 'Fractiebeheer',
+          link: 'mandatenbeheer.fracties',
+        },
+        { label: 'Bewerk' },
+      ],
+    },
+  ];
+
+  legacy = [
     {
       route: 'legacy.mandatenbeheer.mandatarissen.index',
       crumbs: [
@@ -166,6 +241,7 @@ export default class SharedBreadCrumbComponent extends Component {
       ],
     },
   ];
+  bread = this.mandatenbeheer.concat(this.legacy);
 
   get crumbsForRoute() {
     const results = this.bread.filter(

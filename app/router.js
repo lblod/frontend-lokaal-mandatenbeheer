@@ -26,6 +26,19 @@ Router.map(function () {
     this.route('toegankelijkheidsverklaring');
   });
 
+  this.route('mandatenbeheer', function () {
+    this.route('mandatarissen', function () {
+      this.route('new');
+      this.route('new-person');
+      this.route('edit', { path: '/:id/edit' });
+    });
+
+    this.route('fracties', function () {
+      this.route('new');
+      this.route('edit', { path: '/:id/edit' });
+    });
+  });
+
   this.route('legacy', function () {
     this.route('mandatenbeheer', function () {
       this.route('mandatarissen', function () {

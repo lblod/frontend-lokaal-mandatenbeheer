@@ -1,0 +1,13 @@
+<PowerSelect
+  @selected={{@selectedPeriod}}
+  @options={{this.periodOptions}}
+  class="is-optional"
+  @onChange={{this.selectPeriod}}
+  @searchEnabled={{false}}
+  as |period|
+>
+  <Shared::Periode
+    @start={{period.startDate}}
+    @end={{period.endDate}}
+  >Bestuursperiode</Shared::Periode>
+</PowerSelect>

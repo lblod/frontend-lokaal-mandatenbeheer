@@ -1,0 +1,80 @@
+{{page-title
+  "Mandatenbeheer "
+  @model.mandatenbeheer.bestuurseenheid.classificatie.label
+  " "
+  @model.mandatenbeheer.bestuurseenheid.naam
+}}
+<div class="au-c-body-container {{if this.hasActiveChildRoute 'au-u-hidden'}}">
+  <AuToolbar
+    @size="large"
+    @nowrap="true"
+    class="au-u-padding-bottom-none"
+    as |Group|
+  >
+    <Group>
+      <div class="au-o-flow">
+        <AuHeading @skin="2">Mandatenbeheer</AuHeading>
+        <Mandatenbeheer::Mandataris::MandatarissenTotals
+          class="js-accordion"
+          @bestuursorganen={{@model.mandatenbeheer.bestuursorganen}}
+        />
+      </div>
+    </Group>
+
+    <Group>
+      <AuButtonGroup>
+        <AuButton
+          {{on "click" this.handleBeheerFractiesClick}}
+          @skin="secondary"
+        >
+          Beheer fracties
+        </AuButton>
+        <AuButton {{on "click" this.handleAddMandatarisClick}}>
+          Voeg mandataris toe
+        </AuButton>
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
+
+  <AuToolbar @size="large" as |Group|>
+    <Group>
+      <Mandatenbeheer::BestuursperiodenSelector
+        @options={{@model.mandatenbeheer.bestuursperiods}}
+        @selectedPeriod={{@model.mandatenbeheer.selectedPeriod}}
+        @onSelect={{this.selectPeriod}}
+      />
+    </Group>
+    <Group class="au-u-1-3@medium">
+      <AuInput
+        value={{this.searchData}}
+        @icon="search"
+        @iconAlignment="left"
+        @width="block"
+        placeholder="Zoek mandataris"
+        {{on "input" (perform this.search value="target.value")}}
+      />
+    </Group>
+  </AuToolbar>
+
+  <div class="au-c-body-container au-c-body-container--scroll">
+    <div class="au-o-box">
+      <Tmp::Todo>
+        Refactor mandataris table!
+        <Legacy::Mandatenbeheer::MandatarisTable
+          class="au-c-body-container"
+          @content={{@model.mandatarissen}}
+          @isLoading={{this.isLoadingModel}}
+          @sort={{this.sort}}
+          @page={{this.page}}
+          @size={{this.size}}
+          @editRoute="mandatenbeheer.mandatarissen.edit"
+          @displaySubset={{this.hasActiveChildRoute}}
+          @mandatarisBestuursorganen={{@model.mandatarisBestuursorganen}}
+        />
+      </Tmp::Todo>
+    </div>
+  </div>
+
+</div>
+
+{{outlet}}
