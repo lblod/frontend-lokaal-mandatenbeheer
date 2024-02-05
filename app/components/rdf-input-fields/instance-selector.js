@@ -8,7 +8,7 @@ import {
 } from '@lblod/submission-form-helpers';
 import { NamedNode } from 'rdflib';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { ACCEPT_HEADER } from 'frontend-lmb/utils/constants';
+import { ACCEPT_HEADER, SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { FORM } from 'frontend-lmb/rdf/namespaces';
 
 const PAGESIZE = 10;
@@ -75,7 +75,7 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   }
 
   searchRepo = restartableTask(async (term) => {
-    await timeout(200);
+    await timeout(SEARCH_TIMEOUT);
     const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
     const instanceApiUrl = this.getFormProperty('instanceApiUrl');
 
