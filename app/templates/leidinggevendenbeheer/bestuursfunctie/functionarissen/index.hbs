@@ -57,14 +57,21 @@
   </Group>
 </AuToolbar>
 
-<Legacy::Leidinggevendenbeheer::FunctionarisTable
-  class="au-c-body-container"
-  @content={{@model.functionarissen}}
-  @sort={{this.sort}}
-  @page={{this.page}}
-  @size={{this.size}}
-  @onClickNew={{this.handleVoegNieuweAanstellingsperiodeClick}}
-  @onEdit="leidinggevendenbeheer.bestuursfunctie.functionarissen.edit"
-/>
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Tmp::Todo>
+      Refactor functionaris table!
+      <Legacy::Leidinggevendenbeheer::FunctionarisTable
+        class="au-c-body-container"
+        @content={{@model.functionarissen}}
+        @sort={{this.sort}}
+        @page={{this.page}}
+        @size={{this.size}}
+        @onClickNew={{this.handleVoegNieuweAanstellingsperiodeClick}}
+        @onEdit="leidinggevendenbeheer.bestuursfunctie.functionarissen.edit"
+      />
+    </Tmp::Todo>
+  </div>
+</div>
 
 {{outlet}}
