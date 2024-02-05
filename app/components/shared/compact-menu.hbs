@@ -12,10 +12,7 @@
     </AuLink>
   {{/if}}
   {{#if this.currentSession.canAccessLeidinggevenden}}
-    <AuLink
-      @route="legacy.leidinggevendenbeheer.bestuursfuncties"
-      role="menuitem"
-    >
+    <AuLink @route="leidinggevendenbeheer.bestuursfuncties" role="menuitem">
       <AuIcon @icon="user-popup" @alignment="left" />
       Leidinggevendenbeheer
     </AuLink>

@@ -39,6 +39,25 @@ Router.map(function () {
     });
   });
 
+  this.route('leidinggevendenbeheer', function () {
+    this.route('bestuursfuncties', function () {
+      this.route(
+        'bestuursfunctie',
+        { path: '/:bestuursfunctie_id' },
+        function () {
+          this.route('contact-info');
+          this.route('functionarissen', function () {
+            this.route('edit', { path: '/:functionaris_id/edit' });
+            this.route('new-person');
+            this.route('new', function () {
+              this.route('periode', { path: '/:persoon_id/periode' });
+            });
+          });
+        }
+      );
+    });
+  });
+
   this.route('legacy', function () {
     this.route('mandatenbeheer', function () {
       this.route('mandatarissen', function () {
