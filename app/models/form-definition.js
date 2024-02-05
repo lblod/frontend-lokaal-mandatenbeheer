@@ -6,6 +6,8 @@ export default class FormDefinitionModel extends Model {
   formTtl;
   @attr('string')
   metaTtl;
+  @attr('string')
+  prefix;
 
   @hasMany('form-instance', {
     async: false,
