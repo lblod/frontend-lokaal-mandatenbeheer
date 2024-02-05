@@ -48,9 +48,7 @@ Router.map(function () {
         this.route('functionarissen', function () {
           this.route('edit', { path: '/:functionaris_id/edit' });
           this.route('new-person');
-          this.route('new', function () {
-            this.route('periode', { path: '/:persoon_id/periode' });
-          });
+          this.route('new');
         });
       }
     );

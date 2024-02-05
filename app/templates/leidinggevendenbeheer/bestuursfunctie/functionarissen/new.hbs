@@ -1,0 +1,22 @@
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Voeg een nieuwe aanstellingsperiode toe</AuHeading>
+  </Group>
+  <Group>
+    <AuButton @skin="primary" {{on "click" this.createNewPerson}}>
+      Voeg iemand buiten de lijst toe
+    </AuButton>
+  </Group>
+</AuToolbar>
+
+<Tmp::Todo>
+  <div>Add person search form!</div>
+  <div>Add create aanstellingsperiode form!</div>
+  <div>Previously this consisteded of two forms, ideally this becomes one form</div>
+</Tmp::Todo>
+
+<AuToolbar @border="top" @size="large" as |Group|>
+  <Group>
+    <AuButton @skin="secondary" {{on "click" this.cancel}}>Annuleer</AuButton>
+  </Group>
+</AuToolbar>

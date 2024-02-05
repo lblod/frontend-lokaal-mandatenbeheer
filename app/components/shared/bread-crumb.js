@@ -105,18 +105,7 @@ export default class SharedBreadCrumbComponent extends Component {
       ],
     },
     {
-      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.new.index',
-      crumbs: [
-        {
-          label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer',
-        },
-        { label: 'Nieuwe aanstellingsperiode' },
-      ],
-    },
-    {
-      route:
-        'leidinggevendenbeheer.bestuursfunctie.functionarissen.new.periode',
+      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.new',
       crumbs: [
         {
           label: 'Leidinggevendenbeheer',
