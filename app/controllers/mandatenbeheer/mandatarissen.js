@@ -3,6 +3,7 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class MandatenbeheerMandatarissenController extends Controller {
   @service() router;
@@ -22,7 +23,7 @@ export default class MandatenbeheerMandatarissenController extends Controller {
 
   @restartableTask
   *search(searchData) {
-    yield timeout(300);
+    yield timeout(SEARCH_TIMEOUT);
     this.page = 0;
     this.filter = searchData;
   }
