@@ -81,71 +81,66 @@ export default class SharedBreadCrumbComponent extends Component {
 
   leidinggevendenbeheer = [
     {
-      route: 'leidinggevendenbeheer.bestuursfuncties.index',
+      route: 'leidinggevendenbeheer.index',
       crumbs: [{ label: 'Leidinggevendenbeheer' }],
     },
     {
-      route:
-        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.index',
+      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.index',
       crumbs: [
         {
           label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer.bestuursfuncties',
+          link: 'leidinggevendenbeheer',
         },
         { label: 'Functionaris' },
       ],
     },
     {
-      route:
-        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.edit',
+      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.edit',
       crumbs: [
         {
           label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer.bestuursfuncties',
+          link: 'leidinggevendenbeheer',
         },
         { label: 'Bewerk functionaris' },
       ],
     },
     {
-      route:
-        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new.index',
+      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.new.index',
       crumbs: [
         {
           label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer.bestuursfuncties',
+          link: 'leidinggevendenbeheer',
         },
         { label: 'Nieuwe aanstellingsperiode' },
       ],
     },
     {
       route:
-        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new.periode',
+        'leidinggevendenbeheer.bestuursfunctie.functionarissen.new.periode',
       crumbs: [
         {
           label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer.bestuursfuncties',
+          link: 'leidinggevendenbeheer',
         },
         { label: 'Nieuwe aanstellingsperiode' },
       ],
     },
     {
-      route:
-        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.functionarissen.new-person',
+      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.new-person',
       crumbs: [
         {
           label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer.bestuursfuncties',
+          link: 'leidinggevendenbeheer',
         },
         { label: 'Voeg nieuwe persoon toe' },
       ],
     },
     {
-      route:
-        'leidinggevendenbeheer.bestuursfuncties.bestuursfunctie.contact-info',
+      route: 'leidinggevendenbeheer.bestuursfunctie.contact-info',
       crumbs: [
         {
           label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer.bestuursfuncties',
+          link: 'leidinggevendenbeheer',
         },
         { label: 'Bewerk contactgegevens' },
       ],
