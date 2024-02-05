@@ -6,6 +6,11 @@ export default class MandatenbeheerFractiesEditController extends Controller {
   @service router;
 
   @action
+  onSave() {
+    this.router.refresh();
+  }
+
+  @action
   cancel() {
     this.router.transitionTo('mandatenbeheer.fracties');
   }
