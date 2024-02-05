@@ -1,0 +1,44 @@
+<div class="au-o-grid au-o-grid--flush">
+  <div class="au-o-grid__item au-u-3-5">
+    <p>
+      <strong>{{this.rol}}</strong>
+    </p>
+  </div>
+  <div class="au-o-grid__item au-u-2-5 au-u-text-right">
+    <AuButton {{on "click" this.edit}}>Pas aan</AuButton>
+  </div>
+  {{#if this.editMode}}
+    <Tmp::Todo>Add edit mandataris form!</Tmp::Todo>
+  {{else}}
+    <div class="au-o-grid__item">
+      <AuContent>
+        <p class="au-c-info-text">
+          {{moment-format @mandataris.start "DD-MM-YYYY"}}
+          —
+          {{#if @mandataris.einde}}
+            {{moment-format @mandataris.einde "DD-MM-YYYY"}}
+          {{else}}
+            heden
+          {{/if}}
+        </p>
+        <ul class="au-c-list-horizontal au-u-margin-top-tiny">
+          {{#if this.formattedBeleidsdomein}}
+            <li class="au-c-list-horizontal__item">{{await
+                this.formattedBeleidsdomein
+              }}</li>
+          {{/if}}
+
+          {{#if this.status}}
+            <li class="au-c-list-horizontal__item">{{this.status}}</li>
+          {{/if}}
+          {{#if @mandataris.rangorde}}
+            <li class="au-c-list-horizontal__item">{{@mandataris.rangorde}}</li>
+          {{/if}}
+          {{#if this.fractie}}
+            <li class="au-c-list-horizontal__item">{{this.fractie}}</li>
+          {{/if}}
+        </ul>
+      </AuContent>
+    </div>
+  {{/if}}
+</div>

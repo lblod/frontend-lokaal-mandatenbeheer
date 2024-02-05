@@ -1,10 +1,35 @@
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
-    <AuHeading @skin="2">Bewerk mandataris</AuHeading>
+    <AuHeading @skin="2">Bewerk mandataris<br /><strong
+      >{{@model.persoon.gebruikteVoornaam}}
+        {{@model.persoon.achternaam}}</strong></AuHeading>
   </Group>
 </AuToolbar>
 
-<Tmp::Todo>Add edit mandataris form!</Tmp::Todo>
+<Mandatenbeheer::Mandataris::MandatarisView
+  class="au-c-body-container"
+  @persoon={{@model.persoon}}
+  @mandatarissen={{@model.mandatarissen}}
+/>
+
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    {{#if this.createMode}}
+      <Tmp::Todo>Add add mandataris form!</Tmp::Todo>
+    {{/if}}
+
+    <div class="au-u-padding-top-small">
+      <AuButton
+        @skin="secondary"
+        @width="block"
+        {{on "click" this.createMandataris}}
+      >
+        <AuIcon @icon="add" @alignment="left" />
+        Voeg nieuw mandaat toe
+      </AuButton>
+    </div>
+  </div>
+</div>
 
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>
