@@ -6,7 +6,7 @@ export default class MandatenbeheerFractiesNewRoute extends Route {
   @service store;
 
   async model() {
-    const formId = 'fractie-new';
+    const formId = 'fractie';
     const form = await getForm(this.store, formId);
     const mandatenbeheerFracties = this.modelFor('mandatenbeheer.fracties');
 
