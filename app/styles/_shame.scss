@@ -81,7 +81,7 @@
   & + & {
     margin-top: $au-unit-small;
     padding-top: $au-unit-small;
-    border-top: .1rem solid $au-gray-200;
+    border-top: 0.1rem solid $au-gray-200;
   }
 
   .au-c-collapsible & + & {
@@ -90,7 +90,6 @@
     border-top-color: $au-gray-300;
   }
 }
-
 
 // Toggle button
 .au-c-button--toggle {
@@ -117,4 +116,9 @@
   .js-accordion--open & {
     display: block;
   }
+}
+
+// util
+.flex-grow {
+  flex-grow: 1;
 }
