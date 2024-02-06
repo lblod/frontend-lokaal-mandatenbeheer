@@ -62,12 +62,6 @@ Router.map(function () {
       });
 
       this.route('fracties', function () {});
-      this.route('fracties-new', function () {
-        this.route('new');
-        this.route('instances');
-        this.route('instance', { path: '/:instance_id' });
-        this.route('edit');
-      });
     });
 
     this.route('leidinggevendenbeheer', function () {
