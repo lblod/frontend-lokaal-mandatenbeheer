@@ -37,7 +37,7 @@
 
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>
-    <AuButton {{on "click" (perform this.resetChanges)}} @skin="secondary">
+    <AuButton {{on "click" this.cancel}} @skin="secondary">
       Annuleer
     </AuButton>
   </Group>

@@ -7,9 +7,4 @@ export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenEditRout
   model(params) {
     return this.store.findRecord('functionaris', params.functionaris_id);
   }
-
-  setupController(controller, model) {
-    super.setupController(controller, model);
-    controller.set('initialStatus', model.status);
-  }
 }
