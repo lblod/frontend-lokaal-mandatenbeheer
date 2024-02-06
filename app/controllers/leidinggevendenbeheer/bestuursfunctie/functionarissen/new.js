@@ -6,18 +6,6 @@ export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenNewIndex
   @service router;
 
   @action
-  createNewPerson(hasData) {
-    hasData
-      ? this.router.transitionTo(
-          'leidinggevendenbeheer.bestuursfunctie.functionarissen.new-person',
-          { queryParams: hasData }
-        )
-      : this.router.transitionTo(
-          'leidinggevendenbeheer.bestuursfunctie.functionarissen.new-person'
-        );
-  }
-
-  @action
   cancel() {
     this.router.transitionTo(
       'leidinggevendenbeheer.bestuursfunctie.functionarissen.index'

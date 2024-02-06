@@ -47,7 +47,6 @@ Router.map(function () {
         this.route('contact-info');
         this.route('functionarissen', function () {
           this.route('edit', { path: '/:functionaris_id/edit' });
-          this.route('new-person');
           this.route('new');
         });
       }
