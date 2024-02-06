@@ -1,6 +1,6 @@
-const loadForm = async (
-  { formTtl, metaTtl },
+const loadFormInto = async (
   store,
+  { formTtl, metaTtl },
   sourceTtl,
   { formGraph, metaGraph, sourceGraph }
 ) => {
@@ -9,4 +9,4 @@ const loadForm = async (
   store.parse(sourceTtl || '', sourceGraph, 'text/turtle');
 };
 
-export { loadForm };
+export { loadFormInto };
