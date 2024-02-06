@@ -14,6 +14,7 @@ import {
 import { inject as service } from '@ember/service';
 import { keepLatestTask } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
+import { loadForm } from 'frontend-lmb/utils/loadForm';
 
 export default class InstanceComponent extends Component {
   @service store;
@@ -88,7 +89,7 @@ export default class InstanceComponent extends Component {
     const form = this.args.form;
     const instanceId = this.args.instanceId;
     const { formInstanceTtl, instanceUri } = await this.retrieveFormInstance(
-      form.definition.id,
+      form.id,
       instanceId
     );
 
@@ -100,7 +101,7 @@ export default class InstanceComponent extends Component {
       sourceGraph: SOURCE_GRAPH,
     };
 
-    this.loadForm(form.definition, formStore, formInstanceTtl, graphs);
+    loadForm(form, formStore, formInstanceTtl, graphs);
 
     const formNode = formStore.any(
       undefined,
@@ -112,7 +113,7 @@ export default class InstanceComponent extends Component {
 
     this.formInfo = {
       instanceId,
-      definition: form.definition,
+      definition: form,
       formNode,
       formStore,
       graphs,
@@ -120,12 +121,6 @@ export default class InstanceComponent extends Component {
     };
 
     this.registerObserver(formStore);
-  }
-
-  async loadForm(definition, store, sourceTtl, graphs) {
-    store.parse(definition.formTtl, graphs.formGraph, 'text/turtle');
-    store.parse(definition.metaTtl || '', graphs.metaGraph, 'text/turtle');
-    store.parse(sourceTtl || '', graphs.sourceGraph, 'text/turtle');
   }
 
   async retrieveFormInstance(formId, id) {
