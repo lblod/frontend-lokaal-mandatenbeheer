@@ -15,7 +15,7 @@ import {
 import { inject as service } from '@ember/service';
 import { keepLatestTask } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
-import { loadForm } from 'frontend-lmb/utils/loadForm';
+import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
 
 export default class NewInstanceComponent extends Component {
   @service store;
@@ -97,7 +97,7 @@ export default class NewInstanceComponent extends Component {
       sourceGraph: SOURCE_GRAPH,
     };
 
-    loadForm(form, formStore, sourceTtl, graphs);
+    loadFormInto(formStore, form, sourceTtl, graphs);
 
     const formNode = formStore.any(
       undefined,
