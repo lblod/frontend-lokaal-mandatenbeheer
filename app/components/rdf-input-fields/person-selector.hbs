@@ -27,7 +27,9 @@
     @closeModal={{this.cancelEdit}}
   >
     {{#if this.creatingPerson}}
-      <Person::Create
+      <Tmp::Todo>This component should be redone using forms</Tmp::Todo>
+
+      <Legacy::Persoon::Create
         @onCreate={{this.onSelectPerson}}
         @onCancel={{this.cancelCreate}}
       />

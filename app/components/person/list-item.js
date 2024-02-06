@@ -7,12 +7,4 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
     }
     return `${person.gebruikteVoornaam} ${person.achternaam}`;
   }
-
-  get personRrn() {
-    const person = this.args.person;
-    if (!person) {
-      return '';
-    }
-    return person.identificator?.rijksregisternummer || 'Geen RRN bekend';
-  }
 }
