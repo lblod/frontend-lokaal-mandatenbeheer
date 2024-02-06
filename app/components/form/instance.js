@@ -13,9 +13,11 @@ import {
 } from '../../utils/constants';
 import { inject as service } from '@ember/service';
 import { keepLatestTask } from 'ember-concurrency';
+import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 
 export default class InstanceComponent extends Component {
   @service store;
+  @service toaster;
 
   @tracked sourceTriples;
   @tracked errorMessage;
@@ -69,6 +71,8 @@ export default class InstanceComponent extends Component {
         'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.';
       return;
     }
+
+    notifyFormSavedSuccessfully(this.toaster);
 
     if (this.args.onSave) {
       this.args.onSave(body);
