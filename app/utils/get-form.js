@@ -1,5 +1,3 @@
-import { FORM_DEFINITION_MODEL } from './well-known-ids';
-
 const retrieveForm = async (id) => {
   const response = await fetch(`/form-content/${id}`);
   if (!response.ok) {
@@ -15,12 +13,12 @@ const retrieveForm = async (id) => {
 };
 
 const getForm = async (store, formId) => {
-  const definition = store.peekRecord(FORM_DEFINITION_MODEL, formId);
+  const definition = store.peekRecord('form-definition', formId);
   if (definition) return definition;
 
   const { formTtl, metaTtl, prefix } = await retrieveForm(formId);
 
-  return store.createRecord(FORM_DEFINITION_MODEL, {
+  return store.createRecord('form-definition', {
     id: formId,
     formTtl,
     metaTtl,
