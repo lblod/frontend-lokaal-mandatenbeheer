@@ -62,16 +62,16 @@ export default class InstanceComponent extends Component {
       return;
     }
 
-    const { id } = yield result.json();
+    const body = yield result.json();
 
-    if (!id) {
+    if (!body?.instance?.instanceUri) {
       this.errorMessage =
         'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.';
       return;
     }
 
     if (this.args.onSave) {
-      this.args.onSave(id);
+      this.args.onSave(body);
     }
   }
 
