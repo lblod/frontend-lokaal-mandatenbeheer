@@ -3,37 +3,9 @@
     <div>
       <AuHeading @level="2" @skin="4">{{@bestuursfunctie.rol.label}}</AuHeading>
       <ul class="au-c-list-horizontal au-u-margin-top-small">
-        <li class="au-c-list-horizontal__item">
-          {{#if @bestuursfunctie.contactinfo.email}}
-            <a
-              class="au-c-link au-c-link--secondary"
-              href="mailto:{{@bestuursfunctie.contactinfo.email}}"
-            >
-              {{@bestuursfunctie.contactinfo.email}}
-            </a>
-          {{else}}
-            <span class="au-c-info-text">Geen mailadres</span>
-          {{/if}}
-        </li>
-        <li class="au-c-list-horizontal__item">
-          {{#if @bestuursfunctie.contactinfo.telefoon}}
-            <a
-              class="au-c-link au-c-link--secondary"
-              href="tel:{{@bestuursfunctie.contactinfo.telefoon}}"
-            >
-              {{@bestuursfunctie.contactinfo.telefoon}}
-            </a>
-          {{else}}
-            <span class="au-c-info-text">geen telefoonnummer</span>
-          {{/if}}
-        </li>
-        <li class="au-c-list-horizontal__item">
-          {{#if @bestuursfunctie.contactinfo.adres.volledigAdres}}
-            <span>{{@bestuursfunctie.contactinfo.adres.volledigAdres}}</span>
-          {{else}}
-            <span class="au-c-info-text">geen adres</span>
-          {{/if}}
-        </li>
+        <Leidinggevendenbeheer::ContactInfoContent
+          @contactinfo={{@bestuursfunctie.contactinfo}}
+        />
       </ul>
     </div>
   </Group>

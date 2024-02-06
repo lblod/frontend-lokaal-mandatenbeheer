@@ -1,17 +1,8 @@
 <AuToolbar @size="large" as |Group|>
   <Group>
     <ul class="au-c-list-horizontal">
-      <Leidinggevendenbeheer::ContactInfoItem
-        @item={{@contactinfo.email}}
-        @text="Geen mailadres"
-      />
-      <Leidinggevendenbeheer::ContactInfoItem
-        @item={{@contactinfo.telefoon}}
-        @text="geen telefoonnummer"
-      />
-      <Leidinggevendenbeheer::ContactInfoItem
-        @item={{@contactinfo.adres.volledigAdres}}
-        @text="geen adres"
+      <Leidinggevendenbeheer::ContactInfoContent
+        @contactinfo={{@contactinfo}}
       />
       <li class="au-c-list-horizontal__item">
         <LinkTo

@@ -1,6 +1,12 @@
 <li class="au-c-list-horizontal__item">
   {{#if @item}}
-    {{@item}}
+    {{#if @link}}
+      <a class="au-c-link au-c-link--secondary" href={{@link}}>
+        {{@item}}
+      </a>
+    {{else}}
+      {{@item}}
+    {{/if}}
   {{else}}
     <span class="au-c-info-text">{{@text}}</span>
   {{/if}}
