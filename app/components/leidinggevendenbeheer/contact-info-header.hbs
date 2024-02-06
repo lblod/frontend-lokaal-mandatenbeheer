@@ -1,27 +1,18 @@
 <AuToolbar @size="large" as |Group|>
   <Group>
     <ul class="au-c-list-horizontal">
-      <li class="au-c-list-horizontal__item">
-        {{#if @contactinfo.email}}
-          {{@contactinfo.email}}
-        {{else}}
-          <span class="au-c-info-text">Geen mailadres</span>
-        {{/if}}
-      </li>
-      <li class="au-c-list-horizontal__item">
-        {{#if @contactinfo.telefoon}}
-          {{@contactinfo.telefoon}}
-        {{else}}
-          <span class="au-c-info-text">geen telefoonnummer</span>
-        {{/if}}
-      </li>
-      <li class="au-c-list-horizontal__item">
-        {{#if @contactinfo.adres.volledigAdres}}
-          <span>{{@contactinfo.adres.volledigAdres}}</span>
-        {{else}}
-          <span class="au-c-info-text">geen adres</span>
-        {{/if}}
-      </li>
+      <Leidinggevendenbeheer::ContactInfoItem
+        @item={{@contactinfo.email}}
+        @text="Geen mailadres"
+      />
+      <Leidinggevendenbeheer::ContactInfoItem
+        @item={{@contactinfo.telefoon}}
+        @text="geen telefoonnummer"
+      />
+      <Leidinggevendenbeheer::ContactInfoItem
+        @item={{@contactinfo.adres.volledigAdres}}
+        @text="geen adres"
+      />
       <li class="au-c-list-horizontal__item">
         <LinkTo
           @route="leidinggevendenbeheer.bestuursfunctie.contact-info"
