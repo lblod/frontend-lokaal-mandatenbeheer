@@ -29,7 +29,7 @@ export default class InstanceTableComponent extends Component {
   @action
   async removeInstance(instanceId) {
     const result = await fetch(
-      `/form-content/${this.formInfo.form.definition.id}/instances/${instanceId}`,
+      `/form-content/${this.formInfo.formDefinition.id}/instances/${instanceId}`,
       {
         method: 'DELETE',
         headers: {
@@ -49,8 +49,8 @@ export default class InstanceTableComponent extends Component {
   }
 
   async onInit() {
-    const form = this.args.form;
-    const id = form.definition.id;
+    const form = this.args.formDefinition;
+    const id = form.id;
     const response = await fetch(`/form-content/${id}/instances`);
     if (!response.ok) {
       let error = new Error(response.statusText);
@@ -60,7 +60,7 @@ export default class InstanceTableComponent extends Component {
     const { instances } = await response.json();
     this.formInfo = {
       instances: instances,
-      form,
+      formDefinition: form,
     };
   }
 }

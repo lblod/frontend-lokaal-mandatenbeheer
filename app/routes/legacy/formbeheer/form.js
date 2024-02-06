@@ -19,13 +19,11 @@ export default class FormRoute extends Route {
         id: semanticFormID,
         formTtl: form.formTtl,
         metaTtl: form.metaTtl,
+        prefix: form.prefix,
       });
     }
 
-    return {
-      definition,
-      prefix: form.prefix,
-    };
+    return definition;
   }
 
   async retrieveForm(id) {
