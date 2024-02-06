@@ -15,6 +15,7 @@ import {
 import { inject as service } from '@ember/service';
 import { keepLatestTask } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
+import { loadForm } from 'frontend-lmb/utils/loadForm';
 
 export default class NewInstanceComponent extends Component {
   @service store;
@@ -87,11 +88,6 @@ export default class NewInstanceComponent extends Component {
     const sourceTtl = this.args.buildSourceTtl
       ? this.args.buildSourceTtl(uri)
       : '';
-    const instance = this.store.createRecord('form-instance', {
-      definition: form.definition,
-      sourceTtl,
-      uri,
-    });
 
     const formStore = new ForkingStore();
 
@@ -101,7 +97,7 @@ export default class NewInstanceComponent extends Component {
       sourceGraph: SOURCE_GRAPH,
     };
 
-    this.loadForm(form.definition, formStore, sourceTtl, graphs);
+    loadForm(form, formStore, sourceTtl, graphs);
 
     const formNode = formStore.any(
       undefined,
@@ -109,11 +105,10 @@ export default class NewInstanceComponent extends Component {
       FORM('Form'),
       FORM_GRAPH
     );
-    const sourceNode = new NamedNode(instance.uri);
+    const sourceNode = new NamedNode(uri);
 
     this.formInfo = {
-      instance,
-      definition: form.definition,
+      definition: form,
       formNode,
       formStore,
       graphs,
@@ -121,12 +116,6 @@ export default class NewInstanceComponent extends Component {
     };
 
     this.registerObserver(formStore);
-  }
-
-  async loadForm(definition, store, sourceTtl, graphs) {
-    store.parse(definition.formTtl, graphs.formGraph, 'text/turtle');
-    store.parse(definition.metaTtl || '', graphs.metaGraph, 'text/turtle');
-    store.parse(sourceTtl || '', graphs.sourceGraph, 'text/turtle');
   }
 
   registerObserver(formStore) {

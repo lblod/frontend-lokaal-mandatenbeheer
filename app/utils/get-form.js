@@ -1,3 +1,5 @@
+import { FORM_DEFINITION_MODEL } from './well-known-ids';
+
 const retrieveForm = async (id) => {
   const response = await fetch(`/form-content/${id}`);
   if (!response.ok) {
@@ -12,32 +14,18 @@ const retrieveForm = async (id) => {
   return form;
 };
 
-// Split into definition and prefix because this structure is expected in instance components
-const format = ({ id, formTtl, metaTtl, prefix }) => ({
-  definition: {
-    id,
-    formTtl,
-    metaTtl,
-  },
-  prefix,
-});
-
 const getForm = async (store, formId) => {
-  const definitionModel = 'form-definition';
-
-  const definition = store.peekRecord(definitionModel, formId);
-  if (definition) return format(definition);
+  const definition = store.peekRecord(FORM_DEFINITION_MODEL, formId);
+  if (definition) return definition;
 
   const { formTtl, metaTtl, prefix } = await retrieveForm(formId);
 
-  return format(
-    store.createRecord(definitionModel, {
-      id: formId,
-      formTtl,
-      metaTtl,
-      prefix,
-    })
-  );
+  return store.createRecord(FORM_DEFINITION_MODEL, {
+    id: formId,
+    formTtl,
+    metaTtl,
+    prefix,
+  });
 };
 
 export { getForm };
