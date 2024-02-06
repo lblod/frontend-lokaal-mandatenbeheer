@@ -79,6 +79,53 @@ export default class SharedBreadCrumbComponent extends Component {
     },
   ];
 
+  leidinggevendenbeheer = [
+    {
+      route: 'leidinggevendenbeheer.index',
+      crumbs: [{ label: 'Leidinggevendenbeheer' }],
+    },
+    {
+      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.index',
+      crumbs: [
+        {
+          label: 'Leidinggevendenbeheer',
+          link: 'leidinggevendenbeheer',
+        },
+        { label: 'Functionaris' },
+      ],
+    },
+    {
+      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.edit',
+      crumbs: [
+        {
+          label: 'Leidinggevendenbeheer',
+          link: 'leidinggevendenbeheer',
+        },
+        { label: 'Bewerk functionaris' },
+      ],
+    },
+    {
+      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.new',
+      crumbs: [
+        {
+          label: 'Leidinggevendenbeheer',
+          link: 'leidinggevendenbeheer',
+        },
+        { label: 'Nieuwe aanstellingsperiode' },
+      ],
+    },
+    {
+      route: 'leidinggevendenbeheer.bestuursfunctie.contact-info',
+      crumbs: [
+        {
+          label: 'Leidinggevendenbeheer',
+          link: 'leidinggevendenbeheer',
+        },
+        { label: 'Bewerk contactgegevens' },
+      ],
+    },
+  ];
+
   legacy = [
     {
       route: 'legacy.mandatenbeheer.mandatarissen.index',
@@ -241,7 +288,7 @@ export default class SharedBreadCrumbComponent extends Component {
       ],
     },
   ];
-  bread = this.mandatenbeheer.concat(this.legacy);
+  bread = this.mandatenbeheer.concat(this.leidinggevendenbeheer, this.legacy);
 
   get crumbsForRoute() {
     const results = this.bread.filter(

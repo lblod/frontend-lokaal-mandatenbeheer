@@ -1,0 +1,19 @@
+<AuToolbar @size="large" as |Group|>
+  <Group>
+    <ul class="au-c-list-horizontal">
+      <Leidinggevendenbeheer::ContactInfoContent
+        @contactinfo={{@contactinfo}}
+      />
+      <li class="au-c-list-horizontal__item">
+        <LinkTo
+          @route="leidinggevendenbeheer.bestuursfunctie.contact-info"
+          @model={{@bestuursfunctieID}}
+          class="au-c-link"
+        >
+          <AuIcon @icon="pencil" @alignment="left" />
+          Bewerk
+        </LinkTo>
+      </li>
+    </ul>
+  </Group>
+</AuToolbar>

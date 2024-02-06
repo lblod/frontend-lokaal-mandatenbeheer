@@ -7,8 +7,6 @@ import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
 export default class MandatenbeheerMandatarissenRoute extends Route {
   @service store;
 
-  modelName = 'mandataris';
-
   queryParams = {
     filter: { refreshModel: true },
     page: { refreshModel: true },

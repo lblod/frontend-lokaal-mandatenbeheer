@@ -1,0 +1,18 @@
+<AuToolbar @size="large" @border="bottom" as |Group|>
+  <Group>
+    <div>
+      <AuHeading @level="2" @skin="4">{{@bestuursfunctie.rol.label}}</AuHeading>
+      <ul class="au-c-list-horizontal au-u-margin-top-small">
+        <Leidinggevendenbeheer::ContactInfoContent
+          @contactinfo={{@bestuursfunctie.contactinfo}}
+        />
+      </ul>
+    </div>
+  </Group>
+  <Group>
+    <AuButton {{on "click" @onClick}}>
+      Bekijk en bewerk aanstellingsperiodes
+      <AuIcon @icon="nav-right" @alignment="right" />
+    </AuButton>
+  </Group>
+</AuToolbar>
