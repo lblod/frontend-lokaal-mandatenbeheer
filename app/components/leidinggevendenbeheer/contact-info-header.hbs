@@ -1,0 +1,37 @@
+<AuToolbar @size="large" as |Group|>
+  <Group>
+    <ul class="au-c-list-horizontal">
+      <li class="au-c-list-horizontal__item">
+        {{#if @contactinfo.email}}
+          {{@contactinfo.email}}
+        {{else}}
+          <span class="au-c-info-text">Geen mailadres</span>
+        {{/if}}
+      </li>
+      <li class="au-c-list-horizontal__item">
+        {{#if @contactinfo.telefoon}}
+          {{@contactinfo.telefoon}}
+        {{else}}
+          <span class="au-c-info-text">geen telefoonnummer</span>
+        {{/if}}
+      </li>
+      <li class="au-c-list-horizontal__item">
+        {{#if @contactinfo.adres.volledigAdres}}
+          <span>{{@contactinfo.adres.volledigAdres}}</span>
+        {{else}}
+          <span class="au-c-info-text">geen adres</span>
+        {{/if}}
+      </li>
+      <li class="au-c-list-horizontal__item">
+        <LinkTo
+          @route="leidinggevendenbeheer.bestuursfunctie.contact-info"
+          @model={{@bestuursfunctieID}}
+          class="au-c-link"
+        >
+          <AuIcon @icon="pencil" @alignment="left" />
+          Bewerk
+        </LinkTo>
+      </li>
+    </ul>
+  </Group>
+</AuToolbar>

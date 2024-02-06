@@ -18,44 +18,10 @@
   </Group>
 </AuToolbar>
 
-<AuToolbar @size="large" as |Group|>
-  <Group>
-    <ul class="au-c-list-horizontal">
-      <li class="au-c-list-horizontal__item">
-        {{#if @model.bestuursfunctie.contactinfo.email}}
-          {{@model.bestuursfunctie.contactinfo.email}}
-        {{else}}
-          <span class="au-c-info-text">Geen mailadres</span>
-        {{/if}}
-      </li>
-      <li class="au-c-list-horizontal__item">
-        {{#if @model.bestuursfunctie.contactinfo.telefoon}}
-          {{@model.bestuursfunctie.contactinfo.telefoon}}
-        {{else}}
-          <span class="au-c-info-text">geen telefoonnummer</span>
-        {{/if}}
-      </li>
-      <li class="au-c-list-horizontal__item">
-        {{#if @model.bestuursfunctie.contactinfo.adres.volledigAdres}}
-          <span
-          >{{@model.bestuursfunctie.contactinfo.adres.volledigAdres}}</span>
-        {{else}}
-          <span class="au-c-info-text">geen adres</span>
-        {{/if}}
-      </li>
-      <li class="au-c-list-horizontal__item">
-        <LinkTo
-          @route="leidinggevendenbeheer.bestuursfunctie.contact-info"
-          @model={{@model.bestuursfunctie.id}}
-          class="au-c-link"
-        >
-          <AuIcon @icon="pencil" @alignment="left" />
-          Bewerk
-        </LinkTo>
-      </li>
-    </ul>
-  </Group>
-</AuToolbar>
+<Leidinggevendenbeheer::ContactInfoHeader
+  @contactinfo={{@model.bestuursfunctie.contactinfo}}
+  @bestuursfunctieID={{@model.bestuursfunctie.id}}
+/>
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
