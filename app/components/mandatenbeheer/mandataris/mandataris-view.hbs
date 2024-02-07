@@ -1,29 +1,7 @@
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
-    <div class="au-o-grid au-o-grid--tiny">
-      <div class="au-o-grid__item au-u-1-2">
-        <p class="au-c-description-label">Rijksregisternummer</p>
-        <p class="au-c-description-value">{{mandatenbeheer/display-rrn
-            @persoon.identificator.identificator
-          }}</p>
-      </div>
-      <div class="au-o-grid__item au-u-1-2">
-        <p class="au-c-description-label">Geboortedatum</p>
-        <p class="au-c-description-value">
-          {{#if @persoon.geboorte.datum}}
-            {{moment-format @persoon.geboorte.datum "DD-MM-YYYY"}}
-          {{/if}}
-        </p>
-      </div>
-      <div class="au-o-grid__item au-u-1-2">
-        <p class="au-c-description-label">Geslacht</p>
-        <p class="au-c-description-value">{{@persoon.geslacht.label}}</p>
-      </div>
-      <div class="au-o-grid__item au-u-1-2">
-        <p class="au-c-description-label">Roepnaam</p>
-        <p class="au-c-description-value">{{@persoon.gebruikteVoornaam}}</p>
-      </div>
-    </div>
+    <Person::Card @persoon={{@persoon}} />
+
   </div>
 
   <div class="au-o-box">
