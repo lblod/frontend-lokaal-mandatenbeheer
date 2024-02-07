@@ -103,6 +103,11 @@ export default class InstanceComponent extends Component {
 
     loadFormInto(formStore, form, formInstanceTtl, graphs);
 
+    if (this.args.buildMetaTtl) {
+      const metaTtl = await this.args.buildMetaTtl();
+      formStore.parse(metaTtl, META_GRAPH, 'text/turtle');
+    }
+
     const formNode = formStore.any(
       undefined,
       RDF('type'),
