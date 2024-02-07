@@ -4,6 +4,8 @@ import { tracked } from '@glimmer/tracking';
 
 export default class MandatenbeheerMandatarisSummaryComponent extends Component {
   @tracked editMode = false;
+  @tracked terminateMode = false;
+  @tracked correctMode = false;
 
   get rol() {
     return this.args.mandataris.bekleedt.get('bestuursfunctie').get('label');
@@ -31,5 +33,21 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
   edit() {
     this.editMode = !this.editMode;
     // TODO add edit mandataris logic here.
+  }
+
+  @action
+  terminate() {
+    this.edit();
+    this.terminateMode = !this.terminateMode;
+  }
+
+  @action
+  correct() {
+    this.edit();
+    this.correctMode = !this.correctMode;
+  }
+
+  onSave() {
+    // TODO
   }
 }
