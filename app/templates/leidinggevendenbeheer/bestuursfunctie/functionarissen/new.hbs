@@ -4,6 +4,12 @@
   </Group>
 </AuToolbar>
 
+<Form::NewInstance
+  @onCreate={{this.create}}
+  @form={{@model.form}}
+  {{!-- @buildSourceTtl={{this.buildSourceTtl}} --}}
+/>
+
 <Tmp::Todo>
   <div>Add person search form!</div>
   <div>Add create aanstellingsperiode form!</div>

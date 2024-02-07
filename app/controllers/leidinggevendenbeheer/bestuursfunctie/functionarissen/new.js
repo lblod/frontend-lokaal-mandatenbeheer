@@ -6,6 +6,13 @@ export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenNewIndex
   @service router;
 
   @action
+  create() {
+    this.router.transitionTo(
+      'leidinggevendenbeheer.bestuursfunctie.functionarissen.index'
+    );
+  }
+
+  @action
   cancel() {
     this.router.transitionTo(
       'leidinggevendenbeheer.bestuursfunctie.functionarissen.index'
