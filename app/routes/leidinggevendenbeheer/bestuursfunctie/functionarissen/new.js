@@ -8,9 +8,13 @@ export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenNewRoute
 
   async model() {
     const form = await getForm(this.store, FUNCTIONARIS_CREATE_FORM_ID);
+    const bestuursfunctie = this.modelFor(
+      'leidinggevendenbeheer.bestuursfunctie'
+    );
 
     return {
       form,
+      bestuursfunctie,
     };
   }
 }
