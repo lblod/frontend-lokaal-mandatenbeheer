@@ -37,6 +37,7 @@
       {{#each @mandatarissen as |mandataris|}}
         <Mandatenbeheer::Mandataris::MandatarisSummary
           @mandataris={{mandataris}}
+          @editMandatarisEindeForm={{@editMandatarisEindeForm}}
         />
         <AuHr />
       {{/each}}
