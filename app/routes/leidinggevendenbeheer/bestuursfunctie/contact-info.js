@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { getForm } from 'frontend-lmb/utils/get-form';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { CONTACTINFO_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieContactInfoRoute extends Route {
@@ -21,7 +21,7 @@ export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieContact
       await bestuursfunctie.save();
     }
 
-    const form = await getForm(this.store, CONTACTINFO_FORM_ID);
+    const form = await getFormFrom(this.store, CONTACTINFO_FORM_ID);
 
     return {
       bestuurseenheid,
