@@ -5,7 +5,10 @@
     </p>
   </div>
   <div class="au-o-grid__item au-u-2-5 au-u-text-right">
-    <AuButton {{on "click" this.edit}}>Pas aan</AuButton>
+    <AuButton
+      @skin={{if this.editing "secondary" "primary"}}
+      {{on "click" this.edit}}
+    >{{if this.editing "Sluit" "Pas aan"}}</AuButton>
   </div>
   <div class="au-o-grid__item">
     <AuContent>
@@ -37,18 +40,12 @@
       </ul>
     </AuContent>
   </div>
-  {{#if this.editMode}}
+
+  {{#if this.editing}}
     <Mandatenbeheer::Mandataris::MandatarisEditPrompt
       class="au-c-collapsible au-u-margin-top-small"
-      @onTerminate={{this.terminate}}
-      @onCorrect={{this.correct}}
-    />
-  {{/if}}
-  {{#if this.terminateMode}}
-    <Form::Instance
-      @instanceId={{@mandataris.id}}
-      @form={{@editMandatarisEindeForm}}
-      @onSave={{this.onSave}}
+      @mandataris={{@mandataris}}
+      @editMandatarisEindeForm={{@editMandatarisEindeForm}}
     />
   {{/if}}
 </div>
