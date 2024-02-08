@@ -73,7 +73,10 @@ export default class NewInstanceComponent extends Component {
     notifyFormSavedSuccessfully(this.toaster);
 
     if (this.args.onCreate) {
-      this.args.onCreate(id);
+      this.args.onCreate({
+        instanceTtl: triples,
+        id,
+      });
     }
   }
 

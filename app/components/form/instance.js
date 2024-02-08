@@ -76,7 +76,11 @@ export default class InstanceComponent extends Component {
     notifyFormSavedSuccessfully(this.toaster);
 
     if (this.args.onSave) {
-      this.args.onSave(body);
+      this.args.onSave({
+        instanceId,
+        instanceTtl: triples,
+        response: body,
+      });
     }
   }
 

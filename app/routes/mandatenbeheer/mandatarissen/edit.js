@@ -22,6 +22,7 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
     return RSVP.hash({
       bestuurseenheid: parentModel.bestuurseenheid,
       bestuursorganen: parentModel.bestuursorganen,
+      bestuursorgaan: parentModel.bestuursorganen[0],
       persoon,
       mandatarissen,
       editMandatarisEindeForm,
