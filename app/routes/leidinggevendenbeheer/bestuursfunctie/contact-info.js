@@ -1,5 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { getForm } from 'frontend-lmb/utils/get-form';
+import { CONTACTINFO_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieContactInfoRoute extends Route {
   @service store;
@@ -19,19 +21,13 @@ export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieContact
       await bestuursfunctie.save();
     }
 
-    let adres = await info.adres;
-    if (!adres) {
-      adres = await this.store.createRecord('adres');
-      await adres.save();
-
-      info.set('adres', adres);
-      await info.save();
-    }
+    const form = await getForm(this.store, CONTACTINFO_FORM_ID);
 
     return {
       bestuurseenheid,
       bestuursfunctie,
       info,
+      form,
     };
   }
 }

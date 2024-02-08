@@ -6,11 +6,11 @@
   </Group>
 </AuToolbar>
 
-<div class="au-c-body-container au-c-body-container--scroll">
-  <div class="au-o-box">
-    <Tmp::Todo>Add create/edit contact form!</Tmp::Todo>
-  </div>
-</div>
+<Form::Instance
+  @instanceId={{@model.info.id}}
+  @form={{@model.form}}
+  @onSave={{this.save}}
+/>
 
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>
