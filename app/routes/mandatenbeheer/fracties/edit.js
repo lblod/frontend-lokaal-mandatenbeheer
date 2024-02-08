@@ -8,13 +8,9 @@ export default class MandaatbeheerFractiesEditRoute extends Route {
 
   async model(params) {
     const form = await getForm(this.store, FRACTIE_FORM_ID);
-    // temporary workaround: we will only have one when we follow the wireframes...
-    const selectedBestuursorgaan =
-      this.modelFor('mandatenbeheer').bestuursorganen[0];
     return {
       form,
       instanceId: params.id,
-      bestuursorgaan: selectedBestuursorgaan,
     };
   }
 }

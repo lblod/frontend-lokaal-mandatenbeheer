@@ -22,6 +22,8 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
     return RSVP.hash({
       bestuurseenheid: parentModel.bestuurseenheid,
       bestuursorganen: parentModel.bestuursorganen,
+      // TODO temporary workaround, we will switch to an application layout where only a  single
+      // bestuursorgaan is selected
       bestuursorgaan: parentModel.bestuursorganen[0],
       persoon,
       mandatarissen,
