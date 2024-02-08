@@ -14,7 +14,7 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
       parentModel.bestuursorganen,
       persoon
     );
-    const editMandatarisEindeForm = await getForm(
+    const editMandatarisEindeForm = getForm(
       this.store,
       EDIT_MANDATARIS_EINDE_FORM_ID
     );
