@@ -12,13 +12,12 @@ import { NamedNode } from 'rdflib';
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
  * to a fractie, the link is materialized through a Lidmaadschap class, with a start and end date.
  * The start and end date for the Lidmaatschap are set to the to the start and end date of the
- * currently selected bestuursorgaan (in bestuursperiode).
+ * mandate, and needs to be kept in sync when the mandataris is updated.
  *
- * This information is to be passed in to the meta graph as context in the following format:
+ * Furthermore, the list of fractions is filtered based on the current bestuursorgaan, which is
+ * passed in as context in the meta graph of the form in the following format:
  *
  * ext:applicationContext ext:currentBestuursorgaan <bestuursorgaanUri> .
- * <bestuursorgaanUri> mandaat:bindingStart <startDate> ;
- *                     mandaat:bindingEinde <endDate> .
  */
 export default class MandatarisFractieSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -27,7 +26,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   @tracked membership = null;
   @tracked initialized = false;
-  @tracked bestuursorgaan = null;
+  @tracked bestuursorgaanUri = null;
   @tracked fracties = [];
   @tracked updating = false;
 
@@ -59,19 +58,15 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
       this.storeOptions.metaGraph
     );
 
-    const orgaan = await this.store.query('bestuursorgaan', {
-      'filter[:uri:]': bestuursorgaanUri.value,
-    });
-    this.bestuursorgaan = orgaan.at(0);
+    this.bestuursorgaanUri = bestuursorgaanUri.value;
   }
 
   async loadFracties() {
-    if (!this.bestuursorgaan) {
+    if (!this.bestuursorgaanUri) {
       return;
     }
     const fracties = await this.store.query('fractie', {
-      // TODO if this works, we can also not fetch the full orgaan and just use the triples in the meta graph
-      'filter[bestuursorganen-in-tijd][:uri:]': this.bestuursorgaan.uri,
+      'filter[bestuursorganen-in-tijd][:uri:]': this.bestuursorgaanUri,
     });
     this.fracties = fracties;
   }
@@ -94,15 +89,15 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   async onSelectFractie(fractie) {
     this.updating = true;
     const newMembership = this.store.createRecord('lidmaatschap', {
-      // TODO tijdsinterval should be the same as the duration of the mandataris,
-      // either deal with this in the backend or in the onsave of the mandataris forms...
       binnenFractie: fractie,
     });
     await newMembership.save();
     this.membership = newMembership;
 
-    // TODO clean up unused membership records? (see address-selector)
-    // for history purposes we may want to keep them around though...
+    // Note: this process creates a new membership whenever the value of the fractie selector changes.
+    // For history purposes, we shouldn't delete the old membership so if we want to view a previous
+    // version of the mandataris forms, we can still see the old membership.
+    // Memberships should therefore also never be modified, only created and deleted.
     replaceSingleFormValue(this.storeOptions, new NamedNode(newMembership.uri));
     this.hasBeenFocused = true;
     super.updateValidations();
