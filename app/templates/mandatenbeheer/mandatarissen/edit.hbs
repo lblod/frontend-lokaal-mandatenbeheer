@@ -5,15 +5,15 @@
         {{@model.persoon.achternaam}}</strong></AuHeading>
   </Group>
 </AuToolbar>
-
-<Mandatenbeheer::Mandataris::MandatarisView
-  class="au-c-body-container"
-  @persoon={{@model.persoon}}
-  @mandatarissen={{@model.mandatarissen}}
-  @editMandatarisEindeForm={{@model.editMandatarisEindeForm}}
-/>
-
 <div class="au-c-body-container au-c-body-container--scroll">
+
+  <Mandatenbeheer::Mandataris::MandatarisView
+    class="au-c-body-container"
+    @persoon={{@model.persoon}}
+    @mandatarissen={{@model.mandatarissen}}
+    @editMandatarisEindeForm={{@model.editMandatarisEindeForm}}
+  />
+
   <div class="au-o-box">
     {{#if this.createMode}}
       <Tmp::Todo>Add add mandataris form!</Tmp::Todo>
