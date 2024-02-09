@@ -6,6 +6,13 @@ export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenEditCont
   @service router;
 
   @action
+  save() {
+    this.router.transitionTo(
+      'leidinggevendenbeheer.bestuursfunctie.functionarissen'
+    );
+  }
+
+  @action
   cancel() {
     this.router.transitionTo(
       'leidinggevendenbeheer.bestuursfunctie.functionarissen'

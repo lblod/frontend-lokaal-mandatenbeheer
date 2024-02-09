@@ -1,18 +1,22 @@
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
     <AuHeading @skin="2">Bewerk aanstellingsperiode voor
-      {{@model.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-      {{@model.isBestuurlijkeAliasVan.achternaam}}
+      {{@model.functionaris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+      {{@model.functionaris.isBestuurlijkeAliasVan.achternaam}}
       als
-      {{@model.bekleedt.rol.label}}</AuHeading>
+      {{@model.functionaris.bekleedt.rol.label}}</AuHeading>
   </Group>
 </AuToolbar>
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
-    <Person::Card @persoon={{@model.isBestuurlijkeAliasVan}} />
+    <Person::Card @persoon={{@model.functionaris.isBestuurlijkeAliasVan}} />
 
-    <Tmp::Todo>Add edit aanstellingsperiode form!</Tmp::Todo>
+    <Form::Instance
+      @instanceId={{@model.instanceId}}
+      @form={{@model.form}}
+      @onSave={{this.save}}
+    />
   </div>
 </div>
 
