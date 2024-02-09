@@ -1,7 +1,10 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { getForm } from 'frontend-lmb/utils/get-form';
-import { EDIT_MANDATARIS_EINDE_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import {
+  EDIT_MANDATARIS_EINDE_FORM_ID,
+  EDIT_MANDATARIS_FORM_ID,
+} from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
 export default class MandatenbeheerMandatarissenEditRoute extends Route {
@@ -14,10 +17,11 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
       parentModel.bestuursorganen,
       persoon
     );
-    const editMandatarisEindeForm = getForm(
+    const editMandatarisEindeForm = getFormFrom(
       this.store,
       EDIT_MANDATARIS_EINDE_FORM_ID
     );
+    const editMandatarisForm = getFormFrom(this.store, EDIT_MANDATARIS_FORM_ID);
 
     return RSVP.hash({
       bestuurseenheid: parentModel.bestuurseenheid,
@@ -28,6 +32,7 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
       persoon,
       mandatarissen,
       editMandatarisEindeForm,
+      editMandatarisForm,
     });
   }
 

@@ -28,14 +28,18 @@
   </div>
 </div>
 <div class="au-o-grid__item">
-  {{#if this.isCorrecting}}
-    <Tmp::Todo />
-  {{else if this.isTerminating}}
+  {{#if this.isTerminating}}
     <Form::Instance
       @instanceId={{@mandataris.id}}
       @form={{@editMandatarisEindeForm}}
       @onSave={{this.onSave}}
       @buildMetaTtl={{this.buildMetaTtl}}
+    />
+  {{else if this.isCorrecting}}
+    <Form::Instance
+      @instanceId={{@mandataris.id}}
+      @form={{@editMandatarisForm}}
+      @onSave={{this.onSave}}
     />
   {{/if}}
 </div>

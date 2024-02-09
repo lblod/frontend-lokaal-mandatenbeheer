@@ -12,7 +12,7 @@ const retrieveForm = async (id) => {
   return form;
 };
 
-const getForm = async (store, formId) => {
+const getFormFrom = async (store, formId) => {
   const definition = store.peekRecord('form-definition', formId);
   if (definition) return definition;
 
@@ -26,4 +26,4 @@ const getForm = async (store, formId) => {
   });
 };
 
-export { getForm };
+export { getFormFrom };
