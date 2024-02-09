@@ -135,10 +135,12 @@ export default class InstanceComponent extends Component {
   }
 
   registerObserver(formStore) {
-    formStore.registerObserver(() => {
+    const onFormUpdate = () => {
       this.sourceTriples = this.formInfo.formStore.serializeDataMergedGraph(
         this.formInfo.graphs.sourceGraph
       );
-    });
+    };
+    formStore.registerObserver(onFormUpdate);
+    onFormUpdate();
   }
 }

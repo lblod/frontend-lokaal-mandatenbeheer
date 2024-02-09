@@ -1,23 +1,23 @@
-<div class="au-c-body-container au-c-body-container--scroll">
-  <div class="au-o-box">
-    <Person::Card @persoon={{@persoon}} />
-  </div>
+<div class="au-o-box">
+  <Person::Card @persoon={{@persoon}} />
+</div>
 
-  <div class="au-o-box">
-    <AuHeading @level="3" @skin="4">
-      Lijst van alle mandaten
-    </AuHeading>
+<div class="au-o-box">
+  <AuHeading @level="3" @skin="4">
+    Lijst van alle mandaten
+  </AuHeading>
 
-    <AuHr />
+  <AuHr />
 
-    <ul class="au-c-list-vertical">
-      {{#each @mandatarissen as |mandataris|}}
-        <Mandatenbeheer::Mandataris::MandatarisSummary
-          @mandataris={{mandataris}}
-        />
-        <AuHr />
-      {{/each}}
-    </ul>
+  <ul class="au-c-list-vertical">
+    {{#each @mandatarissen as |mandataris|}}
+      <Mandatenbeheer::Mandataris::MandatarisSummary
+        @mandataris={{mandataris}}
+        @editMandatarisEindeForm={{@editMandatarisEindeForm}}
+        @editMandatarisForm={{@editMandatarisForm}}
+      />
+      <AuHr />
+    {{/each}}
+  </ul>
 
-  </div>
 </div>

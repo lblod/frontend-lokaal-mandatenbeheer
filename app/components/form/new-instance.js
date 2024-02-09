@@ -114,15 +114,16 @@ export default class NewInstanceComponent extends Component {
       graphs,
       sourceNode,
     };
-
     this.registerObserver(formStore);
   }
 
   registerObserver(formStore) {
-    formStore.registerObserver(() => {
+    const onFormUpdate = () => {
       this.sourceTriples = this.formInfo.formStore.serializeDataMergedGraph(
         this.formInfo.graphs.sourceGraph
       );
-    });
+    };
+    formStore.registerObserver(onFormUpdate);
+    onFormUpdate();
   }
 }
