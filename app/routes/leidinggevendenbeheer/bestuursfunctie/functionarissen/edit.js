@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { getForm } from 'frontend-lmb/utils/get-form';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { FUNCTIONARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenEditRoute extends Route {
@@ -12,7 +12,7 @@ export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenEditRout
       params.functionaris_id
     );
 
-    const form = await getForm(this.store, FUNCTIONARIS_EDIT_FORM_ID);
+    const form = await getFormFrom(this.store, FUNCTIONARIS_EDIT_FORM_ID);
 
     return {
       functionaris,
