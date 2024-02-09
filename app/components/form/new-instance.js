@@ -75,7 +75,7 @@ export default class NewInstanceComponent extends Component {
     if (this.args.onCreate) {
       this.args.onCreate({
         instanceTtl: triples,
-        id,
+        instanceId: id,
       });
     }
   }
