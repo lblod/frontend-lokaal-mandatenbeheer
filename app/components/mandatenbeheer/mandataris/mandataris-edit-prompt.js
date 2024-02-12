@@ -38,7 +38,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   }
 
   @action
-
   async onSave({ instanceTtl }) {
     this.editMode = null;
     const store = new ForkingStore();
