@@ -58,20 +58,17 @@
 
   <div class="au-c-body-container au-c-body-container--scroll">
     <div class="au-o-box">
-      <Tmp::Todo>
-        Refactor mandataris table!
-        <Legacy::Mandatenbeheer::MandatarisTable
-          class="au-c-body-container"
-          @content={{@model.mandatarissen}}
-          @isLoading={{this.isLoadingModel}}
-          @sort={{this.sort}}
-          @page={{this.page}}
-          @size={{this.size}}
-          @editRoute="mandatenbeheer.mandatarissen.edit"
-          @displaySubset={{this.hasActiveChildRoute}}
-          @mandatarisBestuursorganen={{@model.mandatarisBestuursorganen}}
-        />
-      </Tmp::Todo>
+      <Mandatenbeheer::Mandataris::MandatarisTable
+        class="au-c-body-container"
+        @content={{@model.mandatarissen}}
+        @isLoading={{this.isLoadingModel}}
+        @sort={{this.sort}}
+        @page={{this.page}}
+        @size={{this.size}}
+        @editRoute="mandatenbeheer.mandatarissen.edit"
+        @displaySubset={{this.hasActiveChildRoute}}
+        @mandatarisBestuursorganen={{@model.mandatarisBestuursorganen}}
+      />
     </div>
   </div>
 
