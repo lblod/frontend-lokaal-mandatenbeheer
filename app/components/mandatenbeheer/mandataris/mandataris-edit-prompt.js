@@ -16,10 +16,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
     return this.editMode === CORRECT_MODE;
   }
 
-  get notEditing() {
-    return this.editMode === null;
-  }
-
   @action
   terminate() {
     this.editMode = TERMINATE_MODE;

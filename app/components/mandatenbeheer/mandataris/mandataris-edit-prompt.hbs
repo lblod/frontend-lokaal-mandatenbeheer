@@ -1,4 +1,4 @@
-{{#if this.notEditing}}
+{{#unless this.editMode}}
   <div class="au-o-grid au-o-grid--small">
     <div class="au-o-grid__item au-u-1-2">
       <AuContent @skin="small">
@@ -28,7 +28,7 @@
       </AuContent>
     </div>
   </div>
-{{/if}}
+{{/unless}}
 <div class="au-o-grid__item">
   {{#if this.isTerminating}}
     <Form::Instance

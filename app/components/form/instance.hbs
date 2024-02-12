@@ -30,11 +30,7 @@
                 Pas aan
               </AuButton>
               {{#if @onCancel}}
-                <AuButton
-                  {{on "click" this.cancel}}
-                  @skin="secondary"
-                  {{!-- @disabled={{not @cancel}} --}}
-                >
+                <AuButton {{on "click" this.cancel}} @skin="secondary">
                   Annuleer
                 </AuButton>
               {{/if}}
