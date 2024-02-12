@@ -7,7 +7,7 @@ export default class MandaatBestuursorganenSelector extends Component {
   @service store;
 
   @tracked mandaat = null;
-  @tracked mandaten = null;
+  @tracked mandaatOptions = null;
   @tracked bestuursorganen = [];
   @tracked initialized = false;
 
@@ -25,7 +25,7 @@ export default class MandaatBestuursorganenSelector extends Component {
         .map((o) => o.get('id'))
         .join(','),
     });
-    this.mandaten = mandaten;
+    this.mandaatOptions = mandaten;
     this.initialized = true;
   }
 

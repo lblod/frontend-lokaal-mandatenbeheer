@@ -5,8 +5,8 @@ import { triplesForPath } from '@lblod/submission-form-helpers';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { EXT } from 'frontend-lmb/rdf/namespaces';
 import { NamedNode } from 'rdflib';
+import { loadBestuursorgaanUriFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
@@ -50,15 +50,9 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   async loadBestuursorgaan() {
-    const forkingStore = this.storeOptions.store;
-    const bestuursorgaanUri = forkingStore.any(
-      EXT('applicationContext'),
-      EXT('currentBestuursorgaan'),
-      null,
-      this.storeOptions.metaGraph
+    this.bestuursorgaanUri = loadBestuursorgaanUriFromContext(
+      this.storeOptions
     );
-
-    this.bestuursorgaanUri = bestuursorgaanUri.value;
   }
 
   async loadFracties() {

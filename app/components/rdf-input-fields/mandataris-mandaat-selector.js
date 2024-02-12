@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { NamedNode } from 'rdflib';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { EXT } from 'frontend-lmb/rdf/namespaces';
+import { loadBestuursorgaanUriFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 
 export default class MandatarisMandaatSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -23,18 +23,13 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   }
 
   async load() {
-    await this.loadProvidedValue();
-    await this.loadBestuursorgaan();
+    await Promise.all([this.loadProvidedValue(), this.loadBestuursorgaan()]);
     this.initialized = true;
   }
 
   async loadBestuursorgaan() {
-    const forkingStore = this.storeOptions.store;
-    const bestuursorgaanUri = forkingStore.any(
-      EXT('applicationContext'),
-      EXT('currentBestuursorgaan'),
-      null,
-      this.storeOptions.metaGraph
+    const bestuursorgaanUri = loadBestuursorgaanUriFromContext(
+      this.storeOptions
     );
 
     if (!bestuursorgaanUri) {
@@ -42,7 +37,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     }
 
     this.bestuursorganen = await this.store.query('bestuursorgaan', {
-      'filter[:uri:]': bestuursorgaanUri.value,
+      'filter[:uri:]': bestuursorgaanUri,
     });
   }
 
