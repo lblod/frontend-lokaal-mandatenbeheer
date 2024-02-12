@@ -38,7 +38,9 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   }
 
   @action
+
   async onSave({ instanceTtl }) {
+    this.editMode = null;
     const store = new ForkingStore();
     store.parse(instanceTtl, SOURCE_GRAPH, 'text/turtle');
     const mandatarisUri = this.args.mandataris.uri;
