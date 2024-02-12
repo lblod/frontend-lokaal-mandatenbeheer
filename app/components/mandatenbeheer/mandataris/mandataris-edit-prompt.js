@@ -16,6 +16,10 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
     return this.editMode === CORRECT_MODE;
   }
 
+  get notEditing() {
+    return this.editMode === null;
+  }
+
   @action
   terminate() {
     this.editMode = TERMINATE_MODE;
@@ -33,6 +37,7 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
 
   @action
   onSave() {
+    this.editMode = null;
     // TODO For resoures caching
     setTimeout(() => this.args.mandataris.reload(), 1000);
   }

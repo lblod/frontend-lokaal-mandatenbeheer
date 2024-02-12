@@ -18,11 +18,30 @@
             class="au-u-max-width-medium"
           />
           {{yield}}
-
         </section>
-        <AuButton {{on "click" this.saveInstance}} @disabled={{this.isSaving}}>
-          Pas aan
-        </AuButton>
+
+        <AuToolbar as |Group|>
+          <Group>
+            <AuButtonGroup>
+              <AuButton
+                {{on "click" this.saveInstance}}
+                @disabled={{this.isSaving}}
+              >
+                Pas aan
+              </AuButton>
+              {{#if @onCancel}}
+                <AuButton
+                  {{on "click" this.cancel}}
+                  @skin="secondary"
+                  {{!-- @disabled={{not @cancel}} --}}
+                >
+                  Annuleer
+                </AuButton>
+              {{/if}}
+            </AuButtonGroup>
+          </Group>
+        </AuToolbar>
+
         <section class="au-o-region-large">
           <AuHeading
             @level="2"

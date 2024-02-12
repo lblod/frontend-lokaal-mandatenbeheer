@@ -12,9 +12,9 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
     return this.args.mandataris.status.get('label');
   }
   get fractie() {
-    return this.args.mandataris.heeftLidmaatschap
-      .get('binnenFractie')
-      .get('naam');
+    return this.args.mandataris.heeftLidmaatschap.get('binnenFractie')
+      ? this.args.mandataris.heeftLidmaatschap.get('binnenFractie').get('naam')
+      : '';
   }
 
   get formattedBeleidsdomein() {

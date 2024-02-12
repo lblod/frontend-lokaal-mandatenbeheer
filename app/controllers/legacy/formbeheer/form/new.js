@@ -6,6 +6,11 @@ export default class FormNewController extends Controller {
   @service router;
 
   @action
+  onCancel() {
+    this.router.location.history.back();
+  }
+
+  @action
   onCreate(id) {
     const definitionId = this.model.formDefinition.id;
     this.router.transitionTo(

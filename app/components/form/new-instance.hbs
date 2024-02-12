@@ -26,12 +26,27 @@
           </AuAlert>
         {{/if}}
 
-        <AuButton
-          {{on "click" this.createInstance}}
-          @disabled={{this.isSaving}}
-        >
-          Bewaar
-        </AuButton>
+        <AuToolbar as |Group|>
+          <Group>
+            <AuButtonGroup>
+              <AuButton
+                {{on "click" this.createInstance}}
+                @disabled={{this.isSaving}}
+              >
+                Bewaar
+              </AuButton>
+              {{#if @onCancel}}
+                <AuButton
+                  {{on "click" this.cancel}}
+                  @skin="secondary"
+                  {{!-- @disabled={{not @cancel}} --}}
+                >
+                  Annuleer
+                </AuButton>
+              {{/if}}
+            </AuButtonGroup>
+          </Group>
+        </AuToolbar>
 
         <section class="au-o-region-large">
 
