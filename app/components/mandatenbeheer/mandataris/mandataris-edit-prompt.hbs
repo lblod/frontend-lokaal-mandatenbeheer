@@ -33,13 +33,13 @@
       @instanceId={{@mandataris.id}}
       @form={{@editMandatarisEindeForm}}
       @onSave={{this.onSave}}
-      @buildMetaTtl={{this.buildMetaTtl}}
     />
   {{else if this.isCorrecting}}
     <Form::Instance
       @instanceId={{@mandataris.id}}
       @form={{@editMandatarisForm}}
       @onSave={{this.onSave}}
+      @buildMetaTtl={{this.buildMetaTtl}}
     />
   {{/if}}
 </div>
