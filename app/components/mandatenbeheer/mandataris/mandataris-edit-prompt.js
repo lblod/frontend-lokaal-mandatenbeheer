@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { getBestuursorgaanMetaTtl } from '../../../utils/bestuursorgaan-meta-ttl';
+import { getBestuursorgaanMetaTtl } from '../../../utils/form-context/bestuursorgaan-meta-ttl';
 import { SOURCE_GRAPH } from '../../../utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
 import { inject as service } from '@ember/service';
@@ -38,7 +38,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   }
 
   @action
-
   async onSave({ instanceTtl }) {
     this.editMode = null;
     const store = new ForkingStore();

@@ -1,0 +1,23 @@
+<div class={{if @error "ember-power-select--error"}}>
+  {{#if this.initialized}}
+    <PowerSelect
+      @loadingMessage="Aan het laden..."
+      @noMatchesMessage="Geen resultaten"
+      @searchMessage="Typ om te zoeken"
+      @searchEnabled={{true}}
+      @allowClear={{@allowClear}}
+      @disabled={{@disabled}}
+      @placeholder="Zoek mandaat"
+      @options={{this.mandaatOptions}}
+      @selected={{this.mandaat}}
+      @searchField="bestuursfunctie.label"
+      @onChange={{this.select}}
+      @triggerId="mandaat"
+      as |mandaat|
+    >
+      {{mandaat.bestuursfunctie.label}}
+    </PowerSelect>
+  {{else}}
+    Loading...
+  {{/if}}
+</div>

@@ -1,0 +1,13 @@
+<div>
+  <AuLabel for="mandaat">Mandaat</AuLabel>
+  {{#if this.initialized}}
+    <Mandatenbeheer::MandaatBestuursorganenSelector
+      @onSelect={{this.updateMandaat}}
+      @bestuursorganen={{this.bestuursorganen}}
+      @mandaat={{this.mandaat}}
+      @allowClear={{true}}
+    />
+  {{else}}
+    Loading...
+  {{/if}}
+</div>
