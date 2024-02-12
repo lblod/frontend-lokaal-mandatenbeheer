@@ -1,6 +1,8 @@
-import Model, { belongsTo } from '@ember-data/model';
+import Model, { belongsTo, attr } from '@ember-data/model';
 
 export default class LidmaatschapModel extends Model {
+  @attr uri;
+
   @belongsTo('fractie', {
     async: true,
     inverse: null,
