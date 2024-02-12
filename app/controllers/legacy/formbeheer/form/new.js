@@ -11,12 +11,12 @@ export default class FormNewController extends Controller {
   }
 
   @action
-  onCreate(id) {
+  onCreate({ instanceId }) {
     const definitionId = this.model.formDefinition.id;
     this.router.transitionTo(
       'legacy.formbeheer.form.instance',
       definitionId,
-      id
+      instanceId
     );
   }
 }

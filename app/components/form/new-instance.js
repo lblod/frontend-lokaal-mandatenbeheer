@@ -73,7 +73,10 @@ export default class NewInstanceComponent extends Component {
     notifyFormSavedSuccessfully(this.toaster);
 
     if (this.args.onCreate) {
-      this.args.onCreate(id);
+      this.args.onCreate({
+        instanceTtl: triples,
+        instanceId: id,
+      });
     }
   }
 
@@ -87,7 +90,7 @@ export default class NewInstanceComponent extends Component {
     this.args.onCancel();
   }
 
-  onInit() {
+  async onInit() {
     const form = this.args.form;
     const uri = `${form.prefix}${uuid()}`;
     const sourceTtl = this.args.buildSourceTtl
@@ -103,6 +106,11 @@ export default class NewInstanceComponent extends Component {
     };
 
     loadFormInto(formStore, form, sourceTtl, graphs);
+
+    if (this.args.buildMetaTtl) {
+      const metaTtl = await this.args.buildMetaTtl();
+      formStore.parse(metaTtl, META_GRAPH, 'text/turtle');
+    }
 
     const formNode = formStore.any(
       undefined,

@@ -13,6 +13,7 @@
     {{#each @mandatarissen as |mandataris|}}
       <Mandatenbeheer::Mandataris::MandatarisSummary
         @mandataris={{mandataris}}
+        @bestuursorgaan={{@bestuursorgaan}}
         @editMandatarisEindeForm={{@editMandatarisEindeForm}}
         @editMandatarisForm={{@editMandatarisForm}}
       />

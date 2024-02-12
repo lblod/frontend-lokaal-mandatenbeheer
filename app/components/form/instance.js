@@ -76,7 +76,11 @@ export default class InstanceComponent extends Component {
     notifyFormSavedSuccessfully(this.toaster);
 
     if (this.args.onSave) {
-      this.args.onSave(body);
+      this.args.onSave({
+        instanceId,
+        instanceTtl: triples,
+        response: body,
+      });
     }
   }
 
@@ -107,6 +111,11 @@ export default class InstanceComponent extends Component {
     };
 
     loadFormInto(formStore, form, formInstanceTtl, graphs);
+
+    if (this.args.buildMetaTtl) {
+      const metaTtl = await this.args.buildMetaTtl();
+      formStore.parse(metaTtl, META_GRAPH, 'text/turtle');
+    }
 
     const formNode = formStore.any(
       undefined,

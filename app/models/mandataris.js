@@ -7,6 +7,7 @@ export default class MandatarisModel extends AgentInPosition {
   @attr('datetime') start;
   @attr('datetime') einde;
   @attr duplicationReason;
+  @attr uri;
 
   @belongsTo('mandaat', { async: true, inverse: null }) bekleedt;
 

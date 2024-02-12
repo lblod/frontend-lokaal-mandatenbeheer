@@ -1,12 +1,18 @@
-import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { getBestuursorgaanMetaTtl } from '../../../utils/bestuursorgaan-meta-ttl';
+import { SOURCE_GRAPH } from '../../../utils/constants';
+import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
+import { inject as service } from '@ember/service';
 
 const TERMINATE_MODE = 'terminate';
 const CORRECT_MODE = 'correct';
 
 export default class MandatenbeheerMandatarisEditPromptComponent extends Component {
   @tracked editMode = null;
+  @service store;
 
   get isTerminating() {
     return this.editMode === TERMINATE_MODE;
@@ -32,9 +38,23 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   }
 
   @action
-  onSave() {
+
+  async onSave({ instanceTtl }) {
     this.editMode = null;
-    // TODO For resoures caching
+    const store = new ForkingStore();
+    store.parse(instanceTtl, SOURCE_GRAPH, 'text/turtle');
+    const mandatarisUri = this.args.mandataris.uri;
+
+    await syncMandatarisMembership(mandatarisUri, this.store, {
+      store,
+      sourceGraph: SOURCE_GRAPH,
+    });
+
     setTimeout(() => this.args.mandataris.reload(), 1000);
+  }
+
+  @action
+  buildMetaTtl() {
+    return getBestuursorgaanMetaTtl(this.args.bestuursorgaan);
   }
 }
