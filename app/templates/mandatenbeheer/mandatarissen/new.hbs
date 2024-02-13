@@ -9,7 +9,11 @@
   </Group>
 </AuToolbar>
 
-<Tmp::Todo>Add person search form!</Tmp::Todo>
+<Form::NewInstance
+  @onCreate={{this.onCreate}}
+  @form={{@model.mandatarisNewForm}}
+  @buildMetaTtl={{this.buildMetaTtl}}
+/>
 
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>
