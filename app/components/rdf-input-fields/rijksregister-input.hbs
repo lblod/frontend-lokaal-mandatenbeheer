@@ -14,8 +14,7 @@
   @warning={{this.hasWarnings}}
   id={{this.inputId}}
   value={{this.value}}
-  @mask="99.99.99-999.99"
-  @maskPlaceholder="_"
+  {{au-inputmask options=(hash mask="99.99.99-999.99" placeholder="_")}}
   placeholder="00.00.00-000.00"
   {{on "blur" this.updateValue}}
 />
