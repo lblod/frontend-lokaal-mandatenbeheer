@@ -18,7 +18,12 @@
 
   <div class="au-o-box">
     {{#if this.createMode}}
-      <Tmp::Todo>Add add mandataris form!</Tmp::Todo>
+      <Form::NewInstance
+        @onCreate={{this.onCreate}}
+        @form={{@model.mandatarisHiddenPersoonNewForm}}
+        @buildMetaTtl={{this.buildMetaTtl}}
+        @buildSourceTtl={{this.buildSourceTtl}}
+      />
     {{/if}}
 
     <div class="au-u-padding-top-small">
