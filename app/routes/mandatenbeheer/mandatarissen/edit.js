@@ -4,6 +4,7 @@ import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import {
   EDIT_MANDATARIS_EINDE_FORM_ID,
   EDIT_MANDATARIS_FORM_ID,
+  MANDATARIS_HIDDEN_PERSOON_NEW_FORM_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
@@ -22,6 +23,10 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
       EDIT_MANDATARIS_EINDE_FORM_ID
     );
     const editMandatarisForm = getFormFrom(this.store, EDIT_MANDATARIS_FORM_ID);
+    const mandatarisHiddenPersoonNewForm = getFormFrom(
+      this.store,
+      MANDATARIS_HIDDEN_PERSOON_NEW_FORM_ID
+    );
 
     return RSVP.hash({
       bestuurseenheid: parentModel.bestuurseenheid,
@@ -33,6 +38,7 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
       mandatarissen,
       editMandatarisEindeForm,
       editMandatarisForm,
+      mandatarisHiddenPersoonNewForm,
     });
   }
 
