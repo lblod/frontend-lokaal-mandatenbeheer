@@ -41,6 +41,7 @@ export default class NewInstanceComponent extends Component {
 
   @keepLatestTask
   *save() {
+    // TODO validation needs to be checked first before the form is acutally saved
     const triples = this.sourceTriples;
     const definition = this.formInfo.definition;
     this.errorMessage = null;
