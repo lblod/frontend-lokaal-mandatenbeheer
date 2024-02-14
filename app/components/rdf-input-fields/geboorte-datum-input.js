@@ -5,6 +5,7 @@ import { guidFor } from '@ember/object/internals';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
+import moment from 'moment';
 
 export default class RDFGeboorteDatumInput extends InputFieldComponent {
   inputId = 'birthdate-' + guidFor(this);
@@ -12,8 +13,27 @@ export default class RDFGeboorteDatumInput extends InputFieldComponent {
   @service store;
   @tracked geboortedatum;
 
+  minDate;
+  maxDate;
+
   constructor() {
     super(...arguments);
+
+    const now = new Date();
+    const hundredYearsAgo = new Date(
+      now.getFullYear() - 100,
+      now.getMonth(),
+      now.getDate()
+    );
+    const eighteenYearsAgo = new Date(
+      now.getFullYear() - 18,
+      now.getMonth(),
+      now.getDate()
+    );
+
+    this.minDate = hundredYearsAgo;
+    this.maxDate = eighteenYearsAgo;
+
     this.loadProvidedValue();
   }
 
@@ -32,12 +52,19 @@ export default class RDFGeboorteDatumInput extends InputFieldComponent {
 
   @action
   async updateValue(isoDate, date) {
+    this.geboortedatum = date;
+
+    this.updateValidations(date);
+
+    if (this.hasErrors) {
+      return;
+    }
+
     const geboorte = await this.loadOrCreateGeboorte(isoDate, date);
 
     replaceSingleFormValue(this.storeOptions, geboorte.uri);
 
     this.hasBeenFocused = true;
-    this.updateValidations();
   }
 
   async loadOrCreateGeboorte(isoDate, date) {
@@ -54,5 +81,27 @@ export default class RDFGeboorteDatumInput extends InputFieldComponent {
         .save();
     }
     return geboorte;
+  }
+
+  updateValidations() {
+    super.updateValidations();
+
+    if (!this.geboortedatum) {
+      return;
+    }
+
+    if (this.geboortedatum < this.minDate) {
+      let minDate = moment(this.minDate).format('DD-MM-YYYY');
+      this.errorValidations.push({
+        resultMessage: `geboortedatum moet na ${minDate} liggen`,
+      });
+    } else if (this.geboortedatum > this.maxDate) {
+      let maxDate = moment(this.maxDate).format('DD-MM-YYYY');
+      this.errorValidations.push({
+        resultMessage: `geboortedatum moet voor ${maxDate} liggen`,
+      });
+    }
+
+    return;
   }
 }
