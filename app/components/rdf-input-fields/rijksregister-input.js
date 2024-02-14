@@ -3,17 +3,15 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { guidFor } from '@ember/object/internals';
-import {
-  updateSimpleFormValue,
-  triplesForPath,
-} from '@lblod/submission-form-helpers';
+import { triplesForPath } from '@lblod/submission-form-helpers';
 import { isValidRijksregisternummer } from 'frontend-lmb/utils/rijksregisternummer';
+import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 
 export default class RDFRijksRegisterInput extends InputFieldComponent {
   inputId = 'rrn-' + guidFor(this);
 
   @service store;
-  @tracked value;
+  @tracked rijksregisternummer;
 
   constructor() {
     super(...arguments);
@@ -28,8 +26,7 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
       });
       if (queryResult.length >= 1) {
         const identificator = queryResult.at(0);
-        this.nodeValue = identificator.uri;
-        this.value = identificator.identificator;
+        this.rijksregisternummer = identificator.identificator;
       }
     }
   }
@@ -38,32 +35,26 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
   async updateValue(event) {
     if (event && typeof event.preventDefault === 'function')
       event.preventDefault();
-    const rijksregisternummer = event.target.value.trim();
-
-    // TODO ideally this should also check if the other fields are compatible with the rrn
-    // such as birthdate and sex, but this might be more trouble then it's worth.
-    if (!isValidRijksregisternummer(rijksregisternummer)) {
-      // Throw error here.
-      console.log('rijksregister nummer not valid');
-      return;
-    }
-    const identificator = await this.loadOrCreateRijksregister(
-      rijksregisternummer
-    );
-
-    this.value = identificator.uri;
-    this.nodeValue = identificator.identificator;
-
-    updateSimpleFormValue(this.storeOptions, this.value, this.nodeValue);
-
-    this.hasBeenFocused = true;
+    this.rijksregisternummer = event.target.value.trim();
 
     this.updateValidations();
+
+    if (this.hasErrors) {
+      return;
+    }
+
+    const identificator = await this.loadOrCreateRijksregister(
+      this.rijksregisternummer
+    );
+
+    replaceSingleFormValue(this.storeOptions, identificator.uri);
+
+    this.hasBeenFocused = true;
   }
 
   async loadOrCreateRijksregister(rrn) {
     let identificator;
-    let queryResult = await this.store.query('identificator', {
+    const queryResult = await this.store.query('identificator', {
       filter: { ':exact:identificator': rrn },
     });
 
@@ -80,6 +71,22 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
   }
 
   updateValidations() {
-    // TODO some validation needs to happen here.
+    super.updateValidations();
+
+    if (!this.rijksregisternummer) {
+      return;
+    }
+
+    // TODO ideally this should also check if the other fields are compatible with the rrn
+    // such as birthdate and sex, but this might be more trouble then it's worth.
+    if (!isValidRijksregisternummer(this.rijksregisternummer)) {
+      this.errorValidations.push({
+        // validationType: 'string',
+        // hasValidation: true,
+        // valid: false,
+        resultMessage: 'ongeldig rijksregisternummer',
+      });
+      return;
+    }
   }
 }
