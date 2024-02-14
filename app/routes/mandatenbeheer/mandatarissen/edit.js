@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import {
-  EDIT_MANDATARIS_EINDE_FORM_ID,
+  MANDATARIS_EINDE_EDIT_FORM_ID,
   EDIT_MANDATARIS_FORM_ID,
   MANDATARIS_HIDDEN_PERSOON_NEW_FORM_ID,
 } from 'frontend-lmb/utils/well-known-ids';
@@ -18,9 +18,9 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
       parentModel.bestuursorganen,
       persoon
     );
-    const editMandatarisEindeForm = getFormFrom(
+    const mandatarisEindeEditForm = getFormFrom(
       this.store,
-      EDIT_MANDATARIS_EINDE_FORM_ID
+      MANDATARIS_EINDE_EDIT_FORM_ID
     );
     const editMandatarisForm = getFormFrom(this.store, EDIT_MANDATARIS_FORM_ID);
     const mandatarisHiddenPersoonNewForm = getFormFrom(
@@ -36,7 +36,7 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
       bestuursorgaan: parentModel.bestuursorganen[0],
       persoon,
       mandatarissen,
-      editMandatarisEindeForm,
+      mandatarisEindeEditForm,
       editMandatarisForm,
       mandatarisHiddenPersoonNewForm,
     });
