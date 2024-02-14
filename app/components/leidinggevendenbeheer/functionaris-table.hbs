@@ -1,0 +1,66 @@
+<AuDataTable
+  @content={{@content}}
+  @isLoading={{@isLoadingModel}}
+  @noDataMessage="Geen aanstellingsperiode voor de functie gevonden."
+  @sort={{@sort}}
+  @page={{@page}}
+  @size={{@size}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @label="Naam"
+        @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
+        @currentSorting={{@sort}}
+      />
+      <AuDataTableThSortable
+        @label="Familienaam"
+        @field="isBestuurlijkeAliasVan.achternaam"
+        @currentSorting={{@sort}}
+      />
+      <AuDataTableThSortable
+        @label="Status"
+        @field="status.label"
+        @currentSorting={{@sort}}
+      />
+      <AuDataTableThSortable
+        @label="Start periode"
+        @field="start"
+        @currentSorting={{@sort}}
+      />
+      <AuDataTableThSortable
+        @label="Einde periode"
+        @field="einde"
+        @currentSorting={{@sort}}
+      />
+      <th>{{! Actions }}</th>
+    </c.header>
+
+    <c.body as |row|>
+      <td>{{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}</td>
+      <td>{{row.isBestuurlijkeAliasVan.achternaam}}</td>
+      <td>{{row.status.label}}</td>
+      <td>
+        {{#if row.start}}
+          {{moment-format row.start "DD-MM-YYYY"}}
+        {{else}}
+          <span class="au-c-info-text">Onbepaald</span>
+        {{/if}}
+      </td>
+      <td>
+        {{#if row.einde}}
+          {{moment-format row.einde "DD-MM-YYYY"}}
+        {{else}}
+          <span class="au-c-info-text">Onbepaald</span>
+        {{/if}}
+      </td>
+      <td>
+        <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
+          <AuIcon @icon="pencil" @alignment="left" />
+          Bewerk periode
+        </LinkTo>
+      </td>
+    </c.body>
+  </t.content>
+</AuDataTable>

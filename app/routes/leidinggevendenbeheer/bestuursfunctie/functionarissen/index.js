@@ -7,6 +7,13 @@ export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenIndexRou
   @service router;
   @service store;
 
+  queryParams = {
+    filter: { refreshModel: true },
+    page: { refreshModel: true },
+    size: { refreshModel: true },
+    sort: { refreshModel: true },
+  };
+
   async beforeModel() {
     const bestuurseenheidClassificatie =
       this.currentSession.groupClassification;
