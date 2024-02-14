@@ -19,17 +19,10 @@ export default class InstanceTableComponent extends Component {
     return this.formInfo !== null;
   }
 
-  get editRoute() {
-    if (this.args.editRoute) {
-      return this.args.editRoute;
-    }
-    return 'legacy.formbeheer.form.instance';
-  }
-
   @action
-  async removeInstance(instanceId) {
+  async removeInstance(instance) {
     const result = await fetch(
-      `/form-content/${this.formInfo.formDefinition.id}/instances/${instanceId}`,
+      `/form-content/${this.formInfo.formDefinition.id}/instances/${instance.id}`,
       {
         method: 'DELETE',
         headers: {
@@ -44,7 +37,7 @@ export default class InstanceTableComponent extends Component {
       return;
     }
     if (this.args.onRemoveInstance) {
-      this.args.onRemoveInstance(instanceId);
+      this.args.onRemoveInstance(instance.id);
     }
   }
 
