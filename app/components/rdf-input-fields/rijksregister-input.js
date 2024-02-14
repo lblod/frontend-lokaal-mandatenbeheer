@@ -81,9 +81,6 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     // such as birthdate and sex, but this might be more trouble then it's worth.
     if (!isValidRijksregisternummer(this.rijksregisternummer)) {
       this.errorValidations.push({
-        // validationType: 'string',
-        // hasValidation: true,
-        // valid: false,
         resultMessage: 'ongeldig rijksregisternummer',
       });
       return;
