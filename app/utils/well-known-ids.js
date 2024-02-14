@@ -7,3 +7,4 @@ export const EDIT_MANDATARIS_FORM_ID = 'edit-mandataris';
 export const CONTACTINFO_FORM_ID = 'contactinfo';
 export const FUNCTIONARIS_CREATE_FORM_ID = 'functionaris-new';
 export const FUNCTIONARIS_EDIT_FORM_ID = 'functionaris-edit';
+export const CREATE_PERSON_FORM_ID = 'persoon';
