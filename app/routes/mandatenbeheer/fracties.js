@@ -6,15 +6,25 @@ import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-
 export default class MandatenbeheerFractiesRoute extends Route {
   @service store;
 
-  async model() {
+  queryParams = {
+    filter: { refreshModel: true },
+    page: { refreshModel: true },
+    size: { refreshModel: true },
+    sort: { refreshModel: true },
+  };
+
+  async model(params) {
     const mandatenbeheer = this.modelFor('mandatenbeheer');
     const bestuursorganenIds = mandatenbeheer.bestuursorganen.map((o) =>
       o.get('id')
     );
 
     const fracties = await this.store.query('fractie', {
-      sort: 'naam',
-      page: { size: 1000 },
+      sort: params.sort,
+      page: {
+        number: params.page,
+        size: params.size,
+      },
       'filter[bestuursorganen-in-tijd][id]': bestuursorganenIds.join(','),
       include: 'bestuursorganen-in-tijd',
     });
