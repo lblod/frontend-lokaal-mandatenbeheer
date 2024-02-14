@@ -6,11 +6,12 @@
 >
   {{@field.label}}
 </AuLabel>
+
 <div class="au-o-grid au-o-grid--flush">
   <div class="au-o-grid__item au-u-3-4">
     <AuDateInput
       @error={{this.hasErrors}}
-      @value={{this.value}}
+      @value={{this.geboortedatum}}
       @onChange={{this.updateValue}}
       @disabled={{@show}}
       @width={{if @inTable "block"}}
