@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import {
   MANDATARIS_EINDE_EDIT_FORM_ID,
-  EDIT_MANDATARIS_FORM_ID,
+  MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_HIDDEN_PERSOON_NEW_FORM_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
@@ -22,7 +22,7 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
       this.store,
       MANDATARIS_EINDE_EDIT_FORM_ID
     );
-    const editMandatarisForm = getFormFrom(this.store, EDIT_MANDATARIS_FORM_ID);
+    const mandatarisEditForm = getFormFrom(this.store, MANDATARIS_EDIT_FORM_ID);
     const mandatarisHiddenPersoonNewForm = getFormFrom(
       this.store,
       MANDATARIS_HIDDEN_PERSOON_NEW_FORM_ID
@@ -37,7 +37,7 @@ export default class MandatenbeheerMandatarissenEditRoute extends Route {
       persoon,
       mandatarissen,
       mandatarisEindeEditForm,
-      editMandatarisForm,
+      mandatarisEditForm,
       mandatarisHiddenPersoonNewForm,
     });
   }
