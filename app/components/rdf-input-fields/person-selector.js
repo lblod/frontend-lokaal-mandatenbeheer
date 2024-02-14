@@ -104,4 +104,11 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     this.person = null;
     this.closeModal();
   }
+
+  @action
+  buildSourceTtl(instanceUri) {
+    return `
+    <${instanceUri}> <http://mu.semte.ch/vocabularies/ext/possibleDuplicate> "true" .
+    `;
+  }
 }

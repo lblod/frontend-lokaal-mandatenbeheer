@@ -31,6 +31,7 @@
         @onCreate={{this.onSelectNewPerson}}
         @form={{this.createPersonFormDefinition}}
         @onCancel={{this.cancelCreate}}
+        @buildSourceTtl={{this.buildSourceTtl}}
       />
     {{else}}
       <Person::SearchForm

@@ -6,6 +6,7 @@ export default class PersoonModel extends Model {
   @attr alternatieveNaam;
   @attr gebruikteVoornaam;
   @attr uri;
+  @attr('boolean') possibleDuplicate;
 
   @belongsTo('geboorte', {
     async: true,
