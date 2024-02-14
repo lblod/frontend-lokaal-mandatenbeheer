@@ -6,6 +6,7 @@ import { guidFor } from '@ember/object/internals';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { isValidRijksregisternummer } from 'frontend-lmb/utils/rijksregisternummer';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
+import { NamedNode } from 'rdflib';
 
 export default class RDFRijksRegisterInput extends InputFieldComponent {
   inputId = 'rrn-' + guidFor(this);
@@ -47,7 +48,7 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
       this.rijksregisternummer
     );
 
-    replaceSingleFormValue(this.storeOptions, identificator.uri);
+    replaceSingleFormValue(this.storeOptions, new NamedNode(identificator.uri));
 
     this.hasBeenFocused = true;
   }

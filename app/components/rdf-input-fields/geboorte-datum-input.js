@@ -6,6 +6,7 @@ import InputFieldComponent from '@lblod/ember-submission-form-fields/components/
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import moment from 'moment';
+import { NamedNode } from 'rdflib';
 
 export default class RDFGeboorteDatumInput extends InputFieldComponent {
   inputId = 'birthdate-' + guidFor(this);
@@ -62,7 +63,7 @@ export default class RDFGeboorteDatumInput extends InputFieldComponent {
 
     const geboorte = await this.loadOrCreateGeboorte(isoDate, date);
 
-    replaceSingleFormValue(this.storeOptions, geboorte.uri);
+    replaceSingleFormValue(this.storeOptions, new NamedNode(geboorte.uri));
 
     this.hasBeenFocused = true;
   }
