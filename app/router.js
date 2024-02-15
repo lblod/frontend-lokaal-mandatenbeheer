@@ -46,6 +46,11 @@ Router.map(function () {
       this.route('new');
       this.route('edit', { path: '/:id/edit' });
     });
+
+    this.route('bestuursorganen', function () {
+      this.route('new');
+      this.route('edit', { path: '/:id/edit' });
+    });
   });
 
   this.route('leidinggevendenbeheer', function () {
