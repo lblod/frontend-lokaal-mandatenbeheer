@@ -5,6 +5,11 @@ export default class BestuursorgaanModel extends Model {
   @attr naam;
   @attr('date') bindingStart;
   @attr('date') bindingEinde;
+  @attr('date') deactivatedAt;
+
+  get isActive() {
+    return !this.deactivatedAt;
+  }
 
   @belongsTo('bestuurseenheid', {
     async: true,
