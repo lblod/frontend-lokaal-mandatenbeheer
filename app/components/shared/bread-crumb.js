@@ -4,6 +4,55 @@ import { inject as service } from '@ember/service';
 export default class SharedBreadCrumbComponent extends Component {
   @service router;
 
+  bestuursorganen = [
+    {
+      route: 'organen.index',
+      crumbs: [{ label: 'Bestuursorganen' }],
+    },
+    {
+      route: 'organen.orgaan.mandatarissen',
+      crumbs: [
+        {
+          label: 'Bestuursorganen',
+          link: 'organen',
+        },
+        { label: 'Mandatarissen' },
+      ],
+    },
+    {
+      route: 'organen.beheer.index',
+      crumbs: [
+        {
+          label: 'Bestuursorganen',
+          link: 'organen',
+        },
+        { label: 'Beheer bestuursorganen' },
+      ],
+    },
+    {
+      route: 'organen.beheer.new',
+      crumbs: [
+        {
+          label: 'Bestuursorganen',
+          link: 'organen',
+        },
+        { label: 'Beheer bestuursorganen', link: 'organen.beheer' },
+        { label: 'Voeg bestuursorgaan toe' },
+      ],
+    },
+    {
+      route: 'organen.beheer.edit',
+      crumbs: [
+        {
+          label: 'Bestuursorganen',
+          link: 'organen',
+        },
+        { label: 'Beheer bestuursorganen', link: 'organen.beheer' },
+        { label: 'Bewerk bestuursorgaan' },
+      ],
+    },
+  ];
+
   mandatenbeheer = [
     {
       route: 'mandatenbeheer.mandatarissen.index',
@@ -288,7 +337,11 @@ export default class SharedBreadCrumbComponent extends Component {
       ],
     },
   ];
-  bread = this.mandatenbeheer.concat(this.leidinggevendenbeheer, this.legacy);
+  bread = this.bestuursorganen.concat(
+    this.mandatenbeheer,
+    this.leidinggevendenbeheer,
+    this.legacy
+  );
 
   get crumbsForRoute() {
     const results = this.bread.filter(
