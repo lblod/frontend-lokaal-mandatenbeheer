@@ -1,0 +1,15 @@
+<AuToggleSwitch
+  id={{this.inputId}}
+  @disabled={{@show}}
+  @checked={{this.active}}
+  @label={{this.label}}
+  @onChange={{this.toggleActive}}
+/>
+
+{{#each this.errors as |error|}}
+  <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+{{/each}}
+
+{{#each this.warnings as |warning|}}
+  <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+{{/each}}
