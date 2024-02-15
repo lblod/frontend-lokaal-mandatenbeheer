@@ -3,6 +3,12 @@
 </div>
 <nav>
   <ul class="au-c-list-navigation">
+    <li class="au-c-list-navigation__item">
+      <AuNavigationLink @route="organen">
+        <AuIcon @icon="users" @alignment="left" />
+        Bestuursorganen
+      </AuNavigationLink>
+    </li>
     {{#if this.currentSession.canAccessMandaat}}
       <li class="au-c-list-navigation__item">
         <AuNavigationLink @route="mandatenbeheer.mandatarissen">
