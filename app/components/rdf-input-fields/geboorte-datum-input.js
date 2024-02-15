@@ -52,7 +52,7 @@ export default class RDFGeboorteDatumInput extends InputFieldComponent {
   }
 
   @action
-  async updateValue(isoDate, date) {
+  async updateValue(_isoDate, date) {
     this.geboortedatum = date;
 
     this.updateValidations(date);
@@ -61,27 +61,17 @@ export default class RDFGeboorteDatumInput extends InputFieldComponent {
       return;
     }
 
-    const geboorte = await this.loadOrCreateGeboorte(isoDate, date);
-
+    // TODO needs to be reviewed if there could be a more elegant solution for this.
+    // This always creates a new geboorte instance when the geboortedatum field is updated.
+    // This is a necessary evil for now, because we can't just update the previous instance, since we don't know
+    // if the form wil actually be saved and we can't throw the previous instance away because we might want to keep
+    // track of the history.
+    const geboorte = await this.store
+      .createRecord('geboorte', { datum: date })
+      .save();
     replaceSingleFormValue(this.storeOptions, new NamedNode(geboorte.uri));
 
     this.hasBeenFocused = true;
-  }
-
-  async loadOrCreateGeboorte(isoDate, date) {
-    let geboorte;
-    const queryResult = await this.store.query('geboorte', {
-      filter: { datum: isoDate },
-    });
-
-    if (queryResult.length >= 1) {
-      geboorte = queryResult.at(0);
-    } else {
-      geboorte = await this.store
-        .createRecord('geboorte', { datum: date })
-        .save();
-    }
-    return geboorte;
   }
 
   updateValidations() {
