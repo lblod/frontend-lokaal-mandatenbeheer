@@ -38,6 +38,16 @@ export default class BestuursorgaanModel extends Model {
   })
   bevat;
 
+  async classificatieUri() {
+    const bestuursorgaan = await this.isTijdsspecialisatieVan;
+    return bestuursorgaan
+      ? await bestuursorgaan.classificatie.uri
+      : await this.classificatie.uri;
+  }
+
+  // TODO decretale bestuursorganen should be fetched from database
+  // Bestuursorgaan and bestuursorgaan in de tijd are not the same. Use mandatendatabank schema for reference.
+  // go via isTijdsspecialisatieVan to go to the real bestuursorgaan.
   get isDecretaal() {
     const decretaalClassificatieUris = [
       'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/11f0af9e-016c-4e0b-983a-d8bc73804abc',
@@ -45,8 +55,8 @@ export default class BestuursorgaanModel extends Model {
       'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000008',
     ];
 
-    return !!decretaalClassificatieUris.find(
-      (dcUri) => dcUri === this.classificatie.uri
+    return this.classificatieUri().then((uri) =>
+      decretaalClassificatieUris.some((dcUri) => dcUri === uri)
     );
   }
 
