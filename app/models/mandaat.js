@@ -17,4 +17,18 @@ export default class MandaatModel extends Post {
     inverse: 'bevat',
   })
   bevatIn;
+
+  async isDecretaalHelper() {
+    const bestuursorgaanPositions = await this.bevatIn;
+    const areDecretaal = await Promise.all(
+      bestuursorgaanPositions.map((post) => post.isDecretaal())
+    );
+
+    return areDecretaal.some(Boolean);
+  }
+
+  // If any of the bestuursorganen is decretaal, then the mandaat is decretaal.
+  get isDecretaal() {
+    return this.isDecretaalHelper();
+  }
 }
