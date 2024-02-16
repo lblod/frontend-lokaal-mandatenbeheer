@@ -38,6 +38,18 @@ export default class BestuursorgaanModel extends Model {
   })
   bevat;
 
+  get isDecretaal() {
+    const decretaalClassificatieUris = [
+      'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/11f0af9e-016c-4e0b-983a-d8bc73804abc',
+      'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/53c0d8cd-f3a2-411d-bece-4bd83ae2bbc9',
+      'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000008',
+    ];
+
+    return !!decretaalClassificatieUris.find(
+      (dcUri) => dcUri === this.classificatie.uri
+    );
+  }
+
   rdfaBindings = {
     naam: 'http://www.w3.org/2004/02/skos/core#prefLabel',
     class: 'http://data.vlaanderen.be/ns/besluit#Bestuursorgaan',
