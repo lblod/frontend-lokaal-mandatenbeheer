@@ -21,7 +21,7 @@ export default class MandaatModel extends Post {
   async isDecretaalHelper() {
     const bestuursorgaanPositions = await this.bevatIn;
     const areDecretaal = await Promise.all(
-      bestuursorgaanPositions.map((position) => position.isDecretaal())
+      bestuursorgaanPositions.map((position) => position.isDecretaal)
     );
 
     return areDecretaal.some(Boolean);
