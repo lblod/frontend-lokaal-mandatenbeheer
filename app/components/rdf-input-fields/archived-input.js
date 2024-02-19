@@ -23,11 +23,7 @@ export default class RDFArchivedInput extends InputFieldComponent {
 
   async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    if (matches.values.length > 0) {
-      this.active = !matches.values[0].object.value;
-    } else {
-      this.active = true;
-    }
+    this.active = matches.values.length === 0;
   }
 
   @action
