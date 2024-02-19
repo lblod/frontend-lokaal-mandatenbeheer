@@ -30,16 +30,6 @@ export default class SharedBreadCrumbComponent extends Component {
       ],
     },
     {
-      route: 'mandatenbeheer.mandatarissen.new-person',
-      crumbs: [
-        {
-          label: 'Mandatenbeheer',
-          link: 'mandatenbeheer.mandatarissen',
-        },
-        { label: 'Voeg nieuwe persoon toe' },
-      ],
-    },
-    {
       route: 'mandatenbeheer.fracties.index',
       crumbs: [
         {
