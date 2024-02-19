@@ -1,0 +1,18 @@
+{{page-title this.model.besetuursorgaan.naam}}
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">{{this.model.bestuursorgaan.naam}}</AuHeading>
+  </Group>
+</AuToolbar>
+
+<Form::Instance
+  @instanceId={{this.model.instanceId}}
+  @form={{this.model.form}}
+  @editable={{false}}
+/>
+
+<AuToolbar @border="top" @size="large" as |Group|>
+  <Group>
+    <AuButton @skin="secondary" {{on "click" this.edit}}>Pas aan</AuButton>
+  </Group>
+</AuToolbar>

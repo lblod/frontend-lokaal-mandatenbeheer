@@ -8,7 +8,7 @@
           <RdfForm
             @groupClass="au-o-grid__item"
             @form={{this.formInfo.form}}
-            @show={{false}}
+            @show={{(not this.editable)}}
             @graphs={{this.formInfo.graphs}}
             @sourceNode={{this.formInfo.sourceNode}}
             @formStore={{this.formInfo.formStore}}

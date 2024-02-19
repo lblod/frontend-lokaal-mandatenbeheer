@@ -38,6 +38,13 @@ export default class InstanceComponent extends Component {
     return this.save.isRunning;
   }
 
+  get editable() {
+    if (this.args.editable === undefined) {
+      return true;
+    }
+    return Boolean(this.args.editable);
+  }
+
   @keepLatestTask
   *save() {
     // TODO validation needs to be checked first before the form is actually saved
