@@ -14,18 +14,24 @@
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
-    <ul class="au-o-grid au-o-grid--small">
-      {{#each @model.bestuursorganen as |orgaan|}}
-        <li class="au-o-grid__item au-u-1-6@small au-u-1-3medium">
-          <AuCard
-            @flex="true"
-            {{on "click" (fn this.goToOrgaan orgaan)}}
-            as |c|
-          >
-            <c.content>{{orgaan.naam}}</c.content>
-          </AuCard>
-        </li>
-      {{/each}}
-    </ul>
+    <Tmp::Todo>
+      <div>
+        Split cards in decretaal and niet-decretaal.
+      </div>
+      <div>Add css to show these cards are clickable.</div>
+      <ul class="au-o-grid au-o-grid--small">
+        {{#each @model.bestuursorganen as |orgaan|}}
+          <li class="au-o-grid__item au-u-1-6@small au-u-1-3medium">
+            <AuCard
+              @flex="true"
+              {{on "click" (fn this.goToOrgaan orgaan)}}
+              as |c|
+            >
+              <c.content>{{orgaan.naam}}</c.content>
+            </AuCard>
+          </li>
+        {{/each}}
+      </ul>
+    </Tmp::Todo>
   </div>
 </div>
