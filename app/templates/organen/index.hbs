@@ -13,5 +13,19 @@
 </AuToolbar>
 
 <div class="au-c-body-container au-c-body-container--scroll">
-  <Tmp::Todo>Add bestuursorgaan cards</Tmp::Todo>
+  <div class="au-o-box">
+    <ul class="au-o-grid au-o-grid--small">
+      {{#each @model.bestuursorganen as |orgaan|}}
+        <li class="au-o-grid__item au-u-1-6@small au-u-1-3medium">
+          <AuCard
+            @flex="true"
+            {{on "click" (fn this.goToOrgaan orgaan)}}
+            as |c|
+          >
+            <c.content>{{orgaan.naam}}</c.content>
+          </AuCard>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
 </div>
