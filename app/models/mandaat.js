@@ -1,6 +1,8 @@
 import { attr, belongsTo, hasMany } from '@ember-data/model';
 import Post from './post';
 
+const identity = Boolean;
+
 // INHERITS FROM POST(positie)
 export default class MandaatModel extends Post {
   @attr uri;
@@ -19,12 +21,12 @@ export default class MandaatModel extends Post {
   bevatIn;
 
   async isDecretaalHelper() {
-    const bestuursorgaanPositions = await this.bevatIn;
+    const bestuursorganen = await this.bevatIn;
     const areDecretaal = await Promise.all(
-      bestuursorgaanPositions.map((position) => position.isDecretaal)
+      bestuursorganen.map((orgaan) => orgaan.isDecretaal)
     );
 
-    return areDecretaal.some(Boolean);
+    return areDecretaal.some(identity);
   }
 
   // If any of the bestuursorganen is decretaal, then the mandaat is decretaal.
