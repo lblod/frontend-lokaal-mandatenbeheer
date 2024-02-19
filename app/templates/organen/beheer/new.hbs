@@ -1,11 +1,19 @@
-{{page-title "Nieuw bestuursorgaan"}}
-
+{{page-title "Nieuw Bestuursorgaan"}}
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
-    <AuHeading @skin="2">Nieuw bestuursorgaan</AuHeading>
+    <AuHeading @skin="2">Voeg bestuursorgaan toe</AuHeading>
   </Group>
 </AuToolbar>
 
-<div class="au-c-body-container au-c-body-container--scroll">
-  <Tmp::Todo>Add new bestuursorgaan form</Tmp::Todo>
-</div>
+<Form::NewInstance
+  @onCreate={{this.onCreate}}
+  @form={{this.model.form}}
+  @buildSourceTtl={{this.buildSourceTtl}}
+/>
+
+<AuToolbar @border="top" @size="large" as |Group|>
+  <Group>
+    <AuButton @skin="secondary" {{on "click" this.cancel}}>Annuleer</AuButton>
+  </Group>
+</AuToolbar>
+{{outlet}}

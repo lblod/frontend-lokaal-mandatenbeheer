@@ -10,7 +10,7 @@ export default class MandatenbeheerBestuursorganenNewRoute extends Route {
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
     return {
-      bestuurseenheid: this.modelFor('mandatenbeheer').bestuurseenheid,
+      bestuurseenheid: this.modelFor('organen').bestuurseenheid,
       form,
     };
   }
