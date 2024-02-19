@@ -12,9 +12,11 @@ export default class ApplicationRoute extends Route {
   @service session;
   @service plausible;
   @service router;
+  @service decretaleOrganen;
 
   async beforeModel() {
     await this.session.setup();
+    await this.decretaleOrganen.setup();
 
     const moment = this.moment;
     moment.setLocale('nl-be');

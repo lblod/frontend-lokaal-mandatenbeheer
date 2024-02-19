@@ -1,6 +1,14 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import { inject as service } from '@ember/service';
 
+/**
+ * Bestuursorgaan and bestuursorgaan in de tijd are not the same,
+ * go via isTijdsspecialisatieVan to go to the real bestuursorgaan.
+ * Use mandatendatabank schema for reference.
+ */
 export default class BestuursorgaanModel extends Model {
+  @service decretaleOrganen;
+
   @attr uri;
   @attr naam;
   @attr('date') bindingStart;
@@ -42,6 +50,19 @@ export default class BestuursorgaanModel extends Model {
     inverse: 'bevatIn',
   })
   bevat;
+
+  async classificatieUri() {
+    const bestuursorgaan = await this.isTijdsspecialisatieVan;
+    return bestuursorgaan
+      ? await bestuursorgaan.get('classificatie.uri')
+      : await this.classificatie.get('uri');
+  }
+
+  get isDecretaal() {
+    return this.classificatieUri().then((uri) => {
+      return this.decretaleOrganen.codeUris.some((dcUri) => dcUri === uri);
+    });
+  }
 
   rdfaBindings = {
     naam: 'http://www.w3.org/2004/02/skos/core#prefLabel',
