@@ -6,6 +6,8 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { NamedNode } from 'rdflib';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { CREATE_PERSON_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class PersonSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -16,6 +18,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
   @tracked initialized = false;
   @tracked selectNewPerson = false;
   @tracked creatingPerson = false;
+  @tracked createPersonFormDefinition;
 
   constructor() {
     super(...arguments);
@@ -61,7 +64,21 @@ export default class PersonSelectorComponent extends InputFieldComponent {
   }
 
   @action
-  onCreateNewPerson() {
+  async onSelectNewPerson({ instanceId }) {
+    const persoon = await this.store.findRecord('persoon', instanceId);
+    replaceSingleFormValue(this.storeOptions, new NamedNode(persoon.uri));
+    this.hasBeenFocused = true;
+    super.updateValidations();
+    this.person = persoon;
+    this.closeModal();
+  }
+
+  @action
+  async onCreateNewPerson() {
+    this.createPersonFormDefinition = await getFormFrom(
+      this.store,
+      CREATE_PERSON_FORM_ID
+    );
     this.creatingPerson = true;
   }
 
@@ -86,5 +103,12 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     super.updateValidations();
     this.person = null;
     this.closeModal();
+  }
+
+  @action
+  buildSourceTtl(instanceUri) {
+    return `
+    <${instanceUri}> <http://mu.semte.ch/vocabularies/ext/possibleDuplicate> "true" .
+    `;
   }
 }

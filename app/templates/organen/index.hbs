@@ -1,0 +1,42 @@
+{{page-title
+  "Bestuursorganen"
+  " "
+  @model.bestuurseenheid.classificatie.label
+  " "
+  @model.bestuurseenheid.naam
+}}
+
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Overzicht bestuursorganen</AuHeading>
+  </Group>
+  <Group>
+    <AuButton {{on "click" this.beheerOrganen}}>
+      Beheer bestuursorganen
+    </AuButton>
+  </Group>
+</AuToolbar>
+
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Tmp::Todo>
+      <div>
+        Split cards in decretaal and niet-decretaal.
+      </div>
+      <div>Add css to show these cards are clickable.</div>
+      <ul class="au-o-grid au-o-grid--small">
+        {{#each @model.bestuursorganen as |orgaan|}}
+          <li class="au-o-grid__item au-u-1-6@small au-u-1-3medium">
+            <AuCard
+              @flex="true"
+              {{on "click" (fn this.goToOrgaan orgaan)}}
+              as |c|
+            >
+              <c.content>{{orgaan.naam}}</c.content>
+            </AuCard>
+          </li>
+        {{/each}}
+      </ul>
+    </Tmp::Todo>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+{{page-title "Beheer bestuursorgaan"}}
+
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Beheer bestuursorganen</AuHeading>
+  </Group>
+  <Group>
+    <AuButton @skin="primary" {{on "click" this.createNewOrgaan}}>
+      Voeg nieuw bestuursorgaan toe
+    </AuButton>
+  </Group>
+</AuToolbar>
+
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <AuHeading @skin="3">Actieve bestuursorganen</AuHeading>
+    <Organen::OrganenTable
+      @content={{@model.bestuursorganen}}
+      @isLoading={{this.isLoadingModel}}
+      @sort={{this.sort}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @editRoute="organen.beheer.edit"
+    />
+  </div>
+  <div class="au-o-box">
+    <AuHeading @skin="3">Inactieve bestuursorganen</AuHeading>
+    <Tmp::Todo>Add table inactive bestuursorgaan</Tmp::Todo>
+  </div>
+</div>

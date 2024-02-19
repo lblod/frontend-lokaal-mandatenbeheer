@@ -26,10 +26,19 @@ Router.map(function () {
     this.route('toegankelijkheidsverklaring');
   });
 
+  this.route('organen', function () {
+    this.route('orgaan', { path: '/:orgaan_id' }, function () {
+      this.route('mandatarissen');
+    });
+    this.route('beheer', function () {
+      this.route('new');
+      this.route('edit', { path: '/:orgaan_id/edit' });
+    });
+  });
+
   this.route('mandatenbeheer', function () {
     this.route('mandatarissen', function () {
       this.route('new');
-      this.route('new-person');
       this.route('edit', { path: '/:id/edit' });
     });
 

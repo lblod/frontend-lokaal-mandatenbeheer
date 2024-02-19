@@ -12,3 +12,4 @@ export const FUNCTIONARIS_CREATE_FORM_ID = 'functionaris-new';
 export const FUNCTIONARIS_EDIT_FORM_ID = 'functionaris-edit';
 export const DECRETALE_BESTUURSORGANEN_CONCEPT_SCHEME =
   '2e127dcf-d6c8-4134-ac39-8be1d7fbdfaf';
+export const CREATE_PERSON_FORM_ID = 'persoon';
