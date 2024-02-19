@@ -9,6 +9,9 @@ export default class OrganenbeheerIndexRoute extends Route {
     active_page: { refreshModel: true },
     active_size: { refreshModel: true },
     active_sort: { refreshModel: true },
+    inactive_page: { refreshModel: true },
+    inactive_size: { refreshModel: true },
+    inactive_sort: { refreshModel: true },
   };
 
   async model(params) {
@@ -23,8 +26,18 @@ export default class OrganenbeheerIndexRoute extends Route {
       active_options
     );
 
+    const inactive_options = this.getInactiveOptions(
+      params,
+      parentModel.bestuurseenheid
+    );
+    const inactive_bestuursorganen = await this.store.query(
+      'bestuursorgaan',
+      inactive_options
+    );
+
     return {
       active_bestuursorganen,
+      inactive_bestuursorganen,
     };
   }
 
@@ -34,6 +47,22 @@ export default class OrganenbeheerIndexRoute extends Route {
       page: {
         number: params.active_page,
         size: params.active_size,
+      },
+      filter: {
+        bestuurseenheid: {
+          id: bestuurseenheid.id,
+        },
+      },
+    };
+    return queryParams;
+  }
+
+  getInactiveOptions(params, bestuurseenheid) {
+    const queryParams = {
+      sort: params.inactive_sort,
+      page: {
+        number: params.inactive_page,
+        size: params.inactive_size,
       },
       filter: {
         bestuurseenheid: {

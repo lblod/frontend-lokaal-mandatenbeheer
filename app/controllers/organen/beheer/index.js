@@ -10,6 +10,10 @@ export default class OrganenBeheerIndexController extends Controller {
   active_sort = 'naam';
   active_size = 5;
 
+  @tracked inactive_page = 0;
+  inactive_sort = 'naam';
+  inactive_size = 5;
+
   @action
   createNewOrgaan() {
     this.router.transitionTo('organen.beheer.new');

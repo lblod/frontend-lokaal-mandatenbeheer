@@ -25,6 +25,13 @@
   </div>
   <div class="au-o-box">
     <AuHeading @skin="3">Inactieve bestuursorganen</AuHeading>
-    <Tmp::Todo>Add table inactive bestuursorgaan</Tmp::Todo>
+    <Organen::OrganenTable
+      @content={{@model.inactive_bestuursorganen}}
+      @isLoading={{this.isLoadingModel}}
+      @sort={{this.inactive_sort}}
+      @page={{this.inactive_page}}
+      @size={{this.inactive_size}}
+      @editRoute="organen.beheer.edit"
+    />
   </div>
 </div>
