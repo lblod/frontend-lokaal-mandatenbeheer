@@ -6,10 +6,9 @@ import { tracked } from '@glimmer/tracking';
 export default class OrganenBeheerIndexController extends Controller {
   @service router;
 
-  @tracked filter = '';
-  @tracked page = 0;
-  sort = 'naam';
-  size = 5;
+  @tracked active_page = 0;
+  active_sort = 'naam';
+  active_size = 5;
 
   @action
   createNewOrgaan() {

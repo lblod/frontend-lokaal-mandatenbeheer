@@ -6,29 +6,34 @@ export default class OrganenbeheerIndexRoute extends Route {
   @service store;
 
   queryParams = {
-    filter: { refreshModel: true },
-    page: { refreshModel: true },
-    size: { refreshModel: true },
-    sort: { refreshModel: true },
+    active_page: { refreshModel: true },
+    active_size: { refreshModel: true },
+    active_sort: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('organen');
 
-    const options = this.getOptions(params, parentModel.bestuurseenheid);
-    const bestuursorganen = await this.store.query('bestuursorgaan', options);
+    const active_options = this.getActiveOptions(
+      params,
+      parentModel.bestuurseenheid
+    );
+    const active_bestuursorganen = await this.store.query(
+      'bestuursorgaan',
+      active_options
+    );
 
     return {
-      bestuursorganen,
+      active_bestuursorganen,
     };
   }
 
-  getOptions(params, bestuurseenheid) {
+  getActiveOptions(params, bestuurseenheid) {
     const queryParams = {
-      sort: params.sort,
+      sort: params.active_sort,
       page: {
-        number: params.page,
-        size: params.size,
+        number: params.active_page,
+        size: params.active_size,
       },
       filter: {
         bestuurseenheid: {
@@ -36,11 +41,6 @@ export default class OrganenbeheerIndexRoute extends Route {
         },
       },
     };
-
-    if (params.filter) {
-      queryParams['filter']['naam'] = params.filter;
-    }
-
     return queryParams;
   }
 
