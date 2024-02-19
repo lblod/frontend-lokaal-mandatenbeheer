@@ -5,6 +5,10 @@
   @title="Menu modules"
   @buttonLabel="Account settings"
 >
+  <AuLink @route="organen" role="menuitem">
+    <AuIcon @icon="users" @alignment="left" />
+    Bestuursorganen
+  </AuLink>
   {{#if this.currentSession.canAccessMandaat}}
     <AuLink @route="mandatenbeheer.mandatarissen" role="menuitem">
       <AuIcon @icon="user-fill" @alignment="left" />
