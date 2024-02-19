@@ -1,0 +1,23 @@
+{{page-title "Bestuursorgaan"}}
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">{{if
+        (await this.model.bestuursorgaan.isDecretaal)
+        "Decretaal"
+        "Niet decretaal"
+      }}
+      {{this.model.bestuursorgaan.naam}}</AuHeading>
+  </Group>
+</AuToolbar>
+
+<Form::Instance
+  @instanceId={{this.model.instanceId}}
+  @form={{this.model.form}}
+  @editable={{false}}
+/>
+
+<AuToolbar @border="top" @size="large" as |Group|>
+  <Group>
+    <AuButton @skin="secondary" {{on "click" this.edit}}>Pas aan</AuButton>
+  </Group>
+</AuToolbar>

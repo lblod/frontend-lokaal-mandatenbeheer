@@ -20,23 +20,25 @@
           {{yield}}
         </section>
 
-        <AuToolbar as |Group|>
-          <Group>
-            <AuButtonGroup>
-              <AuButton
-                {{on "click" this.saveInstance}}
-                @disabled={{this.isSaving}}
-              >
-                Pas aan
-              </AuButton>
-              {{#if @onCancel}}
-                <AuButton {{on "click" this.cancel}} @skin="secondary">
-                  Annuleer
+        {{#if this.editable}}
+          <AuToolbar as |Group|>
+            <Group>
+              <AuButtonGroup>
+                <AuButton
+                  {{on "click" this.saveInstance}}
+                  @disabled={{this.isSaving}}
+                >
+                  Pas aan
                 </AuButton>
-              {{/if}}
-            </AuButtonGroup>
-          </Group>
-        </AuToolbar>
+                {{#if @onCancel}}
+                  <AuButton {{on "click" this.cancel}} @skin="secondary">
+                    Annuleer
+                  </AuButton>
+                {{/if}}
+              </AuButtonGroup>
+            </Group>
+          </AuToolbar>
+        {{/if}}
 
         <section class="au-o-region-large">
           <AuHeading
