@@ -14,7 +14,7 @@
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
     <AuHeading @skin="3">Actieve bestuursorganen</AuHeading>
-    <Organen::OrganenTable
+    <Organen::ActiveOrgaanTable
       @content={{@model.active_bestuursorganen}}
       @isLoading={{this.isLoadingModel}}
       @sort={{this.active_sort}}
@@ -25,7 +25,7 @@
   </div>
   <div class="au-o-box">
     <AuHeading @skin="3">Inactieve bestuursorganen</AuHeading>
-    <Organen::OrganenTable
+    <Organen::InactiveOrgaanTable
       @content={{@model.inactive_bestuursorganen}}
       @isLoading={{this.isLoadingModel}}
       @sort={{this.inactive_sort}}

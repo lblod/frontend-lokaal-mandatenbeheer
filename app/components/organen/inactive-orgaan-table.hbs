@@ -1,0 +1,33 @@
+<AuDataTable
+  @content={{@content}}
+  @isLoading={{@isLoading}}
+  @noDataMessage="Geen bestuursorganen gevonden"
+  @sort={{@sort}}
+  @page={{@page}}
+  @size={{@size}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @field="naam"
+        @currentSorting={{@sort}}
+        @label="Naam"
+      />
+      <th>Aantal leden</th>
+      <th>Oprichtingsdatum</th>
+      <th>Einddatum</th>
+      <th>{{! Actions }}</th>
+    </c.header>
+
+    <c.body as |row|>
+      <td>{{row.naam}}</td>
+      <td>TODO add aantal leden</td>
+      <td>
+        {{moment-format row.bindingStart "DD-MM-YYYY"}}</td>
+      <td>
+        {{moment-format row.deactivatedAt "DD-MM-YYYY"}}</td>
+      <td>TODO add action</td>
+    </c.body>
+  </t.content>
+</AuDataTable>
