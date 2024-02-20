@@ -15,11 +15,9 @@
   <div class="au-o-box">
     <AuHeading @skin="3">Actieve bestuursorganen</AuHeading>
     <Organen::ActiveOrgaanTable
-      @content={{@model.active_bestuursorganen}}
+      @content={{@model.activeOrganen}}
       @isLoading={{this.isLoadingModel}}
       @sort={{this.active_sort}}
-      @page={{this.active_page}}
-      @size={{this.active_size}}
       @editRoute="organen.beheer.edit"
       @nbMembers={{this.getNbMembers}}
     />
@@ -27,11 +25,9 @@
   <div class="au-o-box">
     <AuHeading @skin="3">Inactieve bestuursorganen</AuHeading>
     <Organen::InactiveOrgaanTable
-      @content={{@model.inactive_bestuursorganen}}
+      @content={{@model.inactiveOrganen}}
       @isLoading={{this.isLoadingModel}}
       @sort={{this.inactive_sort}}
-      @page={{this.inactive_page}}
-      @size={{this.inactive_size}}
       @editRoute="organen.beheer.edit"
       @nbMembers={{this.getNbMembers}}
     />

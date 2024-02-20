@@ -1,20 +1,14 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
 
 export default class OrganenBeheerIndexController extends Controller {
   @service router;
   @service store;
 
-  @tracked active_page = 0;
   active_sort = 'naam';
-  active_size = 5;
-
-  @tracked inactive_page = 0;
   inactive_sort = 'naam';
-  inactive_size = 5;
 
   @action
   createNewOrgaan() {

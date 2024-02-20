@@ -5,12 +5,9 @@ import { action } from '@ember/object';
 export default class OrganenbeheerIndexRoute extends Route {
   @service store;
 
+  pageSize = 50;
   queryParams = {
-    active_page: { refreshModel: true },
-    active_size: { refreshModel: true },
     active_sort: { refreshModel: true },
-    inactive_page: { refreshModel: true },
-    inactive_size: { refreshModel: true },
     inactive_sort: { refreshModel: true },
   };
 
@@ -21,23 +18,41 @@ export default class OrganenbeheerIndexRoute extends Route {
       params,
       parentModel.bestuurseenheid
     );
-    const active_bestuursorganen = await this.store.query(
+    const activeOrganenUnfiltered = await this.store.query(
       'bestuursorgaan',
       active_options
+    );
+    const activeOrganen = [];
+    await Promise.all(
+      activeOrganenUnfiltered.map(async (orgaan) => {
+        const isDecretaal = await orgaan.isDecretaal;
+        if (!isDecretaal) {
+          activeOrganen.push(orgaan);
+        }
+      })
     );
 
     const inactive_options = this.getInactiveOptions(
       params,
       parentModel.bestuurseenheid
     );
-    const inactive_bestuursorganen = await this.store.query(
+    const inactiveOrganenUnfiltered = await this.store.query(
       'bestuursorgaan',
       inactive_options
     );
+    const inactiveOrganen = [];
+    await Promise.all(
+      inactiveOrganenUnfiltered.map(async (orgaan) => {
+        const isDecretaal = await orgaan.isDecretaal;
+        if (!isDecretaal) {
+          inactiveOrganen.push(orgaan);
+        }
+      })
+    );
 
     return {
-      active_bestuursorganen,
-      inactive_bestuursorganen,
+      activeOrganen,
+      inactiveOrganen,
     };
   }
 
@@ -45,8 +60,7 @@ export default class OrganenbeheerIndexRoute extends Route {
     const queryParams = {
       sort: params.active_sort,
       page: {
-        number: params.active_page,
-        size: params.active_size,
+        size: this.pageSize,
       },
       filter: {
         bestuurseenheid: {
@@ -62,8 +76,7 @@ export default class OrganenbeheerIndexRoute extends Route {
     const queryParams = {
       sort: params.inactive_sort,
       page: {
-        number: params.inactive_page,
-        size: params.inactive_size,
+        size: this.pageSize,
       },
       filter: {
         bestuurseenheid: {
