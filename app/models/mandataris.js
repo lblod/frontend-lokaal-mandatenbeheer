@@ -9,7 +9,7 @@ export default class MandatarisModel extends AgentInPosition {
   @attr duplicationReason;
   @attr uri;
 
-  @belongsTo('mandaat', { async: true, inverse: null }) bekleedt;
+  @belongsTo('mandaat', { async: true, inverse: 'bekleedDoor' }) bekleedt;
 
   @belongsTo('lidmaatschap', {
     async: true,

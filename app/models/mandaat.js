@@ -20,6 +20,12 @@ export default class MandaatModel extends Post {
   })
   bevatIn;
 
+  @hasMany('mandataris', {
+    async: true,
+    inverse: 'bekleedt',
+  })
+  bekleedDoor;
+
   async isDecretaalHelper() {
     const bestuursorganen = await this.bevatIn;
     const areDecretaal = await Promise.all(

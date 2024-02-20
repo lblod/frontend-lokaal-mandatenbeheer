@@ -22,7 +22,7 @@
     <c.body as |row|>
       <td>{{row.naam}}</td>
       <td>TODO add voorzitter</td>
-      <td>{{await (@nbMembers row)}}</td>
+      <td>{{await row.nbMembers}}</td>
       <td>
         {{moment-format row.bindingStart "DD-MM-YYYY"}}</td>
       <td>
