@@ -7,6 +7,7 @@ import RDFMandatarisFractieSelectorComponent from 'frontend-lmb/components/rdf-i
 import RDFMandatarisMandaatSelectorComponent from 'frontend-lmb/components/rdf-input-fields/mandataris-mandaat-selector';
 import RDFRijksRegisterInput from 'frontend-lmb/components/rdf-input-fields/rijksregister-input';
 import RDFGeboorteDatumInput from 'frontend-lmb/components/rdf-input-fields/geboorte-datum-input';
+import RDFArchivedInput from 'frontend-lmb/components/rdf-input-fields/archived-input';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -43,6 +44,10 @@ export const registerCustomFormFields = () => {
     {
       displayType: 'http://lblod.data.gift/display-types/geboorteDatumInput',
       edit: RDFGeboorteDatumInput,
+    },
+    {
+      displayType: 'http://lblod.data.gift/display-types/archivedInput',
+      edit: RDFArchivedInput,
     },
   ]);
 };
