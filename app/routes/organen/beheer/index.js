@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 export default class OrganenbeheerIndexRoute extends Route {
   @service store;
 
-  pageSize = 50;
+  pageSize = 100;
   queryParams = {
     active_sort: { refreshModel: true },
     inactive_sort: { refreshModel: true },
@@ -14,40 +14,15 @@ export default class OrganenbeheerIndexRoute extends Route {
   async model(params) {
     const parentModel = this.modelFor('organen');
 
-    const active_options = this.getActiveOptions(
-      params,
+    const activeOrganen = await this.getOrgans(
+      params.active_sort,
       parentModel.bestuurseenheid
-    );
-    const activeOrganenUnfiltered = await this.store.query(
-      'bestuursorgaan',
-      active_options
-    );
-    const activeOrganen = [];
-    await Promise.all(
-      activeOrganenUnfiltered.map(async (orgaan) => {
-        const isDecretaal = await orgaan.isDecretaal;
-        if (!isDecretaal) {
-          activeOrganen.push(orgaan);
-        }
-      })
     );
 
-    const inactive_options = this.getInactiveOptions(
-      params,
-      parentModel.bestuurseenheid
-    );
-    const inactiveOrganenUnfiltered = await this.store.query(
-      'bestuursorgaan',
-      inactive_options
-    );
-    const inactiveOrganen = [];
-    await Promise.all(
-      inactiveOrganenUnfiltered.map(async (orgaan) => {
-        const isDecretaal = await orgaan.isDecretaal;
-        if (!isDecretaal) {
-          inactiveOrganen.push(orgaan);
-        }
-      })
+    const inactiveOrganen = await this.getOrgans(
+      params.inactive_sort,
+      parentModel.bestuurseenheid,
+      false
     );
 
     return {
@@ -56,25 +31,27 @@ export default class OrganenbeheerIndexRoute extends Route {
     };
   }
 
-  getActiveOptions(params, bestuurseenheid) {
-    const queryParams = {
-      sort: params.active_sort,
-      page: {
-        size: this.pageSize,
-      },
-      filter: {
-        bestuurseenheid: {
-          id: bestuurseenheid.id,
-        },
-      },
-    };
-    queryParams['filter[:has-no:deactivated-at]'] = true;
-    return queryParams;
+  async getOrgans(sort, bestuurseenheid, active = true) {
+    const queryOptions = this.getOptions(sort, bestuurseenheid, active);
+    const organenUnfiltered = await this.store.query(
+      'bestuursorgaan',
+      queryOptions
+    );
+    const organen = [];
+    await Promise.all(
+      organenUnfiltered.map(async (orgaan) => {
+        const isDecretaal = await orgaan.isDecretaal;
+        if (!isDecretaal) {
+          organen.push(orgaan);
+        }
+      })
+    );
+    return organen;
   }
 
-  getInactiveOptions(params, bestuurseenheid) {
+  getOptions(sortParam, bestuurseenheid, active) {
     const queryParams = {
-      sort: params.inactive_sort,
+      sort: sortParam,
       page: {
         size: this.pageSize,
       },
@@ -84,7 +61,11 @@ export default class OrganenbeheerIndexRoute extends Route {
         },
       },
     };
-    queryParams['filter[:has:deactivated-at]'] = true;
+    if (active) {
+      queryParams['filter[:has-no:deactivated-at]'] = true;
+    } else {
+      queryParams['filter[:has:deactivated-at]'] = true;
+    }
     return queryParams;
   }
 
