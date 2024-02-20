@@ -7,9 +7,11 @@ import RSVP from 'rsvp';
 export default class OrganenOrgaanRoute extends Route {
   @service store;
   async model(params) {
+    const bestuursorgaanId = params.orgaan_id;
+
     const bestuursorgaan = this.store.findRecord(
       'bestuursorgaan',
-      params.orgaan_id,
+      bestuursorgaanId,
       {
         include: 'classificatie,heeft-tijdsspecialisaties',
       }
@@ -19,7 +21,7 @@ export default class OrganenOrgaanRoute extends Route {
 
     return RSVP.hash({
       form: formDefinition,
-      instanceId: params.orgaan_id,
+      instanceId: bestuursorgaanId,
       bestuursorgaan,
     });
   }
