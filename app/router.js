@@ -33,7 +33,6 @@ Router.map(function () {
     this.route('beheer', function () {
       this.route('new');
       this.route('edit', { path: '/:orgaan_id/edit' });
-      this.route('show', { path: '/:orgaan_id' });
     });
   });
 
