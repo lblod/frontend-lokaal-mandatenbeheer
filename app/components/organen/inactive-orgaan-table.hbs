@@ -3,8 +3,6 @@
   @isLoading={{@isLoading}}
   @noDataMessage="Geen bestuursorganen gevonden"
   @sort={{@sort}}
-  @page={{@page}}
-  @size={{@size}}
   as |t|
 >
   <t.content as |c|>
@@ -14,26 +12,20 @@
         @currentSorting={{@sort}}
         @label="Naam"
       />
-      <th>Huidige voorzitter</th>
       <th>Aantal leden</th>
       <th>Oprichtingsdatum</th>
-      <th>{{! Bewerk Action }}</th>
-      <th>{{! Archive Action }}</th>
+      <th>Einddatum</th>
+      <th>{{! Actions }}</th>
     </c.header>
 
     <c.body as |row|>
       <td>{{row.naam}}</td>
-      <td>TODO add voorzitter</td>
-      <td>TODO add aantal leden</td>
+      <td>{{await row.nbMembers}}</td>
       <td>
         {{moment-format row.bindingStart "DD-MM-YYYY"}}</td>
       <td>
-        <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
-          <AuIcon @icon="pencil" @alignment="left" />
-          Bewerk
-        </LinkTo>
-      </td>
-      <td>TODO add archive action</td>
+        {{moment-format row.deactivatedAt "DD-MM-YYYY"}}</td>
+      <td>TODO add action</td>
     </c.body>
   </t.content>
 </AuDataTable>

@@ -22,15 +22,32 @@ export default class OrganenRoute extends Route {
       bestuurseenheid.get('id')
     );
 
+    const decretaleBestuursorganen = [];
+    const nietDecretaleBestuursorganen = [];
+    await Promise.all(
+      bestuursorganen.map(async (orgaan) => {
+        const isDecretaal = await orgaan.isDecretaal;
+        if (isDecretaal) {
+          decretaleBestuursorganen.push(orgaan);
+        } else {
+          nietDecretaleBestuursorganen.push(orgaan);
+        }
+      })
+    );
+
     return RSVP.hash({
       bestuurseenheid,
-      bestuursorganen,
+      decretaleBestuursorganen,
+      nietDecretaleBestuursorganen,
     });
   }
 
   async getAllBestuursorganen(bestuurseenheidId) {
     return await this.store.query('bestuursorgaan', {
       'filter[bestuurseenheid][id]': bestuurseenheidId,
+      'filter[:has-no:deactivated-at]': true,
+      'filter[:has-no:is-tijdsspecialisatie-van]': true,
+      include: 'classificatie,is-tijdsspecialisatie-van',
     });
   }
 }
