@@ -19,24 +19,37 @@
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
-    <Tmp::Todo>
-      <div>
-        Split cards in decretaal and niet-decretaal.
-      </div>
-      <ul class="au-o-grid au-o-grid--small">
-        {{#each @model.bestuursorganen as |orgaan|}}
-          <li class="au-o-grid__item au-u-1-5@small au-u-1-3medium">
-            <AuCard
-              class="orgaan-card"
-              @flex="true"
-              {{on "click" (fn this.goToOrgaan orgaan)}}
-              as |c|
-            >
-              <c.content>{{orgaan.naam}}</c.content>
-            </AuCard>
-          </li>
-        {{/each}}
-      </ul>
-    </Tmp::Todo>
+    <AuHeading @skin="3">Decretale bestuursorganen</AuHeading>
+    <ul class="au-o-grid au-o-grid--small">
+      {{#each @model.decretaleBestuursorganen as |orgaan|}}
+        <li class="au-o-grid__item au-u-1-5@small au-u-1-3medium">
+          <AuCard
+            class="orgaan-card"
+            @flex="true"
+            {{on "click" (fn this.goToOrgaan orgaan)}}
+            as |c|
+          >
+            <c.content>{{orgaan.naam}}</c.content>
+          </AuCard>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+  <div class="au-o-box">
+    <AuHeading @skin="3">Niet-decretale bestuursorganen</AuHeading>
+    <ul class="au-o-grid au-o-grid--small">
+      {{#each @model.nietDecretaleBestuursorganen as |orgaan|}}
+        <li class="au-o-grid__item au-u-1-5@small au-u-1-3medium">
+          <AuCard
+            class="orgaan-card"
+            @flex="true"
+            {{on "click" (fn this.goToOrgaan orgaan)}}
+            as |c|
+          >
+            <c.content>{{orgaan.naam}}</c.content>
+          </AuCard>
+        </li>
+      {{/each}}
+    </ul>
   </div>
 </div>
