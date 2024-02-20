@@ -31,6 +31,7 @@ export default class OrganenRoute extends Route {
   async getAllBestuursorganen(bestuurseenheidId) {
     return await this.store.query('bestuursorgaan', {
       'filter[bestuurseenheid][id]': bestuurseenheidId,
+      'filter[:has-no:deactivated-at]': true,
     });
   }
 }
