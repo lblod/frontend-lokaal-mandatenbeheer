@@ -14,11 +14,11 @@ export default class MandatenbeheerBestuursorganenNewController extends Controll
 
   @action
   cancel() {
-    this.router.transitionTo('mandatenbeheer.bestuursorganen');
+    this.router.transitionTo('organen.beheer');
   }
 
   @action
   onCreate({ instanceId }) {
-    this.router.transitionTo('mandatenbeheer.bestuursorganen.edit', instanceId);
+    this.router.transitionTo('organen.beheer.edit', instanceId);
   }
 }
