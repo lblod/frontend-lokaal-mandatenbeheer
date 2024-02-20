@@ -122,3 +122,38 @@
 .flex-grow {
   flex-grow: 1;
 }
+
+/*
+ For readonly view of semantic forms
+*/
+.disabled input.au-c-input.is-disabled {
+  background-color: transparent;
+  color: black;
+  border: transparent;
+  padding-left: 0;
+}
+
+.disabled .ember-power-select-trigger[aria-disabled="true"] {
+  background-color: transparent;
+  border: transparent;
+  padding-left: 0 !important;
+}
+
+.disabled .ember-power-select-status-icon {
+  display: none;
+}
+
+.disabled
+  .is-disabled
+  .au-c-toggle-switch__input:checked
+  + .au-c-toggle-switch__toggle {
+  background-color: transparent;
+}
+
+.disabled .is-disabled .au-c-toggle-switch__toggle::before {
+  background-color: transparent;
+}
+
+.disabled .au-c-toggle-switch.is-disabled {
+  color: black;
+}
