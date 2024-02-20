@@ -54,8 +54,8 @@ export default class BestuursorgaanModel extends Model {
   async classificatieUri() {
     const bestuursorgaan = await this.isTijdsspecialisatieVan;
     return bestuursorgaan
-      ? await bestuursorgaan.get('classificatie.uri')
-      : await this.classificatie.get('uri');
+      ? bestuursorgaan.get('classificatie.uri')
+      : (await this.classificatie).get('uri');
   }
 
   get isDecretaal() {
