@@ -54,6 +54,7 @@ export default class OrganenbeheerIndexRoute extends Route {
         },
       },
     };
+    queryParams['filter[:has-no:deactivated-at]'] = true;
     return queryParams;
   }
 
@@ -70,6 +71,7 @@ export default class OrganenbeheerIndexRoute extends Route {
         },
       },
     };
+    queryParams['filter[:has:deactivated-at]'] = true;
     return queryParams;
   }
 
