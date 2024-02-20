@@ -28,7 +28,7 @@
       <td>
         {{moment-format row.bindingStart "DD-MM-YYYY"}}</td>
       <td>
-        <LinkTo @route={{@editRoute}} @model={{row}} class="au-c-link">
+        <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
           <AuIcon @icon="pencil" @alignment="left" />
           Bewerk
         </LinkTo>
