@@ -38,16 +38,16 @@
               </AuButtonGroup>
             </Group>
           </AuToolbar>
-        {{/if}}
 
-        <section class="au-o-region-large">
-          <AuHeading
-            @level="2"
-            @skin="3"
-            class="au-u-margin-bottom"
-          >Content</AuHeading>
-          <Form::FormattedTriples @triples={{this.sourceTriples}} />
-        </section>
+          <section class="au-o-region-large">
+            <AuHeading
+              @level="2"
+              @skin="3"
+              class="au-u-margin-bottom"
+            >Content</AuHeading>
+            <Form::FormattedTriples @triples={{this.sourceTriples}} />
+          </section>
+        {{/if}}
       </div>
     </div>
   </div>
