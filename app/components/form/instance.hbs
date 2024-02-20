@@ -8,7 +8,7 @@
           <RdfForm
             @groupClass="au-o-grid__item"
             @form={{this.formInfo.form}}
-            @show={{(not this.editable)}}
+            @show={{(not this.isEditable)}}
             @graphs={{this.formInfo.graphs}}
             @sourceNode={{this.formInfo.sourceNode}}
             @formStore={{this.formInfo.formStore}}
@@ -20,7 +20,7 @@
           {{yield}}
         </section>
 
-        {{#if this.editable}}
+        {{#if this.isEditable}}
           <AuToolbar as |Group|>
             <Group>
               <AuButtonGroup>

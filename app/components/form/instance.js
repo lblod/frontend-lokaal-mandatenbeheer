@@ -38,11 +38,11 @@ export default class InstanceComponent extends Component {
     return this.save.isRunning;
   }
 
-  get editable() {
-    if (this.args.editable === undefined) {
+  get isEditable() {
+    if (this.args.isEditable === undefined) {
       return true;
     }
-    return Boolean(this.args.editable);
+    return Boolean(this.args.isEditable);
   }
 
   @keepLatestTask
