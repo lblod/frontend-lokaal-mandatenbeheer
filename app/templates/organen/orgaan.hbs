@@ -1,0 +1,34 @@
+{{page-title this.model.besetuursorgaan.naam}}
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">
+      {{this.model.bestuursorgaan.naam}}</AuHeading>
+    <AuPill
+      @skin="link"
+      @draft={{false}}
+      @size="regular"
+      @icon="info-circle"
+      @iconAlignment="left"
+      @hideText={{false}}
+    >
+      {{if
+        (await this.model.bestuursorgaan.isDecretaal)
+        "Decretaal"
+        "Niet decretaal"
+      }}
+    </AuPill>
+  </Group>
+</AuToolbar>
+
+<Form::Instance
+  @instanceId={{this.model.instanceId}}
+  @form={{this.model.form}}
+  @isEditable={{false}}
+/>
+
+<AuToolbar @border="top" @size="large" as |Group|>
+  <Group>
+    <AuButton @skin="secondary" {{on "click" this.edit}}>Pas aan</AuButton>
+    {{outlet}}
+  </Group>
+</AuToolbar>

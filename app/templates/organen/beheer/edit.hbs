@@ -2,11 +2,18 @@
 
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
-    <AuHeading @skin="2">Bewerk bestuursorgaan
-      {{@model.bestuursorgaan.naam}}</AuHeading>
+    <AuHeading @skin="2">Bewerk bestuursorgaan</AuHeading>
   </Group>
 </AuToolbar>
 
-<div class="au-c-body-container au-c-body-container--scroll">
-  <Tmp::Todo>Add edit bestuursorgaan form</Tmp::Todo>
-</div>
+<Form::Instance
+  @instanceId={{this.model.instanceId}}
+  @form={{this.model.form}}
+  @onSave={{this.onSave}}
+/>
+
+<AuToolbar @border="top" @size="large" as |Group|>
+  <Group>
+    <AuButton @skin="secondary" {{on "click" this.cancel}}>Annuleer</AuButton>
+  </Group>
+</AuToolbar>

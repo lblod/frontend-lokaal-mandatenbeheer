@@ -8,7 +8,7 @@
           <RdfForm
             @groupClass="au-o-grid__item"
             @form={{this.formInfo.form}}
-            @show={{false}}
+            @show={{(not this.isEditable)}}
             @graphs={{this.formInfo.graphs}}
             @sourceNode={{this.formInfo.sourceNode}}
             @formStore={{this.formInfo.formStore}}
@@ -20,32 +20,34 @@
           {{yield}}
         </section>
 
-        <AuToolbar as |Group|>
-          <Group>
-            <AuButtonGroup>
-              <AuButton
-                {{on "click" this.saveInstance}}
-                @disabled={{this.isSaving}}
-              >
-                Pas aan
-              </AuButton>
-              {{#if @onCancel}}
-                <AuButton {{on "click" this.cancel}} @skin="secondary">
-                  Annuleer
+        {{#if this.isEditable}}
+          <AuToolbar as |Group|>
+            <Group>
+              <AuButtonGroup>
+                <AuButton
+                  {{on "click" this.saveInstance}}
+                  @disabled={{this.isSaving}}
+                >
+                  Pas aan
                 </AuButton>
-              {{/if}}
-            </AuButtonGroup>
-          </Group>
-        </AuToolbar>
+                {{#if @onCancel}}
+                  <AuButton {{on "click" this.cancel}} @skin="secondary">
+                    Annuleer
+                  </AuButton>
+                {{/if}}
+              </AuButtonGroup>
+            </Group>
+          </AuToolbar>
 
-        <section class="au-o-region-large">
-          <AuHeading
-            @level="2"
-            @skin="3"
-            class="au-u-margin-bottom"
-          >Content</AuHeading>
-          <Form::FormattedTriples @triples={{this.sourceTriples}} />
-        </section>
+          <section class="au-o-region-large">
+            <AuHeading
+              @level="2"
+              @skin="3"
+              class="au-u-margin-bottom"
+            >Content</AuHeading>
+            <Form::FormattedTriples @triples={{this.sourceTriples}} />
+          </section>
+        {{/if}}
       </div>
     </div>
   </div>
