@@ -46,6 +46,7 @@ export default class OrganenRoute extends Route {
     return await this.store.query('bestuursorgaan', {
       'filter[bestuurseenheid][id]': bestuurseenheidId,
       'filter[:has-no:deactivated-at]': true,
+      'filter[:has-no:is-tijdsspecialisatie-van]': true,
       include: 'classificatie,is-tijdsspecialisatie-van',
     });
   }
