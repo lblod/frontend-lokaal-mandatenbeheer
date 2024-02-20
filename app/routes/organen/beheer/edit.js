@@ -6,7 +6,7 @@ export default class MandatenbeheerBestuursorganenEditRoute extends Route {
   async model(params) {
     const bestuursorgaan = await this.store.findRecord(
       'bestuursorgaan',
-      params.id,
+      params.orgaan_id,
       {
         include: 'classificatie,heeft-tijdsspecialisaties',
       }
