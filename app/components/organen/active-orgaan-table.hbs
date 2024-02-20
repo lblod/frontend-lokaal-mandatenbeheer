@@ -1,0 +1,37 @@
+<AuDataTable
+  @content={{@content}}
+  @isLoading={{@isLoading}}
+  @noDataMessage="Geen bestuursorganen gevonden"
+  @sort={{@sort}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @field="naam"
+        @currentSorting={{@sort}}
+        @label="Naam"
+      />
+      <th>Huidige voorzitter</th>
+      <th>Aantal leden</th>
+      <th>Oprichtingsdatum</th>
+      <th>{{! Bewerk Action }}</th>
+      <th>{{! Archive Action }}</th>
+    </c.header>
+
+    <c.body as |row|>
+      <td>{{row.naam}}</td>
+      <td>TODO add voorzitter</td>
+      <td>{{await row.nbMembers}}</td>
+      <td>
+        {{moment-format row.bindingStart "DD-MM-YYYY"}}</td>
+      <td>
+        <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
+          <AuIcon @icon="pencil" @alignment="left" />
+          Bewerk
+        </LinkTo>
+      </td>
+      <td>TODO add archive action</td>
+    </c.body>
+  </t.content>
+</AuDataTable>

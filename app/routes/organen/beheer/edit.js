@@ -4,7 +4,7 @@ import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
-export default class MandatenbeheerBestuursorganenEditRoute extends Route {
+export default class OrganenBeheerEditRoute extends Route {
   @service store;
   async model(params) {
     const bestuursorgaan = this.store.findRecord(

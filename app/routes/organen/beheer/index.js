@@ -5,30 +5,55 @@ import { action } from '@ember/object';
 export default class OrganenbeheerIndexRoute extends Route {
   @service store;
 
+  pageSize = 100;
   queryParams = {
-    filter: { refreshModel: true },
-    page: { refreshModel: true },
-    size: { refreshModel: true },
-    sort: { refreshModel: true },
+    active_sort: { refreshModel: true },
+    inactive_sort: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('organen');
 
-    const options = this.getOptions(params, parentModel.bestuurseenheid);
-    const bestuursorganen = await this.store.query('bestuursorgaan', options);
+    const activeOrganen = await this.getOrgans(
+      params.active_sort,
+      parentModel.bestuurseenheid
+    );
+
+    const inactiveOrganen = await this.getOrgans(
+      params.inactive_sort,
+      parentModel.bestuurseenheid,
+      false
+    );
 
     return {
-      bestuursorganen,
+      activeOrganen,
+      inactiveOrganen,
     };
   }
 
-  getOptions(params, bestuurseenheid) {
+  async getOrgans(sort, bestuurseenheid, active = true) {
+    const queryOptions = this.getOptions(sort, bestuurseenheid, active);
+    const organenUnfiltered = await this.store.query(
+      'bestuursorgaan',
+      queryOptions
+    );
+    const organen = [];
+    await Promise.all(
+      organenUnfiltered.map(async (orgaan) => {
+        const isDecretaal = await orgaan.isDecretaal;
+        if (!isDecretaal) {
+          organen.push(orgaan);
+        }
+      })
+    );
+    return organen;
+  }
+
+  getOptions(sortParam, bestuurseenheid, active) {
     const queryParams = {
-      sort: params.sort,
+      sort: sortParam,
       page: {
-        number: params.page,
-        size: params.size,
+        size: this.pageSize,
       },
       filter: {
         bestuurseenheid: {
@@ -36,11 +61,11 @@ export default class OrganenbeheerIndexRoute extends Route {
         },
       },
     };
-
-    if (params.filter) {
-      queryParams['filter']['naam'] = params.filter;
+    if (active) {
+      queryParams['filter[:has-no:deactivated-at]'] = true;
+    } else {
+      queryParams['filter[:has:deactivated-at]'] = true;
     }
-
     return queryParams;
   }
 

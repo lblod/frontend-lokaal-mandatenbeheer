@@ -1,5 +1,6 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { inject as service } from '@ember/service';
+import { getCurrentBestuursperiod } from 'frontend-lmb/utils/bestuursperioden';
 
 /**
  * Bestuursorgaan and bestuursorgaan in de tijd are not the same,
@@ -8,6 +9,7 @@ import { inject as service } from '@ember/service';
  */
 export default class BestuursorgaanModel extends Model {
   @service decretaleOrganen;
+  @service store;
 
   @attr uri;
   @attr naam;
@@ -54,7 +56,7 @@ export default class BestuursorgaanModel extends Model {
   async classificatieUri() {
     const bestuursorgaan = await this.isTijdsspecialisatieVan;
     return bestuursorgaan
-      ? bestuursorgaan.get('classificatie.uri')
+      ? await bestuursorgaan.get('classificatie.uri')
       : (await this.classificatie).get('uri');
   }
 
@@ -62,6 +64,27 @@ export default class BestuursorgaanModel extends Model {
     return this.classificatieUri().then((uri) => {
       return this.decretaleOrganen.codeUris.some((dcUri) => dcUri === uri);
     });
+  }
+
+  get nbMembers() {
+    return this.getNbMembers();
+  }
+
+  async getNbMembers() {
+    const currentOrgaan = await this.getCurrentBestuursorgaanInDeTijd();
+    const mandaten = await currentOrgaan.bevat;
+    const mandatenAmounts = await Promise.all(
+      mandaten.map(async (mandaat) => {
+        return (await mandaat.bekleedDoor).meta.count;
+      })
+    );
+    const amount = mandatenAmounts.reduce((acc, curr) => acc + curr, 0);
+    return amount;
+  }
+
+  async getCurrentBestuursorgaanInDeTijd() {
+    const tijdsspecialisaties = await this.heeftTijdsspecialisaties;
+    return getCurrentBestuursperiod(tijdsspecialisaties);
   }
 
   rdfaBindings = {
