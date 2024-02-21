@@ -1,3 +1,12 @@
+<AuToolbar @size="large" as |Group|>
+  <Group>
+    <Mandatenbeheer::BestuursperiodenSelector
+      @options={{@model.bestuursPeriods}}
+      @selectedPeriod={{@model.selectedPeriod}}
+      @onSelect={{this.selectPeriod}}
+    />
+  </Group>
+</AuToolbar>
 <AuToolbar
   @size="large"
   @nowrap="true"

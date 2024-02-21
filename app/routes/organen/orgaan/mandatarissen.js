@@ -1,12 +1,17 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { getCurrentBestuursorgaan } from 'frontend-lmb/utils/bestuursperioden';
+import {
+  getBestuursPeriodsOG,
+  getSelectedBestuursorgaanWithPeriods,
+} from 'frontend-lmb/utils/bestuursperioden';
 
 export default class OrganenMandatarissenRout extends Route {
   @service store;
 
   queryParams = {
+    startDate: { refreshModel: true },
+    endDate: { refreshModel: true },
     filter: { refreshModel: true },
     page: { refreshModel: true },
     size: { refreshModel: true },
@@ -17,15 +22,28 @@ export default class OrganenMandatarissenRout extends Route {
     const parentModel = this.modelFor('organen.orgaan');
     const bestuursOrgaan = parentModel.bestuursorgaan;
 
-    // TODO correct bestuursorgaan in de tijd still needs to be selected.
     const tijdsspecialisaties = await bestuursOrgaan.heeftTijdsspecialisaties;
-    const currentBestuursOrgaan = getCurrentBestuursorgaan(tijdsspecialisaties);
+    const currentBestuursOrgaanWithPeriods =
+      getSelectedBestuursorgaanWithPeriods(tijdsspecialisaties, {
+        startDate: params.startDate,
+        endDate: params.endDate,
+      });
+
+    const bestuursPeriods = getBestuursPeriodsOG(tijdsspecialisaties);
+    const selectedPeriod = {
+      startDate: currentBestuursOrgaanWithPeriods.startDate,
+      endDate: currentBestuursOrgaanWithPeriods.endDate,
+    };
+    const currentBestuursOrgaan =
+      currentBestuursOrgaanWithPeriods.bestuursOrgaan;
 
     const options = this.getOptions(params, currentBestuursOrgaan);
 
     const mandatarissen = await this.store.query('mandataris', options);
 
     return {
+      bestuursPeriods,
+      selectedPeriod,
       mandatarissen,
       bestuursOrgaan,
     };
