@@ -55,12 +55,12 @@ export default class MandatarisModel extends AgentInPosition {
     );
   }
   get isActive() {
-    if (!this.endDate) {
+    if (!this.einde) {
       return true;
     }
 
-    const today = moment(new Date()).format('YYYY-MM-DD');
-    if (this.endDate > today) {
+    const today = moment(new Date());
+    if (this.einde > today) {
       return true;
     }
     return false;
