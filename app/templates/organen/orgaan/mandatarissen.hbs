@@ -1,3 +1,25 @@
+<AuToolbar
+  @size="large"
+  @nowrap="true"
+  class="au-u-padding-bottom-none"
+  as |Group|
+>
+  <Group>
+    <AuHeading @skin="3">Mandatarissen</AuHeading>
+  </Group>
+</AuToolbar>
+
 <div class="au-c-body-container au-c-body-container--scroll">
-  <Tmp::Todo>Add mandatarissentable belonging to this bestuursorgaan</Tmp::Todo>
+  <div class="au-o-box">
+    <Organen::MandatarisTable
+      @content={{@model.mandatarissen}}
+      @isLoading={{this.isLoadingModel}}
+      @sort={{this.sort}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @editRoute="mandatenbeheer.mandatarissen.edit"
+    />
+  </div>
 </div>
+
+{{outlet}}
