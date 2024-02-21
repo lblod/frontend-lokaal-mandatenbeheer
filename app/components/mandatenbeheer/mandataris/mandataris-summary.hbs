@@ -6,6 +6,10 @@
   </div>
   <div class="au-o-grid__item au-u-2-5 au-u-text-right">
     <AuButton
+      @skin={{if this.editing "primary" "secondary"}}
+      {{on "click" this.linkToDetailPage}}
+    >Details</AuButton>
+    <AuButton
       @skin={{if this.editing "secondary" "primary"}}
       {{on "click" this.edit}}
     >{{if this.editing "Sluit" "Pas aan"}}</AuButton>
