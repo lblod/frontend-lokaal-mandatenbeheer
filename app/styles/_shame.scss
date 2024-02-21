@@ -148,15 +148,8 @@
   display: none;
 }
 
-.disabled
-  .is-disabled
-  .au-c-toggle-switch__input:checked
-  + .au-c-toggle-switch__toggle {
-  background-color: transparent;
-}
-
 .disabled .is-disabled .au-c-toggle-switch__toggle::before {
-  background-color: transparent;
+  background-color: white;
 }
 
 .disabled .au-c-toggle-switch.is-disabled {
