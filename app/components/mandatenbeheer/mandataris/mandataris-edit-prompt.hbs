@@ -29,21 +29,23 @@
     </div>
   </div>
 {{/unless}}
-<div class="au-o-grid__item">
-  {{#if this.isTerminating}}
-    <Form::Instance
-      @instanceId={{@mandataris.id}}
-      @form={{@mandatarisEindeEditForm}}
-      @onSave={{this.onSave}}
-      @onCancel={{this.cancel}}
-    />
-  {{else if this.isCorrecting}}
-    <Form::Instance
-      @instanceId={{@mandataris.id}}
-      @form={{@mandatarisEditForm}}
-      @onSave={{this.onSave}}
-      @onCancel={{this.cancel}}
-      @buildMetaTtl={{this.buildMetaTtl}}
-    />
-  {{/if}}
+<div class="au-o-region-large">
+  <div class="au-o-grid__item">
+    {{#if this.isTerminating}}
+      <Form::Instance
+        @instanceId={{@mandataris.id}}
+        @form={{@mandatarisEindeEditForm}}
+        @onSave={{this.onSave}}
+        @onCancel={{this.cancel}}
+      />
+    {{else if this.isCorrecting}}
+      <Form::Instance
+        @instanceId={{@mandataris.id}}
+        @form={{@mandatarisEditForm}}
+        @onSave={{this.onSave}}
+        @onCancel={{this.cancel}}
+        @buildMetaTtl={{this.buildMetaTtl}}
+      />
+    {{/if}}
+  </div>
 </div>
