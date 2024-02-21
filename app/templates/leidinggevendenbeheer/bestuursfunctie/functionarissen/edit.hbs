@@ -12,11 +12,13 @@
   <div class="au-o-box">
     <Person::Card @persoon={{@model.functionaris.isBestuurlijkeAliasVan}} />
 
-    <Form::Instance
-      @instanceId={{@model.instanceId}}
-      @form={{@model.form}}
-      @onSave={{this.save}}
-    />
+    <div class="au-u-margin-top">
+      <Form::Instance
+        @instanceId={{@model.instanceId}}
+        @form={{@model.form}}
+        @onSave={{this.save}}
+      />
+    </div>
   </div>
 </div>
 
