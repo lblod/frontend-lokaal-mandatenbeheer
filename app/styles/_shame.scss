@@ -155,3 +155,8 @@
 .disabled .au-c-toggle-switch.is-disabled {
   color: black;
 }
+.no-pagination {
+  .au-c-data-table__actions--bottom {
+    display: none;
+  }
+}
