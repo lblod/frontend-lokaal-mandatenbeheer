@@ -1,65 +1,56 @@
 {{#if this.initialized}}
-  <div class="au-c-main-container">
-    <div
-      class="au-c-main-container__content au-c-main-container__content--scroll"
-    >
-      <div class="au-o-layout">
-        <section class="au-o-region-large">
-          <RdfForm
-            @groupClass="au-o-grid__item"
-            @form={{this.formInfo.form}}
-            @show={{false}}
-            @graphs={{this.formInfo.graphs}}
-            @sourceNode={{this.formInfo.sourceNode}}
-            @formStore={{this.formInfo.formStore}}
-            @forceShowErrors={{true}}
-            @useNewListingLayout={{true}}
-            @level={{2}}
-            class="au-u-max-width-medium"
-          />
-          {{yield}}
+  <section>
+    <RdfForm
+      @groupClass="au-o-grid__item"
+      @form={{this.formInfo.form}}
+      @show={{false}}
+      @graphs={{this.formInfo.graphs}}
+      @sourceNode={{this.formInfo.sourceNode}}
+      @formStore={{this.formInfo.formStore}}
+      @forceShowErrors={{true}}
+      @useNewListingLayout={{true}}
+      @level={{2}}
+      class="au-u-max-width-medium"
+    />
+    {{yield}}
+  </section>
 
-        </section>
-        {{#if this.errorMessage}}
-          <AuAlert @skin="error" @title="Fout" @icon="alert-triangle">
-            {{this.errorMessage}}
-          </AuAlert>
+  {{#if this.errorMessage}}
+    <AuAlert @skin="error" @title="Fout" @icon="alert-triangle">
+      {{this.errorMessage}}
+    </AuAlert>
+  {{/if}}
+
+  <AuToolbar as |Group|>
+    <Group>
+      <AuButtonGroup>
+        <AuButton
+          {{on "click" this.createInstance}}
+          @disabled={{this.isSaving}}
+        >
+          Bewaar
+        </AuButton>
+        {{#if @onCancel}}
+          <AuButton
+            {{on "click" this.cancel}}
+            @skin="secondary"
+            {{!-- @disabled={{not @cancel}} --}}
+          >
+            Annuleer
+          </AuButton>
         {{/if}}
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
 
-        <AuToolbar as |Group|>
-          <Group>
-            <AuButtonGroup>
-              <AuButton
-                {{on "click" this.createInstance}}
-                @disabled={{this.isSaving}}
-              >
-                Bewaar
-              </AuButton>
-              {{#if @onCancel}}
-                <AuButton
-                  {{on "click" this.cancel}}
-                  @skin="secondary"
-                  {{!-- @disabled={{not @cancel}} --}}
-                >
-                  Annuleer
-                </AuButton>
-              {{/if}}
-            </AuButtonGroup>
-          </Group>
-        </AuToolbar>
-
-        <section class="au-o-region-large">
-
-          <AuHeading
-            @level="2"
-            @skin="3"
-            class="au-u-margin-bottom"
-          >Content</AuHeading>
-          <Form::FormattedTriples @triples={{this.sourceTriples}} />
-        </section>
-      </div>
-    </div>
-  </div>
+  <section class="au-u-margin-top-large">
+    <AuHeading
+      @level="2"
+      @skin="3"
+      class="au-u-margin-bottom"
+    >Content</AuHeading>
+    <Form::FormattedTriples @triples={{this.sourceTriples}} />
+  </section>
 {{else}}
   <div>loading...</div>
 {{/if}}
