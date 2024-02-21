@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import {
-  getBestuursPeriodsOG,
+  getBestuursPeriods,
   getSelectedBestuursorgaanWithPeriods,
 } from 'frontend-lmb/utils/bestuursperioden';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
@@ -34,7 +34,7 @@ export default class OrganenOrgaanRoute extends Route {
         endDate: params.endDate,
       });
 
-    const bestuursPeriods = getBestuursPeriodsOG(tijdsspecialisaties);
+    const bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
     const selectedPeriod = { startDate, endDate };
 
     const formDefinition = getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
