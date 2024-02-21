@@ -28,17 +28,7 @@ export const getSelectedBestuursorgaanWithPeriods = (
   const periods = getBestuursPeriods(organen);
 
   if (!(startDate || endDate)) {
-    const today = moment(new Date()).format('YYYY-MM-DD');
-
-    const currentPeriod = periods.find(
-      (p) => p.startDate <= today && (today < p.endDate || !p.endDate)
-    );
-    const firstfuturePeriod = periods.find((p) => p.startDate > today);
-    const firstPreviousPeriod = periods.slice(-1)[0];
-
-    const selectedPeriod =
-      currentPeriod || firstfuturePeriod || firstPreviousPeriod;
-    return selectedPeriod;
+    return getClosestPeriod(periods);
   } else {
     return periods.find((period) => {
       return period.startDate == startDate;
@@ -57,15 +47,19 @@ export const getCurrentBestuursorgaan = (organen) => {
 
   const sortedPeriods = periods.sortBy('startDate');
 
+  const selectedPeriod = getClosestPeriod(sortedPeriods);
+
+  return selectedPeriod.bestuursorgaan;
+};
+
+export const getClosestPeriod = (periods) => {
   const today = moment(new Date()).format('YYYY-MM-DD');
 
-  const currentPeriod = sortedPeriods.find(
+  const currentPeriod = periods.find(
     (p) => p.startDate <= today && (today < p.endDate || !p.endDate)
   );
-  const firstfuturePeriod = sortedPeriods.find((p) => p.startDate > today);
-  const firstPreviousPeriod = sortedPeriods.slice(-1)[0];
+  const firstfuturePeriod = periods.find((p) => p.startDate > today);
+  const firstPreviousPeriod = periods.slice(-1)[0];
 
-  const selectedPeriod =
-    currentPeriod || firstfuturePeriod || firstPreviousPeriod;
-  return selectedPeriod.bestuursorgaan;
+  return currentPeriod || firstfuturePeriod || firstPreviousPeriod;
 };
