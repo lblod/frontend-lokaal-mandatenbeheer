@@ -28,19 +28,14 @@ export default class OrganenOrgaanRoute extends Route {
     );
 
     const tijdsspecialisaties = await bestuursorgaan.heeftTijdsspecialisaties;
-    const currentBestuursOrgaanWithPeriods =
+    const { bestuursOrgaan, startDate, endDate } =
       getSelectedBestuursorgaanWithPeriods(tijdsspecialisaties, {
         startDate: params.startDate,
         endDate: params.endDate,
       });
 
     const bestuursPeriods = getBestuursPeriodsOG(tijdsspecialisaties);
-    const selectedPeriod = {
-      startDate: currentBestuursOrgaanWithPeriods.startDate,
-      endDate: currentBestuursOrgaanWithPeriods.endDate,
-    };
-    const currentBestuursOrgaan =
-      currentBestuursOrgaanWithPeriods.bestuursOrgaan;
+    const selectedPeriod = { startDate, endDate };
 
     const formDefinition = getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
@@ -50,7 +45,7 @@ export default class OrganenOrgaanRoute extends Route {
       bestuursorgaan,
       bestuursPeriods,
       selectedPeriod,
-      currentBestuursOrgaan,
+      currentBestuursOrgaan: bestuursOrgaan,
     });
   }
 }
