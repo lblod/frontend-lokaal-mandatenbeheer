@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { getCurrentBestuursperiod } from 'frontend-lmb/utils/bestuursperioden';
+import { getCurrentBestuursorgaan } from 'frontend-lmb/utils/bestuursperioden';
 
 export default class OrganenMandatarissenRout extends Route {
   @service store;
@@ -19,7 +19,7 @@ export default class OrganenMandatarissenRout extends Route {
 
     // TODO correct bestuursorgaan in de tijd still needs to be selected.
     const tijdsspecialisaties = await bestuursOrgaan.heeftTijdsspecialisaties;
-    const currentBestuursOrgaan = getCurrentBestuursperiod(tijdsspecialisaties);
+    const currentBestuursOrgaan = getCurrentBestuursorgaan(tijdsspecialisaties);
 
     const options = this.getOptions(params, currentBestuursOrgaan);
 

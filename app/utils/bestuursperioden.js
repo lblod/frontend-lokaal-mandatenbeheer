@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export const getCurrentBestuursperiod = (organen) => {
+export const getCurrentBestuursorgaan = (organen) => {
   const periods = organen.map((b) => ({
     bestuursorgaan: b,
     startDate: moment(b.bindingStart).format('YYYY-MM-DD'),
