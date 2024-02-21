@@ -4,20 +4,42 @@
 
 <div class="au-o-box">
   <AuHeading @level="3" @skin="4">
-    Lijst van alle mandaten
+    Huidige mandaten
   </AuHeading>
 
   <AuHr />
 
   <ul class="au-c-list-vertical">
     {{#each @mandatarissen as |mandataris|}}
-      <Mandatenbeheer::Mandataris::MandatarisSummary
-        @mandataris={{mandataris}}
-        @bestuursorgaan={{@bestuursorgaan}}
-        @mandatarisEindeEditForm={{@mandatarisEindeEditForm}}
-        @mandatarisEditForm={{@mandatarisEditForm}}
-      />
-      <AuHr />
+      {{#if mandataris.isActive}}
+        <Mandatenbeheer::Mandataris::MandatarisSummary
+          @mandataris={{mandataris}}
+          @bestuursorgaan={{@bestuursorgaan}}
+          @mandatarisEindeEditForm={{@mandatarisEindeEditForm}}
+          @mandatarisEditForm={{@mandatarisEditForm}}
+        />
+        <AuHr />
+      {{/if}}
+    {{/each}}
+  </ul>
+
+  <AuHeading @level="3" @skin="4">
+    Beëindigde mandaten
+  </AuHeading>
+
+  <AuHr />
+
+  <ul class="au-c-list-vertical">
+    {{#each @mandatarissen as |mandataris|}}
+      {{#unless mandataris.isActive}}
+        <Mandatenbeheer::Mandataris::MandatarisSummary
+          @mandataris={{mandataris}}
+          @bestuursorgaan={{@bestuursorgaan}}
+          @mandatarisEindeEditForm={{@mandatarisEindeEditForm}}
+          @mandatarisEditForm={{@mandatarisEditForm}}
+        />
+        <AuHr />
+      {{/unless}}
     {{/each}}
   </ul>
 
