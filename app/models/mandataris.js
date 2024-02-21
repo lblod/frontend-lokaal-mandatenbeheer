@@ -1,5 +1,6 @@
 import { attr, belongsTo, hasMany } from '@ember-data/model';
 import AgentInPosition from './agent-in-position';
+import moment from 'moment';
 
 // INHERITS FROM AGENT-IN-POSITION
 export default class MandatarisModel extends AgentInPosition {
@@ -52,6 +53,17 @@ export default class MandatarisModel extends AgentInPosition {
       (uri) =>
         uri == 'http://mu.semte.ch/vocabularies/ext/mandatenExtractorService'
     );
+  }
+  get isActive() {
+    if (!this.einde) {
+      return true;
+    }
+
+    const today = moment(new Date());
+    if (this.einde > today) {
+      return true;
+    }
+    return false;
   }
 }
 

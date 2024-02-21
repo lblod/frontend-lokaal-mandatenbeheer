@@ -102,6 +102,8 @@ Router.map(function () {
     });
   });
 
+  this.route('under-construction');
+
   this.route('error/404', {
     path: '/*wildcard',
   });
