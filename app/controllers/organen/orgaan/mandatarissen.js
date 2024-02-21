@@ -27,9 +27,8 @@ export default class OrganenMandatarissenController extends Controller {
     const queryParams = {
       page: 0,
       startDate: period.startDate,
+      endDate: period.endDate,
     };
-
-    queryParams['endDate'] = period.endDate;
 
     this.router.transitionTo('organen.orgaan.mandatarissen', {
       queryParams,
