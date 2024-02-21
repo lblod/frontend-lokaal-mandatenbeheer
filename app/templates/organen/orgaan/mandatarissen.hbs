@@ -1,1 +1,44 @@
-<Tmp::Todo>Add mandatarissentable belonging to this bestuursorgaan</Tmp::Todo>
+<AuToolbar @size="large" as |Group|>
+  <Group>
+    <Mandatenbeheer::BestuursperiodenSelector
+      @options={{@model.bestuursPeriods}}
+      @selectedPeriod={{@model.selectedPeriod}}
+      @onSelect={{this.selectPeriod}}
+    />
+  </Group>
+</AuToolbar>
+<AuToolbar
+  @size="large"
+  @nowrap="true"
+  class="au-u-padding-bottom-none"
+  as |Group|
+>
+  <Group>
+    <AuHeading @skin="3">Mandatarissen</AuHeading>
+  </Group>
+  <Group class="au-u-1-3@medium">
+    <AuInput
+      value={{this.searchData}}
+      @icon="search"
+      @iconAlignment="left"
+      @width="block"
+      placeholder="Zoek mandataris"
+      {{on "input" (perform this.search value="target.value")}}
+    />
+  </Group>
+</AuToolbar>
+
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Organen::MandatarisTable
+      @content={{@model.mandatarissen}}
+      @isLoading={{this.isLoadingModel}}
+      @sort={{this.sort}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @editRoute="mandatenbeheer.mandatarissen.edit"
+    />
+  </div>
+</div>
+
+{{outlet}}

@@ -1,6 +1,6 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import { getCurrentBestuursperiod } from 'frontend-lmb/utils/bestuursperioden';
+import { getCurrentBestuursorgaan } from 'frontend-lmb/utils/bestuursperioden';
 
 /**
  * Bestuursorgaan and bestuursorgaan in de tijd are not the same,
@@ -84,7 +84,7 @@ export default class BestuursorgaanModel extends Model {
 
   async getCurrentBestuursorgaanInDeTijd() {
     const tijdsspecialisaties = await this.heeftTijdsspecialisaties;
-    return getCurrentBestuursperiod(tijdsspecialisaties);
+    return getCurrentBestuursorgaan(tijdsspecialisaties);
   }
 
   rdfaBindings = {
