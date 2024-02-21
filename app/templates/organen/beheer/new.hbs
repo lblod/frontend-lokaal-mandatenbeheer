@@ -5,11 +5,15 @@
   </Group>
 </AuToolbar>
 
-<Form::NewInstance
-  @onCreate={{this.onCreate}}
-  @form={{this.model.form}}
-  @buildSourceTtl={{this.buildSourceTtl}}
-/>
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Form::NewInstance
+      @onCreate={{this.onCreate}}
+      @form={{this.model.form}}
+      @buildSourceTtl={{this.buildSourceTtl}}
+    />
+  </div>
+</div>
 
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>

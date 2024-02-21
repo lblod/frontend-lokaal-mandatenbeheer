@@ -4,11 +4,15 @@
   </Group>
 </AuToolbar>
 
-<Form::NewInstance
-  @onCreate={{this.onCreate}}
-  @form={{@model.mandatarisNewForm}}
-  @buildMetaTtl={{this.buildMetaTtl}}
-/>
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Form::NewInstance
+      @onCreate={{this.onCreate}}
+      @form={{@model.mandatarisNewForm}}
+      @buildMetaTtl={{this.buildMetaTtl}}
+    />
+  </div>
+</div>
 
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>

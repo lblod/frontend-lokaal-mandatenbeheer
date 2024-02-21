@@ -5,11 +5,15 @@
   </Group>
 </AuToolbar>
 
-<Form::Instance
-  @instanceId={{this.model.instanceId}}
-  @form={{this.model.form}}
-  @onSave={{this.onSave}}
-/>
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{this.model.instanceId}}
+      @form={{this.model.form}}
+      @onSave={{this.onSave}}
+    />
+  </div>
+</div>
 
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>
