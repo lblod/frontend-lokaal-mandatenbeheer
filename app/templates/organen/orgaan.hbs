@@ -20,15 +20,17 @@
   </Group>
 </AuToolbar>
 
-<Form::Instance
-  @instanceId={{this.model.instanceId}}
-  @form={{this.model.form}}
-  @isEditable={{false}}
-/>
-
-<AuToolbar @border="top" @size="large" as |Group|>
+<div class="au-o-box">
+  <Form::Instance
+    @instanceId={{this.model.instanceId}}
+    @form={{this.model.form}}
+    @isEditable={{false}}
+  />
+</div>
+<AuToolbar @size="large" as |Group|>
   <Group>
     <AuButton @skin="secondary" {{on "click" this.edit}}>Pas aan</AuButton>
-    {{outlet}}
   </Group>
 </AuToolbar>
+
+{{outlet}}
