@@ -1,61 +1,58 @@
-<div class="au-o-flow" {{did-insert this.initialize}}>
-  <div class="au-o-layout">
+<div class="au-o-box no-pagination" {{did-insert this.initialize}}>
+  <AuDataTable
+    @content={{this.orderedMandaten}}
+    @isLoading={{this.loading}}
+    @noDataMessage="Geen mandaten gevonden"
+    @page={{0}}
+    @size={{100}}
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        <th>Naam</th>
+        <th>Aantal Houders</th>
+        <th></th>
+      </c.header>
+      <c.body data-test-loket="mandaten-body" as |mandaat|>
+        <td class="au-u-visible-small-up">
+          {{mandaat.bestuursfunctie.label}}
+        </td>
 
-    <div class="au-o-flow no-pagination">
-      <AuDataTable
-        @content={{this.orderedMandaten}}
-        @isLoading={{this.loading}}
-        @noDataMessage="Geen mandaten gevonden"
-        @page={{0}}
-        @size={{100}}
-        as |t|
-      >
-        <t.content as |c|>
-          <c.header>
-            <th>Naam</th>
-            <th>Aantal Houders</th>
-            <th></th>
-          </c.header>
-          <c.body data-test-loket="mandaten-body" as |mandaat|>
-            <td class="au-u-visible-small-up">
-              {{mandaat.bestuursfunctie.label}}
-            </td>
-
-            <td class="au-u-visible-small-up">
-              {{mandaat.aantalHouders}}
-            </td>
-            <td>
-              <Tmp::Todo>
-                <LinkTo
-                  @route={{"mandaat.edit"}}
-                  @model={{mandaat.id}}
-                  class="au-c-link"
-                > Bewerk </LinkTo>
-                <AuButton
-                  @skin="link"
-                  @icon="bin"
-                  @alert="true"
-                  {{on "click" (fn this.hideMandaat mandaat)}}
-                >
-                  Verwijder
-                </AuButton>
-              </Tmp::Todo>
-            </td>
-          </c.body>
-        </t.content>
-      </AuDataTable>
-      {{#unless this.bestuursorgaanIT.isDecretaal}}
-        <AuButton
-          @disabled={{this.loadingBestuursfuncties}}
-          {{on "click" this.createNewMandaat}}
-          @icon="plus"
-        >
-          Voeg mandaat toe
-        </AuButton>
-      {{/unless}}
-      {{yield}}
-    </div>
-  </div>
+        <td class="au-u-visible-small-up">
+          {{mandaat.aantalHouders}}
+        </td>
+        <td>
+          <LinkTo
+            @route={{"mandaat.edit"}}
+            @model={{mandaat.id}}
+            class="au-c-link"
+          > Bewerk </LinkTo>
+          <AuButton
+            @skin="link"
+            @icon="bin"
+            @alert="true"
+            @loading={{(and
+              (eq this.removingMandaatId mandaat.id)
+              this.removeMandaatTask.isRunning
+            )}}
+            {{on "click" (fn this.removeMandaat mandaat)}}
+          >
+            Verwijder
+          </AuButton>
+        </td>
+      </c.body>
+    </t.content>
+  </AuDataTable>
+  {{#unless this.bestuursorgaanIT.isDecretaal}}
+    <AuButton
+      @disabled={{this.loadingBestuursfuncties}}
+      {{on "click" this.createNewMandaat}}
+      @icon="plus"
+    >
+      Voeg mandaat toe
+    </AuButton>
+  {{/unless}}
+  {{yield}}
 </div>
 
 <AuModal
@@ -89,7 +86,7 @@
         <AuButtonGroup>
           <AuButton
             {{on "click" this.confirmCreateMandaat}}
-            @loading={{this.createManaat.isRunning}}
+            @loading={{this.createMandaat.isRunning}}
           >
             Creëer Mandaat
           </AuButton>

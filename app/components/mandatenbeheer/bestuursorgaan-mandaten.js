@@ -6,10 +6,13 @@ import { keepLatestTask, dropTask } from 'ember-concurrency';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
+  @service toaster;
+
   @tracked sort = 'bestuursfunctie.label';
   @tracked creatingNewMandaat = false;
   @tracked availableBestuursfuncties = [];
   @tracked selectedBestuursfunctie = null;
+  @tracked removingMandaatId = null;
 
   get mandaten() {
     return this.args.bestuursorgaanIT.bevat;
@@ -55,9 +58,40 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     this.creatingNewMandaat = false;
   }
 
+  @dropTask
+  *removeMandaatTask(mandaat) {
+    this.removingMandaatId = mandaat.id;
+    const mandatarissen = yield this.store.query('mandataris', {
+      filter: {
+        bekleedt: {
+          ':uri:': mandaat.uri,
+        },
+      },
+      page: {
+        size: 1,
+      },
+    });
+    if (mandatarissen.length > 0) {
+      this.toaster.notify(
+        'Het mandaat kon niet worden verwijderd omdat er nog mandatarissen aan gekoppeld zijn!',
+        'Error',
+        {
+          type: 'error',
+          icon: 'circle-check',
+        }
+      );
+      return;
+    }
+    yield mandaat.destroyRecord();
+    this.toaster.notify('Het mandaat werd verwijderd.', 'Success', {
+      type: 'success',
+      icon: 'circle-check',
+    });
+  }
+
   @action
-  hideMandaat() {
-    // TODO
+  async removeMandaat(mandaat) {
+    this.removeMandaatTask.perform(mandaat);
   }
 
   @action
