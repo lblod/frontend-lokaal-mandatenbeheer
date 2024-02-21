@@ -26,11 +26,12 @@
     @form={{this.model.form}}
     @isEditable={{false}}
   />
+
+  <AuToolbar class="au-u-margin-top" as |Group|>
+    <Group>
+      <AuButton @skin="secondary" {{on "click" this.edit}}>Pas aan</AuButton>
+    </Group>
+  </AuToolbar>
 </div>
-<AuToolbar @size="large" as |Group|>
-  <Group>
-    <AuButton @skin="secondary" {{on "click" this.edit}}>Pas aan</AuButton>
-  </Group>
-</AuToolbar>
 
 {{outlet}}
