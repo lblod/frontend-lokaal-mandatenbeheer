@@ -5,6 +5,11 @@
       @selectedPeriod={{@model.selectedPeriod}}
       @onSelect={{this.selectPeriod}}
     />
+    {{#unless (await this.model.bestuursOrgaan.isDecretaal)}}
+      <AuButton {{on "click" this.handleAddBestuursperiodeClick}}>
+        Voeg bestuursperiode toe
+      </AuButton>
+    {{/unless}}
   </Group>
 </AuToolbar>
 <AuToolbar
