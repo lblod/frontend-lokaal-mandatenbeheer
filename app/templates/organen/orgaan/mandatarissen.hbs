@@ -6,7 +6,7 @@
       @onSelect={{this.selectPeriod}}
     />
     {{#unless (await this.model.bestuursOrgaan.isDecretaal)}}
-      <BestuursperiodeNewModal @bestuursorgaan={{this.model.bestuursOrgaan}} />
+      <BestuursperiodeNewButton @bestuursorgaan={{this.model.bestuursOrgaan}} />
     {{/unless}}
   </Group>
 </AuToolbar>

@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSPERIODE_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
-export default class BestuursperiodeNewModalComponent extends Component {
+export default class BestuursperiodeNewButtonComponent extends Component {
   @service store;
 
   @tracked isInitialized = false;

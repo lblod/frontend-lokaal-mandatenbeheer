@@ -34,9 +34,4 @@ export default class OrganenMandatarissenController extends Controller {
       queryParams,
     });
   }
-
-  @action
-  handleAddBestuursperiodeClick() {
-    this.router.transitionTo('organen.orgaan.bestuursperiodes.new');
-  }
 }
