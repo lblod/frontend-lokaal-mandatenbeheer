@@ -39,6 +39,11 @@ export default class MandatarisSearchRoute extends Route {
     return queryParams;
   }
 
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.searchData = this.paramsFor('mandataris-search')['filter'];
+  }
+
   @action
   reloadModel() {
     this.refresh();
