@@ -1,0 +1,22 @@
+{{#if this.isInitialized}}
+  <AuButton {{on "click" this.openModal}}>
+    Voeg bestuursperiode toe
+  </AuButton>
+  <AuModal
+    @title={{this.title}}
+    @modalOpen={{this.isModalOpen}}
+    @closable={{true}}
+    @closeModal={{this.closeModal}}
+  >
+    <div class="au-o-box">
+      <Form::NewInstance
+        @onCreate={{this.closeModal}}
+        @onCancel={{this.closeModal}}
+        @form={{this.bestuursperiodeFormDefinition}}
+        @buildSourceTtl={{this.buildSourceTtl}}
+      />
+    </div>
+  </AuModal>
+{{else}}
+  Loading...
+{{/if}}
