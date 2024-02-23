@@ -31,17 +31,15 @@
   </Group>
 </AuToolbar>
 
-<div class="au-c-body-container au-c-body-container--scroll">
-  <div class="au-o-box">
-    <Organen::MandatarisTable
-      @content={{@model.mandatarissen}}
-      @isLoading={{this.isLoadingModel}}
-      @sort={{this.sort}}
-      @page={{this.page}}
-      @size={{this.size}}
-      @editRoute="mandatenbeheer.mandatarissen.edit"
-    />
-  </div>
+<div class="au-o-box">
+  <Organen::MandatarisTable
+    @content={{@model.mandatarissen}}
+    @isLoading={{this.isLoadingModel}}
+    @sort={{this.sort}}
+    @page={{this.page}}
+    @size={{this.size}}
+    @editRoute="mandatenbeheer.mandatarissen.edit"
+  />
 </div>
 
 {{outlet}}
