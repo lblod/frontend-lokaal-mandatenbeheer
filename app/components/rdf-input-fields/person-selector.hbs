@@ -27,12 +27,14 @@
     @closeModal={{this.cancelEdit}}
   >
     {{#if this.creatingPerson}}
-      <Form::NewInstance
-        @onCreate={{this.onSelectNewPerson}}
-        @form={{this.createPersonFormDefinition}}
-        @onCancel={{this.cancelCreate}}
-        @buildSourceTtl={{this.buildSourceTtl}}
-      />
+      <div class="au-o-box">
+        <Form::NewInstance
+          @onCreate={{this.onSelectNewPerson}}
+          @form={{this.createPersonFormDefinition}}
+          @onCancel={{this.cancelCreate}}
+          @buildSourceTtl={{this.buildSourceTtl}}
+        />
+      </div>
     {{else}}
       <Person::SearchForm
         @showDefaultHead={{false}}
