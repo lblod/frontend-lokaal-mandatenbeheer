@@ -20,22 +20,24 @@
   </Group>
 </AuToolbar>
 
-<div class="au-o-box">
-  <Form::Instance
-    @instanceId={{this.model.instanceId}}
-    @form={{this.model.form}}
-    @isEditable={{false}}
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{this.model.instanceId}}
+      @form={{this.model.form}}
+      @isEditable={{false}}
+    />
+
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButton @skin="secondary" {{on "click" this.edit}}>Pas aan</AuButton>
+      </Group>
+    </AuToolbar>
+  </div>
+
+  <Mandatenbeheer::BestuursorgaanMandaten
+    @bestuursorgaanIT={{this.model.currentBestuursOrgaan}}
   />
 
-  <AuToolbar class="au-u-margin-top" as |Group|>
-    <Group>
-      <AuButton @skin="secondary" {{on "click" this.edit}}>Pas aan</AuButton>
-    </Group>
-  </AuToolbar>
+  {{outlet}}
 </div>
-
-<Mandatenbeheer::BestuursorgaanMandaten
-  @bestuursorgaanIT={{this.model.currentBestuursOrgaan}}
-/>
-
-{{outlet}}
