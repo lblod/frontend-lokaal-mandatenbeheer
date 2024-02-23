@@ -4,10 +4,15 @@
   class="is-optional"
   @onChange={{this.selectPeriod}}
   @searchEnabled={{false}}
+  @noMatchesMessage="Geen bestuursperioden"
   as |period|
 >
-  <Shared::Periode
-    @start={{period.startDate}}
-    @end={{period.endDate}}
-  >Bestuursperiode</Shared::Periode>
+  {{#if this.periodOptions}}
+    <Shared::Periode
+      @start={{period.startDate}}
+      @end={{period.endDate}}
+    >Bestuursperiode</Shared::Periode>
+  {{else}}
+    Geen bestuursperioden
+  {{/if}}
 </PowerSelect>
