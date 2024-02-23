@@ -29,10 +29,6 @@ Router.map(function () {
   this.route('organen', function () {
     this.route('orgaan', { path: '/:orgaan_id' }, function () {
       this.route('mandatarissen');
-
-      this.route('bestuursperiodes', function () {
-        this.route('new');
-      });
     });
     this.route('beheer', function () {
       this.route('new');
