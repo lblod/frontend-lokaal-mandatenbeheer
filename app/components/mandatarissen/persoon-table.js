@@ -1,9 +1,6 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 
 export default class MandatarissenPersoonTable extends Component {
-  @service router;
-
   async mandaten(persoon) {
     const mandatarissen = await persoon.isAangesteldAls;
     const mandaten = await Promise.all(
