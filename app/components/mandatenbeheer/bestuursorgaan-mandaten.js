@@ -16,7 +16,11 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @tracked orderedMandaten = [];
 
   get mandaten() {
-    return this.args.bestuursorgaanIT.bevat;
+    if (this.args.bestuursorgaanIT) {
+      return this.args.bestuursorgaanIT.bevat;
+    } else {
+      return [];
+    }
   }
 
   get loading() {
