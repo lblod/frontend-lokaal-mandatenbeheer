@@ -1,4 +1,7 @@
-<div class="au-o-box no-pagination" {{did-insert this.initialize}}>
+<div
+  class="au-o-box no-pagination"
+  {{did-insert this.computeBestuursfuncties.perform}}
+>
   <AuDataTable
     @content={{this.orderedMandaten}}
     @isLoading={{this.loading}}
@@ -13,7 +16,7 @@
         <th>Aantal Houders</th>
         <th></th>
       </c.header>
-      <c.body data-test-loket="mandaten-body" as |mandaat|>
+      <c.body as |mandaat|>
         <td class="au-u-visible-small-up">
           {{mandaat.bestuursfunctie.label}}
         </td>
@@ -33,9 +36,9 @@
             @alert="true"
             @loading={{(and
               (eq this.removingMandaatId mandaat.id)
-              this.removeMandaatTask.isRunning
+              this.removeMandaat.isRunning
             )}}
-            {{on "click" (fn this.removeMandaat mandaat)}}
+            {{on "click" (perform this.removeMandaat mandaat)}}
           >
             Verwijder
           </AuButton>
@@ -43,7 +46,7 @@
       </c.body>
     </t.content>
   </AuDataTable>
-  {{#unless this.bestuursorgaanIT.isDecretaal}}
+  {{#unless (await this.bestuursorgaanIT.isDecretaal)}}
     <AuButton
       @disabled={{this.loadingBestuursfuncties}}
       {{on "click" this.createNewMandaat}}
@@ -85,7 +88,7 @@
       <Group>
         <AuButtonGroup>
           <AuButton
-            {{on "click" this.confirmCreateMandaat}}
+            {{on "click" this.createMandaat.perform}}
             @loading={{this.createMandaat.isRunning}}
           >
             Creëer Mandaat

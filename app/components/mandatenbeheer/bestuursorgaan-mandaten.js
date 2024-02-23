@@ -59,7 +59,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   @dropTask
-  *removeMandaatTask(mandaat) {
+  *removeMandaat(mandaat) {
     this.removingMandaatId = mandaat.id;
     const mandatarissen = yield this.store.query('mandataris', {
       filter: {
@@ -90,16 +90,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   @action
-  async removeMandaat(mandaat) {
-    this.removeMandaatTask.perform(mandaat);
-  }
-
-  @action
-  confirmCreateMandaat() {
-    this.createMandaat.perform();
-  }
-
-  @action
   createNewMandaat() {
     this.creatingNewMandaat = true;
   }
@@ -107,10 +97,5 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @action
   cancelCreateMandaat() {
     this.creatingNewMandaat = false;
-  }
-
-  @action
-  initialize() {
-    this.computeBestuursfuncties.perform();
   }
 }
