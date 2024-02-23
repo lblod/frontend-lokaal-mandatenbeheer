@@ -19,6 +19,7 @@
         @currentSorting={{@sort}}
         @label="Familienaam"
       />
+      <th>Mandaten</th>
       <th>{{! Detail Action }}</th>
     </c.header>
 
@@ -29,6 +30,7 @@
       <td>
         {{row.achternaam}}
       </td>
+      <td>{{await (this.mandaten row)}}</td>
       <td>
         <AuButton
           @icon="pencil"
