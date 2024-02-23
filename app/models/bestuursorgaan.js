@@ -72,10 +72,7 @@ export default class BestuursorgaanModel extends Model {
 
   async getNbMembers() {
     const currentOrgaan = await this.getCurrentBestuursorgaanInDeTijd();
-    if (!currentOrgaan) {
-      return 0;
-    }
-    const mandaten = await currentOrgaan.bevat;
+    const mandaten = currentOrgaan ? await currentOrgaan.bevat : [];
     const mandatenAmounts = await Promise.all(
       mandaten.map(async (mandaat) => {
         return (await mandaat.bekleedDoor).meta.count;
