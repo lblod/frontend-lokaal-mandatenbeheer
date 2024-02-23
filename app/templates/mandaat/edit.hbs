@@ -12,13 +12,8 @@
       @instanceId={{this.model.instanceId}}
       @form={{this.model.form}}
       @onSave={{this.onSave}}
+      @onCancel={{this.onCancel}}
     />
   </div>
 </div>
 {{outlet}}
-
-<AuToolbar @border="top" @size="large" as |Group|>
-  <Group>
-    <AuButton @skin="secondary" {{on "click" this.onCancel}}>Annuleer</AuButton>
-  </Group>
-</AuToolbar>
