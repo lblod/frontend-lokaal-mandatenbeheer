@@ -72,6 +72,9 @@ export default class BestuursorgaanModel extends Model {
 
   async getNbMembers() {
     const currentOrgaan = await this.getCurrentBestuursorgaanInDeTijd();
+    if (!currentOrgaan) {
+      return 0;
+    }
     const mandaten = await currentOrgaan.bevat;
     const mandatenAmounts = await Promise.all(
       mandaten.map(async (mandaat) => {
@@ -84,6 +87,9 @@ export default class BestuursorgaanModel extends Model {
 
   async getCurrentBestuursorgaanInDeTijd() {
     const tijdsspecialisaties = await this.heeftTijdsspecialisaties;
+    if (tijdsspecialisaties.length == 0) {
+      return null;
+    }
     return getCurrentBestuursorgaan(tijdsspecialisaties);
   }
 
