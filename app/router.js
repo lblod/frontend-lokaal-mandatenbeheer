@@ -36,8 +36,6 @@ Router.map(function () {
     });
   });
 
-  this.route('mandataris-search');
-
   this.route('mandatenbeheer', function () {
     this.route('mandatarissen', function () {
       this.route('new');
@@ -112,5 +110,9 @@ Router.map(function () {
 
   this.route('mandaat', function () {
     this.route('edit', { path: '/:id/edit' });
+  });
+
+  this.route('mandatarissen', function () {
+    this.route('search');
   });
 });

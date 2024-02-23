@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
-export default class MandatarisSearchController extends Controller {
+export default class MandatarissenSearchController extends Controller {
   @service router;
 
   @tracked filter = '';

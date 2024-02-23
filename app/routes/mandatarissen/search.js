@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class MandatarisSearchRoute extends Route {
+export default class MandatarissenSearchRoute extends Route {
   @service store;
 
   queryParams = {
@@ -41,7 +41,7 @@ export default class MandatarisSearchRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.searchData = this.paramsFor('mandataris-search')['filter'];
+    controller.searchData = this.paramsFor('mandatarissen.search')['filter'];
   }
 
   @action
