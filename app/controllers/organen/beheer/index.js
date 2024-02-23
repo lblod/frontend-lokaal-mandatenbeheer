@@ -18,13 +18,13 @@ export default class OrganenBeheerIndexController extends Controller {
   async archiveOrgaan(orgaan) {
     orgaan.deactivatedAt = new Date();
     await orgaan.save();
-    this.router.refresh();
+    this.send('reloadModel');
   }
 
   @action
   async deArchiveOrgaan(orgaan) {
     orgaan.deactivatedAt = undefined;
     await orgaan.save();
-    this.router.refresh();
+    this.send('reloadModel');
   }
 }
