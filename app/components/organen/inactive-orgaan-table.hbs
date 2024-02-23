@@ -25,7 +25,13 @@
         {{moment-format row.bindingStart "DD-MM-YYYY"}}</td>
       <td>
         {{moment-format row.deactivatedAt "DD-MM-YYYY"}}</td>
-      <td>TODO add action</td>
+      <td>
+        <AuButton
+          @icon="undo"
+          @skin="link"
+          {{on "click" (fn @dearchive row)}}
+        >Heractiveer</AuButton>
+      </td>
     </c.body>
   </t.content>
 </AuDataTable>

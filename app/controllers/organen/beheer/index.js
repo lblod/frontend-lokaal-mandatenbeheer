@@ -20,4 +20,11 @@ export default class OrganenBeheerIndexController extends Controller {
     await orgaan.save();
     this.router.refresh();
   }
+
+  @action
+  async deArchiveOrgaan(orgaan) {
+    orgaan.deactivatedAt = undefined;
+    await orgaan.save();
+    this.router.refresh();
+  }
 }
