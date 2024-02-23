@@ -10,7 +10,7 @@ export default class MandatarissenSearchController extends Controller {
 
   @tracked filter = '';
   @tracked page = 0;
-  sort = 'is-bestuurlijke-alias-van.achternaam';
+  sort = 'achternaam';
   size = 20;
 
   @tracked searchData;

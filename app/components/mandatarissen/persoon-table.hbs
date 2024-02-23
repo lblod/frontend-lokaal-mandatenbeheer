@@ -1,0 +1,41 @@
+<AuDataTable
+  @content={{@content}}
+  @isLoading={{@isLoading}}
+  @noDataMessage="Geen mandatarissen gevonden"
+  @sort={{@sort}}
+  @page={{@page}}
+  @size={{@size}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @field="gebruikteVoornaam"
+        @currentSorting={{@sort}}
+        @label="Naam"
+      />
+      <AuDataTableThSortable
+        @field="achternaam"
+        @currentSorting={{@sort}}
+        @label="Familienaam"
+      />
+      <th>{{! Detail Action }}</th>
+    </c.header>
+
+    <c.body as |row|>
+      <td>
+        {{row.gebruikteVoornaam}}
+      </td>
+      <td>
+        {{row.achternaam}}
+      </td>
+      <td>
+        <AuButton
+          @icon="pencil"
+          @skin="link"
+          {{on "click" (fn @detail row)}}
+        >Details</AuButton>
+      </td>
+    </c.body>
+  </t.content>
+</AuDataTable>

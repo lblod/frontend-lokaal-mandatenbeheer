@@ -14,10 +14,10 @@ export default class MandatarissenSearchRoute extends Route {
 
   async model(params) {
     const options = this.getOptions(params);
-    const mandatarissen = await this.store.query('mandataris', options);
+    const personen = await this.store.query('persoon', options);
 
     return {
-      mandatarissen,
+      personen,
     };
   }
 
@@ -28,12 +28,8 @@ export default class MandatarissenSearchRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      filter: {
-        'is-bestuurlijke-alias-van': params.filter,
-      },
-      include: ['is-bestuurlijke-alias-van', 'bekleedt.bestuursfunctie'].join(
-        ','
-      ),
+      filter: params.filter,
+      'filter[:has:is-aangesteld-als]': true,
     };
 
     return queryParams;
