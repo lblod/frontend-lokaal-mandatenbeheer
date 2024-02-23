@@ -1,5 +1,6 @@
 import EmberRouter from '@ember/routing/router';
 import config from 'frontend-lmb/config/environment';
+import { fallbackRoute } from 'ember-metis';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -115,4 +116,6 @@ Router.map(function () {
   this.route('mandatarissen', function () {
     this.route('search');
   });
+
+  fallbackRoute(this);
 });

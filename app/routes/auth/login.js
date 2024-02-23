@@ -9,7 +9,7 @@ export default class AuthLoginRoute extends Route {
   beforeModel() {
     if (this.session.prohibitAuthentication('index')) {
       if (isValidAcmidmConfig(ENV.acmidm)) {
-        window.location.replace(buildLoginUrl(ENV.acmidm));
+        window.location?.replace(buildLoginUrl(ENV.acmidm));
       } else {
         this.router.replaceWith('mock-login');
       }

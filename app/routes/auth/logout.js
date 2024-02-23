@@ -15,7 +15,7 @@ export default class AuthLogoutRoute extends Route {
           ? this.router.urlFor('mock-login')
           : ENV.acmidm.logoutUrl;
 
-        window.location.replace(logoutUrl);
+        window.location?.replace(logoutUrl);
       } catch (error) {
         throw new Error(
           'Something went wrong while trying to remove the session on the server',

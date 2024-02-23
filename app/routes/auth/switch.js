@@ -16,7 +16,7 @@ export default class AuthSwitchRoute extends Route {
         ? this.router.urlFor('mock-login')
         : buildSwitchUrl(ENV.acmidm);
 
-      window.location.replace(logoutUrl);
+      window.location?.replace(logoutUrl);
     } catch (error) {
       throw new Error(
         'Something went wrong while trying to remove the session on the server',

@@ -24,11 +24,11 @@ Object.defineProperty(Array.prototype, '_super', {
   enumerable: false,
 });
 
-browserUpdate({
-  vs: { i: 11, f: -3, o: -3, s: -3, c: -3 },
-  style: 'corner',
-  l: 'nl',
-  shift_page_down: false,
-});
+// browserUpdate({
+//   vs: { i: 11, f: -3, o: -3, s: -3, c: -3 },
+//   style: 'corner',
+//   l: 'nl',
+//   shift_page_down: false,
+// });
 
 loadInitializers(App, config.modulePrefix);

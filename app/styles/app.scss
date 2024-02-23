@@ -26,10 +26,9 @@
 
 // PLUGINS
 @import "ember-appuniversum/a-plugins";
-@import "project/p-ember-promise-modals";
 
 // UTILITIES
 @import "ember-appuniversum/a-utilities";
 
 // TEMPORARY HACKS AND QUICKFIXES
-@import 'shame';
+@import "shame";

@@ -18,6 +18,13 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
+    fastboot: {
+      hostWhitelist: [/^localhost:\d+$/],
+    },
+    metis: {
+      // provisionary, will be changed later, not to be trusted as a real url
+      baseUrl: 'http://lmb.lblod.info/',
+    },
     moment: {
       allowEmpty: true,
       includeLocales: ['nl-be'],
