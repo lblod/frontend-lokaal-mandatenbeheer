@@ -1,7 +1,4 @@
-<div
-  class="au-o-box no-pagination"
-  {{did-insert this.computeBestuursfuncties.perform}}
->
+<div class="au-o-box no-pagination" {{did-insert this.initialize.perform}}>
   <AuDataTable
     @content={{this.orderedMandaten}}
     @isLoading={{this.loading}}
