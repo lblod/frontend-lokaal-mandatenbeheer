@@ -53,6 +53,13 @@ export default class SharedBreadCrumbComponent extends Component {
     },
   ];
 
+  mandatarissen = [
+    {
+      route: 'mandataris-search',
+      crumbs: [{ label: 'Mandatarissen' }],
+    },
+  ];
+
   mandatenbeheer = [
     {
       route: 'mandatenbeheer.mandatarissen.index',
@@ -328,6 +335,7 @@ export default class SharedBreadCrumbComponent extends Component {
     },
   ];
   bread = this.bestuursorganen.concat(
+    this.mandatarissen,
     this.mandatenbeheer,
     this.leidinggevendenbeheer,
     this.legacy

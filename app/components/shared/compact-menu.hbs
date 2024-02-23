@@ -9,6 +9,10 @@
     <AuIcon @icon="users" @alignment="left" />
     Bestuursorganen
   </AuLink>
+  <AuLink @route="mandataris-search" role="menuitem">
+    <AuIcon @icon="user-fill" @alignment="left" />
+    Mandatarissen
+  </AuLink>
   {{#if this.currentSession.canAccessMandaat}}
     <AuLink @route="mandatenbeheer.mandatarissen" role="menuitem">
       <AuIcon @icon="user-fill" @alignment="left" />
