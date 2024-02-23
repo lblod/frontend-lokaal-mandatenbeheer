@@ -13,4 +13,11 @@ export default class OrganenBeheerIndexController extends Controller {
   createNewOrgaan() {
     this.router.transitionTo('organen.beheer.new');
   }
+
+  @action
+  async archiveOrgaan(orgaan) {
+    orgaan.deactivatedAt = new Date();
+    await orgaan.save();
+    this.router.refresh();
+  }
 }
