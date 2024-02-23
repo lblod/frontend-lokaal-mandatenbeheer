@@ -1,3 +1,24 @@
-{{page-title "Edit"}}
-<Tmp::Todo>Allow edit of mandaat</Tmp::Todo>
+{{page-title "Edit Mandaat"}}
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Bewerk Mandaat
+      {{this.model.mandaat.bestuursfunctie.label}}</AuHeading>
+  </Group>
+</AuToolbar>
+
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{this.model.instanceId}}
+      @form={{this.model.form}}
+      @onSave={{this.onSave}}
+    />
+  </div>
+</div>
 {{outlet}}
+
+<AuToolbar @border="top" @size="large" as |Group|>
+  <Group>
+    <AuButton @skin="secondary" {{on "click" this.onCancel}}>Annuleer</AuButton>
+  </Group>
+</AuToolbar>

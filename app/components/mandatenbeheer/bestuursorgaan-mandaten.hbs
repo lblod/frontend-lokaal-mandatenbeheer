@@ -27,23 +27,25 @@
             @model={{mandaat.id}}
             class="au-c-link"
           > Bewerk </LinkTo>
-          <AuButton
-            @skin="link"
-            @icon="bin"
-            @alert="true"
-            @loading={{(and
-              (eq this.removingMandaatId mandaat.id)
-              this.removeMandaat.isRunning
-            )}}
-            {{on "click" (perform this.removeMandaat mandaat)}}
-          >
-            Verwijder
-          </AuButton>
+          {{#unless (await @bestuursorgaanIT.isDecretaal)}}
+            <AuButton
+              @skin="link"
+              @icon="bin"
+              @alert="true"
+              @loading={{(and
+                (eq this.removingMandaatId mandaat.id)
+                this.removeMandaat.isRunning
+              )}}
+              {{on "click" (perform this.removeMandaat mandaat)}}
+            >
+              Verwijder
+            </AuButton>
+          {{/unless}}
         </td>
       </c.body>
     </t.content>
   </AuDataTable>
-  {{#unless (await this.bestuursorgaanIT.isDecretaal)}}
+  {{#unless (await @bestuursorgaanIT.isDecretaal)}}
     <AuButton
       @disabled={{this.loadingBestuursfuncties}}
       {{on "click" this.createNewMandaat}}
