@@ -107,4 +107,8 @@ Router.map(function () {
   this.route('error/404', {
     path: '/*wildcard',
   });
+
+  this.route('mandaat', function () {
+    this.route('edit', { path: '/:id/edit' });
+  });
 });

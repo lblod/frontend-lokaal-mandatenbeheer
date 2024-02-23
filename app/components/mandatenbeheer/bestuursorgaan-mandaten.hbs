@@ -1,0 +1,100 @@
+<div class="au-o-box no-pagination" {{did-insert this.initialize.perform}}>
+  <AuDataTable
+    @content={{this.orderedMandaten}}
+    @isLoading={{this.loading}}
+    @noDataMessage="Geen mandaten gevonden"
+    @page={{0}}
+    @size={{100}}
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        <th>Naam</th>
+        <th>Aantal Houders</th>
+        <th></th>
+      </c.header>
+      <c.body as |mandaat|>
+        <td class="au-u-visible-small-up">
+          {{mandaat.bestuursfunctie.label}}
+        </td>
+
+        <td class="au-u-visible-small-up">
+          {{mandaat.aantalHouders}}
+        </td>
+        <td>
+          <LinkTo
+            @route={{"mandaat.edit"}}
+            @model={{mandaat.id}}
+            class="au-c-link"
+          > Bewerk </LinkTo>
+          <AuButton
+            @skin="link"
+            @icon="bin"
+            @alert="true"
+            @loading={{(and
+              (eq this.removingMandaatId mandaat.id)
+              this.removeMandaat.isRunning
+            )}}
+            {{on "click" (perform this.removeMandaat mandaat)}}
+          >
+            Verwijder
+          </AuButton>
+        </td>
+      </c.body>
+    </t.content>
+  </AuDataTable>
+  {{#unless (await this.bestuursorgaanIT.isDecretaal)}}
+    <AuButton
+      @disabled={{this.loadingBestuursfuncties}}
+      {{on "click" this.createNewMandaat}}
+      @icon="plus"
+    >
+      Voeg mandaat toe
+    </AuButton>
+  {{/unless}}
+  {{yield}}
+</div>
+
+<AuModal
+  @id="create-mandaat"
+  @modalOpen={{this.creatingNewMandaat}}
+  @closeModal={{this.cancelCreateMandaat}}
+  @title="Nieuw Mandaat Aanmaken"
+  as |Modal|
+>
+  <Modal.Body>
+    <AuLabel>Type Mandaat:</AuLabel>
+    <PowerSelect
+      @allowClear={{false}}
+      @renderInPlace={{false}}
+      @searchEnabled={{this.searchEnabled}}
+      @noMatchesMessage={{"Geen resultaten gevonden"}}
+      @searchMessage={{"Typ om een type mandaat te zoeken"}}
+      @options={{this.availableBestuursfuncties}}
+      @selected={{this.selectedBestuursfunctie}}
+      @onChange={{fn (mut this.selectedBestuursfunctie)}}
+      @searchField="label"
+      as |singleselect|
+    >
+      {{singleselect.label}}
+    </PowerSelect>
+
+  </Modal.Body>
+  <Modal.Footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton
+            {{on "click" this.createMandaat.perform}}
+            @loading={{this.createMandaat.isRunning}}
+          >
+            Creëer Mandaat
+          </AuButton>
+          <AuButton @skin="secondary" {{on "click" this.cancelCreateMandaat}}>
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </Modal.Footer>
+</AuModal>
