@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class OrganenMandatarissenRoute extends Route {
+export default class MandatarissenSearchRoute extends Route {
   @service store;
 
   queryParams = {
@@ -13,22 +13,15 @@ export default class OrganenMandatarissenRoute extends Route {
   };
 
   async model(params) {
-    const parentModel = this.modelFor('organen.orgaan');
-    const bestuursOrgaan = parentModel.bestuursorgaan;
-
-    const options = this.getOptions(params, parentModel.currentBestuursOrgaan);
-
+    const options = this.getOptions(params);
     const mandatarissen = await this.store.query('mandataris', options);
 
     return {
       mandatarissen,
-      bestuursOrgaan,
-      bestuursPeriods: parentModel.bestuursPeriods,
-      selectedPeriod: parentModel.selectedPeriod,
     };
   }
 
-  getOptions(params, bestuursOrgaan) {
+  getOptions(params) {
     const queryParams = {
       sort: params.sort,
       page: {
@@ -36,22 +29,19 @@ export default class OrganenMandatarissenRoute extends Route {
         size: params.size,
       },
       filter: {
-        bekleedt: {
-          'bevat-in': {
-            id: bestuursOrgaan.id,
-          },
-        },
+        'is-bestuurlijke-alias-van': params.filter,
       },
       include: ['is-bestuurlijke-alias-van', 'bekleedt.bestuursfunctie'].join(
         ','
       ),
     };
 
-    if (params.filter) {
-      queryParams['filter']['is-bestuurlijke-alias-van'] = params.filter;
-    }
-
     return queryParams;
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.searchData = this.paramsFor('mandatarissen.search')['filter'];
   }
 
   @action

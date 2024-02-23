@@ -111,4 +111,8 @@ Router.map(function () {
   this.route('mandaat', function () {
     this.route('edit', { path: '/:id/edit' });
   });
+
+  this.route('mandatarissen', function () {
+    this.route('search');
+  });
 });

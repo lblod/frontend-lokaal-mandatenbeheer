@@ -1,0 +1,38 @@
+<div class="au-c-body-container">
+  <AuToolbar
+    @size="large"
+    @nowrap="true"
+    class="au-u-padding-bottom-none"
+    as |Group|
+  >
+    <Group>
+      <div class="au-o-flow">
+        <AuHeading @skin="2">Mandatarissen</AuHeading>
+      </div>
+    </Group>
+  </AuToolbar>
+
+  <div class="au-o-box">
+    <AuInput
+      value={{this.searchData}}
+      @icon="search"
+      @iconAlignment="left"
+      @width="block"
+      placeholder="Zoek mandataris"
+      {{on "input" (perform this.search value="target.value")}}
+    />
+  </div>
+
+  <div class="au-c-body-container au-c-body-container--scroll">
+    <div class="au-o-box">
+      <Organen::MandatarisTable
+        @content={{@model.mandatarissen}}
+        @isLoading={{this.isLoadingModel}}
+        @sort={{this.sort}}
+        @page={{this.page}}
+        @size={{this.size}}
+        @editRoute="mandatenbeheer.mandatarissen.edit"
+      />
+    </div>
+  </div>
+</div>
