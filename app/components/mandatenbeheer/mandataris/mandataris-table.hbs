@@ -40,7 +40,8 @@
         @currentSorting={{@sort}}
         @label="Einde mandaat"
       />
-      <th></th>
+      <th>{{! Bewerk Action }}</th>
+      <th>{{! Detail Action }}</th>
     </c.header>
 
     <c.body as |row|>
@@ -69,11 +70,17 @@
         {{moment-format row.start "DD-MM-YYYY"}}</td>
       <td>
         {{moment-format row.einde "DD-MM-YYYY"}}</td>
+      <td><LinkTo @route={{@editRoute}} class="au-c-link">
+          <AuIcon @icon="pencil" @alignment="left" />
+          Bewerk
+        </LinkTo></td>
       <td><LinkTo
-          @route={{@editRoute}}
+          @route={{@detailRoute}}
           @model={{row.isBestuurlijkeAliasVan.id}}
           class="au-c-link"
-        > Bewerk </LinkTo></td>
+        >
+          Meer info
+        </LinkTo></td>
     </c.body>
   </t.content>
 </AuDataTable>
