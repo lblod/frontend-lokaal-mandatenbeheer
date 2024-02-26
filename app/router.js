@@ -36,10 +36,18 @@ Router.map(function () {
     });
   });
 
+  this.route('mandaat', function () {
+    this.route('edit', { path: '/:id/edit' });
+  });
+
+  this.route('mandatarissen', function () {
+    this.route('search');
+    this.route('persoon', { path: '/:id/persoon' });
+  });
+
   this.route('mandatenbeheer', function () {
     this.route('mandatarissen', function () {
       this.route('new');
-      this.route('edit', { path: '/:id/edit' });
     });
 
     this.route('fracties', function () {
@@ -106,13 +114,5 @@ Router.map(function () {
 
   this.route('error/404', {
     path: '/*wildcard',
-  });
-
-  this.route('mandaat', function () {
-    this.route('edit', { path: '/:id/edit' });
-  });
-
-  this.route('mandatarissen', function () {
-    this.route('search');
   });
 });
