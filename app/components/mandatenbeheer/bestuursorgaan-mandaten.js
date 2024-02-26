@@ -15,12 +15,8 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @tracked removingMandaatId = null;
   @tracked orderedMandaten = [];
 
-  get mandaten() {
-    return this.args.bestuursorgaanIT ? this.args.bestuursorgaanIT.bevat : [];
-  }
-
   get loading() {
-    return this.mandaten.isPending;
+    return this.args.mandaten.isPending;
   }
 
   get loadingBestuursfuncties() {
@@ -29,7 +25,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   @keepLatestTask
   *computeBestuursfuncties() {
-    const mandaten = yield this.mandaten;
+    const mandaten = yield this.args.mandaten;
     const bestuursFunctiesUsed = yield Promise.all(
       mandaten.map((m) => m.bestuursfunctie)
     );
@@ -90,7 +86,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   *computeOrderedMandaten() {
     // using a getter on sorted mandaten is not possible because mandaten is a promise array and it
     // is deprecated to call sortby on that directly, sortby is also deprecated it seems...
-    const mandaten = yield this.mandaten;
+    const mandaten = yield this.args.mandaten;
     this.orderedMandaten = mandaten.slice().sort((a, b) => {
       return a.get('bestuursfunctie.label') > b.get('bestuursfunctie.label')
         ? 1
