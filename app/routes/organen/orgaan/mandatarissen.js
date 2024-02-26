@@ -14,10 +14,10 @@ export default class OrganenMandatarissenRoute extends Route {
 
   async model(params) {
     const parentModel = this.modelFor('organen.orgaan');
-    const bestuursOrgaan = parentModel.bestuursorgaan;
+    const bestuursOrgaan = await parentModel.bestuursorgaan;
 
     let mandatarissen;
-    if (parentModel.bestuursOrgaan) {
+    if (bestuursOrgaan) {
       const options = this.getOptions(
         params,
         parentModel.currentBestuursOrgaan

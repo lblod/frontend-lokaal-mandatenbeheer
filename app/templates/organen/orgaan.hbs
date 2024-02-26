@@ -1,4 +1,4 @@
-{{page-title this.model.besetuursorgaan.naam}}
+{{page-title this.model.bestuursorgaan.naam}}
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
     <AuHeading @skin="2">
@@ -36,6 +36,7 @@
   </div>
 
   <Mandatenbeheer::BestuursorgaanMandaten
+    @mandaten={{this.model.mandaten}}
     @bestuursorgaanIT={{this.model.currentBestuursOrgaan}}
   />
 
