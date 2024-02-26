@@ -1,7 +1,7 @@
 <div class="au-o-box no-pagination" {{did-insert this.initialize.perform}}>
   <AuDataTable
     @content={{this.orderedMandaten}}
-    @isLoading={{this.loading}}
+    @isLoading={{@isLoadingModel}}
     @noDataMessage="Geen mandaten gevonden"
     @page={{0}}
     @size={{100}}

@@ -15,10 +15,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @tracked removingMandaatId = null;
   @tracked orderedMandaten = [];
 
-  get loading() {
-    return this.args.mandaten.isPending;
-  }
-
   get loadingBestuursfuncties() {
     return this.computeBestuursfuncties.isRunning;
   }
