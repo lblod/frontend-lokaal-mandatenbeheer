@@ -28,13 +28,17 @@ export default class OrganenOrgaanRoute extends Route {
     );
 
     const tijdsspecialisaties = await bestuursorgaan.heeftTijdsspecialisaties;
-    const { bestuursOrgaan, startDate, endDate } =
-      getSelectedBestuursorgaanWithPeriods(tijdsspecialisaties, {
-        startDate: params.startDate,
-        endDate: params.endDate,
-      });
+    let bestuursOrgaan, startDate, endDate, bestuursPeriods;
+    if (tijdsspecialisaties.length != 0) {
+      ({ bestuursOrgaan, startDate, endDate } =
+        getSelectedBestuursorgaanWithPeriods(tijdsspecialisaties, {
+          startDate: params.startDate,
+          endDate: params.endDate,
+        }));
 
-    const bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
+      bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
+    }
+
     const selectedPeriod = { startDate, endDate };
 
     const formDefinition = getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);

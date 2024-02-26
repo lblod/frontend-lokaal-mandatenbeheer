@@ -16,9 +16,15 @@ export default class OrganenMandatarissenRoute extends Route {
     const parentModel = this.modelFor('organen.orgaan');
     const bestuursOrgaan = parentModel.bestuursorgaan;
 
-    const options = this.getOptions(params, parentModel.currentBestuursOrgaan);
+    let mandatarissen;
+    if (parentModel.bestuursOrgaan) {
+      const options = this.getOptions(
+        params,
+        parentModel.currentBestuursOrgaan
+      );
 
-    const mandatarissen = await this.store.query('mandataris', options);
+      mandatarissen = await this.store.query('mandataris', options);
+    }
 
     return {
       mandatarissen,
