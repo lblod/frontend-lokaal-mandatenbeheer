@@ -25,13 +25,13 @@
 
   <div class="au-c-body-container au-c-body-container--scroll">
     <div class="au-o-box">
-      <Organen::MandatarisTable
-        @content={{@model.mandatarissen}}
+      <Mandatarissen::PersoonTable
+        @content={{@model.personen}}
         @isLoading={{this.isLoadingModel}}
         @sort={{this.sort}}
         @page={{this.page}}
         @size={{this.size}}
-        @editRoute="mandatenbeheer.mandatarissen.edit"
+        @detail={{this.goToPersonPage}}
       />
     </div>
   </div>
