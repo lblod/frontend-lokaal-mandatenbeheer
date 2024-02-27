@@ -27,23 +27,25 @@
         <AuButton @skin="secondary" {{on "click" this.correct}}>Corrigeer fouten</AuButton>
       </AuContent>
     </div>
+    <div class="au-o-grid__item au-u-1-1 au-u-text-right">
+      <AuButton @skin="secondary" {{on "click" @edit}}>Annuleer</AuButton>
+    </div>
   </div>
 {{/unless}}
-<div class="au-o-region-large">
-  {{#if this.isTerminating}}
-    <Form::Instance
-      @instanceId={{@mandataris.id}}
-      @form={{@mandatarisEindeEditForm}}
-      @onSave={{this.onSave}}
-      @onCancel={{this.cancel}}
-    />
-  {{else if this.isCorrecting}}
-    <Form::Instance
-      @instanceId={{@mandataris.id}}
-      @form={{@mandatarisEditForm}}
-      @onSave={{this.onSave}}
-      @onCancel={{this.cancel}}
-      @buildMetaTtl={{this.buildMetaTtl}}
-    />
-  {{/if}}
-</div>
+
+{{#if this.isTerminating}}
+  <Form::Instance
+    @instanceId={{@mandataris.id}}
+    @form={{@mandatarisEindeEditForm}}
+    @onSave={{this.onSave}}
+    @onCancel={{this.cancel}}
+  />
+{{else if this.isCorrecting}}
+  <Form::Instance
+    @instanceId={{@mandataris.id}}
+    @form={{@mandatarisEditForm}}
+    @onSave={{this.onSave}}
+    @onCancel={{this.cancel}}
+    @buildMetaTtl={{this.buildMetaTtl}}
+  />
+{{/if}}
