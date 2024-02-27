@@ -7,11 +7,25 @@ export default class MandatarissenPersoonRoute extends Route {
 
   async model(params) {
     const persoon = await this.store.findRecord('persoon', params.id);
-    const mandatarissen = this.getMandatarissen(persoon);
+    const mandatarissen = await this.getMandatarissen(persoon);
+
+    const actieveMandatarissen = [];
+    const inactieveMandatarissen = [];
+    await Promise.all(
+      mandatarissen.map((mandataris) => {
+        const active = mandataris.isActive;
+        if (active) {
+          actieveMandatarissen.push(mandataris);
+        } else {
+          inactieveMandatarissen.push(mandataris);
+        }
+      })
+    );
 
     return RSVP.hash({
       persoon,
-      mandatarissen,
+      actieveMandatarissen,
+      inactieveMandatarissen,
     });
   }
 

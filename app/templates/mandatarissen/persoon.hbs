@@ -19,11 +19,9 @@
     <AuHr />
 
     <ul class="au-c-list-vertical">
-      {{#each @model.mandatarissen as |mandataris|}}
-        {{#if mandataris.isActive}}
-          <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
-          <AuHr />
-        {{/if}}
+      {{#each @model.actieveMandatarissen as |mandataris|}}
+        <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
+        <AuHr />
       {{/each}}
     </ul>
 
@@ -34,11 +32,9 @@
     <AuHr />
 
     <ul class="au-c-list-vertical">
-      {{#each @model.mandatarissen as |mandataris|}}
-        {{#unless mandataris.isActive}}
-          <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
-          <AuHr />
-        {{/unless}}
+      {{#each @model.inactieveMandatarissen as |mandataris|}}
+        <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
+        <AuHr />
       {{/each}}
     </ul>
 
