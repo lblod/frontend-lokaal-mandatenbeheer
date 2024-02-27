@@ -18,10 +18,14 @@ export default class MandatarissenMandatarisRoute extends Route {
     );
     const mandatarisEditForm = getFormFrom(this.store, MANDATARIS_EDIT_FORM_ID);
 
+    const bestuursorganen = await (await mandataris.bekleedt).get('bevatIn');
+
     return RSVP.hash({
       mandataris,
       mandatarisEindeEditForm,
       mandatarisEditForm,
+      // TODO should be all bestuursorganen, but this is not supported by the mandateselector for now.
+      bestuursorgaan: bestuursorganen[0],
     });
   }
 

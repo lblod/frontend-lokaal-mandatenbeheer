@@ -54,10 +54,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
 
   @action
   async buildMetaTtl() {
-    // TODO should be all bestuursorganen, but this is not supported by the mandateselector for now.
-    const bestuursorganen = await (
-      await this.args.mandataris.bekleedt
-    ).get('bevatIn');
-    return getBestuursorgaanMetaTtl(bestuursorganen[0]);
+    return getBestuursorgaanMetaTtl(this.args.bestuursorgaan);
   }
 }
