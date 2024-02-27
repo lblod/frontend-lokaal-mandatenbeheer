@@ -8,11 +8,11 @@ export default class OrganenMandatarisNewRoute extends Route {
   @service store;
 
   async model() {
-    const parentModel = this.modelFor('organen.orgaan');
+    const { currentBestuursorgaan } = this.modelFor('organen.orgaan');
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
 
     return RSVP.hash({
-      bestuursorgaan: parentModel.currentBestuursOrgaan,
+      currentBestuursorgaan,
       mandatarisNewForm,
     });
   }
