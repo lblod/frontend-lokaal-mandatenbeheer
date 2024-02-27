@@ -17,7 +17,7 @@ export default class OrganenMandatarissenController extends Controller {
 
   @action
   addMandataris() {
-    this.router.transitionTo('organen.orgaan.mandatarissen.new');
+    this.router.transitionTo('organen.orgaan.mandataris.new');
   }
 
   @restartableTask

@@ -6,7 +6,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
 
-export default class OrganenMandatarissenNewController extends Controller {
+export default class OrganenMandatarisNewController extends Controller {
   @service router;
   @service store;
 

@@ -28,7 +28,8 @@ Router.map(function () {
 
   this.route('organen', function () {
     this.route('orgaan', { path: '/:orgaan_id' }, function () {
-      this.route('mandatarissen', function () {
+      this.route('mandatarissen');
+      this.route('mandataris', function () {
         this.route('new');
       });
     });
