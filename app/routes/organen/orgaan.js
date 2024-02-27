@@ -28,7 +28,8 @@ export default class OrganenOrgaanRoute extends Route {
     );
 
     const tijdsspecialisaties = await bestuursorgaan.heeftTijdsspecialisaties;
-    let bestuursOrgaan, startDate, endDate, bestuursPeriods, mandaten;
+    let mandaten = [];
+    let bestuursOrgaan, startDate, endDate, bestuursPeriods;
     if (tijdsspecialisaties.length != 0) {
       ({ bestuursOrgaan, startDate, endDate } =
         getSelectedBestuursorgaanWithPeriods(tijdsspecialisaties, {
