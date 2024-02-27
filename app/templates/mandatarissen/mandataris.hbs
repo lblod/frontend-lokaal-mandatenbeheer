@@ -19,6 +19,13 @@
   </div>
 
   {{#if this.editing}}
+    <AuToolbar @border="bottom" @size="medium" as |Group|>
+      <Group>
+        <AuHeading @skin="3">
+          Bewerk mandaat
+        </AuHeading>
+      </Group>
+    </AuToolbar>
     <div class="au-o-box">
       <Mandatarissen::MandatarisEditPrompt
         class="au-c-collapsible au-u-margin-top-small"
