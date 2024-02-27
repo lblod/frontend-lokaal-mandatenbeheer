@@ -1,9 +1,6 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 
 export default class MandatarisCardComponent extends Component {
-  @service router;
-
   get rol() {
     return this.args.mandataris.bekleedt.get('bestuursfunctie').get('label');
   }
