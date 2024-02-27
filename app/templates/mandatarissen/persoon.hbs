@@ -1,0 +1,64 @@
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Bewerk mandataris<br /><strong
+      >{{@model.persoon.gebruikteVoornaam}}
+        {{@model.persoon.achternaam}}</strong></AuHeading>
+  </Group>
+</AuToolbar>
+<div class="au-c-body-container au-c-body-container--scroll">
+
+  <div class="au-o-box">
+    <Person::Card @persoon={{@model.persoon}} />
+  </div>
+
+  <div class="au-o-box">
+    <AuHeading @level="3" @skin="4">
+      Huidige mandaten
+    </AuHeading>
+
+    <AuHr />
+
+    <ul class="au-c-list-vertical">
+      {{#each @model.mandatarissen as |mandataris|}}
+        {{#if mandataris.isActive}}
+          <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
+          <AuHr />
+        {{/if}}
+      {{/each}}
+    </ul>
+
+    <AuHeading @level="3" @skin="4">
+      Beëindigde mandaten
+    </AuHeading>
+
+    <AuHr />
+
+    <ul class="au-c-list-vertical">
+      {{#each @model.mandatarissen as |mandataris|}}
+        {{#unless mandataris.isActive}}
+          <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
+          <AuHr />
+        {{/unless}}
+      {{/each}}
+    </ul>
+
+  </div>
+
+  <div class="au-o-box">
+    <Tmp::Todo>
+      <div>Here you should be able to select a bestuursorgaan, and transition to
+        the create mandataris page within that bestuurorgaan. Might be a bit
+        trickty with regard to bestuursorganen in de tijd.</div>
+      <div class="au-u-padding-top-small">
+        <AuButton
+          @skin="secondary"
+          @width="block"
+          {{on "click" this.createMandataris}}
+        >
+          <AuIcon @icon="add" @alignment="left" />
+          Voeg nieuw mandaat toe
+        </AuButton>
+      </div>
+    </Tmp::Todo>
+  </div>
+</div>

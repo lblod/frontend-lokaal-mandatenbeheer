@@ -32,11 +32,9 @@
       </td>
       <td>{{await (this.mandaten row)}}</td>
       <td>
-        <AuButton
-          @icon="pencil"
-          @skin="link"
-          {{on "click" (fn @detail row)}}
-        >Details</AuButton>
+        <LinkTo @route={{@detailRoute}} @model={{row.id}} class="au-c-link">
+          Meer info
+        </LinkTo>
       </td>
     </c.body>
   </t.content>

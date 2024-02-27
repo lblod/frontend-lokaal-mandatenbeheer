@@ -58,6 +58,16 @@ export default class SharedBreadCrumbComponent extends Component {
       route: 'mandatarissen.search',
       crumbs: [{ label: 'Mandatarissen' }],
     },
+    {
+      route: 'mandatarissen.persoon',
+      crumbs: [
+        {
+          label: 'Mandatarissen',
+          link: 'mandatarissen.search',
+        },
+        { label: 'Details persoon' },
+      ],
+    },
   ];
 
   mandatenbeheer = [
