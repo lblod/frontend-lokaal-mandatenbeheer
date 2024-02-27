@@ -14,23 +14,17 @@ export default class OrganenMandatarissenRoute extends Route {
 
   async model(params) {
     const parentModel = this.modelFor('organen.orgaan');
-    const currentBestuursOrgaan = await parentModel.currentBestuursOrgaan;
+    const currentBestuursorgaan = await parentModel.currentBestuursorgaan;
 
     let mandatarissen;
-    if (currentBestuursOrgaan) {
-      const options = this.getOptions(
-        params,
-        parentModel.currentBestuursOrgaan
-      );
+    if (currentBestuursorgaan) {
+      const options = this.getOptions(params, currentBestuursorgaan);
 
       mandatarissen = await this.store.query('mandataris', options);
     }
 
     return {
       mandatarissen,
-      bestuursOrgaan: parentModel.bestuursorgaan,
-      bestuursPeriods: parentModel.bestuursPeriods,
-      selectedPeriod: parentModel.selectedPeriod,
     };
   }
 
@@ -60,6 +54,7 @@ export default class OrganenMandatarissenRoute extends Route {
     return queryParams;
   }
 
+  // TODO is this still necessary?
   @action
   reloadModel() {
     this.refresh();
