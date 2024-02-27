@@ -22,6 +22,10 @@
       {{#each @model.actieveMandatarissen as |mandataris|}}
         <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
         <AuHr />
+      {{else}}
+        <AuPill @icon="info-circle" class="au-u-margin-bottom">
+          Geen huidige mandaten beschikbaar
+        </AuPill>
       {{/each}}
     </ul>
 
@@ -35,6 +39,10 @@
       {{#each @model.inactieveMandatarissen as |mandataris|}}
         <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
         <AuHr />
+      {{else}}
+        <AuPill @icon="info-circle">
+          Geen beëindigde mandaten beschikbaar
+        </AuPill>
       {{/each}}
     </ul>
 
