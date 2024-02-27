@@ -12,7 +12,6 @@ export default class MandatarissenMandatarisRoute extends Route {
 
   async model(params) {
     const mandataris = await this.getMandataris(params.id);
-    console.log(mandataris);
     const mandatarisEindeEditForm = getFormFrom(
       this.store,
       MANDATARIS_EINDE_EDIT_FORM_ID
