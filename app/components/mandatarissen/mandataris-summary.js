@@ -28,7 +28,7 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
   }
 
   @action
-  linkToDetailPage() {
-    this.router.transitionTo('under-construction');
+  linkToDetailPage(mandataris) {
+    this.router.transitionTo('mandatarissen.mandataris', mandataris.id);
   }
 }
