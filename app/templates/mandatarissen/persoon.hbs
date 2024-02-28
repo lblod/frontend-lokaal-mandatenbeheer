@@ -82,6 +82,7 @@
       @selected={{this.selectedBestuursorgaan}}
       @onChange={{fn (mut this.selectedBestuursorgaan)}}
       @searchField="naam"
+      @placeholder="Selecteer een bestuursorgaan"
       as |select|
     >
       {{select.naam}}
@@ -91,7 +92,10 @@
   <Modal.Footer>
     <AuToolbar as |Group|>
       <Group>
-        <AuButton {{on "click" this.createMandataris}}>
+        <AuButton
+          @disabled={{not this.selectedBestuursorgaan}}
+          {{on "click" this.createMandataris}}
+        >
           Voeg nieuw mandaat toe
         </AuButton>
         <AuButton @skin="secondary" {{on "click" this.toggleModal}}>
