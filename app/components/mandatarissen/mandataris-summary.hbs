@@ -5,6 +5,7 @@
     </p>
   </div>
   <div class="au-o-grid__item au-u-2-5 au-u-text-right">
+    <AuButton {{on "click" this.toggleChangingState}}>Verander Toestand</AuButton>
     <AuButton
       {{on "click" (fn this.linkToDetailPage @mandataris)}}
     >Details</AuButton>
@@ -40,3 +41,18 @@
     </AuContent>
   </div>
 </div>
+<AuModal
+  @title={{(concat
+    "Verander Toestand " @mandataris.bekleedt.bestuursfunctie.label
+  )}}
+  @modalOpen={{this.changingState}}
+  @closable={{true}}
+  @closeModal={{this.toggleChangingState}}
+>
+  <Mandatarissen::UpdateState
+    @noTitle={{true}}
+    @onCancel={{this.toggleChangingState}}
+    @onStateChanged={{this.onUpdateState}}
+    @mandataris={{@mandataris}}
+  />
+</AuModal>

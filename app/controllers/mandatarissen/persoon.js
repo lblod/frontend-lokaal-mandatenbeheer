@@ -27,4 +27,9 @@ export default class MandatarissenPersoonController extends Controller {
       this.selectedBestuursorgaan.id
     );
   }
+
+  @action
+  handleMandatarisUpdate() {
+    this.send('reloadModel');
+  }
 }

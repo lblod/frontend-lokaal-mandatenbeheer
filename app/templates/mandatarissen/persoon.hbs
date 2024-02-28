@@ -20,7 +20,10 @@
 
     <ul class="au-c-list-vertical">
       {{#each @model.actieveMandatarissen as |mandataris|}}
-        <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
+        <Mandatarissen::MandatarisSummary
+          @mandataris={{mandataris}}
+          @onUpdate={{this.handleMandatarisUpdate}}
+        />
         <AuHr />
       {{else}}
         <AuPill @icon="info-circle" class="au-u-margin-bottom">
@@ -37,7 +40,10 @@
 
     <ul class="au-c-list-vertical">
       {{#each @model.inactieveMandatarissen as |mandataris|}}
-        <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
+        <Mandatarissen::MandatarisSummary
+          @mandataris={{mandataris}}
+          @onUpdate={{this.handleMandatarisUpdate}}
+        />
         <AuHr />
       {{else}}
         <AuPill @icon="info-circle">
