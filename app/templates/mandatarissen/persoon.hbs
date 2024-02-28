@@ -49,20 +49,59 @@
   </div>
 
   <div class="au-o-box">
-    <Tmp::Todo>
-      <div>Here you should be able to select a bestuursorgaan, and transition to
-        the create mandataris page within that bestuurorgaan. Might be a bit
-        trickty with regard to bestuursorganen in de tijd.</div>
-      <div class="au-u-padding-top-small">
-        <AuButton
-          @skin="secondary"
-          @width="block"
-          {{on "click" this.createMandataris}}
-        >
-          <AuIcon @icon="add" @alignment="left" />
-          Voeg nieuw mandaat toe
-        </AuButton>
-      </div>
-    </Tmp::Todo>
+    <div class="au-u-padding-top-small">
+      <AuButton
+        @skin="secondary"
+        @width="block"
+        {{on "click" this.toggleModal}}
+      >
+        <AuIcon @icon="add" @alignment="left" />
+        Voeg nieuw mandaat toe
+      </AuButton>
+    </div>
   </div>
 </div>
+
+<AuModal
+  @title="Selecteer bestuursorgaan"
+  @modalOpen={{this.isModalOpen}}
+  @closeModal={{this.closeModal}}
+  as |Modal|
+>
+  <Modal.Body>
+    <AuContent class="au-u-margin-bottom-small">
+      Selecteer een bestuursorgaan waaraan je een mandaat wilt toevoegen.
+    </AuContent>
+    <PowerSelect
+      @allowClear={{false}}
+      @renderInPlace={{false}}
+      @searchEnabled={{true}}
+      @noMatchesMessage={{"Geen resultaten gevonden"}}
+      @searchMessage={{"Typ om een bestuursorgaan te zoeken"}}
+      @options={{@model.bestuursorganen}}
+      @selected={{this.selectedBestuursorgaan}}
+      @onChange={{fn (mut this.selectedBestuursorgaan)}}
+      @searchField="naam"
+      @placeholder="Selecteer een bestuursorgaan"
+      as |select|
+    >
+      {{select.naam}}
+    </PowerSelect>
+
+  </Modal.Body>
+  <Modal.Footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButton
+          @disabled={{not this.selectedBestuursorgaan}}
+          {{on "click" this.createMandataris}}
+        >
+          Voeg nieuw mandaat toe
+        </AuButton>
+        <AuButton @skin="secondary" {{on "click" this.closeModal}}>
+          Annuleer
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </Modal.Footer>
+</AuModal>
