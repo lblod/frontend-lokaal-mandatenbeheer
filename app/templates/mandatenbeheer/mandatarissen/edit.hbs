@@ -7,15 +7,6 @@
 </AuToolbar>
 <div class="au-c-body-container au-c-body-container--scroll">
 
-  <Mandatenbeheer::Mandataris::MandatarisView
-    class="au-c-body-container"
-    @persoon={{@model.persoon}}
-    @bestuursorgaan={{@model.bestuursorgaan}}
-    @mandatarissen={{@model.mandatarissen}}
-    @mandatarisEindeEditForm={{@model.mandatarisEindeEditForm}}
-    @mandatarisEditForm={{@model.mandatarisEditForm}}
-  />
-
   <div class="au-o-box">
     {{#if this.createMode}}
       <Form::NewInstance
