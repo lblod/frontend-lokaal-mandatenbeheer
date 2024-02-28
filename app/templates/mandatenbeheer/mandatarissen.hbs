@@ -58,15 +58,16 @@
 
   <div class="au-c-body-container au-c-body-container--scroll">
     <div class="au-o-box">
-      <Mandatenbeheer::Mandataris::MandatarisTable
-        @content={{@model.mandatarissen}}
-        @sort={{this.sort}}
-        @page={{this.page}}
-        @size={{this.size}}
-        @editRoute="under-construction"
-        @detailRoute="mandatenbeheer.mandatarissen.edit"
-        @mandatarisBestuursorganen={{@model.mandatarisBestuursorganen}}
-      />
+      <AuAlert
+        @icon="alert-triangle"
+        @title="This content has moved"
+        @skin="warning"
+      >
+        <div>This page will be removed in the near future, this logic can now be
+          found in the organen module.</div>
+
+        <AuLink @route="organen" @skin="button">Ga naar de bestuursorganen</AuLink>
+      </AuAlert>
     </div>
   </div>
 
