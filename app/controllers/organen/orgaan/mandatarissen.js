@@ -15,6 +15,11 @@ export default class OrganenMandatarissenController extends Controller {
 
   @tracked searchData;
 
+  @action
+  addMandataris() {
+    this.router.transitionTo('organen.orgaan.mandataris.new');
+  }
+
   @restartableTask
   *search(searchData) {
     yield timeout(SEARCH_TIMEOUT);

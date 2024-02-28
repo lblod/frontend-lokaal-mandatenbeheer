@@ -16,7 +16,6 @@
     <AuHeading @skin="3">Actieve bestuursorganen</AuHeading>
     <Organen::ActiveOrgaanTable
       @content={{@model.activeOrganen}}
-      @isLoading={{this.isLoadingModel}}
       @sort={{this.active_sort}}
       @editRoute="organen.beheer.edit"
       @archive={{this.archiveOrgaan}}
@@ -26,7 +25,6 @@
     <AuHeading @skin="3">Inactieve bestuursorganen</AuHeading>
     <Organen::InactiveOrgaanTable
       @content={{@model.inactiveOrganen}}
-      @isLoading={{this.isLoadingModel}}
       @sort={{this.inactive_sort}}
       @editRoute="organen.beheer.edit"
       @dearchive={{this.deArchiveOrgaan}}
