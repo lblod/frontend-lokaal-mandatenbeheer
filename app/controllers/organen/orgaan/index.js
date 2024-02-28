@@ -6,7 +6,7 @@ export default class OrganenOrgaanIndexController extends Controller {
   @service router;
 
   @action
-  edit() {
+  onEdit() {
     this.router.transitionTo('organen.beheer.edit', this.model.instanceId);
   }
 }
