@@ -54,9 +54,4 @@ export default class MandatarissenPersoonRoute extends Route {
     let mandatarissen = await this.store.query('mandataris', queryParams);
     return mandatarissen.slice();
   }
-
-  @action
-  reloadModel() {
-    this.refresh();
-  }
 }

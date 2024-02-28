@@ -47,7 +47,8 @@ export default class MandatarissenPersoonTable extends Component {
       einde: this.args.mandataris.einde,
     });
     this.args.mandataris.einde = this.date;
-    return Promise.all([newMandataris.save(), this.args.mandataris.save()]);
+    await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
+    return newMandataris;
   }
 
   endMandataris() {
@@ -55,9 +56,9 @@ export default class MandatarissenPersoonTable extends Component {
     return this.args.mandataris.save();
   }
 
-  onStateChanged() {
+  onStateChanged(newMandataris) {
     if (this.args.onStateChanged) {
-      this.args.onStateChanged();
+      this.args.onStateChanged(newMandataris);
     }
   }
 
@@ -71,19 +72,20 @@ export default class MandatarissenPersoonTable extends Component {
     }
 
     yield promise
-      .then(() => {
+      .then((newMandataris) => {
         showSuccessToast(
           this.toaster,
           'Mandataris status werd succesvol aangepast.'
         );
+        this.onStateChanged(newMandataris);
       })
       .catch(() => {
         showErrorToast(
           this.toaster,
           'Er ging iets mis bij het aanpassen van de mandataris status.'
         );
+        this.onStateChanged(this.args.mandataris);
       });
-    this.onStateChanged();
   }
 
   @action

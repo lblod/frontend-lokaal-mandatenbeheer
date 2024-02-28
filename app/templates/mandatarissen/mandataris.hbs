@@ -11,32 +11,19 @@
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
-    <Mandatarissen::MandatarisCard
-      @mandataris={{@model.mandataris}}
-      @edit={{this.edit}}
-      @editing={{this.editing}}
-    />
+    <Mandatarissen::MandatarisCard @mandataris={{@model.mandataris}} />
   </div>
 
-  {{#if this.editing}}
-    <AuToolbar @border="bottom" @size="medium" as |Group|>
-      <Group>
-        <AuHeading @skin="3">
-          Bewerk mandaat
-        </AuHeading>
-      </Group>
-    </AuToolbar>
-    <div class="au-o-box">
-      <Mandatarissen::MandatarisEditPrompt
-        class="au-c-collapsible au-u-margin-top-small"
-        @mandataris={{@model.mandataris}}
-        @edit={{this.edit}}
-        @bestuursorgaan={{@model.bestuursorgaan}}
-        @mandatarisEindeEditForm={{@model.mandatarisEindeEditForm}}
-        @mandatarisEditForm={{@model.mandatarisEditForm}}
-      />
-    </div>
-  {{/if}}
+  <div class="au-o-box">
+    <Mandatarissen::MandatarisEditPrompt
+      class="au-c-collapsible au-u-margin-top-small"
+      @mandataris={{@model.mandataris}}
+      @bestuursorgaan={{@model.bestuursorgaan}}
+      @mandatarisEindeEditForm={{@model.mandatarisEindeEditForm}}
+      @mandatarisEditForm={{@model.mandatarisEditForm}}
+      @onMandatarisChanged={{this.onMandatarisChanged}}
+    />
+  </div>
 
   <div class="au-o-box">
     <Tmp::Todo>

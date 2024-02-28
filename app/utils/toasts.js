@@ -5,14 +5,14 @@ const notifyFormSavedSuccessfully = (toaster) => {
   });
 };
 
-const showSuccessToast = (toaster, message) => {
-  toaster.success(message, {
-    timeout: 5000,
+const showSuccessToast = (toaster, message, title = 'Succes') => {
+  toaster.success(message, title, {
+    timeOut: 5000,
   });
 };
 
-const showErrorToast = (toaster, message) => {
-  toaster.error(message);
+const showErrorToast = (toaster, message, title = 'Error') => {
+  toaster.error(message, title);
 };
 
 export { notifyFormSavedSuccessfully, showSuccessToast, showErrorToast };
