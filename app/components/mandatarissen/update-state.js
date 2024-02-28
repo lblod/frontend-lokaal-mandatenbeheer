@@ -19,17 +19,24 @@ export default class MandatarissenPersoonTable extends Component {
   }
 
   get statusOptions() {
-    return [...this.mandatarisStatus.statuses].sort((a, b) => {
-      return a.label.localeCompare(b.label);
-    });
+    return this.mandatarisStatus.statuses
+      .filter((status) => status.id !== this.currentStatus?.id)
+      .sort((a, b) => {
+        return a.label.localeCompare(b.label);
+      });
   }
 
   get currentStatus() {
+    if (this.args.mandataris.einde.getTime() < new Date().getTime()) {
+      return this.mandatarisStatus.endedState;
+    }
     return this.args.mandataris.status;
   }
 
   get validDate() {
-    return this.date && this.date >= this.args.mandataris.start;
+    return (
+      this.date && this.date.getTime() >= this.args.mandataris.start.getTime()
+    );
   }
 
   get disabled() {

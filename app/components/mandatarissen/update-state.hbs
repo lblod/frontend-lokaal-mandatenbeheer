@@ -12,7 +12,7 @@
     </AuLabel>
     <div>
       {{@mandataris.bekleedt.bestuursfunctie.label}},
-      {{this.currentStatus.label}}
+      {{@mandataris.status.label}}
       van
       {{moment-format @mandataris.start "DD-MM-YYYY"}}
       {{#if @mandataris.einde}}
@@ -42,7 +42,20 @@
     <AuLabel>
       Vanaf
     </AuLabel>
-    <AuDatePicker @value={{this.date}} {{on "change" this.updateDate}} />
+    <AuDatePicker
+      @value={{this.date}}
+      @onChange={{this.updateDate}}
+      @error={{not this.validDate}}
+      @alignment="top"
+    />
+    {{#unless this.validDate}}
+      <AuAlert
+        @size="small"
+        @closable={{false}}
+        @skin="error"
+        class="au-u-margin-top"
+      >De gekozen datum moet na de startdatum liggen van het huidige mandaat.</AuAlert>
+    {{/unless}}
   </div>
   <AuToolbar class="au-u-margin-top" as |Group|>
     <Group>
