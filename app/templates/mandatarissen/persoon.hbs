@@ -53,7 +53,7 @@
       <AuButton
         @skin="secondary"
         @width="block"
-        {{on "click" this.createMandataris}}
+        {{on "click" this.toggleModal}}
       >
         <AuIcon @icon="add" @alignment="left" />
         Voeg nieuw mandaat toe
@@ -61,3 +61,34 @@
     </div>
   </div>
 </div>
+
+<AuModal
+  @title="Selecteer bestuursorgaan"
+  @modalOpen={{this.isModalOpen}}
+  @closeModal={{this.toggleModal}}
+>
+  <div class="au-o-box">
+    <PowerSelect
+      @allowClear={{false}}
+      @renderInPlace={{false}}
+      @searchEnabled={{true}}
+      @noMatchesMessage={{"Geen resultaten gevonden"}}
+      @searchMessage={{"Typ om een bestuursorgaan te zoeken"}}
+      @options={{@model.bestuursorganen}}
+      @selected={{this.selectedBestuursorgaan}}
+      @onChange={{fn (mut this.selectedBestuursorgaan)}}
+      @searchField="naam"
+      as |select|
+    >
+      {{select.naam}}
+    </PowerSelect>
+    <AuButton
+      @skin="secondary"
+      @width="block"
+      {{on "click" this.createMandataris}}
+    >
+      <AuIcon @icon="add" @alignment="left" />
+      Voeg nieuw mandaat toe
+    </AuButton>
+  </div>
+</AuModal>
