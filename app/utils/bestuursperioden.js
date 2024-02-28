@@ -12,7 +12,7 @@ export const getBestuursPeriods = (organen) => {
 
 const getBestuursPeriodsExtended = (organen) => {
   const periods = organen.map((b) => ({
-    bestuursOrgaan: b,
+    bestuursorgaan: b,
     startDate: moment(b.bindingStart).format('YYYY-MM-DD'),
     endDate: b.bindingEinde
       ? moment(b.bindingEinde).format('YYYY-MM-DD')
@@ -39,7 +39,7 @@ export const getSelectedBestuursorgaanWithPeriods = (
 export const getCurrentBestuursorgaan = (organen) => {
   const sortedPeriods = getBestuursPeriodsExtended(organen);
   const selectedPeriod = getClosestPeriod(sortedPeriods);
-  return selectedPeriod.bestuursOrgaan;
+  return selectedPeriod.bestuursorgaan;
 };
 
 const getClosestPeriod = (periods) => {

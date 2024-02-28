@@ -1,15 +1,3 @@
-<AuToolbar @size="large" as |Group|>
-  <Group>
-    <Mandatenbeheer::BestuursperiodenSelector
-      @options={{@model.bestuursPeriods}}
-      @selectedPeriod={{@model.selectedPeriod}}
-      @onSelect={{this.selectPeriod}}
-    />
-    {{#unless (await this.model.bestuursOrgaan.isDecretaal)}}
-      <BestuursperiodeNewButton @bestuursorgaan={{this.model.bestuursOrgaan}} />
-    {{/unless}}
-  </Group>
-</AuToolbar>
 <AuToolbar
   @size="large"
   @nowrap="true"

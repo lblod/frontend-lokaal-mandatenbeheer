@@ -29,6 +29,6 @@ export default class OrganenMandatarisNewController extends Controller {
 
   @action
   buildMetaTtl() {
-    return getBestuursorgaanMetaTtl(this.model.bestuursorgaan);
+    return getBestuursorgaanMetaTtl(this.model.currentBestuursorgaan);
   }
 }

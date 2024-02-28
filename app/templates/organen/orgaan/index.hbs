@@ -1,0 +1,15 @@
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{this.model.instanceId}}
+      @form={{this.model.bestuursorgaanFormDefinition}}
+      @isEditable={{false}}
+    />
+
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButton @skin="secondary" {{on "click" this.onEdit}}>Pas aan</AuButton>
+      </Group>
+    </AuToolbar>
+  </div>
+</div>
