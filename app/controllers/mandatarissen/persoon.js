@@ -7,6 +7,9 @@ export default class MandatarissenPersoonController extends Controller {
 
   @action
   createMandataris() {
-    this.router.transitionTo('under-construction');
+    this.router.transitionTo(
+      'organen.orgaan.mandatarissen',
+      this.model.bestuursorganen[0].id
+    );
   }
 }

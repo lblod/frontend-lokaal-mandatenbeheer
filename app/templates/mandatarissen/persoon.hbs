@@ -49,20 +49,15 @@
   </div>
 
   <div class="au-o-box">
-    <Tmp::Todo>
-      <div>Here you should be able to select a bestuursorgaan, and transition to
-        the create mandataris page within that bestuurorgaan. Might be a bit
-        trickty with regard to bestuursorganen in de tijd.</div>
-      <div class="au-u-padding-top-small">
-        <AuButton
-          @skin="secondary"
-          @width="block"
-          {{on "click" this.createMandataris}}
-        >
-          <AuIcon @icon="add" @alignment="left" />
-          Voeg nieuw mandaat toe
-        </AuButton>
-      </div>
-    </Tmp::Todo>
+    <div class="au-u-padding-top-small">
+      <AuButton
+        @skin="secondary"
+        @width="block"
+        {{on "click" this.createMandataris}}
+      >
+        <AuIcon @icon="add" @alignment="left" />
+        Voeg nieuw mandaat toe
+      </AuButton>
+    </div>
   </div>
 </div>
