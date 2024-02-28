@@ -40,18 +40,3 @@
     </AuContent>
   </div>
 </div>
-<AuModal
-  @title={{(concat
-    "Verander Toestand " @mandataris.bekleedt.bestuursfunctie.label
-  )}}
-  @modalOpen={{this.changingState}}
-  @closable={{true}}
-  @closeModal={{this.toggleChangingState}}
->
-  <Mandatarissen::UpdateState
-    @noTitle={{true}}
-    @onCancel={{this.toggleChangingState}}
-    @onStateChanged={{this.onUpdateState}}
-    @mandataris={{@mandataris}}
-  />
-</AuModal>

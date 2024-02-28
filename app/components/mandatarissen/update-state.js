@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
-export default class MandatarissenPersoonTable extends Component {
+export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
   @tracked date = new Date();
 
