@@ -17,6 +17,7 @@ export default class MandatarissenPersoonController extends Controller {
   @action
   closeModal() {
     this.isModalOpen = false;
+    this.selectedBestuursorgaan = null;
   }
 
   @action

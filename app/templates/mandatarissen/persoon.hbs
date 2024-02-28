@@ -65,7 +65,7 @@
 <AuModal
   @title="Selecteer bestuursorgaan"
   @modalOpen={{this.isModalOpen}}
-  @closeModal={{this.toggleModal}}
+  @closeModal={{this.closeModal}}
   as |Modal|
 >
   <Modal.Body>
@@ -98,7 +98,7 @@
         >
           Voeg nieuw mandaat toe
         </AuButton>
-        <AuButton @skin="secondary" {{on "click" this.toggleModal}}>
+        <AuButton @skin="secondary" {{on "click" this.closeModal}}>
           Annuleer
         </AuButton>
       </Group>
