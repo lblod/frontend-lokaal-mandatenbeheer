@@ -66,8 +66,12 @@
   @title="Selecteer bestuursorgaan"
   @modalOpen={{this.isModalOpen}}
   @closeModal={{this.toggleModal}}
+  as |Modal|
 >
-  <div class="au-o-box">
+  <Modal.Body>
+    <AuContent class="au-u-margin-bottom-small">
+      Selecteer een bestuursorgaan waaraan je een mandaat wilt toevoegen.
+    </AuContent>
     <PowerSelect
       @allowClear={{false}}
       @renderInPlace={{false}}
@@ -82,13 +86,18 @@
     >
       {{select.naam}}
     </PowerSelect>
-    <AuButton
-      @skin="secondary"
-      @width="block"
-      {{on "click" this.createMandataris}}
-    >
-      <AuIcon @icon="add" @alignment="left" />
-      Voeg nieuw mandaat toe
-    </AuButton>
-  </div>
+
+  </Modal.Body>
+  <Modal.Footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButton {{on "click" this.createMandataris}}>
+          Voeg nieuw mandaat toe
+        </AuButton>
+        <AuButton @skin="secondary" {{on "click" this.toggleModal}}>
+          Annuleer
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </Modal.Footer>
 </AuModal>
