@@ -7,15 +7,15 @@ import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
 import { inject as service } from '@ember/service';
 
-const TERMINATE_MODE = 'terminate';
+const CHANGE_MODE = 'change';
 const CORRECT_MODE = 'correct';
 
 export default class MandatenbeheerMandatarisEditPromptComponent extends Component {
   @tracked editMode = null;
   @service store;
 
-  get isTerminating() {
-    return this.editMode === TERMINATE_MODE;
+  get isChanging() {
+    return this.editMode === CHANGE_MODE;
   }
 
   get isCorrecting() {
@@ -23,8 +23,8 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   }
 
   @action
-  terminate() {
-    this.editMode = TERMINATE_MODE;
+  changeStatus() {
+    this.editMode = CHANGE_MODE;
   }
 
   @action
@@ -50,6 +50,17 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
     });
 
     setTimeout(() => this.args.mandataris.reload(), 1000);
+  }
+
+  @action
+  onUpdateState(newMandataris) {
+    this.editMode = null;
+    if (
+      newMandataris != this.args.mandataris &&
+      this.args.onMandatarisChanged
+    ) {
+      this.args.onMandatarisChanged(newMandataris);
+    }
   }
 
   @action

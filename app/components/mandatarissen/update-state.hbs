@@ -1,0 +1,76 @@
+{{yield}}
+<div class="au-o-box au-o-flow">
+  {{#unless @noTitle}}
+    <AuHeading>
+      Verander Toestand
+      {{@mandataris.bekleedt.bestuursfunctie.label}}
+    </AuHeading>
+  {{/unless}}
+  <div>
+    <AuLabel>
+      Huidige Toestand
+    </AuLabel>
+    <div>
+      {{@mandataris.bekleedt.bestuursfunctie.label}},
+      {{@mandataris.status.label}}
+      van
+      {{moment-format @mandataris.start "DD-MM-YYYY"}}
+      {{#if @mandataris.einde}}
+        tot
+        {{moment-format @mandataris.einde "DD-MM-YYYY"}}
+      {{/if}}
+    </div>
+  </div>
+  <div>
+    <AuLabel>
+      Nieuwe Toestand
+    </AuLabel>
+    <PowerSelect
+      @allowClear={{false}}
+      @selected={{this.newStatus}}
+      @options={{this.statusOptions}}
+      @onChange={{this.updateNewStatus}}
+      @searchEnabled={{true}}
+      @searchField="label"
+      @noMatchesMessage="Geen resultaten"
+      as |status|
+    >
+      {{status.label}}
+    </PowerSelect>
+  </div>
+  <div>
+    <AuLabel>
+      Vanaf
+    </AuLabel>
+    <AuDatePicker
+      @value={{this.date}}
+      @onChange={{this.updateDate}}
+      @error={{not this.validDate}}
+      @alignment="top"
+    />
+    {{#unless this.validDate}}
+      <AuAlert
+        @size="small"
+        @closable={{false}}
+        @skin="error"
+        class="au-u-margin-top"
+      >De gekozen datum moet na de startdatum liggen van het huidige mandaat.</AuAlert>
+    {{/unless}}
+  </div>
+  <AuToolbar class="au-u-margin-top" as |Group|>
+    <Group>
+      <AuButtonGroup>
+        <AuButton
+          {{on "click" (perform this.updateState)}}
+          @disabled={{this.disabled}}
+          @loading={{this.isSaving}}
+        >
+          Pas aan
+        </AuButton>
+        <AuButton {{on "click" @onCancel}} @skin="secondary">
+          Annuleer
+        </AuButton>
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
+</div>
