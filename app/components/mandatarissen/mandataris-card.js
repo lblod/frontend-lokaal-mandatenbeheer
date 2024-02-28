@@ -1,10 +1,6 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 
-export default class MandatenbeheerMandatarisSummaryComponent extends Component {
-  @service router;
-
+export default class MandatarisCardComponent extends Component {
   get rol() {
     return this.args.mandataris.bekleedt.get('bestuursfunctie').get('label');
   }
@@ -25,10 +21,5 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
     return beleidsdomeinenPromise.then((beleidsdomeinen) => {
       return beleidsdomeinen.map((item) => item.label).join(', ');
     });
-  }
-
-  @action
-  linkToDetailPage(mandataris) {
-    this.router.transitionTo('mandatarissen.mandataris', mandataris.id);
   }
 }

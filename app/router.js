@@ -46,6 +46,7 @@ Router.map(function () {
   this.route('mandatarissen', function () {
     this.route('search');
     this.route('persoon', { path: '/:id/persoon' });
+    this.route('mandataris', { path: '/:id/mandataris' });
   });
 
   this.route('mandatenbeheer', function () {

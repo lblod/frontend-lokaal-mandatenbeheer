@@ -1,0 +1,53 @@
+<AuCard as |c|>
+  <c.header>
+    <AuHeading @level="2" @skin="4">
+      {{this.rol}}
+    </AuHeading>
+  </c.header>
+  <c.content>
+
+    <div class="au-o-grid au-o-grid--tiny">
+      <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
+        <div class="au-c-description-label">Status</div>
+        <div class="au-c-description-value">{{this.status}}</div>
+      </div>
+      <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
+        <div class="au-c-description-label">Rangorde</div>
+        <div class="au-c-description-value">{{@mandataris.rangorde}}</div>
+      </div>
+      <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
+        <div class="au-c-description-label">Fractie</div>
+        <div class="au-c-description-value">{{this.fractie}}</div>
+      </div>
+      <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
+        <div class="au-c-description-label">Startdatum</div>
+        <div class="au-c-description-value">
+          {{moment-format @mandataris.start "DD-MM-YYYY"}}
+        </div>
+      </div>
+      <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
+        <div class="au-c-description-label">Einddatum</div>
+        <div class="au-c-description-value">
+          {{#if @mandataris.einde}}
+            {{moment-format @mandataris.einde "DD-MM-YYYY"}}
+          {{else}}
+            heden
+          {{/if}}
+        </div>
+      </div>
+      <div class="au-o-grid__item au-u-5-6">
+        <div class="au-c-description-label"><div>Beleidsdomein(en)</div></div>
+        <div class="au-c-description-value">{{await
+            this.formattedBeleidsdomein
+          }}</div>
+      </div>
+      {{#unless @editing}}
+        <div class="au-o-grid__item au-u-1-6 au-u-text-right">
+          <br />
+          <AuButton {{on "click" @edit}}>Pas aan</AuButton>
+        </div>
+      {{/unless}}
+    </div>
+  </c.content>
+
+</AuCard>
