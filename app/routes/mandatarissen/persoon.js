@@ -51,6 +51,24 @@ export default class MandatarissenPersoonRoute extends Route {
     };
 
     let mandatarissen = await this.store.query('mandataris', queryParams);
-    return mandatarissen.slice();
+    return this.keepLatestMandatarisPerMandaat(mandatarissen);
+  }
+
+  keepLatestMandatarisPerMandaat(mandatarissen) {
+    const mandaatIdToMandataris = {};
+
+    mandatarissen.forEach((mandataris) => {
+      const mandaatId = mandataris.bekleedt.id;
+      if (!mandaatIdToMandataris[mandaatId]) {
+        mandaatIdToMandataris[mandaatId] = mandataris;
+      } else {
+        const existingMandataris = mandaatIdToMandataris[mandaatId];
+        if (mandataris.start > existingMandataris.start) {
+          mandaatIdToMandataris[mandaatId] = mandataris;
+        }
+      }
+    });
+
+    return Object.values(mandaatIdToMandataris);
   }
 }
