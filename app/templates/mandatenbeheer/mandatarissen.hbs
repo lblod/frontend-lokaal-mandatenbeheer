@@ -22,51 +22,24 @@
     </Group>
 
     <Group>
-      <AuButtonGroup>
-        <AuButton
-          {{on "click" this.handleBeheerFractiesClick}}
-          @skin="secondary"
-        >
-          Beheer fracties
-        </AuButton>
-        <AuButton {{on "click" this.handleAddMandatarisClick}}>
-          Voeg mandataris toe
-        </AuButton>
-      </AuButtonGroup>
-    </Group>
-  </AuToolbar>
-
-  <AuToolbar @size="large" as |Group|>
-    <Group>
-      <Mandatenbeheer::BestuursperiodenSelector
-        @options={{@model.mandatenbeheer.bestuursperiods}}
-        @selectedPeriod={{@model.mandatenbeheer.selectedPeriod}}
-        @onSelect={{this.selectPeriod}}
-      />
-    </Group>
-    <Group class="au-u-1-3@medium">
-      <AuInput
-        value={{this.searchData}}
-        @icon="search"
-        @iconAlignment="left"
-        @width="block"
-        placeholder="Zoek mandataris"
-        {{on "input" (perform this.search value="target.value")}}
-      />
+      <AuButton {{on "click" this.handleBeheerFractiesClick}} @skin="secondary">
+        Beheer fracties
+      </AuButton>
     </Group>
   </AuToolbar>
 
   <div class="au-c-body-container au-c-body-container--scroll">
     <div class="au-o-box">
-      <Mandatenbeheer::Mandataris::MandatarisTable
-        @content={{@model.mandatarissen}}
-        @sort={{this.sort}}
-        @page={{this.page}}
-        @size={{this.size}}
-        @editRoute="under-construction"
-        @detailRoute="mandatenbeheer.mandatarissen.edit"
-        @mandatarisBestuursorganen={{@model.mandatarisBestuursorganen}}
-      />
+      <AuAlert
+        @icon="alert-triangle"
+        @title="This content has moved"
+        @skin="warning"
+      >
+        <div>This page will be removed in the near future, this logic can now be
+          found in the organen module.</div>
+
+        <AuLink @route="organen" @skin="button">Ga naar de bestuursorganen</AuLink>
+      </AuAlert>
     </div>
   </div>
 
