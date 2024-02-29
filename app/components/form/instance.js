@@ -172,6 +172,7 @@ export default class InstanceComponent extends Component {
       if (this.isDestroyed) {
         return;
       }
+
       this.sourceTriples = this.formInfo.formStore.serializeDataMergedGraph(
         this.formInfo.graphs.sourceGraph
       );
