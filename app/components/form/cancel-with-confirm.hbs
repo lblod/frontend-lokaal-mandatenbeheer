@@ -1,4 +1,4 @@
-<AuButton @skin="secondary" {{on "click" this.cancel}}>Annuleer</AuButton>
+<AuButton @skin="secondary" {{on "click" this.cancel}}>{{yield}}</AuButton>
 
 <AuModal
   @id="exit-confirmation"
