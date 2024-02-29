@@ -37,6 +37,16 @@
           <li class="au-c-list-horizontal__item">{{this.fractie}}</li>
         {{/if}}
       </ul>
+      <AuPill
+        @skin="link"
+        @draft={{false}}
+        @size="regular"
+        @icon="info-circle"
+        @iconAlignment="left"
+        @hideText={{false}}
+      >
+        {{if @mandataris.isDraft "Niet bekrachtigd" "Bekrachtigd"}}
+      </AuPill>
     </AuContent>
   </div>
 </div>

@@ -6,6 +6,16 @@
       <br />
       {{@model.bestuursorgaan.isTijdsspecialisatieVan.naam}}
     </AuHeading>
+    <AuPill
+      @skin="link"
+      @draft={{false}}
+      @size="regular"
+      @icon="info-circle"
+      @iconAlignment="left"
+      @hideText={{false}}
+    >
+      {{if @mandataris.isDraft "Niet bekrachtigd" "Bekrachtigd"}}
+    </AuPill>
   </Group>
 </AuToolbar>
 
