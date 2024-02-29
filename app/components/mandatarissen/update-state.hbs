@@ -2,13 +2,13 @@
 <div class="au-o-box au-o-flow">
   {{#unless @noTitle}}
     <AuHeading>
-      Verander Toestand
+      Verander Status
       {{@mandataris.bekleedt.bestuursfunctie.label}}
     </AuHeading>
   {{/unless}}
   <div>
     <AuLabel>
-      Huidige Toestand
+      Huidige Status
     </AuLabel>
     <div>
       {{@mandataris.bekleedt.bestuursfunctie.label}},
@@ -23,7 +23,7 @@
   </div>
   <div>
     <AuLabel>
-      Nieuwe Toestand
+      Nieuwe Status
     </AuLabel>
     <PowerSelect
       @allowClear={{false}}
