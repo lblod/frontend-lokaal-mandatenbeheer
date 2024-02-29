@@ -15,15 +15,19 @@ import { inject as service } from '@ember/service';
 import { keepLatestTask } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
+import { guidFor } from '@ember/object/internals';
 
 export default class InstanceComponent extends Component {
   @service store;
   @service toaster;
+  @service formDirtyState;
 
   @tracked sourceTriples;
   @tracked errorMessage;
   @tracked formInfo = null;
   formStore = null;
+  savedTriples = null;
+  formId = `form-${guidFor(this)}`;
 
   constructor() {
     super(...arguments);
@@ -90,6 +94,8 @@ export default class InstanceComponent extends Component {
         response: body,
       });
     }
+
+    this.formDirtyState.markClean(this.formId);
   }
 
   @action
@@ -156,11 +162,30 @@ export default class InstanceComponent extends Component {
     return { formInstanceTtl, instanceUri };
   }
 
+  willDestroy() {
+    super.willDestroy(...arguments);
+    this.formDirtyState.markClean(this.formId);
+  }
+
   registerObserver(formStore) {
     const onFormUpdate = () => {
+      if (this.isDestroyed) {
+        return;
+      }
+
       this.sourceTriples = this.formInfo.formStore.serializeDataMergedGraph(
         this.formInfo.graphs.sourceGraph
       );
+
+      if (this.savedTriples === null) {
+        this.savedTriples = this.sourceTriples;
+      }
+
+      if (this.savedTriples === this.sourceTriples) {
+        this.formDirtyState.markClean(this.formId);
+      } else {
+        this.formDirtyState.markDirty(this.formId);
+      }
     };
     formStore.registerObserver(onFormUpdate);
     onFormUpdate();
