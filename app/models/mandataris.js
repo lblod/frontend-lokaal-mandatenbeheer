@@ -9,6 +9,8 @@ export default class MandatarisModel extends AgentInPosition {
   @attr('datetime') einde;
   @attr duplicationReason;
   @attr uri;
+  // Mandatarissen that existed before isDraft wil have isDraft = undefined
+  @attr isDraft;
 
   @belongsTo('mandaat', { async: true, inverse: 'bekleedDoor' }) bekleedt;
 
