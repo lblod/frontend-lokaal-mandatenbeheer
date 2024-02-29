@@ -2,7 +2,17 @@
   <div class="au-o-grid__item au-u-1-2">
     <AuContent @skin="small">
       <AuHeading @level="4" @skin="5">Wijziging huidige situatie</AuHeading>
-      {{#if this.mandaatHasEnded}}
+      {{#if @mandataris.isActive}}
+        <p>Indien de mandataris wordt vervangen, of de huidige
+          <strong>status, fractie, rangorde of bevoegdheid</strong>
+          verandert:
+        </p>
+        <ul>
+          <li>beëindig dit mandaat;</li>
+          <li><strong>start een nieuw mandaat</strong>
+            met de gewijzigde situatie.</li>
+        </ul>
+      {{else}}
         <p>
           Dit mandaat werd beëindigd en kan niet meer gewijzigd worden. Indien
           deze status niet correct is, gebruik de 'corrigeer fouten'
@@ -13,19 +23,9 @@
           een periode waarin het mandaat niet actief was, voeg een nieuw mandaat
           toe.
         </p>
-      {{else}}
-        <p>Indien de mandataris wordt vervangen, of de huidige
-          <strong>status, fractie, rangorde of bevoegdheid</strong>
-          verandert:
-        </p>
-        <ul>
-          <li>beëindig dit mandaat door de einddatum in te vullen;</li>
-          <li><strong>start een nieuw mandaat</strong>
-            met de gewijzigde situatie.</li>
-        </ul>
       {{/if}}
       <AuButton
-        @disabled={{this.mandaatHasEnded}}
+        @disabled={{not @mandataris.isActive}}
         {{on "click" this.changeStatus}}
       >Verander status</AuButton>
     </AuContent>

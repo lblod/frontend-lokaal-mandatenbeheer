@@ -22,13 +22,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
     return this.editMode === CORRECT_MODE;
   }
 
-  get mandaatHasEnded() {
-    return (
-      this.args.mandataris.einde &&
-      this.args.mandataris.einde.getTime() < new Date().getTime()
-    );
-  }
-
   @action
   changeStatus() {
     this.editMode = CHANGE_MODE;
