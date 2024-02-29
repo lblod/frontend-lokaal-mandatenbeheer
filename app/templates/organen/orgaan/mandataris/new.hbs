@@ -14,6 +14,8 @@
 
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>
-    <AuButton @skin="secondary" {{on "click" this.cancel}}>Annuleer</AuButton>
+    <Form::CancelWithConfirm
+      @cancel={{this.cancel}}
+    >Annuleer</Form::CancelWithConfirm>
   </Group>
 </AuToolbar>
