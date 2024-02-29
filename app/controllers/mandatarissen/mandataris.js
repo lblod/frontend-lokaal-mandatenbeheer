@@ -1,12 +1,12 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class MandatarissenMandatarisController extends Controller {
-  @tracked editing = false;
+  @service router;
 
   @action
-  edit() {
-    this.editing = !this.editing;
+  onMandatarisChanged(newMandataris) {
+    this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
   }
 }

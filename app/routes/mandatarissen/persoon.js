@@ -22,10 +22,16 @@ export default class MandatarissenPersoonRoute extends Route {
       })
     );
 
+    const bestuursorganen = this.store.query('bestuursorgaan', {
+      'filter[:has-no:deactivated-at]': true,
+      'filter[:has-no:is-tijdsspecialisatie-van]': true,
+    });
+
     return RSVP.hash({
       persoon,
       actieveMandatarissen,
       inactieveMandatarissen,
+      bestuursorganen,
     });
   }
 
