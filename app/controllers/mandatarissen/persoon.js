@@ -22,6 +22,7 @@ export default class MandatarissenPersoonController extends Controller {
 
   @action
   createMandataris() {
+    this.toggleModal();
     this.router.transitionTo(
       'organen.orgaan.mandataris.new',
       this.selectedBestuursorgaan.id
