@@ -34,6 +34,11 @@ export default class OrganenMandatarisNewController extends Controller {
   }
 
   @action
+  buildSourceTtl(instanceUri) {
+    return `<${instanceUri}> <http://mu.semte.ch/vocabularies/ext/isDraft> "true".`;
+  }
+
+  @action
   buildMetaTtl() {
     return getBestuursorgaanMetaTtl(this.model.currentBestuursorgaan);
   }
