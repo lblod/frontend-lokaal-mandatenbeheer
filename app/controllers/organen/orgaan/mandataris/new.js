@@ -47,6 +47,6 @@ export default class OrganenMandatarisNewController extends Controller {
       'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan'
     );
     const persoon = await this.store.findRecord('persoon', this.person);
-    replaceSingleFormValue(storeOptions, persoon.uri);
+    replaceSingleFormValue(storeOptions, new NamedNode(persoon.uri));
   }
 }
