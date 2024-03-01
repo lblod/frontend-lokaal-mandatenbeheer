@@ -12,6 +12,10 @@ export default class OrganenMandatarisNewController extends Controller {
   @service router;
   @service store;
 
+  queryParams = ['person'];
+
+  person = null;
+
   @action
   cancel() {
     this.router.transitionTo('organen.orgaan.mandatarissen');
@@ -39,8 +43,7 @@ export default class OrganenMandatarisNewController extends Controller {
     storeOptions.path = new NamedNode(
       'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan'
     );
-    const personId = 'b6aab7dd-090c-4784-a9dc-9a93593ad4c8';
-    const persoon = await this.store.findRecord('persoon', personId);
+    const persoon = await this.store.findRecord('persoon', this.person);
     replaceSingleFormValue(storeOptions, persoon.uri);
   }
 }

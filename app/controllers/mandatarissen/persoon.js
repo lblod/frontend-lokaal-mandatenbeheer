@@ -24,7 +24,8 @@ export default class MandatarissenPersoonController extends Controller {
   createMandataris() {
     this.router.transitionTo(
       'organen.orgaan.mandataris.new',
-      this.selectedBestuursorgaan.id
+      this.selectedBestuursorgaan.id,
+      { queryParams: { person: this.model.persoon.id } }
     );
   }
 }
