@@ -40,6 +40,9 @@ export default class OrganenMandatarisNewController extends Controller {
 
   @action
   async prefillValues(storeOptions) {
+    if (!this.person) {
+      return;
+    }
     storeOptions.path = new NamedNode(
       'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan'
     );
