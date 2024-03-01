@@ -22,7 +22,7 @@
           value={{this.voornaam}}
           id="mandataris-voornaam"
           placeholder="Voornaam"
-          {{on "input" (perform this.setVoornaam value="target.value")}}
+          {{on "input" this.setVoornaam}}
         />
       </div>
       <div class="au-o-grid__item au-u-1-2">
@@ -33,7 +33,7 @@
           value={{this.achternaam}}
           id="mandataris-naam"
           placeholder="Familienaam"
-          {{on "input" (perform this.setAchternaam value="target.value")}}
+          {{on "input" this.setAchternaam}}
         />
       </div>
       <div class="au-o-grid__item">
