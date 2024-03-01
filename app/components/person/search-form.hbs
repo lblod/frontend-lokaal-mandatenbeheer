@@ -42,9 +42,11 @@
           @icon="search"
           @iconAlignment="left"
           value={{this.rijksregisternummer}}
-          @mask="99.99.99-999.99"
-          @maskPlaceholder="_"
-          @onChange={{(fn (mut this.rijksregisternummer))}}
+          {{au-inputmask
+            options=(hash
+              mask="99.99.99-999.99" autoUnmask="true" placeholder="_"
+            )
+          }}
           id="mandataris-rijksregisternummer"
           placeholder="00.00.00-000.00"
           {{on "input" this.setRrn}}
