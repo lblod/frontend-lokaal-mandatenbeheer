@@ -1,5 +1,5 @@
 <div class="au-o-grid au-o-grid--small">
-  <div class="au-o-grid__item au-u-1-2">
+  <div class="au-o-grid__item au-u-1-3@medium">
     <AuContent @skin="small">
       <AuHeading @level="4" @skin="5">Wijziging huidige situatie</AuHeading>
       {{#if @mandataris.isActive}}
@@ -30,7 +30,7 @@
       >Verander status</AuButton>
     </AuContent>
   </div>
-  <div class="au-o-grid__item au-u-1-2">
+  <div class="au-o-grid__item au-u-1-3@medium">
     <AuContent @skin="small">
       <AuHeading @level="4" @skin="5">Correctie</AuHeading>
       <p>Indien een mandaat
@@ -40,6 +40,21 @@
         de fouten.
       </p>
       <AuButton @skin="secondary" {{on "click" this.correct}}>Corrigeer fouten</AuButton>
+    </AuContent>
+  </div>
+  <div class="au-o-grid__item au-u-1-3@medium">
+    <AuContent @skin="small">
+      <AuHeading @level="4" @skin="5">Bekrachtiging</AuHeading>
+      {{#if @mandataris.isDraft}}
+        <p>Bekrachtig het mandaat, waardoor het officieel wordt opgenomen in de
+          Vlaamse Mandatendatabank.</p>
+      {{/if}}
+      <AuButton
+        @skin="secondary"
+        @disabled={{not @mandataris.isDraft}}
+        {{on "click" this.bekrachtig}}
+      >Bekrachtig
+      </AuButton>
     </AuContent>
   </div>
 </div>
@@ -76,4 +91,32 @@
       @buildMetaTtl={{this.buildMetaTtl}}
     />
   </div>
+</AuModal>
+<AuModal
+  @title={{(concat "Bekrachtig " @mandataris.bekleedt.bestuursfunctie.label)}}
+  @modalOpen={{this.isBekrachtiging}}
+  @closeModal={{this.cancel}}
+  as |Modal|
+>
+  <Modal.Body>
+    <p>
+      Bent u zeker dat u het mandaat wil bekrachtigen? Deze actie is niet
+      omkeerbaar.
+    </p>
+  </Modal.Body>
+  <Modal.Footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton {{on "click" this.onBekrachtig}}>
+            Bekrachtig
+          </AuButton>
+          <AuButton
+            {{on "click" this.cancel}}
+            @skin="secondary"
+          >Annuleer</AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </Modal.Footer>
 </AuModal>
