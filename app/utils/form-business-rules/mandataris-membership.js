@@ -62,6 +62,9 @@ export const syncMandatarisMembership = async function (
 ) {
   const { begin: begin, end } = getMandatarisDates(mandatarisUri, storeOptions);
   const membership = await fetchMembership(store, mandatarisUri, storeOptions);
+  if (!membership) {
+    return;
+  }
   const timeFrame = await ensureTimeFrame(store, membership);
   timeFrame.begin = begin ? new Date(begin.value) : null;
   timeFrame.einde = end ? new Date(end.value) : null;
