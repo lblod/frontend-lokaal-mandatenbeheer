@@ -38,6 +38,12 @@
         @disabled={{not @mandataris.isDraft}}
         {{on "click" this.bekrachtig}}
       >Bekrachtig
+        {{#unless @mandataris.isDraft}}
+          <EmberTooltip
+            @text="De Bekrachtiging van een mandaat kan niet ongedaan gemaakt worden. Contacteer de technische dienst indien nodig."
+            @side="right"
+          />
+        {{/unless}}
       </AuButton>
     </AuContent>
   </div>
