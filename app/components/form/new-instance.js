@@ -118,6 +118,18 @@ export default class NewInstanceComponent extends Component {
       const metaTtl = await this.args.buildMetaTtl();
       formStore.parse(metaTtl, META_GRAPH, 'text/turtle');
     }
+    const sourceNode = new NamedNode(uri);
+
+    if (this.args.prefillValues) {
+      const storeOptions = {
+        formGraph: graphs.formGraph,
+        metaGraph: graphs.metaGraph,
+        sourceGraph: graphs.sourceGraph,
+        sourceNode,
+        store: formStore,
+      };
+      await this.args.prefillValues(storeOptions);
+    }
 
     const formNode = formStore.any(
       undefined,
@@ -125,7 +137,6 @@ export default class NewInstanceComponent extends Component {
       FORM('Form'),
       FORM_GRAPH
     );
-    const sourceNode = new NamedNode(uri);
 
     this.formInfo = {
       definition: form,
