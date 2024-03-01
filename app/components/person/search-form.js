@@ -42,6 +42,28 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
   }
 
   @restartableTask
+  *setVoornaam(searchData) {
+    yield timeout(300);
+    this.voornaam = searchData;
+    this.search.perform();
+  }
+
+  @restartableTask
+  *setAchternaam(searchData) {
+    yield timeout(300);
+    this.achternaam = searchData;
+    this.search.perform();
+  }
+
+  @action
+  setRrn(event) {
+    if (event && typeof event.preventDefault === 'function')
+      event.preventDefault();
+    this.rijksregisternummer = event.target.value.trim();
+    this.search.perform();
+  }
+
+  @restartableTask
   *search() {
     yield timeout(300);
 
