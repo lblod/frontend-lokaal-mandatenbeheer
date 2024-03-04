@@ -58,7 +58,7 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
   }
 
   @action
-  setRrn(event) {
+  setRijksregisternummer(event) {
     if (event && typeof event.preventDefault === 'function')
       event.preventDefault();
     this.rijksregisternummer = event.target.value.trim();
