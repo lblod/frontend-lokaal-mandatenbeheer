@@ -5,8 +5,6 @@ import { getBestuursorgaanMetaTtl } from 'frontend-lmb/utils/form-context/bestuu
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
-import { NamedNode } from 'rdflib';
-import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 
 export default class OrganenMandatarisNewController extends Controller {
   @service router;
@@ -44,7 +42,7 @@ export default class OrganenMandatarisNewController extends Controller {
   }
 
   @action
-  async prefillValues(storeOptions) {
+  async buildSourceTtl(instanceUri) {
     if (!this.person) {
       return;
     }
@@ -52,9 +50,9 @@ export default class OrganenMandatarisNewController extends Controller {
     if (!persoon) {
       return;
     }
-    storeOptions.path = new NamedNode(
-      'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan'
-    );
-    replaceSingleFormValue(storeOptions, new NamedNode(persoon.uri));
+
+    return `
+    <${instanceUri}> <http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan> <${persoon.uri}>.
+    `;
   }
 }
