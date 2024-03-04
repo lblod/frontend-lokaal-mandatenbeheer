@@ -160,3 +160,11 @@
     display: none;
   }
 }
+
+.au-o-ext-align-self--start {
+  align-self: flex-start;
+}
+
+.au-o-ext-flex-no-shrink {
+  flex-shrink: 0;
+}
