@@ -27,6 +27,9 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   get currentStatus() {
+    if (!this.args.mandataris.einde) {
+      return this.args.mandataris.status;
+    }
     if (this.args.mandataris.einde.getTime() < new Date().getTime()) {
       return this.mandatarisStatus.endedState;
     }
@@ -34,9 +37,13 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   get validDate() {
-    return (
-      this.date && this.date.getTime() >= this.args.mandataris.start.getTime()
-    );
+    if (!this.date) {
+      return false;
+    }
+    if (!this.args.mandataris.start) {
+      return true;
+    }
+    return this.date.getTime() >= this.args.mandataris.start.getTime();
   }
 
   get disabled() {
