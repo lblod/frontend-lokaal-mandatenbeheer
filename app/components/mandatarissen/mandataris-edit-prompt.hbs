@@ -98,31 +98,9 @@
     />
   </div>
 </AuModal>
-<AuModal
-  @title={{(concat "Bekrachtig " @mandataris.bekleedt.bestuursfunctie.label)}}
+<Mandatarissen::ConfirmBekrachtiging
   @modalOpen={{this.isBekrachtiging}}
-  @closeModal={{this.cancel}}
-  as |Modal|
->
-  <Modal.Body>
-    <p>
-      Bent u zeker dat u het mandaat wil bekrachtigen? Deze actie is niet
-      omkeerbaar.
-    </p>
-  </Modal.Body>
-  <Modal.Footer>
-    <AuToolbar as |Group|>
-      <Group>
-        <AuButtonGroup>
-          <AuButton {{on "click" this.onBekrachtig}}>
-            Bekrachtig
-          </AuButton>
-          <AuButton
-            {{on "click" this.cancel}}
-            @skin="secondary"
-          >Annuleer</AuButton>
-        </AuButtonGroup>
-      </Group>
-    </AuToolbar>
-  </Modal.Footer>
-</AuModal>
+  @onBekrachtig={{this.onBekrachtig}}
+  @cancel={{this.cancel}}
+  @mandataris={{@mandataris}}
+/>
