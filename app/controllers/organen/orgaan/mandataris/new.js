@@ -5,8 +5,6 @@ import { getBestuursorgaanMetaTtl } from 'frontend-lmb/utils/form-context/bestuu
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
-import { NamedNode } from 'rdflib';
-import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 
 export default class OrganenMandatarisNewController extends Controller {
   @service router;
