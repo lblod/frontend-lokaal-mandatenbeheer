@@ -101,7 +101,7 @@ export default class NewInstanceComponent extends Component {
     const form = this.args.form;
     const uri = `${form.prefix}${uuid()}`;
     const sourceTtl = this.args.buildSourceTtl
-      ? this.args.buildSourceTtl(uri)
+      ? await this.args.buildSourceTtl(uri)
       : '';
 
     const formStore = new ForkingStore();
@@ -119,17 +119,6 @@ export default class NewInstanceComponent extends Component {
       formStore.parse(metaTtl, META_GRAPH, 'text/turtle');
     }
     const sourceNode = new NamedNode(uri);
-
-    if (this.args.prefillValues) {
-      const storeOptions = {
-        formGraph: graphs.formGraph,
-        metaGraph: graphs.metaGraph,
-        sourceGraph: graphs.sourceGraph,
-        sourceNode,
-        store: formStore,
-      };
-      await this.args.prefillValues(storeOptions);
-    }
 
     const formNode = formStore.any(
       undefined,

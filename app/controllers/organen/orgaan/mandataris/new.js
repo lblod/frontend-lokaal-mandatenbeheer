@@ -39,7 +39,7 @@ export default class OrganenMandatarisNewController extends Controller {
   }
 
   @action
-  async prefillValues(storeOptions) {
+  async buildSourceTtl(instanceUri) {
     if (!this.person) {
       return;
     }
@@ -47,9 +47,9 @@ export default class OrganenMandatarisNewController extends Controller {
     if (!persoon) {
       return;
     }
-    storeOptions.path = new NamedNode(
-      'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan'
-    );
-    replaceSingleFormValue(storeOptions, new NamedNode(persoon.uri));
+
+    return `
+    <${instanceUri}> <http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan> <${persoon.uri}>.
+    `;
   }
 }
