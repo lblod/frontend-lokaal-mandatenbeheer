@@ -19,10 +19,10 @@
         <AuInput
           @icon="search"
           @iconAlignment="left"
-          @value={{this.voornaam}}
+          value={{this.voornaam}}
           id="mandataris-voornaam"
           placeholder="Voornaam"
-          {{on "input" (perform this.search)}}
+          {{on "input" this.setVoornaam}}
         />
       </div>
       <div class="au-o-grid__item au-u-1-2">
@@ -30,10 +30,10 @@
         <AuInput
           @icon="search"
           @iconAlignment="left"
-          @value={{this.achternaam}}
+          value={{this.achternaam}}
           id="mandataris-naam"
           placeholder="Familienaam"
-          {{on "input" (perform this.search)}}
+          {{on "input" this.setAchternaam}}
         />
       </div>
       <div class="au-o-grid__item">
@@ -41,13 +41,15 @@
         <AuInput
           @icon="search"
           @iconAlignment="left"
-          @value={{this.rijksregisternummer}}
-          @mask="99.99.99-999.99"
-          @maskPlaceholder="_"
-          @onChange={{(fn (mut this.rijksregisternummer))}}
+          value={{this.rijksregisternummer}}
+          {{au-inputmask
+            options=(hash
+              mask="99.99.99-999.99" autoUnmask="true" placeholder="_"
+            )
+          }}
           id="mandataris-rijksregisternummer"
           placeholder="00.00.00-000.00"
-          {{on "input" (perform this.search)}}
+          {{on "input" this.setRijksregisternummer}}
         />
       </div>
     </div>
