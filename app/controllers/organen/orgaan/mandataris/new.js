@@ -38,16 +38,17 @@ export default class OrganenMandatarisNewController extends Controller {
 
   @action
   async buildSourceTtl(instanceUri) {
+    const isDraft = `<${instanceUri}> <http://mu.semte.ch/vocabularies/ext/isDraft> "true".`;
     if (!this.person) {
-      return;
+      return isDraft;
     }
     const persoon = await this.store.findRecord('persoon', this.person);
     if (!persoon) {
-      return;
+      return isDraft;
     }
 
     return `
-    <${instanceUri}> <http://mu.semte.ch/vocabularies/ext/isDraft> "true".
+    ${isDraft}
     <${instanceUri}> <http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan> <${persoon.uri}>.
     `;
   }
