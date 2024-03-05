@@ -1,19 +1,15 @@
 import { EXT } from 'frontend-lmb/rdf/namespaces';
 
-export const getBestuursorgaanMetaTtl = (bestuursorgaan) => {
+export const getBestuursorganenMetaTtl = (bestuursorgaan) => {
   if (!bestuursorgaan) {
     return;
   }
   let bestuursorgaanUris;
-  if (bestuursorgaan.length) {
-    bestuursorgaanUris = bestuursorgaan
-      .map((orgaan) => {
-        return `<${orgaan.uri}>`;
-      })
-      .join(', ');
-  } else {
-    bestuursorgaanUris = `<${bestuursorgaan.uri}>`;
-  }
+  bestuursorgaanUris = bestuursorgaan
+    .map((orgaan) => {
+      return `<${orgaan.uri}>`;
+    })
+    .join(', ');
 
   return `
     @prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
