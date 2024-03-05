@@ -7,7 +7,7 @@ import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
-  @tracked date = new Date();
+  @tracked date = null;
 
   @service mandatarisStatus;
   @service store;
@@ -15,15 +15,12 @@ export default class MandatarissenUpdateState extends Component {
 
   constructor() {
     super(...arguments);
-    this.newStatus = this.mandatarisStatus.endedState;
+    this.newStatus = this.args.mandataris.status;
+    this.date = this.args.mandataris.einde;
   }
 
   get statusOptions() {
-    return this.mandatarisStatus.statuses
-      .filter((status) => status.id !== this.currentStatus?.id)
-      .sort((a, b) => {
-        return a.label.localeCompare(b.label);
-      });
+    return this.mandatarisStatus.statuses;
   }
 
   get currentStatus() {
@@ -46,8 +43,21 @@ export default class MandatarissenUpdateState extends Component {
     return this.date.getTime() >= this.args.mandataris.start.getTime();
   }
 
+  get hasDifference() {
+    return (
+      this.newStatus?.id !== this.args.mandataris.status?.id ||
+      this.date.getTime() !== this.args.mandataris.einde?.getTime()
+    );
+  }
+
   get disabled() {
-    return this.loading || !this.newStatus || !this.date || !this.validDate;
+    return (
+      this.loading ||
+      !this.newStatus ||
+      !this.date ||
+      !this.validDate ||
+      !this.hasDifference
+    );
   }
 
   async changeMandatarisState() {
