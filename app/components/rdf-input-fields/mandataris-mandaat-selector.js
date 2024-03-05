@@ -23,22 +23,28 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   }
 
   async load() {
-    await Promise.all([this.loadProvidedValue(), this.loadBestuursorgaan()]);
+    await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
     this.initialized = true;
   }
 
-  async loadBestuursorgaan() {
-    const bestuursorgaanUri = loadBestuursorgaanUriFromContext(
+  async loadBestuursorganen() {
+    const bestuursorgaanUris = loadBestuursorgaanUriFromContext(
       this.storeOptions
     );
 
-    if (!bestuursorgaanUri) {
+    if (!bestuursorgaanUris) {
       return;
     }
 
-    this.bestuursorganen = await this.store.query('bestuursorgaan', {
-      'filter[:uri:]': bestuursorgaanUri,
-    });
+    for (let uri of bestuursorgaanUris) {
+      this.bestuursorganen.push(
+        (
+          await this.store.query('bestuursorgaan', {
+            'filter[:uri:]': uri,
+          })
+        )[0]
+      );
+    }
   }
 
   async loadProvidedValue() {

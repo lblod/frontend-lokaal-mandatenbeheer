@@ -4,23 +4,32 @@ export const getBestuursorgaanMetaTtl = (bestuursorgaan) => {
   if (!bestuursorgaan) {
     return;
   }
-  const bestuursorgaanUri = bestuursorgaan.uri;
+  let bestuursorgaanUris;
+  if (bestuursorgaan.length) {
+    bestuursorgaanUris = bestuursorgaan
+      .map((orgaan) => {
+        return `<${orgaan.uri}>`;
+      })
+      .join(', ');
+  } else {
+    bestuursorgaanUris = `<${bestuursorgaan.uri}>`;
+  }
 
   return `
     @prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
 
-    ext:applicationContext ext:currentBestuursorgaan <${bestuursorgaanUri}> .
+    ext:applicationContext ext:currentBestuursorgaan ${bestuursorgaanUris} .
   `;
 };
 
 export const loadBestuursorgaanUriFromContext = (storeOptions) => {
   const forkingStore = storeOptions.store;
-  const bestuursorgaanUri = forkingStore.any(
+  const bestuursorgaanUri = forkingStore.match(
     EXT('applicationContext'),
     EXT('currentBestuursorgaan'),
     null,
     storeOptions.metaGraph
   );
 
-  return bestuursorgaanUri?.value;
+  return bestuursorgaanUri?.map((node) => node.object.value);
 };

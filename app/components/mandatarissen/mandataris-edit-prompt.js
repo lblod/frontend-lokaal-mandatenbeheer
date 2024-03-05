@@ -82,6 +82,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
 
   @action
   async buildMetaTtl() {
-    return getBestuursorgaanMetaTtl(this.args.bestuursorgaan);
+    return getBestuursorgaanMetaTtl(this.args.bestuursorganen);
   }
 }

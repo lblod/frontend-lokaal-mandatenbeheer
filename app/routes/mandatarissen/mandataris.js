@@ -24,7 +24,7 @@ export default class MandatarissenMandatarisRoute extends Route {
       mandataris,
       mandatarisEindeEditForm,
       mandatarisEditForm,
-      bestuursorganen,
+      bestuursorganen: bestuursorganen.slice(),
     });
   }
 

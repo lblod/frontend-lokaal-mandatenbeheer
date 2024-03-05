@@ -60,7 +60,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
       return;
     }
     const fracties = await this.store.query('fractie', {
-      'filter[bestuursorganen-in-tijd][:uri:]': this.bestuursorgaanUri,
+      'filter[bestuursorganen-in-tijd][:uri:]': this.bestuursorgaanUri[0],
     });
     this.fracties = fracties;
   }
