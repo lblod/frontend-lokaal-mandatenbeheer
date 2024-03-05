@@ -66,7 +66,7 @@ export default class MandatarissenUpdateState extends Component {
     return this.date.getTime() >= this.args.mandataris.start.getTime();
   }
 
-  get hasDifferenceInBeleidsdomeinen() {
+  get hasChangesInBeleidsdomeinen() {
     if (
       this.selectedBeleidsdomeinen.length !==
       this.args.mandataris.beleidsdomein.length
@@ -89,13 +89,12 @@ export default class MandatarissenUpdateState extends Component {
     return false;
   }
 
-  get hasDifference() {
+  get hasChanges() {
     return (
       this.newStatus?.id !== this.args.mandataris.status?.id ||
-      this.date.getTime() !== this.args.mandataris.einde?.getTime() ||
       this.selectedFractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
-      this.hasDifferenceInBeleidsdomeinen ||
+      this.hasChangesInBeleidsdomeinen ||
       this.rangorde !== this.args.mandataris.rangorde
     );
   }
@@ -106,7 +105,7 @@ export default class MandatarissenUpdateState extends Component {
       !this.newStatus ||
       !this.date ||
       !this.validDate ||
-      !this.hasDifference
+      !this.hasChanges
     );
   }
 

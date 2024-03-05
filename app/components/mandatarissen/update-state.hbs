@@ -105,7 +105,7 @@
           @disabled={{this.disabled}}
           @loading={{this.isSaving}}
         >
-          {{if this.hasDifference "Pas aan" "Onveranderd"}}
+          {{if this.hasChanges "Pas aan" "Onveranderd"}}
         </AuButton>
         <AuButton {{on "click" @onCancel}} @skin="secondary">
           Annuleer
