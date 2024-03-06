@@ -6,19 +6,13 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { NamedNode } from 'rdflib';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
-import { CREATE_PERSON_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class PersonSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
-
+  @tracked person = null;
   @service store;
 
-  @tracked person = null;
   @tracked initialized = false;
-  @tracked selectNewPerson = false;
-  @tracked creatingPerson = false;
-  @tracked createPersonFormDefinition;
 
   constructor() {
     super(...arguments);
@@ -47,68 +41,18 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     this.person = matches.at(0);
   }
 
-  closeModal() {
-    this.selectNewPerson = false;
-    this.creatingPerson = false;
-  }
-
   @action
-  async onSelectPerson(person) {
-    const uri = person.uri;
+  async onUpdate(person) {
+    const uri = person?.uri;
 
-    replaceSingleFormValue(this.storeOptions, new NamedNode(uri));
+    if (uri) {
+      replaceSingleFormValue(this.storeOptions, new NamedNode(uri));
+    } else {
+      replaceSingleFormValue(this.storeOptions, null);
+    }
+
     this.hasBeenFocused = true;
     super.updateValidations();
     this.person = person;
-    this.closeModal();
-  }
-
-  @action
-  async onSelectNewPerson({ instanceId }) {
-    const persoon = await this.store.findRecord('persoon', instanceId);
-    replaceSingleFormValue(this.storeOptions, new NamedNode(persoon.uri));
-    this.hasBeenFocused = true;
-    super.updateValidations();
-    this.person = persoon;
-    this.closeModal();
-  }
-
-  @action
-  async onCreateNewPerson() {
-    this.createPersonFormDefinition = await getFormFrom(
-      this.store,
-      CREATE_PERSON_FORM_ID
-    );
-    this.creatingPerson = true;
-  }
-
-  @action
-  startEdit() {
-    this.selectNewPerson = true;
-  }
-  @action
-  cancelEdit() {
-    this.closeModal();
-  }
-
-  @action
-  cancelCreate() {
-    this.closeModal();
-  }
-
-  @action
-  removePerson() {
-    replaceSingleFormValue(this.storeOptions, null);
-    this.hasBeenFocused = true;
-    super.updateValidations();
-    this.person = null;
-    this.closeModal();
-  }
-
-  @action
-  buildSourceTtl(instanceUri) {
-    return `
-    <${instanceUri}> <http://mu.semte.ch/vocabularies/ext/possibleDuplicate> "true" .
-    `;
   }
 }
