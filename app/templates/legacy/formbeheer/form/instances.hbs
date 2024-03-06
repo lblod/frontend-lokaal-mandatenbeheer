@@ -1,6 +1,8 @@
 {{page-title "Instances"}}
 <Form::InstanceTable
   @onCreate={{this.onCreate}}
+  @page={{this.page}}
+  @size={{this.size}}
   @formDefinition={{this.model.formDefinition}}
   @onRemoveInstance={{this.onRemoveInstance}}
   @editRoute="legacy.formbeheer.form.instance"

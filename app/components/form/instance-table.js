@@ -41,16 +41,45 @@ export default class InstanceTableComponent extends Component {
     }
   }
 
+  @action
   async onInit() {
     const form = this.args.formDefinition;
     const id = form.id;
-    const response = await fetch(`/form-content/${id}/instances`);
+    const response = await fetch(
+      `/form-content/${id}/instances?page[size]=${this.args.size}&page[number]=${this.args.page}`
+    );
     if (!response.ok) {
       let error = new Error(response.statusText);
       error.status = response.status;
       throw error;
     }
     const { instances } = await response.json();
+    instances.meta = instances.meta || {};
+    instances.meta.count = parseInt(response.headers.get('X-Total-Count'), 10);
+    instances.meta.pagination = {
+      first: {
+        number: 0,
+      },
+      self: {
+        number: this.args.page,
+        size: this.args.size,
+      },
+      last: {
+        number: Math.floor(instances.meta.count / this.args.size),
+      },
+    };
+    if (this.args.page && this.args.page > 0) {
+      instances.meta.pagination.prev = {
+        number: this.args.page - 1,
+        size: this.args.size,
+      };
+    }
+    if (this.args.page * this.args.size < instances.meta.count) {
+      instances.meta.pagination.next = {
+        number: this.args.page + 1,
+        size: this.args.size,
+      };
+    }
     this.formInfo = {
       instances: instances,
       formDefinition: form,
