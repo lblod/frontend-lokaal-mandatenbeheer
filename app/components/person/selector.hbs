@@ -6,11 +6,19 @@
     class="au-u-flex--stretch flex-grow"
     {{on "click" this.startEdit}}
   />
-  <AuButton
-    {{on "click" this.startEdit}}
-    @icon="pencil"
-    @skin="secondary"
-  >Bewerk</AuButton>
+  {{#if (and @inline this.selectNewPerson)}}
+    <AuButton
+      {{on "click" this.cancelEdit}}
+      @icon="pencil"
+      @skin="secondary"
+    >Annuleer</AuButton>
+  {{else}}
+    <AuButton
+      {{on "click" this.startEdit}}
+      @icon="pencil"
+      @skin="secondary"
+    >Bewerk</AuButton>
+  {{/if}}
   <AuButton
     {{on "click" this.removePerson}}
     @icon="trash"
@@ -18,29 +26,48 @@
     @skin="secondary"
   >Verwijder</AuButton>
 </div>
-<AuModal
-  @title={{"Selecteer een persoon"}}
-  @modalOpen={{this.selectNewPerson}}
-  @closable={{true}}
-  @closeModal={{this.cancelEdit}}
->
-  {{#if this.creatingPerson}}
-    <div class="au-o-box">
+{{#if (and this.selectNewPerson @inline)}}
+  <div class="au-o-nested-form">
+    {{#if this.creatingPerson}}
       <Form::NewInstance
         @onCreate={{this.onSelectNewPerson}}
         @form={{this.createPersonFormDefinition}}
-        @onCancel={{this.cancelCreate}}
         @buildSourceTtl={{this.buildSourceTtl}}
       />
-    </div>
-  {{else}}
-    <Person::SearchForm
-      @showDefaultHead={{false}}
-      @onSelect={{this.onSelectPerson}}
-      @onCreateNewPerson={{this.onCreateNewPerson}}
-      @onCancel={{this.cancelEdit}}
-    />
-  {{/if}}
+    {{else}}
+      <Person::SearchForm
+        @showDefaultHead={{false}}
+        @onSelect={{this.onSelectPerson}}
+        @onCreateNewPerson={{this.onCreateNewPerson}}
+      />
+    {{/if}}
+  </div>
+{{else}}
+  <AuModal
+    @title={{"Selecteer een persoon"}}
+    @modalOpen={{this.selectNewPerson}}
+    @closable={{true}}
+    @closeModal={{this.cancelEdit}}
+  >
+    <div class="au-o-box">
 
-</AuModal>
+      {{#if this.creatingPerson}}
+        <Form::NewInstance
+          @onCreate={{this.onSelectNewPerson}}
+          @form={{this.createPersonFormDefinition}}
+          @onCancel={{this.cancelCreate}}
+          @buildSourceTtl={{this.buildSourceTtl}}
+        />
+      {{else}}
+        <Person::SearchForm
+          @showDefaultHead={{false}}
+          @onSelect={{this.onSelectPerson}}
+          @onCreateNewPerson={{this.onCreateNewPerson}}
+          @onCancel={{this.cancelEdit}}
+        />
+      {{/if}}
+    </div>
+
+  </AuModal>
+{{/if}}
 {{yield}}
