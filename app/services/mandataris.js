@@ -50,8 +50,8 @@ export default class MandatarisService extends Service {
     const newMandataris = this.store.createRecord('mandataris', {
       bekleedt: toReplace.bekleedt,
       isBestuurlijkeAliasVan: replacementPerson,
-      start: newMandatarisState.einde,
-      einde: toReplace.einde,
+      start: newMandatarisState.start,
+      einde: newMandatarisState.einde,
       // TODO this seems to not work
       beleidsdomein: await newMandatarisState.beleidsdomein,
       rangorde: newMandatarisState.rangorde,
