@@ -24,7 +24,7 @@ export default class MandatarisService extends Service {
     const end = moment(endDate || mandataris.einde);
     while ((current = toCheck.pop())) {
       if (
-        (!mandataris.end || start.isSameOrBefore(current.end)) &&
+        (!start || start.isSameOrBefore(current.einde)) &&
         (!end || end.isSameOrAfter(current.start))
       ) {
         return current;
@@ -52,7 +52,6 @@ export default class MandatarisService extends Service {
       isBestuurlijkeAliasVan: replacementPerson,
       start: newMandatarisState.start,
       einde: newMandatarisState.einde,
-      // TODO this seems to not work
       beleidsdomein: await newMandatarisState.beleidsdomein,
       rangorde: newMandatarisState.rangorde,
       status: toReplace.status,

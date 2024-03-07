@@ -133,7 +133,7 @@ export default class MandatarissenUpdateState extends Component {
 
     const endDate = this.args.mandataris.einde;
 
-    const newMandataris = this.store.createRecord('mandataris', {
+    const newMandatarisProps = {
       bekleedt: this.args.mandataris.bekleedt,
       beleidsdomein: this.selectedBeleidsdomeinen,
       isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
@@ -142,14 +142,21 @@ export default class MandatarissenUpdateState extends Component {
       start: this.date,
       status: this.newStatus,
       einde: endDate,
-    });
+    };
+
+    const newMandataris = this.store.createRecord(
+      'mandataris',
+      newMandatarisProps
+    );
 
     if (this.selectedReplacement) {
       const replacementMandataris =
         await this.mandatarisService.getOrCreateReplacement(
           this.args.mandataris,
           this.selectedReplacement,
-          newMandataris,
+          // passing these along because if we pass the model, relations will be
+          // evaluated as of right now and we haven't saved yet
+          newMandatarisProps,
           this.selectedFractie
         );
       newMandataris.tijdelijkeVervangingen = [replacementMandataris];
