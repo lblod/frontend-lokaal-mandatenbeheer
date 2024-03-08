@@ -18,7 +18,7 @@ export const getBestuursorganenMetaTtl = (bestuursorgaan) => {
   `;
 };
 
-export const loadBestuursorgaanUriFromContext = (storeOptions) => {
+export const loadBestuursorgaanUrisFromContext = (storeOptions) => {
   const forkingStore = storeOptions.store;
   const bestuursorgaanUri = forkingStore.match(
     EXT('applicationContext'),

@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { NamedNode } from 'rdflib';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { loadBestuursorgaanUriFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 
 export default class MandatarisMandaatSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -28,7 +28,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   }
 
   async loadBestuursorganen() {
-    const bestuursorgaanUris = loadBestuursorgaanUriFromContext(
+    const bestuursorgaanUris = loadBestuursorgaanUrisFromContext(
       this.storeOptions
     );
 
