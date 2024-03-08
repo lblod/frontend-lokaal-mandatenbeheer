@@ -13,3 +13,6 @@ export const ACCEPT_HEADER = {
 };
 
 export const SEARCH_TIMEOUT = 500;
+// the resource cache is invalidated because of our form update, but the service doesn't wait for it before returning.
+// this is a temporary hack while we wait for backend driven frontend revalidation
+export const RESOURCE_CACHE_TIMEOUT = 1000;

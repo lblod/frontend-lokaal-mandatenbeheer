@@ -11,9 +11,10 @@ import {
   FORM_GRAPH,
   META_GRAPH,
   SOURCE_GRAPH,
+  RESOURCE_CACHE_TIMEOUT,
 } from '../../utils/constants';
 import { inject as service } from '@ember/service';
-import { keepLatestTask } from 'ember-concurrency';
+import { keepLatestTask, timeout } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
 import { guidFor } from '@ember/object/internals';
@@ -60,6 +61,8 @@ export default class NewInstanceComponent extends Component {
         instanceUri: this.formInfo.sourceNode.value,
       }),
     });
+
+    yield timeout(RESOURCE_CACHE_TIMEOUT);
 
     if (!result.ok) {
       this.errorMessage =
