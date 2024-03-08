@@ -109,9 +109,7 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
       sort: 'is-bestuurlijke-alias-van.achternaam',
       include: 'is-bestuurlijke-alias-van',
       filter: {
-        'is-bestuurlijke-alias-van': {
-          achternaam: searchData,
-        },
+        'is-bestuurlijke-alias-van': searchData,
         bekleedt: {
           id: this.mandaat.id,
         },
