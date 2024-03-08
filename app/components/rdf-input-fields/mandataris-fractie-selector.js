@@ -26,7 +26,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   @tracked membership = null;
   @tracked initialized = false;
-  @tracked bestuursorgaanUri = null;
+  @tracked bestuursorgaanUris = [];
   @tracked fracties = [];
   @tracked updating = false;
 
@@ -50,20 +50,20 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   async loadBestuursorgaan() {
-    // TODO could be more than one.
-    this.bestuursorgaanUri = loadBestuursorgaanUrisFromContext(
+    this.bestuursorgaanUris = loadBestuursorgaanUrisFromContext(
       this.storeOptions
     );
   }
 
   async loadFracties() {
-    if (!this.bestuursorgaanUri) {
+    if (!this.bestuursorgaanUris) {
       return;
     }
-    const fracties = await this.store.query('fractie', {
-      'filter[bestuursorganen-in-tijd][:uri:]': this.bestuursorgaanUri[0],
+    // Even if there are multiple bestuursorganen available, it should be okay to just select the first,
+    // since fracties are configured on bestuurseenheid level.
+    this.fracties = await this.store.query('fractie', {
+      'filter[bestuursorganen-in-tijd][:uri:]': this.bestuursorgaanUris[0],
     });
-    this.fracties = fracties;
   }
 
   async loadProvidedValue() {
