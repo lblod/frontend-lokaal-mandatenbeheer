@@ -12,6 +12,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
 
   @service store;
+  @service multiUriFetcher;
 
   @tracked mandaat = null;
   @tracked initialized = false;
@@ -36,15 +37,10 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
       return;
     }
 
-    for (let uri of bestuursorgaanUris) {
-      this.bestuursorganen.push(
-        (
-          await this.store.query('bestuursorgaan', {
-            'filter[:uri:]': uri,
-          })
-        )[0]
-      );
-    }
+    this.bestuursorganen = await this.multiUriFetcher.fetchUris(
+      'bestuursorgaan',
+      bestuursorgaanUris
+    );
   }
 
   async loadProvidedValue() {
