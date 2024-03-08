@@ -3,13 +3,15 @@
     <AuContent @skin="small">
       <AuHeading @level="4" @skin="5">Wijziging huidige situatie</AuHeading>
       {{#if @mandataris.isActive}}
-        <p>Indien de mandataris wordt vervangen, of de huidige
+        <p>Indien de mandataris wordt
+          <strong>vervangen</strong>, of de huidige
           <strong>status, fractie, rangorde of bevoegdheid</strong>
-          verandert:
+          verandert.
         </p>
         <ul>
-          <li>beëindig dit mandaat;</li>
-          <li><strong>start een nieuw mandaat</strong>
+          <li>Dit beëindigt dit mandaat;</li>
+          <li>en
+            <strong>start een nieuw mandaat</strong>
             met de gewijzigde situatie.</li>
         </ul>
       {{else}}
@@ -27,7 +29,7 @@
       <AuButton
         @disabled={{not @mandataris.isActive}}
         {{on "click" this.changeStatus}}
-      >Verander status</AuButton>
+      >Wijzig huidige situatie</AuButton>
     </AuContent>
   </div>
   <div class="au-o-grid__item au-u-1-3@medium">

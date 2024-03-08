@@ -57,6 +57,46 @@
       >De gekozen datum moet na de startdatum liggen van het huidige mandaat.</AuAlert>
     {{/unless}}
   </div>
+  {{#unless this.isTerminatingMandate}}
+    <div>
+      <AuLabel>
+        Beleidsdomeinen
+      </AuLabel>
+      <Mandatarissen::BeleidsdomeinSelectorWithCreate
+        @beleidsdomeinen={{this.selectedBeleidsdomeinen}}
+        @onSelect={{this.updateBeleidsdomeinen}}
+      />
+      <AuHelpText>Enkel voor burgemeester en schepenen</AuHelpText>
+    </div>
+    <div>
+      <AuLabel>
+        Fractie
+      </AuLabel>
+      {{#if this.loading}}
+        Loading...
+      {{else}}
+        <Mandatarissen::FractieSelector
+          @fractie={{this.selectedFractie}}
+          @onSelect={{this.updateFractie}}
+          @allowClear={{true}}
+          @bestuursorganen={{this.bestuursorganenForFractie}}
+        />
+      {{/if}}
+    </div>
+    {{#if this.showRangorde}}
+      <div>
+        <AuLabel>
+          Rangorde
+        </AuLabel>
+        <AuInput
+          @value={{this.rangorde}}
+          @width="block"
+          id="mandataris-rangorde"
+          placeholder={{this.rangordePlaceholder}}
+        />
+      </div>
+    {{/if}}
+  {{/unless}}
   <AuToolbar class="au-u-margin-top" as |Group|>
     <Group>
       <AuButtonGroup>
@@ -65,7 +105,7 @@
           @disabled={{this.disabled}}
           @loading={{this.isSaving}}
         >
-          Pas aan
+          {{if this.hasChanges "Pas aan" "Onveranderd"}}
         </AuButton>
         <AuButton {{on "click" @onCancel}} @skin="secondary">
           Annuleer

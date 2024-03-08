@@ -7,7 +7,11 @@ import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
-  @tracked date = new Date();
+  @tracked date = null;
+  @tracked selectedBeleidsdomeinen = [];
+  @tracked selectedFractie = null;
+  @tracked bestuursorganenForFractie = [];
+  @tracked rangorde = null;
 
   @service mandatarisStatus;
   @service store;
@@ -15,15 +19,27 @@ export default class MandatarissenUpdateState extends Component {
 
   constructor() {
     super(...arguments);
-    this.newStatus = this.mandatarisStatus.endedState;
+    this.load.perform();
+  }
+
+  get loading() {
+    return this.load.isRunning;
+  }
+
+  @dropTask
+  *load() {
+    this.newStatus = this.args.mandataris.status;
+    this.date = new Date();
+    this.selectedBeleidsdomeinen = this.args.mandataris.beleidsdomein.slice();
+    this.rangorde = this.args.mandataris.rangorde;
+    this.selectedFractie = yield (yield this.args.mandataris.heeftLidmaatschap)
+      ?.binnenFractie;
+    this.bestuursorganenForFractie = (yield (yield this.args.mandataris
+      .bekleedt).bevatIn).slice();
   }
 
   get statusOptions() {
-    return this.mandatarisStatus.statuses
-      .filter((status) => status.id !== this.currentStatus?.id)
-      .sort((a, b) => {
-        return a.label.localeCompare(b.label);
-      });
+    return this.mandatarisStatus.statuses;
   }
 
   get currentStatus() {
@@ -36,6 +52,10 @@ export default class MandatarissenUpdateState extends Component {
     return this.args.mandataris.status;
   }
 
+  get isTerminatingMandate() {
+    return this.newStatus === this.mandatarisStatus.endedState;
+  }
+
   get validDate() {
     if (!this.date) {
       return false;
@@ -46,23 +66,123 @@ export default class MandatarissenUpdateState extends Component {
     return this.date.getTime() >= this.args.mandataris.start.getTime();
   }
 
+  get hasChangesInBeleidsdomeinen() {
+    if (
+      this.selectedBeleidsdomeinen.length !==
+      this.args.mandataris.beleidsdomein.length
+    ) {
+      return true;
+    }
+
+    // if the length is the same, a difference requires a new item to have been added
+
+    const oldIds = new Set();
+
+    this.args.mandataris.beleidsdomein.forEach((beleidsdomein) => {
+      oldIds.add(beleidsdomein.id);
+    });
+    for (let i = 0; i < this.selectedBeleidsdomeinen.length; i++) {
+      if (!oldIds.has(this.selectedBeleidsdomeinen[i].id)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  get hasChanges() {
+    return (
+      this.newStatus?.id !== this.args.mandataris.status?.id ||
+      this.selectedFractie?.id !==
+        this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
+      this.hasChangesInBeleidsdomeinen ||
+      this.rangorde !== this.args.mandataris.rangorde
+    );
+  }
+
   get disabled() {
-    return this.loading || !this.newStatus || !this.date || !this.validDate;
+    return (
+      this.loading ||
+      !this.newStatus ||
+      !this.date ||
+      !this.validDate ||
+      !this.hasChanges
+    );
+  }
+
+  get showRangorde() {
+    const roleName = this.args.mandataris.get('bekleedt.bestuursfunctie.label');
+    return roleName && roleName.toLowerCase().indexOf('schepen') >= 0;
+  }
+
+  get rangordePlaceholder() {
+    const mandaatName = (
+      this.args.mandataris.get('bekleedt.bestuursfunctie.label') || 'schepen'
+    ).toLowerCase();
+    return `Eerste ${mandaatName}`;
   }
 
   async changeMandatarisState() {
+    await this.updateOldLidmaatschap();
+
+    const endDate = this.args.mandataris.einde;
     const newMandataris = this.store.createRecord('mandataris', {
-      bekleedt: await this.args.mandataris.bekleedt,
-      lidmaatschap: await this.args.mandataris.lidmaatschap,
-      beleidsdomein: (await this.args.mandataris.beleidsdomein) || [],
-      isBestuurlijkeAliasVan: await this.args.mandataris.isBestuurlijkeAliasVan,
+      bekleedt: this.args.mandataris.bekleedt,
+      beleidsdomein: this.selectedBeleidsdomeinen,
+      isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
+      rangorde: this.rangorde,
+      isDraft: true,
       start: this.date,
       status: this.newStatus,
-      einde: this.args.mandataris.einde,
+      einde: endDate,
     });
     this.args.mandataris.einde = this.date;
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
+
+    await this.createNewLidmaatschap(newMandataris);
+
     return newMandataris;
+  }
+
+  async updateOldLidmaatschap() {
+    const oldLidmaatschap = await this.args.mandataris.heeftLidmaatschap;
+    if (!oldLidmaatschap) {
+      return;
+    }
+    let oldTijdsinterval = await oldLidmaatschap.lidGedurende;
+
+    if (!oldTijdsinterval) {
+      // old membership instances don't necessarily have a tijdsinterval
+      oldTijdsinterval = this.store.createRecord('tijdsinterval', {
+        begin: this.args.mandataris.start,
+        einde: this.date,
+      });
+      await oldTijdsinterval.save();
+      oldLidmaatschap.lidGedurende = oldTijdsinterval;
+      await oldLidmaatschap.save();
+    }
+    oldTijdsinterval.einde = this.date;
+
+    await oldTijdsinterval.save();
+  }
+
+  async createNewLidmaatschap(newMandataris) {
+    if (!this.selectedFractie) {
+      return;
+    }
+    const endDate = this.args.mandataris.einde;
+    const newTijdsinterval = this.store.createRecord('tijdsinterval', {
+      begin: this.date,
+      einde: endDate,
+    });
+
+    await newTijdsinterval.save();
+
+    const newLidmaatschap = this.store.createRecord('lidmaatschap', {
+      binnenFractie: this.selectedFractie,
+      lid: newMandataris,
+      lidGedurende: newTijdsinterval,
+    });
+    await newLidmaatschap.save();
   }
 
   endMandataris() {
@@ -110,5 +230,13 @@ export default class MandatarissenUpdateState extends Component {
   @action
   updateNewStatus(status) {
     this.newStatus = status;
+  }
+
+  @action updateBeleidsdomeinen(selectedBeleidsdomeinen) {
+    this.selectedBeleidsdomeinen = selectedBeleidsdomeinen;
+  }
+
+  @action updateFractie(newFractie) {
+    this.selectedFractie = newFractie;
   }
 }

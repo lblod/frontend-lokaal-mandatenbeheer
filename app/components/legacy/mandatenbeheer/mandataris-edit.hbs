@@ -23,7 +23,7 @@
         </div>
         <div>
           <AuLabel for="mandataris-beleidsdomein">Beleidsdomeinen</AuLabel>
-          {{legacy/mandatenbeheer/beleidsdomein-selector-with-create
+          {{mandatarissen/beleidsdomein-selector-with-create
             onSelect=(action "setBeleidsdomein")
             beleidsdomeinen=this.beleidsdomeinen
           }}
@@ -76,7 +76,7 @@
         </div>
         <div>
           <AuLabel for="fractie">Fractie</AuLabel>
-          {{legacy/mandatenbeheer/fractie-selector
+          {{mandatarissen/fractie-selector
             onSelect=(action "setFractie")
             fractie=this.fractie
             allowClear=true
@@ -241,7 +241,7 @@
           </div>
           <div>
             <AuLabel for="mandataris-fractie">Fractie</AuLabel>
-            {{legacy/mandatenbeheer/fractie-selector
+            {{mandatarissen/fractie-selector
               onSelect=(action "setFractie")
               fractie=this.fractie
               allowClear=true

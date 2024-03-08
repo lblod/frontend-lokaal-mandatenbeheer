@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service() store;
@@ -10,6 +11,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   @tracked _fractie;
   @tracked bestuursorganenId;
+  @tracked fractieOptions = [];
 
   constructor() {
     super(...arguments);
@@ -19,26 +21,33 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         o.get('id')
       );
     }
+    this.searchByName.perform();
   }
 
   @restartableTask
   *searchByName(searchData) {
-    yield timeout(300);
+    yield timeout(SEARCH_TIMEOUT);
     let queryParams = {
       sort: 'naam',
       include: 'fractietype',
       filter: {
-        naam: searchData,
         'bestuursorganen-in-tijd': {
           id: this.bestuursorganenId.join(','),
         },
       },
     };
+    if (searchData) {
+      queryParams.filter.naam = searchData;
+    }
     let fracties = yield this.store.query('fractie', queryParams);
     fracties = fracties.filter((f) => !f.get('fractietype.isOnafhankelijk'));
     //sets dummy
-    if ('onafhankelijk'.includes(searchData.toLowerCase())) {
+    if ('onafhankelijk'.includes(searchData?.toLowerCase())) {
       fracties.pushObject(yield this.createNewOnafhankelijkeFractie());
+    }
+    // so we have results when search is blank
+    if (!searchData) {
+      this.fractieOptions = fracties;
     }
     return fracties;
   }
