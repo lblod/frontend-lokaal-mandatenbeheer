@@ -1,32 +1,34 @@
-<div>
-  <AuLabel for="replacement">{{this.title}}</AuLabel>
-  {{#if this.initialized}}
-    <PowerSelectMultiple
-      @triggerId="replacement"
-      @allowClear={{true}}
-      @disabled={{this.disabled}}
-      @search={{perform this.search}}
-      @selected={{this.replacements}}
-      @onChange={{this.selectReplacement}}
-      @loadingMessage="Aan het laden..."
-      @searchEnabled={{true}}
-      @noMatchesMessage="Geen resultaten"
-      @searchMessage="Typ om te zoeken"
-      as |mandataris|
-    >
-      <span>
-        {{mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-        {{mandataris.isBestuurlijkeAliasVan.achternaam}}
-      </span>
-      <span>
-        {{moment-format mandataris.start "DD-MM-YYYY"}}
-        {{#if mandataris.einde}}
-          -
-          {{moment-format mandataris.einde "DD-MM-YYYY"}}
-        {{/if}}
-      </span>
-    </PowerSelectMultiple>
-  {{else}}
-    Loading...
-  {{/if}}
-</div>
+{{#if this.shouldRender}}
+  <div>
+    <AuLabel for="replacement">{{this.title}}</AuLabel>
+    {{#if this.initialized}}
+      <PowerSelectMultiple
+        @triggerId="replacement"
+        @allowClear={{true}}
+        @disabled={{this.disabled}}
+        @search={{perform this.search}}
+        @selected={{this.replacements}}
+        @onChange={{this.selectReplacement}}
+        @loadingMessage="Aan het laden..."
+        @searchEnabled={{true}}
+        @noMatchesMessage="Geen resultaten"
+        @searchMessage="Typ om te zoeken"
+        as |mandataris|
+      >
+        <span>
+          {{mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          {{mandataris.isBestuurlijkeAliasVan.achternaam}}
+        </span>
+        <span>
+          {{moment-format mandataris.start "DD-MM-YYYY"}}
+          {{#if mandataris.einde}}
+            -
+            {{moment-format mandataris.einde "DD-MM-YYYY"}}
+          {{/if}}
+        </span>
+      </PowerSelectMultiple>
+    {{else}}
+      Loading...
+    {{/if}}
+  </div>
+{{/if}}

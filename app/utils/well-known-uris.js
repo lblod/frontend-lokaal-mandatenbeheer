@@ -8,3 +8,5 @@ export const FRACTIETYPE_SAMENWERKINGSVERBAND =
   'http://data.vlaanderen.be/id/concept/Fractietype/Samenwerkingsverband';
 export const BESTUURSEENHEID_CLASSIFICATIECODE_OCMW =
   'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000002';
+export const MANDATARIS_VERHINDERD_STATE =
+  'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/c301248f-0199-45ca-b3e5-4c596731d5fe';

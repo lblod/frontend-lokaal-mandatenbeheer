@@ -8,8 +8,9 @@ import {
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
 import { keepLatestTask, timeout } from 'ember-concurrency';
-import { ORG } from 'frontend-lmb/rdf/namespaces';
+import { MANDAAT, ORG } from 'frontend-lmb/rdf/namespaces';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
 import { NamedNode } from 'rdflib';
 
 export default class MandatarisReplacementSelector extends InputFieldComponent {
@@ -21,17 +22,45 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
   @tracked replacements = null;
   @tracked initialized = false;
   @tracked mandaat = [];
+  @tracked shouldRender = false;
 
   @tracked editing = false;
 
   constructor() {
     super(...arguments);
     this.load();
+    this.registerObserver();
   }
 
   async load() {
     await Promise.all([this.loadProvidedValue(), this.loadMandaat()]);
     this.initialized = true;
+  }
+
+  registerObserver() {
+    const onFormUpdate = () => {
+      if (this.isDestroyed) {
+        return;
+      }
+
+      this.loadMandaat();
+      this.checkIfShouldRender();
+    };
+    this.storeOptions.store.registerObserver(onFormUpdate);
+    onFormUpdate();
+  }
+
+  checkIfShouldRender() {
+    this.shouldRender = this.storeOptions.store.any(
+      this.storeOptions.sourceNode,
+      MANDAAT('status'),
+      new NamedNode(MANDATARIS_VERHINDERD_STATE),
+      this.storeOptions.sourceGraph
+    );
+    if (!this.shouldRender) {
+      // without timeout, the form ttl doesn't update immediately
+      setTimeout(() => this.selectReplacement([]), 100);
+    }
   }
 
   get title() {
