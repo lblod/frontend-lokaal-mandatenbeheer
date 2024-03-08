@@ -1,46 +1,50 @@
-<AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
-  <Group>
-    <AuHeading @skin="2">Beheer
-      {{this.formInfo.formDefinition.id}}
-      Form Instances</AuHeading>
-  </Group>
-  <Group>
-    <AuButton {{on "click" @onCreate}}>Voeg form instance toe</AuButton>
-  </Group>
-</AuToolbar>
+<div {{did-update this.onInit @page}}>
+  <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
+    <Group>
+      <AuHeading @skin="2">Beheer
+        {{this.formInfo.formDefinition.id}}
+        Form Instances</AuHeading>
+    </Group>
+    <Group>
+      <AuButton {{on "click" @onCreate}}>Voeg form instance toe</AuButton>
+    </Group>
+  </AuToolbar>
 
-<AuDataTable
-  @content={{this.formInfo.instances}}
-  @isLoading={{not this.initialized}}
-  @noDataMessage="Geen instance gevonden."
-  as |t|
->
-  <t.content as |c|>
-    <c.header>
-      <th>Uri</th>
-      <th>Id</th>
-      <th>Label</th>
-      <th>{{! Bewerk }}</th>
-      <th>{{! Delete }}</th>
-    </c.header>
+  <AuDataTable
+    @content={{this.formInfo.instances}}
+    @page={{@page}}
+    @size={{@size}}
+    @isLoading={{not this.initialized}}
+    @noDataMessage="Geen instance gevonden."
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        <th>Uri</th>
+        <th>Id</th>
+        <th>Label</th>
+        <th>{{! Bewerk }}</th>
+        <th>{{! Delete }}</th>
+      </c.header>
 
-    <c.body as |row|>
-      <td class="au-u-word-break">{{row.uri}}</td>
-      <td class="au-u-word-break">{{row.id}}</td>
-      <td class="au-u-word-break">{{row.label}}</td>
-      <td>
-        <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
-          <AuIcon @icon="pencil" @alignment="left" />
-          Bewerk
-        </LinkTo>
-      </td>
-      <td class="au-u-text-right">
-        <AuButton
-          @icon="bin"
-          @alert={{true}}
-          {{on "click" (fn this.removeInstance row)}}
-        >Verwijder</AuButton>
-      </td>
-    </c.body>
-  </t.content>
-</AuDataTable>
+      <c.body as |row|>
+        <td class="au-u-word-break">{{row.uri}}</td>
+        <td class="au-u-word-break">{{row.id}}</td>
+        <td class="au-u-word-break">{{row.label}}</td>
+        <td>
+          <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
+            <AuIcon @icon="pencil" @alignment="left" />
+            Bewerk
+          </LinkTo>
+        </td>
+        <td class="au-u-text-right">
+          <AuButton
+            @icon="bin"
+            @alert={{true}}
+            {{on "click" (fn this.removeInstance row)}}
+          >Verwijder</AuButton>
+        </td>
+      </c.body>
+    </t.content>
+  </AuDataTable>
+</div>
