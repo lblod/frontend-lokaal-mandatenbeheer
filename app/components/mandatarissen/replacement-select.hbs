@@ -1,0 +1,21 @@
+<div {{did-update this.checkIfMandateAlreadyExists @selected}}>
+  <Person::Selector
+    @person={{@selected}}
+    @onUpdate={{@onSelect}}
+    @inline={{@inline}}
+  />
+  {{#if this.overlappingMandate}}
+    <AuAlert @skin="warning" @icon="alert-triangle" class="au-u-margin-top">
+      Deze persoon heeft al een overlappend mandaat "{{this.overlappingMandate.bekleedt.bestuursfunctie.label}}"
+      met startdatum
+      {{moment-format this.overlappingMandate.start "DD-MM-YYYY"}}{{if
+        this.overlappingMandate.einde
+        (concat
+          " en einddatum "
+          (moment-format this.overlappingMandate.einde "DD-MM-YYYY")
+        )
+      }}. Door te verder te gaan zal dit mandaat aangeduid worden als vervanging
+      van het huidige mandaat.
+    </AuAlert>
+  {{/if}}
+</div>

@@ -96,6 +96,19 @@
         />
       </div>
     {{/if}}
+    {{#if this.showReplacement}}
+      <div>
+        <AuLabel>
+          Vervanger
+        </AuLabel>
+        <Mandatarissen::ReplacementSelect
+          @mandataris={{@mandataris}}
+          @selected={{this.selectedReplacement}}
+          @onSelect={{this.updateReplacement}}
+          @inline={{true}}
+        />
+      </div>
+    {{/if}}
   {{/unless}}
   <AuToolbar class="au-u-margin-top" as |Group|>
     <Group>

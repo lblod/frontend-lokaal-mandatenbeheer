@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -12,10 +13,12 @@ export default class MandatarissenUpdateState extends Component {
   @tracked selectedFractie = null;
   @tracked bestuursorganenForFractie = [];
   @tracked rangorde = null;
+  @tracked selectedReplacement = null;
 
   @service mandatarisStatus;
   @service store;
   @service toaster;
+  @service('mandataris') mandatarisService;
 
   constructor() {
     super(...arguments);
@@ -50,6 +53,10 @@ export default class MandatarissenUpdateState extends Component {
       return this.mandatarisStatus.endedState;
     }
     return this.args.mandataris.status;
+  }
+
+  get showReplacement() {
+    return this.newStatus?.id === VERHINDERD_STATE_ID;
   }
 
   get isTerminatingMandate() {
@@ -125,7 +132,8 @@ export default class MandatarissenUpdateState extends Component {
     await this.updateOldLidmaatschap();
 
     const endDate = this.args.mandataris.einde;
-    const newMandataris = this.store.createRecord('mandataris', {
+
+    const newMandatarisProps = {
       bekleedt: this.args.mandataris.bekleedt,
       beleidsdomein: this.selectedBeleidsdomeinen,
       isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
@@ -134,11 +142,33 @@ export default class MandatarissenUpdateState extends Component {
       start: this.date,
       status: this.newStatus,
       einde: endDate,
-    });
+    };
+
+    const newMandataris = this.store.createRecord(
+      'mandataris',
+      newMandatarisProps
+    );
+
+    if (this.selectedReplacement) {
+      const replacementMandataris =
+        await this.mandatarisService.getOrCreateReplacement(
+          this.args.mandataris,
+          this.selectedReplacement,
+          // passing these along because if we pass the model, relations will be
+          // evaluated as of right now and we haven't saved yet
+          newMandatarisProps,
+          this.selectedFractie
+        );
+      newMandataris.tijdelijkeVervangingen = [replacementMandataris];
+    }
+
     this.args.mandataris.einde = this.date;
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
-    await this.createNewLidmaatschap(newMandataris);
+    await this.mandatarisService.createNewLidmaatschap(
+      newMandataris,
+      this.selectedFractie
+    );
 
     return newMandataris;
   }
@@ -163,26 +193,6 @@ export default class MandatarissenUpdateState extends Component {
     oldTijdsinterval.einde = this.date;
 
     await oldTijdsinterval.save();
-  }
-
-  async createNewLidmaatschap(newMandataris) {
-    if (!this.selectedFractie) {
-      return;
-    }
-    const endDate = this.args.mandataris.einde;
-    const newTijdsinterval = this.store.createRecord('tijdsinterval', {
-      begin: this.date,
-      einde: endDate,
-    });
-
-    await newTijdsinterval.save();
-
-    const newLidmaatschap = this.store.createRecord('lidmaatschap', {
-      binnenFractie: this.selectedFractie,
-      lid: newMandataris,
-      lidGedurende: newTijdsinterval,
-    });
-    await newLidmaatschap.save();
   }
 
   endMandataris() {
@@ -213,7 +223,8 @@ export default class MandatarissenUpdateState extends Component {
         );
         this.onStateChanged(newMandataris);
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e);
         showErrorToast(
           this.toaster,
           'Er ging iets mis bij het aanpassen van de mandataris status.'
@@ -238,5 +249,9 @@ export default class MandatarissenUpdateState extends Component {
 
   @action updateFractie(newFractie) {
     this.selectedFractie = newFractie;
+  }
+
+  @action updateReplacement(newReplacement) {
+    this.selectedReplacement = newReplacement;
   }
 }

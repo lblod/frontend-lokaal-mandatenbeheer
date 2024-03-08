@@ -28,6 +28,12 @@ export default class MandatarisModel extends AgentInPosition {
   })
   tijdelijkeVervangingen;
 
+  @hasMany('mandataris', {
+    async: true,
+    inverse: null,
+  })
+  vervangerVan;
+
   @hasMany('beleidsdomein-code', {
     async: true,
     inverse: null,
