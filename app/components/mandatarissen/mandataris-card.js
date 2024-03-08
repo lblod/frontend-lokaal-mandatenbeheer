@@ -22,24 +22,4 @@ export default class MandatarisCardComponent extends Component {
       return beleidsdomeinen.map((item) => item.label).join(', ');
     });
   }
-
-  get formattedVervangenDoor() {
-    return this.args.mandataris.tijdelijkeVervangingen.then((replacements) => {
-      return replacements
-        .map((replacement) =>
-          replacement.get('isBestuurlijkeAliasVan.achternaam')
-        )
-        .join(', ');
-    });
-  }
-
-  get formattedVervangerVan() {
-    return this.args.mandataris.vervangerVan.then((replaced) => {
-      return replaced
-        .map((mandataris) =>
-          mandataris.get('isBestuurlijkeAliasVan.achternaam')
-        )
-        .join(', ');
-    });
-  }
 }
