@@ -1,21 +1,24 @@
+import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
-import { triplesForPath } from '@lblod/submission-form-helpers';
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
-import { NamedNode } from 'rdflib';
-import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { keepLatestTask, dropTask, timeout } from 'ember-concurrency';
+import {
+  triplesForPath,
+  updateSimpleFormValue,
+} from '@lblod/submission-form-helpers';
+import { keepLatestTask, timeout } from 'ember-concurrency';
+import { ORG } from 'frontend-lmb/rdf/namespaces';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
-import { EXT, ORG } from 'frontend-lmb/rdf/namespaces';
+import { NamedNode } from 'rdflib';
 
 export default class MandatarisReplacementSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
 
   @service store;
+  @service multiUriFetcher;
 
-  @tracked replacement = null;
+  @tracked replacements = null;
   @tracked initialized = false;
   @tracked mandaat = [];
 
@@ -59,12 +62,15 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
     if (!replacementTriples.length) {
       return;
     }
-    const replacementUri = replacementTriples[0].value;
-
-    const matches = await this.store.query('mandataris', {
-      'filter[:uri:]': replacementUri,
+    const replacementUris = replacementTriples.map((triple) => {
+      return triple.value;
     });
-    this.replacement = matches.at(0);
+
+    const matches = await this.multiUriFetcher.fetchUris(
+      'mandataris',
+      replacementUris
+    );
+    this.replacements = matches;
   }
 
   @keepLatestTask
@@ -85,14 +91,21 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
   }
 
   @action
-  selectReplacement(mandataris) {
-    this.replacement = mandataris;
-    const uri = mandataris?.uri;
-    if (uri) {
-      replaceSingleFormValue(this.storeOptions, new NamedNode(uri));
-    } else {
-      replaceSingleFormValue(this.storeOptions, null);
-    }
+  selectReplacement(mandatarises) {
+    this.replacements = mandatarises;
+
+    // Retrieve options in store
+    const matches = triplesForPath(this.storeOptions, true).values;
+
+    // Cleanup old value(s) in the store
+    matches
+      .filter((m) => !mandatarises.find((opt) => m.value == opt.uri))
+      .forEach((m) => updateSimpleFormValue(this.storeOptions, undefined, m));
+
+    // Insert new value in the store
+    mandatarises.forEach((mandataris) =>
+      updateSimpleFormValue(this.storeOptions, new NamedNode(mandataris.uri))
+    );
 
     this.hasBeenFocused = true;
     super.updateValidations();
