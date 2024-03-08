@@ -62,6 +62,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     // Even if there are multiple bestuursorganen available, it should be okay to just select the first,
     // since fracties are configured on bestuurseenheid level.
     this.fracties = await this.store.query('fractie', {
+      sort: 'naam',
       'filter[bestuursorganen-in-tijd][:uri:]': this.bestuursorgaanUris[0],
     });
   }
