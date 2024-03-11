@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { getBestuursorgaanMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
@@ -33,7 +33,7 @@ export default class OrganenMandatarisNewController extends Controller {
 
   @action
   buildMetaTtl() {
-    return getBestuursorgaanMetaTtl(this.model.currentBestuursorgaan);
+    return getBestuursorganenMetaTtl([this.model.currentBestuursorgaan]);
   }
 
   @action

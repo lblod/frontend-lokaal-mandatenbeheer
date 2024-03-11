@@ -6,12 +6,13 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { NamedNode } from 'rdflib';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { loadBestuursorgaanUriFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 
 export default class MandatarisMandaatSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
 
   @service store;
+  @service multiUriFetcher;
 
   @tracked mandaat = null;
   @tracked initialized = false;
@@ -23,22 +24,23 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   }
 
   async load() {
-    await Promise.all([this.loadProvidedValue(), this.loadBestuursorgaan()]);
+    await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
     this.initialized = true;
   }
 
-  async loadBestuursorgaan() {
-    const bestuursorgaanUri = loadBestuursorgaanUriFromContext(
+  async loadBestuursorganen() {
+    const bestuursorgaanUris = loadBestuursorgaanUrisFromContext(
       this.storeOptions
     );
 
-    if (!bestuursorgaanUri) {
+    if (!bestuursorgaanUris) {
       return;
     }
 
-    this.bestuursorganen = await this.store.query('bestuursorgaan', {
-      'filter[:uri:]': bestuursorgaanUri,
-    });
+    this.bestuursorganen = await this.multiUriFetcher.fetchUris(
+      'bestuursorgaan',
+      bestuursorgaanUris
+    );
   }
 
   async loadProvidedValue() {

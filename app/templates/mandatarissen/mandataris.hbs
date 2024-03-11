@@ -4,7 +4,7 @@
       {{@model.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
       {{@model.mandataris.isBestuurlijkeAliasVan.achternaam}}
       <br />
-      {{@model.bestuursorgaan.isTijdsspecialisatieVan.naam}}
+      {{this.bestuursorganenTitle}}
     </AuHeading>
   </Group>
 </AuToolbar>
@@ -18,7 +18,7 @@
     <Mandatarissen::MandatarisEditPrompt
       class="au-c-collapsible au-u-margin-top-small"
       @mandataris={{@model.mandataris}}
-      @bestuursorgaan={{@model.bestuursorgaan}}
+      @bestuursorganen={{@model.bestuursorganen}}
       @mandatarisEindeEditForm={{@model.mandatarisEindeEditForm}}
       @mandatarisEditForm={{@model.mandatarisEditForm}}
       @onMandatarisChanged={{this.onMandatarisChanged}}
