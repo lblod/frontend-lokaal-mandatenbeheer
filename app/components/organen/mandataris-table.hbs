@@ -42,14 +42,14 @@
 
     <c.body as |row|>
       <td><LinkTo
-          @route={{@editRoute}}
+          @route={{@personRoute}}
           @model={{row.isBestuurlijkeAliasVan.id}}
           class="au-c-link"
         >
           {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
         </LinkTo></td>
       <td><LinkTo
-          @route={{@editRoute}}
+          @route={{@personRoute}}
           @model={{row.isBestuurlijkeAliasVan.id}}
           class="au-c-link"
         >
