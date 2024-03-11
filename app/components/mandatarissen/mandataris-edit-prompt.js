@@ -14,6 +14,7 @@ const BEKRACHTIG_MODE = 'bekrachtig';
 export default class MandatenbeheerMandatarisEditPromptComponent extends Component {
   @tracked editMode = null;
   @service store;
+  @service router;
 
   get isChanging() {
     return this.editMode === CHANGE_MODE;
@@ -59,7 +60,7 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
       sourceGraph: SOURCE_GRAPH,
     });
 
-    setTimeout(() => this.args.mandataris.reload(), 1000);
+    setTimeout(() => this.router.refresh(), 1000);
   }
 
   @action
