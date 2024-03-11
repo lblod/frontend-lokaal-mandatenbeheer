@@ -19,22 +19,20 @@
         @label="Familienaam"
       />
       <th>Mandaten</th>
-      <th>{{! Detail Action }}</th>
     </c.header>
 
     <c.body as |row|>
       <td>
-        {{row.gebruikteVoornaam}}
-      </td>
-      <td>
-        {{row.achternaam}}
-      </td>
-      <td>{{await (this.mandaten row)}}</td>
-      <td>
         <LinkTo @route={{@detailRoute}} @model={{row.id}} class="au-c-link">
-          Meer info
+          {{row.gebruikteVoornaam}}
         </LinkTo>
       </td>
+      <td>
+        <LinkTo @route={{@detailRoute}} @model={{row.id}} class="au-c-link">
+          {{row.achternaam}}
+        </LinkTo>
+      </td>
+      <td>{{await (this.mandaten row)}}</td>
     </c.body>
   </t.content>
 </AuDataTable>
