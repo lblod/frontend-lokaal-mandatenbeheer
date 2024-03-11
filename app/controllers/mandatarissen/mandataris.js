@@ -6,14 +6,9 @@ export default class MandatarissenMandatarisController extends Controller {
   @service router;
 
   get bestuursorganenTitle() {
-    let displayText =
-      this.model.bestuursorganen[0].isTijdsspecialisatieVan.get('naam');
-    for (let i = 1; i < this.model.bestuursorganen.length; i++) {
-      displayText += ` - ${this.model.bestuursorganen[1].isTijdsspecialisatieVan.get(
-        'naam'
-      )}`;
-    }
-    return displayText;
+    return this.model.bestuursorganen
+      .map((elem) => elem.isTijdsspecialisatieVan.get('naam'))
+      .join(' - ');
   }
 
   @action
