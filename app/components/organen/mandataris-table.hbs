@@ -58,9 +58,9 @@
       <td>
         {{row.heeftLidmaatschap.binnenFractie.naam}}
       </td>
-      <td>
-        {{row.bekleedt.bestuursfunctie.label}}
-      </td>
+      <td><LinkTo @route={{@mandaatRoute}} @model={{row.id}} class="au-c-link">
+          {{row.bekleedt.bestuursfunctie.label}}
+        </LinkTo></td>
       <td>
         {{moment-format row.start "DD-MM-YYYY"}}</td>
       <td>
