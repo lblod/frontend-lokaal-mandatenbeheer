@@ -38,16 +38,23 @@
         @currentSorting={{@sort}}
         @label="Einde mandaat"
       />
-      <th></th>
     </c.header>
 
     <c.body as |row|>
-      <td>
-        {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-      </td>
-      <td>
-        {{row.isBestuurlijkeAliasVan.achternaam}}
-      </td>
+      <td><LinkTo
+          @route={{@editRoute}}
+          @model={{row.isBestuurlijkeAliasVan.id}}
+          class="au-c-link"
+        >
+          {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+        </LinkTo></td>
+      <td><LinkTo
+          @route={{@editRoute}}
+          @model={{row.isBestuurlijkeAliasVan.id}}
+          class="au-c-link"
+        >
+          {{row.isBestuurlijkeAliasVan.achternaam}}
+        </LinkTo></td>
       <td>
         {{row.heeftLidmaatschap.binnenFractie.naam}}
       </td>
@@ -58,14 +65,6 @@
         {{moment-format row.start "DD-MM-YYYY"}}</td>
       <td>
         {{moment-format row.einde "DD-MM-YYYY"}}</td>
-      <td><LinkTo
-          @route={{@editRoute}}
-          @model={{row.isBestuurlijkeAliasVan.id}}
-          class="au-c-link"
-        >
-          <AuIcon @icon="pencil" @alignment="left" />
-          Bewerk
-        </LinkTo></td>
     </c.body>
   </t.content>
 </AuDataTable>
