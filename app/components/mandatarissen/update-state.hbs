@@ -23,23 +23,6 @@
   </div>
   <div>
     <AuLabel>
-      Nieuwe Status
-    </AuLabel>
-    <PowerSelect
-      @allowClear={{false}}
-      @selected={{this.newStatus}}
-      @options={{this.statusOptions}}
-      @onChange={{this.updateNewStatus}}
-      @searchEnabled={{true}}
-      @searchField="label"
-      @noMatchesMessage="Geen resultaten"
-      as |status|
-    >
-      {{status.label}}
-    </PowerSelect>
-  </div>
-  <div>
-    <AuLabel>
       Vanaf
     </AuLabel>
     <AuDatePicker
@@ -57,7 +40,37 @@
       >De gekozen datum moet na de startdatum liggen van het huidige mandaat.</AuAlert>
     {{/unless}}
   </div>
+  <div>
+    <AuLabel>
+      Nieuwe Status
+    </AuLabel>
+    <PowerSelect
+      @allowClear={{false}}
+      @selected={{this.newStatus}}
+      @options={{this.statusOptions}}
+      @onChange={{this.updateNewStatus}}
+      @searchEnabled={{true}}
+      @searchField="label"
+      @noMatchesMessage="Geen resultaten"
+      as |status|
+    >
+      {{status.label}}
+    </PowerSelect>
+  </div>
   {{#unless this.isTerminatingMandate}}
+    {{#if this.showReplacement}}
+      <div>
+        <AuLabel>
+          Vervanger
+        </AuLabel>
+        <Mandatarissen::ReplacementSelect
+          @mandataris={{@mandataris}}
+          @selected={{this.selectedReplacement}}
+          @onSelect={{this.updateReplacement}}
+          @inline={{true}}
+        />
+      </div>
+    {{/if}}
     <div>
       <AuLabel>
         Beleidsdomeinen
@@ -93,19 +106,6 @@
           @width="block"
           id="mandataris-rangorde"
           placeholder={{this.rangordePlaceholder}}
-        />
-      </div>
-    {{/if}}
-    {{#if this.showReplacement}}
-      <div>
-        <AuLabel>
-          Vervanger
-        </AuLabel>
-        <Mandatarissen::ReplacementSelect
-          @mandataris={{@mandataris}}
-          @selected={{this.selectedReplacement}}
-          @onSelect={{this.updateReplacement}}
-          @inline={{true}}
         />
       </div>
     {{/if}}
