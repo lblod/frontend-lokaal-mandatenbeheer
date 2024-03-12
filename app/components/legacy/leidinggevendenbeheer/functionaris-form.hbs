@@ -41,13 +41,12 @@
       <div class="au-o-grid au-o-grid--tiny">
         {{#each this.statusOptions as |status|}}
           <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-            <AuControlRadio
-              @label={{status.label}}
+            <AuRadio
               @name="functionary-status"
               @value={{status.label}}
               @onChange={{fn (mut @model.status) status}}
               checked={{eq status.id @model.status.id}}
-            />
+            >{{status.label}}</AuRadio>
           </div>
         {{/each}}
       </div>
