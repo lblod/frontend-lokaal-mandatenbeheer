@@ -127,10 +127,5 @@
   },
   "ember": {
     "edition": "octane"
-  },
-  "lintTodo": {
-    "ember-template-lint": {
-      "daysToDecay": null
-    }
   }
 }
