@@ -10,9 +10,7 @@ export default class FormModel extends Model {
 
   @hasMany('form-extension', {
     async: true,
-    inverse: 'form',
-    polymorphic: true,
-    as: 'form',
+    inverse: 'baseForm',
   })
   extensions;
 }
