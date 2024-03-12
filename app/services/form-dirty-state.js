@@ -1,4 +1,5 @@
 import Service from '@ember/service';
+import ENV from 'frontend-lmb/config/environment';
 
 export default class FormDirtyStateService extends Service {
   dirtyForms = new Set();
@@ -6,12 +7,14 @@ export default class FormDirtyStateService extends Service {
   constructor() {
     super(...arguments);
 
-    window.addEventListener('beforeunload', (e) => {
-      if (this.hasDirtyForms) {
-        e.preventDefault();
-        e.returnValue = '';
-      }
-    });
+    if (!ENV.APP.DISABLE_RELOAD_WARNINGS) {
+      window.addEventListener('beforeunload', (e) => {
+        if (this.hasDirtyForms) {
+          e.preventDefault();
+          e.returnValue = '';
+        }
+      });
+    }
   }
 
   get hasDirtyForms() {
