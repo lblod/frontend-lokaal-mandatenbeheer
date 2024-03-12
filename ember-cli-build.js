@@ -20,6 +20,9 @@ module.exports = function (defaults) {
         controle: process.env.CONTROLE === 'true',
       },
     },
+    sassOptions: {
+      includePaths: ['node_modules/@appuniversum/ember-appuniversum'],
+    },
   };
 
   // console.log(defaults);
