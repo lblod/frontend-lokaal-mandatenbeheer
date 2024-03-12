@@ -1,50 +1,6 @@
 <AuLabel>{{this.title}}</AuLabel>
 {{#if this.initialized}}
-  <div
-    class="au-u-flex au-u-flex--row au-u-flex--spaced-tiny au-u-flex--vertical-center"
-  >
-    <Person::ListItem
-      @person={{this.person}}
-      class="au-u-flex--stretch flex-grow"
-      {{on "click" this.startEdit}}
-    />
-    <AuButton
-      {{on "click" this.startEdit}}
-      @icon="pencil"
-      @skin="secondary"
-    >Bewerk</AuButton>
-    <AuButton
-      {{on "click" this.removePerson}}
-      @icon="trash"
-      @hideText={{true}}
-      @skin="secondary"
-    >Verwijder</AuButton>
-  </div>
-  <AuModal
-    @title={{this.title}}
-    @modalOpen={{this.selectNewPerson}}
-    @closable={{true}}
-    @closeModal={{this.cancelEdit}}
-  >
-    {{#if this.creatingPerson}}
-      <div class="au-o-box">
-        <Form::NewInstance
-          @onCreate={{this.onSelectNewPerson}}
-          @form={{this.createPersonFormDefinition}}
-          @onCancel={{this.cancelCreate}}
-          @buildSourceTtl={{this.buildSourceTtl}}
-        />
-      </div>
-    {{else}}
-      <Person::SearchForm
-        @showDefaultHead={{false}}
-        @onSelect={{this.onSelectPerson}}
-        @onCreateNewPerson={{this.onCreateNewPerson}}
-        @onCancel={{this.cancelEdit}}
-      />
-    {{/if}}
-
-  </AuModal>
+  <Person::Selector @person={{this.person}} @onUpdate={{this.onUpdate}} />
 {{else}}
   Loading...
 {{/if}}

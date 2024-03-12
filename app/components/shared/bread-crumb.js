@@ -10,6 +10,26 @@ export default class SharedBreadCrumbComponent extends Component {
       crumbs: [{ label: 'Bestuursorganen' }],
     },
     {
+      route: 'organen.orgaan.index',
+      crumbs: [
+        {
+          label: 'Bestuursorganen',
+          link: 'organen',
+        },
+        { label: 'Detail' },
+      ],
+    },
+    {
+      route: 'organen.orgaan.mandaten',
+      crumbs: [
+        {
+          label: 'Bestuursorganen',
+          link: 'organen',
+        },
+        { label: 'Mandaten' },
+      ],
+    },
+    {
       route: 'organen.orgaan.mandatarissen',
       crumbs: [
         {
@@ -17,6 +37,20 @@ export default class SharedBreadCrumbComponent extends Component {
           link: 'organen',
         },
         { label: 'Mandatarissen' },
+      ],
+    },
+    {
+      route: 'organen.orgaan.mandataris.new',
+      crumbs: [
+        {
+          label: 'Bestuursorganen',
+          link: 'organen',
+        },
+        {
+          label: 'Mandatarissen',
+          link: 'organen.orgaan.mandatarissen',
+        },
+        { label: 'Voeg mandaat toe' },
       ],
     },
     {
@@ -58,32 +92,32 @@ export default class SharedBreadCrumbComponent extends Component {
       route: 'mandatarissen.search',
       crumbs: [{ label: 'Mandatarissen' }],
     },
+    {
+      route: 'mandatarissen.persoon',
+      crumbs: [
+        {
+          label: 'Mandatarissen',
+          link: 'mandatarissen.search',
+        },
+        { label: 'Details persoon' },
+      ],
+    },
+    {
+      route: 'mandatarissen.mandataris',
+      crumbs: [
+        {
+          label: 'Mandatarissen',
+          link: 'mandatarissen.search',
+        },
+        { label: 'Details mandaat' },
+      ],
+    },
   ];
 
   mandatenbeheer = [
     {
       route: 'mandatenbeheer.mandatarissen.index',
       crumbs: [{ label: 'Mandatenbeheer' }],
-    },
-    {
-      route: 'mandatenbeheer.mandatarissen.edit',
-      crumbs: [
-        {
-          label: 'Mandatenbeheer',
-          link: 'mandatenbeheer.mandatarissen',
-        },
-        { label: 'Bewerk' },
-      ],
-    },
-    {
-      route: 'mandatenbeheer.mandatarissen.new',
-      crumbs: [
-        {
-          label: 'Mandatenbeheer',
-          link: 'mandatenbeheer.mandatarissen',
-        },
-        { label: 'Voeg mandaat toe' },
-      ],
     },
     {
       route: 'mandatenbeheer.fracties.index',

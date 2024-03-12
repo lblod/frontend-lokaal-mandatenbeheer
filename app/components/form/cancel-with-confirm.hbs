@@ -1,0 +1,29 @@
+<AuButton @skin="secondary" {{on "click" this.cancel}}>{{yield}}</AuButton>
+
+<AuModal
+  @id="exit-confirmation"
+  @modalOpen={{this.isModalOpen}}
+  @closeModal={{this.closeModal}}
+  @title="Wil u de aangebrachte wijzigingen bewaren?"
+  as |Modal|
+>
+  <Modal.Body>
+    <p>
+      De wijzigingen zullen verloren gaan als u niet op bewaren klikt.
+    </p>
+  </Modal.Body>
+  <Modal.Footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton {{on "click" this.closeModal}}>
+            Annuleer
+          </AuButton>
+          <AuButton @skin="secondary" {{on "click" this.confirmCancel}}>
+            Verwerp wijzigingen
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </Modal.Footer>
+</AuModal>

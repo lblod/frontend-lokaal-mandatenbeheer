@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { NamedNode } from 'rdflib';
-import { loadBestuursorgaanUriFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
@@ -26,7 +26,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   @tracked membership = null;
   @tracked initialized = false;
-  @tracked bestuursorgaanUri = null;
+  @tracked bestuursorgaanUris = [];
   @tracked fracties = [];
   @tracked updating = false;
 
@@ -50,19 +50,21 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   async loadBestuursorgaan() {
-    this.bestuursorgaanUri = loadBestuursorgaanUriFromContext(
+    this.bestuursorgaanUris = loadBestuursorgaanUrisFromContext(
       this.storeOptions
     );
   }
 
   async loadFracties() {
-    if (!this.bestuursorgaanUri) {
+    if (!this.bestuursorgaanUris) {
       return;
     }
-    const fracties = await this.store.query('fractie', {
-      'filter[bestuursorganen-in-tijd][:uri:]': this.bestuursorgaanUri,
+    // Even if there are multiple bestuursorganen available, it should be okay to just select the first,
+    // since fracties are configured on bestuurseenheid level.
+    this.fracties = await this.store.query('fractie', {
+      sort: 'naam',
+      'filter[bestuursorganen-in-tijd][:uri:]': this.bestuursorgaanUris[0],
     });
-    this.fracties = fracties;
   }
 
   async loadProvidedValue() {

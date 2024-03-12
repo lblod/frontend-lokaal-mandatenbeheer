@@ -6,13 +6,8 @@
   </div>
   <div class="au-o-grid__item au-u-2-5 au-u-text-right">
     <AuButton
-      @skin={{if this.editing "primary" "secondary"}}
-      {{on "click" this.linkToDetailPage}}
+      {{on "click" (fn this.linkToDetailPage @mandataris)}}
     >Details</AuButton>
-    <AuButton
-      @skin={{if this.editing "secondary" "primary"}}
-      {{on "click" this.edit}}
-    >{{if this.editing "Sluit" "Pas aan"}}</AuButton>
   </div>
   <div class="au-o-grid__item">
     <AuContent>
@@ -42,16 +37,16 @@
           <li class="au-c-list-horizontal__item">{{this.fractie}}</li>
         {{/if}}
       </ul>
+      <AuPill
+        @skin="link"
+        @draft={{false}}
+        @size="regular"
+        @icon="info-circle"
+        @iconAlignment="left"
+        @hideText={{false}}
+      >
+        {{if @mandataris.isDraft "Niet bekrachtigd" "Bekrachtigd"}}
+      </AuPill>
     </AuContent>
   </div>
-
-  {{#if this.editing}}
-    <Mandatenbeheer::Mandataris::MandatarisEditPrompt
-      class="au-c-collapsible au-u-margin-top-small"
-      @mandataris={{@mandataris}}
-      @bestuursorgaan={{@bestuursorgaan}}
-      @mandatarisEindeEditForm={{@mandatarisEindeEditForm}}
-      @mandatarisEditForm={{@mandatarisEditForm}}
-    />
-  {{/if}}
 </div>

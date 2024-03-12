@@ -7,7 +7,7 @@ export default class OrganenIndexController extends Controller {
 
   @action
   goToOrgaan(targetOrgaan) {
-    this.router.transitionTo('organen.orgaan.mandatarissen', targetOrgaan.id);
+    this.router.transitionTo('organen.orgaan.index', targetOrgaan.id);
   }
 
   @action

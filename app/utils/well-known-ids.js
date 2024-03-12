@@ -5,8 +5,6 @@ export const FRACTIE_FORM_ID = 'fractie';
 export const MANDAAT_FORM_ID = 'mandaat';
 export const MANDATARIS_EINDE_EDIT_FORM_ID = 'mandataris-einde-edit';
 export const MANDATARIS_EDIT_FORM_ID = 'mandataris-edit';
-export const MANDATARIS_HIDDEN_PERSOON_NEW_FORM_ID =
-  'mandataris-hidden-persoon-new';
 export const MANDATARIS_NEW_FORM_ID = 'mandataris-new';
 export const CONTACTINFO_FORM_ID = 'contactinfo';
 export const FUNCTIONARIS_CREATE_FORM_ID = 'functionaris-new';
@@ -16,3 +14,4 @@ export const DECRETALE_BESTUURSORGANEN_CONCEPT_SCHEME =
 export const CREATE_PERSON_FORM_ID = 'persoon';
 export const BESTUURSORGAAN_FORM_ID = 'bestuursorgaan';
 export const BESTUURSPERIODE_FORM_ID = 'bestuursperiode';
+export const VERHINDERD_STATE_ID = 'c301248f-0199-45ca-b3e5-4c596731d5fe';

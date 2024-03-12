@@ -1,0 +1,28 @@
+<AuModal
+  @title={{(concat "Bekrachtig " @mandataris.bekleedt.bestuursfunctie.label)}}
+  @modalOpen={{@modalOpen}}
+  @closeModal={{@cancel}}
+  as |Modal|
+>
+  <Modal.Body>
+    <p>
+      Het bekrachtigen van een mandaat gebeurt automatisch bij het publiceren
+      van de beslissingen van de gemeenteraad. Indien deze beslissingen niet
+      gepubliceerd worden als Linked Data, of indien er data ontbreek, is het
+      mogelijk om deze aanstelling manueel als bekrachtigd te markeren. Het
+      bekrachtigen van een mandaat is echter niet omkeerbaar.
+    </p>
+  </Modal.Body>
+  <Modal.Footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton {{on "click" @onBekrachtig}}>
+            Bekrachtig
+          </AuButton>
+          <AuButton {{on "click" @cancel}} @skin="secondary">Annuleer</AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </Modal.Footer>
+</AuModal>

@@ -1,6 +1,10 @@
 {{page-title "New"}}
-<Form::NewInstance
-  @onCreate={{this.onCreate}}
-  @form={{this.model.formDefinition}}
-  @onCancel={{this.onCancel}}
-/>
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Form::NewInstance
+      @onCreate={{this.onCreate}}
+      @form={{this.model.formDefinition}}
+      @onCancel={{this.onCancel}}
+    />
+  </div>
+</div>

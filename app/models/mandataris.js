@@ -9,6 +9,8 @@ export default class MandatarisModel extends AgentInPosition {
   @attr('datetime') einde;
   @attr duplicationReason;
   @attr uri;
+  // isDraft will be undefined for Mandatarissen that existed before isDraft status was added
+  @attr('boolean') isDraft;
 
   @belongsTo('mandaat', { async: true, inverse: 'bekleedDoor' }) bekleedt;
 
@@ -25,6 +27,12 @@ export default class MandatarisModel extends AgentInPosition {
     inverse: null,
   })
   tijdelijkeVervangingen;
+
+  @hasMany('mandataris', {
+    async: true,
+    inverse: null,
+  })
+  vervangerVan;
 
   @hasMany('beleidsdomein-code', {
     async: true,

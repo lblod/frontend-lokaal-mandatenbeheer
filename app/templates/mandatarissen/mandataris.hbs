@@ -1,0 +1,33 @@
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Mandaat
+      {{@model.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+      {{@model.mandataris.isBestuurlijkeAliasVan.achternaam}}
+      <br />
+      {{this.bestuursorganenTitle}}
+    </AuHeading>
+  </Group>
+</AuToolbar>
+
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Mandatarissen::MandatarisCard @mandataris={{@model.mandataris}} />
+  </div>
+
+  <div class="au-o-box">
+    <Mandatarissen::MandatarisEditPrompt
+      class="au-c-collapsible au-u-margin-top-small"
+      @mandataris={{@model.mandataris}}
+      @bestuursorganen={{@model.bestuursorganen}}
+      @mandatarisEindeEditForm={{@model.mandatarisEindeEditForm}}
+      @mandatarisEditForm={{@model.mandatarisEditForm}}
+      @onMandatarisChanged={{this.onMandatarisChanged}}
+    />
+  </div>
+
+  <div class="au-o-box">
+    <Tmp::Todo>
+      Add history here.
+    </Tmp::Todo>
+  </div>
+</div>

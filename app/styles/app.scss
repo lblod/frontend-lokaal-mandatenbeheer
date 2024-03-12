@@ -2,34 +2,16 @@
    # Digitaal loket
    ================================== */
 
-// SETTINGS
-@import "ember-appuniversum/a-settings";
-
-// TOOLS
-@import "ember-appuniversum/a-tools";
-
-// GENERIC
-@import "ember-appuniversum/a-generic";
-
-// ELEMENTS
-@import "ember-appuniversum/a-elements";
-
-// OBJECTS
-@import "ember-appuniversum/a-objects";
-
-// COMPONENTS
-@import "ember-appuniversum/a-components";
+@import "@appuniversum/ember-appuniversum/styles";
 @import "project/c-data-list";
 @import "project/c-document-status-pills";
 @import "project/c-sidebar-container";
 @import "project/c-status-label";
 
 // PLUGINS
-@import "ember-appuniversum/a-plugins";
 @import "project/p-ember-promise-modals";
 
 // UTILITIES
-@import "ember-appuniversum/a-utilities";
 
 // TEMPORARY HACKS AND QUICKFIXES
-@import 'shame';
+@import "shame";

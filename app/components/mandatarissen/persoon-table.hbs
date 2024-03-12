@@ -1,6 +1,5 @@
 <AuDataTable
   @content={{@content}}
-  @isLoading={{@isLoading}}
   @noDataMessage="Geen mandatarissen gevonden"
   @sort={{@sort}}
   @page={{@page}}
@@ -20,24 +19,20 @@
         @label="Familienaam"
       />
       <th>Mandaten</th>
-      <th>{{! Detail Action }}</th>
     </c.header>
 
     <c.body as |row|>
       <td>
-        {{row.gebruikteVoornaam}}
+        <LinkTo @route={{@detailRoute}} @model={{row.id}} class="au-c-link">
+          {{row.gebruikteVoornaam}}
+        </LinkTo>
       </td>
       <td>
-        {{row.achternaam}}
+        <LinkTo @route={{@detailRoute}} @model={{row.id}} class="au-c-link">
+          {{row.achternaam}}
+        </LinkTo>
       </td>
       <td>{{await (this.mandaten row)}}</td>
-      <td>
-        <AuButton
-          @icon="pencil"
-          @skin="link"
-          {{on "click" (fn @detail row)}}
-        >Details</AuButton>
-      </td>
     </c.body>
   </t.content>
 </AuDataTable>

@@ -29,6 +29,10 @@ Router.map(function () {
   this.route('organen', function () {
     this.route('orgaan', { path: '/:orgaan_id' }, function () {
       this.route('mandatarissen');
+      this.route('mandataris', function () {
+        this.route('new');
+      });
+      this.route('mandaten');
     });
     this.route('beheer', function () {
       this.route('new');
@@ -36,11 +40,18 @@ Router.map(function () {
     });
   });
 
+  this.route('mandaat', function () {
+    this.route('edit', { path: '/:id/edit' });
+  });
+
+  this.route('mandatarissen', function () {
+    this.route('search');
+    this.route('persoon', { path: '/:id/persoon' });
+    this.route('mandataris', { path: '/:id/mandataris' });
+  });
+
   this.route('mandatenbeheer', function () {
-    this.route('mandatarissen', function () {
-      this.route('new');
-      this.route('edit', { path: '/:id/edit' });
-    });
+    this.route('mandatarissen');
 
     this.route('fracties', function () {
       this.route('new');
@@ -106,13 +117,5 @@ Router.map(function () {
 
   this.route('error/404', {
     path: '/*wildcard',
-  });
-
-  this.route('mandaat', function () {
-    this.route('edit', { path: '/:id/edit' });
-  });
-
-  this.route('mandatarissen', function () {
-    this.route('search');
   });
 });

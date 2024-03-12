@@ -160,3 +160,17 @@
     display: none;
   }
 }
+
+.au-o-ext-align-self--start {
+  align-self: flex-start;
+}
+
+.au-o-ext-flex-no-shrink {
+  flex-shrink: 0;
+}
+
+.au-o-nested-form {
+  padding-left: 1em;
+  margin-top: 1em;
+  border-left: solid 3px var(--au-blue-200);
+}

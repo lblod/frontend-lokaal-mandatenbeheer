@@ -28,30 +28,35 @@ export default class OrganenOrgaanRoute extends Route {
     );
 
     const tijdsspecialisaties = await bestuursorgaan.heeftTijdsspecialisaties;
-    let bestuursOrgaan, startDate, endDate, bestuursPeriods, mandaten;
+
+    let currentBestuursorgaan, startDate, endDate, bestuursPeriods;
     if (tijdsspecialisaties.length != 0) {
-      ({ bestuursOrgaan, startDate, endDate } =
-        getSelectedBestuursorgaanWithPeriods(tijdsspecialisaties, {
-          startDate: params.startDate,
-          endDate: params.endDate,
-        }));
+      const result = getSelectedBestuursorgaanWithPeriods(tijdsspecialisaties, {
+        startDate: params.startDate,
+        endDate: params.endDate,
+      });
+
+      currentBestuursorgaan = result.bestuursorgaan;
+      startDate = result.startDate;
+      endDate = result.endDate;
 
       bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
-      mandaten = bestuursOrgaan.bevat;
     }
 
     const selectedPeriod = { startDate, endDate };
 
-    const formDefinition = getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
+    const bestuursorgaanFormDefinition = getFormFrom(
+      this.store,
+      BESTUURSORGAAN_FORM_ID
+    );
 
     return RSVP.hash({
-      form: formDefinition,
+      bestuursorgaanFormDefinition,
       instanceId: bestuursorgaanId,
       bestuursorgaan,
       bestuursPeriods,
       selectedPeriod,
-      currentBestuursOrgaan: bestuursOrgaan,
-      mandaten,
+      currentBestuursorgaan,
     });
   }
 }

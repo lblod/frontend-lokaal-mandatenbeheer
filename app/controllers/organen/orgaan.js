@@ -1,12 +1,16 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export default class OrganenOrgaanController extends Controller {
-  @service router;
+  queryParams = ['startDate', 'endDate'];
+
+  @tracked startDate;
+  @tracked endDate;
 
   @action
-  edit() {
-    this.router.transitionTo('organen.beheer.edit', this.model.instanceId);
+  selectPeriod(period) {
+    this.startDate = period.startDate;
+    this.endDate = period.endDate;
   }
 }

@@ -15,23 +15,15 @@ export default class OrganenMandatarissenController extends Controller {
 
   @tracked searchData;
 
+  @action
+  addMandataris() {
+    this.router.transitionTo('organen.orgaan.mandataris.new');
+  }
+
   @restartableTask
   *search(searchData) {
     yield timeout(SEARCH_TIMEOUT);
     this.page = 0;
     this.filter = searchData;
-  }
-
-  @action
-  selectPeriod(period) {
-    const queryParams = {
-      page: 0,
-      startDate: period.startDate,
-      endDate: period.endDate,
-    };
-
-    this.router.transitionTo('organen.orgaan.mandatarissen', {
-      queryParams,
-    });
   }
 }

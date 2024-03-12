@@ -1,0 +1,17 @@
+{{page-title "Mandaten"}}
+
+<AuToolbar
+  @size="large"
+  @nowrap="true"
+  class="au-u-padding-bottom-none"
+  as |Group|
+>
+  <Group>
+    <AuHeading @skin="3">Mandaten</AuHeading>
+  </Group>
+</AuToolbar>
+
+<Mandatenbeheer::BestuursorgaanMandaten
+  @mandaten={{this.model.mandaten}}
+  @bestuursorgaanIT={{this.model.currentBestuursorgaan}}
+/>

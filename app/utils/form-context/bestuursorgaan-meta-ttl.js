@@ -1,26 +1,31 @@
 import { EXT } from 'frontend-lmb/rdf/namespaces';
 
-export const getBestuursorgaanMetaTtl = (bestuursorgaan) => {
+export const getBestuursorganenMetaTtl = (bestuursorgaan) => {
   if (!bestuursorgaan) {
     return;
   }
-  const bestuursorgaanUri = bestuursorgaan.uri;
+  let bestuursorgaanUris;
+  bestuursorgaanUris = bestuursorgaan
+    .map((orgaan) => {
+      return `<${orgaan.uri}>`;
+    })
+    .join(', ');
 
   return `
     @prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
 
-    ext:applicationContext ext:currentBestuursorgaan <${bestuursorgaanUri}> .
+    ext:applicationContext ext:currentBestuursorgaan ${bestuursorgaanUris} .
   `;
 };
 
-export const loadBestuursorgaanUriFromContext = (storeOptions) => {
+export const loadBestuursorgaanUrisFromContext = (storeOptions) => {
   const forkingStore = storeOptions.store;
-  const bestuursorgaanUri = forkingStore.any(
+  const bestuursorgaanUri = forkingStore.match(
     EXT('applicationContext'),
     EXT('currentBestuursorgaan'),
     null,
     storeOptions.metaGraph
   );
 
-  return bestuursorgaanUri?.value;
+  return bestuursorgaanUri?.map((node) => node.object.value);
 };

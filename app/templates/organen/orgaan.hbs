@@ -18,27 +18,30 @@
       }}
     </AuPill>
   </Group>
+  <Group>
+    <Mandatenbeheer::BestuursperiodenSelector
+      @options={{@model.bestuursPeriods}}
+      @selectedPeriod={{@model.selectedPeriod}}
+      @onSelect={{this.selectPeriod}}
+    />
+    {{#unless (await this.model.bestuursorgaan.isDecretaal)}}
+      <BestuursperiodeNewButton @bestuursorgaan={{this.model.bestuursorgaan}} />
+    {{/unless}}
+  </Group>
 </AuToolbar>
 
+<AuTabs @reversed={{true}} as |Tab|>
+  <Tab>
+    <AuLink @route="organen.orgaan.index">Detail</AuLink>
+  </Tab>
+  <Tab>
+    <AuLink @route="organen.orgaan.mandaten">Mandaten</AuLink>
+  </Tab>
+  <Tab>
+    <AuLink @route="organen.orgaan.mandatarissen">Mandatarissen</AuLink>
+  </Tab>
+</AuTabs>
+
 <div class="au-c-body-container au-c-body-container--scroll">
-  <div class="au-o-box">
-    <Form::Instance
-      @instanceId={{this.model.instanceId}}
-      @form={{this.model.form}}
-      @isEditable={{false}}
-    />
-
-    <AuToolbar class="au-u-margin-top" as |Group|>
-      <Group>
-        <AuButton @skin="secondary" {{on "click" this.edit}}>Pas aan</AuButton>
-      </Group>
-    </AuToolbar>
-  </div>
-
-  <Mandatenbeheer::BestuursorgaanMandaten
-    @mandaten={{this.model.mandaten}}
-    @bestuursorgaanIT={{this.model.currentBestuursOrgaan}}
-  />
-
   {{outlet}}
 </div>

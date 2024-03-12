@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class OrganenMandatarissenRoute extends Route {
@@ -14,23 +13,17 @@ export default class OrganenMandatarissenRoute extends Route {
 
   async model(params) {
     const parentModel = this.modelFor('organen.orgaan');
-    const bestuursOrgaan = await parentModel.bestuursorgaan;
+    const currentBestuursorgaan = await parentModel.currentBestuursorgaan;
 
     let mandatarissen;
-    if (bestuursOrgaan) {
-      const options = this.getOptions(
-        params,
-        parentModel.currentBestuursOrgaan
-      );
+    if (currentBestuursorgaan) {
+      const options = this.getOptions(params, currentBestuursorgaan);
 
       mandatarissen = await this.store.query('mandataris', options);
     }
 
     return {
       mandatarissen,
-      bestuursOrgaan,
-      bestuursPeriods: parentModel.bestuursPeriods,
-      selectedPeriod: parentModel.selectedPeriod,
     };
   }
 
@@ -58,10 +51,5 @@ export default class OrganenMandatarissenRoute extends Route {
     }
 
     return queryParams;
-  }
-
-  @action
-  reloadModel() {
-    this.refresh();
   }
 }

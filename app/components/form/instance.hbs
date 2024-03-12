@@ -26,9 +26,9 @@
             Pas aan
           </AuButton>
           {{#if @onCancel}}
-            <AuButton {{on "click" this.cancel}} @skin="secondary">
-              Annuleer
-            </AuButton>
+            <Form::CancelWithConfirm
+              @cancel={{this.cancel}}
+            >Annuleer</Form::CancelWithConfirm>
           {{/if}}
         </AuButtonGroup>
       </Group>

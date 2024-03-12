@@ -1,0 +1,129 @@
+{{yield}}
+<div class="au-o-box au-o-flow">
+  {{#unless @noTitle}}
+    <AuHeading>
+      Verander Status
+      {{@mandataris.bekleedt.bestuursfunctie.label}}
+    </AuHeading>
+  {{/unless}}
+  <div>
+    <AuLabel>
+      Huidige Status
+    </AuLabel>
+    <div>
+      {{@mandataris.bekleedt.bestuursfunctie.label}},
+      {{@mandataris.status.label}}
+      van
+      {{moment-format @mandataris.start "DD-MM-YYYY"}}
+      {{#if @mandataris.einde}}
+        tot
+        {{moment-format @mandataris.einde "DD-MM-YYYY"}}
+      {{/if}}
+    </div>
+  </div>
+  <div>
+    <AuLabel>
+      Vanaf
+    </AuLabel>
+    <AuDatePicker
+      @value={{this.date}}
+      @onChange={{this.updateDate}}
+      @error={{not this.validDate}}
+      @alignment="top"
+    />
+    {{#unless this.validDate}}
+      <AuAlert
+        @size="small"
+        @closable={{false}}
+        @skin="error"
+        class="au-u-margin-top"
+      >De gekozen datum moet na de startdatum liggen van het huidige mandaat.</AuAlert>
+    {{/unless}}
+  </div>
+  <div>
+    <AuLabel>
+      Nieuwe Status
+    </AuLabel>
+    <PowerSelect
+      @allowClear={{false}}
+      @selected={{this.newStatus}}
+      @options={{this.statusOptions}}
+      @onChange={{this.updateNewStatus}}
+      @searchEnabled={{true}}
+      @searchField="label"
+      @noMatchesMessage="Geen resultaten"
+      as |status|
+    >
+      {{status.label}}
+    </PowerSelect>
+  </div>
+  {{#unless this.isTerminatingMandate}}
+    {{#if this.showReplacement}}
+      <div>
+        <AuLabel>
+          Vervanger
+        </AuLabel>
+        <Mandatarissen::ReplacementSelect
+          @mandataris={{@mandataris}}
+          @selected={{this.selectedReplacement}}
+          @onSelect={{this.updateReplacement}}
+          @inline={{true}}
+        />
+      </div>
+    {{/if}}
+    <div>
+      <AuLabel>
+        Beleidsdomeinen
+      </AuLabel>
+      <Mandatarissen::BeleidsdomeinSelectorWithCreate
+        @beleidsdomeinen={{this.selectedBeleidsdomeinen}}
+        @onSelect={{this.updateBeleidsdomeinen}}
+      />
+      <AuHelpText>Enkel voor burgemeester en schepenen</AuHelpText>
+    </div>
+    <div>
+      <AuLabel>
+        Fractie
+      </AuLabel>
+      {{#if this.loading}}
+        Loading...
+      {{else}}
+        <Mandatarissen::FractieSelector
+          @fractie={{this.selectedFractie}}
+          @onSelect={{this.updateFractie}}
+          @allowClear={{true}}
+          @bestuursorganen={{this.bestuursorganenForFractie}}
+        />
+      {{/if}}
+    </div>
+    {{#if this.showRangorde}}
+      <div>
+        <AuLabel>
+          Rangorde
+        </AuLabel>
+        <AuInput
+          @value={{this.rangorde}}
+          @width="block"
+          id="mandataris-rangorde"
+          placeholder={{this.rangordePlaceholder}}
+        />
+      </div>
+    {{/if}}
+  {{/unless}}
+  <AuToolbar class="au-u-margin-top" as |Group|>
+    <Group>
+      <AuButtonGroup>
+        <AuButton
+          {{on "click" (perform this.updateState)}}
+          @disabled={{this.disabled}}
+          @loading={{this.isSaving}}
+        >
+          {{if this.hasChanges "Pas aan" "Onveranderd"}}
+        </AuButton>
+        <AuButton {{on "click" @onCancel}} @skin="secondary">
+          Annuleer
+        </AuButton>
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
+</div>

@@ -2,34 +2,45 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { getBestuursorgaanMetaTtl } from '../../../utils/form-context/bestuursorgaan-meta-ttl';
-import { SOURCE_GRAPH } from '../../../utils/constants';
+import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
 import { inject as service } from '@ember/service';
 
-const TERMINATE_MODE = 'terminate';
+const CHANGE_MODE = 'change';
 const CORRECT_MODE = 'correct';
+const BEKRACHTIG_MODE = 'bekrachtig';
 
 export default class MandatenbeheerMandatarisEditPromptComponent extends Component {
   @tracked editMode = null;
   @service store;
+  @service router;
 
-  get isTerminating() {
-    return this.editMode === TERMINATE_MODE;
+  get isChanging() {
+    return this.editMode === CHANGE_MODE;
   }
 
   get isCorrecting() {
     return this.editMode === CORRECT_MODE;
   }
 
+  get isBekrachtiging() {
+    return this.editMode === BEKRACHTIG_MODE;
+  }
+
   @action
-  terminate() {
-    this.editMode = TERMINATE_MODE;
+  changeStatus() {
+    this.editMode = CHANGE_MODE;
   }
 
   @action
   correct() {
     this.editMode = CORRECT_MODE;
+  }
+
+  @action
+  bekrachtig() {
+    this.editMode = BEKRACHTIG_MODE;
   }
 
   @action
@@ -49,11 +60,29 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
       sourceGraph: SOURCE_GRAPH,
     });
 
-    setTimeout(() => this.args.mandataris.reload(), 1000);
+    setTimeout(() => this.router.refresh(), 1000);
   }
 
   @action
-  buildMetaTtl() {
-    return getBestuursorgaanMetaTtl(this.args.bestuursorgaan);
+  onUpdateState(newMandataris) {
+    this.editMode = null;
+    if (
+      newMandataris != this.args.mandataris &&
+      this.args.onMandatarisChanged
+    ) {
+      this.args.onMandatarisChanged(newMandataris);
+    }
+  }
+
+  @action
+  async onBekrachtig() {
+    this.editMode = null;
+    this.args.mandataris.isDraft = false;
+    this.args.mandataris.save();
+  }
+
+  @action
+  async buildMetaTtl() {
+    return getBestuursorganenMetaTtl(this.args.bestuursorganen);
   }
 }

@@ -1,0 +1,16 @@
+<PowerSelect
+  @loadingMessage="Aan het laden..."
+  @noMatchesMessage="Geen resultaten"
+  @searchMessage="Typ om te zoeken"
+  @searchEnabled={{true}}
+  @allowClear={{@allowClear}}
+  @disabled={{@disabled}}
+  @placeholder="Zoek fractie"
+  @search={{perform this.searchByName}}
+  @selected={{this._fractie}}
+  @onChange={{this.select}}
+  @options={{this.fractieOptions}}
+  as |fractie|
+>
+  {{fractie.naam}}
+</PowerSelect>

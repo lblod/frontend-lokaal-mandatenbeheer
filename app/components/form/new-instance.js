@@ -11,20 +11,25 @@ import {
   FORM_GRAPH,
   META_GRAPH,
   SOURCE_GRAPH,
+  RESOURCE_CACHE_TIMEOUT,
 } from '../../utils/constants';
 import { inject as service } from '@ember/service';
-import { keepLatestTask } from 'ember-concurrency';
+import { keepLatestTask, timeout } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
+import { guidFor } from '@ember/object/internals';
 
 export default class NewInstanceComponent extends Component {
   @service store;
   @service toaster;
+  @service formDirtyState;
 
   @tracked sourceTriples;
   @tracked errorMessage;
   @tracked formInfo = null;
   formStore = null;
+  savedTriples = null;
+  formId = `form-${guidFor(this)}`;
 
   constructor() {
     super(...arguments);
@@ -57,6 +62,8 @@ export default class NewInstanceComponent extends Component {
       }),
     });
 
+    yield timeout(RESOURCE_CACHE_TIMEOUT);
+
     if (!result.ok) {
       this.errorMessage =
         'Er ging iets mis bij het opslaan van het formulier. Probeer het later opnieuw.';
@@ -79,6 +86,8 @@ export default class NewInstanceComponent extends Component {
         instanceId: id,
       });
     }
+
+    this.formDirtyState.markClean(this.formId);
   }
 
   @action
@@ -95,7 +104,7 @@ export default class NewInstanceComponent extends Component {
     const form = this.args.form;
     const uri = `${form.prefix}${uuid()}`;
     const sourceTtl = this.args.buildSourceTtl
-      ? this.args.buildSourceTtl(uri)
+      ? await this.args.buildSourceTtl(uri)
       : '';
 
     const formStore = new ForkingStore();
@@ -112,6 +121,7 @@ export default class NewInstanceComponent extends Component {
       const metaTtl = await this.args.buildMetaTtl();
       formStore.parse(metaTtl, META_GRAPH, 'text/turtle');
     }
+    const sourceNode = new NamedNode(uri);
 
     const formNode = formStore.any(
       undefined,
@@ -119,7 +129,6 @@ export default class NewInstanceComponent extends Component {
       FORM('Form'),
       FORM_GRAPH
     );
-    const sourceNode = new NamedNode(uri);
 
     this.formInfo = {
       definition: form,
@@ -131,11 +140,30 @@ export default class NewInstanceComponent extends Component {
     this.registerObserver(formStore);
   }
 
+  willDestroy() {
+    super.willDestroy(...arguments);
+    this.formDirtyState.markClean(this.formId);
+  }
+
   registerObserver(formStore) {
     const onFormUpdate = () => {
+      if (this.isDestroyed) {
+        return;
+      }
+
       this.sourceTriples = this.formInfo.formStore.serializeDataMergedGraph(
         this.formInfo.graphs.sourceGraph
       );
+
+      if (this.savedTriples === null) {
+        this.savedTriples = this.sourceTriples;
+      }
+
+      if (this.savedTriples === this.sourceTriples) {
+        this.formDirtyState.markClean(this.formId);
+      } else {
+        this.formDirtyState.markDirty(this.formId);
+      }
     };
     formStore.registerObserver(onFormUpdate);
     onFormUpdate();

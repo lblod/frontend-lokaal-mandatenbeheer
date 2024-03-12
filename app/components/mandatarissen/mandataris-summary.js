@@ -1,11 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
 export default class MandatenbeheerMandatarisSummaryComponent extends Component {
   @service router;
-  @tracked editing = false;
 
   get rol() {
     return this.args.mandataris.bekleedt.get('bestuursfunctie').get('label');
@@ -30,12 +28,7 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
   }
 
   @action
-  edit() {
-    this.editing = !this.editing;
-  }
-
-  @action
-  linkToDetailPage() {
-    this.router.transitionTo('under-construction');
+  linkToDetailPage(mandataris) {
+    this.router.transitionTo('mandatarissen.mandataris', mandataris.id);
   }
 }
