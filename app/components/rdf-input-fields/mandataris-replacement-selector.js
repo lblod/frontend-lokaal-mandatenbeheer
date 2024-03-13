@@ -77,13 +77,15 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
       this.storeOptions.sourceGraph
     )?.value;
 
-    if (!mandaatUri) {
+    if (!mandaatUri || this.mandaat.uri === mandaatUri) {
       return;
     }
 
-    this.mandaat = await this.store.query('mandaat', {
-      'filter[:uri:]': mandaatUri,
-    });
+    this.mandaat = (
+      await this.store.query('mandaat', {
+        'filter[:uri:]': mandaatUri,
+      })
+    )[0];
   }
 
   async loadProvidedValue() {
