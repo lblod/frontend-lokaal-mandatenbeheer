@@ -6,7 +6,7 @@ export default class RechtstreekseVerkiezingModel extends Model {
 
   @belongsTo('bestuursorgaan', {
     async: true,
-    inverse: null,
+    inverse: 'rechtstreekseVerkiezing',
   })
   bestuursorgaanInTijd;
 
