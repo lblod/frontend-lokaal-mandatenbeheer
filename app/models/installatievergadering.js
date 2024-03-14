@@ -11,5 +11,5 @@ export default class InstallatievergaderingModel extends Model {
     async: true,
     inverse: null,
   })
-  bestuursorgaanInDeTijd;
+  bestuursorgaanInTijd;
 }
