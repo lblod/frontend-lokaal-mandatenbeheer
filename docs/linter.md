@@ -10,7 +10,11 @@ Javascript files are verified with [ESlint](https://eslint.org/)
 
 ### Handlebar files
 
-Handlebar files are verified with [ember-template-lint](https://github.com/ember-template-lint/ember-template-lint). Configuration is written in a `.template-lintrc.js` file
+Handlebar files are verified with [ember-template-lint](https://github.com/ember-template-lint/ember-template-lint). Configuration is written in a `.template-lintrc.js` file, and works very similar to the configuration of ESlint. In the configuration file, you can extend some provided set of rules, add additional rules, add plugins, override rules in specific cases and ignore files or directories.
+
+Currently the recommended settings are followed with some simple overrides in case of test files.
+
+Most rules will generate warnings or errors when you run the linter, some rules have fixers which allow automatic reformatting, additional fixers can also be added, see the [documentation](https://github.com/ember-template-lint/ember-template-lint/blob/master/docs/fixer.md) for this.
 
 ### Usage
 
