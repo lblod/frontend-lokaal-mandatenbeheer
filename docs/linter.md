@@ -6,7 +6,11 @@ In this readme more info can be found about the linter and prettier setup. In to
 
 ### Javascript files
 
+Javascript files are verified with [ESlint](https://eslint.org/)
+
 ### Handlebar files
+
+Handlebar files are verified with [ember-template-lint](https://github.com/ember-template-lint/ember-template-lint). Configuration is written in a `.template-lintrc.js` file
 
 ### Usage
 
