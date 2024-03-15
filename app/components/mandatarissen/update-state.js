@@ -14,6 +14,7 @@ export default class MandatarissenUpdateState extends Component {
   @tracked bestuursorganenForFractie = [];
   @tracked rangorde = null;
   @tracked selectedReplacement = null;
+  @tracked replacementSelected;
 
   @service mandatarisStatus;
   @service store;
@@ -102,7 +103,8 @@ export default class MandatarissenUpdateState extends Component {
       this.selectedFractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
       this.hasChangesInBeleidsdomeinen ||
-      this.rangorde !== this.args.mandataris.rangorde
+      this.rangorde !== this.args.mandataris.rangorde ||
+      this.replacementSelected
     );
   }
 
@@ -253,5 +255,6 @@ export default class MandatarissenUpdateState extends Component {
 
   @action updateReplacement(newReplacement) {
     this.selectedReplacement = newReplacement;
+    this.replacementSelected = true;
   }
 }
