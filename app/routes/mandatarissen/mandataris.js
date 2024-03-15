@@ -1,10 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
-import {
-  MANDATARIS_EINDE_EDIT_FORM_ID,
-  MANDATARIS_EDIT_FORM_ID,
-} from 'frontend-lmb/utils/well-known-ids';
+import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
 export default class MandatarissenMandatarisRoute extends Route {
@@ -12,17 +9,13 @@ export default class MandatarissenMandatarisRoute extends Route {
 
   async model(params) {
     const mandataris = await this.getMandataris(params.id);
-    const mandatarisEindeEditForm = getFormFrom(
-      this.store,
-      MANDATARIS_EINDE_EDIT_FORM_ID
-    );
+
     const mandatarisEditForm = getFormFrom(this.store, MANDATARIS_EDIT_FORM_ID);
 
     const bestuursorganen = await (await mandataris.bekleedt).get('bevatIn');
 
     return RSVP.hash({
       mandataris,
-      mandatarisEindeEditForm,
       mandatarisEditForm,
       bestuursorganen,
     });
