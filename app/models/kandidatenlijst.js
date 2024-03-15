@@ -14,7 +14,7 @@ export default class KandidatenlijstModel extends Model {
     async: true,
     inverse: 'kandidatenlijsten',
   })
-  rechtstreekseVerkiezing;
+  verkiezing;
 
   @hasMany('persoon', {
     async: true,

@@ -45,7 +45,7 @@ export default class BestuursorgaanModel extends Model {
     async: true,
     inverse: 'bestuursorgaanInTijd',
   })
-  rechtstreekseVerkiezing;
+  verkiezing;
 
   @hasMany('bestuursorgaan', {
     async: true,
