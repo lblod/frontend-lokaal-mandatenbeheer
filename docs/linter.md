@@ -104,34 +104,34 @@ Similar to the linter, prettier can also be used in different ways:
    
    This command will try to fix all warnings thrown by prettier and write these to file.
 
-2. The prettier can also run automatically if you define them in your editor settings, however the instructions below only format when you save a file (all other files will remain untouched). In VS Code this can be done with a [plugin](https://github.com/prettier/prettier-vscode?tab=readme-ov-file#prettier-settings), more information can be found in the provided link. In short this can be activated by adding some config in your `user.settings` file. Be careful, you can have a global `user.settings` file, but you can also have a workspace specific file, which overwrites the global user settings.
-
-  To set which formatter you want to use you add the following piece of code javascript files:
-  
-  ```
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-  },
-  ```
-
-  This will automatically run the prettier with the settings defined in `.prettierrc.js` for the specified file type, in this case for javascript files. Since we work with ember we also want some formatting for the handlebar files. This can be done by adding the following:
-
-  ```
-  "[handlebars]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-  },
-  ```
-
-  This can be done for any file type.
-  Disclaimer: if you use the [Glimmer Templates Syntax for VS Code plugin](https://marketplace.visualstudio.com/items?itemName=lifeart.vscode-glimmer-syntax), this might influence your templates as well, but the interaction between both is not entirely clear.
-
-  To automatically run formatting (prettier) on save you can add the following line:
-
-  ```
-  "editor.formatOnSave": true,
-  ```
-
-  Either you add this globally or int the settings of a specific type of file, see above.
+2. The prettier can also run automatically if you define them in your editor settings, however the instructions below only format when you save a file (all other files will remain untouched). In VS Code this can be done with a [plugin](https://github.com/prettier/prettier-vscode?tab=readme-ov-file#prettier-settings), more information can be found in the provided link. In short this can be activated by adding some config in your `user.settings` file. Be careful, you can have a global `user.settings` file, but you can also have a workspace specific file, which overwrites the global user settings. 
+   To set which formatter you want to use you add the following piece of code javascript files:
+   
+   ```
+   "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+    },
+   ```
+   
+   This will automatically run the prettier with the settings defined in `.prettierrc.js` for the specified file type, in this case for javascript files. Since we work with ember we also want some formatting for the handlebar files. This can be done by adding the following:
+   
+   ```
+   "[handlebars]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+   ```
+   },
+   
+   This can be done for any file type.
+   
+   Disclaimer: if you use the [Glimmer Templates Syntax for VS Code plugin](https://marketplace.visualstudio.com/items?itemName=lifeart.vscode-glimmer-syntax), this might influence your templates as well, but the interaction between both is not entirely clear.
+   
+   To automatically run formatting (prettier) on save you can add the following line:
+   
+   ```
+   "editor.formatOnSave": true,
+   ```
+   
+   Either you add this globally or int the settings of a specific type of file, see above.
 
 ## Automation
 
