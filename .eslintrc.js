@@ -21,6 +21,7 @@ module.exports = {
   ],
   rules: {
     'ember/routes-segments-snake-case': 'off', // https://github.com/ember-cli/eslint-plugin-ember/issues/374
+    // 'camelcase': ['error', { 'properties': 'always' }],
   },
   env: {
     browser: true,
