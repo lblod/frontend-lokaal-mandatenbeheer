@@ -17,7 +17,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended',
-    'plugin:prettier/recommended',
+    // 'plugin:prettier/recommended',
   ],
   rules: {
     'ember/routes-segments-snake-case': 'off', // https://github.com/ember-cli/eslint-plugin-ember/issues/374
