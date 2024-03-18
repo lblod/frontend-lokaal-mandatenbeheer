@@ -15,7 +15,6 @@
 !.*
 .*/
 .eslintcache
-.template-lintrc.js
 
 # ember-try
 /.node_modules.ember-try/
