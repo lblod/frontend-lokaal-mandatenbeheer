@@ -1,6 +1,6 @@
 # Linter and prettier setup
 
-In this readme more info can be found about the linter and prettier setup. In total two different linters are used one for the javascript code [eslint](#eslint) and one for the [handlebar files](#handlebar-files). [Prettier](#prettier) handles multiple file types.
+In this readme more info can be found about the linter and prettier setup. In total two different linters are used one for the javascript code [eslint](#javascript-files) and one for the [handlebar files](#handlebar-files). [Prettier](#prettier) handles multiple file types.
 
 ## Linter
 
@@ -15,6 +15,8 @@ Handlebar files are verified with [ember-template-lint](https://github.com/ember
 Currently the recommended settings are followed with some simple overrides in case of test files.
 
 Most rules will generate warnings or errors when you run the linter, some rules have fixers which allow automatic reformatting, additional fixers can also be added, see the [documentation](https://github.com/ember-template-lint/ember-template-lint/blob/master/docs/fixer.md) for this.
+
+One plugin is installed, this is the [ember-template-plugin-prettier](https://github.com/ember-template-lint/ember-template-lint-plugin-prettier), this plugin runs prettier as linter rules. This way, you don't have to run prettier independently of the linter. This does mean that the pipeline will automatically fail for prettier issues as well.
 
 ### Usage
 
@@ -128,6 +130,10 @@ To automatically run formatting (prettier) on save you can add the following lin
 ```
 
 Either you add this globally or int the settings of a specific type of file, see above.
+
+## Automation
+
+It is also possible to add git hooks which would run the linter and prettier before you are able to commit. This is not supported as of now. It is still under review how we want to do this, either with a bash script which is ran as a git commit hook or with a dedicated plugin which is added to the repo. Once this is finalised, more info will be added here.
 
 ## Extra
 
