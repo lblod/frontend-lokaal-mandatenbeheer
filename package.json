@@ -127,5 +127,8 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "ember-template-lint-plugin-prettier": "^5.0.0"
   }
 }
