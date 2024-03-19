@@ -102,10 +102,11 @@
           Rangorde
         </AuLabel>
         <AuInput
-          @value={{this.rangorde}}
+          value={{this.rangorde}}
           @width="block"
           id="mandataris-rangorde"
           placeholder={{this.rangordePlaceholder}}
+          {{on "input" this.updateRangorde}}
         />
       </div>
     {{/if}}
