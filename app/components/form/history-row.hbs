@@ -1,0 +1,20 @@
+<tr ...attributes>
+  <td>{{moment-format @historyItem.issued "DD-MM-YYYY HH:mm"}}</td>
+  <td>
+    {{this.userName}}
+  </td>
+  <td>
+    {{this.description}}
+  </td>
+  <td>
+    <AuButton
+      @type="button"
+      @icon="redo"
+      @skin="link"
+      @title="Terugzetten"
+      {{on "click" (fn @onRestore @historyItem)}}
+    >
+      Terugzetten
+    </AuButton>
+  </td>
+</tr>

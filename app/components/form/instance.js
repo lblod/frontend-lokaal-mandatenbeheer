@@ -26,6 +26,7 @@ export default class InstanceComponent extends Component {
   @tracked sourceTriples;
   @tracked errorMessage;
   @tracked formInfo = null;
+
   formStore = null;
   savedTriples = null;
   formId = `form-${guidFor(this)}`;
@@ -111,9 +112,16 @@ export default class InstanceComponent extends Component {
     this.args.onCancel();
   }
 
-  async onInit() {
+  @action
+  async onRestore(historicalInstance) {
+    this.formInfo = null;
+    this.onInit(historicalInstance.formInstanceTtl);
+  }
+
+  async onInit(newFormTtl = null) {
     const form = this.args.form;
     const instanceId = this.args.instanceId;
+
     const { formInstanceTtl, instanceUri } = await this.retrieveFormInstance(
       form.id,
       instanceId
@@ -127,7 +135,7 @@ export default class InstanceComponent extends Component {
       sourceGraph: SOURCE_GRAPH,
     };
 
-    loadFormInto(formStore, form, formInstanceTtl, graphs);
+    loadFormInto(formStore, form, newFormTtl || formInstanceTtl, graphs);
 
     if (this.args.buildMetaTtl) {
       const metaTtl = await this.args.buildMetaTtl();
