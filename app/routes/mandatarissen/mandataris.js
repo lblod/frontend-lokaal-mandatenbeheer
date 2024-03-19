@@ -45,6 +45,7 @@ export default class MandatarissenMandatarisRoute extends Route {
 
   async getMandatarissen(persoon, mandaat) {
     let queryParams = {
+      sort: '-start',
       filter: {
         'is-bestuurlijke-alias-van': {
           id: persoon.id,
