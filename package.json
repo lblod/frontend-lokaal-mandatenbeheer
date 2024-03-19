@@ -98,6 +98,7 @@
     "ember-simple-auth": "^4.2.1",
     "ember-source": "~4.12.0",
     "ember-template-lint": "^5.7.2",
+    "ember-template-lint-plugin-prettier": "^5.0.0",
     "ember-test-selectors": "^6.0.0",
     "ember-tooltips": "^3.6.0",
     "ember-truth-helpers": "^3.0.0",
@@ -127,8 +128,5 @@
   },
   "ember": {
     "edition": "octane"
-  },
-  "dependencies": {
-    "ember-template-lint-plugin-prettier": "^5.0.0"
   }
 }
