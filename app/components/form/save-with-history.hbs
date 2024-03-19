@@ -1,4 +1,8 @@
-<AuButton @skin="secondary" {{on "click" this.openModal}}>{{yield}}</AuButton>
+<AuButton
+  @skin="secondary"
+  {{on "click" this.openModal}}
+  @disabled={{@disabled}}
+>{{yield}}</AuButton>
 
 <AuModal
   @id="form-history"
