@@ -28,6 +28,7 @@
           <Form::SaveWithHistory
             @save={{this.saveInstance}}
             @updateValue={{this.updateHistoryMessage}}
+            @showHistory={{@showHistory}}
           >Pas aan</Form::SaveWithHistory>
           {{#if @onCancel}}
             <Form::CancelWithConfirm

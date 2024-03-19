@@ -7,7 +7,11 @@ export default class SaveWithHistoryComponent extends Component {
 
   @action
   openModal() {
-    this.isModalOpen = true;
+    if (this.args.showHistory) {
+      this.isModalOpen = true;
+    } else {
+      this.args.save();
+    }
   }
 
   @action
