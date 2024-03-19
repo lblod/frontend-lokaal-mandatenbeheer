@@ -30,14 +30,19 @@ export default class FormHistoryComponent extends Component {
     this.totalCount = parseInt(result.headers.get('X-Total-Count'), 10);
 
     const userIds = new Set([...history.map((h) => h.creator)]);
-    const users = yield this.store.query('gebruiker', {
-      filter: {
-        id: Array.from(userIds).join(','),
-      },
-    });
+    let users = [];
+    if (userIds.size !== 0) {
+      users = yield this.store.query('gebruiker', {
+        filter: {
+          id: Array.from(userIds).join(','),
+        },
+      });
+    }
 
     this.history = history.map((h) => {
-      const user = users.findBy('id', h.creator);
+      const user = users.find((item) => {
+        item.id === h.creator;
+      });
       return {
         ...h,
         creator: user,

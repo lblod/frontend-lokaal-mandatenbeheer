@@ -23,7 +23,7 @@
             @save={{this.saveInstance}}
             @updateValue={{this.updateHistoryMessage}}
             @showHistory={{@showHistory}}
-            @disabled={{this.isSaving}}
+            @disabled={{or this.isSaving (not this.hasChanges)}}
           >Pas aan</Form::SaveWithHistory>
           {{#if @onCancel}}
             <Form::CancelWithConfirm
