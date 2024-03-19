@@ -11,10 +11,11 @@
       </tr>
     </:header>
     <:body>
-      {{#each this.history as |historyItem|}}
+      {{#each this.history as |historyItem index|}}
         <Form::HistoryRow
           @historyItem={{historyItem}}
           @onRestore={{perform this.restoreHistoryItem}}
+          @isCurrentVersion={{eq index 0}}
         />
       {{else}}
         <tr>

@@ -21,7 +21,7 @@
         <AuButtonGroup>
           <AuButton
             {{on "click" this.saveInstance}}
-            @disabled={{this.isSaving}}
+            @disabled={{or this.isSaving (not this.hasChanges)}}
           >
             Pas aan
           </AuButton>

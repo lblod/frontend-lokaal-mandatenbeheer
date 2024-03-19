@@ -26,6 +26,7 @@ export default class InstanceComponent extends Component {
   @tracked sourceTriples;
   @tracked errorMessage;
   @tracked formInfo = null;
+  @tracked hasChanges = false;
 
   formStore = null;
   savedTriples = null;
@@ -100,6 +101,7 @@ export default class InstanceComponent extends Component {
     }
 
     this.formDirtyState.markClean(this.formId);
+    this.hasChanges = false;
   }
 
   @action
@@ -194,8 +196,10 @@ export default class InstanceComponent extends Component {
 
       if (this.savedTriples === this.sourceTriples) {
         this.formDirtyState.markClean(this.formId);
+        this.hasChanges = false;
       } else {
         this.formDirtyState.markDirty(this.formId);
+        this.hasChanges = true;
       }
     };
     formStore.registerObserver(onFormUpdate);
