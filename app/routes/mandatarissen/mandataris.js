@@ -9,6 +9,9 @@ export default class MandatarissenMandatarisRoute extends Route {
 
   async model(params) {
     const mandataris = await this.getMandataris(params.id);
+    const persoon = await mandataris.isBestuurlijkeAliasVan;
+    const mandaat = await mandataris.bekleedt;
+    const mandatarissen = await this.getMandatarissen(persoon, mandaat);
 
     const mandatarisEditForm = getFormFrom(this.store, MANDATARIS_EDIT_FORM_ID);
 
@@ -16,6 +19,7 @@ export default class MandatarissenMandatarisRoute extends Route {
 
     return RSVP.hash({
       mandataris,
+      mandatarissen,
       mandatarisEditForm,
       bestuursorganen,
     });
@@ -37,5 +41,26 @@ export default class MandatarissenMandatarisRoute extends Route {
 
     let mandataris = await this.store.findRecord('mandataris', id, queryParams);
     return mandataris;
+  }
+
+  async getMandatarissen(persoon, mandaat) {
+    let queryParams = {
+      filter: {
+        'is-bestuurlijke-alias-van': {
+          id: persoon.id,
+        },
+        bekleedt: {
+          id: mandaat.id,
+        },
+      },
+      include: [
+        'is-bestuurlijke-alias-van',
+        'bekleedt.bestuursfunctie',
+        'beleidsdomein',
+        'heeft-lidmaatschap.binnen-fractie',
+      ].join(','),
+    };
+
+    return await this.store.query('mandataris', queryParams);
   }
 }
