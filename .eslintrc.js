@@ -17,10 +17,10 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended',
-    // 'plugin:prettier/recommended',
+    'plugin:prettier/recommended',
   ],
   rules: {
-    // 'camelcase': ['error', { 'properties': 'always' }],
+    'camelcase': ['error', { 'properties': 'always' }],
   },
   env: {
     browser: true,
