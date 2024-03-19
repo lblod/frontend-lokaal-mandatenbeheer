@@ -121,6 +121,9 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
 
   @action
   selectReplacement(mandatarises) {
+    if (this.isDestroyed || this.isDestroying) {
+      return;
+    }
     this.replacements = mandatarises;
 
     // Retrieve options in store

@@ -20,6 +20,7 @@ export default class FormRoute extends Route {
         formTtl: form.formTtl,
         metaTtl: form.metaTtl,
         prefix: form.prefix,
+        withHistory: form.withHistory,
       });
     }
 

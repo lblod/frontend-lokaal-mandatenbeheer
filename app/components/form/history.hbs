@@ -1,0 +1,35 @@
+{{#if this.loading}}
+  Loading...
+{{else}}
+  <AuTable @size={{this.size}}>
+    <:header>
+      <tr>
+        <th>Tijdstip</th>
+        <th>Gebruiker</th>
+        <th>Aanpassing</th>
+        <th></th>
+      </tr>
+    </:header>
+    <:body>
+      {{#each this.history as |historyItem|}}
+        <Form::HistoryRow
+          @historyItem={{historyItem}}
+          @onRestore={{perform this.restoreHistoryItem}}
+        />
+      {{else}}
+        <tr>
+          <td>Geen aanpassingen gevonden</td><td></td><td></td><td></td>
+        </tr>
+      {{/each}}
+    </:body>
+  </AuTable>
+  <Shared::TablePagination
+    @pageSize={{this.size}}
+    @page={{this.page}}
+    @totalItems={{this.totalCount}}
+    @toNextPage={{this.toNextPage}}
+    @toPreviousPage={{this.toPreviousPage}}
+  />
+
+  {{yield}}
+{{/if}}

@@ -1,0 +1,17 @@
+{{#if this.showSourceTriples}}
+  <section class="au-u-margin-top-large">
+    <AuHeading
+      @level="2"
+      @skin="4"
+      class="au-u-margin-bottom-small"
+      {{on "click" this.toggleExpanded}}
+    >
+      <AuIcon @icon={{if this.expanded "dash" "plus"}} />
+      Content
+    </AuHeading>
+    {{#if this.expanded}}
+      <Form::FormattedTriples @triples={{@triples}} />
+    {{/if}}
+    {{yield}}
+  </section>
+{{/if}}
