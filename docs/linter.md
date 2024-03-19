@@ -8,7 +8,7 @@ In this readme more info can be found about the linter and prettier setup. In to
 
 Javascript files are verified with [ESlint](https://eslint.org/). Configuration is written in an `.eslintrc.js` file and files and directories to be ignored are described in `.eslintignore`. There is a lot that can be configured in the configuration file. Most settings are left to the defaults or come standard with an ember project. The only real updates here should happen to the rules section.
 
-A few different plugins are used to handle the styling of this specific project. By default the recommended configuration of eslint is used, but because this is an ember project, this is extended with an [eslint-ember-plugin](https://github.com/ember-cli/eslint-plugin-ember). For test files [eslint-plugin-qunit](https://github.com/platinumazure/eslint-plugin-qunit) is used. For specific rules regarding Node.js [eslint-plugin-n](https://github.com/eslint-community/eslint-plugin-n#readme) is configured as well.
+A few different plugins are used to handle the styling of this specific project. By default the recommended configuration of eslint is used, but because this is an ember project, this is extended with an [eslint-ember-plugin](https://github.com/ember-cli/eslint-plugin-ember). For test files [eslint-plugin-qunit](https://github.com/platinumazure/eslint-plugin-qunit) is used. For specific rules regarding Node.js [eslint-plugin-n](https://github.com/eslint-community/eslint-plugin-n#readme) is configured as well. These plugins come with ember by default.
 
 Two extra plugins are used for integrating eslint with prettier. [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) disables all rules in eslint, that might conflicht with prettier settings. [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) is used to run prettier as if it were eslint rules. Both these plugins are configured by using `'plugin:prettier/recommended'` in the extends property.
 
@@ -100,7 +100,7 @@ Similar to the linter, prettier can also be used in different ways:
    npx prettier . --check
    ```
    
-   This command checks whether there are problems in any of your files for which the prettier is configured. Instead of using the . you can also specify a directory of file to check.
+   This command checks whether there are problems in any of your files for which the prettier is configured. Instead of using the . you can also specify a directory or file to check.
    
    ```
    npx prettier . --write
@@ -135,7 +135,7 @@ Similar to the linter, prettier can also be used in different ways:
    "editor.formatOnSave": true,
    ```
    
-   Either you add this globally or int the settings of a specific type of file, see above.
+   Either you add this globally or in the settings of a specific type of file, see above.
 
 ## Automation
 
@@ -143,4 +143,4 @@ It is also possible to add git hooks which would run the linter and prettier bef
 
 ## Extra
 
-Next to running linters and prettiers on javascript and template files it is also possible to run these on css files. Since css is only a small part of this repo and at the time of writing this, it didn't really make sense to include this, there is no support for running a linter or prettier on css files. If however at a later stage this would become useful, (stylelint)[https://stylelint.io/] and (stylelint-prettier)[https://github.com/prettier/stylelint-prettier] are good places to start.
+Next to running linters and prettiers on javascript and template files it is also possible to run these on css files. Since css is only a small part of this repo and at the time of writing this, it didn't really make sense to include this, there is no support for running a linter or prettier on css files. If however at a later stage this would become useful, [stylelint](https://stylelint.io/) and [stylelint-prettier](https://github.com/prettier/stylelint-prettier) are good places to start.
