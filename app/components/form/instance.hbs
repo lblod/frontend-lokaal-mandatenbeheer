@@ -22,7 +22,7 @@
           <Form::SaveWithHistory
             @save={{this.saveInstance}}
             @updateValue={{this.updateHistoryMessage}}
-            @showHistory={{@showHistory}}
+            @withHistory={{@form.withHistory}}
             @disabled={{or this.isSaving (not this.hasChanges)}}
           >Pas aan</Form::SaveWithHistory>
           {{#if @onCancel}}
