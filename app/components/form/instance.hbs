@@ -19,12 +19,16 @@
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton
+          {{!-- <AuButton
             {{on "click" this.saveInstance}}
             @disabled={{this.isSaving}}
           >
             Pas aan
-          </AuButton>
+          </AuButton> --}}
+          <Form::SaveWithHistory
+            @save={{this.saveInstance}}
+            @updateValue={{this.updateHistoryMessage}}
+          >Pas aan</Form::SaveWithHistory>
           {{#if @onCancel}}
             <Form::CancelWithConfirm
               @cancel={{this.cancel}}

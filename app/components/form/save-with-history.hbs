@@ -1,0 +1,33 @@
+<AuButton @skin="secondary" {{on "click" this.openModal}}>{{yield}}</AuButton>
+
+<AuModal
+  @id="form-history"
+  @modalOpen={{this.isModalOpen}}
+  @closeModal={{this.closeModal}}
+  class="small"
+  @title="Beschrijving doorgevoerde wijzigingen."
+  as |Modal|
+>
+  <Modal.Body>
+    <p>
+      Geef een beschrijving mee die weergeeft welke wijzigingen u heeft
+      doorgevoerd.
+    </p>
+    {{this.message}}
+    <AuInput
+      @id="history-message"
+      @width="block"
+      placeholder="Beschrijving wijzigingen"
+      {{on "input" @updateValue}}
+    />
+  </Modal.Body>
+  <Modal.Footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButton {{on "click" this.confirm}}>
+          Bevestig
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </Modal.Footer>
+</AuModal>
