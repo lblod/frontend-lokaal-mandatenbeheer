@@ -25,10 +25,16 @@
   </div>
 
   <div class="au-o-box">
-    <Tmp::Todo>
+    <AuHeading @level="3" @skin="4">
+      Historiek
+    </AuHeading>
+
+    <AuHr />
+
+    <ul class="au-c-list-vertical">
       {{#each @model.mandatarissen as |mandataris|}}
         <Mandatarissen::MandatarisCard @mandataris={{mandataris}} />
       {{/each}}
-    </Tmp::Todo>
+    </ul>
   </div>
 </div>
