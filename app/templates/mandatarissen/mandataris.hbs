@@ -34,6 +34,11 @@
     <ul class="au-c-list-vertical">
       {{#each @model.mandatarissen as |mandataris|}}
         <Mandatarissen::MandatarisCard @mandataris={{mandataris}} />
+
+        <Form::History
+          @instanceId={{mandataris.id}}
+          @form={{@model.mandatarisEditForm}}
+        />
       {{/each}}
     </ul>
   </div>
