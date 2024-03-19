@@ -20,7 +20,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
-    'camelcase': ['error', { 'properties': 'always' }],
+    camelcase: ['error', { properties: 'always' }],
   },
   env: {
     browser: true,
@@ -47,6 +47,9 @@ module.exports = {
         node: true,
       },
       extends: ['plugin:n/recommended'],
+      rules: {
+        camelcase: ['off'],
+      },
     },
     {
       // test files
