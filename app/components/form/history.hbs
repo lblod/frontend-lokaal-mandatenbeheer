@@ -18,18 +18,20 @@
         />
       {{else}}
         <tr>
-          <td>Geen aanpassingen gevonden</td><td></td><td></td><td></td>
+          <td colspan="4">Geen aanpassingen gevonden</td>
         </tr>
       {{/each}}
     </:body>
   </AuTable>
-  <Shared::TablePagination
-    @pageSize={{this.size}}
-    @page={{this.page}}
-    @totalItems={{this.totalCount}}
-    @toNextPage={{this.toNextPage}}
-    @toPreviousPage={{this.toPreviousPage}}
-  />
+  {{#if (gt this.history.length 0)}}
+    <Shared::TablePagination
+      @pageSize={{this.size}}
+      @page={{this.page}}
+      @totalItems={{this.totalCount}}
+      @toNextPage={{this.toNextPage}}
+      @toPreviousPage={{this.toPreviousPage}}
+    />
+  {{/if}}
 
   {{yield}}
 {{/if}}
