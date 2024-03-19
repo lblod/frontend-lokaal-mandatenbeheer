@@ -6,7 +6,11 @@ In this readme more info can be found about the linter and prettier setup. In to
 
 ### Javascript files
 
-Javascript files are verified with [ESlint](https://eslint.org/). Configuration is written in an `.eslintrc.js` file and files and directories to be ignored are described in `.eslintignore`. There is a lot that can be configured in the configuration file. Most
+Javascript files are verified with [ESlint](https://eslint.org/). Configuration is written in an `.eslintrc.js` file and files and directories to be ignored are described in `.eslintignore`. There is a lot that can be configured in the configuration file. Most settings are left to the defaults or come standard with an ember project. The only real updates here should happen to the rules section.
+
+A few different plugins are used to handle the styling of this specific project. By default the recommended configuration of eslint is used, but because this is an ember project, this is extended with an [eslint-ember-plugin](https://github.com/ember-cli/eslint-plugin-ember). For test files [eslint-plugin-qunit](https://github.com/platinumazure/eslint-plugin-qunit) is used. For specific rules regarding Node.js [eslint-plugin-n](https://github.com/eslint-community/eslint-plugin-n#readme) is configured as well.
+
+Two extra plugins are used for integrating eslint with prettier. [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) disables all rules in eslint, that might conflicht with prettier settings. [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) is used to run prettier as if it were eslint rules. Both these plugins are configured by using `'plugin:prettier/recommended'` in the extends property.
 
 ### Handlebar files
 
@@ -104,7 +108,7 @@ Similar to the linter, prettier can also be used in different ways:
    
    This command will try to fix all warnings thrown by prettier and write these to file.
 
-2. The prettier can also run automatically if you define them in your editor settings, however the instructions below only format when you save a file (all other files will remain untouched). In VS Code this can be done with a [plugin](https://github.com/prettier/prettier-vscode?tab=readme-ov-file#prettier-settings), more information can be found in the provided link. In short this can be activated by adding some config in your `user.settings` file. Be careful, you can have a global `user.settings` file, but you can also have a workspace specific file, which overwrites the global user settings. 
+2. The prettier can also run automatically if you define them in your editor settings, however the instructions below only format when you save a file (all other files will remain untouched). In VS Code this can be done with a [plugin](https://github.com/prettier/prettier-vscode), more information can be found in the provided link. In short this can be activated by adding some config in your `user.settings` file. Be careful, you can have a global `user.settings` file, but you can also have a workspace specific file, which overwrites the global user settings. 
    To set which formatter you want to use you add the following piece of code javascript files:
    
    ```
@@ -118,8 +122,8 @@ Similar to the linter, prettier can also be used in different ways:
    ```
    "[handlebars]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
-   ```
    },
+   ```
    
    This can be done for any file type.
    
