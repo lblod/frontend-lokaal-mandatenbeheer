@@ -32,6 +32,8 @@ export default class InstanceComponent extends Component {
   savedTriples = null;
   formId = `form-${guidFor(this)}`;
 
+  historyMessage;
+
   constructor() {
     super(...arguments);
     this.onInit();
@@ -70,6 +72,7 @@ export default class InstanceComponent extends Component {
         body: JSON.stringify({
           contentTtl: triples,
           instanceUri: this.formInfo.sourceNode.value,
+          description: this.historyMessage,
         }),
       }
     );
@@ -107,6 +110,13 @@ export default class InstanceComponent extends Component {
   @action
   async saveInstance() {
     this.save.perform();
+  }
+
+  @action
+  updateHistoryMessage(event) {
+    if (event && typeof event.preventDefault === 'function')
+      event.preventDefault();
+    this.historyMessage = event.target.value.trim();
   }
 
   @action
