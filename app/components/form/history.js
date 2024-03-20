@@ -39,13 +39,15 @@ export default class FormHistoryComponent extends Component {
       });
     }
 
+    const userIdToUser = {};
+    users.forEach((u) => {
+      userIdToUser[u.id] = u;
+    });
+
     this.history = history.map((h) => {
-      const user = users.find((item) => {
-        item.id === h.creator;
-      });
       return {
         ...h,
-        creator: user,
+        creator: userIdToUser[h.creator],
       };
     });
 
