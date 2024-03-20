@@ -89,14 +89,14 @@ export default class VerkiezingenRoute extends Route {
       installatievergaderingen
     );
 
-    const formattedInstallatievergaderingen = this.formatIvsMapToLists(
+    const yearsAndStatusesWithIvs = this.formatIvsMapToLists(
       yearToStatusIdToIvs,
       statusIdToStatus
     );
 
     return {
       installatievergaderingen,
-      groupedInstallatievergaderingen: formattedInstallatievergaderingen,
+      yearsAndStatusesWithIvs,
     };
   }
 }

@@ -7,11 +7,14 @@
 </AuToolbar>
 
 <div class="au-c-body-container au-c-body-container--scroll">
-  {{#each @model.groupedInstallatievergaderingen as |yearAndStatusesWithIvs|}}
+  {{#each @model.yearsAndStatusesWithIvs as |yearAndStatusesWithIvs|}}
     <div class="au-o-box">
       <AuHeading @skin="3">{{yearAndStatusesWithIvs.year}}</AuHeading>
       {{#each yearAndStatusesWithIvs.statusesWithIvs as |statusWithIvs|}}
-        <AuHeading @skin="4">{{statusWithIvs.status.label}}</AuHeading>
+        <AuHeading
+          @skin="4"
+          class="au-u-margin-top@medium"
+        >{{statusWithIvs.status.label}}</AuHeading>
         <ul class="au-o-grid au-o-grid--small">
           {{#each
             statusWithIvs.installatievergaderingen
