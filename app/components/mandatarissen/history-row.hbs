@@ -22,6 +22,21 @@
     {{@mandataris.heeftLidmaatschap.binnenFractie.naam}}
   </td>
   <td>
+    {{#if this.currentVersion.creator}}
+      {{this.currentVersion.creator.voornaam}}
+      {{this.currentVersion.creator.achternaam}}
+    {{else}}
+      Onbekend
+    {{/if}}
+  </td>
+  <td>
+    {{#if this.currentVersion.issued}}
+      {{moment-format this.currentVersion.issued "DD-MM-YY HH:mm"}}
+    {{else}}
+      Onbekend
+    {{/if}}
+  </td>
+  <td>
     {{#if @selected}}
       Geselecteerde situatie
     {{else}}
@@ -37,3 +52,11 @@
     {{/if}}
   </td>
 </tr>
+{{#each this.correctionVersions as |version|}}
+  <tr class="au-u-para-tiny">
+    <td colspan={{this.correctionColspan}}>- {{version.description}}</td>
+    <td>{{version.creator.voornaam}} {{version.creator.achternaam}}</td>
+    <td>{{moment-format version.issued "DD-MM-YY HH:mm"}}</td>
+    <td></td>
+  </tr>
+{{/each}}

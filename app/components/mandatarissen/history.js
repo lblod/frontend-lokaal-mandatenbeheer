@@ -28,9 +28,41 @@ export default class MandatarisHistoryComponent extends Component {
         return historyEntry;
       })
     );
-    this.history = [...newHistory].sort((a, b) => {
-      return b.mandataris.start.getTime() - a.mandataris.start.getTime();
+
+    const userIdsInHistory = new Set();
+    newHistory.forEach((h) => {
+      h.corrections.forEach((c) => {
+        userIdsInHistory.add(c.creator);
+      });
     });
+
+    let users = [];
+    if (userIdsInHistory.size !== 0) {
+      users = await this.store.query('gebruiker', {
+        filter: {
+          id: Array.from(userIdsInHistory).join(','),
+        },
+      });
+    }
+
+    const userIdToUser = {};
+    users.forEach((u) => {
+      userIdToUser[u.id] = u;
+    });
+
+    this.history = newHistory
+      .map((h) => {
+        return {
+          ...h,
+          corrections: h.corrections.map((c) => ({
+            ...c,
+            creator: userIdToUser[c.creator],
+          })),
+        };
+      })
+      .sort((a, b) => {
+        return b.mandataris.start.getTime() - a.mandataris.start.getTime();
+      });
     this.loading = false;
   }
 
@@ -48,29 +80,7 @@ export default class MandatarisHistoryComponent extends Component {
     );
 
     const json = await result.json();
-    const history = json.instances;
-
-    const userIds = new Set([...history.map((h) => h.creator)]);
-    let users = [];
-    if (userIds.size !== 0) {
-      users = await this.store.query('gebruiker', {
-        filter: {
-          id: Array.from(userIds).join(','),
-        },
-      });
-    }
-
-    const userIdToUser = {};
-    users.forEach((u) => {
-      userIdToUser[u.id] = u;
-    });
-
-    return history.map((h) => {
-      return {
-        ...h,
-        creator: userIdToUser[h.creator],
-      };
-    });
+    return json.instances;
   }
 
   @action
