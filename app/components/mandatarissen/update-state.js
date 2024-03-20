@@ -57,7 +57,11 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   get showReplacement() {
-    return this.newStatus?.id === VERHINDERD_STATE_ID;
+    return (
+      this.newStatus?.id === VERHINDERD_STATE_ID &&
+      // if we are already verhinderd it does not make sense to change the replacements here, keep them  the same and don't show the selector
+      this.args.mandataris.status?.id !== VERHINDERD_STATE_ID
+    );
   }
 
   get isTerminatingMandate() {
@@ -162,6 +166,9 @@ export default class MandatarissenUpdateState extends Component {
           this.selectedFractie
         );
       newMandataris.tijdelijkeVervangingen = [replacementMandataris];
+    } else if (this.newStatus.id === VERHINDERD_STATE_ID) {
+      newMandataris.tijdelijkeVervangingen =
+        (await this.args.mandataris.tijdelijkeVervangingen) || [];
     }
 
     this.args.mandataris.einde = this.date;
