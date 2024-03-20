@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
 
 export default class FormRoute extends Route {
   @service store;
@@ -11,18 +12,7 @@ export default class FormRoute extends Route {
   }
 
   async model({ id: semanticFormID }) {
-    const form = await this.retrieveForm(semanticFormID);
-
-    let definition = this.store.peekRecord('form-definition', semanticFormID);
-    if (!definition) {
-      definition = this.store.createRecord('form-definition', {
-        id: semanticFormID,
-        formTtl: form.formTtl,
-        metaTtl: form.metaTtl,
-        prefix: form.prefix,
-        withHistory: form.withHistory,
-      });
-    }
+    const definition = getFormFrom(this.store, semanticFormID);
 
     return definition;
   }
