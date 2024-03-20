@@ -1,21 +1,18 @@
 {{#if this.loading}}
   Loading...
 {{else}}
-  <AuTable @size={{this.size}}>
+  <AuTable>
     <:header>
       <tr>
         <th>Tijdstip</th>
         <th>Gebruiker</th>
         <th>Aanpassing</th>
-        <th></th>
       </tr>
     </:header>
     <:body>
-      {{#each this.history as |historyItem index|}}
+      {{#each this.history as |historyItem|}}
         <Mandatarissen::HistoryRow
           @historyItem={{historyItem}}
-          @onRestore={{perform this.restoreHistoryItem}}
-          @isCurrentVersion={{and (eq index 0) (eq this.page 0)}}
         />
       {{else}}
         <tr>
@@ -24,15 +21,5 @@
       {{/each}}
     </:body>
   </AuTable>
-  {{#if (gt this.history.length 0)}}
-    <Shared::TablePagination
-      @pageSize={{this.size}}
-      @page={{this.page}}
-      @totalItems={{this.totalCount}}
-      @toNextPage={{this.toNextPage}}
-      @toPreviousPage={{this.toPreviousPage}}
-    />
-  {{/if}}
-
   {{yield}}
 {{/if}}

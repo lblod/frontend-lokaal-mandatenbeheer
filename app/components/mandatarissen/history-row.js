@@ -9,6 +9,6 @@ export default class MandatarisHistoryRowComponent extends Component {
   }
 
   get description() {
-    return this.args.historyItem.description || 'Aangepast';
+    return this.args.historyItem.description || 'Gecorrigeerd';
   }
 }
