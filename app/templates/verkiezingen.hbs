@@ -21,18 +21,16 @@
             as |installatievergadering|
           }}
             <li class="au-o-grid__item au-u-1-3@medium">
-              <AuCard
-                class="orgaan-card"
-                @flex="true"
-                {{on
-                  "click"
-                  (fn this.goToInstallatievergadering installatievergadering)
-                }}
-                as |c|
+              <AuLink
+                @route="verkiezingen.verkiezingsuitslag"
+                @model={{installatievergadering.id}}
+                @skin="secondary"
               >
-                <c.content
-                >{{installatievergadering.bestuursorgaanInTijd.isTijdsspecialisatieVan.naam}}</c.content>
-              </AuCard>
+                <AuCard class="orgaan-card" @flex="true" as |c|>
+                  <c.content
+                  >{{installatievergadering.bestuursorgaanInTijd.isTijdsspecialisatieVan.naam}}</c.content>
+                </AuCard>
+              </AuLink>
             </li>
           {{/each}}
         </ul>
