@@ -247,8 +247,9 @@ export default class MandatarissenUpdateState extends Component {
 
   @action
   updateRangorde(event) {
-    if (event && typeof event.preventDefault === 'function')
+    if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
+    }
     this.rangorde = event.target.value.trim();
   }
 

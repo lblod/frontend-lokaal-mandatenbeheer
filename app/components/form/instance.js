@@ -114,8 +114,9 @@ export default class InstanceComponent extends Component {
 
   @action
   updateHistoryMessage(event) {
-    if (event && typeof event.preventDefault === 'function')
+    if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
+    }
     this.historyMessage = event.target.value.trim();
   }
 

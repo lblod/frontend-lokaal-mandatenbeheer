@@ -15,7 +15,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   constructor() {
     super(...arguments);
-    if (this.args.fractie) this._fractie = this.args.fractie;
+    if (this.args.fractie) {this._fractie = this.args.fractie;}
     if (this.args.bestuursorganen) {
       this.bestuursorganenId = this.args.bestuursorganen.map((o) =>
         o.get('id')

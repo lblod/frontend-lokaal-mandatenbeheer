@@ -34,8 +34,9 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
 
   @action
   async updateValue(event) {
-    if (event && typeof event.preventDefault === 'function')
+    if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
+    }
     this.rijksregisternummer = event.target.value.trim();
 
     this.updateValidations();
