@@ -59,6 +59,8 @@ Router.map(function () {
     });
   });
 
+  this.route('verkiezingen');
+
   this.route('leidinggevendenbeheer', function () {
     this.route(
       'bestuursfunctie',
