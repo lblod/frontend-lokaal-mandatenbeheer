@@ -18,20 +18,16 @@ module('Integration | Component | loket-module-card', function (hooks) {
   test('it can render a title', async function (assert) {
     this.title = 'Foo';
 
-    await render(hbs`
-      <LoketModuleCard>
-        <:title>{{this.title}}</:title>
-      </LoketModuleCard>
-    `);
+    await render(hbs`<LoketModuleCard>
+  <:title>{{this.title}}</:title>
+</LoketModuleCard>`);
 
     assert.dom(LOKET_MODULE_CARD.TITLE).hasText('Foo');
 
     this.set('title', 'Bar');
     assert.dom(LOKET_MODULE_CARD.TITLE).hasText('Bar');
 
-    await render(hbs`
-      <LoketModuleCard />
-    `);
+    await render(hbs`<LoketModuleCard />`);
 
     assert.dom(LOKET_MODULE_CARD.TITLE).doesNotExist();
   });
@@ -39,42 +35,32 @@ module('Integration | Component | loket-module-card', function (hooks) {
   test('it can render a description', async function (assert) {
     this.description = 'Foo';
 
-    await render(hbs`
-      <LoketModuleCard>
-        <:description>{{this.description}}</:description>
-      </LoketModuleCard>
-    `);
+    await render(hbs`<LoketModuleCard>
+  <:description>{{this.description}}</:description>
+</LoketModuleCard>`);
 
     assert.dom(LOKET_MODULE_CARD.DESCRIPTION).hasText('Foo');
 
     this.set('description', 'Bar');
     assert.dom(LOKET_MODULE_CARD.DESCRIPTION).hasText('Bar');
 
-    await render(hbs`
-      <LoketModuleCard />
-    `);
+    await render(hbs`<LoketModuleCard />`);
 
     assert.dom(LOKET_MODULE_CARD.DESCRIPTION).doesNotExist();
   });
 
   test('it has a block to render the module link', async function (assert) {
-    await render(hbs`
-      <LoketModuleCard>
-        <:link>
-          Foo
-        </:link>
-      </LoketModuleCard>
-    `);
+    await render(hbs`<LoketModuleCard>
+  <:link>
+    Foo
+  </:link>
+</LoketModuleCard>`);
 
     assert.dom(LOKET_MODULE_CARD.LINK).hasText('Foo');
   });
 
   test('it can show a link to an external page where users can get more information about the module', async function (assert) {
-    await render(hbs`
-      <LoketModuleCard
-        @extraInformationLink={{this.link}}
-      />
-    `);
+    await render(hbs`<LoketModuleCard @extraInformationLink={{this.link}} />`);
 
     assert
       .dom(LOKET_MODULE_CARD.EXTRA_INFORMATION_LINK)
@@ -88,11 +74,7 @@ module('Integration | Component | loket-module-card', function (hooks) {
   });
 
   test('it can show a link to a user manual', async function (assert) {
-    await render(hbs`
-      <LoketModuleCard
-        @userManualLink={{this.link}}
-      />
-    `);
+    await render(hbs`<LoketModuleCard @userManualLink={{this.link}} />`);
 
     assert
       .dom(LOKET_MODULE_CARD.USER_MANUAL_LINK)

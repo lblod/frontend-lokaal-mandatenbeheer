@@ -17,11 +17,9 @@ module(
       assert.dom(this.element).hasText('');
 
       // Template block usage:
-      await render(hbs`
-      <BestuursperiodeNewButton>
-        template block text
-      </BestuursperiodeNewButton>
-    `);
+      await render(hbs`<BestuursperiodeNewButton>
+  template block text
+</BestuursperiodeNewButton>`);
 
       assert.dom(this.element).hasText('template block text');
     });

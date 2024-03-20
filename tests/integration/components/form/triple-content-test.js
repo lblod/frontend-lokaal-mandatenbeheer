@@ -15,11 +15,9 @@ module('Integration | Component | form/triple-content', function (hooks) {
     assert.dom(this.element).hasText('');
 
     // Template block usage:
-    await render(hbs`
-      <Form::TripleContent>
-        template block text
-      </Form::TripleContent>
-    `);
+    await render(hbs`<Form::TripleContent>
+  template block text
+</Form::TripleContent>`);
 
     assert.dom(this.element).hasText('template block text');
   });

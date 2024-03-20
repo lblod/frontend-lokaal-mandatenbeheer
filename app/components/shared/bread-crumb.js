@@ -379,7 +379,9 @@ export default class SharedBreadCrumbComponent extends Component {
     const results = this.bread.filter(
       (value) => value.route === this.router.currentRouteName
     );
-    if (results.length <= 0) {return [];}
+    if (results.length <= 0) {
+      return [];
+    }
     return results[0].crumbs;
   }
 }
