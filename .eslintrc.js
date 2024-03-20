@@ -21,7 +21,7 @@ module.exports = {
   ],
   rules: {
     // 'camelcase': ['error', { 'properties': 'always' }],
-    curly: ['error', 'multi-line'],
+    curly: 'error',
   },
   env: {
     browser: true,
