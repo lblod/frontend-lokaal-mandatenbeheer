@@ -1,9 +1,26 @@
 <tr ...attributes>
-  <td>{{moment-format @historyItem.issued "DD-MM-YYYY HH:mm"}}</td>
+  <td>
+    {{#if @historyItem.issued}}
+      {{moment-format @historyItem.issued "DD-MM-YYYY HH:mm"}}
+    {{else}}
+      Ongekend
+    {{/if}}
+  </td>
   <td>
     {{this.userName}}
   </td>
   <td>
     {{this.description}}
+  </td>
+  <td>
+    {{#if @historyItem.mandatarisId}}
+      <AuLink
+        @route="mandatarissen.mandataris"
+        @model={{@historyItem.mandatarisId}}
+        @skin="secondary"
+      >
+        Ga naar deze mandataris
+      </AuLink>
+    {{/if}}
   </td>
 </tr>

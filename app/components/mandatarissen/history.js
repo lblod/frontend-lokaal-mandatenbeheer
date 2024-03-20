@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { keepLatestTask} from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 
 export default class MandatarisHistoryComponent extends Component {
@@ -11,23 +10,26 @@ export default class MandatarisHistoryComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.fetchCurrentHistoryPage.perform();
+    this.fetchCurrentHistoryPage();
   }
 
-  @keepLatestTask
-  *fetchCurrentHistoryPage() {
+  async fetchCurrentHistoryPage() {
+    this.history.push({
+      description: `Status gewijzigd naar ${this.args.mandataris.status.get('label')}`,
+      mandatarisId: this.args.mandataris.id,
+    });
     this.loading = true;
-    const result = yield fetch(
+    const result = await fetch(
       `/form-content/${this.args.form.id}/instances/${this.args.instanceId}/history`
     );
 
-    const json = yield result.json();
+    const json = await result.json();
     const history = json.instances;
 
     const userIds = new Set([...history.map((h) => h.creator)]);
     let users = [];
     if (userIds.size !== 0) {
-      users = yield this.store.query('gebruiker', {
+      users = await this.store.query('gebruiker', {
         filter: {
           id: Array.from(userIds).join(','),
         },
@@ -39,12 +41,14 @@ export default class MandatarisHistoryComponent extends Component {
       userIdToUser[u.id] = u;
     });
 
-    this.history = history.map((h) => {
-      return {
-        ...h,
-        creator: userIdToUser[h.creator],
-      };
-    });
+    this.history = this.history.concat(
+      history.map((h) => {
+        return {
+          ...h,
+          creator: userIdToUser[h.creator],
+        };
+      })
+    );
 
     this.loading = false;
   }

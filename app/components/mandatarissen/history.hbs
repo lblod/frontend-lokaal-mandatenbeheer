@@ -7,13 +7,12 @@
         <th>Tijdstip</th>
         <th>Gebruiker</th>
         <th>Aanpassing</th>
+        <th></th>
       </tr>
     </:header>
     <:body>
       {{#each this.history as |historyItem|}}
-        <Mandatarissen::HistoryRow
-          @historyItem={{historyItem}}
-        />
+        <Mandatarissen::HistoryRow @historyItem={{historyItem}} />
       {{else}}
         <tr>
           <td colspan="4">Geen aanpassingen gevonden</td>
