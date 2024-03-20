@@ -245,6 +245,13 @@ export default class MandatarissenUpdateState extends Component {
     this.newStatus = status;
   }
 
+  @action
+  updateRangorde(event) {
+    if (event && typeof event.preventDefault === 'function')
+      event.preventDefault();
+    this.rangorde = event.target.value.trim();
+  }
+
   @action updateBeleidsdomeinen(selectedBeleidsdomeinen) {
     this.selectedBeleidsdomeinen = selectedBeleidsdomeinen;
   }
