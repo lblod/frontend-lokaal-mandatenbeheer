@@ -28,6 +28,7 @@ browserUpdate({
   vs: { i: 11, f: -3, o: -3, s: -3, c: -3 },
   style: 'corner',
   l: 'nl',
+  // eslint-disable-next-line camelcase
   shift_page_down: false,
 });
 
