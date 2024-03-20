@@ -16,8 +16,6 @@
   "scripts": {
     "build": "ember build --environment=production",
     "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
-    "lint:css": "stylelint --allow-empty-input \"**/*.css\"",
-    "lint:css:fix": "concurrently \"npm:lint:css -- --fix\"",
     "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
     "lint:hbs": "ember-template-lint .",
     "lint:hbs:fix": "ember-template-lint . --fix",
@@ -100,28 +98,26 @@
     "ember-simple-auth": "^4.2.1",
     "ember-source": "~4.12.0",
     "ember-template-lint": "^5.7.2",
+    "ember-template-lint-plugin-prettier": "^5.0.0",
     "ember-test-selectors": "^6.0.0",
     "ember-tooltips": "^3.6.0",
     "ember-truth-helpers": "^3.0.0",
     "ember-unused-components": "^1.2.1",
-    "eslint": "^8.37.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-ember": "^11.5.0",
-    "eslint-plugin-n": "^15.7.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-qunit": "^7.3.4",
+    "eslint": "8.57",
+    "eslint-config-prettier": "9.1",
+    "eslint-plugin-ember": "^12.0.2",
+    "eslint-plugin-n": "16.6",
+    "eslint-plugin-prettier": "5.1",
+    "eslint-plugin-qunit": "8.1",
     "loader.js": "^4.7.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.32",
-    "prettier": "^2.8.7",
+    "prettier": "^3.2.5",
     "qunit": "^2.19.4",
     "qunit-dom": "^2.0.0",
     "rdflib": "^2.2.19",
     "release-it": "^15.4.1",
     "sass": "^1.49.7",
-    "stylelint": "^15.4.0",
-    "stylelint-config-standard": "^32.0.0",
-    "stylelint-prettier": "^3.0.0",
     "tracked-built-ins": "^3.1.1",
     "tracked-toolbox": "^1.2.3",
     "uuid": "^9.0.0",
@@ -132,10 +128,5 @@
   },
   "ember": {
     "edition": "octane"
-  },
-  "lintTodo": {
-    "ember-template-lint": {
-      "daysToDecay": null
-    }
   }
 }
