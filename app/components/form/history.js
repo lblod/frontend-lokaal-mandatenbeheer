@@ -22,7 +22,7 @@ export default class FormHistoryComponent extends Component {
   *fetchCurrentHistoryPage() {
     this.loading = true;
     const result = yield fetch(
-      `/form-content/${this.args.formId}/instances/${this.args.instanceId}/history?page[size]=${this.size}&page[number]=${this.page}`
+      `/form-content/${this.args.form.id}/instances/${this.args.instanceId}/history?page[size]=${this.size}&page[number]=${this.page}`
     );
 
     const json = yield result.json();
