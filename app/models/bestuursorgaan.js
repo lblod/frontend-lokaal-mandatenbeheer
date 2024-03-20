@@ -41,6 +41,12 @@ export default class BestuursorgaanModel extends Model {
   })
   isTijdsspecialisatieVan;
 
+  @belongsTo('rechtstreekse-verkiezing', {
+    async: true,
+    inverse: 'bestuursorgaanInTijd',
+  })
+  verkiezing;
+
   @hasMany('bestuursorgaan', {
     async: true,
     inverse: 'isTijdsspecialisatieVan',

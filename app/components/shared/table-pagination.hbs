@@ -1,0 +1,39 @@
+<div class="au-c-pagination au-u-padding-small">
+  <p>
+    <span class="au-u-hidden-visually">Rij </span><strong>{{this.startItem}}
+      -
+      {{this.endItem}}</strong>
+    van
+    {{@totalItems}}
+  </p>
+  {{yield}}
+  <ul class="au-c-pagination__list">
+    {{#if this.hasMultiplePages}}
+      {{#unless this.isFirstPage}}
+        <li class="au-c-pagination__list-item">
+          <AuButton
+            @skin="link"
+            @icon="nav-left"
+            {{on "click" @toPreviousPage}}
+          >
+            vorige
+            <span class="au-u-hidden-visually"> {{@pageSize}} rijen</span>
+          </AuButton>
+        </li>
+      {{/unless}}
+      {{#unless this.isLastPage}}
+        <li class="au-c-pagination__list-item">
+          <AuButton
+            @skin="link"
+            @icon="nav-right"
+            @iconAlignment="right"
+            {{on "click" @toNextPage}}
+          >
+            volgende
+            <span class="au-u-hidden-visually"> {{@pageSize}} rijen</span>
+          </AuButton>
+        </li>
+      {{/unless}}
+    {{/if}}
+  </ul>
+</div>

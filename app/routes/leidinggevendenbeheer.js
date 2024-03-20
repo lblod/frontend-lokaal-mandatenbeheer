@@ -9,8 +9,9 @@ export default class LeidinggevendenbeheerRoute extends Route {
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
 
-    if (!this.currentSession.canAccessLeidinggevenden)
+    if (!this.currentSession.canAccessLeidinggevenden) {
       this.router.transitionTo('index');
+    }
   }
 
   model() {

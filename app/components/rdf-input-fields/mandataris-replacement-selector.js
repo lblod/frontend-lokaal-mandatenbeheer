@@ -77,13 +77,15 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
       this.storeOptions.sourceGraph
     )?.value;
 
-    if (!mandaatUri) {
+    if (!mandaatUri || this.mandaat.uri === mandaatUri) {
       return;
     }
 
-    this.mandaat = await this.store.query('mandaat', {
-      'filter[:uri:]': mandaatUri,
-    });
+    this.mandaat = (
+      await this.store.query('mandaat', {
+        'filter[:uri:]': mandaatUri,
+      })
+    )[0];
   }
 
   async loadProvidedValue() {
@@ -119,6 +121,9 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
 
   @action
   selectReplacement(mandatarises) {
+    if (this.isDestroyed || this.isDestroying) {
+      return;
+    }
     this.replacements = mandatarises;
 
     // Retrieve options in store

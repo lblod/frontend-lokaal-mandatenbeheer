@@ -3,7 +3,6 @@ export const FEMALE_ID = '5ab0e9b8a3b2ca7c5e000029';
 
 export const FRACTIE_FORM_ID = 'fractie';
 export const MANDAAT_FORM_ID = 'mandaat';
-export const MANDATARIS_EINDE_EDIT_FORM_ID = 'mandataris-einde-edit';
 export const MANDATARIS_EDIT_FORM_ID = 'mandataris-edit';
 export const MANDATARIS_NEW_FORM_ID = 'mandataris-new';
 export const CONTACTINFO_FORM_ID = 'contactinfo';

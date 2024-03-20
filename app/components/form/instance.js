@@ -26,9 +26,13 @@ export default class InstanceComponent extends Component {
   @tracked sourceTriples;
   @tracked errorMessage;
   @tracked formInfo = null;
+  @tracked hasChanges = false;
+
   formStore = null;
   savedTriples = null;
   formId = `form-${guidFor(this)}`;
+
+  historyMessage;
 
   constructor() {
     super(...arguments);
@@ -68,6 +72,7 @@ export default class InstanceComponent extends Component {
         body: JSON.stringify({
           contentTtl: triples,
           instanceUri: this.formInfo.sourceNode.value,
+          description: this.historyMessage,
         }),
       }
     );
@@ -99,6 +104,7 @@ export default class InstanceComponent extends Component {
     }
 
     this.formDirtyState.markClean(this.formId);
+    this.hasChanges = false;
   }
 
   @action
@@ -107,13 +113,28 @@ export default class InstanceComponent extends Component {
   }
 
   @action
+  updateHistoryMessage(event) {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+    }
+    this.historyMessage = event.target.value.trim();
+  }
+
+  @action
   cancel() {
     this.args.onCancel();
   }
 
-  async onInit() {
+  @action
+  async onRestore(historicalInstance) {
+    this.formInfo = null;
+    this.onInit(historicalInstance.formInstanceTtl);
+  }
+
+  async onInit(newFormTtl = null) {
     const form = this.args.form;
     const instanceId = this.args.instanceId;
+
     const { formInstanceTtl, instanceUri } = await this.retrieveFormInstance(
       form.id,
       instanceId
@@ -127,7 +148,7 @@ export default class InstanceComponent extends Component {
       sourceGraph: SOURCE_GRAPH,
     };
 
-    loadFormInto(formStore, form, formInstanceTtl, graphs);
+    loadFormInto(formStore, form, newFormTtl || formInstanceTtl, graphs);
 
     if (this.args.buildMetaTtl) {
       const metaTtl = await this.args.buildMetaTtl();
@@ -186,8 +207,10 @@ export default class InstanceComponent extends Component {
 
       if (this.savedTriples === this.sourceTriples) {
         this.formDirtyState.markClean(this.formId);
+        this.hasChanges = false;
       } else {
         this.formDirtyState.markDirty(this.formId);
+        this.hasChanges = true;
       }
     };
     formStore.registerObserver(onFormUpdate);

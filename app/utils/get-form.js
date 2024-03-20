@@ -7,22 +7,23 @@ const retrieveForm = async (id) => {
   }
 
   const form = await response.json();
-  if (!form.formTtl) throw new Error('Received form without formTtl');
+  if (!form.formTtl) {throw new Error('Received form without formTtl');}
 
   return form;
 };
 
 const getFormFrom = async (store, formId) => {
   const definition = store.peekRecord('form-definition', formId);
-  if (definition) return definition;
+  if (definition) {return definition;}
 
-  const { formTtl, metaTtl, prefix } = await retrieveForm(formId);
+  const { formTtl, metaTtl, prefix, withHistory } = await retrieveForm(formId);
 
   return store.createRecord('form-definition', {
     id: formId,
     formTtl,
     metaTtl,
     prefix,
+    withHistory,
   });
 };
 

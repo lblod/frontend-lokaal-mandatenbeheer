@@ -39,14 +39,7 @@
     </Group>
   </AuToolbar>
 
-  <section class="au-u-margin-top-large">
-    <AuHeading
-      @level="2"
-      @skin="3"
-      class="au-u-margin-bottom"
-    >Content</AuHeading>
-    <Form::FormattedTriples @triples={{this.sourceTriples}} />
-  </section>
+  <Form::TripleContent @triples={{this.sourceTriples}} />
 {{else}}
   <div>loading...</div>
 {{/if}}
