@@ -35,7 +35,7 @@
       {{#each @model.mandatarissen as |mandataris|}}
         <Mandatarissen::MandatarisCard @mandataris={{mandataris}} />
 
-        <Form::History
+        <Mandatarissen::History
           @instanceId={{mandataris.id}}
           @form={{@model.mandatarisEditForm}}
         />
