@@ -15,7 +15,7 @@
         <Form::HistoryRow
           @historyItem={{historyItem}}
           @onRestore={{perform this.restoreHistoryItem}}
-          @isCurrentVersion={{eq index 0}}
+          @isCurrentVersion={{and (eq index 0) (eq this.page 0)}}
         />
       {{else}}
         <tr>
