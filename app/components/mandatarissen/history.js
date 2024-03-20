@@ -19,6 +19,7 @@ export default class MandatarisHistoryComponent extends Component {
       this.history.push({
         description: `Status gewijzigd naar ${mandataris.status.get('label')}`,
         mandatarisId: mandataris.id,
+        selected: this.args.mandataris.id == mandataris.id,
       });
 
       let corrections = await this.fetchHistoryForMandataris(mandataris);

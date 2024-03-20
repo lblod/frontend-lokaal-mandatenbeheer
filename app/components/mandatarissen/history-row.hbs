@@ -13,14 +13,18 @@
     {{this.description}}
   </td>
   <td>
-    {{#if @historyItem.mandatarisId}}
-      <AuLink
-        @route="mandatarissen.mandataris"
-        @model={{@historyItem.mandatarisId}}
-        @skin="secondary"
-      >
-        Ga naar deze mandataris
-      </AuLink>
+    {{#if @historyItem.selected}}
+      Geselecteerde mandataris
+    {{else}}
+      {{#if @historyItem.mandatarisId}}
+        <AuLink
+          @route="mandatarissen.mandataris"
+          @model={{@historyItem.mandatarisId}}
+          @skin="secondary"
+        >
+          Ga naar deze mandataris
+        </AuLink>
+      {{/if}}
     {{/if}}
   </td>
 </tr>
