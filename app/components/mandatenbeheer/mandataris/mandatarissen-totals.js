@@ -73,7 +73,7 @@ export default class MandatenbeheerMandatarissenTotalsComponent extends Componen
 
   @action
   toggleOpen() {
-    if (!this.isOpen) this.getMandatarissenTotals.perform();
+    if (!this.isOpen) {this.getMandatarissenTotals.perform();}
     this.isOpen = !this.isOpen;
   }
 }

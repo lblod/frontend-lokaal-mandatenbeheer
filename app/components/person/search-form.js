@@ -96,7 +96,7 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
     };
     this.queryParams = queryParams;
     this.personen = yield this.getPersoon.perform(queryParams);
-    if (this.personen.meta.pagination.self.number !== this.page) this.page = 0;
+    if (this.personen.meta.pagination.self.number !== this.page) {this.page = 0;}
   }
 
   @task
