@@ -6,7 +6,8 @@ export default class ApplicationSerializer extends JSONAPISerializer.extend(
   DataTableSerializerMixin
 ) {
   serializeAttribute(snapshot, json, key, attributes) {
-    if (key !== 'uri')
+    if (key !== 'uri') {
       super.serializeAttribute(snapshot, json, key, attributes);
+    }
   }
 }
