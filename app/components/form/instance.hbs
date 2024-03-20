@@ -21,7 +21,7 @@
         <AuButtonGroup>
           <AuButton
             {{on "click" this.saveInstance}}
-            @disabled={{this.isSaving}}
+            @disabled={{or this.isSaving (not this.hasChanges)}}
           >
             Pas aan
           </AuButton>
@@ -34,16 +34,21 @@
       </Group>
     </AuToolbar>
 
-    <section class="au-u-margin-top-large">
-      <AuHeading
-        @level="2"
-        @skin="3"
-        class="au-u-margin-bottom"
-      >Content</AuHeading>
-      <Form::FormattedTriples @triples={{this.sourceTriples}} />
-    </section>
-  {{/if}}
+    <Form::TripleContent @triples={{this.sourceTriples}} />
+    {{#if @showHistory}}
+      <section>
+        <AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
+          History
+        </AuHeading>
 
+        <Form::History
+          @instanceId={{@instanceId}}
+          @form={{@form}}
+          @onRestore={{this.onRestore}}
+        />
+      </section>
+    {{/if}}
+  {{/if}}
 {{else}}
   <div>loading...</div>
 {{/if}}

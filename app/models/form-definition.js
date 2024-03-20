@@ -8,6 +8,7 @@ export default class FormDefinitionModel extends Model {
   metaTtl;
   @attr('string')
   prefix;
+  @attr withHistory;
 
   @hasMany('form-instance', {
     async: false,
