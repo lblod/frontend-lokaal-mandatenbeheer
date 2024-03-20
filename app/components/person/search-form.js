@@ -43,24 +43,27 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
 
   @action
   setVoornaam(event) {
-    if (event && typeof event.preventDefault === 'function')
+    if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
+    }
     this.voornaam = event.target.value.trim();
     this.search.perform();
   }
 
   @action
   setAchternaam(event) {
-    if (event && typeof event.preventDefault === 'function')
+    if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
+    }
     this.achternaam = event.target.value.trim();
     this.search.perform();
   }
 
   @action
   setRijksregisternummer(event) {
-    if (event && typeof event.preventDefault === 'function')
+    if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
+    }
     this.rijksregisternummer = event.target.value.trim();
     this.search.perform();
   }
