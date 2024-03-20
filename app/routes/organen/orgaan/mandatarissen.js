@@ -171,6 +171,7 @@ export default class OrganenMandatarissenRoute extends Route {
         'is-bestuurlijke-alias-van',
         'bekleedt.bestuursfunctie',
         'heeft-lidmaatschap.binnen-fractie',
+        'status',
       ].join(','),
     };
 

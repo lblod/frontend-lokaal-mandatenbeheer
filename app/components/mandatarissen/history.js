@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class MandatarisHistoryComponent extends Component {
   @tracked loading = true;
@@ -15,17 +16,30 @@ export default class MandatarisHistoryComponent extends Component {
 
   async fetchHistory() {
     this.loading = true;
-    for (const mandataris of this.args.mandatarissen) {
-      this.history.push({
-        description: `Status gewijzigd naar ${mandataris.status.get('label')}`,
-        mandatarisId: mandataris.id,
-        selected: this.args.mandataris.id == mandataris.id,
-      });
-
-      let corrections = await this.fetchHistoryForMandataris(mandataris);
-      this.history = this.history.concat(corrections);
-    }
+    const allMandatarissen = this.args.mandatarissen;
+    const newHistory = await Promise.all(
+      allMandatarissen.map(async (mandataris) => {
+        let corrections = await this.fetchHistoryForMandataris(mandataris);
+        const historyEntry = {
+          mandataris,
+          corrections,
+          selected: this.args.mandataris?.id === mandataris.id,
+        };
+        return historyEntry;
+      })
+    );
+    this.history = [...newHistory].sort((a, b) => {
+      return b.mandataris.start.getTime() - a.mandataris.start.getTime();
+    });
     this.loading = false;
+  }
+
+  get toonBeleidsdomeinen() {
+    return this.history.some((h) => h.mandataris.beleidsdomein.length > 0);
+  }
+
+  get toonRangorde() {
+    return this.history.some((h) => h.mandataris.rangorde);
   }
 
   async fetchHistoryForMandataris(mandataris) {
@@ -57,5 +71,10 @@ export default class MandatarisHistoryComponent extends Component {
         creator: userIdToUser[h.creator],
       };
     });
+  }
+
+  @action
+  async onMandatarisUpdate() {
+    await this.fetchHistory();
   }
 }
