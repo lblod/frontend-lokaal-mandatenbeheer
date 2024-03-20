@@ -32,15 +32,11 @@
     <AuHr />
 
     <ul class="au-c-list-vertical">
-      {{#each @model.mandatarissen as |mandataris|}}
-        <Mandatarissen::MandatarisCard @mandataris={{mandataris}} />
-
-        <Mandatarissen::History
-          @mandataris={{mandataris}}
-          @instanceId={{mandataris.id}}
-          @form={{@model.mandatarisEditForm}}
-        />
-      {{/each}}
+      <Mandatarissen::History
+        @mandataris={{@model.mandataris}}
+        @mandatarissen={{@model.mandatarissen}}
+        @form={{@model.mandatarisEditForm}}
+      />
     </ul>
   </div>
 </div>

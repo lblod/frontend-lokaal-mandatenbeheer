@@ -10,17 +10,26 @@ export default class MandatarisHistoryComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.fetchCurrentHistoryPage();
+    this.fetchHistory();
   }
 
-  async fetchCurrentHistoryPage() {
-    this.history.push({
-      description: `Status gewijzigd naar ${this.args.mandataris.status.get('label')}`,
-      mandatarisId: this.args.mandataris.id,
-    });
+  async fetchHistory() {
     this.loading = true;
+    for (const mandataris of this.args.mandatarissen) {
+      this.history.push({
+        description: `Status gewijzigd naar ${mandataris.status.get('label')}`,
+        mandatarisId: mandataris.id,
+      });
+
+      let corrections = await this.fetchHistoryForMandataris(mandataris);
+      this.history = this.history.concat(corrections);
+    }
+    this.loading = false;
+  }
+
+  async fetchHistoryForMandataris(mandataris) {
     const result = await fetch(
-      `/form-content/${this.args.form.id}/instances/${this.args.instanceId}/history`
+      `/form-content/${this.args.form.id}/instances/${mandataris.id}/history`
     );
 
     const json = await result.json();
@@ -41,15 +50,11 @@ export default class MandatarisHistoryComponent extends Component {
       userIdToUser[u.id] = u;
     });
 
-    this.history = this.history.concat(
-      history.map((h) => {
-        return {
-          ...h,
-          creator: userIdToUser[h.creator],
-        };
-      })
-    );
-
-    this.loading = false;
+    return history.map((h) => {
+      return {
+        ...h,
+        creator: userIdToUser[h.creator],
+      };
+    });
   }
 }
