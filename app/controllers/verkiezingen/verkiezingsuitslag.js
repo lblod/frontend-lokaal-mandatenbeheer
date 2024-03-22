@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { action } from '@ember/object';
 
-export default class VerkiezingsuitslagController extends Controller {
+export default class VerkiezingenVerkiezingsuitslagController extends Controller {
   @service router;
   @service store;
 

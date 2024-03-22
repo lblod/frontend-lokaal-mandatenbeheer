@@ -59,10 +59,10 @@ Router.map(function () {
     });
   });
 
-  this.route('verkiezingen');
-
-  this.route('verkiezingsuitslag', {
-    path: '/:bestuursorgaan_in_tijd_id/verkiezingsuitslag',
+  this.route('verkiezingen', function () {
+    this.route('verkiezingsuitslag', {
+      path: '/:bestuursorgaan_in_tijd_id/verkiezingsuitslag',
+    });
   });
 
   this.route('leidinggevendenbeheer', function () {
