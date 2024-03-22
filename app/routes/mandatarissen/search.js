@@ -33,6 +33,7 @@ export default class MandatarissenSearchRoute extends Route {
       include:
         'is-aangesteld-als,is-aangesteld-als.bekleedt,is-aangesteld-als.bekleedt.bestuursfunctie',
     };
+
     return queryParams;
   }
 
