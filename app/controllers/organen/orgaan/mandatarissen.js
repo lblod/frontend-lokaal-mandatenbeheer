@@ -13,8 +13,6 @@ export default class OrganenMandatarissenController extends Controller {
   sort = 'is-bestuurlijke-alias-van.achternaam';
   size = 20;
 
-  @tracked searchData;
-
   @action
   addMandataris() {
     this.router.transitionTo('organen.orgaan.mandataris.new');
