@@ -48,10 +48,14 @@ export default class OrganenMandatarissenRoute extends Route {
         return folded.foldedFracties;
       }
       if (key.indexOf('start') >= 0) {
-        return moment(folded.foldedStart).format('YYYY-MM-DD');
+        return (
+          folded.foldedStart && moment(folded.foldedStart).format('YYYY-MM-DD')
+        );
       }
       if (key.indexOf('einde') >= 0) {
-        return moment(folded.foldedEnd).format('YYYY-MM-DD');
+        return (
+          folded.foldedEnd && moment(folded.foldedEnd).format('YYYY-MM-DD')
+        );
       }
       return null;
     };
