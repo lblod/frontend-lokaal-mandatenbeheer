@@ -25,7 +25,7 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
       include: ['kandidatenlijst', 'persoon'].join(','),
     };
     if (params.filter && params.filter.length > 0) {
-      options.filter = params.filter;
+      options['filter[persoon]'] = params.filter;
     }
     return options;
   }
