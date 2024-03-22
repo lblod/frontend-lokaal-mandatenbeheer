@@ -23,9 +23,63 @@ export default class OrganenMandatarissenRoute extends Route {
       mandatarissen = await this.store.query('mandataris', options);
     }
 
+    const unsorted = await this.foldMandatarissen(mandatarissen);
+
     return {
-      mandatarissen: await this.foldMandatarissen(mandatarissen),
+      mandatarissen: this.reSortMandatarissen(params, unsorted),
     };
+  }
+
+  reSortMandatarissen(params, mandatarissen) {
+    const needsResort = ![
+      'start',
+      'einde',
+      'heeft-lidmaatschap.binnen-fractie.naam',
+    ].find((resortKey) => {
+      params.sort.includes(resortKey);
+    });
+    if (!needsResort) {
+      // can trust api to have sorted properly since we haven't recombined these fields in a possibly destructive way
+      return mandatarissen;
+    }
+
+    const getValue = (folded, key) => {
+      if (key.indexOf('heeft-lidmaatschap.binnen-fractie.naam') >= 0) {
+        return folded.foldedFracties;
+      }
+      if (key.indexOf('start') >= 0) {
+        return moment(folded.foldedStart).format('YYYY-MM-DD');
+      }
+      if (key.indexOf('einde') >= 0) {
+        return moment(folded.foldedEnd).format('YYYY-MM-DD');
+      }
+      return null;
+    };
+
+    return mandatarissen.sort((a, b) => {
+      const aVal = getValue(a, params.sort);
+      const bVal = getValue(b, params.sort);
+      if (aVal === bVal) {
+        return 0;
+      }
+      let result = 0;
+      if (aVal === null) {
+        result = 1;
+      }
+      if (bVal === null) {
+        result = -1;
+      }
+      if (aVal > bVal) {
+        result = 1;
+      } else {
+        result = -1;
+      }
+
+      if (params.sort.indexOf('-') >= 0) {
+        return result * -1;
+      }
+      return result;
+    });
   }
 
   async foldMandatarissen(mandatarissen) {
