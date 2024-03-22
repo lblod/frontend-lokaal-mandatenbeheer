@@ -92,10 +92,14 @@ export default class OrganenMandatarissenRoute extends Route {
         const key = `${personId}-${mandaatId}`;
         const existing = personMandaatData[key];
         if (existing) {
-          existing.foldedStart = moment.min(
-            moment(existing.foldedStart),
-            moment(mandataris.start)
-          );
+          if (!mandataris.start || !existing.foldedStart) {
+            existing.foldedStart = null;
+          } else {
+            existing.foldedStart = moment.min(
+              moment(existing.foldedStart),
+              moment(mandataris.start)
+            );
+          }
           if (!mandataris.einde || !existing.foldedEnd) {
             existing.foldedEnd = null;
           } else {
