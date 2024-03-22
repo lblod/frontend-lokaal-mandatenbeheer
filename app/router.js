@@ -59,6 +59,12 @@ Router.map(function () {
     });
   });
 
+  this.route('verkiezingen', function () {
+    this.route('verkiezingsuitslag', {
+      path: '/:installatievergadering_id/verkiezingsuitslag',
+    });
+  });
+
   this.route('leidinggevendenbeheer', function () {
     this.route(
       'bestuursfunctie',
