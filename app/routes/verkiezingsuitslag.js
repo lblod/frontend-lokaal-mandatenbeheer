@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
+export default class VerkiezingsuitslagRoute extends Route {
   @service store;
 
   queryParams = {
@@ -36,14 +36,31 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
       'verkiezingsresultaat',
       options
     );
-    return { verkiezingsresultaten };
+    const ivStatuses = await this.store.findAll(
+      'installatievergadering-status'
+    );
+    // This query returns a single installatievergadering wrapped in an array
+    const installatievergaderingen = await this.store.query(
+      'installatievergadering',
+      {
+        'filter[bestuursorgaan-in-tijd][id]': params.bestuursorgaan_in_tijd_id,
+        include: 'status',
+      }
+    );
+    const installatievergadering = installatievergaderingen[0];
+    const selectedStatus = installatievergadering.get('status');
+
+    return {
+      verkiezingsresultaten,
+      ivStatuses,
+      selectedStatus,
+      installatievergadering,
+    };
   }
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.searchData = this.paramsFor('verkiezingen.verkiezingsuitslag')[
-      'filter'
-    ];
+    controller.searchData = this.paramsFor('verkiezingsuitslag')['filter'];
   }
 
   @action

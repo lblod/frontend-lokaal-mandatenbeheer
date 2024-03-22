@@ -12,6 +12,13 @@
         <AuHeading @skin="2">Verkiezingsuitslag</AuHeading>
       </div>
     </Group>
+    <Group>
+      <Shared::InstallatievergaderingStatusSelector
+        @options={{@model.ivStatuses}}
+        @selectedStatus={{@model.selectedStatus}}
+        @onSelect={{this.selectStatus}}
+      />
+    </Group>
   </AuToolbar>
 
   <div class="au-o-box">
