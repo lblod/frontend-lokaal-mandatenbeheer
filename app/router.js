@@ -61,7 +61,7 @@ Router.map(function () {
 
   this.route('verkiezingen', function () {
     this.route('verkiezingsuitslag', {
-      path: '/:installatievergadering_id/verkiezingsuitslag',
+      path: '/:bestuursorgaan_in_tijd_id/verkiezingsuitslag',
     });
   });
 

@@ -1,2 +1,100 @@
 {{page-title "Verkiezingsuitslag"}}
-{{outlet}}
+
+<div class="au-c-body-container">
+  <AuToolbar
+    @size="large"
+    @nowrap="true"
+    class="au-u-padding-bottom-none"
+    as |Group|
+  >
+    <Group>
+      <div class="au-o-flow">
+        <AuHeading @skin="2">Verkiezingsuitslag</AuHeading>
+      </div>
+    </Group>
+    <Group>
+      <p>Change installatievergadering status:</p>
+      <Shared::InstallatievergaderingStatusSelector
+        @options={{@model.ivStatuses}}
+        @selectedStatus={{@model.selectedStatus}}
+        @onSelect={{this.selectStatus}}
+      />
+    </Group>
+  </AuToolbar>
+
+  <div class="au-o-box">
+    <AuInput
+      value={{this.searchData}}
+      @icon="search"
+      @iconAlignment="left"
+      @width="block"
+      placeholder="Zoek verkiezingsuitslag"
+      {{on "input" (perform this.search value="target.value")}}
+    />
+  </div>
+
+  <AuDataTable
+    @content={{@model.verkiezingsresultaten}}
+    @noDataMessage="Geen verkiezingsuitslagen gevonden"
+    @sort={{this.sort}}
+    @page={{this.page}}
+    @size={{this.size}}
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        <AuDataTableThSortable
+          @field="persoon.gebruikteVoornaam"
+          @currentSorting={{this.sort}}
+          @label="Voornaam"
+        />
+        <AuDataTableThSortable
+          @field="persoon.achternaam"
+          @currentSorting={{this.sort}}
+          @label="Achternaam"
+        />
+        <AuDataTableThSortable
+          @field="kandidatenlijst.lijstnaam"
+          @currentSorting={{this.sort}}
+          @label="Lijstnaam"
+        />
+        <AuDataTableThSortable
+          @field="kandidatenlijst.lijstnummer"
+          @currentSorting={{this.sort}}
+          @label="Lijstnummer"
+        />
+        <AuDataTableThSortable
+          @field="aantalNaamstemmen"
+          @currentSorting={{this.sort}}
+          @label="Aantal naamstemmen"
+        />
+        <AuDataTableThSortable
+          @field="plaatsRangorde"
+          @currentSorting={{this.sort}}
+          @label="Plaats rangorde"
+        />
+      </c.header>
+
+      <c.body as |row|>
+        <td>
+          {{row.persoon.gebruikteVoornaam}}
+        </td>
+        <td>
+          {{row.persoon.achternaam}}
+        </td>
+        <td>
+          {{row.kandidatenlijst.lijstnaam}}
+        </td>
+        <td>
+          {{row.kandidatenlijst.lijstnummer}}
+        </td>
+        <td>
+          {{row.aantalNaamstemmen}}
+        </td>
+        <td>
+          {{row.plaatsRangorde}}
+        </td>
+      </c.body>
+    </t.content>
+  </AuDataTable>
+</div>
