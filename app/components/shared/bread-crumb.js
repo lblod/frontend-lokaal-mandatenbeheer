@@ -161,11 +161,11 @@ export default class SharedBreadCrumbComponent extends Component {
 
   verkiezingen = [
     {
-      route: 'verkiezingen',
+      route: 'verkiezingen.index',
       crumbs: [{ label: 'Verkiezingen' }],
     },
     {
-      route: 'verkiezingsuitslag',
+      route: 'verkiezingen.verkiezingsuitslag',
       crumbs: [
         {
           label: 'Verkiezingen',
