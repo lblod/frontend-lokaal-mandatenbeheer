@@ -80,9 +80,16 @@ export default class InstanceTableComponent extends Component {
         size: this.args.size,
       };
     }
+
+    let headers = [];
+    if (instances.length > 0) {
+      headers = Object.keys(instances[0]);
+    }
+
     this.formInfo = {
       instances: instances,
       formDefinition: form,
+      headers: headers,
     };
   }
 }

@@ -20,9 +20,9 @@
   >
     <t.content as |c|>
       <c.header>
-        <th>Uri</th>
-        <th>Id</th>
-        <th>Label</th>
+        {{#each this.formInfo.headers as |header|}}
+          <th>{{header}}</th>
+        {{/each}}
         <th>{{! Bewerk }}</th>
         <th>{{! Delete }}</th>
       </c.header>
