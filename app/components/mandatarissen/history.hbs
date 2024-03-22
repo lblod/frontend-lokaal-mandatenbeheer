@@ -1,0 +1,41 @@
+<div {{did-update this.onMandatarisUpdate @mandataris}}>
+  {{#if this.loading}}
+    Loading...
+  {{else}}
+    <AuTable>
+      <:header>
+        <tr>
+          <th>Van</th>
+          <th>Tot</th>
+          <th>Status</th>
+          {{#if this.toonBeleidsdomeinen}}
+            <th>#Beleidsdomeinen</th>
+          {{/if}}
+          {{#if this.toonRangorde}}
+            <th>Rangorde</th>
+          {{/if}}
+          <th>Fractie</th>
+          <th>Aangepast door</th>
+          <th>Op</th>
+          <th></th>
+        </tr>
+      </:header>
+      <:body>
+        {{#each this.history as |historyItem|}}
+          <Mandatarissen::HistoryRow
+            @mandataris={{historyItem.mandataris}}
+            @selected={{historyItem.selected}}
+            @corrections={{historyItem.corrections}}
+            @toonBeleidsdomeinen={{this.toonBeleidsdomeinen}}
+            @toonRangorde={{this.toonRangorde}}
+          />
+        {{else}}
+          <tr>
+            <td colspan="4">Geen aanpassingen gevonden</td>
+          </tr>
+        {{/each}}
+      </:body>
+    </AuTable>
+    {{yield}}
+  {{/if}}
+</div>

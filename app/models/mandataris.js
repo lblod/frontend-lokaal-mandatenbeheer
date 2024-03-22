@@ -1,6 +1,8 @@
 import { attr, belongsTo, hasMany } from '@ember-data/model';
 import AgentInPosition from './agent-in-position';
 import moment from 'moment';
+import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 
 // INHERITS FROM AGENT-IN-POSITION
 export default class MandatarisModel extends AgentInPosition {
@@ -72,6 +74,27 @@ export default class MandatarisModel extends AgentInPosition {
       return true;
     }
     return false;
+  }
+
+  async save() {
+    const creating = !this.id;
+    const result = await super.save(...arguments);
+    if (creating) {
+      await fetch(
+        `/form-content/${MANDATARIS_EDIT_FORM_ID}/instances/${this.id}/history`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': JSON_API_TYPE,
+          },
+          body: JSON.stringify({
+            description: 'Aangemaakt',
+          }),
+        }
+      );
+    }
+
+    return result;
   }
 }
 
