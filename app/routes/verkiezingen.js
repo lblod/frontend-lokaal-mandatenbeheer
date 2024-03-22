@@ -41,6 +41,7 @@ export default class VerkiezingenRoute extends Route {
     return { yearToStatusIdToIvs, statusIdToStatus };
   }
 
+  // This format is easier to work with in the template
   /*
   [
     {
@@ -58,7 +59,6 @@ export default class VerkiezingenRoute extends Route {
     }
   ]
   */
-  // Grouped to lists for display in the template
   formatIvsMapToLists(yearToStatusIdToIvs, statusIdToStatus) {
     return Object.keys(yearToStatusIdToIvs).map((year) => {
       const statusIdToInstallatievergaderingen = yearToStatusIdToIvs[year];
