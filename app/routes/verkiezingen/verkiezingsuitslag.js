@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class VerkiezingsuitslagRoute extends Route {
+export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
   @service store;
 
   queryParams = {
@@ -60,7 +60,9 @@ export default class VerkiezingsuitslagRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.searchData = this.paramsFor('verkiezingsuitslag')['filter'];
+    controller.searchData = this.paramsFor('verkiezingen.verkiezingsuitslag')[
+      'filter'
+    ];
   }
 
   @action
