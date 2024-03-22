@@ -79,7 +79,7 @@ export default class OrganenMandatarissenRoute extends Route {
         result = -1;
       }
 
-      if (params.sort.indexOf('-') >= 0) {
+      if (params.sort.indexOf('-') === 0) {
         return result * -1;
       }
       return result;
@@ -142,11 +142,13 @@ export default class OrganenMandatarissenRoute extends Route {
       })
     );
     return folded.map((entry) => {
+      const fracties = entry.foldedFracties;
+      fracties.sort((a, b) => a.localeCompare(b));
       return {
         mandataris: entry.mandataris,
         foldedStart: entry.foldedStart,
         foldedEnd: entry.foldedEnd,
-        foldedFracties: entry.foldedFracties.join(', '),
+        foldedFracties: fracties.join(', '),
       };
     });
   }
