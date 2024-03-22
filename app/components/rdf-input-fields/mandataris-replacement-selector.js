@@ -21,7 +21,7 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
 
   @tracked replacements = null;
   @tracked initialized = false;
-  @tracked mandaat = [];
+  @tracked mandaat = null;
   @tracked shouldRender = false;
 
   @tracked editing = false;
@@ -77,7 +77,7 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
       this.storeOptions.sourceGraph
     )?.value;
 
-    if (!mandaatUri || this.mandaat.uri === mandaatUri) {
+    if (!mandaatUri || this.mandaat?.uri === mandaatUri) {
       return;
     }
 
