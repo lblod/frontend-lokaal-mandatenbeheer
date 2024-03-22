@@ -159,6 +159,23 @@ export default class SharedBreadCrumbComponent extends Component {
     },
   ];
 
+  verkiezingen = [
+    {
+      route: 'verkiezingen.index',
+      crumbs: [{ label: 'Verkiezingen' }],
+    },
+    {
+      route: 'verkiezingen.verkiezingsuitslag',
+      crumbs: [
+        {
+          label: 'Verkiezingen',
+          link: 'verkiezingen',
+        },
+        { label: 'Verkiezingsuitslag' },
+      ],
+    },
+  ];
+
   leidinggevendenbeheer = [
     {
       route: 'leidinggevendenbeheer.index',
@@ -371,6 +388,7 @@ export default class SharedBreadCrumbComponent extends Component {
   bread = this.bestuursorganen.concat(
     this.mandatarissen,
     this.mandatenbeheer,
+    this.verkiezingen,
     this.leidinggevendenbeheer,
     this.legacy
   );
@@ -379,7 +397,9 @@ export default class SharedBreadCrumbComponent extends Component {
     const results = this.bread.filter(
       (value) => value.route === this.router.currentRouteName
     );
-    if (results.length <= 0) {return [];}
+    if (results.length <= 0) {
+      return [];
+    }
     return results[0].crumbs;
   }
 }

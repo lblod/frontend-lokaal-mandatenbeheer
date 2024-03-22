@@ -19,6 +19,10 @@
       Mandatenbeheer
     </AuLink>
   {{/if}}
+  <AuLink @route="verkiezingen" role="menuitem">
+    <AuIcon @icon="user-fill" @alignment="left" />
+    Verkiezingen
+  </AuLink>
   {{#if this.currentSession.canAccessLeidinggevenden}}
     <AuLink @route="leidinggevendenbeheer" role="menuitem">
       <AuIcon @icon="user-popup" @alignment="left" />

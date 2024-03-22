@@ -23,6 +23,12 @@
         </AuNavigationLink>
       </li>
     {{/if}}
+    <li class="au-c-list-navigation__item">
+      <AuNavigationLink @route="verkiezingen">
+        <AuIcon @icon="user-fill" @alignment="left" />
+        Verkiezingen
+      </AuNavigationLink>
+    </li>
     {{#if this.currentSession.canAccessLeidinggevenden}}
       <li class="au-c-list-navigation__item">
         <AuNavigationLink @route="leidinggevendenbeheer">
