@@ -7,7 +7,7 @@ export default class FormInstancesRoute extends Route {
   };
 
   async model() {
-    const formModel = this.modelFor('legacy.formbeheer.form');
+    const formModel = this.modelFor('formbeheer.form');
     return { formDefinition: formModel };
   }
 }
