@@ -1,32 +1,29 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent extends Component {
-  @service() store;
+  @service store;
 
-  @tracked _beleidsdomeinen = A();
+  @tracked _beleidsdomeinen = [];
 
   constructor() {
     super(...arguments);
-    this._beleidsdomeinen = (this.args.beleidsdomeinen || A()).toArray();
+    this._beleidsdomeinen = this.args.beleidsdomeinen || [];
   }
 
   @restartableTask
   *searchByName(searchData) {
-    yield timeout(300);
+    yield timeout(SEARCH_TIMEOUT);
     let queryParams = {
       sort: 'label',
       'filter[label]': searchData,
     };
 
-    const codes = yield this.store.query('beleidsdomein-code', queryParams);
-    // EmberData throws a deprecation because PowerSelectWithCreate calls `.toArray`, but only because it exists.
-    // TODO: On EmberData v5 we can remove this workaround since the `toArray` method will no longer exist
-    return codes.slice();
+    return yield this.store.query('beleidsdomein-code', queryParams);
   }
 
   @action
