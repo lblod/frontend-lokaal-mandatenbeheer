@@ -1,0 +1,11 @@
+{{page-title "Instances"}}
+<div class="au-c-body-container au-c-body-container--scroll">
+  <Form::InstanceTable
+    @onCreate={{this.onCreate}}
+    @page={{this.page}}
+    @size={{this.size}}
+    @formDefinition={{this.model.formDefinition}}
+    @onRemoveInstance={{this.onRemoveInstance}}
+    @editRoute="formbeheer.form.instance"
+  />
+</div>
