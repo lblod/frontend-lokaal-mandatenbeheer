@@ -42,6 +42,7 @@ export default class CurrentSessionService extends Service {
 
   setupSentrySession() {
     if (SHOULD_ENABLE_SENTRY) {
+      // eslint-disable-next-line camelcase
       setUser({ id: this.user.id, ip_address: null });
       setContext('session', {
         account: this.account.id,

@@ -17,11 +17,9 @@ module(
       assert.dom(this.element).hasText('');
 
       // Template block usage:
-      await render(hbs`
-      <Mandatarissen::ReplacementSelect>
-        template block text
-      </Mandatarissen::ReplacementSelect>
-    `);
+      await render(hbs`<Mandatarissen::ReplacementSelect>
+  template block text
+</Mandatarissen::ReplacementSelect>`);
 
       assert.dom(this.element).hasText('template block text');
     });
