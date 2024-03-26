@@ -95,7 +95,7 @@ export default class VerkiezingenIndexRoute extends Route {
     );
 
     yearsAndStatusesWithIvs.sort((a, b) => {
-      if(b.year < a.year) {
+      if (b.year < a.year) {
         return -1;
       }
       return 1;
