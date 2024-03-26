@@ -24,8 +24,8 @@ export default class MandatarisHistoryRowComponent extends Component {
   }
 
   get correctionColspan() {
-    const max_number_of_columns = 6;
-    let colspan = max_number_of_columns;
+    const maxNbCols = 6;
+    let colspan = maxNbCols;
     if (!this.args.toonBeleidsdomeinen) {
       colspan--;
     }
