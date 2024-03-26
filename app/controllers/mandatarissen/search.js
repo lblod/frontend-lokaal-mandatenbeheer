@@ -12,8 +12,6 @@ export default class MandatarissenSearchController extends Controller {
   sort = 'achternaam';
   size = 20;
 
-  @tracked searchData;
-
   @restartableTask
   *search(searchData) {
     yield timeout(SEARCH_TIMEOUT);
