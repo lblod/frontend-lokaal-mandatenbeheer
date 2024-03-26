@@ -7,20 +7,20 @@ export default class OrganenbeheerIndexRoute extends Route {
 
   pageSize = 100;
   queryParams = {
-    active_sort: { refreshModel: true },
-    inactive_sort: { refreshModel: true },
+    activeSort: { refreshModel: true },
+    inactiveSort: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('organen');
 
     const activeOrganen = await this.getOrgans(
-      params.active_sort,
+      params.activeSort,
       parentModel.bestuurseenheid
     );
 
     const inactiveOrganen = await this.getOrgans(
-      params.inactive_sort,
+      params.inactiveSort,
       parentModel.bestuurseenheid,
       false
     );

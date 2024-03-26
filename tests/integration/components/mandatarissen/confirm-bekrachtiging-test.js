@@ -17,11 +17,9 @@ module(
       assert.dom(this.element).hasText('');
 
       // Template block usage:
-      await render(hbs`
-      <Mandatarissen::ConfirmBekrachtiging>
-        template block text
-      </Mandatarissen::ConfirmBekrachtiging>
-    `);
+      await render(hbs`<Mandatarissen::ConfirmBekrachtiging>
+  template block text
+</Mandatarissen::ConfirmBekrachtiging>`);
 
       assert.dom(this.element).hasText('template block text');
     });

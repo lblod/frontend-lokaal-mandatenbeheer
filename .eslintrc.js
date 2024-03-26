@@ -17,10 +17,10 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended',
-    // 'plugin:prettier/recommended',
+    'plugin:prettier/recommended',
   ],
   rules: {
-    // 'camelcase': ['error', { 'properties': 'always' }],
+    camelcase: ['error', { properties: 'always' }],
     curly: 'error',
   },
   env: {
@@ -48,6 +48,9 @@ module.exports = {
         node: true,
       },
       extends: ['plugin:n/recommended'],
+      rules: {
+        camelcase: ['off'],
+      },
     },
     {
       // test files

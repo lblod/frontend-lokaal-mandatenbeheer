@@ -94,6 +94,13 @@ export default class VerkiezingenIndexRoute extends Route {
       statusIdToStatus
     );
 
+    yearsAndStatusesWithIvs.sort((a, b) => {
+      if(b.year < a.year) {
+        return -1;
+      }
+      return 1;
+    });
+
     return {
       installatievergaderingen,
       yearsAndStatusesWithIvs,

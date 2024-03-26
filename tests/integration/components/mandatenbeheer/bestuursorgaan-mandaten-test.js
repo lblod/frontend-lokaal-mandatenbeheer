@@ -15,11 +15,9 @@ module('Integration | Component | bestuursorgaan-mandaten', function (hooks) {
     assert.dom(this.element).hasText('');
 
     // Template block usage:
-    await render(hbs`
-      <Mandatenbeheer::BestuursorgaanMandaten>
-        template block text
-      </Mandatenbeheer::BestuursorgaanMandaten>
-    `);
+    await render(hbs`<Mandatenbeheer::BestuursorgaanMandaten>
+  template block text
+</Mandatenbeheer::BestuursorgaanMandaten>`);
 
     assert.dom(this.element).hasText('template block text');
   });

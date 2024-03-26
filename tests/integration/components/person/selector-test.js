@@ -15,11 +15,9 @@ module('Integration | Component | person/selector', function (hooks) {
     assert.dom(this.element).hasText('');
 
     // Template block usage:
-    await render(hbs`
-      <Person::Selector>
-        template block text
-      </Person::Selector>
-    `);
+    await render(hbs`<Person::Selector>
+  template block text
+</Person::Selector>`);
 
     assert.dom(this.element).hasText('template block text');
   });
