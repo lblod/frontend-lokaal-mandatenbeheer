@@ -41,32 +41,32 @@
 
 <AuModal
   @title="Voeg fractie toe"
-  @modalOpen={{this.createFractieModal}}
+  @modalOpen={{eq this.modal this.create}}
   @closable={{true}}
-  @closeModal={{this.closeCreateFractieModal}}
+  @closeModal={{this.closeModal}}
 >
   <div class="au-o-box">
     <Form::NewInstance
-      @onCreate={{this.createFractie}}
+      @onCreate={{this.saveModal}}
       @form={{@model.form}}
       @buildSourceTtl={{this.buildSourceTtlCreateFractie}}
-      @onCancel={{this.closeCreateFractieModal}}
+      @onCancel={{this.closeModal}}
     />
   </div>
 </AuModal>
 
 <AuModal
   @title="Bewerk fractie"
-  @modalOpen={{this.editFractieModal}}
+  @modalOpen={{eq this.modal this.edit}}
   @closable={{true}}
-  @closeModal={{this.closeEditFractieModal}}
+  @closeModal={{this.closeModal}}
 >
   <div class="au-o-box">
     <Form::Instance
       @instanceId={{this.instanceId}}
       @form={{this.model.form}}
-      @onSave={{this.editFractie}}
-      @onCancel={{this.closeEditFractieModal}}
+      @onSave={{this.saveModal}}
+      @onCancel={{this.closeModal}}
     />
   </div>
 

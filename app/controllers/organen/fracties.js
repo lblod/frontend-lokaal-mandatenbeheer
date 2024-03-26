@@ -10,8 +10,9 @@ export default class FractiesController extends Controller {
   sort = 'naam';
   size = 10;
 
-  @tracked createFractieModal = false;
-  @tracked editFractieModal = false;
+  @tracked modal = false;
+  edit = 'edit';
+  create = 'create';
   @tracked instanceId = null;
 
   get hasActiveChildRoute() {
@@ -23,29 +24,20 @@ export default class FractiesController extends Controller {
 
   @action
   openCreateFractieModal() {
-    this.createFractieModal = true;
-  }
-  @action
-  closeCreateFractieModal() {
-    this.createFractieModal = false;
-  }
-  @action
-  createFractie() {
-    this.createFractieModal = false;
-    this.router.refresh;
+    this.modal = 'create';
   }
   @action
   openEditFractieModal(instanceId) {
-    this.editFractieModal = true;
+    this.modal = 'edit';
     this.instanceId = instanceId;
   }
   @action
-  closeEditFractieModal() {
-    this.editFractieModal = false;
+  closeModal() {
+    this.modal = null;
   }
   @action
-  editFractie() {
-    this.editFractieModal = false;
+  saveModal() {
+    this.modal = null;
     this.router.refresh;
   }
 
