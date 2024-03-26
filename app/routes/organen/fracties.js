@@ -6,6 +6,9 @@ import {
   getSelectedBestuursorgaanWithPeriods,
 } from 'frontend-lmb/utils/bestuursperioden';
 import RSVP from 'rsvp';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { FRACTIE_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
 
 export default class FractiesRoute extends Route {
   @service store;
@@ -70,7 +73,17 @@ export default class FractiesRoute extends Route {
       include: 'bestuursorganen-in-tijd',
     });
 
+    const form = await getFormFrom(this.store, FRACTIE_FORM_ID);
+    const defaultFractieType = (
+      await this.store.query('fractietype', {
+        page: { size: 1 },
+        'filter[:uri:]': FRACTIETYPE_SAMENWERKINGSVERBAND,
+      })
+    ).at(0);
+
     return RSVP.hash({
+      form,
+      defaultFractieType,
       fracties,
       bestuurseenheid: parentModel.bestuurseenheid,
       bestuursorganen: selectedBestuursOrganen,

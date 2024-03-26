@@ -11,7 +11,7 @@
       <AuHeading @skin="2">Beheer Fracties</AuHeading>
     </Group>
     <Group>
-      <AuButton {{on "click" this.createNewFractie}}>Voeg fractie toe</AuButton>
+      <AuButton {{on "click" this.openCreateFractieModal}}>Voeg fractie toe</AuButton>
     </Group>
   </AuToolbar>
 
@@ -32,11 +32,44 @@
         @sort={{this.sort}}
         @page={{this.page}}
         @size={{this.size}}
-        @editRoute="organen.fracties.edit"
+        @edit={{this.openEditFractieModal}}
         @selectedPeriod={{@model.selectedPeriod}}
       />
     </div>
   </div>
 </div>
+
+<AuModal
+  @title="Voeg fractie toe"
+  @modalOpen={{this.createFractieModal}}
+  @closable={{true}}
+  @closeModal={{this.closeCreateFractieModal}}
+>
+  <div class="au-o-box">
+    <Form::NewInstance
+      @onCreate={{this.createFractie}}
+      @form={{@model.form}}
+      @buildSourceTtl={{this.buildSourceTtlCreateFractie}}
+      @onCancel={{this.closeCreateFractieModal}}
+    />
+  </div>
+</AuModal>
+
+<AuModal
+  @title="Bewerk fractie"
+  @modalOpen={{this.editFractieModal}}
+  @closable={{true}}
+  @closeModal={{this.closeEditFractieModal}}
+>
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{this.instanceId}}
+      @form={{this.model.form}}
+      @onSave={{this.editFractie}}
+      @onCancel={{this.closeEditFractieModal}}
+    />
+  </div>
+
+</AuModal>
 
 {{outlet}}
