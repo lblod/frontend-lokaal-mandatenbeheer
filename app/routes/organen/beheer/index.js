@@ -59,6 +59,9 @@ export default class OrganenbeheerIndexRoute extends Route {
         bestuurseenheid: {
           id: bestuurseenheid.id,
         },
+        'heeft-tijdsspecialisaties': {
+          ':has:bevat': true,
+        },
       },
     };
     if (active) {
