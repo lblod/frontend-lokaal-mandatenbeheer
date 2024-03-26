@@ -36,7 +36,7 @@ export default class FractiesRoute extends Route {
       bestuursorganen,
       selectedPeriod
     );
-    const bestuursorganenIds = bestuursorganen.map((o) => o.get('id'));
+    const bestuursorganenIds = selectedBestuursOrganen.map((o) => o.get('id'));
 
     const fracties = await this.store.query('fractie', {
       sort: params.sort,
