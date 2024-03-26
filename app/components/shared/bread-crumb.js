@@ -86,41 +86,13 @@ export default class SharedBreadCrumbComponent extends Component {
       ],
     },
     {
-      route: 'organen.fracties.index',
+      route: 'organen.fracties',
       crumbs: [
         {
           label: 'Bestuursorganen',
           link: 'organen',
         },
         { label: 'Beheer fracties' },
-      ],
-    },
-    {
-      route: 'organen.fracties.new',
-      crumbs: [
-        {
-          label: 'Bestuursorganen',
-          link: 'organen',
-        },
-        {
-          label: 'Fractiebeheer',
-          link: 'organen.fracties',
-        },
-        { label: 'Voeg fractie toe' },
-      ],
-    },
-    {
-      route: 'organen.fracties.edit',
-      crumbs: [
-        {
-          label: 'Bestuursorganen',
-          link: 'organen',
-        },
-        {
-          label: 'Fractiebeheer',
-          link: 'organen.fracties',
-        },
-        { label: 'Bewerk' },
       ],
     },
   ];

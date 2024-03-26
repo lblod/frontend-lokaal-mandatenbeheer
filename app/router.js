@@ -38,10 +38,7 @@ Router.map(function () {
       this.route('new');
       this.route('edit', { path: '/:orgaan_id/edit' });
     });
-    this.route('fracties', function () {
-      this.route('new');
-      this.route('edit', { path: '/:id/edit' });
-    });
+    this.route('fracties');
   });
 
   this.route('mandaat', function () {
