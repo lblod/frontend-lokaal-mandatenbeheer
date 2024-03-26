@@ -33,8 +33,8 @@ export default class MandatarissenSearchRoute extends Route {
         'is-aangesteld-als,is-aangesteld-als.bekleedt,is-aangesteld-als.bekleedt.bestuursfunctie',
     };
 
-    if(params.filter && params.filter.length > 0) {
-     queryParams.filter= params.filter;
+    if (params.filter && params.filter.length > 0) {
+      queryParams.filter = params.filter;
     }
 
     return queryParams;

@@ -17,11 +17,9 @@ module(
       assert.dom(this.element).hasText('');
 
       // Template block usage:
-      await render(hbs`
-      <Shared::InstallatievergaderingStatusSelector>
-        template block text
-      </Shared::InstallatievergaderingStatusSelector>
-    `);
+      await render(hbs`<Shared::InstallatievergaderingStatusSelector>
+  template block text
+</Shared::InstallatievergaderingStatusSelector>`);
 
       assert.dom(this.element).hasText('template block text');
     });
