@@ -24,41 +24,14 @@ export default class FractiesRoute extends Route {
 
   async model(params) {
     const parentModel = this.modelFor('organen');
-    const bestuursorganen = parentModel.bestuursorganen;
 
-    let selectedPeriod, bestuursPeriods;
-
-    const selectedBestuursOrganen = await Promise.all(
-      bestuursorganen.map(async (bestuursorgaan) => {
-        const tijdsspecialisaties =
-          await bestuursorgaan.heeftTijdsspecialisaties;
-
-        let currentBestuursorgaan;
-        if (tijdsspecialisaties.length != 0) {
-          const result = getSelectedBestuursorgaanWithPeriods(
-            tijdsspecialisaties,
-            {
-              startDate: params.startDate,
-              endDate: params.endDate,
-            }
-          );
-
-          currentBestuursorgaan = result.bestuursorgaan;
-
-          if (!selectedPeriod) {
-            selectedPeriod = {
-              startDate: result.startDate,
-              endDate: result.endDate,
-            };
-            bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
-          }
-          return currentBestuursorgaan;
-        }
-      })
+    const organenWithPeriods = await this.fetchBestuursOrganen(
+      parentModel.bestuursorganen,
+      params
     );
 
     const bestuursorganenIds = await Promise.all(
-      selectedBestuursOrganen.map(async (o) => {
+      organenWithPeriods.bestuursorganen.map(async (o) => {
         return (await o).get('id');
       })
     );
@@ -86,10 +59,46 @@ export default class FractiesRoute extends Route {
       defaultFractieType,
       fracties,
       bestuurseenheid: parentModel.bestuurseenheid,
-      bestuursorganen: selectedBestuursOrganen,
+      ...organenWithPeriods,
+    });
+  }
+
+  async fetchBestuursOrganen(organen, params) {
+    let selectedPeriod, bestuursPeriods;
+
+    const selectedBestuursOrganen = await Promise.all(
+      organen.map(async (bestuursorgaan) => {
+        const tijdsspecialisaties =
+          await bestuursorgaan.heeftTijdsspecialisaties;
+
+        let currentBestuursorgaan;
+        if (tijdsspecialisaties.length != 0) {
+          const result = getSelectedBestuursorgaanWithPeriods(
+            tijdsspecialisaties,
+            {
+              startDate: params.startDate,
+              endDate: params.endDate,
+            }
+          );
+
+          currentBestuursorgaan = result.bestuursorgaan;
+
+          if (!selectedPeriod) {
+            selectedPeriod = {
+              startDate: result.startDate,
+              endDate: result.endDate,
+            };
+            bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
+          }
+          return currentBestuursorgaan;
+        }
+      })
+    );
+    return {
       bestuursPeriods,
       selectedPeriod,
-    });
+      bestuursorganen: selectedBestuursOrganen,
+    };
   }
 
   @action
