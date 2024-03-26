@@ -37,6 +37,7 @@ export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent exte
     let domein = await this.store.createRecord('beleidsdomein-code', {
       label: beleidsdomein,
     });
+    domein.save();
     this._beleidsdomeinen.pushObject(domein);
     this.args.onSelect(this._beleidsdomeinen);
   }
