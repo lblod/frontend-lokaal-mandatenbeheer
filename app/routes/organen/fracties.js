@@ -1,35 +1,27 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import RSVP from 'rsvp';
 import moment from 'moment';
 
-export default class MandatenbeheerRoute extends Route {
-  @service currentSession;
-  @service session;
-  @service router;
+export default class FractiesRoute extends Route {
   @service store;
 
-  startDate;
-  endDate;
-
   queryParams = {
+    filter: { refreshModel: true },
+    page: { refreshModel: true },
+    size: { refreshModel: true },
+    sort: { refreshModel: true },
     startDate: { refreshModel: true },
     endDate: { refreshModel: true },
   };
 
-  beforeModel(transition) {
-    this.session.requireAuthentication(transition, 'login');
-
-    if (!this.currentSession.canAccessMandaat) {
-      this.router.transitionTo('index');
-    }
-  }
-
   async model(params) {
+    const parentModel = this.modelFor('organen');
+    const bestuurseenheid = parentModel.bestuurseenheid;
+
     this.startDate = params.startDate;
     this.endDate = params.endDate;
 
-    const bestuurseenheid = this.currentSession.group;
     const bestuursorganen = await this.getRelevantBestuursorganen(
       bestuurseenheid.get('id')
     );
@@ -44,13 +36,25 @@ export default class MandatenbeheerRoute extends Route {
       bestuursorganen,
       selectedPeriod
     );
+    const bestuursorganenIds = bestuursorganen.map((o) => o.get('id'));
 
-    return RSVP.hash({
+    const fracties = await this.store.query('fractie', {
+      sort: params.sort,
+      page: {
+        number: params.page,
+        size: params.size,
+      },
+      'filter[bestuursorganen-in-tijd][id]': bestuursorganenIds.join(','),
+      include: 'bestuursorganen-in-tijd',
+    });
+
+    return {
+      fracties,
       bestuurseenheid,
       bestuursorganen: selectedBestuursOrganen,
       bestuursperiods,
       selectedPeriod,
-    });
+    };
   }
 
   async getRelevantBestuursorganen(bestuurseenheidId) {
@@ -105,5 +109,10 @@ export default class MandatenbeheerRoute extends Route {
         : null;
       return start == period.startDate && end == period.endDate;
     });
+  }
+
+  @action
+  reloadModel() {
+    this.refresh();
   }
 }

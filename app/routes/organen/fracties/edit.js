@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { FRACTIE_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
-export default class MandaatbeheerFractiesEditRoute extends Route {
+export default class FractiesEditRoute extends Route {
   @service store;
 
   async model(params) {

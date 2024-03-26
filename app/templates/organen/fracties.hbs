@@ -1,8 +1,8 @@
 {{page-title
   "Mandatenbeheer "
-  @model.mandatenbeheer.bestuurseenheid.classificatie.label
+  @model.bestuurseenheid.classificatie.label
   " "
-  @model.mandatenbheer.bestuurseenheid.naam
+  @model.bestuurseenheid.naam
 }}
 
 <div class="au-c-body-container {{if this.hasActiveChildRoute 'au-u-hidden'}}">
@@ -18,8 +18,8 @@
   <AuToolbar @size="large" as |Group|>
     <Group>
       <Mandatenbeheer::BestuursperiodenSelector
-        @options={{@model.mandatenbeheer.bestuursperiods}}
-        @selectedPeriod={{@model.mandatenbeheer.selectedPeriod}}
+        @options={{@model.bestuursperiods}}
+        @selectedPeriod={{@model.selectedPeriod}}
         @onSelect={{this.selectPeriod}}
       />
     </Group>
@@ -32,8 +32,8 @@
         @sort={{this.sort}}
         @page={{this.page}}
         @size={{this.size}}
-        @editRoute="mandatenbeheer.fracties.edit"
-        @selectedPeriod={{@model.mandatenbeheer.selectedPeriod}}
+        @editRoute="organen.fracties.edit"
+        @selectedPeriod={{@model.selectedPeriod}}
       />
     </div>
   </div>

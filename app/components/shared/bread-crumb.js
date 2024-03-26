@@ -85,6 +85,44 @@ export default class SharedBreadCrumbComponent extends Component {
         { label: 'Bewerk bestuursorgaan' },
       ],
     },
+    {
+      route: 'organen.fracties.index',
+      crumbs: [
+        {
+          label: 'Bestuursorganen',
+          link: 'organen',
+        },
+        { label: 'Beheer fracties' },
+      ],
+    },
+    {
+      route: 'organen.fracties.new',
+      crumbs: [
+        {
+          label: 'Bestuursorganen',
+          link: 'organen',
+        },
+        {
+          label: 'Fractiebeheer',
+          link: 'organen.fracties',
+        },
+        { label: 'Voeg fractie toe' },
+      ],
+    },
+    {
+      route: 'organen.fracties.edit',
+      crumbs: [
+        {
+          label: 'Bestuursorganen',
+          link: 'organen',
+        },
+        {
+          label: 'Fractiebeheer',
+          link: 'organen.fracties',
+        },
+        { label: 'Bewerk' },
+      ],
+    },
   ];
 
   mandatarissen = [
@@ -110,51 +148,6 @@ export default class SharedBreadCrumbComponent extends Component {
           link: 'mandatarissen.search',
         },
         { label: 'Details mandaat' },
-      ],
-    },
-  ];
-
-  mandatenbeheer = [
-    {
-      route: 'mandatenbeheer.mandatarissen.index',
-      crumbs: [{ label: 'Mandatenbeheer' }],
-    },
-    {
-      route: 'mandatenbeheer.fracties.index',
-      crumbs: [
-        {
-          label: 'Mandatenbeheer',
-          link: 'mandatenbeheer.mandatarissen',
-        },
-        { label: 'Beheer fracties' },
-      ],
-    },
-    {
-      route: 'mandatenbeheer.fracties.new',
-      crumbs: [
-        {
-          label: 'Mandatenbeheer',
-          link: 'mandatenbeheer.mandatarissen',
-        },
-        {
-          label: 'Fractiebeheer',
-          link: 'mandatenbeheer.fracties',
-        },
-        { label: 'Voeg fractie toe' },
-      ],
-    },
-    {
-      route: 'mandatenbeheer.fracties.edit',
-      crumbs: [
-        {
-          label: 'Mandatenbeheer',
-          link: 'mandatenbeheer.mandatarissen',
-        },
-        {
-          label: 'Fractiebeheer',
-          link: 'mandatenbeheer.fracties',
-        },
-        { label: 'Bewerk' },
       ],
     },
   ];
@@ -254,7 +247,6 @@ export default class SharedBreadCrumbComponent extends Component {
   ];
   bread = this.bestuursorganen.concat(
     this.mandatarissen,
-    this.mandatenbeheer,
     this.verkiezingen,
     this.leidinggevendenbeheer,
     this.formbeheer

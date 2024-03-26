@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
-export default class MandatenbeheerFractiesController extends Controller {
+export default class FractiesController extends Controller {
   @service router;
 
   @tracked page = 0;
@@ -12,19 +12,19 @@ export default class MandatenbeheerFractiesController extends Controller {
 
   get hasActiveChildRoute() {
     return (
-      this.router.currentRouteName.startsWith('mandatenbeheer.fracties.') &&
-      this.router.currentRouteName != 'mandatenbeheer.fracties.index'
+      this.router.currentRouteName.startsWith('organen.fracties.') &&
+      this.router.currentRouteName != 'organen.fracties.index'
     );
   }
 
   @action
   createNewFractie() {
-    this.router.transitionTo('mandatenbeheer.fracties.new');
+    this.router.transitionTo('organen.fracties.new');
   }
 
   @action
   selectPeriod(period) {
-    this.router.transitionTo('mandatenbeheer.fracties', {
+    this.router.transitionTo('organen.fracties', {
       queryParams: {
         startDate: period.startDate,
         endDate: period.endDate,
