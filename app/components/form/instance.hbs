@@ -7,7 +7,7 @@
       @graphs={{this.formInfo.graphs}}
       @sourceNode={{this.formInfo.sourceNode}}
       @formStore={{this.formInfo.formStore}}
-      @forceShowErrors={{true}}
+      @forceShowErrors={{this.forceShowErrors}}
       @useNewListingLayout={{true}}
       @level={{2}}
       class="au-u-max-width-medium {{unless this.isEditable 'disabled'}}"
@@ -15,15 +15,24 @@
     {{yield}}
   </section>
 
+  {{#if this.errorMessage}}
+    <AuAlert @skin="error" @title="Fout" @icon="alert-triangle">
+      {{this.errorMessage}}
+    </AuAlert>
+  {{/if}}
+
   {{#if this.isEditable}}
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
+          <AuButton
+            {{on "click" this.tryOpenHistoryModal}}
+            @disabled={{or this.isSaving (not this.hasChanges)}}
+          >Pas aan</AuButton>
           <Form::SaveWithHistory
             @save={{this.saveInstance}}
             @updateValue={{this.updateHistoryMessage}}
-            @withHistory={{@form.withHistory}}
-            @disabled={{or this.isSaving (not this.hasChanges)}}
+            @isModalOpen={{this.isSaveHistoryModalOpen}}
           >Pas aan</Form::SaveWithHistory>
           {{#if @onCancel}}
             <Form::CancelWithConfirm
