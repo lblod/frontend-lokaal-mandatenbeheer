@@ -1,12 +1,7 @@
-<AuButton
-  {{on "click" this.openModal}}
-  @disabled={{@disabled}}
->{{yield}}</AuButton>
-
 <AuModal
   @id="form-history"
-  @modalOpen={{this.isModalOpen}}
-  @closeModal={{this.closeModal}}
+  @closeModal={{fn (mut @isModalOpen) false}}
+  @modalOpen={{@isModalOpen}}
   class="small"
   @title="Beschrijving doorgevoerde wijzigingen."
   as |Modal|
@@ -22,7 +17,7 @@
   <Modal.Footer>
     <AuToolbar as |Group|>
       <Group>
-        <AuButton {{on "click" this.confirm}}>
+        <AuButton {{on "click" @save}}>
           Bevestig
         </AuButton>
       </Group>
