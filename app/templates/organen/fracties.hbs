@@ -1,0 +1,75 @@
+{{page-title
+  "Mandatenbeheer "
+  @model.bestuurseenheid.classificatie.label
+  " "
+  @model.bestuurseenheid.naam
+}}
+
+<div class="au-c-body-container {{if this.hasActiveChildRoute 'au-u-hidden'}}">
+  <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
+    <Group>
+      <AuHeading @skin="2">Beheer Fracties</AuHeading>
+    </Group>
+    <Group>
+      <AuButton {{on "click" this.openCreateFractieModal}}>Voeg fractie toe</AuButton>
+    </Group>
+  </AuToolbar>
+
+  <AuToolbar @size="large" as |Group|>
+    <Group>
+      <Mandatenbeheer::BestuursperiodenSelector
+        @options={{@model.bestuursPeriods}}
+        @selectedPeriod={{@model.selectedPeriod}}
+        @onSelect={{this.selectPeriod}}
+      />
+    </Group>
+  </AuToolbar>
+
+  <div class="au-c-body-container au-c-body-container--scroll">
+    <div class="au-o-box">
+      <Organen::FractieTable
+        @content={{@model.fracties}}
+        @sort={{this.sort}}
+        @page={{this.page}}
+        @size={{this.size}}
+        @edit={{this.openEditFractieModal}}
+        @selectedPeriod={{@model.selectedPeriod}}
+      />
+    </div>
+  </div>
+</div>
+
+<AuModal
+  @title="Voeg fractie toe"
+  @modalOpen={{eq this.modal this.create}}
+  @closable={{true}}
+  @closeModal={{this.closeModal}}
+>
+  <div class="au-o-box">
+    <Form::NewInstance
+      @onCreate={{this.saveModal}}
+      @form={{@model.form}}
+      @buildSourceTtl={{this.buildSourceTtlCreateFractie}}
+      @onCancel={{this.closeModal}}
+    />
+  </div>
+</AuModal>
+
+<AuModal
+  @title="Bewerk fractie"
+  @modalOpen={{eq this.modal this.edit}}
+  @closable={{true}}
+  @closeModal={{this.closeModal}}
+>
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{this.instanceId}}
+      @form={{this.model.form}}
+      @onSave={{this.saveModal}}
+      @onCancel={{this.closeModal}}
+    />
+  </div>
+
+</AuModal>
+
+{{outlet}}

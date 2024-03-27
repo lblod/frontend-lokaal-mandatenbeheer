@@ -37,6 +37,7 @@ export default class OrganenRoute extends Route {
 
     return RSVP.hash({
       bestuurseenheid,
+      bestuursorganen,
       decretaleBestuursorganen,
       nietDecretaleBestuursorganen,
     });
@@ -47,7 +48,9 @@ export default class OrganenRoute extends Route {
       'filter[bestuurseenheid][id]': bestuurseenheidId,
       'filter[:has-no:deactivated-at]': true,
       'filter[:has-no:is-tijdsspecialisatie-van]': true,
-      include: 'classificatie,is-tijdsspecialisatie-van',
+      'filter[heeft-tijdsspecialisaties][:has:bevat]': true, // only organs with a political mandate
+      include:
+        'classificatie,is-tijdsspecialisatie-van,heeft-tijdsspecialisaties',
     });
   }
 }

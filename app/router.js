@@ -38,6 +38,7 @@ Router.map(function () {
       this.route('new');
       this.route('edit', { path: '/:orgaan_id/edit' });
     });
+    this.route('fracties');
   });
 
   this.route('mandaat', function () {
@@ -48,15 +49,6 @@ Router.map(function () {
     this.route('search');
     this.route('persoon', { path: '/:id/persoon' });
     this.route('mandataris', { path: '/:id/mandataris' });
-  });
-
-  this.route('mandatenbeheer', function () {
-    this.route('mandatarissen');
-
-    this.route('fracties', function () {
-      this.route('new');
-      this.route('edit', { path: '/:id/edit' });
-    });
   });
 
   this.route('verkiezingen', function () {
