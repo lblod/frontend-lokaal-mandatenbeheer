@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { dropTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
@@ -37,8 +37,7 @@ export default class MandatenbeheerMandatarissenTotalsComponent extends Componen
     return this.store.query('mandataris', queryParams);
   }
 
-  @dropTask
-  async getMandatarissenTotals() {
+  getMandatarissenTotals = task({ drop: true }, async () => {
     const bestuursorganen = this.args.bestuursorganen;
 
     const orgaanMandatenMap = await Promise.all(
@@ -69,7 +68,7 @@ export default class MandatenbeheerMandatarissenTotalsComponent extends Componen
     );
 
     this.mandatarissenTotals = mandatarissenOrgaanMap;
-  }
+  });
 
   @action
   toggleOpen() {

@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask, task, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 
 export default class MockLoginController extends Controller {
   @service store;
@@ -12,8 +12,7 @@ export default class MockLoginController extends Controller {
   @tracked page = 0;
   size = 10;
 
-  @task
-  async queryStore() {
+  queryStore = task(async () => {
     const filter = { provider: 'https://github.com/lblod/mock-login-service' };
     if (this.gemeente) {
       filter.gebruiker = { bestuurseenheden: this.gemeente };
@@ -25,14 +24,13 @@ export default class MockLoginController extends Controller {
       sort: 'gebruiker.achternaam',
     });
     return accounts;
-  }
+  });
 
-  @restartableTask
-  async updateSearch(value) {
+  updateSearch = task({ restartable: true }, async (value) => {
     await timeout(500);
     this.page = 0;
     this.gemeente = value;
 
     this.model = await this.queryStore.perform();
-  }
+  });
 }

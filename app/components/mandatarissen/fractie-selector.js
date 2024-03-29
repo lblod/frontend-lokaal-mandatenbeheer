@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
@@ -26,8 +26,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     this.searchByName.perform();
   }
 
-  @restartableTask
-  async searchByName(searchData) {
+  searchByName = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
     let queryParams = {
       sort: 'naam',
@@ -52,7 +51,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       this.fractieOptions = fracties;
     }
     return fracties;
-  }
+  });
 
   async createNewOnafhankelijkeFractie() {
     let onafFractie = (await this.store.findAll('fractietype')).find((f) =>

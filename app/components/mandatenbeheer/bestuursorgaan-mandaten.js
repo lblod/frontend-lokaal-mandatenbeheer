@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { keepLatestTask, dropTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
@@ -19,8 +19,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     return this.computeBestuursfuncties.isRunning;
   }
 
-  @keepLatestTask
-  async computeBestuursfuncties() {
+  computeBestuursfuncties = task({ keepLatest: true }, async () => {
     const mandaten = await this.args.mandaten;
     const bestuursFunctiesUsed = await Promise.all(
       mandaten.map((m) => m.bestuursfunctie)
@@ -35,20 +34,18 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     );
     this.availableBestuursfuncties = availableBestuursfuncties.sortBy('label');
     this.selectedBestuursfunctie = this.availableBestuursfuncties.firstObject;
-  }
+  });
 
-  @dropTask
-  async createMandaat() {
+  createMandaat = task({ drop: true }, async () => {
     const newMandaat = this.store.createRecord('mandaat', {
       bestuursfunctie: this.selectedBestuursfunctie,
       bevatIn: [this.args.bestuursorgaanIT],
     });
     await newMandaat.save();
     this.creatingNewMandaat = false;
-  }
+  });
 
-  @dropTask
-  async removeMandaat(mandaat) {
+  removeMandaat = task({ drop: true }, async (mandaat) => {
     this.removingMandaatId = mandaat.id;
     const mandatarissen = await this.store.query('mandataris', {
       filter: {
@@ -76,10 +73,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       type: 'success',
       icon: 'circle-check',
     });
-  }
+  });
 
-  @dropTask
-  async computeOrderedMandaten() {
+  computeOrderedMandaten = task({ drop: true }, async () => {
     // using a getter on sorted mandaten is not possible because mandaten is a promise array and it
     // is deprecated to call sortby on that directly, sortby is also deprecated it seems...
     const mandaten = await this.args.mandaten;
@@ -88,13 +84,12 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         ? 1
         : -1;
     });
-  }
+  });
 
-  @dropTask
-  async initialize() {
+  initialize = task({ drop: true }, async () => {
     await this.computeBestuursfuncties.perform();
     await this.computeOrderedMandaten.perform();
-  }
+  });
 
   @action
   createNewMandaat() {

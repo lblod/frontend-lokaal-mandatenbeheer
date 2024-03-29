@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { keepLatestTask, dropTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
@@ -18,8 +18,7 @@ export default class FormHistoryComponent extends Component {
     this.fetchCurrentHistoryPage.perform();
   }
 
-  @keepLatestTask
-  async fetchCurrentHistoryPage() {
+  fetchCurrentHistoryPage = task({ keepLatest: true }, async () => {
     this.loading = true;
     const result = await fetch(
       `/form-content/${this.args.form.id}/instances/${this.args.instanceId}/history?page[size]=${this.size}&page[number]=${this.page}`
@@ -52,17 +51,16 @@ export default class FormHistoryComponent extends Component {
     });
 
     this.loading = false;
-  }
+  });
 
-  @dropTask
-  async restoreHistoryItem(historyItem) {
+  restoreHistoryItem = task({ drop: true }, async (historyItem) => {
     const result = await fetch(
       `/form-content/history?historyUri=${historyItem.history}`
     );
     const json = await result.json();
 
     this.args.onRestore(json);
-  }
+  });
 
   @action
   toNextPage() {

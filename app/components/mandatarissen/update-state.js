@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { dropTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
@@ -30,8 +30,7 @@ export default class MandatarissenUpdateState extends Component {
     return this.load.isRunning;
   }
 
-  @dropTask
-  async load() {
+  load = task({ drop: true }, async () => {
     this.newStatus = this.args.mandataris.status;
     this.date = new Date();
     this.selectedBeleidsdomeinen = this.args.mandataris.beleidsdomein.slice();
@@ -44,7 +43,7 @@ export default class MandatarissenUpdateState extends Component {
         await this.args.mandataris.bekleedt
       ).bevatIn
     ).slice();
-  }
+  });
 
   get statusOptions() {
     return this.mandatarisStatus.statuses;
@@ -219,8 +218,7 @@ export default class MandatarissenUpdateState extends Component {
     }
   }
 
-  @dropTask
-  async updateState() {
+  updateState = task({ drop: true }, async () => {
     let promise;
     if (this.newStatus === this.mandatarisStatus.endedState) {
       promise = this.endMandataris();
@@ -244,7 +242,7 @@ export default class MandatarissenUpdateState extends Component {
         );
         this.onStateChanged(this.args.mandataris);
       });
-  }
+  });
 
   @action
   updateDate(date) {
