@@ -104,6 +104,7 @@ export default class RdfInputFieldsConceptSchemeMultiSelectorComponent extends I
   }
 
   search = restartableTask(async (term) => {
+    await timeout(SEARCH_TIMEOUT);
     return await this.fetchOptions(term);
   });
 }
