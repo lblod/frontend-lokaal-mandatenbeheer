@@ -10,9 +10,9 @@ export default class MandatarissenReplacementComponent extends Component {
   @tracked overlappingMandate;
 
   @keepLatestTask
-  *checkMandate() {
+  async checkMandate() {
     const replacement = this.args.selected;
-    this.overlappingMandate = yield this.mandataris.getOverlappingMandate(
+    this.overlappingMandate = await this.mandataris.getOverlappingMandate(
       this.args.mandataris,
       replacement
     );

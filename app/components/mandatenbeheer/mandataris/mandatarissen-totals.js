@@ -38,10 +38,10 @@ export default class MandatenbeheerMandatarissenTotalsComponent extends Componen
   }
 
   @dropTask
-  *getMandatarissenTotals() {
+  async getMandatarissenTotals() {
     const bestuursorganen = this.args.bestuursorganen;
 
-    const orgaanMandatenMap = yield Promise.all(
+    const orgaanMandatenMap = await Promise.all(
       bestuursorganen.map(async (orgaan) => {
         return {
           orgaan,
@@ -57,7 +57,7 @@ export default class MandatenbeheerMandatarissenTotalsComponent extends Componen
       };
     };
 
-    const mandatarissenOrgaanMap = yield Promise.all(
+    const mandatarissenOrgaanMap = await Promise.all(
       orgaanMandatenMap.map(async (e) => {
         return {
           orgaan: e.orgaan,

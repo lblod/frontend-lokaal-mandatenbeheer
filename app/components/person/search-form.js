@@ -69,8 +69,8 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
   }
 
   @restartableTask
-  *search() {
-    yield timeout(300);
+  async search() {
+    await timeout(300);
 
     if (!(this.achternaam || this.voornaam || this.rijksregisternummer)) {
       this.queryParams = {};
@@ -95,16 +95,16 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
       },
     };
     this.queryParams = queryParams;
-    this.personen = yield this.getPersoon.perform(queryParams);
+    this.personen = await this.getPersoon.perform(queryParams);
     if (this.personen.meta.pagination.self.number !== this.page) {
       this.page = 0;
     }
   }
 
   @task
-  *getPersoon(queryParams) {
+  async getPersoon(queryParams) {
     try {
-      return yield this.store.query('persoon', queryParams);
+      return await this.store.query('persoon', queryParams);
     } catch (e) {
       this.error = true;
     }

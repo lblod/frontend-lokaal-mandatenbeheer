@@ -19,20 +19,20 @@ export default class FormHistoryComponent extends Component {
   }
 
   @keepLatestTask
-  *fetchCurrentHistoryPage() {
+  async fetchCurrentHistoryPage() {
     this.loading = true;
-    const result = yield fetch(
+    const result = await fetch(
       `/form-content/${this.args.form.id}/instances/${this.args.instanceId}/history?page[size]=${this.size}&page[number]=${this.page}`
     );
 
-    const json = yield result.json();
+    const json = await result.json();
     const history = json.instances;
     this.totalCount = parseInt(result.headers.get('X-Total-Count'), 10);
 
     const userIds = new Set([...history.map((h) => h.creator)]);
     let users = [];
     if (userIds.size !== 0) {
-      users = yield this.store.query('gebruiker', {
+      users = await this.store.query('gebruiker', {
         filter: {
           id: Array.from(userIds).join(','),
         },
@@ -55,11 +55,11 @@ export default class FormHistoryComponent extends Component {
   }
 
   @dropTask
-  *restoreHistoryItem(historyItem) {
-    const result = yield fetch(
+  async restoreHistoryItem(historyItem) {
+    const result = await fetch(
       `/form-content/history?historyUri=${historyItem.history}`
     );
-    const json = yield result.json();
+    const json = await result.json();
 
     this.args.onRestore(json);
   }

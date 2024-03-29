@@ -27,8 +27,8 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   @restartableTask
-  *searchByName(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
+  async searchByName(searchData) {
+    await timeout(SEARCH_TIMEOUT);
     let queryParams = {
       sort: 'naam',
       include: 'fractietype',
@@ -41,11 +41,11 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     if (searchData) {
       queryParams.filter.naam = searchData;
     }
-    let fracties = yield this.store.query('fractie', queryParams);
+    let fracties = await this.store.query('fractie', queryParams);
     fracties = fracties.filter((f) => !f.get('fractietype.isOnafhankelijk'));
     //sets dummy
     if ('onafhankelijk'.includes(searchData?.toLowerCase())) {
-      fracties.pushObject(yield this.createNewOnafhankelijkeFractie());
+      fracties.pushObject(await this.createNewOnafhankelijkeFractie());
     }
     // so we have results when search is blank
     if (!searchData) {

@@ -45,13 +45,13 @@ export default class NewInstanceComponent extends Component {
   }
 
   @keepLatestTask
-  *save() {
+  async save() {
     // TODO validation needs to be checked first before the form is actually saved
     const triples = this.sourceTriples;
     const definition = this.formInfo.definition;
     this.errorMessage = null;
     // post triples to backend
-    const result = yield fetch(`/form-content/${definition.id}`, {
+    const result = await fetch(`/form-content/${definition.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': JSON_API_TYPE,
@@ -62,7 +62,7 @@ export default class NewInstanceComponent extends Component {
       }),
     });
 
-    yield timeout(RESOURCE_CACHE_TIMEOUT);
+    await timeout(RESOURCE_CACHE_TIMEOUT);
 
     if (!result.ok) {
       this.errorMessage =
@@ -70,7 +70,7 @@ export default class NewInstanceComponent extends Component {
       return;
     }
 
-    const { id } = yield result.json();
+    const { id } = await result.json();
 
     if (!id) {
       this.errorMessage =
