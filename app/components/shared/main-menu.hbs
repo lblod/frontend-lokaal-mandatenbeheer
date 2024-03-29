@@ -15,14 +15,6 @@
         Mandatarissen
       </AuNavigationLink>
     </li>
-    {{#if this.currentSession.canAccessMandaat}}
-      <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="mandatenbeheer.mandatarissen">
-          <AuIcon @icon="user-fill" @alignment="left" />
-          Mandatenbeheer
-        </AuNavigationLink>
-      </li>
-    {{/if}}
     <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="verkiezingen">
         <AuIcon @icon="user-fill" @alignment="left" />

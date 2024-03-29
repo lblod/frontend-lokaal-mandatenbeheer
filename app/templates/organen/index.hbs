@@ -11,9 +11,8 @@
     <AuHeading @skin="2">Overzicht bestuursorganen</AuHeading>
   </Group>
   <Group>
-    <AuButton {{on "click" this.beheerOrganen}}>
-      Beheer bestuursorganen
-    </AuButton>
+    <AuLink @route="organen.fracties" @skin="button-secondary">Beheer fracties</AuLink>
+    <AuLink @route="organen.beheer" @skin="button">Beheer bestuursorganen</AuLink>
   </Group>
 </AuToolbar>
 
