@@ -9,7 +9,7 @@ import {
 import { NamedNode } from 'rdflib';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ACCEPT_HEADER, SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
-import { FORM } from 'frontend-lmb/rdf/namespaces';
+import { getFormProperty } from 'frontend-lmb/utils/form-properties';
 
 const PAGESIZE = 10;
 
@@ -19,6 +19,9 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   @tracked selected = null;
   @tracked options = [];
   @tracked searchEnabled = true;
+
+  instanceLabelProperty;
+  instanceApiUrl;
 
   constructor() {
     super(...arguments);
@@ -31,15 +34,18 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
   }
 
   async loadOptions() {
-    const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
-    const instanceApiUrl = this.getFormProperty('instanceApiUrl');
+    this.instanceLabelProperty = getFormProperty(
+      this.args,
+      'instanceLabelProperty'
+    );
+    this.instanceApiUrl = getFormProperty(this.args, 'instanceApiUrl');
 
     const response = await fetch(
-      `${instanceApiUrl}?page[size]=${PAGESIZE}`,
+      `${this.instanceApiUrl}?page[size]=${PAGESIZE}`,
       ACCEPT_HEADER
     );
 
-    this.options = await this.parseResponse(response, instanceLabelProperty);
+    this.options = await this.parseResponse(response);
   }
 
   async loadProvidedValue() {
@@ -76,26 +82,12 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
 
   searchRepo = restartableTask(async (term) => {
     await timeout(SEARCH_TIMEOUT);
-    const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
-    const instanceApiUrl = this.getFormProperty('instanceApiUrl');
-
-    const url = `${instanceApiUrl}?filter[${instanceLabelProperty}]=${term}&page[size]=${PAGESIZE}`;
+    const url = `${this.instanceApiUrl}?filter[${this.instanceLabelProperty}]=${term}&page[size]=${PAGESIZE}`;
     const response = await fetch(url, ACCEPT_HEADER);
-    return await this.parseResponse(response, instanceLabelProperty);
+    return await this.parseResponse(response);
   });
 
-  getFormProperty(property) {
-    const formGraph = this.args.graphs.formGraph;
-
-    return this.args.formStore.match(
-      this.args.field.uri,
-      FORM(property),
-      undefined,
-      formGraph
-    )[0].object.value;
-  }
-
-  async parseResponse(response, instanceLabelProperty) {
+  async parseResponse(response) {
     if (!response.ok) {
       let error = new Error(response.statusText);
       error.status = response.status;
@@ -104,17 +96,17 @@ export default class RdfInstanceSelectorComponent extends InputFieldComponent {
     const result = await response.json();
     const options = result.data.map((m) => {
       const subject = new NamedNode(m.attributes['uri']);
-      return { subject: subject, label: m.attributes[instanceLabelProperty] };
+      return {
+        subject: subject,
+        label: m.attributes[this.instanceLabelProperty],
+      };
     });
     return options;
   }
 
   async fetchSelectedOption(term) {
-    const instanceLabelProperty = this.getFormProperty('instanceLabelProperty');
-    const instanceApiUrl = this.getFormProperty('instanceApiUrl');
-
-    const url = `${instanceApiUrl}?filter[:uri:]=${encodeURIComponent(term)}`;
+    const url = `${this.instanceApiUrl}?filter[:uri:]=${encodeURIComponent(term)}`;
     const response = await fetch(url, ACCEPT_HEADER);
-    return await this.parseResponse(response, instanceLabelProperty);
+    return await this.parseResponse(response, this.instanceLabelProperty);
   }
 }
