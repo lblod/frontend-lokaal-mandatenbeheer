@@ -51,9 +51,19 @@ export default class RdfInputFieldsConceptSchemeMultiSelectorComponent extends I
   async loadProvidedValue() {
     if (this.isValid) {
       const matches = triplesForPath(this.storeOptions, true).values;
-      this.selected = this.options.filter((opt) =>
-        matches.find((m) => m.equals(opt.subject))
+      if (!matches || matches.length == 0) {
+        return;
+      }
+      let preSelection = await Promise.all(
+        matches.map(async (m) => {
+          const result = this.options.find((opt) => m.equals(opt.subject));
+          if (result) {
+            return result;
+          }
+          return await this.fetchSelectedOption(m.value);
+        })
       );
+      this.selected = preSelection.filter((opt) => opt);
     }
   }
 
@@ -81,6 +91,20 @@ export default class RdfInputFieldsConceptSchemeMultiSelectorComponent extends I
 
     this.hasBeenFocused = true;
     super.updateValidations();
+  }
+
+  async fetchSelectedOption(uri) {
+    const response = await this.store.query('concept', {
+      'filter[:uri:]': uri,
+    });
+    if (!response[0]) {
+      return;
+    }
+
+    return {
+      subject: new NamedNode(response[0].uri),
+      label: response[0].label,
+    };
   }
 
   async fetchOptions(searchData) {
