@@ -48,16 +48,18 @@ export default class RdfInputFieldsConceptSchemeSelectorComponent extends InputF
     this.options = await this.fetchOptions();
   }
 
-  loadProvidedValue() {
+  async loadProvidedValue() {
     if (this.isValid) {
-      // Assumes valid input
-      // This means even though we can have multiple values for one path (e.g. rdf:type)
-      // this selector will only accept one value, and we take the first value from the matches.
-      // The validation makes sure the matching value is the sole one.
       const matches = triplesForPath(this.storeOptions, true).values;
+      if (!matches || matches.length == 0) {
+        return;
+      }
       this.selected = this.options.find((opt) =>
         matches.find((m) => m.equals(opt.subject))
       );
+      if (!this.selected || this.selected.lenght == 0) {
+        this.selected = await this.fetchSelectedOption(matches[0].value);
+      }
     }
   }
 
@@ -89,6 +91,20 @@ export default class RdfInputFieldsConceptSchemeSelectorComponent extends InputF
 
     this.hasBeenFocused = true;
     super.updateValidations();
+  }
+
+  async fetchSelectedOption(uri) {
+    const response = await this.store.query('concept', {
+      'filter[:uri:]': uri,
+    });
+    if (!response[0]) {
+      return;
+    }
+
+    return {
+      subject: new NamedNode(response[0].uri),
+      label: response[0].label,
+    };
   }
 
   async fetchOptions(searchData) {
