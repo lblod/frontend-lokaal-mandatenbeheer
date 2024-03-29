@@ -14,7 +14,7 @@ import {
   RESOURCE_CACHE_TIMEOUT,
 } from '../../utils/constants';
 import { inject as service } from '@ember/service';
-import { keepLatestTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
 import { guidFor } from '@ember/object/internals';
@@ -44,8 +44,7 @@ export default class NewInstanceComponent extends Component {
     return this.save.isRunning;
   }
 
-  @keepLatestTask
-  async save() {
+  save = task({ keepLatest: true }, async () => {
     // TODO validation needs to be checked first before the form is actually saved
     const triples = this.sourceTriples;
     const definition = this.formInfo.definition;
@@ -88,7 +87,7 @@ export default class NewInstanceComponent extends Component {
     }
 
     this.formDirtyState.markClean(this.formId);
-  }
+  });
 
   @action
   async createInstance() {
