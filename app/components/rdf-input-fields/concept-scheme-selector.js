@@ -9,6 +9,8 @@ import {
 } from '@lblod/submission-form-helpers';
 import { NamedNode } from 'rdflib';
 import { hasValidFieldOptions } from '@lblod/ember-submission-form-fields/utils/has-valid-field-options';
+import { restartableTask, timeout } from 'ember-concurrency';
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class RdfInputFieldsConceptSchemeSelectorComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
@@ -37,21 +39,13 @@ export default class RdfInputFieldsConceptSchemeSelectorComponent extends InputF
       return;
     }
 
-    const conceptScheme = fieldOptions.conceptScheme;
+    this.conceptScheme = fieldOptions.conceptScheme;
 
     if (fieldOptions.searchEnabled !== undefined) {
       this.searchEnabled = fieldOptions.searchEnabled;
     }
 
-    const response = await this.store.query('concept', {
-      filter: {
-        'concept-schemes': {
-          ':uri:': conceptScheme,
-        },
-      },
-      sort: 'label',
-    });
-    this.options = await this.parseData(response);
+    this.options = await this.fetchOptions();
   }
 
   loadProvidedValue() {
@@ -96,4 +90,29 @@ export default class RdfInputFieldsConceptSchemeSelectorComponent extends InputF
     this.hasBeenFocused = true;
     super.updateValidations();
   }
+
+  async fetchOptions(searchData) {
+    const queryParams = {
+      filter: {
+        label: searchData,
+        'concept-schemes': {
+          ':uri:': this.conceptScheme,
+        },
+      },
+      sort: 'label',
+    };
+    if (searchData) {
+      queryParams['filter']['label'] = searchData;
+    }
+    const response = await this.store.query('concept', queryParams);
+    return await response.map((m) => {
+      const subject = new NamedNode(m.uri);
+      return { subject: subject, label: m.label };
+    });
+  }
+
+  search = restartableTask(async (term) => {
+    await timeout(SEARCH_TIMEOUT);
+    return await this.fetchOptions(term);
+  });
 }
