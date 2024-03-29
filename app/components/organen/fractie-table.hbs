@@ -28,10 +28,9 @@
         />
       </td>
       <td>
-        <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
+        <AuButton @skin="link" {{on "click" (fn @edit row.id)}}>
           <AuIcon @icon="pencil" @alignment="left" />
-          Bewerk
-        </LinkTo>
+          Bewerk</AuButton>
       </td>
     </c.body>
   </t.content>
