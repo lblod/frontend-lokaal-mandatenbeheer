@@ -16,14 +16,14 @@ export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent exte
   }
 
   @restartableTask
-  *searchByName(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
+  async searchByName(searchData) {
+    await timeout(SEARCH_TIMEOUT);
     let queryParams = {
       sort: 'label',
       'filter[label]': searchData,
     };
 
-    return yield this.store.query('beleidsdomein-code', queryParams);
+    return await this.store.query('beleidsdomein-code', queryParams);
   }
 
   @action

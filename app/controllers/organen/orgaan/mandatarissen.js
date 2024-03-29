@@ -21,8 +21,8 @@ export default class OrganenMandatarissenController extends Controller {
   }
 
   @restartableTask
-  *search(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
+  async search(searchData) {
+    await timeout(SEARCH_TIMEOUT);
     this.page = 0;
     this.filter = searchData;
   }

@@ -55,14 +55,14 @@ export default class InstanceComponent extends Component {
   }
 
   @keepLatestTask
-  *save() {
+  async save() {
     // TODO validation needs to be checked first before the form is actually saved
     const triples = this.sourceTriples;
     const definition = this.formInfo.definition;
     const instanceId = this.formInfo.instanceId;
     this.errorMessage = null;
     // post triples to backend
-    const result = yield fetch(
+    const result = await fetch(
       `/form-content/${definition.id}/instances/${instanceId}`,
       {
         method: 'PUT',
@@ -77,7 +77,7 @@ export default class InstanceComponent extends Component {
       }
     );
 
-    yield timeout(RESOURCE_CACHE_TIMEOUT);
+    await timeout(RESOURCE_CACHE_TIMEOUT);
 
     if (!result.ok) {
       this.errorMessage =
@@ -85,7 +85,7 @@ export default class InstanceComponent extends Component {
       return;
     }
 
-    const body = yield result.json();
+    const body = await result.json();
 
     if (!body?.instance?.instanceUri) {
       this.errorMessage =

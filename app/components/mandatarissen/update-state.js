@@ -31,15 +31,19 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   @dropTask
-  *load() {
+  async load() {
     this.newStatus = this.args.mandataris.status;
     this.date = new Date();
     this.selectedBeleidsdomeinen = this.args.mandataris.beleidsdomein.slice();
     this.rangorde = this.args.mandataris.rangorde;
-    this.selectedFractie = yield (yield this.args.mandataris.heeftLidmaatschap)
-      ?.binnenFractie;
-    this.bestuursorganenForFractie = (yield (yield this.args.mandataris
-      .bekleedt).bevatIn).slice();
+    this.selectedFractie = await (
+      await this.args.mandataris.heeftLidmaatschap
+    )?.binnenFractie;
+    this.bestuursorganenForFractie = (
+      await (
+        await this.args.mandataris.bekleedt
+      ).bevatIn
+    ).slice();
   }
 
   get statusOptions() {
@@ -216,7 +220,7 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   @dropTask
-  *updateState() {
+  async updateState() {
     let promise;
     if (this.newStatus === this.mandatarisStatus.endedState) {
       promise = this.endMandataris();
@@ -224,7 +228,7 @@ export default class MandatarissenUpdateState extends Component {
       promise = this.changeMandatarisState();
     }
 
-    yield promise
+    await promise
       .then((newMandataris) => {
         showSuccessToast(
           this.toaster,

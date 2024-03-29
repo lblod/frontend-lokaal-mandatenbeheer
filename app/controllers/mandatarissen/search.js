@@ -13,8 +13,8 @@ export default class MandatarissenSearchController extends Controller {
   size = 20;
 
   @restartableTask
-  *search(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
+  async search(searchData) {
+    await timeout(SEARCH_TIMEOUT);
     this.page = 0;
     this.filter = searchData;
   }

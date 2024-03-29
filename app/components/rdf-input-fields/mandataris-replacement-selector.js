@@ -105,8 +105,8 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
   }
 
   @keepLatestTask
-  *search(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
+  async search(searchData) {
+    await timeout(SEARCH_TIMEOUT);
     return this.store.query('mandataris', {
       sort: 'is-bestuurlijke-alias-van.achternaam',
       include: 'is-bestuurlijke-alias-van',

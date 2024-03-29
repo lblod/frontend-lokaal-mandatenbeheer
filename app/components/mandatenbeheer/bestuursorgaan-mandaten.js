@@ -20,12 +20,12 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   @keepLatestTask
-  *computeBestuursfuncties() {
-    const mandaten = yield this.args.mandaten;
-    const bestuursFunctiesUsed = yield Promise.all(
+  async computeBestuursfuncties() {
+    const mandaten = await this.args.mandaten;
+    const bestuursFunctiesUsed = await Promise.all(
       mandaten.map((m) => m.bestuursfunctie)
     );
-    const allBestuursfuncties = yield this.store.query('bestuursfunctie-code', {
+    const allBestuursfuncties = await this.store.query('bestuursfunctie-code', {
       page: {
         size: 200,
       },
@@ -38,19 +38,19 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   @dropTask
-  *createMandaat() {
+  async createMandaat() {
     const newMandaat = this.store.createRecord('mandaat', {
       bestuursfunctie: this.selectedBestuursfunctie,
       bevatIn: [this.args.bestuursorgaanIT],
     });
-    yield newMandaat.save();
+    await newMandaat.save();
     this.creatingNewMandaat = false;
   }
 
   @dropTask
-  *removeMandaat(mandaat) {
+  async removeMandaat(mandaat) {
     this.removingMandaatId = mandaat.id;
-    const mandatarissen = yield this.store.query('mandataris', {
+    const mandatarissen = await this.store.query('mandataris', {
       filter: {
         bekleedt: {
           ':uri:': mandaat.uri,
@@ -71,7 +71,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       );
       return;
     }
-    yield mandaat.destroyRecord();
+    await mandaat.destroyRecord();
     this.toaster.notify('Het mandaat werd verwijderd.', 'Success', {
       type: 'success',
       icon: 'circle-check',
@@ -79,10 +79,10 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   @dropTask
-  *computeOrderedMandaten() {
+  async computeOrderedMandaten() {
     // using a getter on sorted mandaten is not possible because mandaten is a promise array and it
     // is deprecated to call sortby on that directly, sortby is also deprecated it seems...
-    const mandaten = yield this.args.mandaten;
+    const mandaten = await this.args.mandaten;
     this.orderedMandaten = mandaten.slice().sort((a, b) => {
       return a.get('bestuursfunctie.label') > b.get('bestuursfunctie.label')
         ? 1
@@ -91,9 +91,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   @dropTask
-  *initialize() {
-    yield this.computeBestuursfuncties.perform();
-    yield this.computeOrderedMandaten.perform();
+  async initialize() {
+    await this.computeBestuursfuncties.perform();
+    await this.computeOrderedMandaten.perform();
   }
 
   @action

@@ -44,13 +44,13 @@ export default class AdressenregisterSelectorComponent extends Component {
   }
 
   @task
-  *selectSuggestion(addressSuggestion) {
+  async selectSuggestion(addressSuggestion) {
     this.addressesWithBusnumbers = null;
     this.addressWithBusnumber = null;
     this.addressSuggestion = addressSuggestion;
 
     if (addressSuggestion) {
-      const addresses = yield this.addressregister.findAll(addressSuggestion);
+      const addresses = await this.addressregister.findAll(addressSuggestion);
       if (addresses.length == 1) {
         this.args.onChange(addresses[0].adresProperties);
       } else {
@@ -66,9 +66,9 @@ export default class AdressenregisterSelectorComponent extends Component {
   }
 
   @keepLatestTask
-  *search(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
-    const addressSuggestions = yield this.addressregister.suggest(searchData);
+  async search(searchData) {
+    await timeout(SEARCH_TIMEOUT);
+    const addressSuggestions = await this.addressregister.suggest(searchData);
     return addressSuggestions;
   }
 
