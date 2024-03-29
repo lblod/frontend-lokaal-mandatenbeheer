@@ -20,12 +20,12 @@ export default class RdfInstanceMultiSelectorComponent extends SelectorComponent
 
   @action
   updateSelectedItems(options) {
-    super.selected = options;
+    this.selected = options;
 
     // Retrieve options in store
     const matches = triplesForPath(this.storeOptions, true).values;
     const matchingOptions = matches.filter((m) =>
-      super.options.find((opt) => m.equals(opt.subject))
+      this.options.find((opt) => m.equals(opt.subject))
     );
 
     // Cleanup old value(s) in the store
