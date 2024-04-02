@@ -117,7 +117,7 @@ export default class InstanceComponent extends Component {
   async tryOpenHistoryModal() {
     if (!this.validate()) {
       this.errorMessage =
-        'Niet alle velden zijn correct ingevuld. Probeer het later opnieuw.';
+        'Niet alle velden zijn correct ingevuld. Gelieve deze eerst te corrigeren.';
       return;
     }
     this.isSaveHistoryModalOpen = true;
