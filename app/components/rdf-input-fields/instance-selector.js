@@ -17,7 +17,7 @@ export default class RdfInstanceSelectorComponent extends SelectorComponent {
   }
 
   @action
-  updateSelectedItems(option) {
+  updateSelection(option) {
     this.selected = option;
 
     // Cleanup old value(s) in the store
@@ -34,6 +34,6 @@ export default class RdfInstanceSelectorComponent extends SelectorComponent {
       updateSimpleFormValue(this.storeOptions, option.subject);
     }
 
-    super.updateSelectedItems();
+    super.updateSelection();
   }
 }

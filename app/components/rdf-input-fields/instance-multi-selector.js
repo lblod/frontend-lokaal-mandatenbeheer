@@ -19,7 +19,7 @@ export default class RdfInstanceMultiSelectorComponent extends SelectorComponent
   }
 
   @action
-  updateSelectedItems(options) {
+  updateSelection(options) {
     this.selected = options;
 
     // Retrieve options in store
@@ -40,6 +40,6 @@ export default class RdfInstanceMultiSelectorComponent extends SelectorComponent
         updateSimpleFormValue(this.storeOptions, option.subject)
       );
 
-    super.updateSelectedItems();
+    super.updateSelection();
   }
 }

@@ -47,7 +47,7 @@ export default class SelectorComponent extends InputFieldComponent {
   async loadProvidedValue() {}
 
   @action
-  updateSelectedItems() {
+  updateSelection() {
     this.hasBeenFocused = true;
     super.updateValidations();
   }
