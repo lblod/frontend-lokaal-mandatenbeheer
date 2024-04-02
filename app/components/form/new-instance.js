@@ -17,7 +17,7 @@ import {
   RESOURCE_CACHE_TIMEOUT,
 } from '../../utils/constants';
 import { inject as service } from '@ember/service';
-import { keepLatestTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
 import { guidFor } from '@ember/object/internals';
@@ -48,8 +48,8 @@ export default class NewInstanceComponent extends Component {
     return this.save.isRunning;
   }
 
-  @keepLatestTask
-  *save() {
+  save = task({ keepLatest: true }, async () => {
+    // TODO validation needs to be checked first before the form is actually saved
     const triples = this.sourceTriples;
     const definition = this.formInfo.definition;
     this.errorMessage = null;
@@ -61,7 +61,7 @@ export default class NewInstanceComponent extends Component {
     }
 
     // post triples to backend
-    const result = yield fetch(`/form-content/${definition.id}`, {
+    const result = await fetch(`/form-content/${definition.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': JSON_API_TYPE,
@@ -72,7 +72,7 @@ export default class NewInstanceComponent extends Component {
       }),
     });
 
-    yield timeout(RESOURCE_CACHE_TIMEOUT);
+    await timeout(RESOURCE_CACHE_TIMEOUT);
 
     if (!result.ok) {
       this.errorMessage =
@@ -80,7 +80,7 @@ export default class NewInstanceComponent extends Component {
       return;
     }
 
-    const { id } = yield result.json();
+    const { id } = await result.json();
 
     if (!id) {
       this.errorMessage =
@@ -99,7 +99,7 @@ export default class NewInstanceComponent extends Component {
     }
 
     this.formDirtyState.markClean(this.formId);
-  }
+  });
 
   @action
   async createInstance() {
