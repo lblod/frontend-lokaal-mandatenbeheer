@@ -23,6 +23,11 @@ module.exports = function (defaults) {
     sassOptions: {
       includePaths: ['node_modules/@appuniversum/ember-appuniversum'],
     },
+    babel: {
+      plugins: [
+        require.resolve('ember-concurrency/async-arrow-task-transform'),
+      ],
+    },
   };
 
   // console.log(defaults);
