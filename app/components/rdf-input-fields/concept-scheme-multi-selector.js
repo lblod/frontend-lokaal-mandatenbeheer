@@ -7,7 +7,7 @@ import {
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { NamedNode } from 'rdflib';
 import { hasValidFieldOptions } from '@lblod/ember-submission-form-fields/utils/has-valid-field-options';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
@@ -127,7 +127,7 @@ export default class RdfInputFieldsConceptSchemeMultiSelectorComponent extends I
     });
   }
 
-  search = restartableTask(async (term) => {
+  search = task({ restartable: true }, async (term) => {
     await timeout(SEARCH_TIMEOUT);
     return await this.fetchOptions(term);
   });
