@@ -1,10 +1,6 @@
-<div
-  class="au-o-box no-pagination"
-  {{did-update this.initialize.perform @mandaten}}
-  {{did-insert this.initialize.perform}}
->
+<div class="au-o-box no-pagination">
   <AuDataTable
-    @content={{this.orderedMandaten}}
+    @content={{@orderedMandaten}}
     @noDataMessage="Geen mandaten gevonden"
     @page={{0}}
     @size={{100}}
@@ -75,7 +71,7 @@
       @searchEnabled={{this.searchEnabled}}
       @noMatchesMessage={{"Geen resultaten gevonden"}}
       @searchMessage={{"Typ om een type mandaat te zoeken"}}
-      @options={{this.availableBestuursfuncties}}
+      @options={{@availableBestuursfuncties}}
       @selected={{this.selectedBestuursfunctie}}
       @onChange={{fn (mut this.selectedBestuursfunctie)}}
       @searchField="label"

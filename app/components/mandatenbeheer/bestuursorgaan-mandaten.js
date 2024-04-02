@@ -7,34 +7,18 @@ import { task } from 'ember-concurrency';
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
   @service toaster;
+  @service router;
 
   @tracked sort = 'bestuursfunctie.label';
   @tracked creatingNewMandaat = false;
-  @tracked availableBestuursfuncties = [];
   @tracked selectedBestuursfunctie = null;
   @tracked removingMandaatId = null;
-  @tracked orderedMandaten = [];
 
-  get loadingBestuursfuncties() {
-    return this.computeBestuursfuncties.isRunning;
+  constructor() {
+    super(...arguments);
+    this.selectedBestuursfunctie =
+      this.args.availableBestuursfuncties.firstObject;
   }
-
-  computeBestuursfuncties = task({ keepLatest: true }, async () => {
-    const mandaten = await this.args.mandaten;
-    const bestuursFunctiesUsed = await Promise.all(
-      mandaten.map((m) => m.bestuursfunctie)
-    );
-    const allBestuursfuncties = await this.store.query('bestuursfunctie-code', {
-      page: {
-        size: 200,
-      },
-    });
-    const availableBestuursfuncties = allBestuursfuncties.filter(
-      (bf) => !bestuursFunctiesUsed.includes(bf)
-    );
-    this.availableBestuursfuncties = availableBestuursfuncties.sortBy('label');
-    this.selectedBestuursfunctie = this.availableBestuursfuncties.firstObject;
-  });
 
   createMandaat = task({ drop: true }, async () => {
     const newMandaat = this.store.createRecord('mandaat', {
@@ -42,6 +26,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       bevatIn: [this.args.bestuursorgaanIT],
     });
     await newMandaat.save();
+    this.router.refresh();
     this.creatingNewMandaat = false;
   });
 
@@ -73,22 +58,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       type: 'success',
       icon: 'circle-check',
     });
-  });
-
-  computeOrderedMandaten = task({ drop: true }, async () => {
-    // using a getter on sorted mandaten is not possible because mandaten is a promise array and it
-    // is deprecated to call sortby on that directly, sortby is also deprecated it seems...
-    const mandaten = await this.args.mandaten;
-    this.orderedMandaten = mandaten.slice().sort((a, b) => {
-      return a.get('bestuursfunctie.label') > b.get('bestuursfunctie.label')
-        ? 1
-        : -1;
-    });
-  });
-
-  initialize = task({ drop: true }, async () => {
-    await this.computeBestuursfuncties.perform();
-    await this.computeOrderedMandaten.perform();
+    this.router.refresh();
   });
 
   @action
