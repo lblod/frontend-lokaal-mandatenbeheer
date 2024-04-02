@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { keepLatestTask, task, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
@@ -43,14 +43,13 @@ export default class AdressenregisterSelectorComponent extends Component {
     }
   }
 
-  @task
-  *selectSuggestion(addressSuggestion) {
+  selectSuggestion = task(async (addressSuggestion) => {
     this.addressesWithBusnumbers = null;
     this.addressWithBusnumber = null;
     this.addressSuggestion = addressSuggestion;
 
     if (addressSuggestion) {
-      const addresses = yield this.addressregister.findAll(addressSuggestion);
+      const addresses = await this.addressregister.findAll(addressSuggestion);
       if (addresses.length == 1) {
         this.args.onChange(addresses[0].adresProperties);
       } else {
@@ -63,14 +62,13 @@ export default class AdressenregisterSelectorComponent extends Component {
     } else {
       this.args.onChange(null);
     }
-  }
+  });
 
-  @keepLatestTask
-  *search(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
-    const addressSuggestions = yield this.addressregister.suggest(searchData);
+  search = task({ keepLatest: true }, async (searchData) => {
+    await timeout(SEARCH_TIMEOUT);
+    const addressSuggestions = await this.addressregister.suggest(searchData);
     return addressSuggestions;
-  }
+  });
 
   @action
   selectAddressWithBusnumber(address) {

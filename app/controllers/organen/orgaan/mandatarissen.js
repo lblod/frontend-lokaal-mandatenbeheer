@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class OrganenMandatarissenController extends Controller {
@@ -20,10 +20,9 @@ export default class OrganenMandatarissenController extends Controller {
     this.router.transitionTo('organen.orgaan.mandataris.new');
   }
 
-  @restartableTask
-  *search(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
+  search = task({ restartable: true }, async (searchData) => {
+    await timeout(SEARCH_TIMEOUT);
     this.page = 0;
     this.filter = searchData;
-  }
+  });
 }

@@ -7,7 +7,7 @@ import {
   triplesForPath,
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
-import { keepLatestTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { MANDAAT, ORG } from 'frontend-lmb/rdf/namespaces';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
@@ -104,9 +104,8 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
     this.replacements = matches;
   }
 
-  @keepLatestTask
-  *search(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
+  search = task({ keepLatest: true }, async (searchData) => {
+    await timeout(SEARCH_TIMEOUT);
     return this.store.query('mandataris', {
       sort: 'is-bestuurlijke-alias-van.achternaam',
       include: 'is-bestuurlijke-alias-van',
@@ -117,7 +116,7 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
         },
       },
     });
-  }
+  });
 
   @action
   selectReplacement(mandatarises) {

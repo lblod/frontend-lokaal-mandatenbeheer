@@ -13,7 +13,7 @@ import {
   RESOURCE_CACHE_TIMEOUT,
 } from '../../utils/constants';
 import { inject as service } from '@ember/service';
-import { keepLatestTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
 import { guidFor } from '@ember/object/internals';
@@ -54,15 +54,14 @@ export default class InstanceComponent extends Component {
     return Boolean(this.args.isEditable);
   }
 
-  @keepLatestTask
-  *save() {
+  save = task({ keepLatest: true }, async () => {
     // TODO validation needs to be checked first before the form is actually saved
     const triples = this.sourceTriples;
     const definition = this.formInfo.definition;
     const instanceId = this.formInfo.instanceId;
     this.errorMessage = null;
     // post triples to backend
-    const result = yield fetch(
+    const result = await fetch(
       `/form-content/${definition.id}/instances/${instanceId}`,
       {
         method: 'PUT',
@@ -77,7 +76,7 @@ export default class InstanceComponent extends Component {
       }
     );
 
-    yield timeout(RESOURCE_CACHE_TIMEOUT);
+    await timeout(RESOURCE_CACHE_TIMEOUT);
 
     if (!result.ok) {
       this.errorMessage =
@@ -85,7 +84,7 @@ export default class InstanceComponent extends Component {
       return;
     }
 
-    const body = yield result.json();
+    const body = await result.json();
 
     if (!body?.instance?.instanceUri) {
       this.errorMessage =
@@ -105,7 +104,7 @@ export default class InstanceComponent extends Component {
 
     this.formDirtyState.markClean(this.formId);
     this.hasChanges = false;
-  }
+  });
 
   @action
   async saveInstance() {
