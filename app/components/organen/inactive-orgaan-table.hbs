@@ -12,7 +12,6 @@
         @label="Naam"
       />
       <th>Aantal leden</th>
-      <th>Oprichtingsdatum</th>
       <th>Einddatum</th>
       <th>{{! Actions }}</th>
     </c.header>
@@ -20,8 +19,6 @@
     <c.body as |row|>
       <td>{{row.naam}}</td>
       <td>{{await row.nbMembers}}</td>
-      <td>
-        {{moment-format row.bindingStart "DD-MM-YYYY"}}</td>
       <td>
         {{moment-format row.deactivatedAt "DD-MM-YYYY"}}</td>
       <td>

@@ -5,7 +5,8 @@ import { action } from '@ember/object';
 export default class OrganenbeheerIndexRoute extends Route {
   @service store;
 
-  pageSize = 100;
+  // can't use pagination as we are filtering frontend side on optional properties, which seems to have limited support
+  pageSize = 20000;
   queryParams = {
     activeSort: { refreshModel: true },
     inactiveSort: { refreshModel: true },
@@ -14,21 +15,34 @@ export default class OrganenbeheerIndexRoute extends Route {
   async model(params) {
     const parentModel = this.modelFor('organen');
 
-    const activeOrganen = await this.getOrgans(
-      params.activeSort,
-      parentModel.bestuurseenheid
-    );
+    const allOrgans = await this.getOrgans(parentModel.bestuurseenheid);
 
-    const inactiveOrganen = await this.getOrgans(
-      params.inactiveSort,
-      parentModel.bestuurseenheid,
-      false
-    );
+    const activeOrganen = allOrgans.filter((orgaan) => !orgaan.deactivatedAt);
+    this.sortBy(activeOrganen, params.activeSort);
+
+    const inactiveOrganen = allOrgans.filter((orgaan) => orgaan.deactivatedAt);
+    this.sortBy(inactiveOrganen, params.inactiveSort);
 
     return {
       activeOrganen,
       inactiveOrganen,
     };
+  }
+
+  sortBy(organen, sort) {
+    if (!sort || sort.length === 0) {
+      return;
+    }
+    const property = sort.split('-')[0];
+    const direction = sort.indexOf('-') > 0 ? -1 : 1;
+    organen.sort((a, b) => {
+      try {
+        return direction * a.get(property).localeCompare(b.get(property));
+      } catch (e) {
+        // in case the property does not exist (should never happen)
+        return -1;
+      }
+    });
   }
 
   async getOrgans(sort, bestuurseenheid, active = true) {
@@ -49,9 +63,8 @@ export default class OrganenbeheerIndexRoute extends Route {
     return organen;
   }
 
-  getOptions(sortParam, bestuurseenheid, active) {
+  getOptions(bestuurseenheid) {
     const queryParams = {
-      sort: sortParam,
       page: {
         size: this.pageSize,
       },
@@ -64,11 +77,6 @@ export default class OrganenbeheerIndexRoute extends Route {
         },
       },
     };
-    if (active) {
-      queryParams['filter[:has-no:deactivated-at]'] = true;
-    } else {
-      queryParams['filter[:has:deactivated-at]'] = true;
-    }
     return queryParams;
   }
 
