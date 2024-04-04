@@ -1,6 +1,7 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class FractieModel extends Model {
+  @attr uri;
   @attr naam;
   @attr('uri-set') generatedFrom;
 
