@@ -8,11 +8,13 @@ export default class RdfInputFieldsConceptSchemeSelectorWithCreateComponent exte
 
   @action
   async create(name) {
+    const type = this.args.field.options.type;
+
     let conceptScheme = await this.multiUriFetcher.fetchUri(
       'concept-scheme',
       this.conceptScheme
     );
-    let concept = await this.store.createRecord('concept', {
+    let concept = await this.store.createRecord(type, {
       label: name,
       conceptSchemes: [conceptScheme],
     });
@@ -27,5 +29,11 @@ export default class RdfInputFieldsConceptSchemeSelectorWithCreateComponent exte
   @action
   suggest(term) {
     return `Voeg "${term}" toe`;
+  }
+
+  @action
+  hideCreateOptionOnSameName(term) {
+    let existingOption = this.options.find(({ label }) => label === term);
+    return !existingOption;
   }
 }

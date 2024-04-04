@@ -25,6 +25,7 @@
     @onCreate={{this.create}}
     @buildSuggestion={{this.suggest}}
     @showCreatePosition={{"bottom"}}
+    @showCreateWhen={{this.hideCreateOptionOnSameName}}
     data-test-field-uri={{@field.uri.value}}
     as |concept|
   >
