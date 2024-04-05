@@ -24,7 +24,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   @service store;
 
-  @tracked fractie = null;
+  @tracked selectedFractie = null;
   @tracked initialized = false;
   @tracked bestuursorgaanUris = [];
   @tracked fracties = [];
@@ -39,6 +39,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     return this.args.field?.label || 'Fractie';
   }
 
+  // TODO unused
   get displayValue() {
     return this.membership?.binnenFractie?.naam || 'Geen fractie geselecteerd';
   }
@@ -68,35 +69,37 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   async loadProvidedValue() {
-    const membershipTriples = triplesForPath(this.storeOptions, false).values;
-    if (!membershipTriples.length) {
+    const fractieUris = triplesForPath(this.storeOptions, false).values;
+    if (!fractieUris.length) {
       return;
     }
-    const membershipUri = membershipTriples[0].value;
+    const fractieUri = fractieUris[0].value;
 
     const matches = await this.store.query('fractie', {
-      'filter[:uri:]': membershipUri,
+      'filter[:uri:]': fractieUri,
     });
-    this.fractie = matches.at(0);
+    this.selectedFractie = matches.at(0);
   }
 
+  // TODO Maybe turn into task?
   @action
   async onSelectFractie(fractie) {
-    this.updating = true; // Maybe turn into task?
+    this.updating = true;
     const uri = fractie.uri;
 
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
-    this.fractie = fractie;
+    this.selectedFractie = fractie;
+    // TODO Why is this useful? Also hasn't been declared as a field.
     this.hasBeenFocused = true;
     super.updateValidations();
     this.updating = false;
   }
 
-  // Unused?
+  // TODO Unused? Maybe should use when user presses "X" on PowerSelect?
   @action
   removeFractie() {
     replaceSingleFormValue(this.storeOptions, null);
-    //this.membership = null;
+    this.selectedFractie = null;
     this.hasBeenFocused = true;
     super.updateValidations();
   }
