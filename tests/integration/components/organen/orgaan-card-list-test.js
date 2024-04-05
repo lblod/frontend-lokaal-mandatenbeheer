@@ -15,11 +15,9 @@ module('Integration | Component | organen/orgaan-card-list', function (hooks) {
     assert.dom(this.element).hasText('');
 
     // Template block usage:
-    await render(hbs`
-      <Organen::OrgaanCardList>
-        template block text
-      </Organen::OrgaanCardList>
-    `);
+    await render(
+      hbs`<Organen::OrgaanCardList>template block text</Organen::OrgaanCardList>`
+    );
 
     assert.dom(this.element).hasText('template block text');
   });
