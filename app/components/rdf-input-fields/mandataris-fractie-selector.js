@@ -39,7 +39,6 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     return this.args.field?.label || 'Fractie';
   }
 
-  // TODO unused
   get displayValue() {
     return this.membership?.binnenFractie?.naam || 'Geen fractie geselecteerd';
   }
@@ -81,26 +80,15 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     this.selectedFractie = matches.at(0);
   }
 
-  // TODO Maybe turn into task?
   @action
   async onSelectFractie(fractie) {
     this.updating = true;
-    const uri = fractie.uri;
+    const uri = fractie?.uri;
 
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
     this.selectedFractie = fractie;
-    // TODO Why is this useful? Also hasn't been declared as a field.
     this.hasBeenFocused = true;
     super.updateValidations();
     this.updating = false;
-  }
-
-  // TODO Unused? Maybe should use when user presses "X" on PowerSelect?
-  @action
-  removeFractie() {
-    replaceSingleFormValue(this.storeOptions, null);
-    this.selectedFractie = null;
-    this.hasBeenFocused = true;
-    super.updateValidations();
   }
 }
