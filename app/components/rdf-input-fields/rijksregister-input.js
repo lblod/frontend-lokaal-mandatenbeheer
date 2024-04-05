@@ -38,6 +38,8 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
       rijksregisternummer ? rijksregisternummer : null
     );
 
+    this.updateValidations();
+
     this.hasBeenFocused = true;
   }
 }
