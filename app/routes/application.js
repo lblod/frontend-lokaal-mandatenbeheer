@@ -5,6 +5,7 @@ import ENV from 'frontend-lmb/config/environment';
 import 'moment';
 import 'moment-timezone';
 import { registerCustomFormFields } from 'frontend-lmb/utils/register-form-fields';
+import { registerCustomValidations } from 'frontend-lmb/utils/register-custom-validations';
 
 export default class ApplicationRoute extends Route {
   @service currentSession;
@@ -29,6 +30,7 @@ export default class ApplicationRoute extends Route {
 
     this.startAnalytics();
     registerCustomFormFields();
+    registerCustomValidations();
 
     return this._loadCurrentSession();
   }
