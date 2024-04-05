@@ -97,7 +97,9 @@
   padding-right: 0;
 
   .au-c-icon {
-    transition: transform $au-transition, color $au-transition;
+    transition:
+      transform $au-transition,
+      color $au-transition;
   }
 
   .js-accordion--open & .au-c-icon {
@@ -123,9 +125,13 @@
   flex-grow: 1;
 }
 
-.orgaan-card:hover {
-  background-color: #e8ebee;
-  cursor: pointer;
+.orgaan-card {
+  position: relative;
+  margin-top: 1em;
+  &:hover {
+    background-color: #e8ebee;
+    cursor: pointer;
+  }
 }
 
 /*
@@ -176,4 +182,9 @@
 }
 .au-c-modal.small {
   max-width: 620px;
+}
+.au-pill-top-right {
+  position: absolute;
+  top: -0.8em;
+  right: 10px;
 }
