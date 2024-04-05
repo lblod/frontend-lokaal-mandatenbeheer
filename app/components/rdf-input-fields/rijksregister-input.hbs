@@ -1,0 +1,13 @@
+<AuLabel for={{this.inputId}}>
+  {{@field.label}}
+</AuLabel>
+<AuInput
+  @width="block"
+  id={{this.inputId}}
+  value={{this.rijksregisternummer}}
+  {{au-inputmask
+    options=(hash mask="99.99.99-999.99" autoUnmask="true" placeholder="_")
+  }}
+  placeholder="00.00.00-000.00"
+  {{on "blur" this.updateValue}}
+/>
