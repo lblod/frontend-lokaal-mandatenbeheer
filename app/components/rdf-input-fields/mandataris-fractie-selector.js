@@ -39,10 +39,6 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     return this.args.field?.label || 'Fractie';
   }
 
-  get displayValue() {
-    return this.membership?.binnenFractie?.naam || 'Geen fractie geselecteerd';
-  }
-
   async load() {
     await this.loadBestuursorgaan();
     await Promise.all([this.loadProvidedValue(), this.loadFracties()]);
