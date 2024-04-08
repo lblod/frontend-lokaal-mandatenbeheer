@@ -19,6 +19,7 @@
     @options={{this.options}}
     @onClose={{fn (mut this.hasBeenFocused) true}}
     @onChange={{this.updateSelection}}
+    @onCreate={{this.add}}
     @disabled={{@show}}
     as |concept|
   >

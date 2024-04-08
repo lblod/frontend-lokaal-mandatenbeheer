@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
 import { action } from '@ember/object';
-import { NamedNode } from 'rdflib';
 
 export default class ConceptSelectorWithCreateComponent extends Component {
   inputId = 'select-' + guidFor(this);
@@ -22,17 +21,7 @@ export default class ConceptSelectorWithCreateComponent extends Component {
       conceptSchemes: [conceptScheme],
     });
     const response = await concept.save();
-    const selection = {
-      subject: new NamedNode(response.uri),
-      label: concept.label,
-    };
-    if (this.args.multiple) {
-      let selected = this.args.selected ?? [];
-      selected.push(selection);
-      this.args.onChange(selected);
-    } else {
-      this.args.onChange(selection);
-    }
+    this.args.onCreate(response);
   }
 
   @action
