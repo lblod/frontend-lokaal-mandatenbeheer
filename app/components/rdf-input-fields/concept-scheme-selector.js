@@ -15,7 +15,7 @@ export default class RdfInputFieldsConceptSchemeSelectorComponent extends Concep
       this.selected = this.options.find((opt) =>
         matches.find((m) => m.equals(opt.subject))
       );
-      if (!this.selected || this.selected.lenght == 0) {
+      if (!this.selected || this.selected.length == 0) {
         this.selected = await this.fetchSelectedOption(matches[0].value);
       }
     }
