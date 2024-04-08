@@ -5,7 +5,10 @@ import { tracked } from '@glimmer/tracking';
 import { v4 as uuid } from 'uuid';
 import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
-import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import {
+  ForkingStore,
+  validateForm,
+} from '@lblod/ember-submission-form-fields';
 import {
   JSON_API_TYPE,
   FORM_GRAPH,
@@ -14,7 +17,7 @@ import {
   RESOURCE_CACHE_TIMEOUT,
 } from '../../utils/constants';
 import { inject as service } from '@ember/service';
-import { keepLatestTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
 import { guidFor } from '@ember/object/internals';
@@ -27,6 +30,7 @@ export default class NewInstanceComponent extends Component {
   @tracked sourceTriples;
   @tracked errorMessage;
   @tracked formInfo = null;
+  @tracked forceShowErrors = false;
   formStore = null;
   savedTriples = null;
   formId = `form-${guidFor(this)}`;
@@ -44,14 +48,20 @@ export default class NewInstanceComponent extends Component {
     return this.save.isRunning;
   }
 
-  @keepLatestTask
-  *save() {
+  save = task({ keepLatest: true }, async () => {
     // TODO validation needs to be checked first before the form is actually saved
     const triples = this.sourceTriples;
     const definition = this.formInfo.definition;
     this.errorMessage = null;
+
+    if (!this.validate()) {
+      this.errorMessage =
+        'Niet alle velden zijn correct ingevuld. Probeer het later opnieuw.';
+      return;
+    }
+
     // post triples to backend
-    const result = yield fetch(`/form-content/${definition.id}`, {
+    const result = await fetch(`/form-content/${definition.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': JSON_API_TYPE,
@@ -62,7 +72,7 @@ export default class NewInstanceComponent extends Component {
       }),
     });
 
-    yield timeout(RESOURCE_CACHE_TIMEOUT);
+    await timeout(RESOURCE_CACHE_TIMEOUT);
 
     if (!result.ok) {
       this.errorMessage =
@@ -70,7 +80,7 @@ export default class NewInstanceComponent extends Component {
       return;
     }
 
-    const { id } = yield result.json();
+    const { id } = await result.json();
 
     if (!id) {
       this.errorMessage =
@@ -78,6 +88,7 @@ export default class NewInstanceComponent extends Component {
       return;
     }
 
+    // Success
     notifyFormSavedSuccessfully(this.toaster);
 
     if (this.args.onCreate) {
@@ -88,7 +99,7 @@ export default class NewInstanceComponent extends Component {
     }
 
     this.formDirtyState.markClean(this.formId);
-  }
+  });
 
   @action
   async createInstance() {
@@ -143,6 +154,17 @@ export default class NewInstanceComponent extends Component {
   willDestroy() {
     super.willDestroy(...arguments);
     this.formDirtyState.markClean(this.formId);
+  }
+
+  validate() {
+    const hasNoErrors = validateForm(this.formInfo.formNode, {
+      ...this.formInfo.graphs,
+      sourceNode: this.formInfo.sourceNode,
+      store: this.formInfo.formStore,
+    });
+
+    this.forceShowErrors = !hasNoErrors;
+    return hasNoErrors;
   }
 
   registerObserver(formStore) {

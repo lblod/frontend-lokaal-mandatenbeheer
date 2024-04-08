@@ -17,11 +17,9 @@ module(
       assert.dom(this.element).hasText('');
 
       // Template block usage:
-      await render(hbs`
-      <Mandatarissen::UpdateState>
-        template block text
-      </Mandatarissen::UpdateState>
-    `);
+      await render(hbs`<Mandatarissen::UpdateState>
+  template block text
+</Mandatarissen::UpdateState>`);
 
       assert.dom(this.element).hasText('template block text');
     });

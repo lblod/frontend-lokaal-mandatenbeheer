@@ -11,7 +11,7 @@
       <AuDataTableThSortable
         @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
         @currentSorting={{@sort}}
-        @label="Naam"
+        @label="Voornaam"
       />
       <AuDataTableThSortable
         @field="isBestuurlijkeAliasVan.achternaam"
@@ -43,28 +43,32 @@
     <c.body as |row|>
       <td><LinkTo
           @route={{@personRoute}}
-          @model={{row.isBestuurlijkeAliasVan.id}}
+          @model={{row.mandataris.isBestuurlijkeAliasVan.id}}
           class="au-c-link"
         >
-          {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          {{row.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
         </LinkTo></td>
       <td><LinkTo
           @route={{@personRoute}}
-          @model={{row.isBestuurlijkeAliasVan.id}}
+          @model={{row.mandataris.isBestuurlijkeAliasVan.id}}
           class="au-c-link"
         >
-          {{row.isBestuurlijkeAliasVan.achternaam}}
+          {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
         </LinkTo></td>
       <td>
-        {{row.heeftLidmaatschap.binnenFractie.naam}}
+        {{row.foldedFracties}}
       </td>
-      <td><LinkTo @route={{@mandaatRoute}} @model={{row.id}} class="au-c-link">
-          {{row.bekleedt.bestuursfunctie.label}}
+      <td><LinkTo
+          @route={{@mandaatRoute}}
+          @model={{row.mandataris.id}}
+          class="au-c-link"
+        >
+          {{row.mandataris.bekleedt.bestuursfunctie.label}}
         </LinkTo></td>
       <td>
-        {{moment-format row.start "DD-MM-YYYY"}}</td>
+        {{moment-format row.foldedStart "DD-MM-YYYY"}}</td>
       <td>
-        {{moment-format row.einde "DD-MM-YYYY"}}</td>
+        {{moment-format row.foldedEnd "DD-MM-YYYY"}}</td>
     </c.body>
   </t.content>
 </AuDataTable>

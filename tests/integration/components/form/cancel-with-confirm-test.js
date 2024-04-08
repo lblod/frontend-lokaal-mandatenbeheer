@@ -15,11 +15,9 @@ module('Integration | Component | form/cancel-with-confirm', function (hooks) {
     assert.dom(this.element).hasText('');
 
     // Template block usage:
-    await render(hbs`
-      <Form::CancelWithConfirm>
-        template block text
-      </Form::CancelWithConfirm>
-    `);
+    await render(hbs`<Form::CancelWithConfirm>
+  template block text
+</Form::CancelWithConfirm>`);
 
     assert.dom(this.element).hasText('template block text');
   });

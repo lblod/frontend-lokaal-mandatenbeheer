@@ -7,13 +7,10 @@ export default class OrganenRoute extends Route {
   @service session;
   @service router;
   @service store;
+  @service decretaleOrganen;
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
-
-    // TODO we probably want some access rights here.
-    // if (!this.currentSession.canAccessBestuursorganen)
-    //   this.router.transitionTo('index');
   }
 
   async model() {
@@ -22,10 +19,16 @@ export default class OrganenRoute extends Route {
       bestuurseenheid.get('id')
     );
 
+    const gemeenteBestuursorganen = [];
     const decretaleBestuursorganen = [];
     const nietDecretaleBestuursorganen = [];
     await Promise.all(
       bestuursorganen.map(async (orgaan) => {
+        const isGemeentelijk = await orgaan.isGemeentelijk;
+        if (isGemeentelijk) {
+          gemeenteBestuursorganen.push(orgaan);
+          return;
+        }
         const isDecretaal = await orgaan.isDecretaal;
         if (isDecretaal) {
           decretaleBestuursorganen.push(orgaan);
@@ -37,7 +40,9 @@ export default class OrganenRoute extends Route {
 
     return RSVP.hash({
       bestuurseenheid,
+      bestuursorganen,
       decretaleBestuursorganen,
+      gemeenteBestuursorganen,
       nietDecretaleBestuursorganen,
     });
   }
@@ -47,7 +52,10 @@ export default class OrganenRoute extends Route {
       'filter[bestuurseenheid][id]': bestuurseenheidId,
       'filter[:has-no:deactivated-at]': true,
       'filter[:has-no:is-tijdsspecialisatie-van]': true,
-      include: 'classificatie,is-tijdsspecialisatie-van',
+      'filter[classificatie][id]':
+        this.decretaleOrganen.classificatieIds.join(','), // only organs with a political mandate
+      include:
+        'classificatie,is-tijdsspecialisatie-van,heeft-tijdsspecialisaties',
     });
   }
 }

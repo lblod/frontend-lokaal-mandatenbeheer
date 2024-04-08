@@ -15,11 +15,9 @@ module('Integration | Component | shared/table-pagination', function (hooks) {
     assert.dom(this.element).hasText('');
 
     // Template block usage:
-    await render(hbs`
-      <Shared::TablePagination>
-        template block text
-      </Shared::TablePagination>
-    `);
+    await render(hbs`<Shared::TablePagination>
+  template block text
+</Shared::TablePagination>`);
 
     assert.dom(this.element).hasText('template block text');
   });

@@ -1,0 +1,45 @@
+{{#if @multiple}}
+  <PowerSelectMultipleWithCreate
+    @triggerId={{this.inputId}}
+    @search={{perform @search}}
+    @searchField="label"
+    @searchEnabled={{@searchEnabled}}
+    @selected={{@selected}}
+    @options={{@options}}
+    @onClose={{@onClose}}
+    @onChange={{@onChange}}
+    @allowClear={{true}}
+    @loadingMessage="Aan het laden..."
+    @noMatchesMessage="Geen resultaten gevonden"
+    @disabled={{@disabled}}
+    @onCreate={{this.create}}
+    @buildSuggestion={{this.suggest}}
+    @showCreatePosition={{"bottom"}}
+    @showCreateWhen={{this.hideCreateOptionOnSameName}}
+    as |concept|
+  >
+    {{concept.label}}
+  </PowerSelectMultipleWithCreate>
+{{else}}
+  <PowerSelectWithCreate
+    @triggerId={{this.inputId}}
+    @search={{perform @search}}
+    @searchField="label"
+    @searchEnabled={{@searchEnabled}}
+    @selected={{@selected}}
+    @options={{@options}}
+    @onClose={{@onClose}}
+    @onChange={{@onChange}}
+    @allowClear={{true}}
+    @loadingMessage="Aan het laden..."
+    @noMatchesMessage="Geen resultaten gevonden"
+    @disabled={{@disabled}}
+    @onCreate={{this.create}}
+    @buildSuggestion={{this.suggest}}
+    @showCreatePosition={{"bottom"}}
+    @showCreateWhen={{this.hideCreateOptionOnSameName}}
+    as |concept|
+  >
+    {{concept.label}}
+  </PowerSelectWithCreate>
+{{/if}}

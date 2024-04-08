@@ -4,7 +4,10 @@ import { tracked } from '@glimmer/tracking';
 
 import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
-import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import {
+  ForkingStore,
+  validateForm,
+} from '@lblod/ember-submission-form-fields';
 import {
   JSON_API_TYPE,
   FORM_GRAPH,
@@ -13,7 +16,7 @@ import {
   RESOURCE_CACHE_TIMEOUT,
 } from '../../utils/constants';
 import { inject as service } from '@ember/service';
-import { keepLatestTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
 import { guidFor } from '@ember/object/internals';
@@ -27,6 +30,8 @@ export default class InstanceComponent extends Component {
   @tracked errorMessage;
   @tracked formInfo = null;
   @tracked hasChanges = false;
+  @tracked forceShowErrors = false;
+  @tracked isSaveHistoryModalOpen = false;
 
   formStore = null;
   savedTriples = null;
@@ -54,15 +59,15 @@ export default class InstanceComponent extends Component {
     return Boolean(this.args.isEditable);
   }
 
-  @keepLatestTask
-  *save() {
+  save = task({ keepLatest: true }, async () => {
     // TODO validation needs to be checked first before the form is actually saved
     const triples = this.sourceTriples;
     const definition = this.formInfo.definition;
     const instanceId = this.formInfo.instanceId;
     this.errorMessage = null;
+
     // post triples to backend
-    const result = yield fetch(
+    const result = await fetch(
       `/form-content/${definition.id}/instances/${instanceId}`,
       {
         method: 'PUT',
@@ -77,7 +82,7 @@ export default class InstanceComponent extends Component {
       }
     );
 
-    yield timeout(RESOURCE_CACHE_TIMEOUT);
+    await timeout(RESOURCE_CACHE_TIMEOUT);
 
     if (!result.ok) {
       this.errorMessage =
@@ -85,7 +90,7 @@ export default class InstanceComponent extends Component {
       return;
     }
 
-    const body = yield result.json();
+    const body = await result.json();
 
     if (!body?.instance?.instanceUri) {
       this.errorMessage =
@@ -93,6 +98,7 @@ export default class InstanceComponent extends Component {
       return;
     }
 
+    // Success
     notifyFormSavedSuccessfully(this.toaster);
 
     if (this.args.onSave) {
@@ -105,6 +111,16 @@ export default class InstanceComponent extends Component {
 
     this.formDirtyState.markClean(this.formId);
     this.hasChanges = false;
+  });
+
+  @action
+  async tryOpenHistoryModal() {
+    if (!this.validate()) {
+      this.errorMessage =
+        'Niet alle velden zijn correct ingevuld. Gelieve deze eerst te corrigeren.';
+      return;
+    }
+    this.isSaveHistoryModalOpen = true;
   }
 
   @action
@@ -189,6 +205,18 @@ export default class InstanceComponent extends Component {
   willDestroy() {
     super.willDestroy(...arguments);
     this.formDirtyState.markClean(this.formId);
+  }
+
+  @action
+  validate() {
+    const hasNoErrors = validateForm(this.formInfo.formNode, {
+      ...this.formInfo.graphs,
+      sourceNode: this.formInfo.sourceNode,
+      store: this.formInfo.formStore,
+    });
+
+    this.forceShowErrors = !hasNoErrors;
+    return hasNoErrors;
   }
 
   registerObserver(formStore) {

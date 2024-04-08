@@ -11,45 +11,23 @@
     <AuHeading @skin="2">Overzicht bestuursorganen</AuHeading>
   </Group>
   <Group>
-    <AuButton {{on "click" this.beheerOrganen}}>
-      Beheer bestuursorganen
-    </AuButton>
+    <AuLink @route="organen.fracties" @skin="button-secondary">Beheer fracties</AuLink>
+    <AuLink @route="organen.beheer" @skin="button">Beheer bestuursorganen</AuLink>
   </Group>
 </AuToolbar>
 
 <div class="au-c-body-container au-c-body-container--scroll">
-  <div class="au-o-box">
-    <AuHeading @skin="3">Decretale bestuursorganen</AuHeading>
-    <ul class="au-o-grid au-o-grid--small">
-      {{#each @model.decretaleBestuursorganen as |orgaan|}}
-        <li class="au-o-grid__item au-u-1-5@small au-u-1-3medium">
-          <AuCard
-            class="orgaan-card"
-            @flex="true"
-            {{on "click" (fn this.goToOrgaan orgaan)}}
-            as |c|
-          >
-            <c.content>{{orgaan.naam}}</c.content>
-          </AuCard>
-        </li>
-      {{/each}}
-    </ul>
-  </div>
-  <div class="au-o-box">
-    <AuHeading @skin="3">Niet-decretale bestuursorganen</AuHeading>
-    <ul class="au-o-grid au-o-grid--small">
-      {{#each @model.nietDecretaleBestuursorganen as |orgaan|}}
-        <li class="au-o-grid__item au-u-1-5@small au-u-1-3medium">
-          <AuCard
-            class="orgaan-card"
-            @flex="true"
-            {{on "click" (fn this.goToOrgaan orgaan)}}
-            as |c|
-          >
-            <c.content>{{orgaan.naam}}</c.content>
-          </AuCard>
-        </li>
-      {{/each}}
-    </ul>
-  </div>
+  <Organen::OrgaanCardList
+    @organs={{@model.gemeenteBestuursorganen}}
+    @title="Gemeente Bestuursorganen"
+  />
+  <Organen::OrgaanCardList
+    @organs={{@model.decretaleBestuursorganen}}
+    @title="Decretale Bestuursorganen"
+  />
+  <Organen::OrgaanCardList
+    @organs={{@model.nietDecretaleBestuursorganen}}
+    @title="Andere Bestuursorganen"
+    @showType={{true}}
+  />
 </div>

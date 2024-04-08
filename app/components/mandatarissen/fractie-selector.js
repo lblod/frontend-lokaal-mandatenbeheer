@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
@@ -15,7 +15,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   constructor() {
     super(...arguments);
-    if (this.args.fractie) {this._fractie = this.args.fractie;}
+    if (this.args.fractie) {
+      this._fractie = this.args.fractie;
+    }
     if (this.args.bestuursorganen) {
       this.bestuursorganenId = this.args.bestuursorganen.map((o) =>
         o.get('id')
@@ -24,9 +26,8 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     this.searchByName.perform();
   }
 
-  @restartableTask
-  *searchByName(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
+  searchByName = task({ restartable: true }, async (searchData) => {
+    await timeout(SEARCH_TIMEOUT);
     let queryParams = {
       sort: 'naam',
       include: 'fractietype',
@@ -39,18 +40,18 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     if (searchData) {
       queryParams.filter.naam = searchData;
     }
-    let fracties = yield this.store.query('fractie', queryParams);
+    let fracties = await this.store.query('fractie', queryParams);
     fracties = fracties.filter((f) => !f.get('fractietype.isOnafhankelijk'));
     //sets dummy
     if ('onafhankelijk'.includes(searchData?.toLowerCase())) {
-      fracties.pushObject(yield this.createNewOnafhankelijkeFractie());
+      fracties.pushObject(await this.createNewOnafhankelijkeFractie());
     }
     // so we have results when search is blank
     if (!searchData) {
       this.fractieOptions = fracties;
     }
     return fracties;
-  }
+  });
 
   async createNewOnafhankelijkeFractie() {
     let onafFractie = (await this.store.findAll('fractietype')).find((f) =>

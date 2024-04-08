@@ -4,26 +4,25 @@ import { action } from '@ember/object';
 
 export default class OrganenbeheerIndexRoute extends Route {
   @service store;
+  @service decretaleOrganen;
 
-  pageSize = 100;
+  // can't use pagination as we are filtering frontend side on optional properties, which seems to have limited support
+  pageSize = 20000;
   queryParams = {
-    active_sort: { refreshModel: true },
-    inactive_sort: { refreshModel: true },
+    activeSort: { refreshModel: true },
+    inactiveSort: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('organen');
 
-    const activeOrganen = await this.getOrgans(
-      params.active_sort,
-      parentModel.bestuurseenheid
-    );
+    const allOrgans = await this.getOrgans(parentModel.bestuurseenheid);
 
-    const inactiveOrganen = await this.getOrgans(
-      params.inactive_sort,
-      parentModel.bestuurseenheid,
-      false
-    );
+    const activeOrganen = allOrgans.filter((orgaan) => !orgaan.deactivatedAt);
+    this.sortBy(activeOrganen, params.activeSort);
+
+    const inactiveOrganen = allOrgans.filter((orgaan) => orgaan.deactivatedAt);
+    this.sortBy(inactiveOrganen, params.inactiveSort);
 
     return {
       activeOrganen,
@@ -31,27 +30,30 @@ export default class OrganenbeheerIndexRoute extends Route {
     };
   }
 
+  sortBy(organen, sort) {
+    if (!sort || sort.length === 0) {
+      return;
+    }
+    const property = sort.split('-')[0];
+    const direction = sort.indexOf('-') > 0 ? -1 : 1;
+    organen.sort((a, b) => {
+      try {
+        return direction * a.get(property).localeCompare(b.get(property));
+      } catch (e) {
+        // in case the property does not exist (should never happen)
+        return -1;
+      }
+    });
+  }
+
   async getOrgans(sort, bestuurseenheid, active = true) {
     const queryOptions = this.getOptions(sort, bestuurseenheid, active);
-    const organenUnfiltered = await this.store.query(
-      'bestuursorgaan',
-      queryOptions
-    );
-    const organen = [];
-    await Promise.all(
-      organenUnfiltered.map(async (orgaan) => {
-        const isDecretaal = await orgaan.isDecretaal;
-        if (!isDecretaal) {
-          organen.push(orgaan);
-        }
-      })
-    );
+    const organen = await this.store.query('bestuursorgaan', queryOptions);
     return organen;
   }
 
-  getOptions(sortParam, bestuurseenheid, active) {
+  getOptions(bestuurseenheid) {
     const queryParams = {
-      sort: sortParam,
       page: {
         size: this.pageSize,
       },
@@ -59,13 +61,11 @@ export default class OrganenbeheerIndexRoute extends Route {
         bestuurseenheid: {
           id: bestuurseenheid.id,
         },
+        classificatie: {
+          id: this.decretaleOrganen.classificatieIds.join(','),
+        },
       },
     };
-    if (active) {
-      queryParams['filter[:has-no:deactivated-at]'] = true;
-    } else {
-      queryParams['filter[:has:deactivated-at]'] = true;
-    }
     return queryParams;
   }
 

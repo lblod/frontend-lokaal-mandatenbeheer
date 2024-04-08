@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
@@ -12,12 +12,9 @@ export default class MandatarissenSearchController extends Controller {
   sort = 'achternaam';
   size = 20;
 
-  @tracked searchData;
-
-  @restartableTask
-  *search(searchData) {
-    yield timeout(SEARCH_TIMEOUT);
+  search = task({ restartable: true }, async (searchData) => {
+    await timeout(SEARCH_TIMEOUT);
     this.page = 0;
     this.filter = searchData;
-  }
+  });
 }

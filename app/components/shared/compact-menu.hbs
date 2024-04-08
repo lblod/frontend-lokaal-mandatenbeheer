@@ -13,24 +13,18 @@
     <AuIcon @icon="user-fill" @alignment="left" />
     Mandatarissen
   </AuLink>
-  {{#if this.currentSession.canAccessMandaat}}
-    <AuLink @route="mandatenbeheer.mandatarissen" role="menuitem">
-      <AuIcon @icon="user-fill" @alignment="left" />
-      Mandatenbeheer
-    </AuLink>
-  {{/if}}
+  <AuLink @route="verkiezingen" role="menuitem">
+    <AuIcon @icon="user-fill" @alignment="left" />
+    Verkiezingen
+  </AuLink>
   {{#if this.currentSession.canAccessLeidinggevenden}}
     <AuLink @route="leidinggevendenbeheer" role="menuitem">
       <AuIcon @icon="user-popup" @alignment="left" />
       Leidinggevendenbeheer
     </AuLink>
   {{/if}}
-  <AuLink @route="legacy.formbeheer" role="menuitem">
+  <AuLink @route="formbeheer" role="menuitem">
     <AuIcon @icon="draft" @alignment="left" />
     Formbeheer
-  </AuLink>
-  <AuLink @route="legacy" role="menuitem">
-    <AuIcon @icon="archive" @alignment="left" />
-    Legacy
   </AuLink>
 </AuDropdown>

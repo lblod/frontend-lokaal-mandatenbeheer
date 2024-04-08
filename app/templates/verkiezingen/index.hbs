@@ -1,0 +1,40 @@
+{{page-title "Verkiezingen"}}
+
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Verkiezingen</AuHeading>
+  </Group>
+</AuToolbar>
+
+<div class="au-c-body-container au-c-body-container--scroll">
+  {{#each @model.yearsAndStatusesWithIvs as |yearAndStatusesWithIvs|}}
+    <div class="au-o-box">
+      <AuHeading @skin="3">{{yearAndStatusesWithIvs.year}}</AuHeading>
+      {{#each yearAndStatusesWithIvs.statusesWithIvs as |statusWithIvs|}}
+        <AuHeading
+          @skin="4"
+          class="au-u-margin-top@medium"
+        >{{statusWithIvs.status.label}}</AuHeading>
+        <ul class="au-o-grid au-o-grid--small">
+          {{#each
+            statusWithIvs.installatievergaderingen
+            as |installatievergadering|
+          }}
+            <li class="au-o-grid__item au-u-1-3@medium">
+              <AuLink
+                @route="verkiezingen.verkiezingsuitslag"
+                @model={{installatievergadering.bestuursorgaanInTijd.id}}
+                @skin="secondary"
+              >
+                <AuCard class="orgaan-card" @flex="true" as |c|>
+                  <c.content
+                  >{{installatievergadering.bestuursorgaanInTijd.isTijdsspecialisatieVan.naam}}</c.content>
+                </AuCard>
+              </AuLink>
+            </li>
+          {{/each}}
+        </ul>
+      {{/each}}
+    </div>
+  {{/each}}
+</div>

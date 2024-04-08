@@ -15,14 +15,12 @@
         Mandatarissen
       </AuNavigationLink>
     </li>
-    {{#if this.currentSession.canAccessMandaat}}
-      <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="mandatenbeheer.mandatarissen">
-          <AuIcon @icon="user-fill" @alignment="left" />
-          Mandatenbeheer
-        </AuNavigationLink>
-      </li>
-    {{/if}}
+    <li class="au-c-list-navigation__item">
+      <AuNavigationLink @route="verkiezingen">
+        <AuIcon @icon="user-fill" @alignment="left" />
+        Verkiezingen
+      </AuNavigationLink>
+    </li>
     {{#if this.currentSession.canAccessLeidinggevenden}}
       <li class="au-c-list-navigation__item">
         <AuNavigationLink @route="leidinggevendenbeheer">
@@ -32,15 +30,9 @@
       </li>
     {{/if}}
     <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="legacy.formbeheer">
+      <AuNavigationLink @route="formbeheer">
         <AuIcon @icon="draft" @alignment="left" />
         Formbeheer
-      </AuNavigationLink>
-    </li>
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="legacy">
-        <AuIcon @icon="archive" @alignment="left" />
-        Legacy
       </AuNavigationLink>
     </li>
   </ul>

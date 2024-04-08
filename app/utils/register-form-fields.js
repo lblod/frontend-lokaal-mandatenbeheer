@@ -9,6 +9,10 @@ import RDFRijksRegisterInput from 'frontend-lmb/components/rdf-input-fields/rijk
 import RDFGeboorteDatumInput from 'frontend-lmb/components/rdf-input-fields/geboorte-datum-input';
 import RDFArchivedInput from 'frontend-lmb/components/rdf-input-fields/archived-input';
 import RDFAMandatarisReplacementSelector from 'frontend-lmb/components/rdf-input-fields/mandataris-replacement-selector';
+import RDFConceptSchemeSelectorComponent from 'frontend-lmb/components/rdf-input-fields/concept-scheme-selector';
+import RDFConceptSchemeMultiSelectorComponent from 'frontend-lmb/components/rdf-input-fields/concept-scheme-multi-selector';
+import RdfInputFieldsConceptSchemeSelectorWithCreateComponent from 'frontend-lmb/components/rdf-input-fields/concept-scheme-selector-with-create';
+import RdfInputFieldsConceptSchemeMultiSelectorWithCreateComponent from 'frontend-lmb/components/rdf-input-fields/concept-scheme-multi-selector-with-create';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -53,6 +57,26 @@ export const registerCustomFormFields = () => {
     {
       displayType: 'http://lblod.data.gift/display-types/mandatarisReplacement',
       edit: RDFAMandatarisReplacementSelector,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/conceptSchemeSelectorWithoutMeta',
+      edit: RDFConceptSchemeSelectorComponent,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/conceptSchemeMultiSelectorWithoutMeta',
+      edit: RDFConceptSchemeMultiSelectorComponent,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/conceptSchemeSelectorWithCreate',
+      edit: RdfInputFieldsConceptSchemeSelectorWithCreateComponent,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/conceptSchemeMultiSelectorWithCreate',
+      edit: RdfInputFieldsConceptSchemeMultiSelectorWithCreateComponent,
     },
   ]);
 };

@@ -1,51 +1,55 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { restartableTask, timeout } from 'ember-concurrency';
-import { A } from '@ember/array';
+import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { BELEIDSDOMEIN_CODES_CONCEPT_SCHEME } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent extends Component {
-  @service() store;
+  @service store;
 
-  @tracked _beleidsdomeinen = A();
+  @tracked selected = [];
+  @tracked options = [];
+  conceptScheme = BELEIDSDOMEIN_CODES_CONCEPT_SCHEME;
 
   constructor() {
     super(...arguments);
-    this._beleidsdomeinen = (this.args.beleidsdomeinen || A()).toArray();
+    this.selected = this.args.beleidsdomeinen || [];
+    this.load();
   }
 
-  @restartableTask
-  *searchByName(searchData) {
-    yield timeout(300);
+  async load() {
+    this.options = await this.fetchOptions();
+  }
+
+  async fetchOptions(searchData) {
     let queryParams = {
       sort: 'label',
-      'filter[label]': searchData,
     };
-
-    const codes = yield this.store.query('beleidsdomein-code', queryParams);
-    // EmberData throws a deprecation because PowerSelectWithCreate calls `.toArray`, but only because it exists.
-    // TODO: On EmberData v5 we can remove this workaround since the `toArray` method will no longer exist
-    return codes.slice();
+    if (searchData) {
+      queryParams['filter[label]'] = searchData;
+    }
+    return await this.store.query('beleidsdomein-code', queryParams);
   }
+
+  search = task({ restartable: true }, async (searchData) => {
+    await timeout(SEARCH_TIMEOUT);
+    let searchResults = await this.fetchOptions(searchData);
+    this.options = searchResults;
+    return searchResults;
+  });
 
   @action
   select(beleidsdomeinen) {
-    this._beleidsdomeinen.setObjects(beleidsdomeinen);
-    this.args.onSelect(this._beleidsdomeinen);
+    this.selected.setObjects(beleidsdomeinen);
+    this.args.onSelect(this.selected);
   }
 
   @action
-  async create(beleidsdomein) {
-    let domein = await this.store.createRecord('beleidsdomein-code', {
-      label: beleidsdomein,
-    });
-    this._beleidsdomeinen.pushObject(domein);
-    this.args.onSelect(this._beleidsdomeinen);
-  }
-
-  @action
-  suggest(term) {
-    return `Voeg "${term}" toe`;
+  add(beleidsdomein) {
+    let oldSelection = [...this.selected];
+    oldSelection.push(beleidsdomein);
+    this.select(oldSelection);
   }
 }

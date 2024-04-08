@@ -15,11 +15,9 @@ module('Integration | Component | form/history-row', function (hooks) {
     assert.dom(this.element).hasText('');
 
     // Template block usage:
-    await render(hbs`
-      <Form::HistoryRow>
-        template block text
-      </Form::HistoryRow>
-    `);
+    await render(hbs`<Form::HistoryRow>
+  template block text
+</Form::HistoryRow>`);
 
     assert.dom(this.element).hasText('template block text');
   });

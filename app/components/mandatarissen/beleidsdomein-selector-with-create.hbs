@@ -1,15 +1,15 @@
-<PowerSelectMultipleWithCreate
-        @searchEnabled={{true}}
-        @disabled={{@disabled}}
-        @placeholder={{"Zoek beleidsdomein"}}
-        @search={{perform this.searchByName}}
-        @selected={{this._beleidsdomeinen}}
-        @onChange={{this.select}}
-        @onCreate={{this.create}}
-        @buildSuggestion={{this.suggest}}
-        @showCreatePosition={{"bottom"}}
-        @loadingMessage={{"Aan het laden..."}}
-        @noMatchesMessage={{"Geen resultaten"}}
-        as |beleidsdomein|>
-  {{beleidsdomein.label}}
-</PowerSelectMultipleWithCreate>
+<Mandatarissen::ConceptSelectorWithCreate
+  @multiple={{true}}
+  @type={{"beleidsdomein-code"}}
+  @conceptScheme={{this.conceptScheme}}
+  @search={{this.search}}
+  @searchEnabled={{true}}
+  @selected={{this.selected}}
+  @options={{this.options}}
+  @onChange={{this.select}}
+  @onCreate={{this.add}}
+  @disabled={{@disabled}}
+  as |concept|
+>
+  {{concept.label}}
+</Mandatarissen::ConceptSelectorWithCreate>

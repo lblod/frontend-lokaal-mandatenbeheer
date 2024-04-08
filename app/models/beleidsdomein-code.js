@@ -1,5 +1,3 @@
-import Model, { attr } from '@ember-data/model';
+import ConceptModel from './concept';
 
-export default class BeleidsdomeinCodeModel extends Model {
-  @attr label;
-}
+export default class BeleidsdomeinCodeModel extends ConceptModel {}

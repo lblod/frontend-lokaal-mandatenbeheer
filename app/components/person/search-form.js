@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { restartableTask, task, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
@@ -68,9 +68,8 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
     this.search.perform();
   }
 
-  @restartableTask
-  *search() {
-    yield timeout(300);
+  search = task({ restartable: true }, async () => {
+    await timeout(300);
 
     if (!(this.achternaam || this.voornaam || this.rijksregisternummer)) {
       this.queryParams = {};
@@ -95,18 +94,19 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
       },
     };
     this.queryParams = queryParams;
-    this.personen = yield this.getPersoon.perform(queryParams);
-    if (this.personen.meta.pagination.self.number !== this.page) {this.page = 0;}
-  }
+    this.personen = await this.getPersoon.perform(queryParams);
+    if (this.personen.meta.pagination.self.number !== this.page) {
+      this.page = 0;
+    }
+  });
 
-  @task
-  *getPersoon(queryParams) {
+  getPersoon = task(async (queryParams) => {
     try {
-      return yield this.store.query('persoon', queryParams);
+      return await this.store.query('persoon', queryParams);
     } catch (e) {
       this.error = true;
     }
-  }
+  });
 
   resetAfterError() {
     this.error = false;

@@ -53,6 +53,12 @@ export default class BestuursorgaanModel extends Model {
   })
   heeftTijdsspecialisaties;
 
+  @hasMany('bestuursfunctie', {
+    async: true,
+    inverse: null,
+  })
+  bevatBestuursfunctie;
+
   @hasMany('mandaat', {
     async: true,
     inverse: 'bevatIn',
@@ -68,7 +74,17 @@ export default class BestuursorgaanModel extends Model {
 
   get isDecretaal() {
     return this.classificatieUri().then((uri) => {
-      return this.decretaleOrganen.codeUris.some((dcUri) => dcUri === uri);
+      return this.decretaleOrganen.decretaleCodeUris.some(
+        (dcUri) => dcUri === uri
+      );
+    });
+  }
+
+  get isGemeentelijk() {
+    return this.classificatieUri().then((uri) => {
+      return this.decretaleOrganen.gemeenteCodeUris.some(
+        (dcUri) => dcUri === uri
+      );
     });
   }
 

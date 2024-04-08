@@ -6,8 +6,8 @@ export default class OrganenBeheerIndexController extends Controller {
   @service router;
   @service store;
 
-  active_sort = 'naam';
-  inactive_sort = 'naam';
+  activeSort = 'naam';
+  inactiveSort = 'naam';
 
   @action
   createNewOrgaan() {
