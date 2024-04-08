@@ -26,11 +26,15 @@
         </LinkTo>
       </td>
       <td>
-        <AuButton
-          @icon="archive"
-          @skin="link"
-          {{on "click" (fn @archive row)}}
-        >Archiveer</AuButton>
+        {{#if (await row.isDecretaal)}}
+          Decretaal
+        {{else}}
+          <AuButton
+            @icon="archive"
+            @skin="link"
+            {{on "click" (fn @archive row)}}
+          >Archiveer</AuButton>
+        {{/if}}
       </td>
     </c.body>
   </t.content>

@@ -48,9 +48,6 @@ module.exports = {
         node: true,
       },
       extends: ['plugin:n/recommended'],
-      rules: {
-        camelcase: ['off'],
-      },
     },
     {
       // test files

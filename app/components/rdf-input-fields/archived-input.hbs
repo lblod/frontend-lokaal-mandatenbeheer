@@ -2,9 +2,8 @@
   id={{this.inputId}}
   @disabled={{@show}}
   @checked={{this.active}}
-  @label={{this.label}}
   @onChange={{this.toggleActive}}
-/>
+>{{this.label}}</AuToggleSwitch>
 
 {{#each this.errors as |error|}}
   <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>

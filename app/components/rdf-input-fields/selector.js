@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { NamedNode } from 'rdflib';
 import { ACCEPT_HEADER, SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { getFormProperty } from 'frontend-lmb/utils/form-properties';
@@ -52,7 +52,7 @@ export default class SelectorComponent extends InputFieldComponent {
     super.updateValidations();
   }
 
-  search = restartableTask(async (term) => {
+  search = task({ restartable: true }, async (term) => {
     await timeout(SEARCH_TIMEOUT);
 
     const url = `${this.instanceApiUrl}?filter[${this.instanceLabelProperty}]=${term}&page[size]=${PAGESIZE}`;

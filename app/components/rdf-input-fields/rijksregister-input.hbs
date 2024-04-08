@@ -1,17 +1,15 @@
 <AuLabel
+  for={{this.inputId}}
   @error={{this.hasErrors}}
   @warning={{this.hasWarnings}}
   @required={{this.isRequired}}
-  for={{this.inputId}}
 >
   {{@field.label}}
 </AuLabel>
-
 <AuInput
   @error={{this.hasErrors}}
-  @disabled={{@show}}
-  @width={{if @inTable "block"}}
   @warning={{this.hasWarnings}}
+  @width="block"
   id={{this.inputId}}
   value={{this.rijksregisternummer}}
   {{au-inputmask
