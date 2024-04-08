@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
@@ -12,10 +13,11 @@ export default class OrganenMandatarisNewController extends Controller {
 
   queryParams = ['person'];
 
-  person = null;
+  @tracked person = null;
 
   @action
   cancel() {
+    this.person = null;
     this.router.transitionTo('organen.orgaan.mandatarissen');
   }
 
