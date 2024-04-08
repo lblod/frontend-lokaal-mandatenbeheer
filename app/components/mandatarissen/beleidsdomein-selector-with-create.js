@@ -4,45 +4,50 @@ import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { BELEIDSDOMEIN_CODES_CONCEPT_SCHEME } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent extends Component {
   @service store;
 
-  @tracked _beleidsdomeinen = [];
+  @tracked selected = [];
+  @tracked options = [];
+  conceptScheme = BELEIDSDOMEIN_CODES_CONCEPT_SCHEME;
 
   constructor() {
     super(...arguments);
-    this._beleidsdomeinen = this.args.beleidsdomeinen || [];
+    this.selected = this.args.beleidsdomeinen || [];
+    this.load();
   }
 
-  searchByName = task({ restartable: true }, async (searchData) => {
-    await timeout(SEARCH_TIMEOUT);
+  async load() {
+    this.options = await this.fetchOptions();
+  }
+
+  async fetchOptions(searchData) {
     let queryParams = {
       sort: 'label',
-      'filter[label]': searchData,
     };
-
+    if (searchData) {
+      queryParams['filter[label]'] = searchData;
+    }
     return await this.store.query('beleidsdomein-code', queryParams);
+  }
+
+  search = task({ restartable: true }, async (searchData) => {
+    await timeout(SEARCH_TIMEOUT);
+    return await this.fetchOptions(searchData);
   });
 
   @action
   select(beleidsdomeinen) {
-    this._beleidsdomeinen.setObjects(beleidsdomeinen);
-    this.args.onSelect(this._beleidsdomeinen);
+    this.selected.setObjects(beleidsdomeinen);
+    this.args.onSelect(this.selected);
   }
 
   @action
-  async create(beleidsdomein) {
-    let domein = await this.store.createRecord('beleidsdomein-code', {
-      label: beleidsdomein,
-    });
-    domein.save();
-    this._beleidsdomeinen.pushObject(domein);
-    this.args.onSelect(this._beleidsdomeinen);
-  }
-
-  @action
-  suggest(term) {
-    return `Voeg "${term}" toe`;
+  add(beleidsdomein) {
+    let tmp = this.selected;
+    tmp.push(beleidsdomein);
+    this.select(tmp);
   }
 }
