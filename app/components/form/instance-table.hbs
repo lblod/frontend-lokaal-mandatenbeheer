@@ -28,9 +28,9 @@
       </c.header>
 
       <c.body as |row|>
-        <td class="au-u-word-break">{{row.uri}}</td>
-        <td class="au-u-word-break">{{row.id}}</td>
-        <td class="au-u-word-break">{{row.label}}</td>
+        {{#each-in row as |key value|}}
+          <td class="au-u-word-break">{{value}}</td>
+        {{/each-in}}
         <td>
           <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
             <AuIcon @icon="pencil" @alignment="left" />
