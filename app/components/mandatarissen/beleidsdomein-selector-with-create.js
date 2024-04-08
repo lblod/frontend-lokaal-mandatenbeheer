@@ -48,8 +48,8 @@ export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent exte
 
   @action
   add(beleidsdomein) {
-    let tmp = this.selected;
-    tmp.push(beleidsdomein);
-    this.select(tmp);
+    let oldSelection = [...this.selected];
+    oldSelection.push(beleidsdomein);
+    this.select(oldSelection);
   }
 }
