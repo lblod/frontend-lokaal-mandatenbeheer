@@ -1,9 +1,5 @@
 import { registerCustomValidation } from '@lblod/submission-form-helpers';
-import { isValidRijksregisternummer } from './rijksregisternummer';
-
-const rijksregisternummerValidation = (value) => {
-  return isValidRijksregisternummer(value.value);
-};
+import { rijksregisternummerValidation } from './rijksregisternummer';
 
 export const registerCustomValidations = () => {
   registerCustomValidation(

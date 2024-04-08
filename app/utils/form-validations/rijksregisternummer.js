@@ -127,3 +127,6 @@ function parse(nrn) {
   }
   throw new Error('Could not parse nrn of invalid type');
 }
+
+export const rijksregisternummerValidation = (value) =>
+  isValidRijksregisternummer(value.value);
