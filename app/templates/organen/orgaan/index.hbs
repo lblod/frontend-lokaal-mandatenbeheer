@@ -6,10 +6,12 @@
       @isEditable={{false}}
     />
 
-    <AuToolbar class="au-u-margin-top" as |Group|>
-      <Group>
-        <AuButton @skin="secondary" {{on "click" this.onEdit}}>Pas aan</AuButton>
-      </Group>
-    </AuToolbar>
+    {{#unless (await this.model.bestuursorgaan.isDecretaal)}}
+      <AuToolbar class="au-u-margin-top" as |Group|>
+        <Group>
+          <AuButton @skin="secondary" {{on "click" this.onEdit}}>Pas aan</AuButton>
+        </Group>
+      </AuToolbar>
+    {{/unless}}
   </div>
 </div>

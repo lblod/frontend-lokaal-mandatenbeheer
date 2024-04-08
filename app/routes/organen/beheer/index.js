@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 
 export default class OrganenbeheerIndexRoute extends Route {
   @service store;
+  @service decretaleOrganen;
 
   // can't use pagination as we are filtering frontend side on optional properties, which seems to have limited support
   pageSize = 20000;
@@ -47,19 +48,7 @@ export default class OrganenbeheerIndexRoute extends Route {
 
   async getOrgans(sort, bestuurseenheid, active = true) {
     const queryOptions = this.getOptions(sort, bestuurseenheid, active);
-    const organenUnfiltered = await this.store.query(
-      'bestuursorgaan',
-      queryOptions
-    );
-    const organen = [];
-    await Promise.all(
-      organenUnfiltered.map(async (orgaan) => {
-        const isDecretaal = await orgaan.isDecretaal;
-        if (!isDecretaal) {
-          organen.push(orgaan);
-        }
-      })
-    );
+    const organen = await this.store.query('bestuursorgaan', queryOptions);
     return organen;
   }
 
@@ -72,8 +61,8 @@ export default class OrganenbeheerIndexRoute extends Route {
         bestuurseenheid: {
           id: bestuurseenheid.id,
         },
-        'heeft-tijdsspecialisaties': {
-          ':has:bevat': true,
+        classificatie: {
+          id: this.decretaleOrganen.classificatieIds.join(','),
         },
       },
     };
