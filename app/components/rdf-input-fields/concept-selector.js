@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { NamedNode } from 'rdflib';
 import { hasValidFieldOptions } from '@lblod/ember-submission-form-fields/utils/has-valid-field-options';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class ConceptSchemeSelectorComponent extends InputFieldComponent {
@@ -86,8 +86,8 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
     });
   }
 
-  search = restartableTask(async (term) => {
+  search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
-    return await this.fetchOptions(term);
+    return await this.fetchOptions(searchData);
   });
 }
