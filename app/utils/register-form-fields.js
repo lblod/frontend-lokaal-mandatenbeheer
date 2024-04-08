@@ -50,6 +50,10 @@ export const registerCustomFormFields = () => {
       edit: RDFRijksRegisterInput,
     },
     {
+      displayType: 'http://lblod.data.gift/display-types/archivedInput',
+      edit: RDFArchivedInput,
+    },
+    {
       displayType: 'http://lblod.data.gift/display-types/mandatarisReplacement',
       edit: RDFAMandatarisReplacementSelector,
     },

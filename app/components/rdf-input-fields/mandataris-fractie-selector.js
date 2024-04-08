@@ -24,7 +24,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   @service store;
 
-  @tracked membership = null;
+  @tracked selectedFractie = null;
   @tracked initialized = false;
   @tracked bestuursorgaanUris = [];
   @tracked fracties = [];
@@ -37,10 +37,6 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   get title() {
     return this.args.field?.label || 'Fractie';
-  }
-
-  get displayValue() {
-    return this.membership?.binnenFractie?.naam || 'Geen fractie geselecteerd';
   }
 
   async load() {
@@ -68,43 +64,27 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   async loadProvidedValue() {
-    const membershipTriples = triplesForPath(this.storeOptions, false).values;
-    if (!membershipTriples.length) {
+    const fractieUris = triplesForPath(this.storeOptions, false).values;
+    if (!fractieUris.length) {
       return;
     }
-    const membershipUri = membershipTriples[0].value;
+    const fractieUri = fractieUris[0].value;
 
-    const matches = await this.store.query('lidmaatschap', {
-      'filter[:uri:]': membershipUri,
-      include: 'binnen-fractie',
+    const matches = await this.store.query('fractie', {
+      'filter[:uri:]': fractieUri,
     });
-    this.membership = matches.at(0);
+    this.selectedFractie = matches.at(0);
   }
 
   @action
   async onSelectFractie(fractie) {
     this.updating = true;
-    const newMembership = this.store.createRecord('lidmaatschap', {
-      binnenFractie: fractie,
-    });
-    await newMembership.save();
-    this.membership = newMembership;
+    const uri = fractie?.uri;
 
-    // Note: this process creates a new membership whenever the value of the fractie selector changes.
-    // For history purposes, we shouldn't delete the old membership so if we want to view a previous
-    // version of the mandataris forms, we can still see the old membership.
-    // Memberships should therefore also never be modified, only created and deleted.
-    replaceSingleFormValue(this.storeOptions, new NamedNode(newMembership.uri));
+    replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
+    this.selectedFractie = fractie;
     this.hasBeenFocused = true;
     super.updateValidations();
     this.updating = false;
-  }
-
-  @action
-  removeFractie() {
-    replaceSingleFormValue(this.storeOptions, null);
-    this.membership = null;
-    this.hasBeenFocused = true;
-    super.updateValidations();
   }
 }
