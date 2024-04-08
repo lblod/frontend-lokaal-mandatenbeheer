@@ -1,0 +1,36 @@
+{{#unless @inTable}}
+  <AuLabel
+    @error={{this.hasErrors}}
+    @required={{this.isRequired}}
+    @warning={{this.hasWarnings}}
+    for={{this.inputId}}
+  >
+    {{@field.label}}
+  </AuLabel>
+{{/unless}}
+<div class={{if this.hasErrors "ember-power-select--error"}}>
+  <Mandatarissen::ConceptSelectorWithCreate
+    @multiple={{true}}
+    @type={{@field.options.type}}
+    @conceptScheme={{this.conceptScheme}}
+    @search={{this.search}}
+    @searchEnabled={{this.searchEnabled}}
+    @selected={{this.selected}}
+    @options={{this.options}}
+    @onClose={{fn (mut this.hasBeenFocused) true}}
+    @onChange={{this.updateSelection}}
+    @onCreate={{this.add}}
+    @disabled={{@show}}
+    as |concept|
+  >
+    {{concept.label}}
+  </Mandatarissen::ConceptSelectorWithCreate>
+</div>
+
+{{#each this.errors as |error|}}
+  <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+{{/each}}
+
+{{#each this.warnings as |warning|}}
+  <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+{{/each}}

@@ -7,12 +7,14 @@ export default class ConceptSchemeModel extends Model {
   @hasMany('concept', {
     async: true,
     inverse: 'conceptSchemes',
+    polymorphic: true,
   })
   concepts;
 
   @hasMany('concept', {
     async: true,
     inverse: 'topConceptSchemes',
+    polymorphic: true,
   })
   topConcepts;
 }
