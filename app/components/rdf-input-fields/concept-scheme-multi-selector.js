@@ -26,23 +26,20 @@ export default class RdfInputFieldsConceptSchemeMultiSelectorComponent extends C
   }
 
   @action
-  updateSelection(options) {
-    this.selected = options;
+  updateSelection(selectedValues) {
+    this.selected = selectedValues;
 
     // Retrieve options in store
     const matches = triplesForPath(this.storeOptions, true).values;
-    const matchingOptions = matches.filter((m) =>
-      this.options.find((opt) => m.equals(opt.subject))
-    );
 
     // Cleanup old value(s) in the store
-    matchingOptions
-      .filter((m) => !options.find((opt) => m.equals(opt.subject)))
+    matches
+      .filter((m) => !selectedValues.find((opt) => m.equals(opt.subject)))
       .forEach((m) => updateSimpleFormValue(this.storeOptions, undefined, m));
 
     // Insert new value in the store
-    options
-      .filter((opt) => !matchingOptions.find((m) => opt.subject.equals(m)))
+    selectedValues
+      .filter((opt) => !matches.find((m) => opt.subject.equals(m)))
       .forEach((option) =>
         updateSimpleFormValue(this.storeOptions, option.subject)
       );

@@ -17,21 +17,18 @@ export default class RdfInstanceSelectorComponent extends SelectorComponent {
   }
 
   @action
-  updateSelectedItems(option) {
-    this.selected = option;
+  updateSelectedItems(selectedValue) {
+    this.selected = selectedValue;
 
     // Cleanup old value(s) in the store
     const matches = triplesForPath(this.storeOptions, true).values;
-    const matchingOptions = matches.filter((m) =>
-      this.options.find((opt) => m.equals(opt.subject))
-    );
-    matchingOptions.forEach((m) =>
+    matches.forEach((m) =>
       updateSimpleFormValue(this.storeOptions, undefined, m)
     );
 
     // Insert new value in the store
-    if (option) {
-      updateSimpleFormValue(this.storeOptions, option.subject);
+    if (selectedValue) {
+      updateSimpleFormValue(this.storeOptions, selectedValue.subject);
     }
 
     super.updateSelectedItems();
