@@ -88,6 +88,8 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
 
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
-    return await this.fetchOptions(searchData);
+    let searchResults = await this.fetchOptions(searchData);
+    this.options = searchResults;
+    return searchResults;
   });
 }
