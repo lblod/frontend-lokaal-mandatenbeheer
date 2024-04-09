@@ -79,11 +79,18 @@ export default class AddressregisterService extends Service {
   async findAll(suggestion) {
     let addresses = [];
     if (!suggestion.isEmpty()) {
-      const results = await (
-        await fetch(
-          `/adressenregister/match?municipality=${suggestion.municipality}&zipcode=${suggestion.zipCode}&thoroughfarename=${suggestion.street}&housenumber=${suggestion.housenumber}`
-        )
-      ).json();
+      const response = await fetch(
+        `/adressenregister/match?municipality=${suggestion.municipality}&zipcode=${suggestion.zipCode}&thoroughfarename=${suggestion.street}&housenumber=${suggestion.housenumber}`
+      );
+      if (!response.ok) {
+        return [];
+      }
+      let results;
+      try {
+        results = await response.json();
+      } catch {
+        return [];
+      }
       addresses = results.map(function (result) {
         return new Address({
           uri: result.identificator.id,
