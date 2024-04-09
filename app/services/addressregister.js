@@ -83,13 +83,13 @@ export default class AddressregisterService extends Service {
         `/adressenregister/match?municipality=${suggestion.municipality}&zipcode=${suggestion.zipCode}&thoroughfarename=${suggestion.street}&housenumber=${suggestion.housenumber}`
       );
       if (!response.ok) {
-        return addresses;
+        return [];
       }
       let results;
       try {
         results = await response.json();
       } catch {
-        return addresses;
+        return [];
       }
       addresses = results.map(function (result) {
         return new Address({
