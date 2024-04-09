@@ -1,25 +1,12 @@
 <AuLabel>{{this.title}}</AuLabel>
 {{#if this.initialized}}
   <div class={{if this.hasErrors "ember-power-select--error"}}>
-    <PowerSelect
-      @triggerId={{this.inputId}}
-      @searchEnabled={{false}}
-      @searchField="label"
-      @selected={{this.selectedFractie}}
-      @options={{this.fracties}}
-      @onClose={{fn (mut this.hasBeenFocused) true}}
-      @onChange={{this.onSelectFractie}}
-      @allowClear={{true}}
-      @loadingMessage="Aan het laden..."
-      @noMatchesMessage="Geen fracties gevonden"
-      @disabled={{this.updating}}
-      data-test-field-uri={{@field.uri.value}}
-      as |fractie|
-    >
-      <span data-test-field-uri={{fractie.uri}}>
-        {{fractie.naam}}
-      </span>
-    </PowerSelect>
+    <Mandatarissen::FractieSelector
+      @fractie={{this.selectedFractie}}
+      @onSelect={{this.onSelectFractie}}
+      @bestuursorganen={{this.bestuursorganenInTijd}}
+      {{!-- @onClose={{fn (mut this.hasBeenFocused) true}} --}}
+    />
   </div>
 {{else}}
   Loading...
