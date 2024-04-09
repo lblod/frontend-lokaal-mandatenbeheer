@@ -1,6 +1,18 @@
 import Component from '@glimmer/component';
 
 export default class MandatarisCardComponent extends Component {
+  get bestuursOrgaanLabel() {
+    return this.args.mandataris
+      .get('bekleedt.bevatIn')
+      .then(async (bestuursOrganenInDeTijd) => {
+        const bestuursOrgaan = await bestuursOrganenInDeTijd?.[0]?.get(
+          'isTijdsspecialisatieVan'
+        );
+
+        return bestuursOrgaan ? `- ${bestuursOrgaan.naam}` : '';
+      });
+  }
+
   get rol() {
     return this.args.mandataris.bekleedt.get('bestuursfunctie').get('label');
   }
