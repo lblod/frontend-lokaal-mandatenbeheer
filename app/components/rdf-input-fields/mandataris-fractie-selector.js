@@ -64,16 +64,17 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   async loadProvidedValue() {
-    const fractieUris = triplesForPath(this.storeOptions, false).values;
-    if (!fractieUris.length) {
+    const membershipUris = triplesForPath(this.storeOptions, false).values;
+    if (!membershipUris.length) {
       return;
     }
-    const fractieUri = fractieUris[0].value;
+    const membershipUri = membershipUris[0].value;
 
-    const matches = await this.store.query('fractie', {
-      'filter[:uri:]': fractieUri,
+    const matches = await this.store.query('lidmaatschap', {
+      'filter[:uri:]': membershipUri,
+      include: 'binnen-fractie',
     });
-    this.selectedFractie = matches.at(0);
+    this.selectedFractie = matches.at(0).binnenFractie;
   }
 
   @action
