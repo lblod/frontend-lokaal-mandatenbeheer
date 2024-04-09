@@ -188,3 +188,7 @@
   top: -0.8em;
   right: 10px;
 }
+
+.ember-power-select-dropdown.ember-basic-dropdown-content--in-place {
+  z-index: 10;
+}
