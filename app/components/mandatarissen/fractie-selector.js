@@ -24,10 +24,24 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         o.get('id')
       );
     }
-    this.searchByName.perform();
+
+    this.loadFracties();
   }
 
-  searchByName = task({ restartable: true }, async (searchData) => {
+  async loadFracties() {
+    let fracties = await this.fetchFracties();
+
+    let onafhankelijke = fracties.find((f) =>
+      f.get('fractietype.isOnafhankelijk')
+    );
+    if (!onafhankelijke) {
+      onafhankelijke = await this.createOnafhankelijkeFractie();
+      fracties = [...fracties, onafhankelijke];
+    }
+    this.fractieOptions = fracties;
+  }
+
+  async fetchFracties(searchData) {
     await timeout(SEARCH_TIMEOUT);
     let queryParams = {
       sort: 'naam',
@@ -41,21 +55,8 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     if (searchData) {
       queryParams.filter.naam = searchData;
     }
-    let fracties = await this.store.query('fractie', queryParams);
-    let onafhankelijke = fracties.find((f) =>
-      f.get('fractietype.isOnafhankelijk')
-    );
-    if (!onafhankelijke) {
-      onafhankelijke = await this.createOnafhankelijkeFractie();
-      fracties = [...fracties, onafhankelijke];
-    }
-
-    // so we have results when search is blank
-    if (!searchData) {
-      this.fractieOptions = fracties;
-    }
-    return fracties;
-  });
+    return await this.store.query('fractie', queryParams);
+  }
 
   async createOnafhankelijkeFractie() {
     const onafhankelijkeFractieType = (
@@ -79,4 +80,10 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     this._fractie = fractie;
     this.args.onSelect(fractie);
   }
+
+  search = task({ restartable: true }, async (searchData) => {
+    await timeout(SEARCH_TIMEOUT);
+    let searchResults = await this.fetchFracties(searchData);
+    return searchResults;
+  });
 }
