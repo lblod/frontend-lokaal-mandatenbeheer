@@ -39,16 +39,38 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       fracties = [...fracties, onafhankelijke];
     }
 
-    if (this.isChangingFraction) {
+    if (this.isChangingFraction && this.mandataris) {
       if (await this.isFractionIndependent(this._fractie)) {
-        const previousFraction = null;
-        console.log(`set previous fraction`, previousFraction);
+        const mandataries = await this.store.query('mandataris', {
+          include: 'heeft-lidmaatschap,heeft-lidmaatschap.binnen-fractie',
+          filter: {
+            bekleedt: { id: this.mandataris.bekleedt.id },
+            'is-bestuurlijke-alias-van': {
+              id: this.mandataris.isBestuurlijkeAliasVan.id,
+            },
+          },
+        });
+
+        const fractionsForMandataries = [];
+        for (const mandate of mandataries) {
+          const lidmaatschap = await mandate.heeftLidmaatschap;
+          const fraction = await lidmaatschap.binnenFractie;
+          if (
+            !fractionsForMandataries.find(
+              (fractionModel) => fractionModel.id == fraction.id
+            )
+          ) {
+            fractionsForMandataries.push(fraction);
+          }
+        }
+        this.fractieOptions = fractionsForMandataries;
       } else {
         const independentFraction = await this.getIndependentFraction(fracties);
         if (independentFraction) {
           this.fractieOptions = [this._fractie, independentFraction];
         } else {
           console.warning(`Creating a new independent fraction`);
+          // should we create a new independent fraction here?
           const newIndependentFraction =
             await this.createOnafhankelijkeFractie();
           this.fractieOptions = [newIndependentFraction];
@@ -126,6 +148,10 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       }
     }
     return null;
+  }
+
+  get mandataris() {
+    return this.args.mandataris;
   }
 
   get isChangingFraction() {
