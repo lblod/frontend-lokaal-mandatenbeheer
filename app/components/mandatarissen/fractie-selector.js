@@ -42,7 +42,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   async fetchFracties(searchData) {
-    await timeout(SEARCH_TIMEOUT);
     let queryParams = {
       sort: 'naam',
       include: 'fractietype',
