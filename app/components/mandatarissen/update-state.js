@@ -11,18 +11,21 @@ export default class MandatarissenUpdateState extends Component {
   @tracked date = null;
   @tracked selectedBeleidsdomeinen = [];
   @tracked selectedFractie = null;
+  @tracked bestuurseeneenheid = null;
   @tracked bestuursorganenForFractie = [];
   @tracked rangorde = null;
   @tracked selectedReplacement = null;
   @tracked replacementUpdated;
 
   @service mandatarisStatus;
+  @service currentSession;
   @service store;
   @service toaster;
   @service('mandataris') mandatarisService;
 
   constructor() {
     super(...arguments);
+    this.bestuurseenheid = this.currentSession.group;
     this.load.perform();
   }
 

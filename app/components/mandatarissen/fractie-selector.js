@@ -4,6 +4,7 @@ import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service() store;
@@ -41,10 +42,22 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       queryParams.filter.naam = searchData;
     }
     let fracties = await this.store.query('fractie', queryParams);
-    fracties = fracties.filter((f) => !f.get('fractietype.isOnafhankelijk'));
-    //sets dummy
-    if ('onafhankelijk'.includes(searchData?.toLowerCase())) {
-      fracties.pushObject(await this.createNewOnafhankelijkeFractie());
+    // let onafhankelijke = fracties.find(
+    //   async (f) => (await f.get('fractietype')).isOnafhankelijk
+    // );
+    let onafhankelijke = await this.store.query('fractie', {
+      filter: {
+        'bestuursorganen-in-tijd': {
+          id: this.bestuursorganenId.join(','),
+        },
+        fractietype: {
+          ':uri:': FRACTIETYPE_ONAFHANKELIJK,
+        },
+      },
+    });
+    if (onafhankelijke.length == 0) {
+      onafhankelijke = await this.createOnafhankelijkeFractie();
+      fracties = [...fracties, onafhankelijke];
     }
     // so we have results when search is blank
     if (!searchData) {
@@ -53,16 +66,21 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     return fracties;
   });
 
-  async createNewOnafhankelijkeFractie() {
-    let onafFractie = (await this.store.findAll('fractietype')).find((f) =>
-      f.get('isOnafhankelijk')
-    );
-    return this.store.createRecord('fractie', {
+  async createOnafhankelijkeFractie() {
+    const onafhankelijkeFractieType = (
+      await this.store.query('fractietype', {
+        page: { size: 1 },
+        'filter[:uri:]': FRACTIETYPE_ONAFHANKELIJK,
+      })
+    ).at(0);
+    const onafhankelijke = this.store.createRecord('fractie', {
       naam: 'Onafhankelijk',
-      fractietype: onafFractie,
+      fractietype: onafhankelijkeFractieType,
       bestuursorganenInTijd: this.args.bestuursorganen,
-      bestuurseenheid: this.bestuurseeneenheid,
+      bestuurseenheid: this.args.bestuurseenheid,
     });
+    onafhankelijke.save();
+    return onafhankelijke;
   }
 
   @action

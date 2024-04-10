@@ -23,6 +23,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   @tracked selectedFractie = null;
   @tracked initialized = false;
+  @tracked bestuurseeneenheid = null;
   @tracked bestuursorganenInTijd = [];
 
   constructor() {
@@ -40,12 +41,12 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   async loadBestuursorganen() {
-    const bestuurseenheid = this.currentSession.group;
+    this.bestuurseenheid = this.currentSession.group;
     const queryParams = this.router.currentRoute.queryParams;
 
     // TODO this should still be filtered which kind of orgaan (decretaal ..)
     const bestuursorganen = await this.store.query('bestuursorgaan', {
-      'filter[bestuurseenheid][id]': bestuurseenheid.id,
+      'filter[bestuurseenheid][id]': this.bestuurseenheid.id,
       'filter[:has-no:deactivated-at]': true,
       'filter[:has-no:is-tijdsspecialisatie-van]': true,
       include: 'classificatie,heeft-tijdsspecialisaties',
