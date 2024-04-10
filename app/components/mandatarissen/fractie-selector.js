@@ -29,63 +29,62 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   async loadFracties() {
-    let fracties = await this.fetchFracties();
+    let fracties = [];
 
-    let onafhankelijke = fracties.find((f) =>
-      f.get('fractietype.isOnafhankelijk')
-    );
+    if (this.isUpdatingFractie && this._fractie) {
+      fracties = await this.getFractiesWhenUpdateState();
+    } else {
+      fracties = await this.fetchFracties();
+    }
+
+    let onafhankelijke = await this.getIndependentFractie(fracties);
+
     if (!onafhankelijke) {
       onafhankelijke = await this.createOnafhankelijkeFractie();
-      fracties = [...fracties, onafhankelijke];
+      this.fractieOptions = [...fracties, onafhankelijke];
+      return;
     }
 
-    if (this.isUpdatingFractie && this.mandataris && this._fractie) {
-      if (await this.isFractieIndependent(this._fractie)) {
-        const mandataries = await this.store.query('mandataris', {
-          include: 'heeft-lidmaatschap,heeft-lidmaatschap.binnen-fractie',
-          filter: {
-            bekleedt: { id: this.mandataris.bekleedt.id },
-            'is-bestuurlijke-alias-van': {
-              id: this.mandataris.isBestuurlijkeAliasVan.id,
-            },
-          },
-        });
+    this.fractieOptions = fracties;
+  }
 
-        const fractiesForMandataries = [];
-        for (const mandate of mandataries) {
-          const lidmaatschap = await mandate.heeftLidmaatschap;
-          if (!lidmaatschap) {
-            continue;
-          }
-          const fractie = await lidmaatschap.binnenFractie;
-          if (!fractie) {
-            continue;
-          }
+  async getFractiesWhenUpdateState() {
+    const mandataries = await this.store.query('mandataris', {
+      include: 'heeft-lidmaatschap,heeft-lidmaatschap.binnen-fractie',
+      filter: {
+        bekleedt: { id: this.mandataris.bekleedt.id },
+        'is-bestuurlijke-alias-van': {
+          id: this.mandataris.isBestuurlijkeAliasVan.id,
+        },
+      },
+    });
+    const fracties = await this.fractionsOfMandataries(mandataries);
 
-          if (
-            !fractiesForMandataries.find(
-              (fractieModel) => fractieModel.id == fractie.id
-            )
-          ) {
-            fractiesForMandataries.push(fractie);
-          }
-        }
-        this.fractieOptions = fractiesForMandataries;
-      } else {
-        const independentFractie = await this.getIndependentFractie(fracties);
-        if (independentFractie) {
-          this.fractieOptions = [this._fractie, independentFractie];
-        } else {
-          console.warning(`Creating a new independent fractie`);
-          // should we create a new independent fractie here?
-          const newIndependentFractie =
-            await this.createOnafhankelijkeFractie();
-          this.fractieOptions = [newIndependentFractie];
-        }
+    return fracties;
+  }
+
+  async fractionsOfMandataries(mandataries) {
+    const fractiesForMandataries = [];
+    for (const mandate of mandataries) {
+      const lidmaatschap = await mandate.heeftLidmaatschap;
+      if (!lidmaatschap) {
+        continue;
       }
-    } else {
-      this.fractieOptions = fracties;
+      const fractie = await lidmaatschap.binnenFractie;
+      if (!fractie) {
+        continue;
+      }
+
+      if (
+        !fractiesForMandataries.find(
+          (fractieModel) => fractieModel.id == fractie.id
+        )
+      ) {
+        fractiesForMandataries.push(fractie);
+      }
     }
+
+    return fractiesForMandataries;
   }
 
   async fetchFracties(searchData) {
@@ -142,10 +141,15 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   });
 
   async isFractieIndependent(fractie) {
-    return await fractie.get('fractietype.isOnafhankelijk');
+    const type = await fractie.fractietype;
+
+    if (!type) {
+      return false;
+    }
+
+    return type.isOnafhankelijk;
   }
 
-  // REMOVE: This is always one yes?
   async getIndependentFractie(fracties) {
     for (const fractie of fracties) {
       const isIndependent = await this.isFractieIndependent(fractie);
