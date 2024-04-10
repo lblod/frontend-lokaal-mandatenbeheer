@@ -39,7 +39,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       fracties = [...fracties, onafhankelijke];
     }
 
-    if (this.isChangingFraction && this.mandataris) {
+    if (this.isChangingFraction && this.mandataris && this._fractie) {
       if (await this.isFractionIndependent(this._fractie)) {
         const mandataries = await this.store.query('mandataris', {
           include: 'heeft-lidmaatschap,heeft-lidmaatschap.binnen-fractie',
@@ -54,7 +54,14 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         const fractionsForMandataries = [];
         for (const mandate of mandataries) {
           const lidmaatschap = await mandate.heeftLidmaatschap;
+          if (!lidmaatschap) {
+            continue;
+          }
           const fraction = await lidmaatschap.binnenFractie;
+          if (!fraction) {
+            continue;
+          }
+
           if (
             !fractionsForMandataries.find(
               (fractionModel) => fractionModel.id == fraction.id
