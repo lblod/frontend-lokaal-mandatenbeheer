@@ -6,9 +6,6 @@ import { tracked } from '@glimmer/tracking';
 export default class MandatarisCardComponent extends Component {
   @tracked bestuursOrgaanNames;
 
-  get rol() {
-    return this.args.mandataris.bekleedt.get('bestuursfunctie').get('label');
-  }
   get status() {
     return this.args.mandataris.status.get('label');
   }
@@ -26,6 +23,17 @@ export default class MandatarisCardComponent extends Component {
     return beleidsdomeinenPromise.then((beleidsdomeinen) => {
       return beleidsdomeinen.map((item) => item.label).join(', ');
     });
+  }
+
+  get rolWithBestuurOrgaanNames() {
+    const rol = this.args.mandataris.bekleedt
+      .get('bestuursfunctie')
+      .get('label');
+
+    if (!this.bestuursOrgaanNames || this.bestuursOrgaanNames == '') {
+      return rol;
+    }
+    return `${rol} - ${this.bestuursOrgaanNames}`;
   }
 
   setBestuursOrganenForMandataris = restartableTask(async () => {
