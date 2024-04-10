@@ -1,12 +1,6 @@
-import Model, { belongsTo, hasMany } from '@ember-data/model';
+import Model, { hasMany } from '@ember-data/model';
 
 export default class PostModel extends Model {
-  @belongsTo('role', {
-    async: true,
-    inverse: null,
-  })
-  role;
-
   @hasMany('agent-in-position', {
     async: true,
     inverse: 'post',
