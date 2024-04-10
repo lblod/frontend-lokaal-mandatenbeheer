@@ -111,3 +111,25 @@ export async function getUniqueBestuursorganen(mandataris) {
 
   return Array.from(bestuursorganen);
 }
+
+export const getUniqueVervangers = async (mandataris) => {
+  const duplicateVervangers = await mandataris.vervangerVan;
+  const vervangers = new Map();
+
+  for (let vervanger of duplicateVervangers) {
+    const persoon = await vervanger.isBestuurlijkeAliasVan;
+    if (!vervangers.has(persoon.id)) {
+      vervangers.set(persoon.id, vervanger);
+    } else {
+      const existingVervanger = vervangers.get(persoon.id);
+      const existingEinde = existingVervanger.einde;
+      const newEinde = vervanger.einde;
+
+      // Keep the most recent vervanger
+      if (!newEinde || (existingEinde && newEinde > existingEinde)) {
+        vervangers.set(persoon.id, vervanger);
+      }
+    }
+  }
+  return Array.from(vervangers.values());
+};
