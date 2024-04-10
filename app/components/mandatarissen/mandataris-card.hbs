@@ -1,8 +1,15 @@
 <AuCard as |c|>
   <c.header>
     <div class="au-u-flex">
-      <AuHeading @level="2" @skin="4" class="flex-grow">
-        {{this.rol}}{{await this.bestuursOrgaanLabel}}
+      <AuHeading
+        @level="2"
+        @skin="4"
+        class="flex-grow"
+        {{did-insert (perform this.setBestuursOrganenForMandataris)}}
+      >
+        {{this.rol}}
+        -
+        {{this.bestuursOrgaanNames}}
       </AuHeading>
       <AuPill
         @skin="link"

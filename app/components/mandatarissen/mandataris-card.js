@@ -1,17 +1,10 @@
 import Component from '@glimmer/component';
 
-export default class MandatarisCardComponent extends Component {
-  get bestuursOrgaanLabel() {
-    return this.args.mandataris
-      .get('bekleedt.bevatIn')
-      .then(async (bestuursOrganenInDeTijd) => {
-        const bestuursOrgaan = await bestuursOrganenInDeTijd?.[0]?.get(
-          'isTijdsspecialisatieVan'
-        );
+import { restartableTask } from 'ember-concurrency';
+import { tracked } from '@glimmer/tracking';
 
-        return bestuursOrgaan ? `- ${bestuursOrgaan.naam}` : '';
-      });
-  }
+export default class MandatarisCardComponent extends Component {
+  @tracked bestuursOrgaanNames;
 
   get rol() {
     return this.args.mandataris.bekleedt.get('bestuursfunctie').get('label');
@@ -33,5 +26,36 @@ export default class MandatarisCardComponent extends Component {
     return beleidsdomeinenPromise.then((beleidsdomeinen) => {
       return beleidsdomeinen.map((item) => item.label).join(', ');
     });
+  }
+
+  setBestuursOrganenForMandataris = restartableTask(async () => {
+    this.bestuursOrgaanNames = '';
+    const names = [];
+    const bestuursOrganenInDeTijd =
+      await this.mandataris.get('bekleedt.bevatIn');
+
+    if (!bestuursOrganenInDeTijd) {
+      return '';
+    }
+
+    for (const orgaan of bestuursOrganenInDeTijd) {
+      if (!orgaan) {
+        return null;
+      }
+
+      const bestuursOrgaan = await orgaan.get('isTijdsspecialisatieVan');
+
+      if (!bestuursOrgaan) {
+        continue;
+      }
+
+      names.push(bestuursOrgaan.naam);
+    }
+
+    this.bestuursOrgaanNames = names.join(', ');
+  });
+
+  get mandataris() {
+    return this.args.mandataris;
   }
 }
