@@ -1,10 +1,8 @@
-import { attr, belongsTo, hasMany } from '@ember-data/model';
-import Post from './post';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 const identity = Boolean;
 
-// INHERITS FROM POST(positie)
-export default class MandaatModel extends Post {
+export default class MandaatModel extends Model {
   @attr uri;
   @attr aantalHouders;
 
