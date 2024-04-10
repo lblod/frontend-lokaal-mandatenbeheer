@@ -11,7 +11,10 @@
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
-    <Mandatarissen::MandatarisCard @mandataris={{@model.mandataris}} />
+    <Mandatarissen::MandatarisCard
+      @mandataris={{@model.mandataris}}
+      @vervangers={{@model.vervangers}}
+    />
   </div>
 
   <div class="au-o-box">
