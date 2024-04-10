@@ -20,17 +20,17 @@
   >
     <t.content as |c|>
       <c.header>
-        <th>Uri</th>
-        <th>Id</th>
-        <th>Label</th>
+        {{#each this.formInfo.headers as |header|}}
+          <th>{{header}}</th>
+        {{/each}}
         <th>{{! Bewerk }}</th>
         <th>{{! Delete }}</th>
       </c.header>
 
       <c.body as |row|>
-        <td class="au-u-word-break">{{row.uri}}</td>
-        <td class="au-u-word-break">{{row.id}}</td>
-        <td class="au-u-word-break">{{row.label}}</td>
+        {{#each-in row as |key value|}}
+          <td class="au-u-word-break">{{value}}</td>
+        {{/each-in}}
         <td>
           <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
             <AuIcon @icon="pencil" @alignment="left" />
