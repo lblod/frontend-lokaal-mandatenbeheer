@@ -38,7 +38,25 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       onafhankelijke = await this.createOnafhankelijkeFractie();
       fracties = [...fracties, onafhankelijke];
     }
-    this.fractieOptions = fracties;
+
+    if (this.isChangingFraction) {
+      if (await this.isFractionIndependent(this._fractie)) {
+        const previousFraction = null;
+        console.log(`set previous fraction`, previousFraction);
+      } else {
+        const independentFraction = await this.getIndependentFraction(fracties);
+        if (independentFraction) {
+          this.fractieOptions = [this._fractie, independentFraction];
+        } else {
+          console.warning(`Creating a new independent fraction`);
+          const newIndependentFraction =
+            await this.createOnafhankelijkeFractie();
+          this.fractieOptions = [newIndependentFraction];
+        }
+      }
+    } else {
+      this.fractieOptions = fracties;
+    }
   }
 
   async fetchFracties(searchData) {
@@ -93,4 +111,29 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     let searchResults = await this.fetchFracties(searchData);
     return searchResults;
   });
+
+  async isFractionIndependent(fraction) {
+    return await fraction.get('fractietype.isOnafhankelijk');
+  }
+
+  // This is always one yes?
+  async getIndependentFraction(fractions) {
+    for (const fraction of fractions) {
+      const isIndependent = await this.isFractionIndependent(fraction);
+
+      if (isIndependent) {
+        return fraction;
+      }
+    }
+    return null;
+  }
+
+  get isChangingFraction() {
+    const state = this.args.isChangingFraction;
+    if (state && typeof state == 'boolean') {
+      return this.args.isChangingFraction;
+    }
+
+    return false;
+  }
 }
