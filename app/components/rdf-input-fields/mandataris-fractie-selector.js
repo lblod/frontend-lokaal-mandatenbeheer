@@ -44,11 +44,12 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     this.bestuurseenheid = this.currentSession.group;
     const queryParams = this.router.currentRoute.queryParams;
 
-    // TODO this should still be filtered which kind of orgaan (decretaal ..)
     const bestuursorganen = await this.store.query('bestuursorgaan', {
       'filter[bestuurseenheid][id]': this.bestuurseenheid.id,
       'filter[:has-no:deactivated-at]': true,
       'filter[:has-no:is-tijdsspecialisatie-van]': true,
+      'filter[classificatie][id]':
+        this.decretaleOrganen.classificatieIds.join(','), // only organs with a political mandate
       include: 'classificatie,heeft-tijdsspecialisaties',
     });
 
