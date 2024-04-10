@@ -42,23 +42,14 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       queryParams.filter.naam = searchData;
     }
     let fracties = await this.store.query('fractie', queryParams);
-    // let onafhankelijke = fracties.find(
-    //   async (f) => (await f.get('fractietype')).isOnafhankelijk
-    // );
-    let onafhankelijke = await this.store.query('fractie', {
-      filter: {
-        'bestuursorganen-in-tijd': {
-          id: this.bestuursorganenId.join(','),
-        },
-        fractietype: {
-          ':uri:': FRACTIETYPE_ONAFHANKELIJK,
-        },
-      },
-    });
-    if (onafhankelijke.length == 0) {
+    let onafhankelijke = fracties.find((f) =>
+      f.get('fractietype.isOnafhankelijk')
+    );
+    if (!onafhankelijke) {
       onafhankelijke = await this.createOnafhankelijkeFractie();
       fracties = [...fracties, onafhankelijke];
     }
+
     // so we have results when search is blank
     if (!searchData) {
       this.fractieOptions = fracties;
