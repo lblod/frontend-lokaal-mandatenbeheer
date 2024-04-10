@@ -11,17 +11,12 @@
       <AuHeading @skin="2">Beheer Fracties</AuHeading>
     </Group>
     <Group>
-      <AuButton {{on "click" this.openCreateFractieModal}}>Voeg fractie toe</AuButton>
-    </Group>
-  </AuToolbar>
-
-  <AuToolbar @size="large" as |Group|>
-    <Group>
       <Mandatenbeheer::BestuursperiodenSelector
         @options={{@model.bestuursPeriods}}
         @selectedPeriod={{@model.selectedPeriod}}
         @onSelect={{this.selectPeriod}}
       />
+      <AuButton {{on "click" this.openCreateFractieModal}}>Voeg fractie toe</AuButton>
     </Group>
   </AuToolbar>
 
