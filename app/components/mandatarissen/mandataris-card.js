@@ -32,7 +32,7 @@ export default class MandatarisCardComponent extends Component {
     this.bestuursOrgaanNames = '';
     const names = [];
     const bestuursOrganenInDeTijd =
-      await this.mandataris.get('bekleedt.bevatIn');
+      await this.args.mandataris.get('bekleedt.bevatIn');
 
     if (!bestuursOrganenInDeTijd) {
       return '';
@@ -54,8 +54,4 @@ export default class MandatarisCardComponent extends Component {
 
     this.bestuursOrgaanNames = names.join(', ');
   });
-
-  get mandataris() {
-    return this.args.mandataris;
-  }
 }
