@@ -1,8 +1,10 @@
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
     <AuHeading @skin="2">Mandaat
-      {{@model.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-      {{@model.mandataris.isBestuurlijkeAliasVan.achternaam}}
+      <AuLink @route="mandatarissen.persoon" @model={{this.persoon}}>
+        {{this.persoon.gebruikteVoornaam}}
+        {{this.persoon.achternaam}}
+      </AuLink>
       <br />
       {{this.bestuursorganenTitle}}
     </AuHeading>
