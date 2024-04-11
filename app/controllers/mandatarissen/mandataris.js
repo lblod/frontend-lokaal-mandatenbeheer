@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class MandatarissenMandatarisController extends Controller {
   @service router;
@@ -18,5 +18,10 @@ export default class MandatarissenMandatarisController extends Controller {
 
   get persoon() {
     return this.model.mandataris.isBestuurlijkeAliasVan;
+  }
+
+  @action
+  routeToPersoon() {
+    this.router.transitionTo('mandatarissen.persoon', this.persoon.id);
   }
 }
