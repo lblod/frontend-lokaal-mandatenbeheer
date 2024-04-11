@@ -20,6 +20,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @service currentSession;
   @service store;
   @service router;
+  @service decretaleOrganen;
 
   @tracked selectedFractie = null;
   @tracked initialized = false;
