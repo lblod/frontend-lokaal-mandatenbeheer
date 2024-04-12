@@ -14,6 +14,13 @@ import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-conte
  * to a fractie, the link is materialized through a Lidmaadschap class, with a start and end date.
  * The start and end date for the Lidmaatschap are set to the to the start and end date of the
  * mandate, and needs to be kept in sync when the mandataris is updated.
+ *
+ * Furthermore, the list of fractions is filtered based on the current bestuursorgaan, which is
+ * passed in as context in the meta graph of the form in the following format:
+ *
+ * ext:applicationContext ext:currentBestuursorgaan <bestuursorgaanUri> .
+ * This bestuursorgaan is used to select the bestuursperiod in which the current form operates,
+ * which is then used to fetch all bestuursorganen corresponding with that bestuursperiod.
  */
 export default class MandatarisFractieSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
