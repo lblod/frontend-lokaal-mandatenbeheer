@@ -37,7 +37,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       fracties = await this.fetchFracties();
     }
 
-    let onafhankelijke = await this.getIndependentFractie(fracties);
+    let onafhankelijke = fracties.find((f) =>
+      f.get('fractietype.isOnafhankelijk')
+    );
 
     if (!onafhankelijke) {
       onafhankelijke = await this.createOnafhankelijkeFractie();
@@ -144,17 +146,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     }
 
     return type.isOnafhankelijk;
-  }
-
-  async getIndependentFractie(fracties) {
-    for (const fractie of fracties) {
-      const isIndependent = await this.isFractieIndependent(fractie);
-
-      if (isIndependent) {
-        return fractie;
-      }
-    }
-    return null;
   }
 
   get mandataris() {
