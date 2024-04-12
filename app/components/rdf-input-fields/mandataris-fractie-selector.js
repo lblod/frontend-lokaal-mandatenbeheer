@@ -6,6 +6,8 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { NamedNode } from 'rdflib';
+import moment from 'moment';
+import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
@@ -42,12 +44,23 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   async loadBestuursorganen() {
     this.bestuurseenheid = this.currentSession.group;
-    const params = this.router.currentRoute.queryParams;
+    const bestuursorgaanUris = loadBestuursorgaanUrisFromContext(
+      this.storeOptions
+    );
+    const bestuursorgaan = (
+      await this.store.query('bestuursorgaan', {
+        'filter[:uri:]': bestuursorgaanUris[0],
+      })
+    )[0];
+
     this.bestuursorganenInTijd =
       await this.tijdsspecialisaties.getCurrentTijdsspecialisaties(
         this.store,
         this.bestuurseenheid,
-        params
+        {
+          startDate: moment(bestuursorgaan.bindingStart).format('YYYY-MM-DD'),
+          endDate: moment(bestuursorgaan.bindingEinde).format('YYYY-MM-DD'),
+        }
       );
   }
 
