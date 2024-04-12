@@ -31,7 +31,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   async loadFracties() {
     let fracties = [];
 
-    if (this.isUpdatingFractie && this._fractie) {
+    if (this.args.isUpdatingFractie && this._fractie) {
       fracties = await this.getFractiesWhenUpdateState();
     } else {
       fracties = await this.fetchFracties();
@@ -146,14 +146,5 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     }
 
     return type.isOnafhankelijk;
-  }
-
-  get isUpdatingFractie() {
-    const state = this.args.isUpdatingFractie;
-    if (state && typeof state == 'boolean') {
-      return this.args.isUpdatingFractie;
-    }
-
-    return false;
   }
 }
