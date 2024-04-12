@@ -6,7 +6,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { NamedNode } from 'rdflib';
-import { getSelectedBestuursorgaanWithPeriods } from 'frontend-lmb/utils/bestuursperioden';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
@@ -18,13 +17,13 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
 
   @service currentSession;
+  @service tijdsspecialisaties;
   @service store;
   @service router;
-  @service decretaleOrganen;
 
   @tracked selectedFractie = null;
   @tracked initialized = false;
-  @tracked bestuurseeneenheid = null;
+  @tracked bestuurseenheid = null;
   @tracked bestuursorganenInTijd = [];
 
   constructor() {
@@ -43,42 +42,13 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   async loadBestuursorganen() {
     this.bestuurseenheid = this.currentSession.group;
-    const queryParams = this.router.currentRoute.queryParams;
-
-    const bestuursorganen = await this.store.query('bestuursorgaan', {
-      'filter[bestuurseenheid][id]': this.bestuurseenheid.id,
-      'filter[:has-no:deactivated-at]': true,
-      'filter[:has-no:is-tijdsspecialisatie-van]': true,
-      'filter[classificatie][id]':
-        this.decretaleOrganen.classificatieIds.join(','), // only organs with a political mandate
-      include: 'classificatie,heeft-tijdsspecialisaties',
-    });
-
-    this.bestuursorganenInTijd = await this.fetchBestuursOrganen(
-      bestuursorganen,
-      queryParams
-    );
-  }
-
-  async fetchBestuursOrganen(organen, params) {
-    const zever = await Promise.all(
-      organen.map(async (bestuursorgaan) => {
-        const tijdsspecialisaties =
-          await bestuursorgaan.heeftTijdsspecialisaties;
-
-        if (tijdsspecialisaties.length != 0) {
-          const result = getSelectedBestuursorgaanWithPeriods(
-            tijdsspecialisaties,
-            {
-              startDate: params.startDate,
-              endDate: params.endDate,
-            }
-          );
-          return result ? result.bestuursorgaan : null;
-        }
-      })
-    );
-    return zever.filter(Boolean);
+    const params = this.router.currentRoute.queryParams;
+    this.bestuursorganenInTijd =
+      await this.tijdsspecialisaties.getCurrentTijdsspecialisaties(
+        this.store,
+        this.bestuurseenheid,
+        params
+      );
   }
 
   async loadProvidedValue() {

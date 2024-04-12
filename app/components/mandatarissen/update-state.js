@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
+import moment from 'moment';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -12,6 +13,7 @@ export default class MandatarissenUpdateState extends Component {
   @tracked selectedBeleidsdomeinen = [];
   @tracked selectedFractie = null;
   @tracked bestuurseeneenheid = null;
+  @tracked bestuursorganenOfMandaat = [];
   @tracked bestuursorganenForFractie = [];
   @tracked rangorde = null;
   @tracked selectedReplacement = null;
@@ -19,6 +21,7 @@ export default class MandatarissenUpdateState extends Component {
 
   @service mandatarisStatus;
   @service currentSession;
+  @service tijdsspecialisaties;
   @service store;
   @service toaster;
   @service('mandataris') mandatarisService;
@@ -41,11 +44,24 @@ export default class MandatarissenUpdateState extends Component {
     this.selectedFractie = await (
       await this.args.mandataris.heeftLidmaatschap
     )?.binnenFractie;
-    this.bestuursorganenForFractie = (
+    this.bestuursorganenOfMandaat = (
       await (
         await this.args.mandataris.bekleedt
       ).bevatIn
     ).slice();
+    this.bestuursorganenForFractie =
+      await this.tijdsspecialisaties.getCurrentTijdsspecialisaties(
+        this.store,
+        this.bestuurseenheid,
+        {
+          startDate: moment(
+            this.bestuursorganenOfMandaat[0].bindingStart
+          ).format('YYYY-MM-DD'),
+          endDate: moment(this.bestuursorganenOfMandaat[0].bindingEinde).format(
+            'YYYY-MM-DD'
+          ),
+        }
+      );
   });
 
   get statusOptions() {
