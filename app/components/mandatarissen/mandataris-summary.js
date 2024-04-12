@@ -8,7 +8,7 @@ import { restartableTask } from 'ember-concurrency';
 export default class MandatenbeheerMandatarisSummaryComponent extends Component {
   @service router;
 
-  @tracked bestuursOrgaanNames;
+  @tracked bestuursorgaanNames;
 
   get status() {
     return this.args.mandataris.status.get('label');
@@ -29,15 +29,15 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
     });
   }
 
-  get rolWithBestuurOrgaanNames() {
+  get rolWithBestuurorgaanNames() {
     const rol = this.args.mandataris.bekleedt
       .get('bestuursfunctie')
       .get('label');
 
-    if (!this.bestuursOrgaanNames || this.bestuursOrgaanNames === '') {
+    if (!this.bestuursorgaanNames || this.bestuursorgaanNames === '') {
       return rol;
     }
-    return `${rol} - ${this.bestuursOrgaanNames}`;
+    return `${rol} - ${this.bestuursorgaanNames}`;
   }
 
   @action
@@ -45,30 +45,30 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
     this.router.transitionTo('mandatarissen.mandataris', mandataris.id);
   }
 
-  setBestuursOrganenForMandataris = restartableTask(async () => {
-    this.bestuursOrgaanNames = '';
+  setBestuursorganenForMandataris = restartableTask(async () => {
+    this.bestuursorgaanNames = '';
     const names = [];
-    const bestuursOrganenInDeTijd =
+    const bestuursorganenInDeTijd =
       await this.args.mandataris.get('bekleedt.bevatIn');
 
-    if (!bestuursOrganenInDeTijd) {
+    if (!bestuursorganenInDeTijd) {
       return '';
     }
 
-    for (const orgaan of bestuursOrganenInDeTijd) {
+    for (const orgaan of bestuursorganenInDeTijd) {
       if (!orgaan) {
         return null;
       }
 
-      const bestuursOrgaan = await orgaan.get('isTijdsspecialisatieVan');
+      const bestuursorgaan = await orgaan.get('isTijdsspecialisatieVan');
 
-      if (!bestuursOrgaan) {
+      if (!bestuursorgaan) {
         continue;
       }
 
-      names.push(bestuursOrgaan.naam);
+      names.push(bestuursorgaan.naam);
     }
 
-    this.bestuursOrgaanNames = names.join(', ');
+    this.bestuursorgaanNames = names.join(', ');
   });
 }
