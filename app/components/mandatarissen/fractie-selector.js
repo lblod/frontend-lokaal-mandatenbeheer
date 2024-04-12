@@ -49,7 +49,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   async getFractiesWhenUpdateState() {
-    const mandataries = await this.store.query('mandataris', {
+    const mandatarissen = await this.store.query('mandataris', {
       include: 'heeft-lidmaatschap,heeft-lidmaatschap.binnen-fractie',
       filter: {
         bekleedt: { id: this.mandataris.bekleedt.id },
@@ -58,14 +58,14 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         },
       },
     });
-    const fracties = await this.fractionsOfMandataries(mandataries);
+    const fracties = await this.fractiesVanMandatarissen(mandatarissen);
 
     return fracties;
   }
 
-  async fractionsOfMandataries(mandataries) {
-    const fractiesForMandataries = [];
-    for (const mandate of mandataries) {
+  async fractiesVanMandatarissen(mandatarissen) {
+    const fracties = [];
+    for (const mandate of mandatarissen) {
       const lidmaatschap = await mandate.heeftLidmaatschap;
       if (!lidmaatschap) {
         continue;
@@ -75,16 +75,12 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         continue;
       }
 
-      if (
-        !fractiesForMandataries.find(
-          (fractieModel) => fractieModel.id == fractie.id
-        )
-      ) {
-        fractiesForMandataries.push(fractie);
+      if (!fracties.find((fractieModel) => fractieModel.id == fractie.id)) {
+        fracties.push(fractie);
       }
     }
 
-    return fractiesForMandataries;
+    return fracties;
   }
 
   async fetchFracties(searchData) {
