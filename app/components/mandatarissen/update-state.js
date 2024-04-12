@@ -12,7 +12,7 @@ export default class MandatarissenUpdateState extends Component {
   @tracked date = null;
   @tracked selectedBeleidsdomeinen = [];
   @tracked selectedFractie = null;
-  @tracked bestuurseeneenheid = null;
+  @tracked bestuurseenheid = null;
   @tracked bestuursorganenOfMandaat = [];
   @tracked bestuursorganenForFractie = [];
   @tracked rangorde = null;
