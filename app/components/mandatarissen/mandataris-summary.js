@@ -34,7 +34,7 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
       .get('bestuursfunctie')
       .get('label');
 
-    if (!this.bestuursOrgaanNames || this.bestuursOrgaanNames == '') {
+    if (!this.bestuursOrgaanNames || this.bestuursOrgaanNames === '') {
       return rol;
     }
     return `${rol} - ${this.bestuursOrgaanNames}`;
