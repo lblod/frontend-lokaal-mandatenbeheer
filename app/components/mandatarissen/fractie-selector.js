@@ -54,7 +54,15 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     if (searchData) {
       queryParams.filter.naam = searchData;
     }
-    return await this.store.query('fractie', queryParams);
+    let fracties = await this.store.query('fractie', queryParams);
+    // Only show one onafhankelijke fractie
+    return fracties.filter((obj, index) => {
+      return (
+        !obj.get('fractietype.isOnafhankelijk') ||
+        index ===
+          fracties.findIndex((o) => o.get('fractietype.isOnafhankelijk'))
+      );
+    });
   }
 
   async createOnafhankelijkeFractie() {
