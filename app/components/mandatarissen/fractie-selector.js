@@ -54,9 +54,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     const mandatarissen = await this.store.query('mandataris', {
       include: 'heeft-lidmaatschap,heeft-lidmaatschap.binnen-fractie',
       filter: {
-        bekleedt: { id: this.mandataris.bekleedt.id },
+        bekleedt: { id: this.args.mandataris.bekleedt.id },
         'is-bestuurlijke-alias-van': {
-          id: this.mandataris.isBestuurlijkeAliasVan.id,
+          id: this.args.mandataris.isBestuurlijkeAliasVan.id,
         },
       },
     });
@@ -146,10 +146,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     }
 
     return type.isOnafhankelijk;
-  }
-
-  get mandataris() {
-    return this.args.mandataris;
   }
 
   get isUpdatingFractie() {
