@@ -31,7 +31,7 @@ export default class MandatenbeheerBestuursorganenNewController extends Controll
       latestBestuursperiod
     );
 
-    // parent route has all bestuursorganen and needs a refresh lest it thinks the list is still the same
+    // parent route has all bestuursorganen and so needs a refresh
     await this.router.refresh();
 
     this.router.transitionTo('organen.beheer.edit', instanceId);
