@@ -67,6 +67,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   async fractiesVanMandatarissen(mandatarissen) {
     const fracties = [];
+    let containsOnafhankelijke = false;
     for (const mandate of mandatarissen) {
       const lidmaatschap = await mandate.heeftLidmaatschap;
       if (!lidmaatschap) {
@@ -80,6 +81,15 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       if (!fracties.find((fractieModel) => fractieModel.id == fractie.id)) {
         fracties.push(fractie);
       }
+
+      if (fractie.get('fractietype.isOnafhankelijk')) {
+        containsOnafhankelijke = true;
+      }
+    }
+
+    if (!containsOnafhankelijke) {
+      let onafhankelijke = await this.fetchOnafhankelijkeFractie();
+      return onafhankelijke ? [...fracties, onafhankelijke] : fracties;
     }
 
     return fracties;
@@ -107,6 +117,21 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
           fracties.findIndex((o) => o.get('fractietype.isOnafhankelijk'))
       );
     });
+  }
+
+  async fetchOnafhankelijkeFractie() {
+    const onafhankelijkeFractieType = (
+      await this.store.query('fractietype', {
+        page: { size: 1 },
+        'filter[:uri:]': FRACTIETYPE_ONAFHANKELIJK,
+      })
+    ).at(0);
+    const onafhankelijke = await this.store.query('fractie', {
+      page: { size: 1 },
+      'filter[fractietype][id]': onafhankelijkeFractieType.id,
+      include: 'fractietype',
+    });
+    return onafhankelijke.length ? onafhankelijke[0] : null;
   }
 
   async createOnafhankelijkeFractie() {
