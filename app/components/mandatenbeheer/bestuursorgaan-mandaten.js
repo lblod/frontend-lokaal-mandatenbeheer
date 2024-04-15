@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 
-export default class MandatenbeheerFractieSelectorComponent extends Component {
+export default class MandatenbeheerBestuursorgaanMandatenComponent extends Component {
   @service store;
   @service toaster;
   @service router;

@@ -3,12 +3,13 @@
   @noMatchesMessage="Geen resultaten"
   @searchMessage="Typ om te zoeken"
   @searchEnabled={{true}}
-  @allowClear={{@allowClear}}
+  @allowClear={{true}}
   @disabled={{@disabled}}
   @placeholder="Zoek fractie"
-  @search={{perform this.searchByName}}
+  @search={{perform this.search}}
   @selected={{this._fractie}}
   @onChange={{this.select}}
+  @onClose={{@onClose}}
   @options={{this.fractieOptions}}
   as |fractie|
 >
