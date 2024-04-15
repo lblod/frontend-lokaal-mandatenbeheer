@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 
 export default class FractiesController extends Controller {
   @service router;
+  @service store;
 
   @tracked page = 0;
   sort = 'naam';
@@ -38,7 +39,7 @@ export default class FractiesController extends Controller {
   @action
   saveModal() {
     this.modal = null;
-    this.send('reloadModel');
+    this.send('reloadModel', this.instanceId);
   }
 
   @action
