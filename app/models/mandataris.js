@@ -52,6 +52,12 @@ export default class MandatarisModel extends Model {
   })
   status;
 
+  @belongsTo('mandataris-publication-status', {
+    async: true,
+    inverse: null,
+  })
+  publicationStatus;
+
   @belongsTo('mandataris', { async: true, inverse: null }) duplicateOf;
 
   @hasMany('contact-punt', {
