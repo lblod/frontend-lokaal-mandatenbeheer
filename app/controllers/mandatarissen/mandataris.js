@@ -19,9 +19,4 @@ export default class MandatarissenMandatarisController extends Controller {
   get persoon() {
     return this.model.mandataris.isBestuurlijkeAliasVan;
   }
-
-  @action
-  routeToPersoon() {
-    this.router.transitionTo('mandatarissen.persoon', this.persoon.id);
-  }
 }
