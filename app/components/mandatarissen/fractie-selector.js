@@ -120,15 +120,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   async fetchOnafhankelijkeFractie() {
-    const onafhankelijkeFractieType = (
-      await this.store.query('fractietype', {
-        page: { size: 1 },
-        'filter[:uri:]': FRACTIETYPE_ONAFHANKELIJK,
-      })
-    ).at(0);
     const onafhankelijke = await this.store.query('fractie', {
       page: { size: 1 },
-      'filter[fractietype][id]': onafhankelijkeFractieType.id,
+      'filter[fractietype][:uri:]': FRACTIETYPE_ONAFHANKELIJK,
       include: 'fractietype',
     });
     return onafhankelijke.length ? onafhankelijke[0] : null;
