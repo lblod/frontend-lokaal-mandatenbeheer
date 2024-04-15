@@ -7,6 +7,7 @@ export default class PersoonModel extends Model {
   @attr gebruikteVoornaam;
   @attr uri;
   @attr('boolean') possibleDuplicate;
+  @attr('datetime') modified;
 
   @belongsTo('geboorte', {
     async: true,
