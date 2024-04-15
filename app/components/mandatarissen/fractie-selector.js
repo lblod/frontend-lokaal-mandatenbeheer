@@ -137,14 +137,4 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     let searchResults = await this.fetchFracties(searchData);
     return searchResults;
   });
-
-  async isFractieIndependent(fractie) {
-    const type = await fractie.fractietype;
-
-    if (!type) {
-      return false;
-    }
-
-    return type.isOnafhankelijk;
-  }
 }
