@@ -1,0 +1,15 @@
+<PowerSelect
+  @selected={{@selectedStatus}}
+  @options={{@options}}
+  class="is-optional"
+  @onChange={{this.selectStatus}}
+  @searchEnabled={{false}}
+  @noMatchesMessage="Geen statussen"
+  as |status|
+>
+  {{#if @options}}
+    {{status.label}}
+  {{else}}
+    Geen statussen
+  {{/if}}
+</PowerSelect>
