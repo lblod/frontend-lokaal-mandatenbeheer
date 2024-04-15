@@ -1,13 +1,15 @@
 import Component from '@glimmer/component';
+
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { restartableTask } from 'ember-concurrency';
 
 export default class MandatenbeheerMandatarisSummaryComponent extends Component {
   @service router;
 
-  get rol() {
-    return this.args.mandataris.bekleedt.get('bestuursfunctie').get('label');
-  }
+  @tracked bestuursorgaanNames;
+
   get status() {
     return this.args.mandataris.status.get('label');
   }
@@ -27,8 +29,46 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
     });
   }
 
+  get rolWithBestuurorgaanNames() {
+    const rol = this.args.mandataris.bekleedt
+      .get('bestuursfunctie')
+      .get('label');
+
+    if (!this.bestuursorgaanNames || this.bestuursorgaanNames === '') {
+      return rol;
+    }
+    return `${rol} - ${this.bestuursorgaanNames}`;
+  }
+
   @action
   linkToDetailPage(mandataris) {
     this.router.transitionTo('mandatarissen.mandataris', mandataris.id);
   }
+
+  setBestuursorganenForMandataris = restartableTask(async () => {
+    this.bestuursorgaanNames = '';
+    const names = [];
+    const bestuursorganenInDeTijd =
+      await this.args.mandataris.get('bekleedt.bevatIn');
+
+    if (!bestuursorganenInDeTijd) {
+      return '';
+    }
+
+    for (const orgaan of bestuursorganenInDeTijd) {
+      if (!orgaan) {
+        return null;
+      }
+
+      const bestuursorgaan = await orgaan.get('isTijdsspecialisatieVan');
+
+      if (!bestuursorgaan) {
+        continue;
+      }
+
+      names.push(bestuursorgaan.naam);
+    }
+
+    this.bestuursorgaanNames = names.join(', ');
+  });
 }

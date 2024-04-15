@@ -1,8 +1,14 @@
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
     <AuHeading @skin="2">Mandaat
-      {{@model.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-      {{@model.mandataris.isBestuurlijkeAliasVan.achternaam}}
+      {{! template-lint-disable no-invalid-interactive }}
+      <span
+        {{on "click" this.routeToPersoon}}
+        class="mimmick-au-link-button-style"
+      >
+        {{this.persoon.gebruikteVoornaam}}
+        {{this.persoon.achternaam}}
+      </span>
       <br />
       {{this.bestuursorganenTitle}}
     </AuHeading>
@@ -11,7 +17,10 @@
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
-    <Mandatarissen::MandatarisCard @mandataris={{@model.mandataris}} />
+    <Mandatarissen::MandatarisCard
+      @mandataris={{@model.mandataris}}
+      @vervangers={{@model.vervangers}}
+    />
   </div>
 
   <div class="au-o-box">

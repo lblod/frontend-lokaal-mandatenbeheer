@@ -1,11 +1,9 @@
-import { attr, belongsTo, hasMany } from '@ember-data/model';
-import AgentInPosition from './agent-in-position';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 
-// INHERITS FROM AGENT-IN-POSITION
-export default class MandatarisModel extends AgentInPosition {
+export default class MandatarisModel extends Model {
   @attr rangorde;
   @attr('datetime') start;
   @attr('datetime') einde;
@@ -15,6 +13,12 @@ export default class MandatarisModel extends AgentInPosition {
   @attr('boolean') isDraft;
 
   @belongsTo('mandaat', { async: true, inverse: 'bekleedDoor' }) bekleedt;
+
+  @belongsTo('persoon', {
+    async: true,
+    inverse: 'isAangesteldAls',
+  })
+  isBestuurlijkeAliasVan;
 
   @belongsTo('lidmaatschap', {
     async: true,
@@ -111,3 +115,25 @@ export async function getUniqueBestuursorganen(mandataris) {
 
   return Array.from(bestuursorganen);
 }
+
+export const getUniqueVervangers = async (mandataris) => {
+  const duplicateVervangers = await mandataris.vervangerVan;
+  const vervangers = new Map();
+
+  for (let vervanger of duplicateVervangers) {
+    const persoon = await vervanger.isBestuurlijkeAliasVan;
+    if (!vervangers.has(persoon.id)) {
+      vervangers.set(persoon.id, vervanger);
+    } else {
+      const existingVervanger = vervangers.get(persoon.id);
+      const existingEinde = existingVervanger.einde;
+      const newEinde = vervanger.einde;
+
+      // Keep the most recent vervanger
+      if (!newEinde || (existingEinde && newEinde > existingEinde)) {
+        vervangers.set(persoon.id, vervanger);
+      }
+    }
+  }
+  return Array.from(vervangers.values());
+};

@@ -32,11 +32,9 @@ export default class PersoonModel extends Model {
   })
   nationalities;
 
-  @hasMany('agent-in-position', {
+  @hasMany('mandataris', {
     async: true,
     inverse: 'isBestuurlijkeAliasVan',
-    polymorphic: true,
-    as: 'persoon',
   })
   isAangesteldAls;
 }

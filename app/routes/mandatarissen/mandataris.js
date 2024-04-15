@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { getUniqueVervangers } from 'frontend-lmb/models/mandataris';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
@@ -11,6 +12,7 @@ export default class MandatarissenMandatarisRoute extends Route {
     const mandataris = await this.getMandataris(params.id);
     const persoon = await mandataris.isBestuurlijkeAliasVan;
     const mandaat = await mandataris.bekleedt;
+    const vervangers = await getUniqueVervangers(mandataris);
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);
 
     const mandatarisEditForm = getFormFrom(this.store, MANDATARIS_EDIT_FORM_ID);
@@ -19,6 +21,7 @@ export default class MandatarissenMandatarisRoute extends Route {
 
     return RSVP.hash({
       mandataris,
+      vervangers,
       mandatarissen,
       mandatarisEditForm,
       bestuursorganen,
@@ -28,13 +31,11 @@ export default class MandatarissenMandatarisRoute extends Route {
   async getMandataris(id) {
     let queryParams = {
       include: [
-        'is-bestuurlijke-alias-van',
         'bekleedt.bestuursfunctie',
         'bekleedt.bevat-in',
         'beleidsdomein',
         'status',
         'tijdelijke-vervangingen',
-        'vervanger-van',
         'heeft-lidmaatschap.binnen-fractie',
       ].join(','),
     };

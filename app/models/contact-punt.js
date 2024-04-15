@@ -29,14 +29,6 @@ export default class ContactPuntModel extends Model {
   })
   secondaryContactPoint;
 
-  @hasMany('agent-in-position', {
-    async: true,
-    inverse: 'contacts',
-    polymorphic: true,
-    as: 'contact-punt',
-  })
-  agentsInPosition;
-
   @hasMany('mandataris', {
     async: true,
     inverse: 'contactPoints',
