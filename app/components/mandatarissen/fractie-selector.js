@@ -29,16 +29,60 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   async loadFracties() {
-    let fracties = await this.fetchFracties();
+    let fracties = [];
+
+    if (this.args.isUpdatingFractie && this._fractie) {
+      fracties = await this.getFractiesWhenUpdateState();
+    } else {
+      fracties = await this.fetchFracties();
+    }
 
     let onafhankelijke = fracties.find((f) =>
       f.get('fractietype.isOnafhankelijk')
     );
+
     if (!onafhankelijke) {
       onafhankelijke = await this.createOnafhankelijkeFractie();
-      fracties = [...fracties, onafhankelijke];
+      this.fractieOptions = [...fracties, onafhankelijke];
+      return;
     }
+
     this.fractieOptions = fracties;
+  }
+
+  async getFractiesWhenUpdateState() {
+    const mandatarissen = await this.store.query('mandataris', {
+      include: 'heeft-lidmaatschap,heeft-lidmaatschap.binnen-fractie',
+      filter: {
+        bekleedt: { id: this.args.mandataris.bekleedt.id },
+        'is-bestuurlijke-alias-van': {
+          id: this.args.mandataris.isBestuurlijkeAliasVan.id,
+        },
+      },
+    });
+    const fracties = await this.fractiesVanMandatarissen(mandatarissen);
+
+    return fracties;
+  }
+
+  async fractiesVanMandatarissen(mandatarissen) {
+    const fracties = [];
+    for (const mandate of mandatarissen) {
+      const lidmaatschap = await mandate.heeftLidmaatschap;
+      if (!lidmaatschap) {
+        continue;
+      }
+      const fractie = await lidmaatschap.binnenFractie;
+      if (!fractie) {
+        continue;
+      }
+
+      if (!fracties.find((fractieModel) => fractieModel.id == fractie.id)) {
+        fracties.push(fractie);
+      }
+    }
+
+    return fracties;
   }
 
   async fetchFracties(searchData) {
@@ -93,4 +137,14 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     let searchResults = await this.fetchFracties(searchData);
     return searchResults;
   });
+
+  async isFractieIndependent(fractie) {
+    const type = await fractie.fractietype;
+
+    if (!type) {
+      return false;
+    }
+
+    return type.isOnafhankelijk;
+  }
 }
