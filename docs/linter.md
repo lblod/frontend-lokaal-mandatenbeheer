@@ -10,7 +10,7 @@ Javascript files are verified with [ESlint](https://eslint.org/). Configuration 
 
 A few different plugins are used to handle the styling of this specific project. By default the recommended configuration of eslint is used, but because this is an ember project, this is extended with an [eslint-ember-plugin](https://github.com/ember-cli/eslint-plugin-ember). For test files [eslint-plugin-qunit](https://github.com/platinumazure/eslint-plugin-qunit) is used. For specific rules regarding Node.js [eslint-plugin-n](https://github.com/eslint-community/eslint-plugin-n#readme) is configured as well. These plugins come with ember by default.
 
-Two extra plugins are used for integrating eslint with prettier. [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) disables all rules in eslint, that might conflicht with prettier settings. [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) is used to run prettier as if it were eslint rules. Both these plugins are configured by using `'plugin:prettier/recommended'` in the extends property.
+Two extra plugins are used for integrating eslint with prettier. [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) disables all rules in eslint, that might conflict with prettier settings. [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) is used to run prettier as if it were eslint rules. Both these plugins are configured by using `'plugin:prettier/recommended'` in the extends property.
 
 ### Handlebar files
 
@@ -95,51 +95,51 @@ Similar to the linter, prettier can also be used in different ways:
 
 1. You can manually execute prettier.
    Two commands are useful here:
-   
+
    ```
    npx prettier . --check
    ```
-   
+
    This command checks whether there are problems in any of your files for which the prettier is configured. Instead of using the . you can also specify a directory or file to check.
-   
+
    ```
    npx prettier . --write
    ```
-   
+
    This command will try to fix all warnings thrown by prettier and write these to file.
 
-2. The prettier can also run automatically if you define them in your editor settings, however the instructions below only format when you save a file (all other files will remain untouched). In VS Code this can be done with a [plugin](https://github.com/prettier/prettier-vscode), more information can be found in the provided link. In short this can be activated by adding some config in your `user.settings` file. Be careful, you can have a global `user.settings` file, but you can also have a workspace specific file, which overwrites the global user settings. 
+2. The prettier can also run automatically if you define them in your editor settings, however the instructions below only format when you save a file (all other files will remain untouched). In VS Code this can be done with a [plugin](https://github.com/prettier/prettier-vscode), more information can be found in the provided link. In short this can be activated by adding some config in your `user.settings` file. Be careful, you can have a global `user.settings` file, but you can also have a workspace specific file, which overwrites the global user settings.
    To set which formatter you want to use you add the following piece of code javascript files:
-   
+
    ```
    "[javascript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
    ```
-   
+
    This will automatically run the prettier with the settings defined in `.prettierrc.js` for the specified file type, in this case for javascript files. Since we work with ember we also want some formatting for the handlebar files. This can be done by adding the following:
-   
+
    ```
    "[handlebars]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
    },
    ```
-   
+
    This can be done for any file type.
-   
+
    Disclaimer: if you use the [Glimmer Templates Syntax for VS Code plugin](https://marketplace.visualstudio.com/items?itemName=lifeart.vscode-glimmer-syntax), this might influence your templates as well, but the interaction between both is not entirely clear.
-   
+
    To automatically run formatting (prettier) on save you can add the following line:
-   
+
    ```
    "editor.formatOnSave": true,
    ```
-   
+
    Either you add this globally or in the settings of a specific type of file, see above.
 
 ## Automation
 
-It is also possible to add git hooks which would run the linter and prettier before you are able to commit. This is not supported as of now. It is still under review how we want to do this, either with a bash script which is ran as a git commit hook or with a dedicated plugin which is added to the repo. Once this is finalised, more info will be added here.
+It is also possible to add git hooks which would run the linter and prettier before you are able to commit. This is supported with the [husky plugin](https://typicode.github.io/husky/), this simply runs the linter (which also includes the prettier warnings due to another plugin) before you commit. If this throws errors, your commit will be cancelled. The configuration for this plugin can be found under the .husky folder. Multiple types of hooks are supported, for now we just use the pre-commit hook to run the linter before committing. The hook can be temporarily disabled by just adding -n flag to your git command.
 
 ## Extra
 
