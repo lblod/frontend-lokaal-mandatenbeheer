@@ -42,14 +42,14 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
 
   @action
   linkToDetailPage(mandataris) {
-    this.router.transitionTo('mandatarissen.mandataris', mandataris.id);
+    this.router.transitionTo('mandatarissen.mandataris', mandataris.id)
   }
 
   setBestuursorganenForMandataris = restartableTask(async () => {
-    this.bestuursorgaanNames = '';
+    this.bestuursorgaan_names = '';
     const names = [];
     const bestuursorganenInDeTijd =
-      await this.args.mandataris.get('bekleedt.bevatIn');
+      await this.args.mandataris.get('bekleedt.bevatIn')
 
     if (!bestuursorganenInDeTijd) {
       return '';
