@@ -6,6 +6,7 @@ import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestu
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
+import { MANDATARIS_DRAFT_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class OrganenMandatarisNewController extends Controller {
   @service router;
@@ -40,17 +41,17 @@ export default class OrganenMandatarisNewController extends Controller {
 
   @action
   async buildSourceTtl(instanceUri) {
-    const isDraft = `<${instanceUri}> <http://mu.semte.ch/vocabularies/ext/isDraft> "true".`;
+    const draftTriple = `<${instanceUri}> <http://mu.semte.ch/vocabularies/ext/lmb/hasPublicationStatus> <${MANDATARIS_DRAFT_STATE}>.`;
     if (!this.person) {
-      return isDraft;
+      return draftTriple;
     }
     const persoon = await this.store.findRecord('persoon', this.person);
     if (!persoon) {
-      return isDraft;
+      return draftTriple;
     }
 
     return `
-    ${isDraft}
+    ${draftTriple}
     <${instanceUri}> <http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan> <${persoon.uri}>.
     `;
   }
