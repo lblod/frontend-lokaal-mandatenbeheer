@@ -4,6 +4,7 @@ export default class FormInstancesRoute extends Route {
   queryParams = {
     page: { refreshModel: false },
     size: { refreshModel: false },
+    sort: { refreshModel: true },
   };
 
   async model() {

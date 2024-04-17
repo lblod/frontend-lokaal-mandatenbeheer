@@ -12,6 +12,7 @@
 
   <AuDataTable
     @content={{this.formInfo.instances}}
+    @sort={{@sort}}
     @page={{@page}}
     @size={{@size}}
     @isLoading={{not this.initialized}}
@@ -21,7 +22,11 @@
     <t.content as |c|>
       <c.header>
         {{#each this.formInfo.headers as |header|}}
-          <th>{{header}}</th>
+          <AuDataTableThSortable
+            @field={{header}}
+            @currentSorting={{@sort}}
+            @label={{header}}
+          />
         {{/each}}
         <th>{{! Bewerk }}</th>
         <th>{{! Delete }}</th>

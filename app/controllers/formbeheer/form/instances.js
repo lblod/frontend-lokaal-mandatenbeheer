@@ -4,10 +4,11 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class FormInstancesController extends Controller {
-  queryParams = ['page', 'size'];
+  queryParams = ['page', 'size', 'sort'];
 
   @service router;
   @tracked page = 0;
+  @tracked sort = 'uri';
   size = 10;
 
   @action
