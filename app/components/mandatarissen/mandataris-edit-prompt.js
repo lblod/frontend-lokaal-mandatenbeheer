@@ -6,6 +6,8 @@ import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestu
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
 import { inject as service } from '@ember/service';
+import { queryRecord } from 'frontend-lmb/utils/query-record';
+import { MANDATARIS_BEKRACHTIGD_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 const CHANGE_MODE = 'change';
 const CORRECT_MODE = 'correct';
@@ -13,6 +15,7 @@ const CORRECT_MODE = 'correct';
 export default class MandatenbeheerMandatarisEditPromptComponent extends Component {
   @tracked editMode = null;
   @tracked publicationStatusOptions = [];
+  @tracked selectedPublicationStatus;
   @service store;
   @service router;
 
@@ -34,13 +37,24 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
     this.loadPublicationStatusOptions();
   }
 
+  async getBekrachtigdStatus() {
+    return await queryRecord(this.store, 'mandataris-publication-status', {
+      'filter[:uri:]': MANDATARIS_BEKRACHTIGD_STATE,
+    });
+  }
+
   async loadPublicationStatusOptions() {
     const publicationStatus = await this.mandataris.publicationStatus;
-    if (publicationStatus?.isBekrachtigd) {
-      this.publicationStatusOptions = [publicationStatus];
-    } else {
-      this.publicationStatusOptions = this.args.publicationStatuses;
+    const bekrachtigdStatus = await this.getBekrachtigdStatus();
+
+    if (!publicationStatus || publicationStatus.isBekrachtigd) {
+      this.publicationStatusOptions = [bekrachtigdStatus];
+      this.selectedPublicationStatus = bekrachtigdStatus;
+      return;
     }
+
+    this.publicationStatusOptions = this.args.publicationStatuses;
+    this.selectedPublicationStatus = publicationStatus;
   }
 
   @action
