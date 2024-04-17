@@ -19,11 +19,9 @@ module(
       assert.dom(this.element).hasText('');
 
       // Template block usage:
-      await render(hbs`
-      <Mandatarissen::Mandataris::PublicationStatusSelector>
-        template block text
-      </Mandatarissen::Mandataris::PublicationStatusSelector>
-    `);
+      await render(hbs`<Mandatarissen::Mandataris::PublicationStatusSelector>
+  template block text
+</Mandatarissen::Mandataris::PublicationStatusSelector>`);
 
       assert.dom(this.element).hasText('template block text');
     });
