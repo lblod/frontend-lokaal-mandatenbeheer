@@ -46,10 +46,24 @@
   </div>
   <div class="au-o-grid__item au-u-1-3@medium">
     <AuContent @skin="small">
-      <AuHeading @level="4" @skin="5">Bekrachtiging</AuHeading>
-      <p>Verander de publicatie status van het mandaat. Indien u het mandaat
-        bekrachtigt, wordt het officieel opgenomen in de Vlaamse
-        Mandatendatabank.</p>
+      <AuHeading @level="4" @skin="5">Publicatie status</AuHeading>
+      <p>Verander de publicatie status van het mandaat:</p>
+      <ul>
+        <li>
+          Draft mandaten dienen enkel als input voor de zitting.
+        </li>
+        <li>
+          Effectieve mandaten dienen als actuele data voor de dagelijkse
+          werking.
+        </li>
+        <li>
+          Indien u het mandaat bekrachtigt, wordt het officieel opgenomen in de
+          Vlaamse Mandatendatabank.
+        </li>
+      </ul>
+      <p>
+        De bekrachtiging van een mandaat is niet omkeerbaar.
+      </p>
       <Mandatarissen::Mandataris::PublicationStatusSelector
         @options={{this.publicationStatusOptions}}
         @selectedStatus={{@mandataris.publicationStatus}}
