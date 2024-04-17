@@ -36,7 +36,7 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
 
   async loadPublicationStatusOptions() {
     const publicationStatus = await this.mandataris.publicationStatus;
-    if (publicationStatus.isBekrachtigd) {
+    if (publicationStatus?.isBekrachtigd) {
       this.publicationStatusOptions = [publicationStatus];
     } else {
       this.publicationStatusOptions = this.args.publicationStatuses;
