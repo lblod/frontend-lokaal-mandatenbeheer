@@ -102,20 +102,7 @@ export default class FractiesRoute extends Route {
   }
 
   @action
-  async reloadModel(instanceId) {
-    if (!instanceId) {
-      this.refresh();
-      return;
-    }
-
-    const modifiedFractie = await this.store.findRecord('fractie', instanceId);
-
-    if (modifiedFractie) {
-      await modifiedFractie.reload();
-      modifiedFractie.modified = new Date();
-      await modifiedFractie.save();
-    }
-
+  async reloadModel() {
     this.refresh();
   }
 }

@@ -39,7 +39,7 @@ export default class FractiesController extends Controller {
   @action
   saveModal() {
     this.modal = null;
-    this.send('reloadModel', this.instanceId);
+    this.send('reloadModel');
   }
 
   @action
