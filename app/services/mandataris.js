@@ -1,5 +1,6 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
+import { getDraftStatus } from 'frontend-lmb/utils/get-draft-status';
 import moment from 'moment';
 
 export default class MandatarisService extends Service {
@@ -48,14 +49,14 @@ export default class MandatarisService extends Service {
     }
 
     const newMandataris = this.store.createRecord('mandataris', {
-      bekleedt: toReplace.bekleedt,
-      isBestuurlijkeAliasVan: replacementPerson,
+      rangorde: newMandatarisState.rangorde,
       start: newMandatarisState.start,
       einde: newMandatarisState.einde,
+      bekleedt: toReplace.bekleedt,
+      isBestuurlijkeAliasVan: replacementPerson,
       beleidsdomein: await newMandatarisState.beleidsdomein,
-      rangorde: newMandatarisState.rangorde,
       status: toReplace.status,
-      isDraft: true,
+      publicationStatus: await getDraftStatus(),
     });
     await newMandataris.save();
 
