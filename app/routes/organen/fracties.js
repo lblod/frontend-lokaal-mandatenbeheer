@@ -102,7 +102,7 @@ export default class FractiesRoute extends Route {
   }
 
   @action
-  async reloadModel() {
+  reloadModel() {
     this.refresh();
   }
 }
