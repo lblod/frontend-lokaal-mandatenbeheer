@@ -102,6 +102,7 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   async onUpdatePublicationStatus(publicationStatus) {
     this.mandataris.publicationStatus = publicationStatus;
     await this.mandataris.save();
+    this.router.refresh();
   }
 
   @action
