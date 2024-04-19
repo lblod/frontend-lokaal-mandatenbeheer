@@ -5,6 +5,16 @@
         {{this.formInfo.formDefinition.id}}
         Form Instances</AuHeading>
     </Group>
+    <Group class="au-u-1-3@medium">
+      <AuInput
+        value={{@filter}}
+        @icon="search"
+        @iconAlignment="left"
+        @width="block"
+        placeholder="Zoek {{this.formInfo.formDefinition.id}}"
+        {{on "input" (perform @search value="target.value")}}
+      />
+    </Group>
     <Group>
       <AuButton {{on "click" @onCreate}}>Voeg form instance toe</AuButton>
     </Group>
