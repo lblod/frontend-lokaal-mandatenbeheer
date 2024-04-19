@@ -9,6 +9,14 @@ export default class MandatarisModel extends Model {
   @attr('datetime') einde;
   @attr duplicationReason;
   @attr uri;
+  // isDraft will be undefined for Mandatarissen that existed before isDraft status was added
+  @attr('boolean') isDraft;
+  @attr('datetime', {
+    defaultValue() {
+      return new Date();
+    },
+  })
+  modified;
 
   @belongsTo('mandaat', { async: true, inverse: 'bekleedDoor' }) bekleedt;
 
