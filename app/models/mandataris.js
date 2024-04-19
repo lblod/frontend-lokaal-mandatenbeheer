@@ -9,6 +9,12 @@ export default class MandatarisModel extends Model {
   @attr('datetime') einde;
   @attr duplicationReason;
   @attr uri;
+  @attr('datetime', {
+    defaultValue() {
+      return new Date();
+    },
+  })
+  modified;
 
   @belongsTo('mandaat', { async: true, inverse: 'bekleedDoor' }) bekleedt;
 
