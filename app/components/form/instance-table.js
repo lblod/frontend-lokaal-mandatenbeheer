@@ -46,7 +46,7 @@ export default class InstanceTableComponent extends Component {
     const form = this.args.formDefinition;
     const id = form.id;
     const response = await fetch(
-      `/form-content/${id}/instances?page[size]=${this.args.size}&page[number]=${this.args.page}`
+      `/form-content/${id}/instances?page[size]=${this.args.size}&page[number]=${this.args.page}&sort=${this.args.sort}&filter=${this.args.filter}`
     );
     if (!response.ok) {
       let error = new Error(response.statusText);
