@@ -2,13 +2,14 @@
   @selected={{@selectedStatus}}
   @options={{@options}}
   class="is-optional"
-  @onChange={{this.selectStatus}}
+  @onChange={{@onSelect}}
   @searchEnabled={{false}}
+  @disabled={{@disabled}}
   @noMatchesMessage="Geen statussen"
   @placeholder="Selecteer een status"
   as |status|
 >
-  {{#if @options}}
+  {{#if status.label}}
     {{status.label}}
   {{else}}
     Geen statussen

@@ -14,9 +14,6 @@ export default class MandatarissenMandatarisRoute extends Route {
     const mandaat = await mandataris.bekleedt;
     const vervangers = await getUniqueVervangers(mandataris);
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);
-    const publicationStatuses = await this.store.findAll(
-      'mandataris-publication-status-code'
-    );
 
     const mandatarisEditForm = getFormFrom(this.store, MANDATARIS_EDIT_FORM_ID);
 
@@ -26,7 +23,6 @@ export default class MandatarissenMandatarisRoute extends Route {
       mandataris,
       vervangers,
       mandatarissen,
-      publicationStatuses,
       mandatarisEditForm,
       bestuursorganen,
     });

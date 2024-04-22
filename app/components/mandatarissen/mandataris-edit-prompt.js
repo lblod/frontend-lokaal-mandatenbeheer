@@ -16,6 +16,7 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   @tracked editMode = null;
   @tracked publicationStatusOptions = [];
   @tracked selectedPublicationStatus;
+  @tracked disabled = false;
   @service store;
   @service router;
 
@@ -43,17 +44,30 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
     });
   }
 
-  async loadPublicationStatusOptions() {
-    const publicationStatus = await this.mandataris.publicationStatus;
+  isBekrachtigd(publicationStatus) {
+    return !publicationStatus || publicationStatus.isBekrachtigd;
+  }
+
+  async setBekrachtigdStatus() {
     const bekrachtigdStatus = await this.getBekrachtigdStatus();
 
-    if (!publicationStatus || publicationStatus.isBekrachtigd) {
-      this.publicationStatusOptions = [bekrachtigdStatus];
-      this.selectedPublicationStatus = bekrachtigdStatus;
+    this.disabled = true;
+    this.selectedPublicationStatus = bekrachtigdStatus;
+  }
+
+  async loadPublicationStatusOptions() {
+    const publicationStatus = await this.mandataris.publicationStatus;
+
+    if (this.isBekrachtigd(publicationStatus)) {
+      await this.setBekrachtigdStatus();
       return;
     }
 
-    this.publicationStatusOptions = this.args.publicationStatuses;
+    const publicationStatuses = await this.store.findAll(
+      'mandataris-publication-status-code'
+    );
+
+    this.publicationStatusOptions = publicationStatuses;
     this.selectedPublicationStatus = publicationStatus;
   }
 
@@ -103,9 +117,13 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
 
   @action
   async onUpdatePublicationStatus(publicationStatus) {
+    if (this.isBekrachtigd(publicationStatus)) {
+      await this.setBekrachtigdStatus();
+    } else {
+      this.selectedPublicationStatus = publicationStatus;
+    }
     this.mandataris.publicationStatus = publicationStatus;
     await this.mandataris.save();
-    this.router.refresh();
   }
 
   @action
