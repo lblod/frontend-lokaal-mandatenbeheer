@@ -141,16 +141,16 @@ export default class SharedBreadCrumbComponent extends Component {
     },
   ];
 
-  leidinggevendenbeheer = [
+  leidinggevenden = [
     {
       route: 'leidinggevendenbeheer.index',
-      crumbs: [{ label: 'Leidinggevendenbeheer' }],
+      crumbs: [{ label: 'Leidinggevenden' }],
     },
     {
       route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.index',
       crumbs: [
         {
-          label: 'Leidinggevendenbeheer',
+          label: 'Leidinggevenden',
           link: 'leidinggevendenbeheer',
         },
         { label: 'Functionaris' },
@@ -160,7 +160,7 @@ export default class SharedBreadCrumbComponent extends Component {
       route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.edit',
       crumbs: [
         {
-          label: 'Leidinggevendenbeheer',
+          label: 'Leidinggevenden',
           link: 'leidinggevendenbeheer',
         },
         { label: 'Bewerk functionaris' },
@@ -170,7 +170,7 @@ export default class SharedBreadCrumbComponent extends Component {
       route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.new',
       crumbs: [
         {
-          label: 'Leidinggevendenbeheer',
+          label: 'Leidinggevenden',
           link: 'leidinggevendenbeheer',
         },
         { label: 'Nieuwe aanstellingsperiode' },
@@ -180,7 +180,7 @@ export default class SharedBreadCrumbComponent extends Component {
       route: 'leidinggevendenbeheer.bestuursfunctie.contact-info',
       crumbs: [
         {
-          label: 'Leidinggevendenbeheer',
+          label: 'Leidinggevenden',
           link: 'leidinggevendenbeheer',
         },
         { label: 'Bewerk contactgegevens' },
@@ -188,22 +188,22 @@ export default class SharedBreadCrumbComponent extends Component {
     },
   ];
 
-  formbeheer = [
+  forms = [
     {
       route: 'formbeheer.index',
-      crumbs: [{ label: 'Formbeheer' }],
+      crumbs: [{ label: 'Forms' }],
     },
     {
       route: 'formbeheer.form.instances',
       crumbs: [
-        { label: 'Formbeheer', link: 'formbeheer' },
+        { label: 'Forms', link: 'formbeheer' },
         { label: 'Form instances' },
       ],
     },
     {
       route: 'formbeheer.form.new',
       crumbs: [
-        { label: 'Formbeheer', link: 'formbeheer' },
+        { label: 'Forms', link: 'formbeheer' },
         { label: 'Form', link: 'formbeheer.form.instances' },
         { label: 'Nieuwe form instance' },
       ],
@@ -211,7 +211,7 @@ export default class SharedBreadCrumbComponent extends Component {
     {
       route: 'formbeheer.form.instance',
       crumbs: [
-        { label: 'Formbeheer', link: 'formbeheer' },
+        { label: 'Forms', link: 'formbeheer' },
         { label: 'Form', link: 'formbeheer.form.instances' },
         { label: 'Bewerk form instance' },
       ],
@@ -220,8 +220,8 @@ export default class SharedBreadCrumbComponent extends Component {
   bread = this.bestuursorganen.concat(
     this.mandatarissen,
     this.verkiezingen,
-    this.leidinggevendenbeheer,
-    this.formbeheer
+    this.leidinggevenden,
+    this.forms
   );
 
   get crumbsForRoute() {
