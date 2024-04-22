@@ -9,31 +9,29 @@
       <AuDataTableThSortable
         @field="naam"
         @currentSorting={{@sort}}
-        @label="Naam"
+        @label="Bestuursorgaan"
       />
+      <th>Type</th>
       <th>Aantal leden</th>
-      <th>{{! Bewerk Action }}</th>
-      <th>{{! Archive Action }}</th>
+      <th>Einddatum</th>
+      <th>Status orgaan</th>
     </c.header>
 
     <c.body as |row|>
-      <td>{{row.naam}}</td>
-      <td>{{await row.nbMembers}}</td>
       <td>
         <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
-          <AuIcon @icon="pencil" @alignment="left" />
-          Bewerk
+          {{row.naam}}
         </LinkTo>
       </td>
+      <td>{{row.classificatie.label}}</td>
+      <td>{{await row.nbMembers}}</td>
       <td>
-        {{#if (await row.isDecretaal)}}
-          Decretaal
+        {{moment-format row.deactivatedAt "DD-MM-YYYY"}}</td>
+      <td>
+        {{#if row.isActive}}
+          Actief
         {{else}}
-          <AuButton
-            @icon="archive"
-            @skin="link"
-            {{on "click" (fn @archive row)}}
-          >Archiveer</AuButton>
+          Inactief
         {{/if}}
       </td>
     </c.body>

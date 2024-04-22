@@ -9,24 +9,19 @@ export default class OrganenbeheerIndexRoute extends Route {
   // can't use pagination as we are filtering frontend side on optional properties, which seems to have limited support
   pageSize = 20000;
   queryParams = {
-    activeSort: { refreshModel: true },
-    inactiveSort: { refreshModel: true },
+    sort: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('organen');
 
-    const allOrgans = await this.getOrgans(parentModel.bestuurseenheid);
+    const allOrganen = await this.getOrgans(parentModel.bestuurseenheid);
+    const organen = [...allOrganen];
 
-    const activeOrganen = allOrgans.filter((orgaan) => !orgaan.deactivatedAt);
-    this.sortBy(activeOrganen, params.activeSort);
-
-    const inactiveOrganen = allOrgans.filter((orgaan) => orgaan.deactivatedAt);
-    this.sortBy(inactiveOrganen, params.inactiveSort);
+    this.sortBy(organen, params.sort);
 
     return {
-      activeOrganen,
-      inactiveOrganen,
+      organen,
     };
   }
 
@@ -46,8 +41,8 @@ export default class OrganenbeheerIndexRoute extends Route {
     });
   }
 
-  async getOrgans(sort, bestuurseenheid, active = true) {
-    const queryOptions = this.getOptions(sort, bestuurseenheid, active);
+  async getOrgans(bestuurseenheid) {
+    const queryOptions = this.getOptions(bestuurseenheid);
     const organen = await this.store.query('bestuursorgaan', queryOptions);
     return organen;
   }

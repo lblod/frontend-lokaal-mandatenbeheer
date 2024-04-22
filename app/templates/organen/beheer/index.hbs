@@ -2,7 +2,7 @@
 
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
-    <AuHeading @skin="2">Beheer bestuursorganen</AuHeading>
+    <AuHeading @skin="2">Bestuursorganen</AuHeading>
   </Group>
   <Group>
     <AuButton @skin="primary" {{on "click" this.createNewOrgaan}}>
@@ -13,21 +13,11 @@
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
-    <AuHeading @skin="3">Actieve bestuursorganen</AuHeading>
-    <Organen::ActiveOrgaanTable
-      @content={{@model.activeOrganen}}
-      @sort={{this.activeSort}}
-      @editRoute="organen.beheer.edit"
+    <Organen::OrgaanTable
+      @content={{@model.organen}}
+      @sort={{this.sort}}
+      @editRoute="organen.orgaan"
       @archive={{this.archiveOrgaan}}
-    />
-  </div>
-  <div class="au-o-box">
-    <AuHeading @skin="3">Inactieve bestuursorganen</AuHeading>
-    <Organen::InactiveOrgaanTable
-      @content={{@model.inactiveOrganen}}
-      @sort={{this.inactiveSort}}
-      @editRoute="organen.beheer.edit"
-      @dearchive={{this.deArchiveOrgaan}}
     />
   </div>
 </div>
