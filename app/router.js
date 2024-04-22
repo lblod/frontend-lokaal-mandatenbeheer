@@ -57,7 +57,7 @@ Router.map(function () {
     });
   });
 
-  this.route('leidinggevendenbeheer', function () {
+  this.route('leidinggevenden', function () {
     this.route(
       'bestuursfunctie',
       { path: '/:bestuursfunctie_id' },
@@ -71,7 +71,7 @@ Router.map(function () {
     );
   });
 
-  this.route('formbeheer', function () {
+  this.route('forms', function () {
     this.route('form', { path: '/:id' }, function () {
       this.route('new');
       this.route('instances');

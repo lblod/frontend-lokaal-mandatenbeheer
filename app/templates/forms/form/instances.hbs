@@ -1,0 +1,14 @@
+{{page-title "Instances"}}
+<div class="au-c-body-container au-c-body-container--scroll">
+  <Form::InstanceTable
+    @onCreate={{this.onCreate}}
+    @sort={{this.sort}}
+    @page={{this.page}}
+    @size={{this.size}}
+    @filter={{this.filter}}
+    @search={{this.search}}
+    @formDefinition={{this.model.formDefinition}}
+    @onRemoveInstance={{this.onRemoveInstance}}
+    @editRoute="forms.form.instance"
+  />
+</div>

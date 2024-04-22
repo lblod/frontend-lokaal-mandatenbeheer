@@ -1,0 +1,14 @@
+<Leidinggevenden::ContactInfoItem
+  @item={{@contactinfo.email}}
+  @text="Geen mailadres"
+  @link="mailto:{{@contactinfo.email}}"
+/>
+<Leidinggevenden::ContactInfoItem
+  @item={{@contactinfo.telefoon}}
+  @text="geen telefoonnummer"
+  @link="tel:{{@contactinfo.telefoon}}"
+/>
+<Leidinggevenden::ContactInfoItem
+  @item={{@contactinfo.adres.volledigAdres}}
+  @text="geen adres"
+/>
