@@ -8,6 +8,7 @@ import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules
 import { inject as service } from '@ember/service';
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import { MANDATARIS_BEKRACHTIGD_STATE } from 'frontend-lmb/utils/well-known-uris';
+import { getDraftStatus } from 'frontend-lmb/utils/get-draft-status';
 
 const CHANGE_MODE = 'change';
 const CORRECT_MODE = 'correct';
@@ -105,12 +106,14 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   }
 
   @action
-  onUpdateState(newMandataris) {
+  async onUpdateState(newMandataris) {
     this.editMode = null;
     if (
       newMandataris != this.args.mandataris &&
       this.args.onMandatarisChanged
     ) {
+      this.disabled = false;
+      this.selectedPublicationStatus = await getDraftStatus(this.store);
       this.args.onMandatarisChanged(newMandataris);
     }
   }
