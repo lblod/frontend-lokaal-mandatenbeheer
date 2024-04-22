@@ -9,7 +9,3 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 ## Links to other PR's
 
 - https://github.com/lblod/frontend-lokaal-mandatenbeheer/pull/180
-
-## Attachments
-
-- /
