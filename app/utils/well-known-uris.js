@@ -11,8 +11,8 @@ export const BESTUURSEENHEID_CLASSIFICATIECODE_OCMW =
 export const MANDATARIS_VERHINDERD_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/c301248f-0199-45ca-b3e5-4c596731d5fe';
 export const MANDATARIS_BEKRACHTIGD_STATE =
-  'http://data.lblod.info/id/concept/MandatarisPublicationStatus/9d8fd14d-95d0-4f5e-b3a5-a56a126227b6';
+  'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/9d8fd14d-95d0-4f5e-b3a5-a56a126227b6';
 export const MANDATARIS_DRAFT_STATE =
-  'http://data.lblod.info/id/concept/MandatarisPublicationStatus/588ce330-4abb-4448-9776-a17d9305df07';
+  'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/588ce330-4abb-4448-9776-a17d9305df07';
 export const BELEIDSDOMEIN_CODES_CONCEPT_SCHEME =
   'http://data.vlaanderen.be/id/conceptscheme/BeleidsdomeinCode';

@@ -38,7 +38,7 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   }
 
   async getBekrachtigdStatus() {
-    return await queryRecord(this.store, 'mandataris-publication-status', {
+    return await queryRecord(this.store, 'mandataris-publication-status-code', {
       'filter[:uri:]': MANDATARIS_BEKRACHTIGD_STATE,
     });
   }

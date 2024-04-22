@@ -56,7 +56,7 @@ export default class MandatarisModel extends Model {
   })
   status;
 
-  @belongsTo('mandataris-publication-status', {
+  @belongsTo('mandataris-publication-status-code', {
     async: true,
     inverse: null,
   })
