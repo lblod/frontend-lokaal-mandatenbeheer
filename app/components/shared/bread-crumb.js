@@ -191,25 +191,28 @@ export default class SharedBreadCrumbComponent extends Component {
   forms = [
     {
       route: 'forms.index',
-      crumbs: [{ label: 'Forms' }],
+      crumbs: [{ label: 'Overzicht forms' }],
     },
     {
       route: 'forms.form.instances',
-      crumbs: [{ label: 'Forms', link: 'forms' }, { label: 'Form instances' }],
+      crumbs: [
+        { label: 'Overzicht forms', link: 'forms' },
+        { label: 'Form instances' },
+      ],
     },
     {
       route: 'forms.form.new',
       crumbs: [
-        { label: 'Forms', link: 'forms' },
-        { label: 'Form', link: 'forms.form.instances' },
+        { label: 'Overzicht forms', link: 'forms' },
+        { label: 'Form instances', link: 'forms.form.instances' },
         { label: 'Nieuwe form instance' },
       ],
     },
     {
       route: 'forms.form.instance',
       crumbs: [
-        { label: 'Forms', link: 'forms' },
-        { label: 'Form', link: 'forms.form.instances' },
+        { label: 'Overzicht forms', link: 'forms' },
+        { label: 'Form instances', link: 'forms.form.instances' },
         { label: 'Bewerk form instance' },
       ],
     },
