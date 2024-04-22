@@ -2,13 +2,13 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class LeidinggevendenbeheerBestuursfunctieContactInfoController extends Controller {
+export default class LeidinggevendenBestuursfunctieContactInfoController extends Controller {
   @service router;
 
   @action
   save() {
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfunctie.functionarissen',
+      'leidinggevenden.bestuursfunctie.functionarissen',
       this.model.bestuursfunctie.id
     );
   }
@@ -18,7 +18,7 @@ export default class LeidinggevendenbeheerBestuursfunctieContactInfoController e
   @action
   cancel() {
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfunctie.functionarissen',
+      'leidinggevenden.bestuursfunctie.functionarissen',
       this.model.bestuursfunctie.id
     );
   }

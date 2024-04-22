@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenIndexController extends Controller {
+export default class LeidinggevendenBestuursfunctieFunctionarissenIndexController extends Controller {
   @service() router;
 
   sort = 'start';
@@ -13,7 +13,7 @@ export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenIndexCon
   @action
   handleVoegNieuweAanstellingsperiodeClick() {
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfunctie.functionarissen.new'
+      'leidinggevenden.bestuursfunctie.functionarissen.new'
     );
   }
 }

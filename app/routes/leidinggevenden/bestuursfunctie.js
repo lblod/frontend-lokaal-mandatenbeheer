@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { BESTUURSEENHEID_CLASSIFICATIECODE_OCMW } from 'frontend-lmb/utils/well-known-uris';
 
-export default class LeidinggevendenbeheerBestuursfunctieRoute extends Route {
+export default class LeidinggevendenBestuursfunctieRoute extends Route {
   @service currentSession;
   @service router;
   @service store;
@@ -14,7 +14,7 @@ export default class LeidinggevendenbeheerBestuursfunctieRoute extends Route {
       bestuurseenheidClassificatie.uri ===
       BESTUURSEENHEID_CLASSIFICATIECODE_OCMW
     ) {
-      this.router.transitionTo('leidinggevendenbeheer.bestuursfuncties.index');
+      this.router.transitionTo('leidinggevenden.bestuursfuncties.index');
     }
   }
 

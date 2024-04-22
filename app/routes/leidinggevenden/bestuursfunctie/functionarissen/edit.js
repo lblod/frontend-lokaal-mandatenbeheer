@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { FUNCTIONARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
-export default class LeidinggevendenbeheerBestuursfunctieFunctionarissenEditRoute extends Route {
+export default class LeidinggevendenBestuursfunctieFunctionarissenEditRoute extends Route {
   @service store;
 
   async model(params) {

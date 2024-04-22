@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class LeidinggevendenbeheerIndexController extends Controller {
+export default class LeidinggevendenIndexController extends Controller {
   @service router;
 
   page = 0;
@@ -11,7 +11,7 @@ export default class LeidinggevendenbeheerIndexController extends Controller {
   @action
   displayBestuursfunctie(bestuursfunctie) {
     this.router.transitionTo(
-      'leidinggevendenbeheer.bestuursfunctie.functionarissen',
+      'leidinggevenden.bestuursfunctie.functionarissen',
       bestuursfunctie.id
     );
   }

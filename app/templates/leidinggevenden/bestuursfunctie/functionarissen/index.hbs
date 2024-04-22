@@ -18,19 +18,19 @@
   </Group>
 </AuToolbar>
 
-<Leidinggevendenbeheer::ContactInfoCard
+<Leidinggevenden::ContactInfoCard
   @contactinfo={{@model.bestuursfunctie.contactinfo}}
   @bestuursfunctieID={{@model.bestuursfunctie.id}}
 />
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
-    <Leidinggevendenbeheer::FunctionarisTable
+    <Leidinggevenden::FunctionarisTable
       @content={{@model.functionarissen}}
       @sort={{this.sort}}
       @page={{this.page}}
       @size={{this.size}}
-      @editRoute="leidinggevendenbeheer.bestuursfunctie.functionarissen.edit"
+      @editRoute="leidinggevenden.bestuursfunctie.functionarissen.edit"
     />
   </div>
 </div>

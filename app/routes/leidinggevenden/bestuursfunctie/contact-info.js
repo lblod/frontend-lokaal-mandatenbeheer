@@ -3,14 +3,12 @@ import { inject as service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { CONTACTINFO_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
-export default class LeidinggevendenbeheerBestuursfunctiesBestuursfunctieContactInfoRoute extends Route {
+export default class LeidinggevendenBestuursfunctiesBestuursfunctieContactInfoRoute extends Route {
   @service store;
 
   async model() {
-    const bestuurseenheid = this.modelFor('leidinggevendenbeheer');
-    const bestuursfunctie = this.modelFor(
-      'leidinggevendenbeheer.bestuursfunctie'
-    );
+    const bestuurseenheid = this.modelFor('leidinggevenden');
+    const bestuursfunctie = this.modelFor('leidinggevenden.bestuursfunctie');
 
     let info = await bestuursfunctie.contactinfo;
     if (!info) {

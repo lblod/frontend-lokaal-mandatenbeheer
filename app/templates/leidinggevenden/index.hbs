@@ -1,5 +1,5 @@
 {{page-title
-  "Leidinggevendenbeheer"
+  "Leidinggevenden"
   " "
   @model.bestuurseenheid.classificatie.label
   " "
@@ -8,7 +8,7 @@
 
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
-    <AuHeading @skin="2">Leidinggevendenbeheer{{if
+    <AuHeading @skin="2">Leidinggevenden{{if
         @model.isRelevant
         " — Overzicht functies"
       }}</AuHeading>
@@ -27,7 +27,7 @@
     </div>
   {{else}}
     {{#each @model.bestuursfunctie as |bestuursfunctie|}}
-      <Leidinggevendenbeheer::BestuursfunctieCard
+      <Leidinggevenden::BestuursfunctieCard
         @bestuursfunctie={{bestuursfunctie}}
         @onClick={{(fn this.displayBestuursfunctie bestuursfunctie)}}
       />

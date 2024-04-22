@@ -143,45 +143,45 @@ export default class SharedBreadCrumbComponent extends Component {
 
   leidinggevenden = [
     {
-      route: 'leidinggevendenbeheer.index',
+      route: 'leidinggevenden.index',
       crumbs: [{ label: 'Leidinggevenden' }],
     },
     {
-      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.index',
+      route: 'leidinggevenden.bestuursfunctie.functionarissen.index',
       crumbs: [
         {
           label: 'Leidinggevenden',
-          link: 'leidinggevendenbeheer',
+          link: 'leidinggevenden',
         },
         { label: 'Functionaris' },
       ],
     },
     {
-      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.edit',
+      route: 'leidinggevenden.bestuursfunctie.functionarissen.edit',
       crumbs: [
         {
           label: 'Leidinggevenden',
-          link: 'leidinggevendenbeheer',
+          link: 'leidinggevenden',
         },
         { label: 'Bewerk functionaris' },
       ],
     },
     {
-      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.new',
+      route: 'leidinggevenden.bestuursfunctie.functionarissen.new',
       crumbs: [
         {
           label: 'Leidinggevenden',
-          link: 'leidinggevendenbeheer',
+          link: 'leidinggevenden',
         },
         { label: 'Nieuwe aanstellingsperiode' },
       ],
     },
     {
-      route: 'leidinggevendenbeheer.bestuursfunctie.contact-info',
+      route: 'leidinggevenden.bestuursfunctie.contact-info',
       crumbs: [
         {
           label: 'Leidinggevenden',
-          link: 'leidinggevendenbeheer',
+          link: 'leidinggevenden',
         },
         { label: 'Bewerk contactgegevens' },
       ],
