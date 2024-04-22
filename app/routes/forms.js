@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default class FormbeheerRoute extends Route {
+export default class FormsRoute extends Route {
   @service session;
   @service currentSession;
   @service router;

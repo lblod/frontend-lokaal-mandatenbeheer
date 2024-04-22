@@ -71,7 +71,7 @@ Router.map(function () {
     );
   });
 
-  this.route('formbeheer', function () {
+  this.route('forms', function () {
     this.route('form', { path: '/:id' }, function () {
       this.route('new');
       this.route('instances');

@@ -9,7 +9,7 @@ export default class FormInstancesRoute extends Route {
   };
 
   async model() {
-    const formModel = this.modelFor('formbeheer.form');
+    const formModel = this.modelFor('forms.form');
     return { formDefinition: formModel };
   }
 }
