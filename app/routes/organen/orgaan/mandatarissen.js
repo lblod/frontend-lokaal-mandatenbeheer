@@ -112,15 +112,16 @@ export default class OrganenMandatarissenRoute extends Route {
               moment(mandataris.einde)
             );
           }
-          if (moment(mandataris.einde).isSame(existing.foldedEnd)) {
-            // keep the one with the oldest end date
-            existing.mandataris = mandataris;
-          }
           const fractie = mandataris.get(
             'heeftLidmaatschap.binnenFractie.naam'
           );
           if (fractie && !existing.foldedFracties.includes(fractie)) {
             existing.foldedFracties.push(fractie);
+          }
+          if (moment(mandataris.einde).isSame(existing.foldedEnd)) {
+            // keep the one with the oldest end date
+            existing.mandataris = mandataris;
+            existing.fractie = fractie;
           }
         } else {
           const fractie = mandataris.get(
@@ -135,6 +136,7 @@ export default class OrganenMandatarissenRoute extends Route {
             foldedEnd: mandataris.einde,
             mandataris,
             foldedFracties: fracties,
+            fractie: fractie,
           };
           personMandaatData[key] = firstOccurrence;
           folded.push(firstOccurrence);
@@ -144,11 +146,16 @@ export default class OrganenMandatarissenRoute extends Route {
     return folded.map((entry) => {
       const fracties = entry.foldedFracties;
       fracties.sort((a, b) => a.localeCompare(b));
+      const currentFractie = entry.fractie;
+      const otherFracties = fracties.filter((f) => f != entry.fractie && f);
+      const fractieText = otherFracties.length
+        ? `${currentFractie} (${otherFracties.join(', ')})`
+        : currentFractie;
       return {
         mandataris: entry.mandataris,
         foldedStart: entry.foldedStart,
         foldedEnd: entry.foldedEnd,
-        foldedFracties: fracties.join(', '),
+        foldedFracties: fractieText,
       };
     });
   }
