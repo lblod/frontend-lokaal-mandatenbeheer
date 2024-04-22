@@ -281,7 +281,7 @@ export default class MandatarissenUpdateState extends Component {
     if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
     }
-    this.rangorde = event.target.value.trim();
+    this.rangorde = event.target.value;
   }
 
   @action updateBeleidsdomeinen(selectedBeleidsdomeinen) {
