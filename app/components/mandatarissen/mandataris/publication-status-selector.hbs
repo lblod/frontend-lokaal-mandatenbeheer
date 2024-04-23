@@ -1,0 +1,17 @@
+<PowerSelect
+  @selected={{this.publicationStatus}}
+  @options={{this.publicationStatusOptions}}
+  class="is-optional"
+  @onChange={{this.onUpdatePublicationStatus}}
+  @searchEnabled={{false}}
+  @disabled={{this.disabled}}
+  @noMatchesMessage="Geen statussen"
+  @placeholder="Bekrachtigd"
+  as |status|
+>
+  {{#if status.label}}
+    {{status.label}}
+  {{else}}
+    Geen statussen
+  {{/if}}
+</PowerSelect>

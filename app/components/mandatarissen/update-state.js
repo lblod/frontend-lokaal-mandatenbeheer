@@ -162,14 +162,14 @@ export default class MandatarissenUpdateState extends Component {
     const endDate = this.args.mandataris.einde;
 
     const newMandatarisProps = {
-      bekleedt: this.args.mandataris.bekleedt,
-      beleidsdomein: this.selectedBeleidsdomeinen,
-      isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
       rangorde: this.rangorde,
-      isDraft: true,
       start: this.date,
-      status: this.newStatus,
       einde: endDate,
+      bekleedt: this.args.mandataris.bekleedt,
+      isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
+      beleidsdomein: this.selectedBeleidsdomeinen,
+      status: this.newStatus,
+      publicationStatus: this.args.mandataris.publicationStatus,
       modified: new Date(),
     };
 

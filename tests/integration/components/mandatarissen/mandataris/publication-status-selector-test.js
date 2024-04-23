@@ -4,7 +4,7 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module(
-  'Integration | Component | mandatarissen/confirm-bekrachtiging',
+  'Integration | Component | mandatarissen/mandataris/publication-status-selector',
   function (hooks) {
     setupRenderingTest(hooks);
 
@@ -12,14 +12,16 @@ module(
       // Set any properties with this.set('myProperty', 'value');
       // Handle any actions with this.set('myAction', function(val) { ... });
 
-      await render(hbs`<Mandatarissen::ConfirmBekrachtiging />`);
+      await render(
+        hbs`<Mandatarissen::Mandataris::PublicationStatusSelector />`
+      );
 
       assert.dom(this.element).hasText('');
 
       // Template block usage:
-      await render(hbs`<Mandatarissen::ConfirmBekrachtiging>
+      await render(hbs`<Mandatarissen::Mandataris::PublicationStatusSelector>
   template block text
-</Mandatarissen::ConfirmBekrachtiging>`);
+</Mandatarissen::Mandataris::PublicationStatusSelector>`);
 
       assert.dom(this.element).hasText('template block text');
     });
