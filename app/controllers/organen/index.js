@@ -7,7 +7,7 @@ export default class OrganenIndexController extends Controller {
   @service store;
   @service decretaleOrganen;
 
-  @tracked orgaanSort = 'naam';
+  @tracked sort = 'naam';
 
   @tracked modal = false;
 

@@ -11,7 +11,7 @@ export default class OrganenIndexRoute extends Route {
   // can't use pagination as we are filtering frontend side on optional properties, which seems to have limited support
   pageSize = 20000;
   queryParams = {
-    orgaanSort: { refreshModel: true },
+    sort: { refreshModel: true },
   };
 
   async model(params) {
@@ -32,7 +32,7 @@ export default class OrganenIndexRoute extends Route {
 
   getOptions(bestuurseenheid, params) {
     const queryParams = {
-      sort: params.orgaanSort,
+      sort: params.sort,
       page: {
         size: this.pageSize,
       },
