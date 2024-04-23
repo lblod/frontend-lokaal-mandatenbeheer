@@ -54,34 +54,12 @@ export default class SharedBreadCrumbComponent extends Component {
       ],
     },
     {
-      route: 'organen.beheer.index',
+      route: 'organen.orgaan.edit',
       crumbs: [
         {
           label: 'Bestuursorganen',
           link: 'organen',
         },
-        { label: 'Beheer bestuursorganen' },
-      ],
-    },
-    {
-      route: 'organen.beheer.new',
-      crumbs: [
-        {
-          label: 'Bestuursorganen',
-          link: 'organen',
-        },
-        { label: 'Beheer bestuursorganen', link: 'organen.beheer' },
-        { label: 'Voeg bestuursorgaan toe' },
-      ],
-    },
-    {
-      route: 'organen.beheer.edit',
-      crumbs: [
-        {
-          label: 'Bestuursorganen',
-          link: 'organen',
-        },
-        { label: 'Beheer bestuursorganen', link: 'organen.beheer' },
         { label: 'Bewerk bestuursorgaan' },
       ],
     },
