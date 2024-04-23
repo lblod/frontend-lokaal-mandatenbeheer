@@ -30,6 +30,12 @@
         <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
           {{row.naam}}
         </LinkTo>
+        {{#if (await row.isDecretaal)}}
+          <AuPill>
+            Decretaal
+          </AuPill>
+        {{/if}}
+
       </td>
       <td>{{row.classificatie.label}}</td>
       <td>{{await row.nbMembers}}</td>
@@ -37,9 +43,13 @@
         {{moment-format row.deactivatedAt "DD-MM-YYYY"}}</td>
       <td>
         {{#if row.isActive}}
-          Actief
+          <AuPill @skin="success">
+            Actief
+          </AuPill>
         {{else}}
-          Inactief
+          <AuPill @skin="error">
+            Inactief
+          </AuPill>
         {{/if}}
       </td>
     </c.body>
