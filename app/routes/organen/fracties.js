@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { action } from '@ember/object';
 import {
   getBestuursPeriods,
   getSelectedBestuursorgaanWithPeriods,
@@ -97,5 +98,10 @@ export default class FractiesRoute extends Route {
       selectedPeriod,
       bestuursorganen: selectedBestuursOrganen,
     };
+  }
+
+  @action
+  reloadModel() {
+    this.refresh();
   }
 }
