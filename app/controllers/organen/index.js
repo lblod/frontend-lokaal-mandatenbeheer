@@ -4,12 +4,19 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 export default class OrganenIndexController extends Controller {
+  queryParams = ['sort', 'activeFilter'];
   @service store;
   @service decretaleOrganen;
 
   @tracked sort = 'naam';
+  @tracked activeFilter = false;
 
   @tracked modal = false;
+
+  @action
+  filterActiveOrgans() {
+    this.activeFilter = !this.activeFilter;
+  }
 
   @action
   toggleModal() {

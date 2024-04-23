@@ -6,7 +6,14 @@
       <div class="au-c-sidebar__header au-u-margin-top-small">
         <AuHeading @level="3" @skin="3">Filters</AuHeading>
       </div>
-      <div class="au-c-sidebar__content">
+      <div class="au-c-sidebar__content au-o-box">
+        <AuHeading @level="5" @skin="5">Status</AuHeading>
+        <AuToggleSwitch
+          @alignment="left"
+          @identifier="filterActiveOrgans"
+          @checked={{this.activeFilter}}
+          @onChange={{this.filterActiveOrgans}}
+        >Enkel actieve organen</AuToggleSwitch>
       </div>
     </div>
   </main.sidebar>

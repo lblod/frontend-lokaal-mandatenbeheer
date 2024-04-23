@@ -12,15 +12,21 @@ export default class OrganenIndexRoute extends Route {
   pageSize = 20000;
   queryParams = {
     sort: { refreshModel: true },
+    activeFilter: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('organen');
     const queryOptions = this.getOptions(parentModel.bestuurseenheid, params);
-    const bestuursorganen = await this.store.query(
+    let bestuursorganen = await this.store.query(
       'bestuursorgaan',
       queryOptions
     );
+    if (params.activeFilter) {
+      bestuursorganen = bestuursorganen.filter((orgaan) => {
+        return orgaan.isActive;
+      });
+    }
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
     return {
