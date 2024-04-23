@@ -32,7 +32,6 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
 
   constructor() {
     super(...arguments);
-    console.log('constructor publication-status-selector');
 
     this.loadPublicationStatusOptions();
   }
