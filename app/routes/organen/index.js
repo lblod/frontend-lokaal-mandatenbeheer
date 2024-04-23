@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import RSVP from 'rsvp';
 
 export default class OrganenIndexRoute extends Route {
@@ -45,10 +44,5 @@ export default class OrganenIndexRoute extends Route {
       include: 'classificatie,heeft-tijdsspecialisaties',
     };
     return queryParams;
-  }
-
-  @action
-  reloadModel() {
-    this.refresh();
   }
 }
