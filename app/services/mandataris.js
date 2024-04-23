@@ -1,6 +1,6 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import { getDraftStatus } from 'frontend-lmb/utils/get-draft-status';
+import { getDraftStatus } from 'frontend-lmb/utils/get-publication-status';
 import moment from 'moment';
 
 export default class MandatarisService extends Service {

@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 import moment from 'moment';
-import { getDraftStatus } from 'frontend-lmb/utils/get-draft-status';
+import { getDraftStatus } from 'frontend-lmb/utils/get-publication-status';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -170,7 +170,7 @@ export default class MandatarissenUpdateState extends Component {
       isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
       beleidsdomein: this.selectedBeleidsdomeinen,
       status: this.newStatus,
-      publicationStatus: await getDraftStatus(this.store),
+      publicationStatus: this.args.mandataris.publicationStatus,
       modified: new Date(),
     };
 

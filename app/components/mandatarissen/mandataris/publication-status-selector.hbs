@@ -1,10 +1,10 @@
 <PowerSelect
-  @selected={{@selectedStatus}}
-  @options={{@options}}
+  @selected={{this.publicationStatus}}
+  @options={{this.publicationStatusOptions}}
   class="is-optional"
-  @onChange={{@onSelect}}
+  @onChange={{this.onUpdatePublicationStatus}}
   @searchEnabled={{false}}
-  @disabled={{@disabled}}
+  @disabled={{this.disabled}}
   @noMatchesMessage="Geen statussen"
   @placeholder="Selecteer een status"
   as |status|

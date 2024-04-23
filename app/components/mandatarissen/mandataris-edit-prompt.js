@@ -6,18 +6,13 @@ import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestu
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
 import { inject as service } from '@ember/service';
-import { queryRecord } from 'frontend-lmb/utils/query-record';
-import { MANDATARIS_BEKRACHTIGD_STATE } from 'frontend-lmb/utils/well-known-uris';
-import { getDraftStatus } from 'frontend-lmb/utils/get-draft-status';
+import { getBekrachtigdStatus } from 'frontend-lmb/utils/get-publication-status';
 
 const CHANGE_MODE = 'change';
 const CORRECT_MODE = 'correct';
 
 export default class MandatenbeheerMandatarisEditPromptComponent extends Component {
   @tracked editMode = null;
-  @tracked publicationStatusOptions = [];
-  @tracked selectedPublicationStatus;
-  @tracked disabled = false;
   @service store;
   @service router;
 
@@ -31,45 +26,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
 
   get mandataris() {
     return this.args.mandataris;
-  }
-
-  constructor() {
-    super(...arguments);
-
-    this.loadPublicationStatusOptions();
-  }
-
-  async getBekrachtigdStatus() {
-    return await queryRecord(this.store, 'mandataris-publication-status-code', {
-      'filter[:uri:]': MANDATARIS_BEKRACHTIGD_STATE,
-    });
-  }
-
-  isBekrachtigd(publicationStatus) {
-    return !publicationStatus || publicationStatus.isBekrachtigd;
-  }
-
-  async setBekrachtigdStatus() {
-    const bekrachtigdStatus = await this.getBekrachtigdStatus();
-
-    this.disabled = true;
-    this.selectedPublicationStatus = bekrachtigdStatus;
-  }
-
-  async loadPublicationStatusOptions() {
-    const publicationStatus = await this.mandataris.publicationStatus;
-
-    if (this.isBekrachtigd(publicationStatus)) {
-      await this.setBekrachtigdStatus();
-      return;
-    }
-
-    const publicationStatuses = await this.store.findAll(
-      'mandataris-publication-status-code'
-    );
-
-    this.publicationStatusOptions = publicationStatuses;
-    this.selectedPublicationStatus = publicationStatus;
   }
 
   @action
@@ -112,21 +68,16 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
       newMandataris != this.args.mandataris &&
       this.args.onMandatarisChanged
     ) {
-      this.disabled = false;
-      this.selectedPublicationStatus = await getDraftStatus(this.store);
       this.args.onMandatarisChanged(newMandataris);
     }
   }
 
-  @action
-  async onUpdatePublicationStatus(publicationStatus) {
-    if (this.isBekrachtigd(publicationStatus)) {
-      await this.setBekrachtigdStatus();
-    } else {
-      this.selectedPublicationStatus = publicationStatus;
+  async getPublicationStatus() {
+    const publicationStatus = await this.mandataris.publicationStatus;
+    if (publicationStatus) {
+      return publicationStatus;
     }
-    this.mandataris.publicationStatus = publicationStatus;
-    await this.mandataris.save();
+    return await getBekrachtigdStatus(this.store);
   }
 
   @action

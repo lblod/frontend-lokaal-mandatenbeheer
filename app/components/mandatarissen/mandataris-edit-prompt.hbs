@@ -65,10 +65,8 @@
         De bekrachtiging van een mandaat is niet omkeerbaar.
       </p>
       <Mandatarissen::Mandataris::PublicationStatusSelector
-        @options={{this.publicationStatusOptions}}
-        @selectedStatus={{this.selectedPublicationStatus}}
-        @onSelect={{this.onUpdatePublicationStatus}}
-        @disabled={{this.disabled}}
+        @mandataris={{@mandataris}}
+        @publicationStatus={{this.getPublicationStatus}}
       />
     </AuContent>
   </div>
