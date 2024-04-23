@@ -28,6 +28,10 @@
       <BestuursperiodeNewButton @bestuursorgaan={{this.model.bestuursorgaan}} />
     {{/unless}}
   </Group>
+  <Group>
+    <AuLink @route="organen.orgaan.edit" @skin="button-secondary">Bewerk
+    </AuLink>
+  </Group>
 </AuToolbar>
 
 <AuTabs @reversed={{true}} as |Tab|>
