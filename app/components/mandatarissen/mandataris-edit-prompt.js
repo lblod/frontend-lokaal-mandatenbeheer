@@ -6,7 +6,6 @@ import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestu
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
 import { inject as service } from '@ember/service';
-import { getBekrachtigdStatus } from 'frontend-lmb/utils/get-publication-status';
 
 const CHANGE_MODE = 'change';
 const CORRECT_MODE = 'correct';
@@ -70,14 +69,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
     ) {
       this.args.onMandatarisChanged(newMandataris);
     }
-  }
-
-  async getPublicationStatus() {
-    const publicationStatus = await this.mandataris.publicationStatus;
-    if (publicationStatus) {
-      return publicationStatus;
-    }
-    return await getBekrachtigdStatus(this.store);
   }
 
   @action
