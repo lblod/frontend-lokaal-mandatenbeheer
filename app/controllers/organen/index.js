@@ -17,20 +17,6 @@ export default class OrganenIndexController extends Controller {
   }
 
   @action
-  async archiveOrgaan(orgaan) {
-    orgaan.deactivatedAt = new Date();
-    await orgaan.save();
-    this.send('reloadModel');
-  }
-
-  @action
-  async deArchiveOrgaan(orgaan) {
-    orgaan.deactivatedAt = undefined;
-    await orgaan.save();
-    this.send('reloadModel');
-  }
-
-  @action
   buildSourceTtlCreateBestuursorgaan(instanceUri) {
     const bestuurseenheid = this.model.bestuurseenheid;
 

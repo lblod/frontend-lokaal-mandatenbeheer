@@ -31,6 +31,23 @@
   <Group>
     <AuLink @route="organen.orgaan.edit" @skin="button-secondary">Bewerk
     </AuLink>
+    {{#unless (await @model.bestuursorgaan.isDecretaal)}}
+      {{#if @model.bestuursorgaan.isActive}}
+        <AuButton
+          @icon="archive"
+          @skin="secondary"
+          @alert="true"
+          {{on "click" this.archiveOrgaan}}
+        >Archiveer</AuButton>
+      {{else}}
+        <AuButton
+          @icon="undo"
+          @skin="secondary"
+          @alert="true"
+          {{on "click" this.deArchiveOrgaan}}
+        >Heractiveer</AuButton>
+      {{/if}}
+    {{/unless}}
   </Group>
 </AuToolbar>
 

@@ -13,4 +13,16 @@ export default class OrganenOrgaanController extends Controller {
     this.startDate = period.startDate;
     this.endDate = period.endDate;
   }
+
+  @action
+  async archiveOrgaan() {
+    this.model.bestuursorgaan.deactivatedAt = new Date();
+    await this.model.bestuursorgaan.save();
+  }
+
+  @action
+  async deArchiveOrgaan() {
+    this.model.bestuursorgaan.deactivatedAt = undefined;
+    await this.model.bestuursorgaan.save();
+  }
 }
