@@ -11,9 +11,17 @@
         @currentSorting={{@sort}}
         @label="Bestuursorgaan"
       />
-      <th>Type</th>
+      <AuDataTableThSortable
+        @field="classificatie.label"
+        @currentSorting={{@sort}}
+        @label="Type"
+      />
       <th>Aantal leden</th>
-      <th>Einddatum</th>
+      <AuDataTableThSortable
+        @field="deactivatedAt"
+        @currentSorting={{@sort}}
+        @label="Einddatum"
+      />
       <th>Status orgaan</th>
     </c.header>
 
