@@ -2,16 +2,11 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class OrganenBeheerIndexController extends Controller {
+export default class OrganenIndexController extends Controller {
   @service router;
   @service store;
 
-  sort = 'naam';
-
-  @action
-  createNewOrgaan() {
-    this.router.transitionTo('organen.beheer.new');
-  }
+  orgaanSort = 'naam';
 
   @action
   async archiveOrgaan(orgaan) {
