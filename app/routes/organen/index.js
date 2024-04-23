@@ -1,5 +1,8 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class OrganenIndexRoute extends Route {
   @service store;
@@ -18,10 +21,12 @@ export default class OrganenIndexRoute extends Route {
       'bestuursorgaan',
       queryOptions
     );
+    const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
     return {
       bestuurseenheid: parentModel.bestuurseenheid,
       bestuursorganen,
+      form,
     };
   }
 
@@ -43,5 +48,10 @@ export default class OrganenIndexRoute extends Route {
       include: 'classificatie,heeft-tijdsspecialisaties',
     };
     return queryParams;
+  }
+
+  @action
+  reloadModel() {
+    this.refresh();
   }
 }

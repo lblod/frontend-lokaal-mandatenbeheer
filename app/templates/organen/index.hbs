@@ -20,9 +20,7 @@
           <AuLink @route="organen.fracties" @skin="button-secondary">Beheer
             fracties
           </AuLink>
-          <AuLink @route="organen.beheer.new" @skin="button">Voeg niew
-            bestuursorgaan toe
-          </AuLink>
+          <AuButton {{on "click" this.toggleModal}}>Voeg bestuursorgaan toe</AuButton>
         </Group>
       </AuToolbar>
 
@@ -39,3 +37,19 @@
     </AuBodyContainer>
   </main.content>
 </AuMainContainer>
+
+<AuModal
+  @title="Voeg bestuursorgaan toe"
+  @modalOpen={{this.modal}}
+  @closable={{true}}
+  @closeModal={{this.toggleModal}}
+>
+  <div class="au-o-box">
+    <Form::NewInstance
+      @onCreate={{this.onCreate}}
+      @form={{this.model.form}}
+      @buildSourceTtl={{this.buildSourceTtlCreateBestuursorgaan}}
+      @onCancel={{this.toggleModal}}
+    />
+  </div>
+</AuModal>
