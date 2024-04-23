@@ -13,6 +13,7 @@ export default class OrganenIndexRoute extends Route {
   queryParams = {
     sort: { refreshModel: true },
     activeFilter: { refreshModel: true },
+    selectedTypes: { refreshModel: true },
   };
 
   async model(params) {
@@ -27,6 +28,20 @@ export default class OrganenIndexRoute extends Route {
         return orgaan.isActive;
       });
     }
+    const tmp2 = await Promise.all(
+      bestuursorganen.map(async (orgaan) => {
+        const tmp = await Promise.all(
+          params.selectedTypes.map(async (filter) => {
+            return await orgaan.get(filter);
+          })
+        );
+        const some = tmp.some((val) => {
+          return val;
+        });
+        return { bool: some, orgaan };
+      })
+    );
+    bestuursorganen = tmp2.filter((val) => val.bool).map((val) => val.orgaan);
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
     return {
