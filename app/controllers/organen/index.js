@@ -71,6 +71,7 @@ export default class OrganenIndexController extends Controller {
 
   async createDefaultBestuursorgaanInTijd(bestuursorgaan, bestuursperiod) {
     const bestuursorgaanInTijd = this.store.createRecord('bestuursorgaan', {
+      bestuurseenheid: this.model.bestuurseenheid,
       isTijdsspecialisatieVan: bestuursorgaan,
       bindingStart: bestuursperiod.bindingStart,
       bindingEinde: bestuursperiod.bindingEinde,
