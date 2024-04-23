@@ -1,12 +1,9 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 export default class OrganenIndexController extends Controller {
-  @service router;
-  @service store;
-
-  orgaanSort = 'naam';
+  @tracked orgaanSort = 'naam';
 
   @action
   async archiveOrgaan(orgaan) {

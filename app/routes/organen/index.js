@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import RSVP from 'rsvp';
 
 export default class OrganenIndexRoute extends Route {
   @service store;
@@ -20,10 +19,10 @@ export default class OrganenIndexRoute extends Route {
       queryOptions
     );
 
-    return RSVP.hash({
+    return {
       bestuurseenheid: parentModel.bestuurseenheid,
       bestuursorganen,
-    });
+    };
   }
 
   getOptions(bestuurseenheid, params) {

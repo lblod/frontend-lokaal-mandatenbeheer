@@ -4,7 +4,6 @@ import {
   getBestuursPeriods,
   getSelectedBestuursorgaanWithPeriods,
 } from 'frontend-lmb/utils/bestuursperioden';
-import RSVP from 'rsvp';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { FRACTIE_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
@@ -53,13 +52,13 @@ export default class FractiesRoute extends Route {
       })
     ).at(0);
 
-    return RSVP.hash({
+    return {
       form,
       defaultFractieType,
       fracties,
       bestuurseenheid: parentModel.bestuurseenheid,
       ...organenWithPeriods,
-    });
+    };
   }
 
   async fetchBestuursOrganen(organen, params) {
