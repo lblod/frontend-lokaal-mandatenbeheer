@@ -13,6 +13,10 @@
       </div>
     </Group>
     <Group>
+      <AuLink
+        @skin="button"
+        @route="verkiezingen.verkiezingsuitslag.prepare"
+      >Start voorbereiding legislatuur</AuLink>
       <p>Change installatievergadering status:</p>
       <Shared::InstallatievergaderingStatusSelector
         @options={{@model.ivStatuses}}
