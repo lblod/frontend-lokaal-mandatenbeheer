@@ -44,7 +44,8 @@ export default class TijdsspecialisatiesService extends Service {
   }
 
   async fetchBestuursOrganenWithTijdsperiods(organen, params) {
-    let selectedPeriod, bestuursPeriods;
+    let selectedPeriod;
+    let bestuursPeriods = new Set();
 
     const selectedBestuursOrganen = await Promise.all(
       organen.map(async (bestuursorgaan) => {
@@ -71,8 +72,9 @@ export default class TijdsspecialisatiesService extends Service {
               startDate: result.startDate,
               endDate: result.endDate,
             };
-            bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
           }
+          let periods = getBestuursPeriods(tijdsspecialisaties);
+          periods.forEach((item) => bestuursPeriods.add(JSON.stringify(item)));
           return currentBestuursorgaan;
         }
       })
@@ -80,8 +82,11 @@ export default class TijdsspecialisatiesService extends Service {
     const filteredTijdsspecialisaties = selectedBestuursOrganen.filter(
       (val) => val
     );
+    const allBestuursPeriods = Array.from(bestuursPeriods).map((v) =>
+      JSON.parse(v)
+    );
     return {
-      bestuursPeriods,
+      bestuursPeriods: Array.from(allBestuursPeriods),
       selectedPeriod,
       bestuursorganen: filteredTijdsspecialisaties,
     };
