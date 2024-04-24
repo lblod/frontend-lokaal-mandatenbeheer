@@ -75,27 +75,29 @@ export default class OrganenIndexRoute extends Route {
         return orgaan.isActive;
       });
     }
-    const tmp2 = await Promise.all(
-      bestuursorganen.map(async (orgaan) => {
-        const tmp = await Promise.all(
-          params.selectedTypes.map(async (filter) => {
-            return await orgaan.get(filter);
-          })
-        );
-        const some = tmp.some((val) => {
-          return val;
-        });
-        const tijdsspecialisaties = await orgaan.heeftTijdsspecialisaties;
-        const time = await tijdsspecialisaties.some((b) => {
-          return (
-            moment(b.bindingStart).format('YYYY-MM-DD') ==
-            bestuursPeriod.startDate
-          );
-        });
-        return { bool: some && time, orgaan };
-      })
-    );
-    return tmp2.filter((val) => val.bool).map((val) => val.orgaan);
+    return (
+      await Promise.all(
+        bestuursorganen.map(async (orgaan) => {
+          const validType = (
+            await Promise.all(
+              params.selectedTypes.map(async (filter) => {
+                return await orgaan.get(filter);
+              })
+            )
+          ).some((val) => val);
+          const tijdsspecialisaties = await orgaan.heeftTijdsspecialisaties;
+          const validPeriod = await tijdsspecialisaties.some((b) => {
+            return (
+              moment(b.bindingStart).format('YYYY-MM-DD') ==
+              bestuursPeriod.startDate
+            );
+          });
+          return { bool: validType && validPeriod, orgaan };
+        })
+      )
+    )
+      .filter((val) => val.bool)
+      .map((val) => val.orgaan);
   }
 
   @action
