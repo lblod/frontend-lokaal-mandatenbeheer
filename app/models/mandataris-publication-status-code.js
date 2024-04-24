@@ -9,10 +9,4 @@ export default class MandatarisPublicationStatusCodeModel extends Model {
   get isBekrachtigd() {
     return this.uri === MANDATARIS_BEKRACHTIGD_STATE;
   }
-
-  rdfaBindings = {
-    class: 'http://www.w3.org/2004/02/skos/core#Concept',
-    label: 'http://www.w3.org/2004/02/skos/core#prefLabel',
-    order: 'http://www.w3.org/ns/shacl#order',
-  };
 }
