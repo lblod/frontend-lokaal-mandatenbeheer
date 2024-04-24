@@ -51,6 +51,7 @@ export default class OrganenIndexRoute extends Route {
         const tijdsspecialisaties = await orgaan.heeftTijdsspecialisaties;
         const time = await tijdsspecialisaties.some((b) => {
           return (
+            !params.startDate ||
             moment(b.bindingStart).format('YYYY-MM-DD') == params.startDate
           );
         });
