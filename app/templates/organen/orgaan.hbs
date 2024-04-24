@@ -23,6 +23,7 @@
       @options={{@model.bestuursPeriods}}
       @selectedPeriod={{@model.selectedPeriod}}
       @onSelect={{this.selectPeriod}}
+      @prefix="Bestuursperiode"
     />
     {{#unless (await this.model.bestuursorgaan.isDecretaal)}}
       <BestuursperiodeNewButton @bestuursorgaan={{this.model.bestuursorgaan}} />
