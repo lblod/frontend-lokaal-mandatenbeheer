@@ -29,36 +29,15 @@ export default class OrganenIndexRoute extends Route {
       );
 
     const queryOptions = this.getOptions(parentModel.bestuurseenheid, params);
-    let bestuursorganen = await this.store.query(
+    const allBestuursorganen = await this.store.query(
       'bestuursorgaan',
       queryOptions
     );
-    if (params.activeFilter) {
-      bestuursorganen = bestuursorganen.filter((orgaan) => {
-        return orgaan.isActive;
-      });
-    }
-    const tmp2 = await Promise.all(
-      bestuursorganen.map(async (orgaan) => {
-        const tmp = await Promise.all(
-          params.selectedTypes.map(async (filter) => {
-            return await orgaan.get(filter);
-          })
-        );
-        const some = tmp.some((val) => {
-          return val;
-        });
-        const tijdsspecialisaties = await orgaan.heeftTijdsspecialisaties;
-        const time = await tijdsspecialisaties.some((b) => {
-          return (
-            moment(b.bindingStart).format('YYYY-MM-DD') ==
-            organenWithPeriods.selectedPeriod.startDate
-          );
-        });
-        return { bool: some && time, orgaan };
-      })
+    const bestuursorganen = await this.filterBestuursorganen(
+      allBestuursorganen,
+      params,
+      organenWithPeriods.selectedPeriod
     );
-    bestuursorganen = tmp2.filter((val) => val.bool).map((val) => val.orgaan);
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
     return {
@@ -88,6 +67,35 @@ export default class OrganenIndexRoute extends Route {
       include: 'classificatie,heeft-tijdsspecialisaties',
     };
     return queryParams;
+  }
+
+  async filterBestuursorganen(bestuursorganen, params, bestuursPeriod) {
+    if (params.activeFilter) {
+      bestuursorganen = bestuursorganen.filter((orgaan) => {
+        return orgaan.isActive;
+      });
+    }
+    const tmp2 = await Promise.all(
+      bestuursorganen.map(async (orgaan) => {
+        const tmp = await Promise.all(
+          params.selectedTypes.map(async (filter) => {
+            return await orgaan.get(filter);
+          })
+        );
+        const some = tmp.some((val) => {
+          return val;
+        });
+        const tijdsspecialisaties = await orgaan.heeftTijdsspecialisaties;
+        const time = await tijdsspecialisaties.some((b) => {
+          return (
+            moment(b.bindingStart).format('YYYY-MM-DD') ==
+            bestuursPeriod.startDate
+          );
+        });
+        return { bool: some && time, orgaan };
+      })
+    );
+    return tmp2.filter((val) => val.bool).map((val) => val.orgaan);
   }
 
   @action
