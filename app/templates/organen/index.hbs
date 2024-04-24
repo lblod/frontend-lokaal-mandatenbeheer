@@ -67,13 +67,11 @@
       </AuToolbar>
 
       <div class="au-c-body-container au-c-body-container--scroll">
-        <div class="au-o-box">
-          <Organen::OrgaanTable
-            @content={{@model.bestuursorganen}}
-            @sort={{this.sort}}
-            @editRoute="organen.orgaan"
-          />
-        </div>
+        <Organen::OrgaanTable
+          @content={{@model.bestuursorganen}}
+          @sort={{this.sort}}
+          @editRoute="organen.orgaan"
+        />
       </div>
     </AuBodyContainer>
   </main.content>
