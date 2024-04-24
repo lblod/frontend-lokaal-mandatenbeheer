@@ -130,13 +130,27 @@ export default class SharedBreadCrumbComponent extends Component {
       crumbs: [{ label: 'Verkiezingen' }],
     },
     {
-      route: 'verkiezingen.verkiezingsuitslag',
+      route: 'verkiezingen.verkiezingsuitslag.index',
       crumbs: [
         {
           label: 'Verkiezingen',
           link: 'verkiezingen',
         },
         { label: 'Verkiezingsuitslag' },
+      ],
+    },
+    {
+      route: 'verkiezingen.verkiezingsuitslag.prepare',
+      crumbs: [
+        {
+          label: 'Verkiezingen',
+          link: 'verkiezingen',
+        },
+        {
+          label: 'Verkiezingsuitslag',
+          link: 'verkiezingen.verkiezingsuitslag',
+        },
+        { label: 'Voorbereiding legislatuur' },
       ],
     },
   ];
