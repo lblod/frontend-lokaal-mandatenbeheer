@@ -7,6 +7,12 @@
         <AuHeading @level="3" @skin="3">Filters</AuHeading>
       </div>
       <div class="au-c-sidebar__content au-o-box">
+        <AuHeading @level="5" @skin="5">Bestuursperiode</AuHeading>
+        <Mandatenbeheer::BestuursperiodenSelector
+          @options={{@model.bestuursPeriods}}
+          @selectedPeriod={{@model.selectedPeriod}}
+          @onSelect={{this.selectPeriod}}
+        />
         <AuHeading @level="5" @skin="5">Status</AuHeading>
         <AuToggleSwitch
           @alignment="left"
