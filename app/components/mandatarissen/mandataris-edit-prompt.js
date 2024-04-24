@@ -61,7 +61,7 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   }
 
   @action
-  async onUpdateState(newMandataris) {
+  onUpdateState(newMandataris) {
     this.editMode = null;
     if (
       newMandataris != this.args.mandataris &&
