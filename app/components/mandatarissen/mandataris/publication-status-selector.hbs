@@ -1,17 +1,19 @@
-<PowerSelect
-  @selected={{this.publicationStatus}}
-  @options={{this.sortedOptions}}
-  class="is-optional"
-  @onChange={{this.onUpdate}}
-  @searchEnabled={{false}}
-  @disabled={{this.disabled}}
-  @noMatchesMessage="Geen statussen"
-  @placeholder="Bekrachtigd"
-  as |status|
->
-  {{#if status.label}}
-    {{status.label}}
-  {{else}}
-    Geen statussen
-  {{/if}}
-</PowerSelect>
+<div {{did-update this.checkPublicationStatus @mandataris.publicationStatus}}>
+  <PowerSelect
+    @selected={{this.publicationStatus}}
+    @options={{this.sortedOptions}}
+    class="is-optional"
+    @onChange={{this.onUpdate}}
+    @searchEnabled={{false}}
+    @disabled={{this.disabled}}
+    @noMatchesMessage="Geen statussen"
+    @placeholder="Bekrachtigd"
+    as |status|
+  >
+    {{#if status.label}}
+      {{status.label}}
+    {{else}}
+      Geen statussen
+    {{/if}}
+  </PowerSelect>
+</div>
