@@ -7,28 +7,38 @@
         <AuHeading @level="3" @skin="3">Filters</AuHeading>
       </div>
       <div class="au-c-sidebar__content au-o-box">
-        <AuHeading @level="5" @skin="5">Bestuursperiode</AuHeading>
-        <Mandatenbeheer::BestuursperiodenSelector
-          @options={{@model.bestuursPeriods}}
-          @selectedPeriod={{@model.selectedPeriod}}
-          @onSelect={{this.selectPeriod}}
-        />
-        <AuHeading @level="5" @skin="5">Status</AuHeading>
-        <AuToggleSwitch
-          @alignment="left"
-          @identifier="filterActiveOrgans"
-          @checked={{this.activeFilter}}
-          @onChange={{this.filterActiveOrgans}}
-        >Enkel actieve organen</AuToggleSwitch>
-        <AuHeading @level="5" @skin="5">Type orgaan</AuHeading>
-        <AuCheckboxGroup
-          @selected={{this.selectedTypes}}
-          @onChange={{this.filterOrganTypes}}
-          as |Group|
-        >
-          <Group.Checkbox @value="isDecretaal">Decretaal</Group.Checkbox>
-          <Group.Checkbox @value="notDecretaal">Niet-decretaal</Group.Checkbox>
-        </AuCheckboxGroup>
+        <form class="au-o-grid au-o-grid--small">
+          <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
+            <div class="au-c-label">Bestuursperiode</div>
+            <Mandatenbeheer::BestuursperiodenSelector
+              @options={{@model.bestuursPeriods}}
+              @selectedPeriod={{@model.selectedPeriod}}
+              @onSelect={{this.selectPeriod}}
+            />
+          </div>
+          <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
+            <div class="au-c-label">Status</div>
+            <AuToggleSwitch
+              @alignment="left"
+              @identifier="filterActiveOrgans"
+              @checked={{this.activeFilter}}
+              @onChange={{this.filterActiveOrgans}}
+            >Enkel actieve organen</AuToggleSwitch>
+          </div>
+          <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
+            <div class="au-c-label">Type orgaan</div>
+            <AuCheckboxGroup
+              @selected={{this.selectedTypes}}
+              @onChange={{this.filterOrganTypes}}
+              as |Group|
+            >
+              <Group.Checkbox @value="isDecretaal">Decretaal</Group.Checkbox>
+              <Group.Checkbox
+                @value="notDecretaal"
+              >Niet-decretaal</Group.Checkbox>
+            </AuCheckboxGroup>
+          </div>
+        </form>
       </div>
     </div>
   </main.sidebar>
