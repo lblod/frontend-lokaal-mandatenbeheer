@@ -5,7 +5,7 @@ import { service } from '@ember/service';
 
 export default class MandatarissenMandatarisPublicationStatusSelectorComponent extends Component {
   @tracked options = [];
-  @tracked disabled = false;
+  @tracked isDisabled = false;
   @service store;
 
   get mandataris() {
@@ -28,7 +28,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     await this.checkPublicationStatus();
 
     // If the publication status is bekrachtigd, we don't need to load the options
-    if (this.disabled) {
+    if (this.isDisabled) {
       return;
     }
 
@@ -36,7 +36,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
       'mandataris-publication-status-code'
     );
 
-    this.disabled = false;
+    this.isDisabled = false;
     this.options = statuses;
   }
 
@@ -49,13 +49,13 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   @action
   async checkPublicationStatus() {
     const publicationStatus = await this.mandataris.publicationStatus;
-    this.disabled = this.isBekrachtigd(publicationStatus);
+    this.isDisabled = this.isBekrachtigd(publicationStatus);
   }
 
   @action
   async onUpdate(publicationStatus) {
     if (publicationStatus.isBekrachtigd) {
-      this.disabled = true;
+      this.isDisabled = true;
     }
     this.mandataris.publicationStatus = publicationStatus;
     await this.mandataris.save();
