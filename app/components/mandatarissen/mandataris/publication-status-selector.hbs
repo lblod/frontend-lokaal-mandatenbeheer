@@ -1,8 +1,8 @@
 <PowerSelect
   @selected={{this.publicationStatus}}
-  @options={{this.publicationStatusOptions}}
+  @options={{this.sortedOptions}}
   class="is-optional"
-  @onChange={{this.onUpdatePublicationStatus}}
+  @onChange={{this.onUpdate}}
   @searchEnabled={{false}}
   @disabled={{this.disabled}}
   @noMatchesMessage="Geen statussen"

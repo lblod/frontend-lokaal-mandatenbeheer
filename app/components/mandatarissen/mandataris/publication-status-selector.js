@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 export default class MandatarissenMandatarisPublicationStatusSelectorComponent extends Component {
-  @tracked publicationStatusOptions = [];
+  @tracked options = [];
   @tracked disabled = false;
   @service store;
 
@@ -14,6 +14,10 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
 
   get publicationStatus() {
     return this.mandataris.publicationStatus;
+  }
+
+  get sortedOptions() {
+    return [...this.options].sort((a, b) => a.order - b.order);
   }
 
   isBekrachtigd(publicationStatus) {
@@ -27,12 +31,12 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
       return;
     }
 
-    const publicationStatuses = await this.store.findAll(
+    const statuses = await this.store.findAll(
       'mandataris-publication-status-code'
     );
 
     this.disabled = false;
-    this.publicationStatusOptions = publicationStatuses;
+    this.options = statuses;
   }
 
   constructor() {
@@ -42,7 +46,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   }
 
   @action
-  async onUpdatePublicationStatus(publicationStatus) {
+  async onUpdate(publicationStatus) {
     if (publicationStatus.isBekrachtigd) {
       this.disabled = true;
     }
