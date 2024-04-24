@@ -38,6 +38,16 @@
               >Niet-decretaal</Group.Checkbox>
             </AuCheckboxGroup>
           </div>
+          <div class="au-o-grid__item">
+            <AuButton
+              @skin="naked"
+              @icon="x"
+              @iconAlignment="left"
+              {{on "click" this.clearFilters}}
+            >
+              Herstel alle filters
+            </AuButton>
+          </div>
         </form>
       </div>
     </div>

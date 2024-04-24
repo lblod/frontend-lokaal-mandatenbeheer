@@ -39,6 +39,14 @@ export default class OrganenIndexController extends Controller {
   }
 
   @action
+  clearFilters() {
+    this.activeFilter = false;
+    this.selectedTypes = ['isDecretaal', 'notDecretaal'];
+    this.startDate = null;
+    this.endDate = null;
+  }
+
+  @action
   toggleModal() {
     this.modal = !this.modal;
   }
