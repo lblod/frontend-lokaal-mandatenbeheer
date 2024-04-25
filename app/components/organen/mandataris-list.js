@@ -27,11 +27,7 @@ export default class OrganenMandatarisListComponent extends Component {
     this.rows.clear();
     this.rows.pushObjects(
       this.mandatarissen.map((mandatarisData) => {
-        return {
-          id: mandatarisData.mandataris.id,
-          data: mandatarisData,
-          values: null,
-        };
+        return mandatarisData;
       })
     );
   }
@@ -56,6 +52,8 @@ export default class OrganenMandatarisListComponent extends Component {
       { label: 'Functie', show: this.args.showFunctie ?? false },
       { label: 'Rangorde', show: this.args.showRangorde ?? false },
       { label: 'Bevoegdheid', show: this.args.showBevoegdheid ?? false },
+      { label: 'Start mandaat', show: this.args.showStartMandaat ?? false },
+      { label: 'Einde mandaat', show: this.args.showEindeMandaat ?? false },
     ];
   }
 }

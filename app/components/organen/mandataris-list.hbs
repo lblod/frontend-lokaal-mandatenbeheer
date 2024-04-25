@@ -15,19 +15,53 @@
     </:header>
     <:body>
       {{#each this.rows as |row|}}
-        {{#unless row.values}}
-          <tr>
-            {{#each this.columns}}
-              <td>
-                <div class="loading-panel au-u-padding-small"></div>
-              </td>
-            {{/each}}
-          </tr>
-        {{/unless}}
         <tr>
-          {{#each row.values as |value|}}
-            <td>{{value}}</td>
-          {{/each}}
+          {{#if @showVoornaam}}
+            <td>
+              <LinkTo
+                @route={{@personRoute}}
+                @model={{row.mandataris.isBestuurlijkeAliasVan.id}}
+                class="au-c-link"
+              >
+                {{row.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+              </LinkTo>
+            </td>
+          {{/if}}
+          {{#if @showNaam}}
+            <td>
+              <LinkTo
+                @route={{@personRoute}}
+                @model={{row.mandataris.isBestuurlijkeAliasVan.id}}
+                class="au-c-link"
+              >
+                {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
+              </LinkTo>
+            </td>
+          {{/if}}
+          {{#if @showFractie}}
+            <td>
+              {{row.foldedFracties}}
+            </td>
+          {{/if}}
+          {{#if @showFunctie}}
+            <td>
+              <LinkTo
+                @route={{@mandaatRoute}}
+                @model={{row.mandataris.id}}
+                class="au-c-link"
+              >
+                {{row.mandataris.bekleedt.bestuursfunctie.label}}
+              </LinkTo>
+            </td>
+          {{/if}}
+          {{#if @showRangorde}}<td>RANG PLACEHOLDER</td>{{/if}}
+          {{#if @showBevoegdheid}}<td>BEVOEGDHEID PLACEHOLDER</td>{{/if}}
+          {{#if @showStartMandaat}}
+            <td>{{moment-format row.foldedStart "DD-MM-YYYY"}}</td>
+          {{/if}}
+          {{#if @showEindeMandaat}}
+            <td>{{moment-format row.foldedEnd "DD-MM-YYYY"}}</td>
+          {{/if}}
         </tr>
       {{/each}}
     </:body>
