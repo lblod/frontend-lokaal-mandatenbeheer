@@ -1,7 +1,4 @@
-<div
-  {{did-insert (perform this.setupTable)}}
-  class="au-c-body-container au-c-body-container--scroll"
->
+<div class="au-c-body-container au-c-body-container--scroll">
   <h1 class="au-u-h2 au-u-margin-bottom-small">{{@title}}</h1>
   <AuDataTable
     @content={{@content}}
@@ -111,9 +108,8 @@
         {{/if}}
         {{#if @showRangorde}}<td>{{row.mandataris.rangorde}}</td>{{/if}}
         {{#if @showBevoegdheid}}
-          <td>{{#each row.mandataris.beleidsdomein as |domein|}}
-              {{domein.label}}
-            {{/each}}
+          <td>
+            <Beleidsdomeinen @mandataris={{row.mandataris}} />
           </td>
         {{/if}}
         {{#if @showStartMandaat}}
