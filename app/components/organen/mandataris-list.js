@@ -6,6 +6,7 @@ import { restartableTask } from 'ember-concurrency';
 
 export default class OrganenMandatarisListComponent extends Component {
   @tracked columns = A([]);
+  @tracked rows = A([]);
 
   constructor() {
     super(...arguments);
@@ -13,12 +14,34 @@ export default class OrganenMandatarisListComponent extends Component {
 
   setupTable = restartableTask(async () => {
     this.setColumns();
+    await this.setRows();
   });
 
   setColumns() {
     this.columns.clear();
     const activeTitles = this.tableTitles.filter((title) => title.show);
     this.columns.pushObjects(activeTitles.map((title) => title.label));
+  }
+
+  async setRows() {
+    this.rows.clear();
+    this.rows.pushObjects(
+      this.mandatarissen.map((mandatarisData) => {
+        return {
+          id: mandatarisData.mandataris.id,
+          data: mandatarisData,
+          values: null,
+        };
+      })
+    );
+  }
+
+  get mandatarissen() {
+    return this.args.mandatarissen ?? [];
+  }
+
+  get rowPlaceholders() {
+    return this.columns.map(() => null);
   }
 
   get contextTitle() {

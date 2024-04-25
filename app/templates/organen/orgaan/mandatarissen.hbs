@@ -24,6 +24,19 @@
   </Group>
 </AuToolbar>
 
+<div>
+  <Organen::MandatarisList
+    @mandatarissen={{@model.mandatarissen}}
+    @title="Samenstelling gemeenteraad"
+    @showVoornaam={{true}}
+    @showNaam={{true}}
+    @showFractie={{true}}
+    @showFunctie={{true}}
+    @showRangorde={{true}}
+    @showBevoegdheid={{true}}
+  />
+</div>
+
 <div class="au-o-box">
   <Organen::MandatarisTable
     @content={{@model.mandatarissen}}

@@ -14,9 +14,22 @@
       </tr>
     </:header>
     <:body>
-      <tr>
-
-      </tr>
+      {{#each this.rows as |row|}}
+        {{#unless row.values}}
+          <tr>
+            {{#each this.columns}}
+              <td>
+                <div class="loading-panel au-u-padding-small"></div>
+              </td>
+            {{/each}}
+          </tr>
+        {{/unless}}
+        <tr>
+          {{#each row.values as |value|}}
+            <td>{{value}}</td>
+          {{/each}}
+        </tr>
+      {{/each}}
     </:body>
   </AuTable>
 </div>
