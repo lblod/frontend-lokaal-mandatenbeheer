@@ -71,24 +71,12 @@
       <c.body as |row|>
         {{#if @showVoornaam}}
           <td>
-            <LinkTo
-              @route={{@personRoute}}
-              @model={{row.mandataris.isBestuurlijkeAliasVan.id}}
-              class="au-c-link"
-            >
-              {{row.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-            </LinkTo>
+            {{row.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
           </td>
         {{/if}}
         {{#if @showNaam}}
           <td>
-            <LinkTo
-              @route={{@personRoute}}
-              @model={{row.mandataris.isBestuurlijkeAliasVan.id}}
-              class="au-c-link"
-            >
-              {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
-            </LinkTo>
+            {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
           </td>
         {{/if}}
         {{#if @showFractie}}
@@ -97,13 +85,7 @@
           </td>{{/if}}
         {{#if @showFunctie}}
           <td>
-            <LinkTo
-              @route={{@mandaatRoute}}
-              @model={{row.mandataris.id}}
-              class="au-c-link"
-            >
-              {{row.mandataris.bekleedt.bestuursfunctie.label}}
-            </LinkTo>
+            {{row.mandataris.bekleedt.bestuursfunctie.label}}
           </td>
         {{/if}}
         {{#if @showRangorde}}<td>{{row.mandataris.rangorde}}</td>{{/if}}
