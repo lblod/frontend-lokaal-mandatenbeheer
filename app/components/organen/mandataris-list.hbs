@@ -1,0 +1,22 @@
+<div
+  {{did-insert (perform this.setupTable)}}
+  class="au-c-body-container au-c-body-container--scroll"
+>
+  <h1 class="au-u-h2 au-u-margin-bottom-small">{{this.contextTitle}}</h1>
+
+  <AuTable>
+    <:title></:title>
+    <:header>
+      <tr>
+        {{#each this.columns as |label|}}
+          <th>{{label}}</th>
+        {{/each}}
+      </tr>
+    </:header>
+    <:body>
+      <tr>
+
+      </tr>
+    </:body>
+  </AuTable>
+</div>
