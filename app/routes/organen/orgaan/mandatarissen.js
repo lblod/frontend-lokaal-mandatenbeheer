@@ -164,12 +164,13 @@ export default class OrganenMandatarissenRoute extends Route {
   }
 
   getOptions(params, bestuursOrgaan) {
+    const NO_PAGINTATION = {
+      number: params.page,
+      size: 9999,
+    };
     const queryParams = {
       sort: params.sort,
-      page: {
-        number: params.page,
-        size: params.size,
-      },
+      page: NO_PAGINTATION,
       filter: {
         bekleedt: {
           'bevat-in': {
