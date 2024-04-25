@@ -54,8 +54,11 @@
               </LinkTo>
             </td>
           {{/if}}
-          {{#if @showRangorde}}<td>RANG PLACEHOLDER</td>{{/if}}
-          {{#if @showBevoegdheid}}<td>BEVOEGDHEID PLACEHOLDER</td>{{/if}}
+          {{#if @showRangorde}}<td>{{row.mandataris.rangorde}}</td>{{/if}}
+          {{#if @showBevoegdheid}}
+            <td>{{row.mandataris.beleidsdomein}}
+            </td>
+          {{/if}}
           {{#if @showStartMandaat}}
             <td>{{moment-format row.foldedStart "DD-MM-YYYY"}}</td>
           {{/if}}
