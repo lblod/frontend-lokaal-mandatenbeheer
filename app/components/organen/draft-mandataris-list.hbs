@@ -1,0 +1,132 @@
+<div
+  {{did-insert (perform this.setupTable)}}
+  class="au-c-body-container au-c-body-container--scroll"
+>
+  <h1 class="au-u-h2 au-u-margin-bottom-small">{{@title}}</h1>
+  <AuDataTable
+    @content={{@content}}
+    @noDataMessage="Geen mandatarissen gevonden"
+    @sort={{@sort}}
+    @page={{@page}}
+    @size={{@size}}
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        {{#if @showVoornaam}}
+          <AuDataTableThSortable
+            @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
+            @currentSorting={{@sort}}
+            @label="Voornaam"
+          />
+        {{/if}}
+        {{#if @showNaam}}
+          <AuDataTableThSortable
+            @field="isBestuurlijkeAliasVan.achternaam"
+            @currentSorting={{@sort}}
+            @label="Familienaam"
+          />
+        {{/if}}
+        {{#if @showFractie}}
+          <AuDataTableThSortable
+            @field="heeftLidmaatschap.binnenFractie.naam"
+            @currentSorting={{@sort}}
+            @label="Fractie"
+          />
+        {{/if}}
+        {{#if @showFunctie}}
+          <AuDataTableThSortable
+            @field="bekleedt.bestuursfunctie.label"
+            @currentSorting={{@sort}}
+            @label="Mandaat"
+          />
+        {{/if}}
+        {{#if @showRangorde}}
+          <AuDataTableThSortable
+            @field="rangorde"
+            @currentSorting={{@sort}}
+            @label="Rangorde"
+          />
+        {{/if}}
+        {{#if @showBevoegdheid}}
+          <AuDataTableThSortable
+            @field="beleidsdomein"
+            @currentSorting={{@sort}}
+            @label="Bevoegdheid"
+          />
+        {{/if}}
+        {{#if @showStartMandaat}}
+          <AuDataTableThSortable
+            @field="start"
+            @currentSorting={{@sort}}
+            @label="Start mandaat"
+          />
+        {{/if}}
+        {{#if @showEindeMandaat}}
+          <AuDataTableThSortable
+            @field="einde"
+            @currentSorting={{@sort}}
+            @label="Einde mandaat"
+          />
+        {{/if}}
+      </c.header>
+
+      <c.body as |row|>
+        {{#if @showVoornaam}}
+          <td>
+            <LinkTo
+              @route={{@personRoute}}
+              @model={{row.mandataris.isBestuurlijkeAliasVan.id}}
+              class="au-c-link"
+            >
+              {{row.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+            </LinkTo>
+          </td>
+        {{/if}}
+        {{#if @showNaam}}
+          <td>
+            <LinkTo
+              @route={{@personRoute}}
+              @model={{row.mandataris.isBestuurlijkeAliasVan.id}}
+              class="au-c-link"
+            >
+              {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
+            </LinkTo>
+          </td>
+        {{/if}}
+        {{#if @showFractie}}
+          <td>
+            {{row.foldedFracties}}
+          </td>{{/if}}
+        {{#if @showFunctie}}
+          <td>
+            <LinkTo
+              @route={{@mandaatRoute}}
+              @model={{row.mandataris.id}}
+              class="au-c-link"
+            >
+              {{row.mandataris.bekleedt.bestuursfunctie.label}}
+            </LinkTo>
+          </td>
+        {{/if}}
+        {{#if @showRangorde}}<td>{{row.mandataris.rangorde}}</td>{{/if}}
+        {{#if @showBevoegdheid}}
+          <td>{{#each row.mandataris.beleidsdomein as |domein|}}
+              {{domein.label}}
+            {{/each}}
+          </td>
+        {{/if}}
+        {{#if @showStartMandaat}}
+          <td>
+            {{moment-format row.foldedStart "DD-MM-YYYY"}}
+          </td>
+        {{/if}}
+        {{#if @showEindeMandaat}}
+          <td>
+            {{moment-format row.foldedEnd "DD-MM-YYYY"}}
+          </td>
+        {{/if}}
+      </c.body>
+    </t.content>
+  </AuDataTable>
+</div>
