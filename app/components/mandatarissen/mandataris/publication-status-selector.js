@@ -24,26 +24,18 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     return !publicationStatus || publicationStatus.isBekrachtigd;
   }
 
-  async loadPublicationStatusOptions() {
+  async loadOptions() {
     await this.checkPublicationStatus();
 
-    // If the publication status is bekrachtigd, we don't need to load the options
-    if (this.isDisabled) {
-      return;
-    }
-
-    const statuses = await this.store.findAll(
+    this.options = await this.store.findAll(
       'mandataris-publication-status-code'
     );
-
-    this.isDisabled = false;
-    this.options = statuses;
   }
 
   constructor() {
     super(...arguments);
 
-    this.loadPublicationStatusOptions();
+    this.loadOptions();
   }
 
   @action
