@@ -4,8 +4,8 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 export default class MandatarissenMandatarisPublicationStatusSelectorComponent extends Component {
-  @tracked publicationStatusOptions = [];
-  @tracked disabled = false;
+  @tracked options = [];
+  @tracked isDisabled = false;
   @service store;
 
   get mandataris() {
@@ -16,6 +16,10 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     return this.mandataris.publicationStatus;
   }
 
+  get sortedOptions() {
+    return [...this.options].sort((a, b) => a.order - b.order);
+  }
+
   isBekrachtigd(publicationStatus) {
     return !publicationStatus || publicationStatus.isBekrachtigd;
   }
@@ -24,15 +28,16 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     await this.checkPublicationStatus();
 
     // If the publication status is bekrachtigd, we don't need to load the options
-    if (this.disabled) {
+    if (this.isDisabled) {
       return;
     }
 
-    const publicationStatuses = await this.store.findAll(
+    const statuses = await this.store.findAll(
       'mandataris-publication-status-code'
     );
 
-    this.publicationStatusOptions = publicationStatuses;
+    this.isDisabled = false;
+    this.options = statuses;
   }
 
   constructor() {
@@ -44,13 +49,13 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   @action
   async checkPublicationStatus() {
     const publicationStatus = await this.mandataris.publicationStatus;
-    this.disabled = this.isBekrachtigd(publicationStatus);
+    this.isDisabled = this.isBekrachtigd(publicationStatus);
   }
 
   @action
-  async onUpdatePublicationStatus(publicationStatus) {
+  async onUpdate(publicationStatus) {
     if (publicationStatus.isBekrachtigd) {
-      this.disabled = true;
+      this.isDisabled = true;
     }
     this.mandataris.publicationStatus = publicationStatus;
     await this.mandataris.save();
