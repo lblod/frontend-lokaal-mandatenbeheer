@@ -63,22 +63,20 @@
       </c.header>
 
       <c.body as |row|>
-        <td>
-          <Verkiezingen::EditOnHover
-            @text={{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-            @editFunction={{this.openModal}}
-            @model={{row}}
-            @helpText="Pas de persoon aan"
-          />
-        </td>
-        <td>
-          <Verkiezingen::EditOnHover
-            @text={{row.isBestuurlijkeAliasVan.achternaam}}
-            @editFunction={{this.openModal}}
-            @model={{row}}
-            @helpText="Pas de persoon aan"
-          />
-        </td>
+        <Verkiezingen::EditOnHover
+          @editFunction={{this.openModal}}
+          @model={{row}}
+          @helpText="Pas de persoon aan"
+        >
+          {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+        </Verkiezingen::EditOnHover>
+        <Verkiezingen::EditOnHover
+          @editFunction={{this.openModal}}
+          @model={{row}}
+          @helpText="Pas de persoon aan"
+        >
+          {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+        </Verkiezingen::EditOnHover>
         {{#if @showFractie}}
           <td>
             {{row.heeftLidmaatschap.binnenFractie.naam}}
