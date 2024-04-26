@@ -6,6 +6,8 @@ There is also the possibility to use npm plugins such as [husky plugin](https://
 ## Usage
 
 The usage of a git hook is pretty straightforward. You just go to the .git/hooks folder where you will find a lot of sample files. These files contain an example of how such a hook could look like. You just remove the .sample extension and you have a working git hook.
+In the case of the pre-commit hook, this script will be executed when you run the `git commit` command.
+If you want to skip the hooks, you can commit with the `--no-verify` flag or abbreviated `-n`.
 
 ## Configuration
 
@@ -97,7 +99,3 @@ fi
 ```
 
 These two configurations should actually exit with a non-zero exit code if you have linter warnings, and prevent you from committing.
-
-## Override
-
-If you want to skip the hooks, you can commit with the `--no-verify` flag or abbreviated `-n`.
