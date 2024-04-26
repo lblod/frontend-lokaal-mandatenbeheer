@@ -63,15 +63,12 @@
       </c.header>
 
       <c.body as |row|>
-        <td class="hover-container">
-          {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-          <div class="hover-element">
-            <AuIcon
-              @icon="pencil"
-              @size="medium"
-              {{on "click" (fn this.openModal row)}}
-            />
-          </div>
+        <td>
+          <Verkiezingen::EditOnHover
+            @text={{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+            @editFunction={{this.openModal}}
+            @model={{row}}
+          />
         </td>
         <td>
           {{row.isBestuurlijkeAliasVan.achternaam}}
