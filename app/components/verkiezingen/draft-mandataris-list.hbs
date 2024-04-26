@@ -66,7 +66,11 @@
         <td class="hover-container">
           {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
           <div class="hover-element">
-            <AuIcon @icon="pencil" @size="medium" {{on "click" this.onClick}} />
+            <AuIcon
+              @icon="pencil"
+              @size="medium"
+              {{on "click" this.toggleModal}}
+            />
           </div>
         </td>
         <td>
@@ -102,3 +106,18 @@
     </t.content>
   </AuDataTable>
 </div>
+
+<AuModal
+  @title="Selecteer een persoon"
+  @modalOpen={{this.isModalOpen}}
+  @closable={{true}}
+  @closeModal={{this.toggleModal}}
+>
+  <div class="au-o-box">
+    <Person::Selector
+      @person={{null}}
+      @onUpdate={{@onSelect}}
+      @inline="false"
+    />
+  </div>
+</AuModal>
