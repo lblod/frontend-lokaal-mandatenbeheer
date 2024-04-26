@@ -14,17 +14,17 @@
     Mandatarissen
   </AuLink>
   <AuLink @route="verkiezingen" role="menuitem">
-    <AuIcon @icon="user-fill" @alignment="left" />
+    <AuIcon @icon="vote" @alignment="left" />
     Verkiezingen
   </AuLink>
   {{#if this.currentSession.canAccessLeidinggevenden}}
-    <AuLink @route="leidinggevendenbeheer" role="menuitem">
+    <AuLink @route="leidinggevenden" role="menuitem">
       <AuIcon @icon="user-popup" @alignment="left" />
-      Leidinggevendenbeheer
+      Leidinggevenden
     </AuLink>
   {{/if}}
-  <AuLink @route="formbeheer" role="menuitem">
+  <AuLink @route="forms" role="menuitem">
     <AuIcon @icon="draft" @alignment="left" />
-    Formbeheer
+    Forms
   </AuLink>
 </AuDropdown>

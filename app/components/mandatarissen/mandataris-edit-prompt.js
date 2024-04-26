@@ -9,7 +9,6 @@ import { inject as service } from '@ember/service';
 
 const CHANGE_MODE = 'change';
 const CORRECT_MODE = 'correct';
-const BEKRACHTIG_MODE = 'bekrachtig';
 
 export default class MandatenbeheerMandatarisEditPromptComponent extends Component {
   @tracked editMode = null;
@@ -24,8 +23,8 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
     return this.editMode === CORRECT_MODE;
   }
 
-  get isBekrachtiging() {
-    return this.editMode === BEKRACHTIG_MODE;
+  get mandataris() {
+    return this.args.mandataris;
   }
 
   @action
@@ -36,11 +35,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
   @action
   correct() {
     this.editMode = CORRECT_MODE;
-  }
-
-  @action
-  bekrachtig() {
-    this.editMode = BEKRACHTIG_MODE;
   }
 
   @action
@@ -75,13 +69,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
     ) {
       this.args.onMandatarisChanged(newMandataris);
     }
-  }
-
-  @action
-  async onBekrachtig() {
-    this.editMode = null;
-    this.args.mandataris.isDraft = false;
-    this.args.mandataris.save();
   }
 
   @action

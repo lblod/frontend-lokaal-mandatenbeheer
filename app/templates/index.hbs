@@ -23,10 +23,10 @@
     <ul class="au-o-grid au-o-grid--small">
       <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
         <LoketModuleCard @icon="users">
-          <:title>Organen</:title>
+          <:title>Bestuursorganen</:title>
           <:description>Hier vind je een overzicht van de bestuursorganen.</:description>
           <:link>
-            <AuLink @route="organen" @skin="button">Ga naar de bestuursorganen</AuLink>
+            <AuLink @route="organen" @skin="button">Ga naar bestuursorganen</AuLink>
           </:link>
         </LoketModuleCard>
       </li>
@@ -36,17 +36,17 @@
           <:description>Hier vind je een overzicht van alle mandatarissen en hun
             historiek.</:description>
           <:link>
-            <AuLink @route="mandatarissen.search" @skin="button">Ga naar de
+            <AuLink @route="mandatarissen.search" @skin="button">Ga naar
               mandatarissen</AuLink>
           </:link>
         </LoketModuleCard>
       </li>
       <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
-        <LoketModuleCard @icon="user-fill">
+        <LoketModuleCard @icon="vote">
           <:title>Verkiezingen</:title>
           <:description>Hier vind je een overzicht van de verkiezingen.</:description>
           <:link>
-            <AuLink @route="verkiezingen" @skin="button">Ga naar de verkiezingen</AuLink>
+            <AuLink @route="verkiezingen" @skin="button">Ga naar verkiezingen</AuLink>
           </:link>
         </LoketModuleCard>
       </li>
@@ -57,22 +57,22 @@
             @extraInformationLink="https://www.vlaanderen.be/lokaal-bestuur/loket-voor-lokale-besturen/leidinggevendenbeheer"
             @userManualLink="https://abb-vlaanderen.gitbook.io/handleiding-loket/modules/leidinggevendenbeheer"
           >
-            <:title>Leidinggevendenbeheer</:title>
+            <:title>Leidinggevenden</:title>
             <:description>Hou hier de leidinggevende functies voor uw bestuur
               bij.</:description>
             <:link>
-              <AuLink @route="leidinggevendenbeheer" @skin="button">Ga naar
-                leidinggevendenbeheer</AuLink>
+              <AuLink @route="leidinggevenden" @skin="button">Ga naar
+                leidinggevenden</AuLink>
             </:link>
           </LoketModuleCard>
         </li>
       {{/if}}
       <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
         <LoketModuleCard @icon="draft">
-          <:title>Formbeheer</:title>
+          <:title>Forms</:title>
           <:description>Hier vind je een overzicht van de huidige forms.</:description>
           <:link>
-            <AuLink @route="formbeheer" @skin="button">Ga naar formbeheer</AuLink>
+            <AuLink @route="forms" @skin="button">Ga naar forms</AuLink>
           </:link>
         </LoketModuleCard>
       </li>

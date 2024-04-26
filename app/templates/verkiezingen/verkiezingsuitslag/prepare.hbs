@@ -1,0 +1,28 @@
+{{page-title "Voorbereiding legislatuur"}}
+
+<div class="au-c-body-container">
+  <AuToolbar
+    @size="large"
+    @nowrap="true"
+    class="au-u-padding-bottom-none"
+    as |Group|
+  >
+    <Group>
+      <div class="au-o-flow">
+        <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
+      </div>
+    </Group>
+    <Group>
+      <p>Change installatievergadering status:</p>
+      <Shared::InstallatievergaderingStatusSelector
+        @options={{@model.ivStatuses}}
+        @selectedStatus={{@model.selectedStatus}}
+        @onSelect={{this.selectStatus}}
+      />
+    </Group>
+  </AuToolbar>
+
+  <div class="au-o-box">
+    <Tmp::Todo>Inhoud toe te voegen</Tmp::Todo>
+  </div>
+</div>

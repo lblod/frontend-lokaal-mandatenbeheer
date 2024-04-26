@@ -130,7 +130,7 @@ export default class SharedBreadCrumbComponent extends Component {
       crumbs: [{ label: 'Verkiezingen' }],
     },
     {
-      route: 'verkiezingen.verkiezingsuitslag',
+      route: 'verkiezingen.verkiezingsuitslag.index',
       crumbs: [
         {
           label: 'Verkiezingen',
@@ -139,80 +139,94 @@ export default class SharedBreadCrumbComponent extends Component {
         { label: 'Verkiezingsuitslag' },
       ],
     },
-  ];
-
-  leidinggevendenbeheer = [
     {
-      route: 'leidinggevendenbeheer.index',
-      crumbs: [{ label: 'Leidinggevendenbeheer' }],
-    },
-    {
-      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.index',
+      route: 'verkiezingen.verkiezingsuitslag.prepare',
       crumbs: [
         {
-          label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer',
+          label: 'Verkiezingen',
+          link: 'verkiezingen',
+        },
+        {
+          label: 'Verkiezingsuitslag',
+          link: 'verkiezingen.verkiezingsuitslag',
+        },
+        { label: 'Voorbereiding legislatuur' },
+      ],
+    },
+  ];
+
+  leidinggevenden = [
+    {
+      route: 'leidinggevenden.index',
+      crumbs: [{ label: 'Leidinggevenden' }],
+    },
+    {
+      route: 'leidinggevenden.bestuursfunctie.functionarissen.index',
+      crumbs: [
+        {
+          label: 'Leidinggevenden',
+          link: 'leidinggevenden',
         },
         { label: 'Functionaris' },
       ],
     },
     {
-      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.edit',
+      route: 'leidinggevenden.bestuursfunctie.functionarissen.edit',
       crumbs: [
         {
-          label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer',
+          label: 'Leidinggevenden',
+          link: 'leidinggevenden',
         },
         { label: 'Bewerk functionaris' },
       ],
     },
     {
-      route: 'leidinggevendenbeheer.bestuursfunctie.functionarissen.new',
+      route: 'leidinggevenden.bestuursfunctie.functionarissen.new',
       crumbs: [
         {
-          label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer',
+          label: 'Leidinggevenden',
+          link: 'leidinggevenden',
         },
         { label: 'Nieuwe aanstellingsperiode' },
       ],
     },
     {
-      route: 'leidinggevendenbeheer.bestuursfunctie.contact-info',
+      route: 'leidinggevenden.bestuursfunctie.contact-info',
       crumbs: [
         {
-          label: 'Leidinggevendenbeheer',
-          link: 'leidinggevendenbeheer',
+          label: 'Leidinggevenden',
+          link: 'leidinggevenden',
         },
         { label: 'Bewerk contactgegevens' },
       ],
     },
   ];
 
-  formbeheer = [
+  forms = [
     {
-      route: 'formbeheer.index',
-      crumbs: [{ label: 'Formbeheer' }],
+      route: 'forms.index',
+      crumbs: [{ label: 'Overzicht forms' }],
     },
     {
-      route: 'formbeheer.form.instances',
+      route: 'forms.form.instances',
       crumbs: [
-        { label: 'Formbeheer', link: 'formbeheer' },
+        { label: 'Overzicht forms', link: 'forms' },
         { label: 'Form instances' },
       ],
     },
     {
-      route: 'formbeheer.form.new',
+      route: 'forms.form.new',
       crumbs: [
-        { label: 'Formbeheer', link: 'formbeheer' },
-        { label: 'Form', link: 'formbeheer.form.instances' },
+        { label: 'Overzicht forms', link: 'forms' },
+        { label: 'Form instances', link: 'forms.form.instances' },
         { label: 'Nieuwe form instance' },
       ],
     },
     {
-      route: 'formbeheer.form.instance',
+      route: 'forms.form.instance',
       crumbs: [
-        { label: 'Formbeheer', link: 'formbeheer' },
-        { label: 'Form', link: 'formbeheer.form.instances' },
+        { label: 'Overzicht forms', link: 'forms' },
+        { label: 'Form instances', link: 'forms.form.instances' },
         { label: 'Bewerk form instance' },
       ],
     },
@@ -220,8 +234,8 @@ export default class SharedBreadCrumbComponent extends Component {
   bread = this.bestuursorganen.concat(
     this.mandatarissen,
     this.verkiezingen,
-    this.leidinggevendenbeheer,
-    this.formbeheer
+    this.leidinggevenden,
+    this.forms
   );
 
   get crumbsForRoute() {

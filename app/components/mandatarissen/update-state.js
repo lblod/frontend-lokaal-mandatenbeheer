@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 import moment from 'moment';
+import { getDraftStatus } from 'frontend-lmb/utils/get-publication-status';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -162,14 +163,14 @@ export default class MandatarissenUpdateState extends Component {
     const endDate = this.args.mandataris.einde;
 
     const newMandatarisProps = {
-      bekleedt: this.args.mandataris.bekleedt,
-      beleidsdomein: this.selectedBeleidsdomeinen,
-      isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
       rangorde: this.rangorde,
-      isDraft: true,
       start: this.date,
-      status: this.newStatus,
       einde: endDate,
+      bekleedt: this.args.mandataris.bekleedt,
+      isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
+      beleidsdomein: this.selectedBeleidsdomeinen,
+      status: this.newStatus,
+      publicationStatus: await getDraftStatus(this.store),
       modified: new Date(),
     };
 
@@ -281,7 +282,7 @@ export default class MandatarissenUpdateState extends Component {
     if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
     }
-    this.rangorde = event.target.value.trim();
+    this.rangorde = event.target.value;
   }
 
   @action updateBeleidsdomeinen(selectedBeleidsdomeinen) {

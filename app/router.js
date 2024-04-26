@@ -52,12 +52,16 @@ Router.map(function () {
   });
 
   this.route('verkiezingen', function () {
-    this.route('verkiezingsuitslag', {
-      path: '/:bestuursorgaan_in_tijd_id/verkiezingsuitslag',
-    });
+    this.route(
+      'verkiezingsuitslag',
+      { path: '/:bestuursorgaan_in_tijd_id/verkiezingsuitslag' },
+      function () {
+        this.route('prepare');
+      }
+    );
   });
 
-  this.route('leidinggevendenbeheer', function () {
+  this.route('leidinggevenden', function () {
     this.route(
       'bestuursfunctie',
       { path: '/:bestuursfunctie_id' },
@@ -71,7 +75,7 @@ Router.map(function () {
     );
   });
 
-  this.route('formbeheer', function () {
+  this.route('forms', function () {
     this.route('form', { path: '/:id' }, function () {
       this.route('new');
       this.route('instances');
