@@ -193,16 +193,39 @@
   z-index: 10;
 }
 
-.hover-element {
-  display:none;
-}
+// .hover-container {
+//   display: flex;
+//   gap: 3px;
+// }
 
-.hover-container:hover .hover-element {
-  display:inline;
+.hover-element {
+  display: none;
+  position: relative;
   padding: 1px;
 }
 
 .hover-element:hover {
   background-color: #e8ebee;
   border-radius: 5px;
+}
+
+.hover-container:hover .hover-element {
+  // display: block;
+  display: inline;
+}
+
+.hover-help-text {
+  display:none;
+  position:absolute;
+  background-color: #e8ebee;
+  bottom: -3rem;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, 0);
+  text-wrap: nowrap;
+  padding: 0 5px;
+}
+
+.hover-element:hover .hover-help-text {
+  display:block;
 }
