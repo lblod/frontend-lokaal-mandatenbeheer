@@ -22,7 +22,16 @@
     </Group>
   </AuToolbar>
 
-  <div class="au-o-box">
-    <Tmp::Todo>Inhoud toe te voegen</Tmp::Todo>
-  </div>
+  <Verkiezingen::DraftMandatarisList
+    @mandatarissen={{@model.mandatarissen}}
+    @sort={{this.sort}}
+    @page={{0}}
+    @size={{9999}}
+    @title=""
+    @showFractie={{true}}
+    @showFunctie={{true}}
+    @showRangorde={{true}}
+    @showBevoegdheid={{true}}
+    @showStartEndDate={{true}}
+  />
 </div>
