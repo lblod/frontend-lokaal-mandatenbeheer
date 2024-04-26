@@ -91,16 +91,17 @@
           <td>{{row.rangorde}}</td>
         {{/if}}
         {{#if @showBevoegdheid}}
-          {{#if this.editBeleidsdomeinen}}
+          {{#if (eq this.editBeleidsdomeinen row.id)}}
             <td>
               <Mandatarissen::BeleidsdomeinSelectorWithCreate
-                @beleidsdomeinen={{this.selectedBeleidsdomeinen}}
+                @beleidsdomeinen={{row.beleidsdomein}}
                 @onSelect={{this.updateBeleidsdomeinen}}
               />
             </td>
           {{else}}
             <Verkiezingen::EditOnHover
               @editFunction={{this.openEditBeleidsdomeinen}}
+              @model={{row}}
               @helpText="Pas de beleidsdomeinen aan"
             >
               <Beleidsdomeinen @mandataris={{row}} />
