@@ -5,6 +5,16 @@ import { service } from '@ember/service';
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
 
+  NO_PAGINATION = {
+    number: 0,
+    size: 9999,
+  };
+
+  queryParams = {
+    filter: { refreshModel: true },
+    sort: { refreshModel: true },
+  };
+
   async model(params) {
     const verkiezingsuitslag = this.modelFor('verkiezingen.verkiezingsuitslag');
     const bestuursorgaan =
@@ -16,7 +26,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
         'mandataris',
         this.getOptions(params, bestuursorgaan)
       );
-      console.log(mandatarissen);
     }
 
     return {
@@ -26,13 +35,9 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   }
 
   getOptions(params, bestuursOrgaan) {
-    const NO_PAGINATION = {
-      number: 0,
-      size: 999,
-    };
     const queryParams = {
       sort: params.sort,
-      page: NO_PAGINATION,
+      page: this.NO_PAGINATION,
       filter: {
         bekleedt: {
           'bevat-in': {
