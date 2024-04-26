@@ -139,7 +139,7 @@ Similar to the linter, prettier can also be used in different ways:
 
 ## Automation
 
-It is also possible to add git hooks which would run the linter and prettier before you are able to commit. This is not supported as of now. It is still under review how we want to do this, either with a bash script which is ran as a git commit hook or with a dedicated plugin which is added to the repo. Once this is finalised, more info will be added here.
+It is also possible to add git hooks which would run the linter and prettier before you are able to commit. This is not configured globally, however you can configure this locally on your own machine, more info can be found in the [git-hooks readme](git-hooks.md).
 
 ## Extra
 
