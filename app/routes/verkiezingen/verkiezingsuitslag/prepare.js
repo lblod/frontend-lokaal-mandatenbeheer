@@ -5,11 +5,6 @@ import { service } from '@ember/service';
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
 
-  NO_PAGINATION = {
-    number: 0,
-    size: 9999,
-  };
-
   queryParams = {
     filter: { refreshModel: true },
     sort: { refreshModel: true },
@@ -37,7 +32,10 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   getOptions(params, bestuursOrgaan) {
     const queryParams = {
       sort: params.sort,
-      page: this.NO_PAGINATION,
+      page: {
+        number: 0,
+        size: 9999,
+      },
       filter: {
         bekleedt: {
           'bevat-in': {
