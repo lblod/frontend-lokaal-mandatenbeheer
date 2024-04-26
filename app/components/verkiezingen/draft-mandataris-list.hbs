@@ -71,7 +71,11 @@
           />
         </td>
         <td>
-          {{row.isBestuurlijkeAliasVan.achternaam}}
+          <Verkiezingen::EditOnHover
+            @text={{row.isBestuurlijkeAliasVan.achternaam}}
+            @editFunction={{this.openModal}}
+            @model={{row}}
+          />
         </td>
         {{#if @showFractie}}
           <td>
