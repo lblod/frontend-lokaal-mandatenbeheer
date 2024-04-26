@@ -1,22 +1,61 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
 
-export default class MandatenbeheerBestuursorganenNewController extends Controller {
-  @service router;
+export default class OrganenIndexController extends Controller {
+  queryParams = [
+    'sort',
+    'activeOrgans',
+    'selectedTypes',
+    'startDate',
+    'endDate',
+  ];
   @service store;
   @service decretaleOrganen;
 
-  @action
-  buildSourceTtl(instanceUri) {
-    const bestuurseenheid = this.model.bestuurseenheid;
+  @tracked sort = 'naam';
+  @tracked activeOrgans = false;
+  @tracked selectedTypes = ['isDecretaal', 'notDecretaal'];
+  @tracked startDate;
+  @tracked endDate;
 
-    return `<${instanceUri}> <http://data.vlaanderen.be/ns/besluit#bestuurt> <${bestuurseenheid.uri}> .`;
+  @tracked isModalActive = false;
+
+  @action
+  filterActiveOrgans() {
+    this.activeOrgans = !this.activeOrgans;
   }
 
   @action
-  cancel() {
-    this.router.transitionTo('organen.beheer');
+  filterOrganTypes(values) {
+    this.selectedTypes = values;
+  }
+
+  @action
+  selectPeriod(period) {
+    this.startDate = period.startDate;
+    this.endDate = period.endDate;
+  }
+
+  @action
+  clearFilters() {
+    this.activeOrgans = false;
+    this.selectedTypes = ['isDecretaal', 'notDecretaal'];
+    this.startDate = null;
+    this.endDate = null;
+  }
+
+  @action
+  toggleModal() {
+    this.isModalActive = !this.isModalActive;
+  }
+
+  @action
+  buildSourceTtlCreateBestuursorgaan(instanceUri) {
+    const bestuurseenheid = this.model.bestuurseenheid;
+
+    return `<${instanceUri}> <http://data.vlaanderen.be/ns/besluit#bestuurt> <${bestuurseenheid.uri}> .`;
   }
 
   @action
@@ -31,10 +70,8 @@ export default class MandatenbeheerBestuursorganenNewController extends Controll
       latestBestuursperiod
     );
 
-    // parent route has all bestuursorganen and so needs a refresh
-    await this.router.refresh();
-
-    this.router.transitionTo('organen.beheer.edit', instanceId);
+    this.toggleModal();
+    this.send('reloadModel');
   }
 
   async getLatestBestuursorgaanInTijd() {

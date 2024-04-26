@@ -4,22 +4,17 @@ import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
-export default class OrganenBeheerEditRoute extends Route {
+export default class OrganenEditRoute extends Route {
   @service store;
-  async model(params) {
-    const bestuursorgaan = this.store.findRecord(
-      'bestuursorgaan',
-      params.orgaan_id,
-      {
-        include: 'classificatie,heeft-tijdsspecialisaties',
-      }
-    );
+
+  async model() {
+    const parentModel = this.modelFor('organen.orgaan');
     const formDefinition = getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
     return RSVP.hash({
       form: formDefinition,
-      instanceId: params.orgaan_id,
-      bestuursorgaan,
+      instanceId: parentModel.instanceId,
+      bestuursorgaan: parentModel.bestuursorgaan,
     });
   }
 }

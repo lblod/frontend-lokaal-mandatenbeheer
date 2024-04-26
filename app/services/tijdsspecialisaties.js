@@ -1,6 +1,9 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import { getSelectedBestuursorgaanWithPeriods } from 'frontend-lmb/utils/bestuursperioden';
+import {
+  getBestuursPeriods,
+  getSelectedBestuursorgaanWithPeriods,
+} from 'frontend-lmb/utils/bestuursperioden';
 
 export default class TijdsspecialisatiesService extends Service {
   @service store;
@@ -38,5 +41,49 @@ export default class TijdsspecialisatiesService extends Service {
       })
     );
     return selectedTijdsspecialisaties.filter(Boolean);
+  }
+
+  async fetchBestuursOrganenWithTijdsperiods(organen, params) {
+    let selectedPeriod, bestuursPeriods;
+
+    const selectedBestuursOrganen = await Promise.all(
+      organen.map(async (bestuursorgaan) => {
+        const tijdsspecialisaties =
+          await bestuursorgaan.heeftTijdsspecialisaties;
+
+        let currentBestuursorgaan;
+        if (tijdsspecialisaties.length != 0) {
+          const result = getSelectedBestuursorgaanWithPeriods(
+            tijdsspecialisaties,
+            {
+              startDate: params.startDate,
+              endDate: params.endDate,
+            }
+          );
+
+          if (!result) {
+            return null;
+          }
+          currentBestuursorgaan = result.bestuursorgaan;
+
+          if (!selectedPeriod) {
+            selectedPeriod = {
+              startDate: result.startDate,
+              endDate: result.endDate,
+            };
+            bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
+          }
+          return currentBestuursorgaan;
+        }
+      })
+    );
+    const filteredTijdsspecialisaties = selectedBestuursOrganen.filter(
+      (val) => val
+    );
+    return {
+      bestuursPeriods,
+      selectedPeriod,
+      bestuursorganen: filteredTijdsspecialisaties,
+    };
   }
 }

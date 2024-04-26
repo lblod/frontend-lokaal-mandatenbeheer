@@ -2,11 +2,11 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class OrganenOrgaanIndexController extends Controller {
+export default class OrganenEditController extends Controller {
   @service router;
 
   @action
-  onEdit() {
-    this.router.transitionTo('organen.orgaan.edit', this.model.instanceId);
+  closeForm() {
+    this.router.transitionTo('organen.orgaan');
   }
 }

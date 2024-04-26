@@ -11,7 +11,7 @@
     <Form::Instance
       @instanceId={{this.model.instanceId}}
       @form={{this.model.form}}
-      @onSave={{this.onSave}}
+      @onSave={{this.closeForm}}
     />
   </div>
 </div>
@@ -19,7 +19,7 @@
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>
     <Form::CancelWithConfirm
-      @cancel={{this.cancel}}
+      @cancel={{this.closeForm}}
     >Annuleer</Form::CancelWithConfirm>
   </Group>
 </AuToolbar>

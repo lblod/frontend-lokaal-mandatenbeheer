@@ -19,31 +19,9 @@ export default class OrganenRoute extends Route {
       bestuurseenheid.get('id')
     );
 
-    const gemeenteBestuursorganen = [];
-    const decretaleBestuursorganen = [];
-    const nietDecretaleBestuursorganen = [];
-    await Promise.all(
-      bestuursorganen.map(async (orgaan) => {
-        const isGemeentelijk = await orgaan.isGemeentelijk;
-        if (isGemeentelijk) {
-          gemeenteBestuursorganen.push(orgaan);
-          return;
-        }
-        const isDecretaal = await orgaan.isDecretaal;
-        if (isDecretaal) {
-          decretaleBestuursorganen.push(orgaan);
-        } else {
-          nietDecretaleBestuursorganen.push(orgaan);
-        }
-      })
-    );
-
     return RSVP.hash({
       bestuurseenheid,
       bestuursorganen,
-      decretaleBestuursorganen,
-      gemeenteBestuursorganen,
-      nietDecretaleBestuursorganen,
     });
   }
 
@@ -54,8 +32,7 @@ export default class OrganenRoute extends Route {
       'filter[:has-no:is-tijdsspecialisatie-van]': true,
       'filter[classificatie][id]':
         this.decretaleOrganen.classificatieIds.join(','), // only organs with a political mandate
-      include:
-        'classificatie,is-tijdsspecialisatie-van,heeft-tijdsspecialisaties',
+      include: 'classificatie,heeft-tijdsspecialisaties',
     });
   }
 }

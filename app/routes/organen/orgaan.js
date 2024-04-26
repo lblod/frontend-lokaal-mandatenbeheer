@@ -17,7 +17,7 @@ export default class OrganenOrgaanRoute extends Route {
   };
 
   async model(params) {
-    const bestuursorgaanId = params.orgaan_id;
+    const bestuursorgaanId = params.id;
 
     const bestuursorgaan = await this.store.findRecord(
       'bestuursorgaan',

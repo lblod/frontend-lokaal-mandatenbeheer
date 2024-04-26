@@ -5,7 +5,6 @@ import { service } from '@ember/service';
 
 export default class FractiesController extends Controller {
   @service router;
-  @service store;
 
   @tracked page = 0;
   sort = 'naam';

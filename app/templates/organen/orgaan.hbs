@@ -23,10 +23,34 @@
       @options={{@model.bestuursPeriods}}
       @selectedPeriod={{@model.selectedPeriod}}
       @onSelect={{this.selectPeriod}}
+      @prefix="Bestuursperiode"
     />
     {{#unless (await this.model.bestuursorgaan.isDecretaal)}}
       <BestuursperiodeNewButton @bestuursorgaan={{this.model.bestuursorgaan}} />
     {{/unless}}
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      <AuLink @route="organen.orgaan.edit" @skin="button-secondary">Bewerk
+      </AuLink>
+      {{#unless (await @model.bestuursorgaan.isDecretaal)}}
+        {{#if @model.bestuursorgaan.isActive}}
+          <AuButton
+            @icon="archive"
+            @skin="secondary"
+            @alert="true"
+            {{on "click" this.archiveOrgaan}}
+          >Archiveer</AuButton>
+        {{else}}
+          <AuButton
+            @icon="undo"
+            @skin="secondary"
+            @alert="true"
+            {{on "click" this.deArchiveOrgaan}}
+          >Heractiveer</AuButton>
+        {{/if}}
+      {{/unless}}
+    </AuButtonGroup>
   </Group>
 </AuToolbar>
 
