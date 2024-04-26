@@ -24,25 +24,6 @@
   </Group>
 </AuToolbar>
 
-<div>
-  <Organen::DraftMandatarisList
-    @mandatarissen={{@model.mandatarissen}}
-    @content={{@model.mandatarissen}}
-    @sort={{this.sort}}
-    @page={{this.page}}
-    @size={{this.size}}
-    @title=""
-    @showVoornaam={{true}}
-    @showNaam={{true}}
-    @showFractie={{true}}
-    @showFunctie={{true}}
-    @showRangorde={{false}}
-    @showBevoegdheid={{false}}
-    @showStartMandaat={{true}}
-    @showEindeMandaat={{true}}
-  />
-</div>
-
 <div class="au-o-box">
   <Organen::MandatarisTable
     @content={{@model.mandatarissen}}
