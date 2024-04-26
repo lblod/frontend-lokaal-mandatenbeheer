@@ -112,21 +112,17 @@ export default class OrganenMandatarissenRoute extends Route {
               moment(mandataris.einde)
             );
           }
-          if (
-            moment(mandataris.einde).isSame(existing.foldedEnd) ||
-            !mandataris.einde
-          ) {
-            // keep the one with the oldest end date (if it is null, we assume this is the oldest as well)
-            existing.mandataris = mandataris;
-          }
           const fractie = mandataris.get(
             'heeftLidmaatschap.binnenFractie.naam'
           );
           if (fractie && !existing.foldedFracties.includes(fractie)) {
             existing.foldedFracties.push(fractie);
           }
-          if (moment(mandataris.einde).isSame(existing.foldedEnd)) {
-            // keep the one with the oldest end date
+          if (
+            moment(mandataris.einde).isSame(existing.foldedEnd) ||
+            !mandataris.einde
+          ) {
+            // keep the one with the oldest end date (if it is null, we assume this is the oldest as well)
             existing.mandataris = mandataris;
             existing.fractie = fractie;
           }
