@@ -20,7 +20,14 @@ export default class DraftMandatarisListComponent extends Component {
 
   @action
   openEditBeleidsdomeinen(mandataris) {
+    this.mandataris = mandataris;
     this.editBeleidsdomeinen = mandataris.id;
+  }
+
+  @action
+  async updateBeleidsdomeinen(selectedBeleidsdomeinen) {
+    this.mandataris.beleidsdomein = await selectedBeleidsdomeinen;
+    await this.mandataris.save();
   }
 
   @action
