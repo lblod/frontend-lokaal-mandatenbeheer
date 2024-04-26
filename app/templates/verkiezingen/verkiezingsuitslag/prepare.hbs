@@ -22,22 +22,20 @@
     </Group>
   </AuToolbar>
 
-  <div class="au-o-box">
-    <Verkiezingen::DraftMandatarisList
-      @mandatarissen={{@model.mandatarissen}}
-      @content={{@model.mandatarissen}}
-      @sort={{this.sort}}
-      @page={{0}}
-      @size={{99999}}
-      @title=""
-      @showVoornaam={{true}}
-      @showNaam={{true}}
-      @showFractie={{true}}
-      @showFunctie={{true}}
-      @showRangorde={{false}}
-      @showBevoegdheid={{false}}
-      @showStartMandaat={{true}}
-      @showEindeMandaat={{true}}
-    />
-  </div>
+  <Verkiezingen::DraftMandatarisList
+    @mandatarissen={{@model.mandatarissen}}
+    @content={{@model.mandatarissen}}
+    @sort={{this.sort}}
+    @page={{this.page}}
+    @size={{this.size}}
+    @title=""
+    @showVoornaam={{true}}
+    @showNaam={{true}}
+    @showFractie={{true}}
+    @showFunctie={{true}}
+    @showRangorde={{false}}
+    @showBevoegdheid={{false}}
+    @showStartMandaat={{true}}
+    @showEindeMandaat={{true}}
+  />
 </div>
