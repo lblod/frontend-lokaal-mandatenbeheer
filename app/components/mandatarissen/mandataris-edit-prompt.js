@@ -50,7 +50,7 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
 
   @action
   async onSave({ instanceTtl }) {
-    this.editMode = null
+    this.editMode = null;
     const store = new ForkingStore();
     store.parse(instanceTtl, SOURCE_GRAPH, 'text/turtle');
     const mandatarisUri = this.args.mandataris.uri;
@@ -76,7 +76,7 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
 
   @action
   async onBekrachtig() {
-    this.editMode = null;
+    this.editMode = null
     this.args.mandataris.isDraft = false;
     this.args.mandataris.save();
   }
