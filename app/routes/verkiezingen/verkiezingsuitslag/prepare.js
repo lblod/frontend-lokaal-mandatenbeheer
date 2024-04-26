@@ -11,9 +11,9 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   };
 
   async model(params) {
-    const verkiezingsuitslag = this.modelFor('verkiezingen.verkiezingsuitslag');
+    const parentModel = this.modelFor('verkiezingen.verkiezingsuitslag');
     const bestuursorgaan =
-      await verkiezingsuitslag.installatievergadering.bestuursorgaanInTijd;
+      await parentModel.installatievergadering.bestuursorgaanInTijd;
 
     let mandatarissen;
     if (bestuursorgaan) {
@@ -24,7 +24,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     }
 
     return {
-      ...verkiezingsuitslag,
+      ...parentModel,
       mandatarissen: mandatarissen,
     };
   }
