@@ -16,4 +16,11 @@ export default class DraftMandatarisListComponent extends Component {
   closeModal() {
     this.isModalOpen = false;
   }
+
+  @action
+  async updatePerson(person) {
+    this.mandataris.isBestuurlijkeAliasVan = person;
+    await this.mandataris.save();
+    this.isModalOpen = false;
+  }
 }
