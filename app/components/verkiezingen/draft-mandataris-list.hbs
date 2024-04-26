@@ -71,37 +71,40 @@
       <c.body as |row|>
         {{#if @showVoornaam}}
           <td>
-            {{row.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+            {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
           </td>
         {{/if}}
         {{#if @showNaam}}
           <td>
-            {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
+            {{row.isBestuurlijkeAliasVan.achternaam}}
           </td>
         {{/if}}
         {{#if @showFractie}}
           <td>
-            {{row.foldedFracties}}
-          </td>{{/if}}
-        {{#if @showFunctie}}
-          <td>
-            {{row.mandataris.bekleedt.bestuursfunctie.label}}
+            {{row.heeftLidmaatschap.binnenFractie.naam}}
           </td>
         {{/if}}
-        {{#if @showRangorde}}<td>{{row.mandataris.rangorde}}</td>{{/if}}
+        {{#if @showFunctie}}
+          <td>
+            {{row.bekleedt.bestuursfunctie.label}}
+          </td>
+        {{/if}}
+        {{#if @showRangorde}}
+          <td>{{row.rangorde}}</td>
+        {{/if}}
         {{#if @showBevoegdheid}}
           <td>
-            <Beleidsdomeinen @mandataris={{row.mandataris}} />
+            <Beleidsdomeinen @mandataris={{row}} />
           </td>
         {{/if}}
         {{#if @showStartMandaat}}
           <td>
-            {{moment-format row.foldedStart "DD-MM-YYYY"}}
+            {{moment-format row.start "DD-MM-YYYY"}}
           </td>
         {{/if}}
         {{#if @showEindeMandaat}}
           <td>
-            {{moment-format row.foldedEnd "DD-MM-YYYY"}}
+            {{moment-format row.einde "DD-MM-YYYY"}}
           </td>
         {{/if}}
       </c.body>
