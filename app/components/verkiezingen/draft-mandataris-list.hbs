@@ -10,20 +10,16 @@
   >
     <t.content as |c|>
       <c.header>
-        {{#if @showVoornaam}}
-          <AuDataTableThSortable
-            @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
-            @currentSorting={{@sort}}
-            @label="Voornaam"
-          />
-        {{/if}}
-        {{#if @showNaam}}
-          <AuDataTableThSortable
-            @field="isBestuurlijkeAliasVan.achternaam"
-            @currentSorting={{@sort}}
-            @label="Familienaam"
-          />
-        {{/if}}
+        <AuDataTableThSortable
+          @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
+          @currentSorting={{@sort}}
+          @label="Voornaam"
+        />
+        <AuDataTableThSortable
+          @field="isBestuurlijkeAliasVan.achternaam"
+          @currentSorting={{@sort}}
+          @label="Familienaam"
+        />
         {{#if @showFractie}}
           <AuDataTableThSortable
             @field="heeftLidmaatschap.binnenFractie.naam"
@@ -52,14 +48,12 @@
             @label="Bevoegdheid"
           />
         {{/if}}
-        {{#if @showStartMandaat}}
+        {{#if @showStartEndDate}}
           <AuDataTableThSortable
             @field="start"
             @currentSorting={{@sort}}
             @label="Start mandaat"
           />
-        {{/if}}
-        {{#if @showEindeMandaat}}
           <AuDataTableThSortable
             @field="einde"
             @currentSorting={{@sort}}
@@ -69,16 +63,12 @@
       </c.header>
 
       <c.body as |row|>
-        {{#if @showVoornaam}}
-          <td>
-            {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-          </td>
-        {{/if}}
-        {{#if @showNaam}}
-          <td>
-            {{row.isBestuurlijkeAliasVan.achternaam}}
-          </td>
-        {{/if}}
+        <td>
+          {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+        </td>
+        <td>
+          {{row.isBestuurlijkeAliasVan.achternaam}}
+        </td>
         {{#if @showFractie}}
           <td>
             {{row.heeftLidmaatschap.binnenFractie.naam}}
@@ -97,12 +87,10 @@
             <Beleidsdomeinen @mandataris={{row}} />
           </td>
         {{/if}}
-        {{#if @showStartMandaat}}
+        {{#if @showStartEndDate}}
           <td>
             {{moment-format row.start "DD-MM-YYYY"}}
           </td>
-        {{/if}}
-        {{#if @showEindeMandaat}}
           <td>
             {{moment-format row.einde "DD-MM-YYYY"}}
           </td>
