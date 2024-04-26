@@ -68,6 +68,7 @@
             @text={{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
             @editFunction={{this.openModal}}
             @model={{row}}
+            @helpText="Pas de persoon aan"
           />
         </td>
         <td>
@@ -75,6 +76,7 @@
             @text={{row.isBestuurlijkeAliasVan.achternaam}}
             @editFunction={{this.openModal}}
             @model={{row}}
+            @helpText="Pas de persoon aan"
           />
         </td>
         {{#if @showFractie}}

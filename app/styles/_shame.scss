@@ -193,15 +193,11 @@
   z-index: 10;
 }
 
-// .hover-container {
-//   display: flex;
-//   gap: 3px;
-// }
-
 .hover-element {
   display: none;
-  position: relative;
-  padding: 1px;
+  position: absolute;
+  padding: 2px 5px 0px 5px;
+  margin: 0px 5px;
 }
 
 .hover-element:hover {
@@ -210,20 +206,22 @@
 }
 
 .hover-container:hover .hover-element {
-  // display: block;
   display: inline;
 }
 
 .hover-help-text {
   display:none;
   position:absolute;
-  background-color: #e8ebee;
-  bottom: -3rem;
+  background-color: #687483;
+  color:white;
+  border-radius: 5px;
+  bottom: -3.3rem;
   left: 50%;
   text-align: center;
   transform: translate(-50%, 0);
   text-wrap: nowrap;
-  padding: 0 5px;
+  padding: 2px 7px;
+  z-index: 10;
 }
 
 .hover-element:hover .hover-help-text {
