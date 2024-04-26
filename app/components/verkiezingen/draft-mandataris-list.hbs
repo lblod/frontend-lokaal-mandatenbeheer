@@ -63,8 +63,11 @@
       </c.header>
 
       <c.body as |row|>
-        <td>
+        <td class="hover-container">
           {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          <div class="hover-element">
+            <AuIcon @icon="pencil" @size="medium" {{on "click" this.onClick}} />
+          </div>
         </td>
         <td>
           {{row.isBestuurlijkeAliasVan.achternaam}}
