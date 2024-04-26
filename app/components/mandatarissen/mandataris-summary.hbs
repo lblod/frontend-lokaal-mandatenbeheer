@@ -45,7 +45,11 @@
         @iconAlignment="left"
         @hideText={{false}}
       >
-        {{if @mandataris.isDraft "Niet bekrachtigd" "Bekrachtigd"}}
+        {{if
+          @mandataris.publicationStatus
+          @mandataris.publicationStatus.label
+          "Bekrachtigd"
+        }}
       </AuPill>
     </AuContent>
   </div>

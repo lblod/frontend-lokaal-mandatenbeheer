@@ -1,4 +1,4 @@
-{{page-title "Bestuursorgaan"}}
+{{page-title "Bestuursorganen"}}
 
 <AuMainContainer as |main|>
   <main.sidebar>
@@ -67,13 +67,11 @@
       </AuToolbar>
 
       <div class="au-c-body-container au-c-body-container--scroll">
-        <div class="au-o-box">
-          <Organen::OrgaanTable
-            @content={{@model.bestuursorganen}}
-            @sort={{this.sort}}
-            @editRoute="organen.orgaan"
-          />
-        </div>
+        <Organen::OrgaanTable
+          @content={{@model.bestuursorganen}}
+          @sort={{this.sort}}
+          @editRoute="organen.orgaan"
+        />
       </div>
     </AuBodyContainer>
   </main.content>
@@ -81,7 +79,7 @@
 
 <AuModal
   @title="Voeg bestuursorgaan toe"
-  @modalOpen={{this.modal}}
+  @modalOpen={{this.isModalActive}}
   @closable={{true}}
   @closeModal={{this.toggleModal}}
 >

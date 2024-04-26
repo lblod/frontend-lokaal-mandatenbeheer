@@ -49,9 +49,13 @@ Router.map(function () {
   });
 
   this.route('verkiezingen', function () {
-    this.route('verkiezingsuitslag', {
-      path: '/:bestuursorgaan_in_tijd_id/verkiezingsuitslag',
-    });
+    this.route(
+      'verkiezingsuitslag',
+      { path: '/:bestuursorgaan_in_tijd_id/verkiezingsuitslag' },
+      function () {
+        this.route('prepare');
+      }
+    );
   });
 
   this.route('leidinggevenden', function () {
