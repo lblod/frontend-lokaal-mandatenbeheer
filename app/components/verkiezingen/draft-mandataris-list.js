@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 export default class DraftMandatarisListComponent extends Component {
   @tracked isModalOpen = false;
   @tracked mandataris;
+  @tracked editBeleidsdomeinen = false;
 
   @action
   openModal(mandataris) {
@@ -15,6 +16,11 @@ export default class DraftMandatarisListComponent extends Component {
   @action
   closeModal() {
     this.isModalOpen = false;
+  }
+
+  @action
+  openEditBeleidsdomeinen() {
+    this.editBeleidsdomeinen = true;
   }
 
   @action

@@ -91,9 +91,21 @@
           <td>{{row.rangorde}}</td>
         {{/if}}
         {{#if @showBevoegdheid}}
-          <td>
-            <Beleidsdomeinen @mandataris={{row}} />
-          </td>
+          {{#if this.editBeleidsdomeinen}}
+            <td>
+              <Mandatarissen::BeleidsdomeinSelectorWithCreate
+                @beleidsdomeinen={{this.selectedBeleidsdomeinen}}
+                @onSelect={{this.updateBeleidsdomeinen}}
+              />
+            </td>
+          {{else}}
+            <Verkiezingen::EditOnHover
+              @editFunction={{this.openEditBeleidsdomeinen}}
+              @helpText="Pas de beleidsdomeinen aan"
+            >
+              <Beleidsdomeinen @mandataris={{row}} />
+            </Verkiezingen::EditOnHover>
+          {{/if}}
         {{/if}}
         {{#if @showStartEndDate}}
           <td>
