@@ -69,7 +69,7 @@
             <AuIcon
               @icon="pencil"
               @size="medium"
-              {{on "click" this.toggleModal}}
+              {{on "click" (fn this.openModal row)}}
             />
           </div>
         </td>
@@ -111,11 +111,11 @@
   @title="Selecteer een persoon"
   @modalOpen={{this.isModalOpen}}
   @closable={{true}}
-  @closeModal={{this.toggleModal}}
+  @closeModal={{this.closeModal}}
 >
   <div class="au-o-box">
     <Person::Selector
-      @person={{null}}
+      @person={{this.mandataris.isBestuurlijkeAliasVan}}
       @onUpdate={{@onSelect}}
       @inline="false"
     />
