@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { FRACTIE_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
+import RSVP from 'rsvp';
 
 export default class FractiesRoute extends Route {
   @service store;
@@ -51,13 +52,13 @@ export default class FractiesRoute extends Route {
       })
     ).at(0);
 
-    return {
+    return RSVP.hash({
       form,
       defaultFractieType,
       fracties,
       bestuurseenheid: parentModel.bestuurseenheid,
       ...organenWithPeriods,
-    };
+    });
   }
 
   @action
