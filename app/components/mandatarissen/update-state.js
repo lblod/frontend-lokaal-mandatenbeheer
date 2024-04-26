@@ -7,6 +7,7 @@ import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 import moment from 'moment';
 import { getDraftStatus } from 'frontend-lmb/utils/get-publication-status';
+import { MANDATARIS_AANGEWEZEN_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -19,6 +20,7 @@ export default class MandatarissenUpdateState extends Component {
   @tracked rangorde = null;
   @tracked selectedReplacement = null;
   @tracked replacementUpdated;
+  @tracked statusOptions = [];
 
   @service mandatarisStatus;
   @service currentSession;
@@ -63,10 +65,25 @@ export default class MandatarissenUpdateState extends Component {
           ),
         }
       );
+    this.statusOptions = await this.getStatusOptions();
   });
 
-  get statusOptions() {
-    return this.mandatarisStatus.statuses;
+  async getStatusOptions() {
+    const isBurgemeester = (
+      await (
+        await this.args.mandataris.bekleedt
+      ).bestuursfunctie
+    ).isBurgemeester;
+
+    // Slice to get rid of proxy
+    const statuses = this.mandatarisStatus.statuses.slice();
+
+    if (isBurgemeester) {
+      return statuses;
+    }
+    return statuses.filter(
+      (status) => status.uri !== MANDATARIS_AANGEWEZEN_STATE
+    );
   }
 
   get currentStatus() {

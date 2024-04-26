@@ -2,6 +2,8 @@ export const FUNCTIONARIS_STATUS_CODE_AANGESTELD =
   'http://data.vlaanderen.be/id/concept/functionarisStatusCode/45b4b155-d22a-4eaf-be3a-97022c6b7fcd';
 export const BESTUURSFUNCTIE_CODE_LEIDINGGEVEND_AMBTENAAR =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/855489b9-b584-4f34-90b2-39aea808cd9f';
+export const BESTUURSFUNCTIE_CODE_BURGEMEESTER =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000013';
 export const FRACTIETYPE_ONAFHANKELIJK =
   'http://data.vlaanderen.be/id/concept/Fractietype/Onafhankelijk';
 export const FRACTIETYPE_SAMENWERKINGSVERBAND =
@@ -14,5 +16,7 @@ export const MANDATARIS_BEKRACHTIGD_STATE =
   'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/9d8fd14d-95d0-4f5e-b3a5-a56a126227b6';
 export const MANDATARIS_DRAFT_STATE =
   'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/588ce330-4abb-4448-9776-a17d9305df07';
+export const MANDATARIS_AANGEWEZEN_STATE =
+  'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/e371f89a-9e83-4a8c-a98e-cd09226fa549';
 export const BELEIDSDOMEIN_CODES_CONCEPT_SCHEME =
   'http://data.vlaanderen.be/id/conceptscheme/BeleidsdomeinCode';
