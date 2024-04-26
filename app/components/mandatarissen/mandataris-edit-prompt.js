@@ -76,7 +76,7 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
 
   @action
   async onBekrachtig() {
-    this.editMode = null
+    this.editMode = null;
     this.args.mandataris.isDraft = false;
     this.args.mandataris.save();
   }
