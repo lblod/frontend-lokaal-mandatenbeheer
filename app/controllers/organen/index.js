@@ -6,7 +6,7 @@ import { service } from '@ember/service';
 export default class OrganenIndexController extends Controller {
   queryParams = [
     'sort',
-    'activeFilter',
+    'activeOrgans',
     'selectedTypes',
     'startDate',
     'endDate',
@@ -15,16 +15,16 @@ export default class OrganenIndexController extends Controller {
   @service decretaleOrganen;
 
   @tracked sort = 'naam';
-  @tracked activeFilter = false;
+  @tracked activeOrgans = false;
   @tracked selectedTypes = ['isDecretaal', 'notDecretaal'];
   @tracked startDate;
   @tracked endDate;
 
-  @tracked modal = false;
+  @tracked isModalActive = false;
 
   @action
   filterActiveOrgans() {
-    this.activeFilter = !this.activeFilter;
+    this.activeOrgans = !this.activeOrgans;
   }
 
   @action
@@ -40,7 +40,7 @@ export default class OrganenIndexController extends Controller {
 
   @action
   clearFilters() {
-    this.activeFilter = false;
+    this.activeOrgans = false;
     this.selectedTypes = ['isDecretaal', 'notDecretaal'];
     this.startDate = null;
     this.endDate = null;
@@ -48,7 +48,7 @@ export default class OrganenIndexController extends Controller {
 
   @action
   toggleModal() {
-    this.modal = !this.modal;
+    this.isModalActive = !this.isModalActive;
   }
 
   @action

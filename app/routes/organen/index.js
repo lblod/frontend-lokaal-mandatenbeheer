@@ -15,7 +15,7 @@ export default class OrganenIndexRoute extends Route {
   pageSize = 20000;
   queryParams = {
     sort: { refreshModel: true },
-    activeFilter: { refreshModel: true },
+    activeOrgans: { refreshModel: true },
     selectedTypes: { refreshModel: true },
     startDate: { refreshModel: true },
     endDate: { refreshModel: true },
@@ -71,7 +71,7 @@ export default class OrganenIndexRoute extends Route {
   }
 
   async filterBestuursorganen(bestuursorganen, params, bestuursPeriod) {
-    if (params.activeFilter) {
+    if (params.activeOrgans) {
       bestuursorganen = bestuursorganen.filter((orgaan) => {
         return orgaan.isActive;
       });
