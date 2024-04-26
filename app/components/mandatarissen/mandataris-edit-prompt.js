@@ -54,9 +54,6 @@ export default class MandatenbeheerMandatarisEditPromptComponent extends Compone
       sourceGraph: SOURCE_GRAPH,
     });
 
-    this.args.mandataris.modified = new Date();
-    await this.args.mandataris.save();
-
     setTimeout(() => this.router.refresh(), 1000);
   }
 
