@@ -31,6 +31,6 @@ Or if you are using docker ember, the following:
 edi npm run lint
 ```
 
-test 123
+test 1234
 
 ## Complex configuration
