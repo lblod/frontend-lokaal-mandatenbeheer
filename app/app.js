@@ -6,6 +6,7 @@ import config from './config/environment';
 import './config/custom-inflector-rules';
 import { setupSentry } from 'frontend-lmb/utils/sentry';
 import { silenceEmptySyncRelationshipWarnings } from './utils/ember-data';
+import Model from '@ember-data/model';
 
 setupSentry();
 silenceEmptySyncRelationshipWarnings();
@@ -15,6 +16,16 @@ export default class App extends Application {
   podModulePrefix = config.podModulePrefix;
   Resolver = Resolver;
 }
+
+// if we track modified state in the model, add the current time as modified date
+Model.reopen({
+  save: function () {
+    if (this.constructor.attributes.get('modified')) {
+      this.modified = new Date();
+    }
+    return this._super();
+  },
+});
 
 // By default `Array.prototype._super` is enumerable which causes conflicts with rdflib.
 // We can force it to be non-enumerable so everything works as expected.
