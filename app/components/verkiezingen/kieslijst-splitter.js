@@ -8,8 +8,24 @@ export default class KieslijstSplitterComponent extends Component {
   @service store;
   @service router;
 
+  @tracked samenwerkingsVerband;
+
   @tracked selectedKieslijst;
   @tracked selectedFractie;
+
+  constructor() {
+    super(...arguments);
+    this.load();
+  }
+
+  async load() {
+    this.samenwerkingsVerband = (
+      await this.store.query('fractietype', {
+        page: { size: 1 },
+        'filter[:uri:]': FRACTIETYPE_SAMENWERKINGSVERBAND,
+      })
+    ).at(0);
+  }
 
   @action
   selectKieslijst(lijst) {
@@ -30,15 +46,9 @@ export default class KieslijstSplitterComponent extends Component {
 
   @action
   async behoudKieslijst() {
-    const fractieType = (
-      await this.store.query('fractietype', {
-        page: { size: 1 },
-        'filter[:uri:]': FRACTIETYPE_SAMENWERKINGSVERBAND,
-      })
-    ).at(0);
     const fractie = this.store.createRecord('fractie', {
       naam: this.selectedKieslijst.lijstnaam,
-      fractietype: fractieType,
+      fractietype: this.samenwerkingsVerband,
       bestuursorganenInTijd: [this.args.bestuursorgaan],
       bestuurseenheid: this.args.bestuurseenheid,
       origineleKandidatenlijst: this.selectedKieslijst,
