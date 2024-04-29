@@ -92,11 +92,10 @@
         {{/if}}
         {{#if @showBevoegdheid}}
           {{#if (eq this.editBeleidsdomeinen row.id)}}
-            <td>
+            <td {{on-click-outside this.closeEditBeleidsdomeinen}}>
               <Mandatarissen::BeleidsdomeinSelectorWithCreate
                 @beleidsdomeinen={{row.beleidsdomein}}
                 @onSelect={{this.updateBeleidsdomeinen}}
-                {{on "focusout" this.closeEditBeleidsdomeinen}}
               />
             </td>
           {{else}}

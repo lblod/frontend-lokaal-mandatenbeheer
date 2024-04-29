@@ -25,8 +25,7 @@ export default class DraftMandatarisListComponent extends Component {
   }
 
   @action
-  closeEditBeleidsdomeinen(event) {
-    console.log(event);
+  closeEditBeleidsdomeinen() {
     this.mandataris = null;
     this.editBeleidsdomeinen = null;
   }
