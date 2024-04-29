@@ -96,6 +96,7 @@
               <Mandatarissen::BeleidsdomeinSelectorWithCreate
                 @beleidsdomeinen={{row.beleidsdomein}}
                 @onSelect={{this.updateBeleidsdomeinen}}
+                {{on "focusout" this.closeEditBeleidsdomeinen}}
               />
             </td>
           {{else}}
