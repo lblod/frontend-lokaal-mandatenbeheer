@@ -12,4 +12,9 @@ export default class KieslijstSplitterComponent extends Component {
   selectKieslijst(lijst) {
     this.selectedKieslijst = lijst.id;
   }
+
+  @action
+  tmp() {
+    console.log('Temporary button action');
+  }
 }
