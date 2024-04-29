@@ -29,6 +29,12 @@ export default class FractieModel extends Model {
   })
   bestuurseenheid;
 
+  @belongsTo('kandidatenlijst', {
+    async: true,
+    inverse: 'resulterendeFracties',
+  })
+  origineleKandidatenlijst;
+
   get generatedFromGelinktNotuleren() {
     return (this.generatedFrom || []).some(
       (uri) =>
