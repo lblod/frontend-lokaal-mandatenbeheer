@@ -5,6 +5,7 @@ import { service } from '@ember/service';
 
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
+  @service currentSession;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -12,6 +13,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   };
 
   async model(params) {
+    const bestuurseenheid = this.currentSession.group;
     const parentModel = this.modelFor('verkiezingen.verkiezingsuitslag');
     const bestuursorgaan =
       await parentModel.installatievergadering.bestuursorgaanInTijd;
@@ -26,6 +28,8 @@ export default class PrepareInstallatievergaderingRoute extends Route {
 
     return RSVP.hash({
       ...parentModel,
+      bestuurseenheid,
+      bestuursorgaan,
       mandatarissen: mandatarissen,
       kandidatenlijsten,
       fracties,
