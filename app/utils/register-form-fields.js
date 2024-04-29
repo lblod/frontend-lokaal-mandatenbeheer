@@ -12,6 +12,7 @@ import RDFConceptSchemeSelectorComponent from 'frontend-lmb/components/rdf-input
 import RDFConceptSchemeMultiSelectorComponent from 'frontend-lmb/components/rdf-input-fields/concept-scheme-multi-selector';
 import RdfInputFieldsConceptSchemeSelectorWithCreateComponent from 'frontend-lmb/components/rdf-input-fields/concept-scheme-selector-with-create';
 import RdfInputFieldsConceptSchemeMultiSelectorWithCreateComponent from 'frontend-lmb/components/rdf-input-fields/concept-scheme-multi-selector-with-create';
+import RdfInputFieldsMandatarisStatusSelectorComponent from 'frontend-lmb/components/rdf-input-fields/mandataris-status-selector';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -40,6 +41,11 @@ export const registerCustomFormFields = () => {
       displayType:
         'http://lblod.data.gift/display-types/mandatarisMandaatSelector',
       edit: RDFMandatarisMandaatSelectorComponent,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/mandatarisStatusCodeSelector',
+      edit: RdfInputFieldsMandatarisStatusSelectorComponent,
     },
     {
       displayType: 'http://lblod.data.gift/display-types/archivedInput',
