@@ -22,6 +22,15 @@ export default class DraftMandatarisListComponent extends Component {
   openEditBeleidsdomeinen(mandataris) {
     this.mandataris = mandataris;
     this.editBeleidsdomeinen = mandataris.id;
+    addEventListener('keyup', this.handleKeyDownBeleidsdomeinen);
+  }
+
+  @action
+  handleKeyDownBeleidsdomeinen(event) {
+    if (event.code == 'Escape' || event.code == 'Tab') {
+      removeEventListener('keyup', this.handleKeyDownBeleidsdomeinen);
+      this.closeEditBeleidsdomeinen();
+    }
   }
 
   @action
