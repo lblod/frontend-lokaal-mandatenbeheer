@@ -70,21 +70,18 @@ export default class KieslijstSplitterComponent extends Component {
 
   @action
   async splitKieslijst() {
-    console.log(this.splitFractie1);
-    console.log(this.splitFractie2);
+    await this.saveFractie(this.splitFractie1, this.selectedKieslijst);
+    await this.saveFractie(this.splitFractie2, this.selectedKieslijst);
     this.closeSplitKieslijstModal();
+    this.router.refresh();
   }
 
   @action
   async keepKieslijst() {
-    const fractie = this.store.createRecord('fractie', {
-      naam: this.selectedKieslijst.lijstnaam,
-      fractietype: this.samenwerkingsVerband,
-      bestuursorganenInTijd: [this.args.bestuursorgaan],
-      bestuurseenheid: this.args.bestuurseenheid,
-      origineleKandidatenlijst: this.selectedKieslijst,
-    });
-    await fractie.save();
+    await this.saveFractie(
+      this.selectedKieslijst.lijstnaam,
+      this.selectedKieslijst
+    );
     this.router.refresh();
   }
 
@@ -99,5 +96,16 @@ export default class KieslijstSplitterComponent extends Component {
       await fractie.destroyRecord();
     });
     await kieslijst.save();
+  }
+
+  async saveFractie(name, kieslijst) {
+    const fractie = this.store.createRecord('fractie', {
+      naam: name,
+      fractietype: this.samenwerkingsVerband,
+      bestuursorganenInTijd: [this.args.bestuursorgaan],
+      bestuurseenheid: this.args.bestuurseenheid,
+      origineleKandidatenlijst: kieslijst,
+    });
+    await fractie.save();
   }
 }
