@@ -17,11 +17,9 @@ module(
       assert.dom(this.element).hasText('');
 
       // Template block usage:
-      await render(hbs`
-      <RdfInputFields::MandatarisStatusSelector>
-        template block text
-      </RdfInputFields::MandatarisStatusSelector>
-    `);
+      await render(hbs`<RdfInputFields::MandatarisStatusSelector>
+  template block text
+</RdfInputFields::MandatarisStatusSelector>`);
 
       assert.dom(this.element).hasText('template block text');
     });
