@@ -6,10 +6,10 @@ import { action } from '@ember/object';
 export default class KieslijstSplitterComponent extends Component {
   @service store;
 
-  @tracked selected;
+  @tracked selectedKieslijst;
 
   @action
-  test(value) {
-    console.log(value);
+  selectKieslijst(lijst) {
+    this.selectedKieslijst = lijst.id;
   }
 }

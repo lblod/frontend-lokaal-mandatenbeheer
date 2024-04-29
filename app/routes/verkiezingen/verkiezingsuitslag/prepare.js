@@ -22,7 +22,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     }
 
     let kandidatenlijsten = await this.getKandidatenLijsten(bestuursorgaan);
-    console.log(kandidatenlijsten);
 
     return RSVP.hash({
       ...parentModel,

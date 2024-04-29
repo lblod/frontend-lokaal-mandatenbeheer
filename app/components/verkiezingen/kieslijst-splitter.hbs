@@ -18,7 +18,11 @@
         <:body>
           {{#each @kandidatenlijst as |lijst|}}
             <tr>
-              <td>
+              <td
+                {{on "click" (fn this.selectKieslijst lijst)}}
+                class="kieslijst-cell
+                  {{if (eq this.selectedKieslijst lijst.id) 'selected'}}"
+              >
                 {{lijst.lijstnaam}}
               </td>
             </tr>
