@@ -12,6 +12,9 @@ export default class KieslijstSplitterComponent extends Component {
 
   @tracked selectedKieslijst;
   @tracked selectedFractie;
+  @tracked splitKieslijstModalOpen = false;
+  @tracked splitFractie1;
+  @tracked splitFractie2;
 
   constructor() {
     super(...arguments);
@@ -40,8 +43,36 @@ export default class KieslijstSplitterComponent extends Component {
   }
 
   @action
-  tmp() {
-    console.log('Temporary button action');
+  openSplitKieslijstModal() {
+    this.splitKieslijstModalOpen = true;
+  }
+
+  @action
+  closeSplitKieslijstModal() {
+    this.splitKieslijstModalOpen = false;
+    this.splitFractie1 = null;
+    this.splitFractie2 = null;
+  }
+
+  @action
+  setValueFractie1(event) {
+    this.splitFractie1 = event.target.value;
+  }
+
+  @action
+  setValueFractie2(event) {
+    this.splitFractie2 = event.target.value;
+  }
+
+  get hasChanges() {
+    return this.splitFractie1 || this.splitFractie2;
+  }
+
+  @action
+  async splitKieslijst() {
+    console.log(this.splitFractie1);
+    console.log(this.splitFractie2);
+    this.closeSplitKieslijstModal();
   }
 
   @action

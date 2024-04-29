@@ -33,7 +33,7 @@
 
     <div class="au-o-grid__item au-u-2-6@medium au-u-flex">
       <div class="vertical-btn-group">
-        <AuButton {{on "click" this.tmp}}>
+        <AuButton {{on "click" this.openSplitKieslijstModal}}>
           Splitsen
         </AuButton>
         <AuButton {{on "click" this.keepKieslijst}}>
@@ -64,3 +64,53 @@
     </div>
   </div>
 </div>
+
+<AuModal
+  @title="Splits kieslijst in fracties"
+  @modalOpen={{this.splitKieslijstModalOpen}}
+  @closable={{true}}
+  @closeModal={{this.closeSplitKieslijstModal}}
+>
+  <div class="au-o-box">
+    <div>
+      <AuLabel>
+        Fractie 1
+      </AuLabel>
+      <AuInput
+        @width="block"
+        id="fractie-split-1"
+        placeholder="Vul een eerste fractie in"
+        {{on "input" this.setValueFractie1}}
+      />
+    </div>
+    <div>
+      <AuLabel>
+        Fractie 2
+      </AuLabel>
+      <AuInput
+        @width="block"
+        id="fractie-split-2"
+        placeholder="Vul een tweede fractie in"
+        {{on "input" this.setValueFractie2}}
+      />
+    </div>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton
+            {{on "click" this.splitKieslijst}}
+            @disabled={{not this.hasChanges}}
+          >
+            {{if this.hasChanges "Pas aan" "Onveranderd"}}
+          </AuButton>
+          <AuButton
+            {{on "click" this.closeSplitKieslijstModal}}
+            @skin="secondary"
+          >
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+</AuModal>
