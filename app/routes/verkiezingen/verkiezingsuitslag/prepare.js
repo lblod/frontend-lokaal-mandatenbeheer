@@ -72,6 +72,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   async getFracties(bestuursOrgaan) {
     const queryParams = {
       'filter[bestuursorganen-in-tijd][id]': bestuursOrgaan.id,
+      'filter[:has:originele-kandidatenlijst]': true,
     };
 
     return await this.store.query('fractie', queryParams);
