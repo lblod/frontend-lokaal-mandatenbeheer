@@ -1,0 +1,30 @@
+<AuToolbar
+  @size="large"
+  @nowrap="true"
+  class="au-u-padding-bottom-none"
+  as |Group|
+>
+  <Group>
+    <div class="au-o-flow">
+      <AuHeading @skin="2">Samenstellen fracties</AuHeading>
+    </div>
+  </Group>
+</AuToolbar>
+
+<div class="au-o-box">
+  <div class="au-o-grid au-o-grid--small">
+    <div class="au-o-grid__item au-u-2-6@medium">
+      <AuTable @size="small">
+        <:body>
+          {{#each @kandidatenlijst as |lijst|}}
+            <tr>
+              <td>
+                {{lijst.lijstnaam}}
+              </td>
+            </tr>
+          {{/each}}
+        </:body>
+      </AuTable>
+    </div>
+  </div>
+</div>

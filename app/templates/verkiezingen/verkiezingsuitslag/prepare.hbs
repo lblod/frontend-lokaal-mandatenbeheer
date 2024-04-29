@@ -1,6 +1,9 @@
 {{page-title "Voorbereiding legislatuur"}}
 
-<div class="au-c-body-container">
+<div class="au-c-body-container au-c-body-container--scroll">
+  <Verkiezingen::KieslijstSplitter
+    @kandidatenlijst={{@model.kandidatenlijsten}}
+  />
   <AuToolbar
     @size="large"
     @nowrap="true"
@@ -22,7 +25,7 @@
     </Group>
   </AuToolbar>
 
-  <Verkiezingen::DraftMandatarisList
+  {{!-- <Verkiezingen::DraftMandatarisList
     @mandatarissen={{@model.mandatarissen}}
     @sort={{this.sort}}
     @page={{0}}
@@ -33,5 +36,5 @@
     @showRangorde={{true}}
     @showBevoegdheid={{true}}
     @showStartEndDate={{true}}
-  />
+  /> --}}
 </div>
