@@ -21,7 +21,7 @@
               <td
                 {{on "click" (fn this.selectKieslijst lijst)}}
                 class="clickable-cell
-                  {{if (eq this.selectedKieslijst lijst.id) 'selected'}}"
+                  {{if (eq this.selectedKieslijst.id lijst.id) 'selected'}}"
               >
                 {{lijst.lijstnaam}}
               </td>
@@ -53,7 +53,7 @@
               <td
                 {{on "click" (fn this.selectFractie fractie)}}
                 class="clickable-cell
-                  {{if (eq this.selectedFractie fractie.id) 'selected'}}"
+                  {{if (eq this.selectedFractie.id fractie.id) 'selected'}}"
               >
                 {{fractie.naam}}
               </td>

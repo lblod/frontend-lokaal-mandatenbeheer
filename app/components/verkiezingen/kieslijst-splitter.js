@@ -12,13 +12,13 @@ export default class KieslijstSplitterComponent extends Component {
   @action
   selectKieslijst(lijst) {
     this.selectedFractie = null;
-    this.selectedKieslijst = lijst.id;
+    this.selectedKieslijst = lijst;
   }
 
   @action
   selectFractie(fractie) {
     this.selectedKieslijst = null;
-    this.selectedFractie = fractie.id;
+    this.selectedFractie = fractie;
   }
 
   @action
