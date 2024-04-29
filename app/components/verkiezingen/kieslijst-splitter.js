@@ -45,7 +45,7 @@ export default class KieslijstSplitterComponent extends Component {
   }
 
   @action
-  async behoudKieslijst() {
+  async keepKieslijst() {
     const fractie = this.store.createRecord('fractie', {
       naam: this.selectedKieslijst.lijstnaam,
       fractietype: this.samenwerkingsVerband,
@@ -55,5 +55,18 @@ export default class KieslijstSplitterComponent extends Component {
     });
     await fractie.save();
     this.router.refresh();
+  }
+
+  @action
+  async revertSplitKieslijst() {
+    const kieslijst = await this.selectedFractie.get(
+      'origineleKandidatenlijst'
+    );
+    const fracties = await kieslijst.get('resulterendeFracties');
+    fracties.forEach(async (fractie) => {
+      await fracties.removeObject(fractie);
+      await fractie.destroyRecord();
+    });
+    await kieslijst.save();
   }
 }
