@@ -16,7 +16,8 @@ export default class MandatarisModel extends Model {
   })
   modified;
 
-  @belongsTo('mandaat', { async: true, inverse: 'bekleedDoor' }) bekleedt;
+  @belongsTo('mandaat', { async: true, inverse: 'bekleedDoor' })
+  bekleedt;
 
   @belongsTo('persoon', {
     async: true,
