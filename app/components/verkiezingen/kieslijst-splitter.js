@@ -6,7 +6,6 @@ import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-
 
 export default class KieslijstSplitterComponent extends Component {
   @service store;
-  @service router;
 
   @tracked samenwerkingsVerband;
 
@@ -73,7 +72,6 @@ export default class KieslijstSplitterComponent extends Component {
     await this.saveFractie(this.splitFractie1, this.selectedKieslijst);
     await this.saveFractie(this.splitFractie2, this.selectedKieslijst);
     this.closeSplitKieslijstModal();
-    this.router.refresh();
   }
 
   @action
@@ -82,7 +80,6 @@ export default class KieslijstSplitterComponent extends Component {
       this.selectedKieslijst.lijstnaam,
       this.selectedKieslijst
     );
-    this.router.refresh();
   }
 
   @action

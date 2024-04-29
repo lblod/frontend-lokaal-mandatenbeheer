@@ -48,16 +48,18 @@
     <div class="au-o-grid__item au-u-2-6@medium">
       <AuTable @size="small">
         <:body>
-          {{#each @fracties as |fractie|}}
-            <tr>
-              <td
-                {{on "click" (fn this.selectFractie fractie)}}
-                class="clickable-cell
-                  {{if (eq this.selectedFractie.id fractie.id) 'selected'}}"
-              >
-                {{fractie.naam}}
-              </td>
-            </tr>
+          {{#each @kandidatenlijst as |lijst|}}
+            {{#each lijst.resulterendeFracties as |fractie|}}
+              <tr>
+                <td
+                  {{on "click" (fn this.selectFractie fractie)}}
+                  class="clickable-cell
+                    {{if (eq this.selectedFractie.id fractie.id) 'selected'}}"
+                >
+                  {{fractie.naam}}
+                </td>
+              </tr>
+            {{/each}}
           {{/each}}
         </:body>
       </AuTable>

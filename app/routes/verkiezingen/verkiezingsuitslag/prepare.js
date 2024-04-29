@@ -24,7 +24,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     }
 
     let kandidatenlijsten = await this.getKandidatenLijsten(bestuursorgaan);
-    let fracties = await this.getFracties(bestuursorgaan);
 
     return RSVP.hash({
       ...parentModel,
@@ -32,7 +31,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       bestuursorgaan,
       mandatarissen: mandatarissen,
       kandidatenlijsten,
-      fracties,
     });
   }
 
@@ -68,17 +66,9 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   async getKandidatenLijsten(bestuursOrgaan) {
     const queryParams = {
       'filter[verkiezing][bestuursorgaan-in-tijd][id]': bestuursOrgaan.id,
+      include: 'resulterende-fracties',
     };
 
     return await this.store.query('kandidatenlijst', queryParams);
-  }
-
-  async getFracties(bestuursOrgaan) {
-    const queryParams = {
-      'filter[bestuursorganen-in-tijd][id]': bestuursOrgaan.id,
-      'filter[:has:originele-kandidatenlijst]': true,
-    };
-
-    return await this.store.query('fractie', queryParams);
   }
 }
