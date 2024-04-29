@@ -20,7 +20,7 @@
             <tr>
               <td
                 {{on "click" (fn this.selectKieslijst lijst)}}
-                class="kieslijst-cell
+                class="clickable-cell
                   {{if (eq this.selectedKieslijst lijst.id) 'selected'}}"
               >
                 {{lijst.lijstnaam}}
