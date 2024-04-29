@@ -44,5 +44,23 @@
         </AuButton>
       </div>
     </div>
+
+    <div class="au-o-grid__item au-u-2-6@medium">
+      <AuTable @size="small">
+        <:body>
+          {{#each @fracties as |fractie|}}
+            <tr>
+              <td
+                {{on "click" (fn this.selectFractie fractie)}}
+                class="clickable-cell
+                  {{if (eq this.selectedFractie fractie.id) 'selected'}}"
+              >
+                {{fractie.naam}}
+              </td>
+            </tr>
+          {{/each}}
+        </:body>
+      </AuTable>
+    </div>
   </div>
 </div>

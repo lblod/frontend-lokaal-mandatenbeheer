@@ -7,10 +7,18 @@ export default class KieslijstSplitterComponent extends Component {
   @service store;
 
   @tracked selectedKieslijst;
+  @tracked selectedFractie;
 
   @action
   selectKieslijst(lijst) {
+    this.selectedFractie = null;
     this.selectedKieslijst = lijst.id;
+  }
+
+  @action
+  selectFractie(fractie) {
+    this.selectedKieslijst = null;
+    this.selectedFractie = fractie.id;
   }
 
   @action
