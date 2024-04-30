@@ -16,6 +16,7 @@ export default class DraftMandatarisListComponent extends Component {
   @action
   closeModal() {
     this.isModalOpen = false;
+    this.mandataris = null;
   }
 
   @action
@@ -28,13 +29,13 @@ export default class DraftMandatarisListComponent extends Component {
   @action
   handleKeyDownBeleidsdomeinen(event) {
     if (event.code == 'Escape' || event.code == 'Tab') {
-      removeEventListener('keyup', this.handleKeyDownBeleidsdomeinen);
       this.closeEditBeleidsdomeinen();
     }
   }
 
   @action
   closeEditBeleidsdomeinen() {
+    removeEventListener('keyup', this.handleKeyDownBeleidsdomeinen);
     this.mandataris = null;
     this.editBeleidsdomeinen = null;
   }
@@ -49,6 +50,6 @@ export default class DraftMandatarisListComponent extends Component {
   async updatePerson(person) {
     this.mandataris.isBestuurlijkeAliasVan = person;
     await this.mandataris.save();
-    this.isModalOpen = false;
+    this.closeModal();
   }
 }
