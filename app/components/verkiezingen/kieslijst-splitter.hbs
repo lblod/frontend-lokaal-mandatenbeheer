@@ -66,13 +66,7 @@
                   role="button"
                   {{on "click" (fn this.selectFracties lijst)}}
                   class="clickable-cell
-                    {{if
-                      (or
-                        (eq this.selectedFractie1.id fractie.id)
-                        (eq this.selectedFractie2.id fractie.id)
-                      )
-                      'selected'
-                    }}"
+                    {{if (contains this.selectedFracties fractie) 'selected'}}"
                 >
                   {{fractie.naam}}
                 </td>

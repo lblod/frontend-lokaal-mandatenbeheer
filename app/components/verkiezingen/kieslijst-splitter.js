@@ -10,7 +10,7 @@ export default class KieslijstSplitterComponent extends Component {
   @tracked samenwerkingsVerband;
 
   @tracked selectedKieslijst;
-  @tracked selectedFractie;
+  @tracked selectedFracties;
 
   @tracked splitKieslijstModalOpen = false;
   @tracked splitFractie1;
@@ -28,16 +28,9 @@ export default class KieslijstSplitterComponent extends Component {
   }
 
   get fractieSelected() {
-    return this.selectedFractie != null;
+    return this.selectedFracties != null;
   }
 
-  get selectedFractie1() {
-    return this.selectedFractie ? this.selectedFractie[0] : null;
-  }
-
-  get selectedFractie2() {
-    return this.selectedFractie ? this.selectedFractie[1] : null;
-  }
   get kieslijstCanBeSplit() {
     if (!this.kieslijstSelected) {
       return false;
@@ -57,7 +50,7 @@ export default class KieslijstSplitterComponent extends Component {
   @action
   selectKieslijst(lijst) {
     if (!lijst.splitted) {
-      this.selectedFractie = null;
+      this.selectedFracties = null;
       this.selectedKieslijst = lijst;
     }
   }
@@ -65,7 +58,7 @@ export default class KieslijstSplitterComponent extends Component {
   @action
   async selectFracties(kieslijst) {
     this.selectedKieslijst = kieslijst;
-    this.selectedFractie = await kieslijst.get('resulterendeFracties');
+    this.selectedFracties = await kieslijst.get('resulterendeFracties');
   }
 
   @action
