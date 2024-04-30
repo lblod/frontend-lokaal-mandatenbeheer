@@ -38,6 +38,14 @@ export default class KieslijstSplitterComponent extends Component {
     return !this.selectedKieslijst.splitted;
   }
 
+  get fractieString() {
+    if (this.selectedFracties.length == 1) {
+      return `de fractie ${this.selectedFracties[0].naam}`;
+    } else {
+      return `de fracties ${this.selectedFracties[0].naam} en ${this.selectedFracties[1].naam}`;
+    }
+  }
+
   async load() {
     this.samenwerkingsVerband = (
       await this.store.query('fractietype', {
