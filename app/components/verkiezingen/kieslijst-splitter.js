@@ -46,8 +46,10 @@ export default class KieslijstSplitterComponent extends Component {
 
   @action
   selectKieslijst(lijst) {
-    this.selectedFractie = null;
-    this.selectedKieslijst = lijst;
+    if (!lijst.splitted) {
+      this.selectedFractie = null;
+      this.selectedKieslijst = lijst;
+    }
   }
 
   @action
