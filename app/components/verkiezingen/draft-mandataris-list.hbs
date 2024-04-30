@@ -64,10 +64,20 @@
 
       <c.body as |row|>
         <td>
-          {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          <Verkiezingen::EditOnHover
+            @text={{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+            @editFunction={{this.openModal}}
+            @model={{row}}
+            @helpText="Pas de persoon aan"
+          />
         </td>
         <td>
-          {{row.isBestuurlijkeAliasVan.achternaam}}
+          <Verkiezingen::EditOnHover
+            @text={{row.isBestuurlijkeAliasVan.achternaam}}
+            @editFunction={{this.openModal}}
+            @model={{row}}
+            @helpText="Pas de persoon aan"
+          />
         </td>
         {{#if @showFractie}}
           <td>
@@ -99,3 +109,18 @@
     </t.content>
   </AuDataTable>
 </div>
+
+<AuModal
+  @title="Selecteer een persoon"
+  @modalOpen={{this.isModalOpen}}
+  @closable={{true}}
+  @closeModal={{this.closeModal}}
+>
+  <div class="au-o-box">
+    <Person::Selector
+      @person={{this.mandataris.isBestuurlijkeAliasVan}}
+      @onUpdate={{this.updatePerson}}
+      @inline="false"
+    />
+  </div>
+</AuModal>

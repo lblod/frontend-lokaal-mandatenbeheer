@@ -1,0 +1,15 @@
+<div class="hover-container">
+  {{@text}}
+  <div class="hover-element">
+    <AuIcon
+      @icon="pencil"
+      @size="medium"
+      {{on "click" (fn @editFunction @model)}}
+    />
+    <div class="hover-help-text">
+      <div>
+        {{@helpText}}
+      </div>
+    </div>
+  </div>
+</div>
