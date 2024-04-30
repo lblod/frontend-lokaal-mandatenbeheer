@@ -35,13 +35,13 @@
       <div class="vertical-btn-group">
         <AuButton
           {{on "click" this.openSplitKieslijstModal}}
-          @disabled={{not this.kieslijstSelected}}
+          @disabled={{not this.kieslijstCanBeSplit}}
         >
           Splitsen
         </AuButton>
         <AuButton
           {{on "click" this.keepKieslijst}}
-          @disabled={{not this.kieslijstSelected}}
+          @disabled={{not this.kieslijstCanBeSplit}}
         >
           Behouden
         </AuButton>

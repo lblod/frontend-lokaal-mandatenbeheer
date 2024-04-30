@@ -28,6 +28,14 @@ export default class KieslijstSplitterComponent extends Component {
     return this.selectedFractie != null;
   }
 
+  get kieslijstCanBeSplit() {
+    if (!this.kieslijstSelected) {
+      return false;
+    }
+    const fracties = this.selectedKieslijst.get('resulterendeFracties');
+    return !fracties || fracties.length == 0;
+  }
+
   async load() {
     this.samenwerkingsVerband = (
       await this.store.query('fractietype', {
