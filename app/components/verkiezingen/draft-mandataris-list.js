@@ -41,13 +41,35 @@ export default class DraftMandatarisListComponent extends Component {
       return;
     }
 
-    if (this.rangordeAsStringMapping.includes(firstWord.input?.toLowerCase())) {
+    if (
+      Object.keys(this.rangordeAsStringMapping).includes(
+        firstWord.input?.toLowerCase()
+      )
+    ) {
       console.log(`first word is a number`, firstWord.input);
+      console.log(`number is`, this.rangordeAsStringMapping[firstWord.input]);
+    } else {
+      const intValue = parseInt(firstWord);
+      if (!intValue) {
+        // show warning
+        return;
+      }
+      console.log({ intValue });
     }
   });
 
   get rangordeAsStringMapping() {
-    return ['eerste', 'tweede'];
+    return {
+      eerste: 1,
+      tweede: 2,
+      derde: 3,
+      vierde: 4,
+      vijfde: 5,
+      zesde: 6,
+      zevende: 7,
+      achtste: 8,
+      negende: 9,
+    };
   }
 
   findFirstWordOfString(string) {
