@@ -19,6 +19,7 @@
           {{#each @kandidatenlijst as |lijst|}}
             <tr>
               <td
+                role="button"
                 {{on "click" (fn this.selectKieslijst lijst)}}
                 class="clickable-cell
                   {{if (eq this.selectedKieslijst.id lijst.id) 'selected'}}
@@ -62,6 +63,7 @@
             {{#each lijst.resulterendeFracties as |fractie|}}
               <tr>
                 <td
+                  role="button"
                   {{on "click" (fn this.selectFractie fractie)}}
                   class="clickable-cell
                     {{if (eq this.selectedFractie.id fractie.id) 'selected'}}"
