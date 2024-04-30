@@ -90,7 +90,10 @@
         {{#if @showRangorde}}
           {{#if (eq this.editRangorde row.id)}}
             <td {{on-click-outside this.closeEditRangorde}}>
-              <AuInput value={{row.rangorde}} />
+              <AuInput
+                value={{this.editRangordeValue}}
+                {{on "keyup" (perform this.validateRangorde)}}
+              />
             </td>
           {{else}}
             <Verkiezingen::EditOnHover
