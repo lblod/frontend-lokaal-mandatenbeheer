@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
+import { A } from '@ember/array';
 
 export default class KieslijstSplitterComponent extends Component {
   @service store;
@@ -17,6 +18,8 @@ export default class KieslijstSplitterComponent extends Component {
   @tracked splitFractie2;
 
   @tracked revertKieslijstModalOpen = false;
+
+  @tracked fracties = A([]);
 
   constructor() {
     super(...arguments);
@@ -45,6 +48,11 @@ export default class KieslijstSplitterComponent extends Component {
         'filter[:uri:]': FRACTIETYPE_SAMENWERKINGSVERBAND,
       })
     ).at(0);
+    this.args.kandidatenlijst.forEach((lijst) => {
+      lijst.resulterendeFracties.forEach((fractie) => {
+        this.fracties.pushObject(fractie);
+      });
+    });
   }
 
   @action
@@ -56,9 +64,13 @@ export default class KieslijstSplitterComponent extends Component {
   }
 
   @action
-  async selectFracties(kieslijst) {
-    this.selectedKieslijst = kieslijst;
-    this.selectedFracties = await kieslijst.get('resulterendeFracties');
+  async selectFracties(fractie) {
+    this.selectedKieslijst = await fractie
+      .get('origineleKandidatenlijst')
+      .reload();
+    this.selectedFracties = await this.selectedKieslijst
+      .get('resulterendeFracties')
+      .reload();
   }
 
   @action
@@ -112,6 +124,7 @@ export default class KieslijstSplitterComponent extends Component {
     const fracties = await this.selectedKieslijst.get('resulterendeFracties');
     fracties.forEach(async (fractie) => {
       await fracties.removeObject(fractie);
+      this.fracties.removeObject(fractie);
       await fractie.destroyRecord();
     });
     await this.selectedKieslijst.save();
@@ -127,5 +140,6 @@ export default class KieslijstSplitterComponent extends Component {
       origineleKandidatenlijst: kieslijst,
     });
     await fractie.save();
+    this.fracties.pushObject(fractie);
   }
 }

@@ -54,17 +54,15 @@
 
     <div class="au-o-grid__item au-u-2-6@medium">
       <ul>
-        {{#each @kandidatenlijst as |lijst|}}
-          {{#each lijst.resulterendeFracties as |fractie|}}
-            <li
-              role="button"
-              {{on "click" (fn this.selectFracties lijst)}}
-              class="clickable-cell
-                {{if (contains this.selectedFracties fractie) 'selected'}}"
-            >
-              {{fractie.naam}}
-            </li>
-          {{/each}}
+        {{#each this.fracties as |fractie|}}
+          <li
+            role="button"
+            {{on "click" (fn this.selectFracties fractie)}}
+            class="clickable-cell
+              {{if (contains this.selectedFracties fractie) 'selected'}}"
+          >
+            {{fractie.naam}}
+          </li>
         {{/each}}
       </ul>
     </div>
