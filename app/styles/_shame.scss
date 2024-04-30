@@ -203,6 +203,13 @@
   font-weight: var(--au-medium);
 }
 
+.clickable-cell.disabled {
+  cursor: not-allowed;
+  color: var(--au-gray-700);
+  background-color: var(--au-gray-300);
+  text-decoration: line-through;
+}
+
 .vertical-btn-group {
   margin: auto;
 }

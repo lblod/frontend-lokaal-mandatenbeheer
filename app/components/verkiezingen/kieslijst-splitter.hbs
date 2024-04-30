@@ -21,7 +21,8 @@
               <td
                 {{on "click" (fn this.selectKieslijst lijst)}}
                 class="clickable-cell
-                  {{if (eq this.selectedKieslijst.id lijst.id) 'selected'}}"
+                  {{if (eq this.selectedKieslijst.id lijst.id) 'selected'}}
+                  {{if lijst.splitted 'disabled'}}"
               >
                 {{lijst.lijstnaam}}
               </td>
