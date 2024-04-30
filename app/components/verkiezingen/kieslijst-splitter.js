@@ -28,16 +28,11 @@ export default class KieslijstSplitterComponent extends Component {
     return this.selectedFractie != null;
   }
 
-  kieslijstSplitted(kieslijst) {
-    const fracties = kieslijst.get('resulterendeFracties');
-    return fracties && fracties.length > 0;
-  }
-
   get kieslijstCanBeSplit() {
     if (!this.kieslijstSelected) {
       return false;
     }
-    return !this.kieslijstSplitted(this.selectedKieslijst);
+    return !this.selectedKieslijst.splitted;
   }
 
   async load() {

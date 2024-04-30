@@ -33,4 +33,9 @@ export default class KandidatenlijstModel extends Model {
     inverse: 'origineleKandidatenlijst',
   })
   resulterendeFracties;
+
+  get splitted() {
+    const fracties = this.resulterendeFracties;
+    return fracties && fracties.length > 0;
+  }
 }
