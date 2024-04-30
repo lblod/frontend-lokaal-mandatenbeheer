@@ -31,6 +31,13 @@ export default class KieslijstSplitterComponent extends Component {
     return this.selectedFractie != null;
   }
 
+  get selectedFractie1() {
+    return this.selectedFractie ? this.selectedFractie[0] : null;
+  }
+
+  get selectedFractie2() {
+    return this.selectedFractie ? this.selectedFractie[1] : null;
+  }
   get kieslijstCanBeSplit() {
     if (!this.kieslijstSelected) {
       return false;
@@ -58,7 +65,7 @@ export default class KieslijstSplitterComponent extends Component {
   @action
   async selectFracties(kieslijst) {
     this.selectedKieslijst = kieslijst;
-    this.selectedFractie = (await kieslijst.get('resulterendeFracties'))[0];
+    this.selectedFractie = await kieslijst.get('resulterendeFracties');
   }
 
   @action
