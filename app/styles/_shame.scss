@@ -195,10 +195,17 @@
 
 .clickable-cell {
   cursor: pointer;
+  padding: 0.6rem;
+  font-size: var(--au-h6);
+  border: 1px solid var(--au-gray-300);
+  border-bottom: none;
+}
+
+.clickable-cell:last-child {
+  border-bottom: 1px solid var(--au-gray-300);
 }
 
 .clickable-cell.selected {
-  box-shadow: inset -.3rem 0 0 var(--au-gray-300);;
   background-color: var(--au-blue-300);
   font-weight: var(--au-medium);
 }

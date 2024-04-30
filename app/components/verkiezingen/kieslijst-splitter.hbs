@@ -14,23 +14,19 @@
 <div class="au-o-box">
   <div class="au-o-grid au-o-grid--small">
     <div class="au-o-grid__item au-u-2-6@medium">
-      <AuTable @size="small">
-        <:body>
-          {{#each @kandidatenlijst as |lijst|}}
-            <tr>
-              <td
-                role="button"
-                {{on "click" (fn this.selectKieslijst lijst)}}
-                class="clickable-cell
-                  {{if (eq this.selectedKieslijst.id lijst.id) 'selected'}}
-                  {{if lijst.splitted 'disabled'}}"
-              >
-                {{lijst.lijstnaam}}
-              </td>
-            </tr>
-          {{/each}}
-        </:body>
-      </AuTable>
+      <ul>
+        {{#each @kandidatenlijst as |lijst|}}
+          <li
+            role="button"
+            {{on "click" (fn this.selectKieslijst lijst)}}
+            class="clickable-cell
+              {{if (eq this.selectedKieslijst.id lijst.id) 'selected'}}
+              {{if lijst.splitted 'disabled'}}"
+          >
+            {{lijst.lijstnaam}}
+          </li>
+        {{/each}}
+      </ul>
     </div>
 
     <div class="au-o-grid__item au-u-2-6@medium au-u-flex">
@@ -57,24 +53,20 @@
     </div>
 
     <div class="au-o-grid__item au-u-2-6@medium">
-      <AuTable @size="small">
-        <:body>
-          {{#each @kandidatenlijst as |lijst|}}
-            {{#each lijst.resulterendeFracties as |fractie|}}
-              <tr>
-                <td
-                  role="button"
-                  {{on "click" (fn this.selectFracties lijst)}}
-                  class="clickable-cell
-                    {{if (contains this.selectedFracties fractie) 'selected'}}"
-                >
-                  {{fractie.naam}}
-                </td>
-              </tr>
-            {{/each}}
+      <ul>
+        {{#each @kandidatenlijst as |lijst|}}
+          {{#each lijst.resulterendeFracties as |fractie|}}
+            <li
+              role="button"
+              {{on "click" (fn this.selectFracties lijst)}}
+              class="clickable-cell
+                {{if (contains this.selectedFracties fractie) 'selected'}}"
+            >
+              {{fractie.naam}}
+            </li>
           {{/each}}
-        </:body>
-      </AuTable>
+        {{/each}}
+      </ul>
     </div>
   </div>
 </div>
