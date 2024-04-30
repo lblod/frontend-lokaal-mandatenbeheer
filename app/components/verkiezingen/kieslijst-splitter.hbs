@@ -48,7 +48,7 @@
           Behouden
         </AuButton>
         <AuButton
-          {{on "click" this.revertSplitKieslijst}}
+          {{on "click" this.toggleRevertKieslijstModal}}
           @disabled={{not this.fractieSelected}}
         >
           Terugzetten
@@ -119,6 +119,35 @@
           </AuButton>
           <AuButton
             {{on "click" this.closeSplitKieslijstModal}}
+            @skin="secondary"
+          >
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+</AuModal>
+
+<AuModal
+  @title="Bevestig terugzetten samengestelde fracties"
+  @modalOpen={{this.revertKieslijstModalOpen}}
+  @closable={{true}}
+  @closeModal={{this.toggleRevertKieslijstModal}}
+>
+  <div class="au-o-box">
+    <div class="au-u-margin-bottom">
+      Deze actie zal alle fracties waarin de kieslijst opgesplitst werd
+      terugplaatsen.
+    </div>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton {{on "click" this.confirmRevertSplitKieslijst}}>
+            Bevestig
+          </AuButton>
+          <AuButton
+            {{on "click" this.toggleRevertKieslijstModal}}
             @skin="secondary"
           >
             Annuleer

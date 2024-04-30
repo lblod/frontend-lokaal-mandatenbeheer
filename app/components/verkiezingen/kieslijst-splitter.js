@@ -11,9 +11,12 @@ export default class KieslijstSplitterComponent extends Component {
 
   @tracked selectedKieslijst;
   @tracked selectedFractie;
+
   @tracked splitKieslijstModalOpen = false;
   @tracked splitFractie1;
   @tracked splitFractie2;
+
+  @tracked revertKieslijstModalOpen = false;
 
   constructor() {
     super(...arguments);
@@ -71,6 +74,11 @@ export default class KieslijstSplitterComponent extends Component {
   }
 
   @action
+  toggleRevertKieslijstModal() {
+    this.revertKieslijstModalOpen = !this.revertKieslijstModalOpen;
+  }
+
+  @action
   setValueFractie1(event) {
     this.splitFractie1 = event.target.value;
   }
@@ -100,7 +108,7 @@ export default class KieslijstSplitterComponent extends Component {
   }
 
   @action
-  async revertSplitKieslijst() {
+  async confirmRevertSplitKieslijst() {
     const kieslijst = await this.selectedFractie.get(
       'origineleKandidatenlijst'
     );
@@ -110,6 +118,7 @@ export default class KieslijstSplitterComponent extends Component {
       await fractie.destroyRecord();
     });
     await kieslijst.save();
+    this.toggleRevertKieslijstModal();
   }
 
   async saveFractie(name, kieslijst) {
