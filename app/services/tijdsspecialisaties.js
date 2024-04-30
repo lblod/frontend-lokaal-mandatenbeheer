@@ -43,8 +43,12 @@ export default class TijdsspecialisatiesService extends Service {
     return selectedTijdsspecialisaties.filter(Boolean);
   }
 
+  // This logic should be split, this does two totally different things,
+  // On te one hand fetching currently selected bestuursorganen,
+  // On the other hand fetching possible bestuursperiods, which should not influence each other.
   async fetchBestuursOrganenWithTijdsperiods(organen, params) {
-    let selectedPeriod, bestuursPeriods;
+    let selectedPeriod;
+    let bestuursPeriods = new Set();
 
     const selectedBestuursOrganen = await Promise.all(
       organen.map(async (bestuursorgaan) => {
@@ -53,6 +57,7 @@ export default class TijdsspecialisatiesService extends Service {
 
         let currentBestuursorgaan;
         if (tijdsspecialisaties.length != 0) {
+          // This returns undefined, if bestuursorgaan does not have a period corresponding with the params...
           const result = getSelectedBestuursorgaanWithPeriods(
             tijdsspecialisaties,
             {
@@ -71,8 +76,9 @@ export default class TijdsspecialisatiesService extends Service {
               startDate: result.startDate,
               endDate: result.endDate,
             };
-            bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
           }
+          let periods = getBestuursPeriods(tijdsspecialisaties);
+          periods.forEach((item) => bestuursPeriods.add(JSON.stringify(item)));
           return currentBestuursorgaan;
         }
       })
@@ -80,8 +86,11 @@ export default class TijdsspecialisatiesService extends Service {
     const filteredTijdsspecialisaties = selectedBestuursOrganen.filter(
       (val) => val
     );
+    const allBestuursPeriods = Array.from(bestuursPeriods).map((v) =>
+      JSON.parse(v)
+    );
     return {
-      bestuursPeriods,
+      bestuursPeriods: Array.from(allBestuursPeriods),
       selectedPeriod,
       bestuursorganen: filteredTijdsspecialisaties,
     };
