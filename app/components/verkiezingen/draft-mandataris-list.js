@@ -1,12 +1,14 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class DraftMandatarisListComponent extends Component {
   @tracked isModalOpen = false;
   @tracked mandataris;
   @tracked editBeleidsdomeinen;
   @tracked editRangorde;
+  @tracked editRangordeValue;
 
   @action
   openModal(mandataris) {
@@ -24,7 +26,19 @@ export default class DraftMandatarisListComponent extends Component {
   openEditRangorde(mandataris) {
     this.mandataris = mandataris;
     this.editRangorde = mandataris.id;
+    this.editRangordeValue = mandataris.rangorde;
   }
+
+  validateRangorde = restartableTask(async (event) => {
+    await timeout(200);
+
+    if (!event.target.value) {
+      this.editRangordeValue = null;
+      return;
+    }
+
+    this.editRangordeValue = event.target.value;
+  });
 
   @action
   closeEditRangorde() {
