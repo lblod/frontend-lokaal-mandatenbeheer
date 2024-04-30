@@ -8,7 +8,6 @@ export default class DraftMandatarisListComponent extends Component {
   @tracked mandataris;
   @tracked editBeleidsdomeinen;
   @tracked editRangorde;
-  @tracked editRangordeValue;
 
   @action
   openModal(mandataris) {
@@ -32,13 +31,33 @@ export default class DraftMandatarisListComponent extends Component {
   validateRangorde = restartableTask(async (event) => {
     await timeout(200);
 
-    if (!event.target.value) {
-      this.editRangordeValue = null;
+    const inputValue = event.target?.value;
+
+    if (!inputValue) {
+      return;
+    }
+    const firstWord = this.findFirstWordOfString(inputValue);
+    if (!firstWord) {
       return;
     }
 
-    this.editRangordeValue = event.target.value;
+    if (this.rangordeAsStringMapping.includes(firstWord.input?.toLowerCase())) {
+      console.log(`first word is a number`, firstWord.input);
+    }
   });
+
+  get rangordeAsStringMapping() {
+    return ['eerste', 'tweede'];
+  }
+
+  findFirstWordOfString(string) {
+    // eslint-disable-next-line no-useless-escape
+    const regex = new RegExp(/^([\w\-]+)/);
+    if (regex.test(string)) {
+      return string.match(regex);
+    }
+    return null;
+  }
 
   @action
   closeEditRangorde() {
