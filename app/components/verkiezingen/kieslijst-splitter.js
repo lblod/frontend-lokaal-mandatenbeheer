@@ -56,9 +56,9 @@ export default class KieslijstSplitterComponent extends Component {
   }
 
   @action
-  async selectFractie(fractie) {
-    this.selectedFractie = fractie;
-    this.selectedKieslijst = await fractie.get('origineleKandidatenlijst');
+  async selectFracties(kieslijst) {
+    this.selectedKieslijst = kieslijst;
+    this.selectedFractie = (await kieslijst.get('resulterendeFracties'))[0];
   }
 
   @action
@@ -109,15 +109,12 @@ export default class KieslijstSplitterComponent extends Component {
 
   @action
   async confirmRevertSplitKieslijst() {
-    const kieslijst = await this.selectedFractie.get(
-      'origineleKandidatenlijst'
-    );
-    const fracties = await kieslijst.get('resulterendeFracties');
+    const fracties = await this.selectedKieslijst.get('resulterendeFracties');
     fracties.forEach(async (fractie) => {
       await fracties.removeObject(fractie);
       await fractie.destroyRecord();
     });
-    await kieslijst.save();
+    await this.selectedKieslijst.save();
     this.toggleRevertKieslijstModal();
   }
 
