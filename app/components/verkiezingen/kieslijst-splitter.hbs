@@ -33,13 +33,22 @@
 
     <div class="au-o-grid__item au-u-2-6@medium au-u-flex">
       <div class="vertical-btn-group">
-        <AuButton {{on "click" this.openSplitKieslijstModal}}>
+        <AuButton
+          {{on "click" this.openSplitKieslijstModal}}
+          @disabled={{not this.kieslijstSelected}}
+        >
           Splitsen
         </AuButton>
-        <AuButton {{on "click" this.keepKieslijst}}>
+        <AuButton
+          {{on "click" this.keepKieslijst}}
+          @disabled={{not this.kieslijstSelected}}
+        >
           Behouden
         </AuButton>
-        <AuButton {{on "click" this.revertSplitKieslijst}}>
+        <AuButton
+          {{on "click" this.revertSplitKieslijst}}
+          @disabled={{not this.fractieSelected}}
+        >
           Terugzetten
         </AuButton>
       </div>

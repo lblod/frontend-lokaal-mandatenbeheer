@@ -20,6 +20,14 @@ export default class KieslijstSplitterComponent extends Component {
     this.load();
   }
 
+  get kieslijstSelected() {
+    return this.selectedKieslijst != null;
+  }
+
+  get fractieSelected() {
+    return this.selectedFractie != null;
+  }
+
   async load() {
     this.samenwerkingsVerband = (
       await this.store.query('fractietype', {
