@@ -129,6 +129,7 @@ export default class KieslijstSplitterComponent extends Component {
     });
     await this.selectedKieslijst.save();
     this.toggleRevertKieslijstModal();
+    this.selectedFracties = null;
   }
 
   async saveFractie(name, kieslijst) {
