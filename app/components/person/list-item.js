@@ -5,6 +5,6 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
     if (!person) {
       return 'Geen persoon geselecteerd';
     }
-    return `${person.gebruikteVoornaam} ${person.achternaam}`;
+    return `${person.get('gebruikteVoornaam')} ${person.get('achternaam')}`;
   }
 }
