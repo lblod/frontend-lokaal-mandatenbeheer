@@ -16,6 +16,7 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
   @tracked selected = null;
   @tracked options = [];
   @tracked searchEnabled = true;
+  conceptScheme = null;
 
   constructor() {
     super(...arguments);
