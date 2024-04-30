@@ -210,6 +210,12 @@
   text-decoration: line-through;
 }
 
+.clickable-cell.selected.disabled{
+  cursor: pointer;
+  background-color: var(--au-blue-300);
+  text-decoration: none;
+}
+
 .vertical-btn-group {
   margin: auto;
 }

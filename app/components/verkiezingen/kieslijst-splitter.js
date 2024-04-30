@@ -56,9 +56,9 @@ export default class KieslijstSplitterComponent extends Component {
   }
 
   @action
-  selectFractie(fractie) {
-    this.selectedKieslijst = null;
+  async selectFractie(fractie) {
     this.selectedFractie = fractie;
+    this.selectedKieslijst = await fractie.get('origineleKandidatenlijst');
   }
 
   @action
