@@ -88,7 +88,19 @@
           </td>
         {{/if}}
         {{#if @showRangorde}}
-          <td>{{row.rangorde}}</td>
+          {{#if (eq this.editRangorde row.id)}}
+            <td {{on-click-outside this.closeEditRangorde}}>
+              <AuInput value={{row.rangorde}} />
+            </td>
+          {{else}}
+            <Verkiezingen::EditOnHover
+              @editFunction={{this.openEditRangorde}}
+              @model={{row}}
+              @helpText="Pas de rangorde aan"
+            >
+              {{row.rangorde}}
+            </Verkiezingen::EditOnHover>
+          {{/if}}
         {{/if}}
         {{#if @showBevoegdheid}}
           {{#if (eq this.editBeleidsdomeinen row.id)}}
