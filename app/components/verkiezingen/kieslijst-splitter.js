@@ -132,6 +132,9 @@ export default class KieslijstSplitterComponent extends Component {
   }
 
   async saveFractie(name, kieslijst) {
+    if (!name) {
+      return;
+    }
     const fractie = this.store.createRecord('fractie', {
       naam: name,
       fractietype: this.samenwerkingsVerband,
