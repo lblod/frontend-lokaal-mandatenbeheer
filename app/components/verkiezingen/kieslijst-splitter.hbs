@@ -130,7 +130,7 @@
 </AuModal>
 
 <AuModal
-  @title="Bevestig terugzetten samengestelde fracties"
+  @title="Bevestig terugzetten {{this.selectedKieslijst.lijstnaam}}"
   @modalOpen={{this.revertKieslijstModalOpen}}
   @closable={{true}}
   @closeModal={{this.toggleRevertKieslijstModal}}
@@ -138,10 +138,17 @@
   <div class="au-o-box">
     <div class="au-u-margin-bottom">
       Deze actie zal
-      {{this.fractieString}}
+      {{#each this.selectedFracties as |fractie index|}}
+        <div class="au-u-bold au-u-flex--inline">
+          {{fractie.naam}}
+        </div>
+        {{if (lt index (sub this.selectedFracties.length 1)) "en"}}
+      {{/each}}
       waarin de kieslijst
-      {{this.selectedKieslijst.lijstnaam}}
-      opgesplitst werd terugplaatsen.
+      <div class="au-u-bold au-u-flex--inline">
+        {{this.selectedKieslijst.lijstnaam}}
+      </div>
+      opgesplitst werd verwijderen.
     </div>
     <AuToolbar class="au-u-margin-top" as |Group|>
       <Group>
