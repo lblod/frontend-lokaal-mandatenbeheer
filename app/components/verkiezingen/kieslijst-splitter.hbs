@@ -14,19 +14,21 @@
 <div class="au-o-box">
   <div class="au-o-grid au-o-grid--small">
     <div class="au-o-grid__item au-u-2-6@medium">
-      <ul>
-        {{#each @kandidatenlijst as |lijst|}}
-          <li
-            role="button"
-            {{on "click" (fn this.selectKieslijst lijst)}}
-            class="clickable-cell
-              {{if (eq this.selectedKieslijst.id lijst.id) 'selected'}}
-              {{if lijst.splitted 'disabled'}}"
-          >
-            {{lijst.lijstnaam}}
-          </li>
-        {{/each}}
-      </ul>
+      <div class="box">
+        <ul>
+          {{#each @kandidatenlijst as |lijst|}}
+            <li
+              role="button"
+              {{on "click" (fn this.selectKieslijst lijst)}}
+              class="clickable-cell
+                {{if (eq this.selectedKieslijst.id lijst.id) 'selected'}}
+                {{if lijst.splitted 'disabled'}}"
+            >
+              {{lijst.lijstnaam}}
+            </li>
+          {{/each}}
+        </ul>
+      </div>
     </div>
 
     <div class="au-o-grid__item au-u-2-6@medium au-u-flex">
@@ -53,18 +55,28 @@
     </div>
 
     <div class="au-o-grid__item au-u-2-6@medium">
-      <ul>
-        {{#each this.fracties as |fractie|}}
-          <li
-            role="button"
-            {{on "click" (fn this.selectFracties fractie)}}
-            class="clickable-cell
-              {{if (contains this.selectedFracties fractie) 'selected'}}"
-          >
-            {{fractie.naam}}
-          </li>
-        {{/each}}
-      </ul>
+      {{#if this.fracties}}
+        <div class="box">
+          <ul>
+            {{#each this.fracties as |fractie|}}
+              <li
+                role="button"
+                {{on "click" (fn this.selectFracties fractie)}}
+                class="clickable-cell
+                  {{if (contains this.selectedFracties fractie) 'selected'}}"
+              >
+                {{fractie.naam}}
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      {{else}}
+        <div class="box">
+          <div class="no-fractie-div">
+            Nog geen fracties aangemaakt
+          </div>
+        </div>
+      {{/if}}
     </div>
   </div>
 </div>
