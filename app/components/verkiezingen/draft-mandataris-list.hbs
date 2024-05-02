@@ -1,7 +1,7 @@
-<div class="au-c-body-container">
+<div class="au-c-body-container" {{did-insert this.setMandatarissen}}>
   <h1 class="au-u-h2 au-u-margin-bottom-small">{{@title}}</h1>
   <AuDataTable
-    @content={{@mandatarissen}}
+    @content={{this.mandatarissen}}
     @noDataMessage="Geen mandatarissen gevonden"
     @sort={{@sort}}
     @page={{@page}}
@@ -9,7 +9,7 @@
     as |t|
   >
     <t.content as |c|>
-      <c.header>
+      <c.header {{on "click" this.setMandatarissen}}>
         <AuDataTableThSortable
           @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
           @currentSorting={{@sort}}
@@ -35,7 +35,8 @@
           />
         {{/if}}
         {{#if @showRangorde}}
-          <th>Rangorde</th>
+          {{! template-lint-disable no-invalid-interactive }}
+          <th {{on "click" this.sortByRangorde}}>Rangorde</th>
         {{/if}}
         {{#if @showBevoegdheid}}
           <AuDataTableThSortable

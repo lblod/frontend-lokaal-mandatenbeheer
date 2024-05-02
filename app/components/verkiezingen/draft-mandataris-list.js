@@ -1,9 +1,15 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { findIntegerInString } from 'frontend-lmb/utils/find-integer-in-string';
+import { A } from '@ember/array';
 
 export default class DraftMandatarisListComponent extends Component {
+  @service router;
+
+  @tracked mandatarissen = A([]);
   @tracked isModalOpen = false;
   @tracked mandataris;
   @tracked editBeleidsdomeinen;
@@ -72,5 +78,29 @@ export default class DraftMandatarisListComponent extends Component {
     this.mandataris.isBestuurlijkeAliasVan = person;
     await this.mandataris.save();
     this.closeModal();
+  }
+
+  @action
+  setMandatarissen() {
+    this.mandatarissen.clear();
+    this.mandatarissen.addObjects(this.args.mandatarissen);
+  }
+
+  @action
+  sortByRangorde() {
+    let saved = this.mandatarissen.map((m) => m);
+    saved.sort((a, b) => {
+      const orderA = a.rangorde;
+      const orderB = b.rangorde;
+
+      const rangordeA = findIntegerInString(orderA) ?? 9999;
+      const rangordeB = findIntegerInString(orderB) ?? 9999;
+
+      return rangordeA - rangordeB;
+    });
+    this.mandatarissen.clear();
+    this.mandatarissen.pushObjects(saved);
+    console.log(saved.map((m) => m.rangorde));
+    console.log(this.mandatarissen.map((m) => m.rangorde));
   }
 }
