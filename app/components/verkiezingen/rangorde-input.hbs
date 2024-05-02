@@ -4,10 +4,12 @@
     @icon="dash"
     @skin="secondary"
     class="order-input-as-string--minus"
+    @disabled={{this.isMinusDisabled}}
   />
   <AuInput
     value={{@rangorde}}
     placeholder="bv. eerste, 1 of 1ste"
+    @warning={{this.inputWarningMessage}}
     {{on "keyup" (perform this.transformRangorde)}}
   />
   <AuButton
@@ -15,5 +17,9 @@
     @skin="secondary"
     @icon="plus"
     class="order-input-as-string--plus"
+    @disabled={{this.isplusDisabled}}
   />
 </div>
+<AuHelpText @warning={{this.inputWarningMessage}}>
+  {{this.inputWarningMessage}}
+</AuHelpText>

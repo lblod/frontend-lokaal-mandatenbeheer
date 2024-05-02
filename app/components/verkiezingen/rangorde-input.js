@@ -1,19 +1,30 @@
 import Component from '@glimmer/component';
 
 import { restartableTask, timeout } from 'ember-concurrency';
+import { tracked } from '@glimmer/tracking';
 
 export default class VerkiezingenRangordeInputComponent extends Component {
+  @tracked rangordeInteger;
+  @tracked inputWarningMessage;
+
+  constructor() {
+    super(...arguments);
+
+    this.rangordeInteger = this.findOrderInString(this.args.rangorde ?? null);
+  }
+
   transformRangorde = restartableTask(async (event) => {
     await timeout(200);
 
-    let possibleOrder = this.findOrderInString(event.target?.value);
+    const inputValue = event.target?.value;
+    this.rangordeInteger = this.findOrderInString(inputValue);
 
-    if (!possibleOrder) {
-      console.warn(`Geen getal gevonden in input veld`);
-      return;
+    if (inputValue && !this.rangordeInteger) {
+      this.inputWarningMessage = `We kunnen geen rangorde vinden`;
+    } else {
+      this.inputWarningMessage = null;
     }
-
-    console.log({ possibleOrder });
+    console.log(`Rangorde in transform:`, this.rangordeInteger);
   });
 
   findOrderInString(possibleString) {
@@ -55,5 +66,13 @@ export default class VerkiezingenRangordeInputComponent extends Component {
       achtste: 8,
       negende: 9,
     };
+  }
+
+  get isMinusDisabled() {
+    return !this.rangordeInteger || this.rangordeInteger == 0;
+  }
+
+  get isPlusDisabled() {
+    return !this.rangordeInteger;
   }
 }
