@@ -5,39 +5,66 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 export default class VerkiezingenRangordeInputComponent extends Component {
+  @tracked rangordeInput;
   @tracked rangordeInteger;
   @tracked inputWarningMessage;
+
+  isRangordeWrittenAsString;
 
   constructor() {
     super(...arguments);
 
+    this.rangordeInput = this.args.rangorde;
     this.rangordeInteger = this.findOrderInString(this.args.rangorde ?? null);
   }
 
   transformRangorde = restartableTask(async (event) => {
     await timeout(200);
 
-    const inputValue = event.target?.value;
-    this.rangordeInteger = this.findOrderInString(inputValue);
+    this.rangordeInput = event.target?.value;
+    this.rangordeInteger = this.findOrderInString(this.rangordeInput);
 
-    if (inputValue && !this.rangordeInteger) {
+    if (this.rangordeInput && !this.rangordeInteger) {
       this.inputWarningMessage = `We kunnen geen rangorde vinden`;
     } else {
       this.inputWarningMessage = null;
     }
-    console.log(`Rangorde in transform:`, this.rangordeInteger);
   });
+
+  setRangorde() {
+    if (
+      !Object.values(this.rangordeAsStringMapping).includes(
+        this.rangordeInteger
+      )
+    ) {
+      this.inputWarningMessage = `Dit is geen geldige rangorde`;
+      return;
+    }
+    this.inputWarningMessage = null;
+
+    if (this.isRangordeWrittenAsString) {
+      const index = Object.values(this.rangordeAsStringMapping).indexOf(
+        this.rangordeInteger
+      );
+      this.rangordeInput = Object.keys(this.rangordeAsStringMapping)[index];
+    } else {
+      this.rangordeInput = this.rangordeInteger;
+    }
+  }
 
   @action
   rangordeUp() {
     this.rangordeInteger += 1;
+    this.setRangorde();
   }
   @action
   rangordeDown() {
     this.rangordeInteger -= 1;
+    this.setRangorde();
   }
 
   findOrderInString(possibleString) {
+    this.isRangordeWrittenAsString = false;
     if (!possibleString) {
       return null;
     }
@@ -49,6 +76,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
 
     const lowercaseWord = firstWord.input?.toLowerCase();
     if (Object.keys(this.rangordeAsStringMapping).includes(lowercaseWord)) {
+      this.isRangordeWrittenAsString = true;
       return this.rangordeAsStringMapping[lowercaseWord];
     } else {
       return parseInt(lowercaseWord);
