@@ -100,7 +100,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   get isPlusDisabled() {
-    return !this.rangordeInteger;
+    return !this.rangordeInteger || this.rangordeInteger >= 20;
   }
 
   get rangordeAsStringMapping() {
