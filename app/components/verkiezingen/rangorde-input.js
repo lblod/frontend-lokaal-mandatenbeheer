@@ -19,7 +19,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   transformRangorde = restartableTask(async (event) => {
-    await timeout(200);
+    await timeout(250);
 
     this.rangordeInput = event.target?.value;
     this.rangordeInteger = this.findOrderInString(this.rangordeInput);
@@ -29,6 +29,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     } else {
       this.inputWarningMessage = null;
     }
+    this.setRangorde();
   });
 
   setRangorde() {
