@@ -69,7 +69,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   get isMinusDisabled() {
-    return !this.rangordeInteger || this.rangordeInteger == 0;
+    return !this.rangordeInteger || this.rangordeInteger <= 1;
   }
 
   get isPlusDisabled() {
