@@ -1,0 +1,19 @@
+<div class="order-input-as-string">
+  <AuButton
+    hideText={{true}}
+    @icon="dash"
+    @skin="secondary"
+    class="order-input-as-string--minus"
+  />
+  <AuInput
+    value={{@rangorde}}
+    placeholder="bv. eerste, 1 of 1ste"
+    {{on "keyup" (perform this.transformRangorde)}}
+  />
+  <AuButton
+    hideText={{true}}
+    @skin="secondary"
+    @icon="plus"
+    class="order-input-as-string--plus"
+  />
+</div>
