@@ -1,27 +1,29 @@
-<div class="order-input-as-string">
-  <AuButton
-    hideText={{true}}
-    @icon="dash"
-    @skin="secondary"
-    class="order-input-as-string--minus"
-    @disabled={{this.isMinusDisabled}}
-    {{on "click" this.rangordeDown}}
-  />
-  <AuInput
-    value={{this.rangordeInput}}
-    placeholder="bv. eerste, 1 of 1ste"
-    @warning={{this.inputWarningMessage}}
-    {{on "keyup" (perform this.transformRangorde)}}
-  />
-  <AuButton
-    hideText={{true}}
-    @skin="secondary"
-    @icon="plus"
-    class="order-input-as-string--plus"
-    @disabled={{this.isPlusDisabled}}
-    {{on "click" this.rangordeUp}}
-  />
+<div>
+  <div class="order-input-as-string">
+    <AuButton
+      hideText={{true}}
+      @icon="dash"
+      @skin="secondary"
+      class="order-input-as-string--minus"
+      @disabled={{this.isMinusDisabled}}
+      {{on "click" this.rangordeDown}}
+    />
+    <AuInput
+      value={{this.rangordeInput}}
+      placeholder="bv. eerste, 1 of 1ste"
+      @warning={{this.inputWarningMessage}}
+      {{on "keyup" (perform this.transformRangorde)}}
+    />
+    <AuButton
+      hideText={{true}}
+      @skin="secondary"
+      @icon="plus"
+      class="order-input-as-string--plus"
+      @disabled={{this.isPlusDisabled}}
+      {{on "click" this.rangordeUp}}
+    />
+  </div>
+  <AuHelpText @warning={{this.inputWarningMessage}}>
+    {{this.inputWarningMessage}}
+  </AuHelpText>
 </div>
-<AuHelpText @warning={{this.inputWarningMessage}}>
-  {{this.inputWarningMessage}}
-</AuHelpText>
