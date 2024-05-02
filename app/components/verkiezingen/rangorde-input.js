@@ -50,6 +50,8 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     } else {
       this.rangordeInput = this.rangordeInteger;
     }
+
+    this.args.updatedRangorde(this.rangordeInput);
   }
 
   @action

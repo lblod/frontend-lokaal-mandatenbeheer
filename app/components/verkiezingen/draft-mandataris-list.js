@@ -29,6 +29,12 @@ export default class DraftMandatarisListComponent extends Component {
   }
 
   @action
+  updateRangorde(rangorde) {
+    this.mandataris.rangorde = rangorde;
+    this.mandataris.save();
+  }
+
+  @action
   closeEditRangorde() {
     this.mandataris = null;
     this.editRangorde = null;
