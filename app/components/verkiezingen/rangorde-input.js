@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 
+import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
@@ -26,6 +27,15 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     }
     console.log(`Rangorde in transform:`, this.rangordeInteger);
   });
+
+  @action
+  rangordeUp() {
+    this.rangordeInteger += 1;
+  }
+  @action
+  rangordeDown() {
+    this.rangordeInteger -= 1;
+  }
 
   findOrderInString(possibleString) {
     if (!possibleString) {

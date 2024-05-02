@@ -5,6 +5,7 @@
     @skin="secondary"
     class="order-input-as-string--minus"
     @disabled={{this.isMinusDisabled}}
+    {{on "click" this.rangordeDown}}
   />
   <AuInput
     value={{@rangorde}}
@@ -18,6 +19,7 @@
     @icon="plus"
     class="order-input-as-string--plus"
     @disabled={{this.isPlusDisabled}}
+    {{on "click" this.rangordeUp}}
   />
 </div>
 <AuHelpText @warning={{this.inputWarningMessage}}>
