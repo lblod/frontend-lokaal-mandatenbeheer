@@ -94,6 +94,14 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     return null;
   }
 
+  get isMinusDisabled() {
+    return !this.rangordeInteger || this.rangordeInteger <= 1;
+  }
+
+  get isPlusDisabled() {
+    return !this.rangordeInteger;
+  }
+
   get rangordeAsStringMapping() {
     return {
       eerste: 1,
@@ -105,14 +113,17 @@ export default class VerkiezingenRangordeInputComponent extends Component {
       zevende: 7,
       achtste: 8,
       negende: 9,
+      tiende: 10,
+      elfde: 11,
+      twaalfde: 12,
+      dertiende: 13,
+      veertiende: 14,
+      vijftiende: 15,
+      zestiende: 16,
+      zeventiende: 17,
+      achtiende: 18,
+      negentiende: 19,
+      twintigste: 20,
     };
-  }
-
-  get isMinusDisabled() {
-    return !this.rangordeInteger || this.rangordeInteger <= 1;
-  }
-
-  get isPlusDisabled() {
-    return !this.rangordeInteger;
   }
 }
