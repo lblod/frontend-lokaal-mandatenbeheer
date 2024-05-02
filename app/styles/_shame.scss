@@ -213,10 +213,10 @@
 }
 
 .hover-help-text {
-  display:none;
-  position:absolute;
+  display: none;
+  position: absolute;
   background-color: #687483;
-  color:white;
+  color: white;
   border-radius: 5px;
   bottom: -3.3rem;
   left: 50%;
@@ -228,5 +228,24 @@
 }
 
 .hover-element:hover .hover-help-text {
-  display:block;
+  display: block;
+}
+
+.order-input-as-string {
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+
+  input {
+    border-radius: 0px;
+  }
+}
+
+.order-input-as-string--minus {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+.order-input-as-string--plus {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
