@@ -90,7 +90,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     // eslint-disable-next-line no-useless-escape
     const regex = new RegExp(/^([\w\-]+)/);
     if (regex.test(string)) {
-      return string.match(regex);
+      return `${string}`.match(regex);
     }
     return null;
   }
