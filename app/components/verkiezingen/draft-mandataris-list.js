@@ -31,55 +31,15 @@ export default class DraftMandatarisListComponent extends Component {
   validateRangorde = restartableTask(async (event) => {
     await timeout(200);
 
-    const inputValue = event.target?.value;
+    let possibleOrder = this.findOrderInString(event.target?.value);
 
-    if (!inputValue) {
-      return;
-    }
-    const firstWord = this.findFirstWordOfString(inputValue);
-    if (!firstWord) {
+    if (!possibleOrder) {
+      console.warn(`Geen getal gevonden in input veld`);
       return;
     }
 
-    if (
-      Object.keys(this.rangordeAsStringMapping).includes(
-        firstWord.input?.toLowerCase()
-      )
-    ) {
-      console.log(`first word is a number`, firstWord.input);
-      console.log(`number is`, this.rangordeAsStringMapping[firstWord.input]);
-    } else {
-      const intValue = parseInt(firstWord);
-      if (!intValue) {
-        // show warning
-        return;
-      }
-      console.log({ intValue });
-    }
+    console.log({ possibleOrder });
   });
-
-  get rangordeAsStringMapping() {
-    return {
-      eerste: 1,
-      tweede: 2,
-      derde: 3,
-      vierde: 4,
-      vijfde: 5,
-      zesde: 6,
-      zevende: 7,
-      achtste: 8,
-      negende: 9,
-    };
-  }
-
-  findFirstWordOfString(string) {
-    // eslint-disable-next-line no-useless-escape
-    const regex = new RegExp(/^([\w\-]+)/);
-    if (regex.test(string)) {
-      return string.match(regex);
-    }
-    return null;
-  }
 
   @action
   closeEditRangorde() {
@@ -119,5 +79,46 @@ export default class DraftMandatarisListComponent extends Component {
     this.mandataris.isBestuurlijkeAliasVan = person;
     await this.mandataris.save();
     this.closeModal();
+  }
+
+  findOrderInString(possibleString) {
+    if (!possibleString) {
+      return null;
+    }
+
+    const firstWord = this.findFirstWordOfString(possibleString);
+    if (!firstWord) {
+      return null;
+    }
+
+    const lowercaseWord = firstWord.input?.toLowerCase();
+    if (Object.keys(this.rangordeAsStringMapping).includes(lowercaseWord)) {
+      return this.rangordeAsStringMapping[lowercaseWord];
+    } else {
+      return parseInt(lowercaseWord);
+    }
+  }
+
+  findFirstWordOfString(string) {
+    // eslint-disable-next-line no-useless-escape
+    const regex = new RegExp(/^([\w\-]+)/);
+    if (regex.test(string)) {
+      return string.match(regex);
+    }
+    return null;
+  }
+
+  get rangordeAsStringMapping() {
+    return {
+      eerste: 1,
+      tweede: 2,
+      derde: 3,
+      vierde: 4,
+      vijfde: 5,
+      zesde: 6,
+      zevende: 7,
+      achtste: 8,
+      negende: 9,
+    };
   }
 }
