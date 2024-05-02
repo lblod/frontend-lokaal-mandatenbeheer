@@ -8,7 +8,7 @@
     {{on "click" this.rangordeDown}}
   />
   <AuInput
-    value={{@rangorde}}
+    value={{this.rangordeInput}}
     placeholder="bv. eerste, 1 of 1ste"
     @warning={{this.inputWarningMessage}}
     {{on "keyup" (perform this.transformRangorde)}}
