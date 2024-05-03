@@ -1,7 +1,7 @@
 <div class="au-c-body-container">
   <h1 class="au-u-h2 au-u-margin-bottom-small">{{@title}}</h1>
   <AuDataTable
-    @content={{@mandatarissen}}
+    @content={{this.resortedMandatarissen}}
     @noDataMessage="Geen mandatarissen gevonden"
     @sort={{@sort}}
     @page={{@page}}
@@ -35,7 +35,11 @@
           />
         {{/if}}
         {{#if @showRangorde}}
-          <th>Rangorde</th>
+          <AuDataTableThSortable
+            @field="rangorde"
+            @currentSorting={{@sort}}
+            @label="Rangorde"
+          />
         {{/if}}
         {{#if @showBevoegdheid}}
           <AuDataTableThSortable
