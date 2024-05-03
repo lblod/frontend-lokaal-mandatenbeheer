@@ -13,7 +13,6 @@ export default class PrepareInstallatievergaderingController extends Controller 
   @service router;
 
   @tracked editMode = null;
-  @tracked person = null;
 
   @action
   createMandataris() {
@@ -26,7 +25,6 @@ export default class PrepareInstallatievergaderingController extends Controller 
 
   @action
   cancel() {
-    this.person = null;
     this.editMode = null;
   }
 
@@ -40,11 +38,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
 
   @action
   async buildSourceTtl(instanceUri) {
-    return await buildNewMandatarisSourceTtl(
-      this.store,
-      instanceUri,
-      this.person
-    );
+    return await buildNewMandatarisSourceTtl(this.store, instanceUri);
   }
 
   @action
