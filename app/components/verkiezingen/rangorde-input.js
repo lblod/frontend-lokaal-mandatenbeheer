@@ -2,46 +2,50 @@ import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
 import { keepLatestTask, timeout } from 'ember-concurrency';
-import { tracked } from '@glimmer/tracking';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import {
+  orderMandatarissenByRangorde,
   rangordeNumberMapping,
   rangordeStringMapping,
+  rangordeStringToNumber,
 } from 'frontend-lmb/utils/rangorde';
 
 export default class VerkiezingenRangordeInputComponent extends Component {
-  @tracked rangordeInput;
-
-  isRangordeWrittenAsString;
-
-  constructor() {
-    super(...arguments);
-
-    this.rangordeInput = this.args.mandataris.rangorde;
-  }
-
   get inputWarningMessage() {
     const order = this.rangordeInteger;
     if (order == null) {
-      return 'Opgelet! Dit is geen geldige rangorde!';
+      return 'Opgelet! Dit is geen gekende rangorde!';
     } else {
       return null;
     }
   }
 
   get rangordeInteger() {
-    return this.findOrderInString(this.rangordeInput);
+    return this.findOrderInString(this.args.mandataris.rangorde);
   }
 
-  updateMandatarisRangorde = keepLatestTask(async () => {
+  get rangorde() {
+    return this.args.mandataris.rangorde;
+  }
+
+  updateMandatarisRangorde = keepLatestTask(async (value) => {
+    const oldRangorde = this.args.mandataris.rangorde;
+    const newRangorde = value;
+    const previousHolder = this.getMandatarisWithRangorde(newRangorde);
+    this.args.mandataris.rangorde = newRangorde;
+
+    const promises = [this.args.mandataris.save()];
+
+    if (previousHolder && previousHolder !== this.args.mandataris) {
+      previousHolder.rangorde = oldRangorde;
+      promises.push(previousHolder.save());
+    }
+    await Promise.all(promises);
     await timeout(SEARCH_TIMEOUT);
-    this.args.mandataris.rangorde = this.rangordeInput;
-    await this.args.mandataris.save();
   });
 
   setRangorde(value) {
-    this.rangordeInput = value;
-    this.updateMandatarisRangorde.perform();
+    this.updateMandatarisRangorde.perform(value);
   }
 
   async getMandaatLabel() {
@@ -81,6 +85,25 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     return this.rangordeInteger >= 20;
   }
 
+  getMandatarisWithRangorde(targetRangorde) {
+    return this.args.mandatarissen.find((mandataris) => {
+      return mandataris.rangorde === targetRangorde;
+    });
+  }
+
+  getNextAvailableRangorde() {
+    const sortedMandatarissen = orderMandatarissenByRangorde([
+      ...this.args.mandatarissen,
+    ]);
+    const lastNumber = rangordeStringToNumber(
+      sortedMandatarissen[sortedMandatarissen.length - 1].rangorde
+    );
+    if (lastNumber) {
+      return rangordeNumberMapping[lastNumber + 1];
+    }
+    return rangordeNumberMapping[1];
+  }
+
   @action
   onUpdateRangorde(event) {
     this.setRangorde(event.currentTarget.value);
@@ -92,10 +115,12 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     const newOrder = rangordeNumberMapping[currentNumber + 1];
 
     if (this.rangordeInteger == null) {
-      this.setRangorde(`${newOrder} ${await this.getMandaatLabel()}`);
+      this.setRangorde(
+        `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`
+      );
     } else {
       const currentOrder = rangordeNumberMapping[currentNumber];
-      this.setRangorde(this.rangordeInput.replace(currentOrder, newOrder));
+      this.setRangorde(this.rangorde.replace(currentOrder, newOrder));
     }
   }
   @action
@@ -104,10 +129,12 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     const newOrder = rangordeNumberMapping[currentNumber - 1];
 
     if (this.rangordeInteger == null) {
-      this.setRangorde(`${newOrder} ${await this.getMandaatLabel()}`);
+      this.setRangorde(
+        `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`
+      );
     } else {
       const currentOrder = rangordeNumberMapping[currentNumber];
-      this.setRangorde(this.rangordeInput.replace(currentOrder, newOrder));
+      this.setRangorde(this.rangorde.replace(currentOrder, newOrder));
     }
   }
 }

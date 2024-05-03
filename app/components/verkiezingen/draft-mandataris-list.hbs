@@ -85,7 +85,10 @@
         {{/if}}
         {{#if @showRangorde}}
           <td>
-            <Verkiezingen::RangordeInput @mandataris={{row}} />
+            <Verkiezingen::RangordeInput
+              @mandataris={{row}}
+              @mandatarissen={{@mandatarissen}}
+            />
           </td>
         {{/if}}
         {{#if @showBevoegdheid}}
