@@ -84,22 +84,9 @@
           </td>
         {{/if}}
         {{#if @showRangorde}}
-          {{#if (eq this.editRangorde row.id)}}
-            <td {{on-click-outside this.closeEditRangorde}}>
-              <Verkiezingen::RangordeInput
-                @rangorde={{row.rangorde}}
-                @updatedRangorde={{this.updateRangorde}}
-              />
-            </td>
-          {{else}}
-            <Verkiezingen::EditOnHover
-              @editFunction={{this.openEditRangorde}}
-              @model={{row}}
-              @helpText="Pas de rangorde aan"
-            >
-              {{row.rangorde}}
-            </Verkiezingen::EditOnHover>
-          {{/if}}
+          <td>
+            <Verkiezingen::RangordeInput @mandataris={{row}} />
+          </td>
         {{/if}}
         {{#if @showBevoegdheid}}
           {{#if (eq this.editBeleidsdomeinen row.id)}}

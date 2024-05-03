@@ -10,9 +10,9 @@
     />
     <AuInput
       value={{this.rangordeInput}}
-      placeholder="bv. eerste, 1 of 1ste"
+      placeholder="bv. Eerste schepen"
       @warning={{this.inputWarningMessage}}
-      {{on "keyup" (perform this.transformRangorde)}}
+      {{on "input" this.setRangorde}}
     />
     <AuButton
       hideText={{true}}

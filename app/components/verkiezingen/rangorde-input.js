@@ -1,89 +1,67 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { keepLatestTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import {
+  rangordeNumberMapping,
+  rangordeStringMapping,
+} from 'frontend-lmb/utils/rangorde';
 
 export default class VerkiezingenRangordeInputComponent extends Component {
   @tracked rangordeInput;
-  @tracked rangordeInteger;
-  @tracked inputWarningMessage;
 
   isRangordeWrittenAsString;
 
   constructor() {
     super(...arguments);
 
-    this.rangordeInput = this.args.rangorde;
-    this.rangordeInteger = this.findOrderInString(this.args.rangorde ?? null);
+    this.rangordeInput = this.args.mandataris.rangorde;
   }
 
-  transformRangorde = restartableTask(async (event) => {
-    await timeout(250);
-
-    this.rangordeInput = event.target?.value;
-    this.rangordeInteger = this.findOrderInString(this.rangordeInput);
-
-    if (this.rangordeInput && !this.rangordeInteger) {
-      this.inputWarningMessage = `We kunnen geen rangorde vinden`;
+  get inputWarningMessage() {
+    const order = this.rangordeInteger;
+    if (order == null) {
+      return 'Opgelet! Dit is geen geldige rangorde!';
     } else {
-      this.inputWarningMessage = null;
+      return null;
     }
-    this.setRangorde();
+  }
+
+  get rangordeInteger() {
+    return this.findOrderInString(this.rangordeInput);
+  }
+
+  updateMandatarisRangorde = keepLatestTask(async () => {
+    await timeout(SEARCH_TIMEOUT);
+    this.args.mandataris.rangorde = this.rangordeInput;
+    await this.args.mandataris.save();
   });
 
-  setRangorde() {
-    if (
-      !Object.values(this.rangordeAsStringMapping).includes(
-        this.rangordeInteger
-      )
-    ) {
-      this.inputWarningMessage = `Dit is geen geldige rangorde`;
-      return;
-    }
-    this.inputWarningMessage = null;
-
-    if (this.isRangordeWrittenAsString) {
-      const index = Object.values(this.rangordeAsStringMapping).indexOf(
-        this.rangordeInteger
-      );
-      this.rangordeInput = Object.keys(this.rangordeAsStringMapping)[index];
-    } else {
-      this.rangordeInput = this.rangordeInteger;
-    }
-
-    this.args.updatedRangorde(this.rangordeInput);
+  setRangorde(value) {
+    this.rangordeInput = value;
+    this.updateMandatarisRangorde.perform();
   }
 
-  @action
-  rangordeUp() {
-    this.rangordeInteger += 1;
-    this.setRangorde();
-  }
-  @action
-  rangordeDown() {
-    this.rangordeInteger -= 1;
-    this.setRangorde();
+  async getMandaatLabel() {
+    const label = await this.args.mandataris.get(
+      'bekleedt.bestuursfunctie.label'
+    );
+    return label.toLowerCase();
   }
 
   findOrderInString(possibleString) {
-    this.isRangordeWrittenAsString = false;
     if (!possibleString) {
       return null;
     }
-
-    const firstWord = this.findFirstWordOfString(possibleString);
-    if (!firstWord) {
-      return null;
-    }
-
-    const lowercaseWord = firstWord.input?.toLowerCase();
-    if (Object.keys(this.rangordeAsStringMapping).includes(lowercaseWord)) {
-      this.isRangordeWrittenAsString = true;
-      return this.rangordeAsStringMapping[lowercaseWord];
-    } else {
-      return parseInt(lowercaseWord);
-    }
+    let foundNumber = null;
+    Object.keys(rangordeStringMapping).forEach((key) => {
+      if (possibleString.startsWith(key)) {
+        foundNumber = rangordeStringMapping[key];
+      }
+    });
+    return foundNumber;
   }
 
   findFirstWordOfString(string) {
@@ -96,35 +74,40 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   get isMinusDisabled() {
-    return !this.rangordeInteger || this.rangordeInteger <= 1;
+    return this.rangordeInteger <= 1;
   }
 
   get isPlusDisabled() {
-    return !this.rangordeInteger || this.rangordeInteger >= 20;
+    return this.rangordeInteger >= 20;
   }
 
-  get rangordeAsStringMapping() {
-    return {
-      eerste: 1,
-      tweede: 2,
-      derde: 3,
-      vierde: 4,
-      vijfde: 5,
-      zesde: 6,
-      zevende: 7,
-      achtste: 8,
-      negende: 9,
-      tiende: 10,
-      elfde: 11,
-      twaalfde: 12,
-      dertiende: 13,
-      veertiende: 14,
-      vijftiende: 15,
-      zestiende: 16,
-      zeventiende: 17,
-      achtiende: 18,
-      negentiende: 19,
-      twintigste: 20,
-    };
+  @action
+  onUpdateRangorde(event) {
+    this.setRangorde(event.currentTarget.value);
+  }
+
+  @action
+  async rangordeUp() {
+    const currentNumber = this.rangordeInteger || 0;
+    const newOrder = rangordeNumberMapping[currentNumber + 1];
+
+    if (this.rangordeInteger == null) {
+      this.setRangorde(`${newOrder} ${await this.getMandaatLabel()}`);
+    } else {
+      const currentOrder = rangordeNumberMapping[currentNumber];
+      this.setRangorde(this.rangordeInput.replace(currentOrder, newOrder));
+    }
+  }
+  @action
+  async rangordeDown() {
+    const currentNumber = this.rangordeInteger || 2;
+    const newOrder = rangordeNumberMapping[currentNumber - 1];
+
+    if (this.rangordeInteger == null) {
+      this.setRangorde(`${newOrder} ${await this.getMandaatLabel()}`);
+    } else {
+      const currentOrder = rangordeNumberMapping[currentNumber];
+      this.setRangorde(this.rangordeInput.replace(currentOrder, newOrder));
+    }
   }
 }

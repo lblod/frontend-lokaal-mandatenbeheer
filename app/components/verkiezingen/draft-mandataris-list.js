@@ -7,7 +7,6 @@ export default class DraftMandatarisListComponent extends Component {
   @tracked isModalOpen = false;
   @tracked mandataris;
   @tracked editBeleidsdomeinen;
-  @tracked editRangorde;
 
   @action
   openModal(mandataris) {
@@ -19,25 +18,6 @@ export default class DraftMandatarisListComponent extends Component {
   closeModal() {
     this.isModalOpen = false;
     this.mandataris = null;
-  }
-
-  @action
-  openEditRangorde(mandataris) {
-    this.mandataris = mandataris;
-    this.editRangorde = mandataris.id;
-    this.editRangordeValue = mandataris.rangorde;
-  }
-
-  @action
-  updateRangorde(rangorde) {
-    this.mandataris.rangorde = rangorde;
-    this.mandataris.save();
-  }
-
-  @action
-  closeEditRangorde() {
-    this.mandataris = null;
-    this.editRangorde = null;
   }
 
   @action
