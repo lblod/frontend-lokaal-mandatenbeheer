@@ -193,6 +193,53 @@
   z-index: 10;
 }
 
+.no-fractie-div, .clickable-cell {
+  padding: 0.6rem;
+  font-size: var(--au-h6);
+}
+
+.clickable-cell {
+  cursor: pointer;
+}
+
+.clickable-cell.selected {
+  background-color: var(--au-blue-300);
+  font-weight: var(--au-medium);
+}
+
+.clickable-cell.disabled {
+  cursor: not-allowed;
+  color: var(--au-gray-700);
+  background-color: var(--au-gray-300);
+  text-decoration: line-through;
+}
+
+.clickable-cell.selected.disabled{
+  cursor: pointer;
+  background-color: var(--au-blue-300);
+  text-decoration: none;
+}
+
+.clickable-cell:hover {
+  background-color: var(--au-gray-200);
+}
+
+.vertical-btn-group {
+  margin: auto;
+}
+
+.vertical-btn-group button {
+  display: inline;
+  margin: 1rem 10rem;
+  width: 40%;
+}
+
+.box {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--au-gray-300);
+}
+
 .hover-element {
   display: none;
   position: absolute;

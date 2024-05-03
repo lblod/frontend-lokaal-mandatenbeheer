@@ -1,6 +1,11 @@
 {{page-title "Voorbereiding legislatuur"}}
 
-<div class="au-c-body-container">
+<div class="au-c-body-container au-c-body-container--scroll">
+  <Verkiezingen::KieslijstSplitter
+    @kandidatenlijst={{@model.kandidatenlijsten}}
+    @bestuursorgaan={{@model.bestuursorgaan}}
+    @bestuurseenheid={{@model.bestuurseenheid}}
+  />
   <AuToolbar
     @size="large"
     @nowrap="true"

@@ -1,9 +1,11 @@
 import Route from '@ember/routing/route';
+import RSVP from 'rsvp';
 
 import { service } from '@ember/service';
 
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
+  @service currentSession;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -11,25 +13,28 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   };
 
   async model(params) {
+    const bestuurseenheid = this.currentSession.group;
     const parentModel = this.modelFor('verkiezingen.verkiezingsuitslag');
     const bestuursorgaan =
       await parentModel.installatievergadering.bestuursorgaanInTijd;
 
     let mandatarissen;
     if (bestuursorgaan) {
-      mandatarissen = await this.store.query(
-        'mandataris',
-        this.getOptions(params, bestuursorgaan)
-      );
+      mandatarissen = await this.getMandatarissen(params, bestuursorgaan);
     }
 
-    return {
+    let kandidatenlijsten = await this.getKandidatenLijsten(bestuursorgaan);
+
+    return RSVP.hash({
       ...parentModel,
+      bestuurseenheid,
+      bestuursorgaan,
       mandatarissen: mandatarissen,
-    };
+      kandidatenlijsten,
+    });
   }
 
-  getOptions(params, bestuursOrgaan) {
+  async getMandatarissen(params, bestuursOrgaan) {
     const queryParams = {
       sort: params.sort,
       page: {
@@ -55,6 +60,15 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       queryParams['filter']['is-bestuurlijke-alias-van'] = params.filter;
     }
 
-    return queryParams;
+    return this.store.query('mandataris', queryParams);
+  }
+
+  async getKandidatenLijsten(bestuursOrgaan) {
+    const queryParams = {
+      'filter[verkiezing][bestuursorgaan-in-tijd][id]': bestuursOrgaan.id,
+      include: 'resulterende-fracties',
+    };
+
+    return await this.store.query('kandidatenlijst', queryParams);
   }
 }
