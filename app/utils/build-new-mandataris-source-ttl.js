@@ -3,19 +3,19 @@ import { MANDATARIS_DRAFT_STATE } from './well-known-uris';
 export const buildNewMandatarisSourceTtl = async (
   store,
   instanceUri,
-  person
+  personId
 ) => {
   const draftTriple = `<${instanceUri}> <http://mu.semte.ch/vocabularies/ext/lmb/hasPublicationStatus> <${MANDATARIS_DRAFT_STATE}>.`;
-  if (!person) {
+  if (!personId) {
     return draftTriple;
   }
-  const persoon = await store.findRecord('persoon', person);
-  if (!persoon) {
+  const person = await store.findRecord('persoon', personId);
+  if (!person) {
     return draftTriple;
   }
 
   return `
     ${draftTriple}
-    <${instanceUri}> <http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan> <${persoon.uri}>.
+    <${instanceUri}> <http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan> <${person.uri}>.
     `;
 };
