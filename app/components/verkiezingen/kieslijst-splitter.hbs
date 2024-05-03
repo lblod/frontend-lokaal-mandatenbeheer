@@ -1,0 +1,171 @@
+<AuToolbar
+  @size="large"
+  @nowrap="true"
+  class="au-u-padding-bottom-none"
+  as |Group|
+>
+  <Group>
+    <div class="au-o-flow">
+      <AuHeading @skin="2">Samenstellen fracties</AuHeading>
+    </div>
+  </Group>
+</AuToolbar>
+
+<div class="au-o-box">
+  <div class="au-o-grid au-o-grid--small">
+    <div class="au-o-grid__item au-u-2-6@medium">
+      <div class="box">
+        <ul>
+          {{#each @kandidatenlijst as |lijst|}}
+            <li
+              role="button"
+              {{on "click" (fn this.selectKieslijst lijst)}}
+              class="clickable-cell
+                {{if (eq this.selectedKieslijst.id lijst.id) 'selected'}}
+                {{if lijst.splitted 'disabled'}}"
+            >
+              {{lijst.lijstnaam}}
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+
+    <div class="au-o-grid__item au-u-2-6@medium au-u-flex">
+      <div class="vertical-btn-group">
+        <AuButton
+          {{on "click" this.openSplitKieslijstModal}}
+          @disabled={{not this.kieslijstCanBeSplit}}
+        >
+          Splitsen
+        </AuButton>
+        <AuButton
+          {{on "click" this.keepKieslijst}}
+          @disabled={{not this.kieslijstCanBeSplit}}
+        >
+          Behouden
+        </AuButton>
+        <AuButton
+          {{on "click" this.toggleRevertKieslijstModal}}
+          @disabled={{not this.fractieSelected}}
+        >
+          Terugzetten
+        </AuButton>
+      </div>
+    </div>
+
+    <div class="au-o-grid__item au-u-2-6@medium">
+      {{#if this.fracties}}
+        <div class="box">
+          <ul>
+            {{#each this.fracties as |fractie|}}
+              <li
+                role="button"
+                {{on "click" (fn this.selectFracties fractie)}}
+                class="clickable-cell
+                  {{if (contains this.selectedFracties fractie) 'selected'}}"
+              >
+                {{fractie.naam}}
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      {{else}}
+        <div class="box">
+          <div class="no-fractie-div">
+            Nog geen fracties aangemaakt
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<AuModal
+  @title="Splits kieslijst in fracties"
+  @modalOpen={{this.splitKieslijstModalOpen}}
+  @closable={{true}}
+  @closeModal={{this.closeSplitKieslijstModal}}
+>
+  <div class="au-o-box">
+    <div class="au-u-margin-bottom">
+      <AuLabel>
+        Fractie 1
+      </AuLabel>
+      <AuInput
+        @width="block"
+        id="fractie-split-1"
+        placeholder="Vul een eerste fractie in"
+        {{on "input" this.setValueFractie1}}
+      />
+    </div>
+    <div class="au-u-margin-bottom">
+      <AuLabel>
+        Fractie 2
+      </AuLabel>
+      <AuInput
+        @width="block"
+        id="fractie-split-2"
+        placeholder="Vul een tweede fractie in"
+        {{on "input" this.setValueFractie2}}
+      />
+    </div>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton
+            {{on "click" this.splitKieslijst}}
+            @disabled={{not this.hasChanges}}
+          >
+            {{if this.hasChanges "Pas aan" "Onveranderd"}}
+          </AuButton>
+          <AuButton
+            {{on "click" this.closeSplitKieslijstModal}}
+            @skin="secondary"
+          >
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+</AuModal>
+
+<AuModal
+  @title="Bevestig terugzetten {{this.selectedKieslijst.lijstnaam}}"
+  @modalOpen={{this.revertKieslijstModalOpen}}
+  @closable={{true}}
+  @closeModal={{this.toggleRevertKieslijstModal}}
+>
+  <div class="au-o-box">
+    <div class="au-u-margin-bottom">
+      Deze actie zal
+      {{#each this.selectedFracties as |fractie index|}}
+        <div class="au-u-bold au-u-flex--inline">
+          {{fractie.naam}}
+        </div>
+        {{if (lt index (sub this.selectedFracties.length 1)) "en"}}
+      {{/each}}
+      waarin de kieslijst
+      <div class="au-u-bold au-u-flex--inline">
+        {{this.selectedKieslijst.lijstnaam}}
+      </div>
+      opgesplitst werd verwijderen.
+    </div>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton {{on "click" this.confirmRevertSplitKieslijst}}>
+            Bevestig
+          </AuButton>
+          <AuButton
+            {{on "click" this.toggleRevertKieslijstModal}}
+            @skin="secondary"
+          >
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+</AuModal>

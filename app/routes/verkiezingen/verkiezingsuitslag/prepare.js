@@ -1,12 +1,13 @@
 import Route from '@ember/routing/route';
+import RSVP from 'rsvp';
 
 import { service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
-import RSVP from 'rsvp';
 
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
+  @service currentSession;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -14,31 +15,33 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   };
 
   async model(params) {
+    const bestuurseenheid = this.currentSession.group;
     const parentModel = this.modelFor('verkiezingen.verkiezingsuitslag');
     const bestuursorgaanInTijd =
       await parentModel.installatievergadering.bestuursorgaanInTijd;
 
     let mandatarissen;
     if (bestuursorgaanInTijd) {
-      mandatarissen = await this.store.query(
-        'mandataris',
-        this.getOptions(params, bestuursorgaanInTijd)
-      );
+      mandatarissen = await this.getMandatarissen(params, bestuursorgaanInTijd);
     }
+
+    let kandidatenlijsten = await this.getKandidatenLijsten(bestuursorgaan);
 
     const bestuursorgaan = bestuursorgaanInTijd.isTijdsspecialisatieVan;
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
 
     return RSVP.hash({
       ...parentModel,
+      bestuurseenheid,
       bestuursorgaanInTijd,
       bestuursorgaan,
       mandatarisNewForm,
       mandatarissen,
+      kandidatenlijsten,
     });
   }
 
-  getOptions(params, bestuursOrgaan) {
+  async getMandatarissen(params, bestuursOrgaan) {
     const queryParams = {
       sort: params.sort,
       page: {
@@ -64,6 +67,15 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       queryParams['filter']['is-bestuurlijke-alias-van'] = params.filter;
     }
 
-    return queryParams;
+    return this.store.query('mandataris', queryParams);
+  }
+
+  async getKandidatenLijsten(bestuursOrgaan) {
+    const queryParams = {
+      'filter[verkiezing][bestuursorgaan-in-tijd][id]': bestuursOrgaan.id,
+      include: 'resulterende-fracties',
+    };
+
+    return await this.store.query('kandidatenlijst', queryParams);
   }
 }

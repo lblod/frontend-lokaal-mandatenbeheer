@@ -22,6 +22,20 @@ export default class KandidatenlijstModel extends Model {
   })
   kandidaten;
 
-  @hasMany('verkiezingsresultaat', { async: true, inverse: 'kandidatenlijst' })
+  @hasMany('verkiezingsresultaat', {
+    async: true,
+    inverse: 'kandidatenlijst',
+  })
   resultaten;
+
+  @hasMany('fractie', {
+    async: true,
+    inverse: 'origineleKandidatenlijst',
+  })
+  resulterendeFracties;
+
+  get splitted() {
+    const fracties = this.resulterendeFracties;
+    return fracties && fracties.length > 0;
+  }
 }
