@@ -40,11 +40,6 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
     return `${rol} - ${this.bestuursorgaanNames}`;
   }
 
-  @action
-  linkToDetailPage(mandataris) {
-    this.router.transitionTo('mandatarissen.mandataris', mandataris.id);
-  }
-
   setBestuursorganenForMandataris = restartableTask(async () => {
     this.bestuursorgaanNames = '';
     const names = [];

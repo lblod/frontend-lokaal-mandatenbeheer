@@ -10,9 +10,13 @@
     </div>
   </Group>
   <Group>
-    <AuButton {{on "click" @onClick}}>
+    <AuLink
+      @route="leidinggevenden.bestuursfunctie.functionarissen"
+      @model={{@bestuursfunctie.id}}
+      @skin="button"
+    >
       Bekijk en bewerk aanstellingsperiodes
       <AuIcon @icon="nav-right" @alignment="right" />
-    </AuButton>
+    </AuLink>
   </Group>
 </AuToolbar>

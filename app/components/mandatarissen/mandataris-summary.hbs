@@ -5,9 +5,13 @@
     </p>
   </div>
   <div class="au-o-grid__item au-u-2-5 au-u-text-right">
-    <AuButton
-      {{on "click" (fn this.linkToDetailPage @mandataris)}}
-    >Details</AuButton>
+    <AuLink
+      @route="mandatarissen.mandataris"
+      @model={{@mandataris.id}}
+      @skin="button"
+    >
+      Details
+    </AuLink>
   </div>
   <div class="au-o-grid__item">
     <AuContent>
