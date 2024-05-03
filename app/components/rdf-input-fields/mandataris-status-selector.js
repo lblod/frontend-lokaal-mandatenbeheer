@@ -1,11 +1,11 @@
 import { queryRecord } from 'frontend-lmb/utils/query-record';
-import ConceptSchemeSelectorComponent from './concept-selector';
 import { MANDATARIS_AANGEWEZEN_STATE } from 'frontend-lmb/utils/well-known-uris';
 import { tracked } from '@glimmer/tracking';
 import { ORG } from 'frontend-lmb/rdf/namespaces';
 import { service } from '@ember/service';
+import RdfInputFieldsConceptSchemeSelectorComponent from './concept-scheme-selector';
 
-export default class RdfInputFieldsMandatarisStatusSelectorComponent extends ConceptSchemeSelectorComponent {
+export default class RdfInputFieldsMandatarisStatusSelectorComponent extends RdfInputFieldsConceptSchemeSelectorComponent {
   @service store;
 
   @tracked mandaat = null;
