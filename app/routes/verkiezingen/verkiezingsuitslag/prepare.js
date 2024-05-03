@@ -25,7 +25,8 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       mandatarissen = await this.getMandatarissen(params, bestuursorgaanInTijd);
     }
 
-    let kandidatenlijsten = await this.getKandidatenLijsten(bestuursorgaan);
+    let kandidatenlijsten =
+      await this.getKandidatenLijsten(bestuursorgaanInTijd);
 
     const bestuursorgaan = bestuursorgaanInTijd.isTijdsspecialisatieVan;
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
