@@ -34,4 +34,30 @@
     @showBevoegdheid={{true}}
     @showStartEndDate={{true}}
   />
+
+  <AuContent @skin="small">
+    <AuButton
+      @skin="naked"
+      @icon="add"
+      {{on "click" this.createMandataris}}
+    >Toevoegen</AuButton>
+  </AuContent>
+  <AuModal
+    @title={{(concat
+      "Voeg mandataris toe aan "
+      @model.bestuursorgaanInTijd.isTijdsspecialisatieVan.naam
+    )}}
+    @modalOpen={{this.isCreating}}
+    @closable={{true}}
+    @closeModal={{this.cancel}}
+  >
+    <div class="au-o-box">
+      <Form::NewInstance
+        @onCreate={{this.onCreate}}
+        @form={{@model.mandatarisNewForm}}
+        @buildSourceTtl={{this.buildSourceTtl}}
+        @buildMetaTtl={{this.buildMetaTtl}}
+      />
+    </div>
+  </AuModal>
 </div>
