@@ -12,7 +12,8 @@
       value={{this.rangorde}}
       placeholder="bv. Eerste schepen"
       @warning={{this.inputWarningMessage}}
-      {{on "input" this.onUpdateRangorde}}
+      {{on "blur" this.onUpdateRangorde}}
+      {{on "keyup" this.onEnterInRangorde}}
     />
     <AuButton
       hideText={{true}}

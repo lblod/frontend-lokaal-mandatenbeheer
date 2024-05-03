@@ -137,4 +137,11 @@ export default class VerkiezingenRangordeInputComponent extends Component {
       this.setRangorde(this.rangorde.replace(currentOrder, newOrder));
     }
   }
+
+  @action
+  onEnterInRangorde(event) {
+    if (event.key === 'Enter') {
+      this.setRangorde(event.currentTarget.value);
+    }
+  }
 }
