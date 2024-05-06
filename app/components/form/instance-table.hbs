@@ -16,7 +16,11 @@
       />
     </Group>
     <Group>
-      <AuButton {{on "click" @onCreate}}>Voeg form instance toe</AuButton>
+      <AuLink
+        @route="forms.form.new"
+        @model={{this.formInfo.formDefinition.id}}
+        @skin="button"
+      >Voeg form instance toe</AuLink>
     </Group>
   </AuToolbar>
 

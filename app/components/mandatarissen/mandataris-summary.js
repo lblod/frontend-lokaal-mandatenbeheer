@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 
-import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask } from 'ember-concurrency';
@@ -38,11 +37,6 @@ export default class MandatenbeheerMandatarisSummaryComponent extends Component 
       return rol;
     }
     return `${rol} - ${this.bestuursorgaanNames}`;
-  }
-
-  @action
-  linkToDetailPage(mandataris) {
-    this.router.transitionTo('mandatarissen.mandataris', mandataris.id);
   }
 
   setBestuursorganenForMandataris = restartableTask(async () => {

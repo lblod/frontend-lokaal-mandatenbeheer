@@ -15,11 +15,6 @@ export default class FormInstancesController extends Controller {
   size = 10;
 
   @action
-  onCreate() {
-    this.router.transitionTo('forms.form.new', this.model.formDefinition.id);
-  }
-
-  @action
   async onRemoveInstance() {
     this.router.refresh();
   }

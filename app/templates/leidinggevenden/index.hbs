@@ -29,7 +29,6 @@
     {{#each @model.bestuursfunctie as |bestuursfunctie|}}
       <Leidinggevenden::BestuursfunctieCard
         @bestuursfunctie={{bestuursfunctie}}
-        @onClick={{(fn this.displayBestuursfunctie bestuursfunctie)}}
       />
     {{/each}}
   {{/if}}

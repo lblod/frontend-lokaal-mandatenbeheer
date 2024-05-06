@@ -9,7 +9,11 @@
     {{#unless (await this.model.bestuursorgaan.isDecretaal)}}
       <AuToolbar class="au-u-margin-top" as |Group|>
         <Group>
-          <AuButton @skin="secondary" {{on "click" this.onEdit}}>Pas aan</AuButton>
+          <AuLink
+            @route="organen.orgaan.edit"
+            @model={{this.model.instanceId}}
+            @skin="button-secondary"
+          >Pas aan</AuLink>
         </Group>
       </AuToolbar>
     {{/unless}}
