@@ -1,7 +1,7 @@
 <div class="au-c-body-container">
   <h1 class="au-u-h2 au-u-margin-bottom-small">{{@title}}</h1>
   <AuDataTable
-    @content={{@mandatarissen}}
+    @content={{this.resortedMandatarissen}}
     @noDataMessage="Geen mandatarissen gevonden"
     @sort={{@sort}}
     @page={{@page}}
@@ -88,7 +88,12 @@
           </td>
         {{/if}}
         {{#if @showRangorde}}
-          <td>{{row.rangorde}}</td>
+          <td>
+            <Verkiezingen::RangordeInput
+              @mandataris={{row}}
+              @mandatarissen={{@mandatarissen}}
+            />
+          </td>
         {{/if}}
         {{#if @showBevoegdheid}}
           {{#if (eq this.editBeleidsdomeinen row.id)}}

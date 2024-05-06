@@ -1,0 +1,30 @@
+<div>
+  <div class="order-input-as-string">
+    <AuButton
+      hideText={{true}}
+      @icon="dash"
+      @skin="secondary"
+      class="order-input-as-string--minus"
+      @disabled={{this.isMinusDisabled}}
+      {{on "click" this.rangordeDown}}
+    />
+    <AuInput
+      value={{this.rangorde}}
+      placeholder="bv. Eerste schepen"
+      @warning={{this.inputWarningMessage}}
+      {{on "blur" this.onUpdateRangorde}}
+      {{on "keyup" this.onEnterInRangorde}}
+    />
+    <AuButton
+      hideText={{true}}
+      @skin="secondary"
+      @icon="plus"
+      class="order-input-as-string--plus"
+      @disabled={{this.isPlusDisabled}}
+      {{on "click" this.rangordeUp}}
+    />
+  </div>
+  <AuHelpText @warning={{this.inputWarningMessage}}>
+    {{this.inputWarningMessage}}
+  </AuHelpText>
+</div>

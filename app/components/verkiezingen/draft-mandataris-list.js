@@ -1,11 +1,24 @@
 import Component from '@glimmer/component';
+
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
 
 export default class DraftMandatarisListComponent extends Component {
   @tracked isModalOpen = false;
   @tracked mandataris;
   @tracked editBeleidsdomeinen;
+
+  get resortedMandatarissen() {
+    if (!this.args.sort || this.args.sort.indexOf('rangorde') < 0) {
+      return this.args.mandatarissen;
+    }
+    const sorted = orderMandatarissenByRangorde([...this.args.mandatarissen]);
+    if (this.args.sort.startsWith('-')) {
+      return sorted.reverse();
+    }
+    return sorted;
+  }
 
   @action
   openModal(mandataris) {
