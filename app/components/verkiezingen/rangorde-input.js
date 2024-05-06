@@ -56,7 +56,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   findOrderInString(possibleString) {
-    if (!possibleString) {
+    if (!possibleString || typeof possibleString != 'string') {
       return null;
     }
     let foundNumber = null;
