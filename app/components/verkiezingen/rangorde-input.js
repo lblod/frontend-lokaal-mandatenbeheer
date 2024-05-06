@@ -59,13 +59,12 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     if (!possibleString) {
       return null;
     }
-    let foundNumber = null;
     Object.keys(rangordeStringMapping).forEach((key) => {
       if (possibleString.startsWith(key)) {
-        foundNumber = rangordeStringMapping[key];
+        return rangordeStringMapping[key];
       }
     });
-    return foundNumber;
+    return null;
   }
 
   findFirstWordOfString(string) {
