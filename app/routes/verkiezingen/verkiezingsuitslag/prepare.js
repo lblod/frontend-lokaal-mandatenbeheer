@@ -28,14 +28,12 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     let kandidatenlijsten =
       await this.getKandidatenLijsten(bestuursorgaanInTijd);
 
-    const bestuursorgaan = bestuursorgaanInTijd.isTijdsspecialisatieVan;
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
 
     return RSVP.hash({
       ...parentModel,
       bestuurseenheid,
       bestuursorgaanInTijd,
-      bestuursorgaan,
       mandatarisNewForm,
       mandatarissen,
       kandidatenlijsten,
