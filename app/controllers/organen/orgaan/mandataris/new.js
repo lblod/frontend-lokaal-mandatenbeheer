@@ -3,10 +3,8 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
-import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
-import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
-import { MANDATARIS_DRAFT_STATE } from 'frontend-lmb/utils/well-known-uris';
+import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
+import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 
 export default class OrganenMandatarisNewController extends Controller {
   @service router;
@@ -24,13 +22,7 @@ export default class OrganenMandatarisNewController extends Controller {
 
   @action
   async onCreate({ instanceTtl, instanceId }) {
-    const store = new ForkingStore();
-    store.parse(instanceTtl, SOURCE_GRAPH, 'text/turtle');
-    const mandataris = await this.store.findRecord('mandataris', instanceId);
-    await syncMandatarisMembership(mandataris.uri, this.store, {
-      store,
-      sourceGraph: SOURCE_GRAPH,
-    });
+    await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     this.router.transitionTo('organen.orgaan.mandatarissen');
   }
 
@@ -41,18 +33,10 @@ export default class OrganenMandatarisNewController extends Controller {
 
   @action
   async buildSourceTtl(instanceUri) {
-    const draftTriple = `<${instanceUri}> <http://mu.semte.ch/vocabularies/ext/lmb/hasPublicationStatus> <${MANDATARIS_DRAFT_STATE}>.`;
-    if (!this.person) {
-      return draftTriple;
-    }
-    const persoon = await this.store.findRecord('persoon', this.person);
-    if (!persoon) {
-      return draftTriple;
-    }
-
-    return `
-    ${draftTriple}
-    <${instanceUri}> <http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan> <${persoon.uri}>.
-    `;
+    return await buildNewMandatarisSourceTtl(
+      this.store,
+      instanceUri,
+      this.person
+    );
   }
 }

@@ -2,6 +2,8 @@ import Route from '@ember/routing/route';
 import RSVP from 'rsvp';
 
 import { service } from '@ember/service';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
@@ -15,21 +17,25 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   async model(params) {
     const bestuurseenheid = this.currentSession.group;
     const parentModel = this.modelFor('verkiezingen.verkiezingsuitslag');
-    const bestuursorgaan =
+    const bestuursorgaanInTijd =
       await parentModel.installatievergadering.bestuursorgaanInTijd;
 
     let mandatarissen;
-    if (bestuursorgaan) {
-      mandatarissen = await this.getMandatarissen(params, bestuursorgaan);
+    if (bestuursorgaanInTijd) {
+      mandatarissen = await this.getMandatarissen(params, bestuursorgaanInTijd);
     }
 
-    let kandidatenlijsten = await this.getKandidatenLijsten(bestuursorgaan);
+    let kandidatenlijsten =
+      await this.getKandidatenLijsten(bestuursorgaanInTijd);
+
+    const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
 
     return RSVP.hash({
       ...parentModel,
       bestuurseenheid,
-      bestuursorgaan,
-      mandatarissen: mandatarissen,
+      bestuursorgaanInTijd,
+      mandatarisNewForm,
+      mandatarissen,
       kandidatenlijsten,
     });
   }

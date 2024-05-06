@@ -1,5 +1,6 @@
 import { EXT } from 'frontend-lmb/rdf/namespaces';
 
+// Expects bestuursorgaan in de tijd
 export const getBestuursorganenMetaTtl = (bestuursorgaan) => {
   if (!bestuursorgaan) {
     return;
