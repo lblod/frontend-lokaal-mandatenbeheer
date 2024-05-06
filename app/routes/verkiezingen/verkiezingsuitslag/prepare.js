@@ -59,6 +59,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
         'bekleedt.bestuursfunctie',
         'heeft-lidmaatschap.binnen-fractie',
         'status',
+        'beleidsdomein',
       ].join(','),
     };
 
