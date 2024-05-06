@@ -1,10 +1,13 @@
 import Component from '@glimmer/component';
 
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
 
 export default class DraftMandatarisListComponent extends Component {
+  @service router;
+
   @tracked isModalOpen = false;
   @tracked mandataris;
   @tracked editBeleidsdomeinen;
@@ -64,5 +67,11 @@ export default class DraftMandatarisListComponent extends Component {
     this.mandataris.isBestuurlijkeAliasVan = person;
     await this.mandataris.save();
     this.closeModal();
+  }
+
+  @action
+  async removeMandataris(mandataris) {
+    await mandataris.destroyRecord();
+    this.router.refresh();
   }
 }

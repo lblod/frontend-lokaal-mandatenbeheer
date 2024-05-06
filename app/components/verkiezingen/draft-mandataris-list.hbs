@@ -60,6 +60,7 @@
             @label="Einde mandaat"
           />
         {{/if}}
+        <th>{{! Delete }}</th>
       </c.header>
 
       <c.body as |row|>
@@ -121,6 +122,13 @@
             {{moment-format row.einde "DD-MM-YYYY"}}
           </td>
         {{/if}}
+        <td class="au-u-text-right">
+          <AuButton
+            @icon="bin"
+            @alert={{true}}
+            {{on "click" (fn this.removeMandataris row)}}
+          >Verwijder</AuButton>
+        </td>
       </c.body>
     </t.content>
   </AuDataTable>
