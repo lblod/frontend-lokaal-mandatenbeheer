@@ -32,7 +32,6 @@ export default class PrepareInstallatievergaderingController extends Controller 
   async onCreate({ instanceTtl, instanceId }) {
     this.editMode = null;
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
-    // TODO not sure why the timeout is needed
     setTimeout(() => this.router.refresh(), 1000);
   }
 
