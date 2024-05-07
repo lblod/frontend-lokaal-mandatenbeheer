@@ -19,6 +19,7 @@ Router.map(function () {
   });
 
   this.route('contact');
+  this.route('settings');
 
   this.route('legaal', function () {
     this.route('disclaimer');
@@ -86,5 +87,4 @@ Router.map(function () {
   this.route('error/404', {
     path: '/*wildcard',
   });
-  this.route('settings');
 });
