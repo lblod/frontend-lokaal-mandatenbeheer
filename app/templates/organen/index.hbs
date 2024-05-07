@@ -11,8 +11,8 @@
           <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
             <div class="au-c-label">Bestuursperiode</div>
             <Mandatenbeheer::BestuursperiodenSelector
-              @options={{@model.bestuursPeriods}}
-              @selectedPeriod={{@model.selectedPeriod}}
+              @options={{this.model.bestuursPeriods}}
+              @selected={{this.model.selectedPeriod}}
               @onSelect={{this.selectPeriod}}
             />
           </div>

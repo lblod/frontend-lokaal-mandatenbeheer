@@ -17,27 +17,37 @@ export default class OrganenIndexRoute extends Route {
     sort: { refreshModel: true },
     activeOrgans: { refreshModel: true },
     selectedTypes: { refreshModel: true },
-    startDate: { refreshModel: true },
-    endDate: { refreshModel: true },
+    bestuursperiode: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('organen');
-    const organenWithPeriods =
-      await this.tijdsspecialisaties.fetchBestuursOrganenWithTijdsperiods(
-        parentModel.bestuursorganen,
-        params
-      );
 
-    const queryOptions = this.getOptions(parentModel.bestuurseenheid, params);
+    const bestuursPeriods = await this.store.query('bestuursperiode', {
+      sort: 'label',
+    });
+    let selectedPeriod;
+    if (params.bestuursperiode) {
+      selectedPeriod = bestuursPeriods.find((period) => {
+        return period.id == params.bestuursperiode;
+      });
+    } else {
+      // TODO: temporary, should be the closest one if no query params.
+      selectedPeriod = bestuursPeriods.at(-1);
+    }
+
+    const queryOptions = this.getOptions(
+      parentModel.bestuurseenheid,
+      params,
+      selectedPeriod
+    );
     const allBestuursorganen = await this.store.query(
       'bestuursorgaan',
       queryOptions
     );
     const bestuursorganen = await this.filterBestuursorganen(
       allBestuursorganen,
-      params,
-      organenWithPeriods.selectedPeriod
+      params
     );
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
@@ -45,12 +55,12 @@ export default class OrganenIndexRoute extends Route {
       bestuurseenheid: parentModel.bestuurseenheid,
       bestuursorganen,
       form,
-      bestuursPeriods: organenWithPeriods.bestuursPeriods,
-      selectedPeriod: organenWithPeriods.selectedPeriod,
+      bestuursPeriods,
+      selectedPeriod,
     });
   }
 
-  getOptions(bestuurseenheid, params) {
+  getOptions(bestuurseenheid, params, bestuursperiode) {
     const queryParams = {
       sort: params.sort,
       page: {
@@ -61,6 +71,11 @@ export default class OrganenIndexRoute extends Route {
           id: bestuurseenheid.id,
         },
         ':has-no:is-tijdsspecialisatie-van': true,
+        'heeft-tijdsspecialisaties': {
+          'heeft-bestuursperiode': {
+            id: bestuursperiode.id,
+          },
+        },
         classificatie: {
           id: this.decretaleOrganen.classificatieIds.join(','),
         },
@@ -70,7 +85,7 @@ export default class OrganenIndexRoute extends Route {
     return queryParams;
   }
 
-  async filterBestuursorganen(bestuursorganen, params, bestuursPeriod) {
+  async filterBestuursorganen(bestuursorganen, params) {
     if (params.activeOrgans) {
       bestuursorganen = bestuursorganen.filter((orgaan) => {
         return orgaan.isActive;
@@ -86,14 +101,7 @@ export default class OrganenIndexRoute extends Route {
               })
             )
           ).some((val) => val);
-          const tijdsspecialisaties = await orgaan.heeftTijdsspecialisaties;
-          const validPeriod = await tijdsspecialisaties.some((b) => {
-            return (
-              moment(b.bindingStart).format('YYYY-MM-DD') ==
-              bestuursPeriod.startDate
-            );
-          });
-          return { bool: validType && validPeriod, orgaan };
+          return { bool: validType, orgaan };
         })
       )
     )

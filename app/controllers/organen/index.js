@@ -4,21 +4,14 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 export default class OrganenIndexController extends Controller {
-  queryParams = [
-    'sort',
-    'activeOrgans',
-    'selectedTypes',
-    'startDate',
-    'endDate',
-  ];
+  queryParams = ['sort', 'activeOrgans', 'selectedTypes', 'bestuursperiode'];
   @service store;
   @service decretaleOrganen;
 
   @tracked sort = 'naam';
   @tracked activeOrgans = false;
   @tracked selectedTypes = ['isDecretaal', 'notDecretaal'];
-  @tracked startDate;
-  @tracked endDate;
+  @tracked bestuursperiode;
 
   @tracked isModalActive = false;
 
@@ -34,16 +27,14 @@ export default class OrganenIndexController extends Controller {
 
   @action
   selectPeriod(period) {
-    this.startDate = period.startDate;
-    this.endDate = period.endDate;
+    this.bestuursperiode = period.id;
   }
 
   @action
   clearFilters() {
     this.activeOrgans = false;
     this.selectedTypes = ['isDecretaal', 'notDecretaal'];
-    this.startDate = null;
-    this.endDate = null;
+    this.bestuursperiode = null;
   }
 
   @action
@@ -93,6 +84,7 @@ export default class OrganenIndexController extends Controller {
   async createDefaultBestuursorgaanInTijd(bestuursorgaan, bestuursperiod) {
     const bestuursorgaanInTijd = this.store.createRecord('bestuursorgaan', {
       isTijdsspecialisatieVan: bestuursorgaan,
+      heeftBestuursperiode: this.model.selectedPeriod,
       bindingStart: bestuursperiod.bindingStart,
       bindingEinde: bestuursperiod.bindingEinde,
     });
