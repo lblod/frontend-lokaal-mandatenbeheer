@@ -1,6 +1,6 @@
 <PowerSelect
   @renderInPlace={{true}}
-  @selected={{@selectedPeriod}}
+  @selected={{this.selectedPeriod}}
   @options={{this.periodOptions}}
   class="is-optional"
   @onChange={{this.selectPeriod}}
@@ -9,10 +9,8 @@
   as |period|
 >
   {{#if this.periodOptions}}
-    <Shared::Periode
-      @start={{period.startDate}}
-      @end={{period.endDate}}
-    >{{@prefix}}</Shared::Periode>
+    {{@prefix}}
+    {{period.label}}
   {{else}}
     Geen bestuursperioden
   {{/if}}
