@@ -10,12 +10,12 @@
       @centered={{true}}
     >Instellingen</AuLoader>
   {{else}}
-    <h2 class="au-u-h2">Bestuurseenheid</h2>
+    <h2 class="au-u-h2">{{this.bestuurseenheidLabel}}</h2>
     <AuHr @size="default" />
     <div class="au-u-margin-top-small">
       <Form::Instance
-        @instanceId={{this.model.bestuurseenheid.instanceId}}
-        @form={{this.model.bestuurseenheid.form}}
+        @instanceId={{this.model.bestuurseenheid.contactInfo.instanceId}}
+        @form={{this.model.bestuurseenheid.contactInfo.form}}
         @onSave={{this.saveBestuurseenheidSettings}}
         @onCancel={{this.cancelBestuurseenheidSettings}}
         @showHistory={{false}}
