@@ -1,14 +1,14 @@
 <PowerSelect
   @renderInPlace={{true}}
-  @selected={{this.selectedPeriod}}
-  @options={{this.periodOptions}}
+  @selected={{@selected}}
+  @options={{@options}}
   class="is-optional"
-  @onChange={{this.selectPeriod}}
+  @onChange={{@onSelect}}
   @searchEnabled={{false}}
   @noMatchesMessage="Geen bestuursperioden"
   as |period|
 >
-  {{#if this.periodOptions}}
+  {{#if @options}}
     {{@prefix}}
     {{period.label}}
   {{else}}
