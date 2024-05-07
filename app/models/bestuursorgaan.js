@@ -41,6 +41,12 @@ export default class BestuursorgaanModel extends Model {
   })
   isTijdsspecialisatieVan;
 
+  @belongsTo('bestuursperiode', {
+    async: true,
+    inverse: 'heeftBestuursorganenInTijd',
+  })
+  heeftBestuursperiode;
+
   @belongsTo('rechtstreekse-verkiezing', {
     async: true,
     inverse: 'bestuursorgaanInTijd',
