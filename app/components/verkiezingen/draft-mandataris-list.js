@@ -1,10 +1,13 @@
 import Component from '@glimmer/component';
 
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
 
 export default class DraftMandatarisListComponent extends Component {
+  @service toaster;
+
   @tracked isModalOpen = false;
   @tracked mandataris;
   @tracked editBeleidsdomeinen;
@@ -64,5 +67,20 @@ export default class DraftMandatarisListComponent extends Component {
     this.mandataris.isBestuurlijkeAliasVan = person;
     await this.mandataris.save();
     this.closeModal();
+  }
+
+  @action
+  async removeMandataris(mandataris) {
+    mandataris
+      .destroyRecord()
+      .then(() => {
+        const succesMessage = 'Mandataris succesvol verwijderd.';
+        this.toaster.success(succesMessage, 'Succes', { timeOut: 5000 });
+      })
+      .catch(() => {
+        const errorMessage =
+          'Er ging iets mis bij het verwijderen van de mandataris. Probeer het later opnieuw.';
+        this.toaster.error(errorMessage, 'Error');
+      });
   }
 }
