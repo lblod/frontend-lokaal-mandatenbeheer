@@ -2,10 +2,7 @@ import Controller from '@ember/controller';
 
 import { restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import {
-  SEARCH_TIMEOUT,
-  USER_INPUT_DEBOUNCE,
-} from 'frontend-lmb/utils/constants';
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class SettingsController extends Controller {
   @tracked bestuurseenheidEmail;
@@ -18,15 +15,6 @@ export default class SettingsController extends Controller {
     await timeout(SEARCH_TIMEOUT);
   });
 
-  validateEmailBestuurseenheid = restartableTask(async (event) => {
-    await timeout(USER_INPUT_DEBOUNCE);
-
-    const inputValue = event.target?.value;
-
-    if (!inputValue) {
-      console.log(`No input in email field`);
-    }
-
-    this.bestuurseenheidEmail = `${inputValue}`.trim();
-  });
+  saveBestuurseenheidSettings = restartableTask(async () => {});
+  cancelBestuurseenheidSettings = restartableTask(async () => {});
 }

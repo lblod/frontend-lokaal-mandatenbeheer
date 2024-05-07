@@ -13,14 +13,12 @@
     <h2 class="au-u-h2">Bestuurseenheid</h2>
     <AuHr @size="default" />
     <div class="au-u-margin-top-small">
-      <AuLabel for="input">Contact email</AuLabel>
-      <AuInput
-        @width="block"
-        @icon="mail"
-        @iconAlignment="left"
-        value={{this.bestuurseenheid.email}}
-        id="email-bestuurseenheid"
-        {{on "keyup" (perform this.validateEmailBestuurseenheid)}}
+      <Form::Instance
+        @instanceId={{this.model.bestuurseenheid.instanceId}}
+        @form={{this.model.bestuurseenheid.form}}
+        @onSave={{this.saveBestuurseenheidSettings}}
+        @onCancel={{this.cancelBestuurseenheidSettings}}
+        @showHistory={{false}}
       />
     </div>
   {{/if}}
