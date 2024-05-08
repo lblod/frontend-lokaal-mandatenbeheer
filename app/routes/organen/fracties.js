@@ -8,7 +8,6 @@ import RSVP from 'rsvp';
 
 export default class FractiesRoute extends Route {
   @service store;
-  @service tijdsspecialisaties;
 
   queryParams = {
     filter: { refreshModel: true },
