@@ -1,10 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import {
-  getBestuursPeriods,
-  getSelectedBestuursorgaanWithPeriods,
-} from 'frontend-lmb/utils/bestuursperioden';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { queryRecord } from 'frontend-lmb/utils/query-record';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
@@ -12,8 +9,7 @@ export default class OrganenOrgaanRoute extends Route {
   @service store;
 
   queryParams = {
-    startDate: { refreshModel: true },
-    endDate: { refreshModel: true },
+    bestuursperiode: { refreshModel: true },
   };
 
   async model(params) {
@@ -27,23 +23,40 @@ export default class OrganenOrgaanRoute extends Route {
       }
     );
 
-    const tijdsspecialisaties = await bestuursorgaan.heeftTijdsspecialisaties;
-
-    let currentBestuursorgaan, startDate, endDate, bestuursPeriods;
-    if (tijdsspecialisaties.length != 0) {
-      const result = getSelectedBestuursorgaanWithPeriods(tijdsspecialisaties, {
-        startDate: params.startDate,
-        endDate: params.endDate,
+    const bestuursPeriods = await this.store.query('bestuursperiode', {
+      sort: 'label',
+      filter: {
+        'heeft-bestuursorganen-in-tijd': {
+          'is-tijdsspecialisatie-van': {
+            id: bestuursorgaanId,
+          },
+        },
+      },
+    });
+    let selectedPeriod;
+    if (params.bestuursperiode) {
+      selectedPeriod = bestuursPeriods.find((period) => {
+        return period.id == params.bestuursperiode;
       });
-
-      currentBestuursorgaan = result.bestuursorgaan;
-      startDate = result.startDate;
-      endDate = result.endDate;
-
-      bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
+    } else {
+      // TODO: temporary, should be the closest one if no query params.
+      selectedPeriod = bestuursPeriods.at(-1);
     }
 
-    const selectedPeriod = { startDate, endDate };
+    const currentBestuursorgaan = await queryRecord(
+      this.store,
+      'bestuursorgaan',
+      {
+        filter: {
+          'is-tijdsspecialisatie-van': {
+            id: bestuursorgaanId,
+          },
+          'heeft-bestuursperiode': {
+            id: selectedPeriod.id,
+          },
+        },
+      }
+    );
 
     const bestuursorgaanFormDefinition = getFormFrom(
       this.store,
