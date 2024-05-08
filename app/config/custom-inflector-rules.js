@@ -77,3 +77,4 @@ inflector.irregular(
   'bestuurseenheid-contact-info',
   'bestuurseenheid-contact-info'
 );
+inflector.irregular('bestuurseenheid-contact', 'bestuurseenheid-contact');

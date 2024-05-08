@@ -1,6 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
-export default class BestuurseenheidContactInfoModel extends Model {
+export default class BestuurseenheidContactModel extends Model {
   @attr('string') uri;
   @attr('string') email;
 }

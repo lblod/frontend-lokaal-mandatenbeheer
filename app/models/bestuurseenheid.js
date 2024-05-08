@@ -23,7 +23,7 @@ export default class Bestuurseenheid extends Model {
   })
   classificatie;
 
-  @belongsTo('bestuurseenheid-contact-info', {
+  @belongsTo('bestuurseenheid-contact', {
     async: true,
     inverse: null,
   })

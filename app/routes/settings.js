@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
-import { BESTUURSEENHEID_CONTACT_INFO_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import { BESTUURSEENHEID_CONTACT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { service } from '@ember/service';
 
 export default class SettingsRoute extends Route {
@@ -15,20 +15,18 @@ export default class SettingsRoute extends Route {
 
   async model() {
     const bestuurseenheid = this.currentSession.group;
-    const contactInfoForm = await getFormFrom(
+    const contactForm = await getFormFrom(
       this.store,
-      BESTUURSEENHEID_CONTACT_INFO_FORM_ID
+      BESTUURSEENHEID_CONTACT_FORM_ID
     );
 
-    let contactInfo = await bestuurseenheid.contact;
-    if (!contactInfo) {
-      const newContact = this.store.createRecord(
-        'bestuurseenheid-contact-info',
-        {
-          email: null,
-        }
-      );
+    let contact = await bestuurseenheid.contact;
+    if (!contact) {
+      const newContact = this.store.createRecord('bestuurseenheid-contact', {
+        email: null,
+      });
       await newContact.save();
+      contact = newContact;
 
       bestuurseenheid.contact = newContact;
       await bestuurseenheid.save();
@@ -36,9 +34,9 @@ export default class SettingsRoute extends Route {
 
     return {
       bestuurseenheid: {
-        contactInfo: {
-          instanceId: contactInfo.id,
-          form: contactInfoForm,
+        contact: {
+          instanceId: contact.id,
+          form: contactForm,
         },
       },
     };
