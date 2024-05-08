@@ -17,7 +17,11 @@
   <Modal.Footer>
     <AuToolbar as |Group|>
       <Group>
-        <AuButton {{on "click" @save}}>
+        <AuButton
+          {{on "click" @save}}
+          @loading={{@isSaving}}
+          @loadingMessage="Aan het opslaan"
+        >
           Bevestig
         </AuButton>
       </Group>
