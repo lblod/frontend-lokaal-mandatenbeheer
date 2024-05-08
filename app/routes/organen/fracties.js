@@ -15,21 +15,36 @@ export default class FractiesRoute extends Route {
     page: { refreshModel: true },
     size: { refreshModel: true },
     sort: { refreshModel: true },
-    startDate: { refreshModel: true },
-    endDate: { refreshModel: true },
+    bestuursperiode: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('organen');
 
-    const organenWithPeriods =
-      await this.tijdsspecialisaties.fetchBestuursOrganenWithTijdsperiods(
-        parentModel.bestuursorganen,
-        params
-      );
+    const bestuursPeriods = await this.store.query('bestuursperiode', {
+      sort: 'label',
+    });
+    let selectedPeriod;
+    if (params.bestuursperiode) {
+      selectedPeriod = bestuursPeriods.find((period) => {
+        return period.id == params.bestuursperiode;
+      });
+    } else {
+      // TODO: temporary, should be the closest one if no query params.
+      selectedPeriod = bestuursPeriods.at(-1);
+    }
+
+    const bestuursorganen = await this.store.query('bestuursorgaan', {
+      filter: {
+        ':has-no:heeft-tijdsspecialisaties': true,
+        'heeft-bestuursperiode': {
+          id: selectedPeriod.id,
+        },
+      },
+    });
 
     const bestuursorganenIds = await Promise.all(
-      organenWithPeriods.bestuursorganen.map(async (o) => {
+      bestuursorganen.map(async (o) => {
         return (await o).get('id');
       })
     );
@@ -57,7 +72,9 @@ export default class FractiesRoute extends Route {
       defaultFractieType,
       fracties,
       bestuurseenheid: parentModel.bestuurseenheid,
-      ...organenWithPeriods,
+      bestuursPeriods,
+      selectedPeriod,
+      bestuursorganen,
     });
   }
 
