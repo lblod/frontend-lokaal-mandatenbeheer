@@ -16,8 +16,8 @@
       <Form::Instance
         @instanceId={{this.model.bestuurseenheid.contactInfo.instanceId}}
         @form={{this.model.bestuurseenheid.contactInfo.form}}
-        @onSave={{this.saveBestuurseenheidSettings}}
-        @onCancel={{this.cancelBestuurseenheidSettings}}
+        @onSave={{perform this.saveBestuurseenheidSettings}}
+        @onCancel={{perform this.cancelBestuurseenheidSettings}}
         @showHistory={{false}}
       />
     </div>
