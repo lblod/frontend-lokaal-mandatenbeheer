@@ -1,25 +1,15 @@
 {{page-title "Instellingen"}}
 
-<div
-  class="au-c-main-container au-u-padding au-u-flex--column"
-  {{did-insert (perform this.prepareSettings)}}
->
-  {{#if this.prepareSettings.isRunning}}
-    <AuLoader
-      @hideMessage={{this.hideMessage}}
-      @centered={{true}}
-    >Instellingen</AuLoader>
-  {{else}}
-    <h2 class="au-u-h2">{{this.bestuurseenheidLabel}}</h2>
-    <AuHr @size="default" />
-    <div class="au-u-margin-top-small">
-      <Form::Instance
-        @instanceId={{this.model.bestuurseenheid.contactInfo.instanceId}}
-        @form={{this.model.bestuurseenheid.contactInfo.form}}
-        @onSave={{perform this.saveBestuurseenheidSettings}}
-        @onCancel={{perform this.cancelBestuurseenheidSettings}}
-        @showHistory={{false}}
-      />
-    </div>
-  {{/if}}
+<div class="au-c-main-container au-u-padding au-u-flex--column">
+  <h2 class="au-u-h2">{{this.bestuurseenheidLabel}}</h2>
+  <AuHr @size="default" />
+  <div class="au-u-margin-top-small">
+    <Form::Instance
+      @instanceId={{this.model.bestuurseenheid.contactInfo.instanceId}}
+      @form={{this.model.bestuurseenheid.contactInfo.form}}
+      @onSave={{perform this.saveBestuurseenheidSettings}}
+      @onCancel={{perform this.cancelBestuurseenheidSettings}}
+      @showHistory={{false}}
+    />
+  </div>
 </div>
