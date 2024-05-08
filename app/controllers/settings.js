@@ -15,6 +15,6 @@ export default class SettingsController extends Controller {
   saveBestuurseenheidSettings = restartableTask(async () => {});
 
   get bestuurseenheidLabel() {
-    return this.currentSession.group.naam;
+    return `${this.currentSession.groupClassification.label} ${this.currentSession.group.naam}`;
   }
 }
