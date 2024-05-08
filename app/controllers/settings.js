@@ -13,7 +13,6 @@ export default class SettingsController extends Controller {
   }
 
   saveBestuurseenheidSettings = restartableTask(async () => {});
-  cancelBestuurseenheidSettings = restartableTask(async () => {});
 
   get bestuurseenheidLabel() {
     return this.currentSession.group.naam;
