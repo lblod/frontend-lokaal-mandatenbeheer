@@ -1,15 +1,5 @@
 import moment from 'moment';
 
-export const getBestuursPeriods = (organen) => {
-  const periods = organen.map((b) => ({
-    startDate: moment(b.bindingStart).format('YYYY-MM-DD'),
-    endDate: b.bindingEinde
-      ? moment(b.bindingEinde).format('YYYY-MM-DD')
-      : null,
-  }));
-  return periods.sortBy('startDate');
-};
-
 const getBestuursPeriodsExtended = (organen) => {
   const periods = organen.map((b) => ({
     bestuursorgaan: b,
