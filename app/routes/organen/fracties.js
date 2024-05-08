@@ -33,17 +33,19 @@ export default class FractiesRoute extends Route {
       selectedPeriod = bestuursPeriods.at(-1);
     }
 
-    const bestuursorganen = await this.store.query('bestuursorgaan', {
-      filter: {
-        ':has-no:heeft-tijdsspecialisaties': true,
-        'heeft-bestuursperiode': {
-          id: selectedPeriod.id,
-        },
-      },
+    const bestuursorganenIds = await Promise.all(
+      parentModel.bestuursorganen.map(async (o) => {
+        return (await o).get('id');
+      })
+    );
+
+    const tijdsspecialisaties = await this.store.query('bestuursorgaan', {
+      'filter[is-tijdsspecialisatie-van][:id:]': bestuursorganenIds.join(','),
+      'filter[heeft-bestuursperiode][:id:]': selectedPeriod.id,
     });
 
-    const bestuursorganenIds = await Promise.all(
-      bestuursorganen.map(async (o) => {
+    const tijdsspecialisatiesIds = await Promise.all(
+      tijdsspecialisaties.map(async (o) => {
         return (await o).get('id');
       })
     );
@@ -54,8 +56,7 @@ export default class FractiesRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      'filter[bestuursorganen-in-tijd][id]': bestuursorganenIds.join(','),
-      include: 'bestuursorganen-in-tijd',
+      'filter[bestuursorganen-in-tijd][:id:]': tijdsspecialisatiesIds.join(','),
     });
 
     const form = await getFormFrom(this.store, FRACTIE_FORM_ID);
@@ -73,7 +74,7 @@ export default class FractiesRoute extends Route {
       bestuurseenheid: parentModel.bestuurseenheid,
       bestuursPeriods,
       selectedPeriod,
-      bestuursorganen,
+      tijdsspecialisaties,
     });
   }
 

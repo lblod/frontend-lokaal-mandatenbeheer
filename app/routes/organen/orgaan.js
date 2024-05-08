@@ -25,13 +25,8 @@ export default class OrganenOrgaanRoute extends Route {
 
     const bestuursPeriods = await this.store.query('bestuursperiode', {
       sort: 'label',
-      filter: {
-        'heeft-bestuursorganen-in-tijd': {
-          'is-tijdsspecialisatie-van': {
-            id: bestuursorgaanId,
-          },
-        },
-      },
+      'filter[heeft-bestuursorganen-in-tijd][is-tijdsspecialisatie-van][:id:]':
+        bestuursorgaanId,
     });
     let selectedPeriod;
     if (params.bestuursperiode) {
@@ -47,14 +42,8 @@ export default class OrganenOrgaanRoute extends Route {
       this.store,
       'bestuursorgaan',
       {
-        filter: {
-          'is-tijdsspecialisatie-van': {
-            id: bestuursorgaanId,
-          },
-          'heeft-bestuursperiode': {
-            id: selectedPeriod.id,
-          },
-        },
+        'filter[is-tijdsspecialisatie-van][:id:]': bestuursorgaanId,
+        'filter[heeft-bestuursperiode][:id:]': selectedPeriod.id,
       }
     );
 

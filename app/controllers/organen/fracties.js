@@ -51,7 +51,7 @@ export default class FractiesController extends Controller {
   @action
   buildSourceTtlCreateFractie(instanceUri) {
     const bestuurseenheid = this.model.bestuurseenheid;
-    const bestuursorganen = this.model.bestuursorganen;
+    const bestuursorganen = this.model.tijdsspecialisaties;
 
     const bestuurseenheidUri = bestuurseenheid.get('uri');
     const bestuursOrganenUris = bestuursorganen.map((b) => `<${b.get('uri')}>`);

@@ -64,31 +64,21 @@ export default class OrganenIndexRoute extends Route {
       page: {
         size: this.pageSize,
       },
-      filter: {
-        bestuurseenheid: {
-          id: bestuurseenheid.id,
-        },
-        ':has-no:is-tijdsspecialisatie-van': true,
-        'heeft-tijdsspecialisaties': {
-          'heeft-bestuursperiode': {
-            id: bestuursperiode.id,
-          },
-        },
-        classificatie: {
-          id: this.decretaleOrganen.classificatieIds.join(','),
-        },
-      },
+      'filter[bestuurseenheid][:id:]': bestuurseenheid.id,
+      'filter[:has-no:is-tijdsspecialisatie-van]': true,
+      'filter[heeft-tijdsspecialisaties][heeft-bestuursperiode][:id:]':
+        bestuursperiode.id,
+      'filter[classificatie][:id:]':
+        this.decretaleOrganen.classificatieIds.join(','),
       include: 'classificatie,heeft-tijdsspecialisaties',
     };
+    if (params.activeOrgans) {
+      queryParams['filter[:has-no:deactivated-at]'] = true;
+    }
     return queryParams;
   }
 
   async filterBestuursorganen(bestuursorganen, params) {
-    if (params.activeOrgans) {
-      bestuursorganen = bestuursorganen.filter((orgaan) => {
-        return orgaan.isActive;
-      });
-    }
     return (
       await Promise.all(
         bestuursorganen.map(async (orgaan) => {
