@@ -6,7 +6,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { NamedNode } from 'rdflib';
-import moment from 'moment';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 
 /**
@@ -26,7 +25,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
 
   @service currentSession;
-  @service tijdsspecialisaties;
+  @service bestuursperioden;
   @service store;
   @service router;
 
@@ -60,14 +59,10 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
       })
     )[0];
 
+    const bestuursperiode = await bestuursorgaan.heeftBestuursperiode;
     this.bestuursorganenInTijd =
-      await this.tijdsspecialisaties.getCurrentTijdsspecialisaties(
-        this.store,
-        this.bestuurseenheid,
-        {
-          startDate: moment(bestuursorgaan.bindingStart).format('YYYY-MM-DD'),
-          endDate: moment(bestuursorgaan.bindingEinde).format('YYYY-MM-DD'),
-        }
+      await this.bestuursperioden.getRelevantTijdsspecialisaties(
+        bestuursperiode
       );
   }
 
