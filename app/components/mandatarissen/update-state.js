@@ -15,7 +15,7 @@ export default class MandatarissenUpdateState extends Component {
   @tracked selectedFractie = null;
   @tracked bestuurseenheid = null;
   @tracked bestuursorganenOfMandaat = [];
-  @tracked bestuursorganenForFractie = [];
+  @tracked bestuursperiode;
   @tracked rangorde = null;
   @tracked selectedReplacement = null;
   @tracked replacementUpdated;
@@ -23,7 +23,6 @@ export default class MandatarissenUpdateState extends Component {
 
   @service mandatarisStatus;
   @service currentSession;
-  @service bestuursperioden;
   @service store;
   @service toaster;
   @service('mandataris') mandatarisService;
@@ -51,14 +50,8 @@ export default class MandatarissenUpdateState extends Component {
         await this.args.mandataris.bekleedt
       ).bevatIn
     ).slice();
-    const bestuursperiode =
+    this.bestuursperiode =
       await this.bestuursorganenOfMandaat[0].heeftBestuursperiode;
-    // TODO look if we actually need this -> probably better if we only supply bestuursperiode,
-    // and let the component take care of the rest.
-    this.bestuursorganenForFractie =
-      await this.bestuursperioden.getRelevantTijdsspecialisaties(
-        bestuursperiode
-      );
     this.statusOptions = await this.getStatusOptions();
   });
 

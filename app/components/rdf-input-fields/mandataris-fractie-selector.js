@@ -25,14 +25,13 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
 
   @service currentSession;
-  @service bestuursperioden;
   @service store;
   @service router;
 
   @tracked selectedFractie = null;
   @tracked initialized = false;
   @tracked bestuurseenheid = null;
-  @tracked bestuursorganenInTijd = [];
+  @tracked bestuursperiode;
 
   constructor() {
     super(...arguments);
@@ -59,11 +58,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
       })
     )[0];
 
-    const bestuursperiode = await bestuursorgaan.heeftBestuursperiode;
-    this.bestuursorganenInTijd =
-      await this.bestuursperioden.getRelevantTijdsspecialisaties(
-        bestuursperiode
-      );
+    this.bestuursperiode = await bestuursorgaan.heeftBestuursperiode;
   }
 
   async loadProvidedValue() {
