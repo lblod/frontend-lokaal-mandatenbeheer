@@ -8,6 +8,7 @@ import RSVP from 'rsvp';
 
 export default class FractiesRoute extends Route {
   @service store;
+  @service bestuursperioden;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -29,8 +30,7 @@ export default class FractiesRoute extends Route {
         return period.id == params.bestuursperiode;
       });
     } else {
-      // TODO: temporary, should be the closest one if no query params.
-      selectedPeriod = bestuursPeriods.at(-1);
+      selectedPeriod = this.bestuursperioden.getClosestPeriod(bestuursPeriods);
     }
 
     const bestuursorganenIds = await Promise.all(

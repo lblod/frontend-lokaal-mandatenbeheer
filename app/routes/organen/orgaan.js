@@ -7,6 +7,7 @@ import RSVP from 'rsvp';
 
 export default class OrganenOrgaanRoute extends Route {
   @service store;
+  @service bestuursperioden;
 
   queryParams = {
     bestuursperiode: { refreshModel: true },
@@ -34,8 +35,7 @@ export default class OrganenOrgaanRoute extends Route {
         return period.id == params.bestuursperiode;
       });
     } else {
-      // TODO: temporary, should be the closest one if no query params.
-      selectedPeriod = bestuursPeriods.at(-1);
+      selectedPeriod = this.bestuursperioden.getClosestPeriod(bestuursPeriods);
     }
 
     const currentBestuursorgaan = await queryRecord(

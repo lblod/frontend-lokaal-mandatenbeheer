@@ -19,4 +19,16 @@ export default class BestuursperiodenService extends Service {
       .map((data) => data.value);
     return filtered;
   }
+
+  getClosestPeriod(periods) {
+    const now = new Date().getFullYear();
+
+    const currentPeriod = periods.find(
+      (p) => p.start <= now && (now < p.einde || !p.einde)
+    );
+    const firstfuturePeriod = periods.find((p) => p.start > now);
+    const firstPreviousPeriod = periods[0];
+
+    return currentPeriod || firstfuturePeriod || firstPreviousPeriod;
+  }
 }

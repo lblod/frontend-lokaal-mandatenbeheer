@@ -8,6 +8,7 @@ import RSVP from 'rsvp';
 export default class OrganenIndexRoute extends Route {
   @service store;
   @service decretaleOrganen;
+  @service bestuursperioden;
 
   // can't use pagination as we are filtering frontend side on optional properties, which seems to have limited support
   pageSize = 20000;
@@ -30,8 +31,7 @@ export default class OrganenIndexRoute extends Route {
         return period.id == params.bestuursperiode;
       });
     } else {
-      // TODO: temporary, should be the closest one if no query params.
-      selectedPeriod = bestuursPeriods.at(-1);
+      selectedPeriod = this.bestuursperioden.getClosestPeriod(bestuursPeriods);
     }
 
     const queryOptions = this.getOptions(
