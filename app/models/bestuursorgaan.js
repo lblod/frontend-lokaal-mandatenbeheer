@@ -74,7 +74,9 @@ export default class BestuursorgaanModel extends Model {
   async classificatieUri() {
     const bestuursorgaan = await this.isTijdsspecialisatieVan;
     return bestuursorgaan
-      ? await bestuursorgaan.get('classificatie.uri')
+      ? await (
+          await bestuursorgaan.classificatie
+        ).uri
       : (await this.classificatie)?.get('uri');
   }
 
@@ -93,6 +95,14 @@ export default class BestuursorgaanModel extends Model {
   get isGemeentelijk() {
     return this.classificatieUri().then((uri) => {
       return this.decretaleOrganen.gemeenteCodeUris.some(
+        (dcUri) => dcUri === uri
+      );
+    });
+  }
+
+  get containsPoliticalMandates() {
+    return this.classificatieUri().then((uri) => {
+      return this.decretaleOrganen.classificatieUris.some(
         (dcUri) => dcUri === uri
       );
     });
