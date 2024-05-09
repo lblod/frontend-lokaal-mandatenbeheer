@@ -1,6 +1,6 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import { getCurrentBestuursorgaan } from 'frontend-lmb/utils/bestuursperioden';
+import { queryRecord } from 'frontend-lmb/utils/query-record';
 
 /**
  * Bestuursorgaan and bestuursorgaan in de tijd are not the same,
@@ -9,7 +9,9 @@ import { getCurrentBestuursorgaan } from 'frontend-lmb/utils/bestuursperioden';
  */
 export default class BestuursorgaanModel extends Model {
   @service decretaleOrganen;
+  @service bestuursperioden;
   @service store;
+  @service router;
 
   @attr uri;
   @attr naam;
@@ -113,8 +115,23 @@ export default class BestuursorgaanModel extends Model {
   }
 
   async getNbMembers() {
-    const currentOrgaan = await this.getCurrentBestuursorgaanInDeTijd();
+    const queryParam = this.router.currentRoute.queryParams.bestuursperiode;
+    // TODO look if we can prevent these queries.
+    const bestuursPeriods = await this.store.query('bestuursperiode', {
+      sort: 'label',
+    });
+    const tijdsperiode = this.bestuursperioden.getRelevantPeriod(
+      bestuursPeriods,
+      queryParam
+    );
+
+    const currentOrgaan = await queryRecord(this.store, 'bestuursorgaan', {
+      'filter[is-tijdsspecialisatie-van][:id:]': this.id,
+      'filter[heeft-bestuursperiode][:id:]': tijdsperiode.id,
+    });
+
     const mandaten = currentOrgaan ? await currentOrgaan.bevat : [];
+    // TODO not entirely correct, can contain inactive mandatarissen...
     const mandatenAmounts = await Promise.all(
       mandaten.map(async (mandaat) => {
         return (await mandaat.bekleedDoor).meta.count;
@@ -122,14 +139,6 @@ export default class BestuursorgaanModel extends Model {
     );
     const amount = mandatenAmounts.reduce((acc, curr) => acc + curr, 0);
     return amount;
-  }
-
-  async getCurrentBestuursorgaanInDeTijd() {
-    const tijdsspecialisaties = await this.heeftTijdsspecialisaties;
-    if (tijdsspecialisaties.length == 0) {
-      return null;
-    }
-    return getCurrentBestuursorgaan(tijdsspecialisaties);
   }
 
   rdfaBindings = {
