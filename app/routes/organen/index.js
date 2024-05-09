@@ -25,14 +25,10 @@ export default class OrganenIndexRoute extends Route {
     const bestuursPeriods = await this.store.query('bestuursperiode', {
       sort: 'label',
     });
-    let selectedPeriod;
-    if (params.bestuursperiode) {
-      selectedPeriod = bestuursPeriods.find((period) => {
-        return period.id == params.bestuursperiode;
-      });
-    } else {
-      selectedPeriod = this.bestuursperioden.getClosestPeriod(bestuursPeriods);
-    }
+    let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
+      bestuursPeriods,
+      params.bestuursperiode
+    );
 
     const queryOptions = this.getOptions(
       parentModel.bestuurseenheid,

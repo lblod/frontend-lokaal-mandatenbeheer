@@ -20,6 +20,16 @@ export default class BestuursperiodenService extends Service {
     return filtered;
   }
 
+  getRelevantPeriod(periods, bestuursperiodeId) {
+    if (bestuursperiodeId) {
+      return periods.find((period) => {
+        return period.id == bestuursperiodeId;
+      });
+    } else {
+      return this.getClosestPeriod(periods);
+    }
+  }
+
   getClosestPeriod(periods) {
     const now = new Date().getFullYear();
 
