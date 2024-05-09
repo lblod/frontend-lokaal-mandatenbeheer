@@ -59,8 +59,11 @@
           <AuHeading @skin="2">Bestuursorganen</AuHeading>
         </Group>
         <Group>
-          <AuLink @route="organen.fracties" @skin="button-secondary">Beheer
-            fracties
+          <AuLink
+            @route="organen.fracties"
+            @skin="button-secondary"
+            @query={{hash bestuursperiode=this.bestuursperiode}}
+          >Beheer fracties
           </AuLink>
           <AuButton {{on "click" this.toggleModal}}>Voeg bestuursorgaan toe</AuButton>
         </Group>
@@ -70,6 +73,7 @@
         <Organen::OrgaanTable
           @content={{@model.bestuursorganen}}
           @sort={{this.sort}}
+          @bestuursperiodeId={{this.bestuursperiode}}
           @editRoute="organen.orgaan"
         />
       </div>

@@ -27,7 +27,12 @@
 
     <c.body as |row|>
       <td>
-        <LinkTo @route={{@editRoute}} @model={{row.id}} class="au-c-link">
+        <LinkTo
+          @route={{@editRoute}}
+          @model={{row.id}}
+          @query={{hash bestuursperiode=@bestuursperiodeId}}
+          class="au-c-link"
+        >
           {{row.naam}}
         </LinkTo>
         {{#if (await row.isDecretaal)}}
