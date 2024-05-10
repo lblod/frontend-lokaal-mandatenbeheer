@@ -16,14 +16,14 @@ export default class PersonSelectorComponent extends Component {
   @tracked creatingPerson = false;
   @tracked createPersonFormDefinition;
 
-  constructor() {
-    super(...arguments);
-    this.person = this.args.person;
-  }
-
   closeModal() {
     this.selectNewPerson = false;
     this.creatingPerson = false;
+  }
+
+  @action
+  onPersonChange() {
+    this.person = this.args.person;
   }
 
   @action
