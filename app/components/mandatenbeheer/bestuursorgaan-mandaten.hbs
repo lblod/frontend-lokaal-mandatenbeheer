@@ -18,28 +18,52 @@
         </td>
 
         <td class="au-u-visible-small-up">
-          {{mandaat.aantalHouders}}
+          {{#if (eq this.editMandaat.id mandaat.id)}}
+            <AuInput
+              value={{mandaat.aantalHouders}}
+              @width="block"
+              id="mandaat-aantal-houders"
+              type="number"
+              {{on "input" this.updateAantalHouders}}
+            />
+          {{else}}
+            {{mandaat.aantalHouders}}
+          {{/if}}
         </td>
         <td>
-          <LinkTo
-            @route={{"mandaat.edit"}}
-            @model={{mandaat.id}}
-            class="au-c-link"
-          > Bewerk </LinkTo>
-          {{#unless (await @bestuursorgaanIT.isDecretaal)}}
+          {{#if (eq this.editMandaat.id mandaat.id)}}
+            <AuButton
+              {{on "click" this.saveMandaat}}
+              @disabled={{not this.aantalHouders}}
+            >
+              Bewaar
+            </AuButton>
+            <AuButton @skin="secondary" {{on "click" this.cancelEditMandaat}}>
+              Annuleer
+            </AuButton>
+          {{else}}
             <AuButton
               @skin="link"
-              @icon="bin"
-              @alert="true"
-              @loading={{(and
-                (eq this.removingMandaatId mandaat.id)
-                this.removeMandaat.isRunning
-              )}}
-              {{on "click" (perform this.removeMandaat mandaat)}}
+              @icon="pencil"
+              {{on "click" (fn this.startEditMandaat mandaat)}}
             >
-              Verwijder
+              Bewerk
             </AuButton>
-          {{/unless}}
+            {{#unless (await @bestuursorgaanIT.isDecretaal)}}
+              <AuButton
+                @skin="link"
+                @icon="bin"
+                @alert="true"
+                @loading={{(and
+                  (eq this.removingMandaatId mandaat.id)
+                  this.removeMandaat.isRunning
+                )}}
+                {{on "click" (perform this.removeMandaat mandaat)}}
+              >
+                Verwijder
+              </AuButton>
+            {{/unless}}
+          {{/if}}
         </td>
       </c.body>
     </t.content>

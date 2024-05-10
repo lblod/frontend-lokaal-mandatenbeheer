@@ -14,6 +14,9 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
   @tracked selectedBestuursfunctie = null;
   @tracked removingMandaatId = null;
 
+  @tracked editMandaat = null;
+  @tracked aantalHouders;
+
   constructor() {
     super(...arguments);
     this.selectedBestuursfunctie =
@@ -69,5 +72,29 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
   @action
   cancelCreateMandaat() {
     this.creatingNewMandaat = false;
+  }
+
+  @action
+  startEditMandaat(mandaat) {
+    this.editMandaat = mandaat;
+  }
+  @action
+  updateAantalHouders(event) {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+    }
+    this.aantalHouders = event.target.value;
+  }
+  @action
+  async saveMandaat() {
+    this.editMandaat.aantalHouders = this.aantalHouders;
+    await this.editMandaat.save();
+    this.aantalHouders = null;
+    this.editMandaat = null;
+  }
+  @action
+  cancelEditMandaat() {
+    this.aantalHouders = null;
+    this.editMandaat = false;
   }
 }
