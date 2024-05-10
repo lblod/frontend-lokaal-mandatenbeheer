@@ -1,29 +1,9 @@
 <div class="au-c-body-container au-c-body-container--scroll">
 
-  <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
-    <Group>
-      <AuHeading @skin="5">Details</AuHeading>
-    </Group>
-  </AuToolbar>
-
   <div class="au-o-box">
-    <Form::Instance
-      @instanceId={{this.model.instanceId}}
-      @form={{this.model.bestuursorgaanFormDefinition}}
-      @isEditable={{false}}
-    />
+    <AuHeading @skin="5" class="au-u-margin-bottom-small">Details</AuHeading>
 
-    {{#unless (await this.model.bestuursorgaan.isDecretaal)}}
-      <AuToolbar class="au-u-margin-top" as |Group|>
-        <Group>
-          <AuLink
-            @route="organen.orgaan.edit"
-            @model={{this.model.instanceId}}
-            @skin="button-secondary"
-          >Pas aan</AuLink>
-        </Group>
-      </AuToolbar>
-    {{/unless}}
+    <Organen::Card @bestuursorgaan={{@model.currentBestuursorgaan}} />
   </div>
 
   <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
