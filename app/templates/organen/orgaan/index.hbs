@@ -7,17 +7,15 @@
     <Organen::Card @bestuursorgaan={{@model.currentBestuursorgaan}} />
   </div>
 
-  <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
-    <Group>
-      <AuHeading @skin="5">Mandaten</AuHeading>
-    </Group>
-  </AuToolbar>
+  <div class="au-o-box">
+    <AuHeading @skin="5" class="au-u-margin-bottom-small">Mandaten</AuHeading>
 
-  <Mandatenbeheer::BestuursorgaanMandaten
-    @orderedMandaten={{this.model.orderedMandaten}}
-    @availableBestuursfuncties={{this.model.availableBestuursfuncties}}
-    @bestuursorgaanIT={{this.model.currentBestuursorgaan}}
-  />
+    <Mandatenbeheer::BestuursorgaanMandaten
+      @orderedMandaten={{this.model.orderedMandaten}}
+      @availableBestuursfuncties={{this.model.availableBestuursfuncties}}
+      @bestuursorgaanIT={{this.model.currentBestuursorgaan}}
+    />
+  </div>
 </div>
 
 <AuModal
