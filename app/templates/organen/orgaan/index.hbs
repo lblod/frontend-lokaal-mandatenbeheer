@@ -1,4 +1,5 @@
 <div class="au-c-body-container au-c-body-container--scroll">
+  <AuButton {{on "click" this.toggleModal}}>Bewerk</AuButton>
 
   <div class="au-o-box">
     <AuHeading @skin="5" class="au-u-margin-bottom-small">Details</AuHeading>
@@ -18,3 +19,19 @@
     @bestuursorgaanIT={{this.model.currentBestuursorgaan}}
   />
 </div>
+
+<AuModal
+  @title="Bewerk bestuursorgaan"
+  @modalOpen={{this.isModalActive}}
+  @closable={{true}}
+  @closeModal={{this.toggleModal}}
+>
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{this.model.bestuursorgaan.id}}
+      @form={{this.model.bestuursorgaanFormDefinition}}
+      @onCancel={{this.toggleModal}}
+      @onSave={{this.onSave}}
+    />
+  </div>
+</AuModal>

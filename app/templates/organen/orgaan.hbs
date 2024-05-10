@@ -55,8 +55,6 @@
         </Group>
         <Group>
           <AuButtonGroup>
-            <AuLink @route="organen.orgaan.edit" @skin="button-secondary">Bewerk
-            </AuLink>
             {{#unless (await @model.bestuursorgaan.isDecretaal)}}
               {{#if @model.bestuursorgaan.isActive}}
                 <AuButton

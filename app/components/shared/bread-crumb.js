@@ -44,16 +44,6 @@ export default class SharedBreadCrumbComponent extends Component {
       ],
     },
     {
-      route: 'organen.orgaan.edit',
-      crumbs: [
-        {
-          label: 'Bestuursorganen',
-          link: 'organen',
-        },
-        { label: 'Bewerk bestuursorgaan' },
-      ],
-    },
-    {
       route: 'organen.fracties',
       crumbs: [
         {

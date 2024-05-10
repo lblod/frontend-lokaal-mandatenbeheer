@@ -1,5 +1,8 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import RSVP from 'rsvp';
 
 export default class OrganenOrgaanIndexRoute extends Route {
   @service store;
@@ -13,12 +16,18 @@ export default class OrganenOrgaanIndexRoute extends Route {
       this.computeBestuursfuncties(mandaten),
     ]);
 
-    return {
+    const bestuursorgaanFormDefinition = getFormFrom(
+      this.store,
+      BESTUURSORGAAN_FORM_ID
+    );
+
+    return RSVP.hash({
+      bestuursorgaanFormDefinition,
       mandaten,
       orderedMandaten,
       availableBestuursfuncties,
       ...parentModel,
-    };
+    });
   }
 
   async orderMandaten(mandaten) {
