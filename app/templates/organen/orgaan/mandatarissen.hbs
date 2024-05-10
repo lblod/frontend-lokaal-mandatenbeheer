@@ -1,21 +1,12 @@
 <AuToolbar
   @size="large"
-  @nowrap="true"
-  class="au-u-padding-bottom-none"
+  class="au-u-padding-bottom-none au-u-margin-bottom-none"
   as |Group|
 >
-  <Group>
-    <AuHeading @skin="3">Mandatarissen</AuHeading>
-  </Group>
-  <Group class="au-u-1-3@medium">
-    <AuInput
-      value={{this.filter}}
-      @icon="search"
-      @iconAlignment="left"
-      @width="block"
-      placeholder="Zoek mandataris"
-      {{on "input" (perform this.search value="target.value")}}
-    />
+  <Group class="au-u-margin-bottom-none">
+    <AuHeading @skin="2">
+      Mandatarissen
+    </AuHeading>
   </Group>
   <Group>
     <AuLink @route="organen.orgaan.mandataris.new" @skin="button">
@@ -23,16 +14,28 @@
     </AuLink>
   </Group>
 </AuToolbar>
+<AuHeading @skin="3" class="au-u-regular au-u-padding-left">
+  {{this.model.bestuursorgaan.naam}}
+</AuHeading>
 
 <div class="au-o-box">
-  <Organen::MandatarisTable
-    @content={{@model.mandatarissen}}
-    @sort={{this.sort}}
-    @page={{this.page}}
-    @size={{this.size}}
-    @personRoute="mandatarissen.persoon"
-    @mandaatRoute="mandatarissen.mandataris"
+  <AuInput
+    value={{this.filter}}
+    @icon="search"
+    @iconAlignment="left"
+    @width="block"
+    placeholder="Zoek mandataris"
+    {{on "input" (perform this.search value="target.value")}}
   />
 </div>
+
+<Organen::MandatarisTable
+  @content={{@model.mandatarissen}}
+  @sort={{this.sort}}
+  @page={{this.page}}
+  @size={{this.size}}
+  @personRoute="mandatarissen.persoon"
+  @mandaatRoute="mandatarissen.mandataris"
+/>
 
 {{outlet}}
