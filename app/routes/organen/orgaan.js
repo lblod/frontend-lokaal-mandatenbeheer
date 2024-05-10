@@ -43,8 +43,6 @@ export default class OrganenOrgaanRoute extends Route {
 
     return RSVP.hash({
       bestuursorgaan,
-      bestuursPeriods,
-      selectedPeriod,
       currentBestuursorgaan,
     });
   }

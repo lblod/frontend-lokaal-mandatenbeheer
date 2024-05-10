@@ -41,19 +41,6 @@
           </AuPill>
         </Group>
         <Group>
-          <Mandatenbeheer::BestuursperiodenSelector
-            @options={{@model.bestuursPeriods}}
-            @selected={{@model.selectedPeriod}}
-            @onSelect={{this.selectPeriod}}
-            @prefix="Bestuursperiode"
-          />
-          {{#unless (await this.model.bestuursorgaan.isDecretaal)}}
-            <BestuursperiodeNewButton
-              @bestuursorgaan={{this.model.bestuursorgaan}}
-            />
-          {{/unless}}
-        </Group>
-        <Group>
           <AuButtonGroup>
             {{#unless (await @model.bestuursorgaan.isDecretaal)}}
               {{#if @model.bestuursorgaan.isActive}}
