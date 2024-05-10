@@ -2,6 +2,8 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import RSVP from 'rsvp';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class OrganenOrgaanRoute extends Route {
   @service store;
@@ -41,7 +43,14 @@ export default class OrganenOrgaanRoute extends Route {
       }
     );
 
+    const bestuursorgaanFormDefinition = getFormFrom(
+      this.store,
+      BESTUURSORGAAN_FORM_ID
+    );
+
     return RSVP.hash({
+      bestuursorgaanFormDefinition,
+      instanceId: bestuursorgaanId,
       bestuursorgaan,
       bestuursPeriods,
       selectedPeriod,
