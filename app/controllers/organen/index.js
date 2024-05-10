@@ -69,8 +69,8 @@ export default class OrganenIndexController extends Controller {
     const bestuursorgaanInTijd = this.store.createRecord('bestuursorgaan', {
       isTijdsspecialisatieVan: bestuursorgaan,
       heeftBestuursperiode: this.model.selectedPeriod,
-      bindingStart: similarBestuursorgaanInTijd.bindingStart,
-      bindingEinde: similarBestuursorgaanInTijd.bindingEinde,
+      bindingStart: similarBestuursorgaanInTijd?.bindingStart,
+      bindingEinde: similarBestuursorgaanInTijd?.bindingEinde,
     });
     await bestuursorgaanInTijd.save();
   }
