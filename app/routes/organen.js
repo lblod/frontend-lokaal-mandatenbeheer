@@ -19,6 +19,14 @@ export default class OrganenRoute extends Route {
       bestuurseenheid.get('id')
     );
 
+    console.log(this.currentSession.user);
+    const not = this.store.createRecord('system-notification', {
+      subject: 'Test',
+      message: 'Message test',
+      gebruiker: this.currentSession.user,
+    });
+    await not.save();
+
     return RSVP.hash({
       bestuurseenheid,
       bestuursorganen,
