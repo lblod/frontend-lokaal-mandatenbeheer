@@ -1,13 +1,13 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default class OrganenOrgaanMandatenRoute extends Route {
+export default class OrganenOrgaanIndexRoute extends Route {
   @service store;
 
   async model() {
-    const { currentBestuursorgaan } = this.modelFor('organen.orgaan');
+    const parentModel = this.modelFor('organen.orgaan');
 
-    const mandaten = await currentBestuursorgaan.bevat;
+    const mandaten = await parentModel.currentBestuursorgaan.bevat;
     const [orderedMandaten, availableBestuursfuncties] = await Promise.all([
       this.orderMandaten(mandaten),
       this.computeBestuursfuncties(mandaten),
@@ -16,8 +16,8 @@ export default class OrganenOrgaanMandatenRoute extends Route {
     return {
       mandaten,
       orderedMandaten,
-      currentBestuursorgaan,
       availableBestuursfuncties,
+      ...parentModel,
     };
   }
 

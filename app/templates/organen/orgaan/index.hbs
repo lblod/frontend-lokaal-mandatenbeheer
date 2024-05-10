@@ -18,4 +18,21 @@
       </AuToolbar>
     {{/unless}}
   </div>
+
+  <AuToolbar
+    @size="large"
+    @nowrap="true"
+    class="au-u-padding-bottom-none"
+    as |Group|
+  >
+    <Group>
+      <AuHeading @skin="3">Mandaten</AuHeading>
+    </Group>
+  </AuToolbar>
+
+  <Mandatenbeheer::BestuursorgaanMandaten
+    @orderedMandaten={{this.model.orderedMandaten}}
+    @availableBestuursfuncties={{this.model.availableBestuursfuncties}}
+    @bestuursorgaanIT={{this.model.currentBestuursorgaan}}
+  />
 </div>

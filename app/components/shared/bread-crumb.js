@@ -20,16 +20,6 @@ export default class SharedBreadCrumbComponent extends Component {
       ],
     },
     {
-      route: 'organen.orgaan.mandaten',
-      crumbs: [
-        {
-          label: 'Bestuursorganen',
-          link: 'organen',
-        },
-        { label: 'Mandaten' },
-      ],
-    },
-    {
       route: 'organen.orgaan.mandatarissen',
       crumbs: [
         {
