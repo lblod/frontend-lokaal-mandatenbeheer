@@ -1,71 +1,90 @@
 {{page-title this.model.bestuursorgaan.naam}}
-<AuToolbar @border="bottom" @size="large" as |Group|>
-  <Group>
-    <AuHeading @skin="2">
-      {{this.model.bestuursorgaan.naam}}</AuHeading>
-    <AuPill
-      @skin="link"
-      @draft={{false}}
-      @size="regular"
-      @icon="info-circle"
-      @iconAlignment="left"
-      @hideText={{false}}
-    >
-      {{if
-        (await this.model.bestuursorgaan.isDecretaal)
-        "Decretaal"
-        "Niet decretaal"
-      }}
-    </AuPill>
-  </Group>
-  <Group>
-    <Mandatenbeheer::BestuursperiodenSelector
-      @options={{@model.bestuursPeriods}}
-      @selected={{@model.selectedPeriod}}
-      @onSelect={{this.selectPeriod}}
-      @prefix="Bestuursperiode"
-    />
-    {{#unless (await this.model.bestuursorgaan.isDecretaal)}}
-      <BestuursperiodeNewButton @bestuursorgaan={{this.model.bestuursorgaan}} />
-    {{/unless}}
-  </Group>
-  <Group>
-    <AuButtonGroup>
-      <AuLink @route="organen.orgaan.edit" @skin="button-secondary">Bewerk
-      </AuLink>
-      {{#unless (await @model.bestuursorgaan.isDecretaal)}}
-        {{#if @model.bestuursorgaan.isActive}}
-          <AuButton
-            @icon="archive"
-            @skin="secondary"
-            @alert="true"
-            {{on "click" this.archiveOrgaan}}
-          >Archiveer</AuButton>
-        {{else}}
-          <AuButton
-            @icon="undo"
-            @skin="secondary"
-            @alert="true"
-            {{on "click" this.deArchiveOrgaan}}
-          >Heractiveer</AuButton>
-        {{/if}}
-      {{/unless}}
-    </AuButtonGroup>
-  </Group>
-</AuToolbar>
 
-<AuTabs @reversed={{true}} as |Tab|>
-  <Tab>
-    <AuLink @route="organen.orgaan.index">Detail</AuLink>
-  </Tab>
-  <Tab>
-    <AuLink @route="organen.orgaan.mandaten">Mandaten</AuLink>
-  </Tab>
-  <Tab>
-    <AuLink @route="organen.orgaan.mandatarissen">Mandatarissen</AuLink>
-  </Tab>
-</AuTabs>
-
-<div class="au-c-body-container au-c-body-container--scroll">
-  {{outlet}}
-</div>
+<AuMainContainer as |main|>
+  <main.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__content">
+        <ul class="au-c-list-navigation">
+          <li class="au-c-list-navigation__item">
+            <AuNavigationLink @route="organen.orgaan.index">
+              Detail
+            </AuNavigationLink>
+          </li>
+          <li class="au-c-list-navigation__item">
+            <AuNavigationLink @route="organen.orgaan.mandaten">
+              Mandaten
+            </AuNavigationLink>
+          </li>
+          <li class="au-c-list-navigation__item">
+            <AuNavigationLink @route="organen.orgaan.mandatarissen">
+              Mandatarissen
+            </AuNavigationLink>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main.sidebar>
+  <main.content>
+    <AuBodyContainer id="content">
+      <AuToolbar @border="bottom" @size="large" as |Group|>
+        <Group>
+          <AuHeading @skin="2">
+            {{this.model.bestuursorgaan.naam}}</AuHeading>
+          <AuPill
+            @skin="link"
+            @draft={{false}}
+            @size="regular"
+            @icon="info-circle"
+            @iconAlignment="left"
+            @hideText={{false}}
+          >
+            {{if
+              (await this.model.bestuursorgaan.isDecretaal)
+              "Decretaal"
+              "Niet decretaal"
+            }}
+          </AuPill>
+        </Group>
+        <Group>
+          <Mandatenbeheer::BestuursperiodenSelector
+            @options={{@model.bestuursPeriods}}
+            @selected={{@model.selectedPeriod}}
+            @onSelect={{this.selectPeriod}}
+            @prefix="Bestuursperiode"
+          />
+          {{#unless (await this.model.bestuursorgaan.isDecretaal)}}
+            <BestuursperiodeNewButton
+              @bestuursorgaan={{this.model.bestuursorgaan}}
+            />
+          {{/unless}}
+        </Group>
+        <Group>
+          <AuButtonGroup>
+            <AuLink @route="organen.orgaan.edit" @skin="button-secondary">Bewerk
+            </AuLink>
+            {{#unless (await @model.bestuursorgaan.isDecretaal)}}
+              {{#if @model.bestuursorgaan.isActive}}
+                <AuButton
+                  @icon="archive"
+                  @skin="secondary"
+                  @alert="true"
+                  {{on "click" this.archiveOrgaan}}
+                >Archiveer</AuButton>
+              {{else}}
+                <AuButton
+                  @icon="undo"
+                  @skin="secondary"
+                  @alert="true"
+                  {{on "click" this.deArchiveOrgaan}}
+                >Heractiveer</AuButton>
+              {{/if}}
+            {{/unless}}
+          </AuButtonGroup>
+        </Group>
+      </AuToolbar>
+      <div class="au-c-body-container au-c-body-container--scroll">
+        {{outlet}}
+      </div>
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>
