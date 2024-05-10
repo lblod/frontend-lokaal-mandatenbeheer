@@ -36,10 +36,6 @@ Router.map(function () {
     this.route('fracties');
   });
 
-  this.route('mandaat', function () {
-    this.route('edit', { path: '/:id/edit' });
-  });
-
   this.route('mandatarissen', function () {
     this.route('search');
     this.route('persoon', { path: '/:id/persoon' });
