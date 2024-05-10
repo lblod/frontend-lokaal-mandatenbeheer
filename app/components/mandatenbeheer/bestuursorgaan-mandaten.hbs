@@ -68,15 +68,17 @@
       </c.body>
     </t.content>
   </AuDataTable>
-  {{#unless (await @bestuursorgaanIT.isDecretaal)}}
-    <AuButton
-      @disabled={{this.loadingBestuursfuncties}}
-      {{on "click" this.createNewMandaat}}
-      @icon="plus"
-    >
-      Voeg mandaat toe
-    </AuButton>
-  {{/unless}}
+  <div class="au-u-margin-top">
+    {{#unless (await @bestuursorgaanIT.isDecretaal)}}
+      <AuButton
+        @disabled={{this.loadingBestuursfuncties}}
+        {{on "click" this.createNewMandaat}}
+        @icon="plus"
+      >
+        Voeg mandaat toe
+      </AuButton>
+    {{/unless}}
+  </div>
   {{yield}}
 </div>
 
