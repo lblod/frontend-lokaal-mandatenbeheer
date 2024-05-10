@@ -1,5 +1,34 @@
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">
+      {{this.model.bestuursorgaan.naam}}
+    </AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      <AuButton {{on "click" this.toggleModal}}>Bewerk</AuButton>
+      {{#unless (await @model.bestuursorgaan.isDecretaal)}}
+        {{#if @model.bestuursorgaan.isActive}}
+          <AuButton
+            @icon="archive"
+            @skin="secondary"
+            @alert="true"
+            {{on "click" this.archiveOrgaan}}
+          >Archiveer</AuButton>
+        {{else}}
+          <AuButton
+            @icon="undo"
+            @skin="secondary"
+            @alert="true"
+            {{on "click" this.deArchiveOrgaan}}
+          >Heractiveer</AuButton>
+        {{/if}}
+      {{/unless}}
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+
 <div class="au-c-body-container au-c-body-container--scroll">
-  <AuButton {{on "click" this.toggleModal}}>Bewerk</AuButton>
 
   <div class="au-o-box">
     <AuHeading @skin="5" class="au-u-margin-bottom-small">Details</AuHeading>
