@@ -1,4 +1,11 @@
 <div class="au-c-body-container au-c-body-container--scroll">
+
+  <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
+    <Group>
+      <AuHeading @skin="5">Details</AuHeading>
+    </Group>
+  </AuToolbar>
+
   <div class="au-o-box">
     <Form::Instance
       @instanceId={{this.model.instanceId}}
@@ -19,14 +26,9 @@
     {{/unless}}
   </div>
 
-  <AuToolbar
-    @size="large"
-    @nowrap="true"
-    class="au-u-padding-bottom-none"
-    as |Group|
-  >
+  <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
     <Group>
-      <AuHeading @skin="3">Mandaten</AuHeading>
+      <AuHeading @skin="5">Mandaten</AuHeading>
     </Group>
   </AuToolbar>
 
