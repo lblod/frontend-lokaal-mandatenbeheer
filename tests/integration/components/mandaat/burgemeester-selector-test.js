@@ -17,11 +17,9 @@ module(
       assert.dom(this.element).hasText('');
 
       // Template block usage:
-      await render(hbs`
-      <Mandaat::BurgemeesterSelector>
-        template block text
-      </Mandaat::BurgemeesterSelector>
-    `);
+      await render(hbs`<Mandaat::BurgemeesterSelector>
+    template block text
+  </Mandaat::BurgemeesterSelector>`);
 
       assert.dom(this.element).hasText('template block text');
     });
