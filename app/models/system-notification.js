@@ -10,5 +10,9 @@ export default class SystemNotificationModel extends Model {
   @attr('datetime') readAt;
   @attr('datetime') archivedAt;
 
-  @belongsTo('gebruiker', { inverse: null }) gebruiker;
+  @belongsTo('gebruiker', {
+    async: true,
+    inverse: 'system-notification',
+  })
+  gebruiker;
 }

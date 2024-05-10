@@ -14,7 +14,11 @@ export default class GebruikerModel extends Model {
   })
   bestuurseenheden;
 
-  @hasMany('system-notification', { inverse: null }) systemNotifications;
+  @hasMany('system-notification', {
+    async: true,
+    inverse: 'gebruiker',
+  })
+  systemNotifications;
 
   get group() {
     return this.bestuurseenheden.at(0);
