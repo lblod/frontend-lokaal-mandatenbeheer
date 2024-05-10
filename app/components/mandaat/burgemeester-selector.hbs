@@ -1,0 +1,15 @@
+<AuToolbar
+  @size="large"
+  @nowrap="true"
+  class="au-u-padding-bottom-none"
+  as |Group|
+>
+  <Group>
+    <div class="au-o-flow">
+      <AuHeading @skin="2">Ambt burgemeester</AuHeading>
+    </div>
+  </Group>
+</AuToolbar>
+<div class="au-o-box">
+  <Person::Selector @person={{this.persoon}} @onUpdate={{this.onUpdate}} />
+</div>
