@@ -1,7 +1,11 @@
-<AuToolbar @border="bottom" @size="large" as |Group|>
-  <Group>
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom-none"
+  as |Group|
+>
+  <Group class="au-u-margin-bottom-none">
     <AuHeading @skin="2">
-      {{this.model.bestuursorgaan.naam}}
+      Details
     </AuHeading>
   </Group>
   <Group>
@@ -27,6 +31,10 @@
     </AuButtonGroup>
   </Group>
 </AuToolbar>
+<AuHeading @skin="2" class="au-u-regular au-u-padding-left">
+  {{this.model.bestuursorgaan.naam}}
+</AuHeading>
+<AuHr />
 
 <div class="au-c-body-container au-c-body-container--scroll">
 
