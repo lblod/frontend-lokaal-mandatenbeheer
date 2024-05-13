@@ -13,6 +13,7 @@ import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
+  @service toaster;
 
   @tracked persoon = null;
   @tracked mandataris = null;
@@ -94,7 +95,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     } else {
       const errorMessage = 'Er zijn meerdere burgemeesters gevonden.';
       console.error(errorMessage);
-      showErrorToast(errorMessage);
+      showErrorToast(this.toaster, errorMessage);
       return null;
     }
   }
