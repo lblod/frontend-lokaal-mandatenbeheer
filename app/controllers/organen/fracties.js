@@ -4,11 +4,13 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 export default class FractiesController extends Controller {
+  queryParams = ['bestuursperiode'];
   @service router;
 
   @tracked page = 0;
   sort = 'naam';
   size = 10;
+  @tracked bestuursperiode;
 
   @tracked modal = false;
   edit = 'edit';
@@ -43,19 +45,13 @@ export default class FractiesController extends Controller {
 
   @action
   selectPeriod(period) {
-    this.router.transitionTo('organen.fracties', {
-      queryParams: {
-        startDate: period.startDate,
-        endDate: period.endDate,
-        page: 0,
-      },
-    });
+    this.bestuursperiode = period.id;
   }
 
   @action
   buildSourceTtlCreateFractie(instanceUri) {
     const bestuurseenheid = this.model.bestuurseenheid;
-    const bestuursorganen = this.model.bestuursorganen;
+    const bestuursorganen = this.model.tijdsspecialisaties;
 
     const bestuurseenheidUri = bestuurseenheid.get('uri');
     const bestuursOrganenUris = bestuursorganen.map((b) => `<${b.get('uri')}>`);

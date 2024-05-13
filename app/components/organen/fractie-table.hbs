@@ -22,10 +22,7 @@
         <strong>{{row.naam}}</strong>
       </td>
       <td>
-        <Shared::Periode
-          @start={{@selectedPeriod.startDate}}
-          @end={{@selectedPeriod.endDate}}
-        />
+        {{@selectedPeriod.label}}
       </td>
       <td>
         <AuButton @skin="link" {{on "click" (fn @edit row.id)}}>

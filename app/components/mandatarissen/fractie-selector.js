@@ -9,8 +9,10 @@ import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service() store;
   @service() currentSession;
+  @service bestuursperioden;
 
   @tracked _fractie;
+  @tracked bestuursorganen = [];
   @tracked bestuursorganenId;
   @tracked fractieOptions = [];
 
@@ -19,13 +21,22 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     if (this.args.fractie) {
       this._fractie = this.args.fractie;
     }
-    if (this.args.bestuursorganen) {
-      this.bestuursorganenId = this.args.bestuursorganen.map((o) =>
-        o.get('id')
-      );
-    }
+    this.load();
+  }
 
-    this.loadFracties();
+  async load() {
+    await this.loadBestuursorganen();
+    await this.loadFracties();
+  }
+
+  async loadBestuursorganen() {
+    if (this.args.bestuursperiode) {
+      this.bestuursorganen =
+        await this.bestuursperioden.getRelevantTijdsspecialisaties(
+          this.args.bestuursperiode
+        );
+      this.bestuursorganenId = this.bestuursorganen.map((o) => o.get('id'));
+    }
   }
 
   async loadFracties() {
@@ -138,7 +149,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     const onafhankelijke = this.store.createRecord('fractie', {
       naam: 'Onafhankelijk',
       fractietype: onafhankelijkeFractieType,
-      bestuursorganenInTijd: this.args.bestuursorganen,
+      bestuursorganenInTijd: this.bestuursorganen,
       bestuurseenheid: this.args.bestuurseenheid,
     });
     onafhankelijke.save();

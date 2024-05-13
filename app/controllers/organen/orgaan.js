@@ -3,15 +3,13 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class OrganenOrgaanController extends Controller {
-  queryParams = ['startDate', 'endDate'];
+  queryParams = ['bestuursperiode'];
 
-  @tracked startDate;
-  @tracked endDate;
+  @tracked bestuursperiode;
 
   @action
   selectPeriod(period) {
-    this.startDate = period.startDate;
-    this.endDate = period.endDate;
+    this.bestuursperiode = period.id;
   }
 
   @action

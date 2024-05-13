@@ -19,6 +19,7 @@ Router.map(function () {
   });
 
   this.route('contact');
+  this.route('settings');
 
   this.route('legaal', function () {
     this.route('disclaimer');

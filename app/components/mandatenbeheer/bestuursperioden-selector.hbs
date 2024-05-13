@@ -1,18 +1,16 @@
 <PowerSelect
   @renderInPlace={{true}}
-  @selected={{@selectedPeriod}}
-  @options={{this.periodOptions}}
+  @selected={{@selected}}
+  @options={{@options}}
   class="is-optional"
-  @onChange={{this.selectPeriod}}
+  @onChange={{@onSelect}}
   @searchEnabled={{false}}
   @noMatchesMessage="Geen bestuursperioden"
   as |period|
 >
-  {{#if this.periodOptions}}
-    <Shared::Periode
-      @start={{period.startDate}}
-      @end={{period.endDate}}
-    >{{@prefix}}</Shared::Periode>
+  {{#if @options}}
+    {{@prefix}}
+    {{period.label}}
   {{else}}
     Geen bestuursperioden
   {{/if}}
