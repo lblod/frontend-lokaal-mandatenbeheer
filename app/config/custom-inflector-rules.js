@@ -73,8 +73,5 @@ inflector.irregular('minister-position', 'minister-positions');
 inflector.irregular('nationality', 'nationalities');
 
 inflector.irregular('system-notification', 'system-notifications');
-inflector.irregular(
-  'bestuurseenheid-contact-info',
-  'bestuurseenheid-contact-info'
-);
-inflector.irregular('bestuurseenheid-contact', 'bestuurseenheid-contact');
+
+inflector.irregular('bestuurseenheid-contact', 'bestuurseenheid-contacten');
