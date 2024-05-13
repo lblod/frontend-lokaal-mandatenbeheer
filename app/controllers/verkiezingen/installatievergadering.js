@@ -9,10 +9,12 @@ import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandata
 const CREATE_MODE = 'create';
 
 export default class VerkiezingenInstallatievergaderingController extends Controller {
+  queryParams = ['bestuursperiode'];
   @service store;
   @service router;
 
   @tracked editMode = null;
+  @tracked bestuursperiode;
 
   @action
   createMandataris() {
@@ -50,5 +52,10 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
     const installatievergadering = this.model.installatievergadering;
     installatievergadering.status = status;
     await installatievergadering.save();
+  }
+
+  @action
+  selectPeriod(period) {
+    this.bestuursperiode = period.id;
   }
 }

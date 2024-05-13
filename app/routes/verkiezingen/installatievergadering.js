@@ -7,21 +7,44 @@ import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
+  @service bestuursperioden;
 
   queryParams = {
     filter: { refreshModel: true },
     sort: { refreshModel: true },
+    bestuursperiode: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('verkiezingen');
     const bestuurseenheid = parentModel.bestuurseenheid;
-    const installatievergadering = await this.getInstallatievergadering(
-      bestuurseenheid.get('id')
+
+    const bestuursPeriods = await this.store.query('bestuursperiode', {
+      sort: 'label',
+      'filter[installatievergaderingen][bestuurseenheid][:id:]':
+        bestuurseenheid.id,
+    });
+    let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
+      bestuursPeriods,
+      params.bestuursperiode
     );
 
-    const bestuursorgaanInTijd =
-      await installatievergadering.bestuursorgaanInTijd;
+    const installatievergadering = (
+      await this.store.query('installatievergadering', {
+        'filter[bestuurseenheid][id]': bestuurseenheid.id,
+        'filter[bestuursperiode][:id:]': selectedPeriod.id,
+        include: ['status'].join(','),
+      })
+    )[0];
+
+    // TODO For now this is the gemeenteraad, should be split up in the different bestuursorganen we need.
+    const bestuursorgaanInTijd = (
+      await this.store.query('bestuursorgaan', {
+        'filter[is-tijdsspecialisatie-van][classificatie][:uri:]':
+          'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000005',
+        'filter[heeft-bestuursperiode][:id:]': selectedPeriod.id,
+      })
+    )[0];
 
     let mandatarissen;
     if (bestuursorgaanInTijd) {
@@ -40,21 +63,9 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       mandatarisNewForm,
       mandatarissen,
       kandidatenlijsten,
+      bestuursPeriods,
+      selectedPeriod,
     });
-  }
-
-  async getInstallatievergadering(bestuurseenheidId) {
-    return (
-      await this.store.query('installatievergadering', {
-        'filter[bestuursorgaan-in-tijd][is-tijdsspecialisatie-van][bestuurseenheid][id]':
-          bestuurseenheidId,
-        include: [
-          'status',
-          'bestuursorgaan-in-tijd',
-          'bestuursorgaan-in-tijd.is-tijdsspecialisatie-van',
-        ].join(','),
-      })
-    )[0];
   }
 
   async getMandatarissen(params, bestuursOrgaan) {

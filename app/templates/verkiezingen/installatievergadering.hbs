@@ -1,5 +1,29 @@
 {{page-title "Voorbereiding legislatuur"}}
 
+<AuToolbar
+  @size="large"
+  @nowrap="true"
+  class="au-u-padding-bottom-none"
+  as |Group|
+>
+  <Group>
+    <div class="au-o-flow">
+      <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
+    </div>
+  </Group>
+  <Group>
+    <Mandatenbeheer::BestuursperiodenSelector
+      @options={{@model.bestuursPeriods}}
+      @selected={{@model.selectedPeriod}}
+      @onSelect={{this.selectPeriod}}
+      @prefix="Bestuursperiode"
+    />
+    <AuLink @route="verkiezingen.verkiezingsuitslag" @skin="button">Bekijk
+      verkiezingsresultaten
+    </AuLink>
+  </Group>
+</AuToolbar>
+
 <div class="au-c-body-container au-c-body-container--scroll">
   <Verkiezingen::KieslijstSplitter
     @kandidatenlijst={{@model.kandidatenlijsten}}
@@ -14,7 +38,7 @@
   >
     <Group>
       <div class="au-o-flow">
-        <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
+        <AuHeading @skin="3">Samenstelling gemeenteraad</AuHeading>
       </div>
     </Group>
     <Group>

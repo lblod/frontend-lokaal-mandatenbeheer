@@ -10,4 +10,10 @@ export default class BestuursperiodeModel extends ConceptModel {
     inverse: 'heeftBestuursperiode',
   })
   heeftBestuursorganenInTijd;
+
+  @hasMany('installatievergadering', {
+    async: true,
+    inverse: 'bestuursperiode',
+  })
+  installatievergaderingen;
 }
