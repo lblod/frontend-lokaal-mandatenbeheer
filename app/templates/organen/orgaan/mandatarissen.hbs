@@ -22,8 +22,7 @@
   <AuInput
     value={{this.filter}}
     @icon="search"
-    @iconAlignment="left"
-    @width="block"
+    @iconAlignment="right"
     placeholder="Zoek mandataris"
     {{on "input" (perform this.search value="target.value")}}
   />
