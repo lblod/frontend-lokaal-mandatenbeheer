@@ -29,6 +29,10 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       params.bestuursperiode
     );
 
+    const ivStatuses = await this.store.findAll(
+      'installatievergadering-status'
+    );
+
     const installatievergadering = (
       await this.store.query('installatievergadering', {
         'filter[bestuurseenheid][id]': bestuurseenheid.id,
@@ -57,6 +61,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
 
     return RSVP.hash({
+      ivStatuses,
       installatievergadering,
       bestuurseenheid,
       bestuursorgaanInTijd,

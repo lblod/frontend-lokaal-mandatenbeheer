@@ -45,7 +45,7 @@
       <p>Change installatievergadering status:</p>
       <Shared::InstallatievergaderingStatusSelector
         @options={{@model.ivStatuses}}
-        @selectedStatus={{@model.selectedStatus}}
+        @selectedStatus={{@model.installatievergadering.status}}
         @onSelect={{this.selectStatus}}
       />
     </Group>

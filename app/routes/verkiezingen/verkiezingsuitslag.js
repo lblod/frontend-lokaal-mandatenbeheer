@@ -13,9 +13,6 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
   };
 
   async model(params) {
-    const ivStatuses = await this.store.findAll(
-      'installatievergadering-status'
-    );
     // Should only be one.
     // TODO add bestuursperiod selector
     const installatievergaderingen = await this.store.query(
@@ -25,7 +22,6 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
       }
     );
     const installatievergadering = installatievergaderingen[0];
-    const selectedStatus = installatievergadering.get('status');
 
     const options = this.getOptions(params);
     const verkiezingsresultaten = await this.store.query(
@@ -34,8 +30,6 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
     );
 
     return {
-      ivStatuses,
-      selectedStatus,
       installatievergadering,
       verkiezingsresultaten,
     };
