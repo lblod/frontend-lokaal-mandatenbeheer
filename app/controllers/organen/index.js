@@ -4,21 +4,14 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 export default class OrganenIndexController extends Controller {
-  queryParams = [
-    'sort',
-    'activeOrgans',
-    'selectedTypes',
-    'startDate',
-    'endDate',
-  ];
+  queryParams = ['sort', 'activeOrgans', 'selectedTypes', 'bestuursperiode'];
   @service store;
   @service decretaleOrganen;
 
   @tracked sort = 'naam';
   @tracked activeOrgans = false;
   @tracked selectedTypes = ['isDecretaal', 'notDecretaal'];
-  @tracked startDate;
-  @tracked endDate;
+  @tracked bestuursperiode;
 
   @tracked isModalActive = false;
 
@@ -34,16 +27,14 @@ export default class OrganenIndexController extends Controller {
 
   @action
   selectPeriod(period) {
-    this.startDate = period.startDate;
-    this.endDate = period.endDate;
+    this.bestuursperiode = period.id;
   }
 
   @action
   clearFilters() {
     this.activeOrgans = false;
     this.selectedTypes = ['isDecretaal', 'notDecretaal'];
-    this.startDate = null;
-    this.endDate = null;
+    this.bestuursperiode = null;
   }
 
   @action
@@ -64,37 +55,22 @@ export default class OrganenIndexController extends Controller {
       'bestuursorgaan',
       instanceId
     );
-    const latestBestuursperiod = await this.getLatestBestuursorgaanInTijd();
-    await this.createDefaultBestuursorgaanInTijd(
-      createdBestuursorgaan,
-      latestBestuursperiod
-    );
+    await this.createDefaultBestuursorgaanInTijd(createdBestuursorgaan);
 
     this.toggleModal();
     this.send('reloadModel');
   }
 
-  async getLatestBestuursorgaanInTijd() {
-    const bestuurseenheid = this.model.bestuurseenheid;
-    const bestuursorganen = await this.store.query('bestuursorgaan', {
-      'filter[is-tijdsspecialisatie-van][bestuurseenheid][id]':
-        bestuurseenheid.get('id'),
-      'filter[is-tijdsspecialisatie-van][:has-no:deactivated-at]': true,
-      'filter[is-tijdsspecialisatie-van][classificatie][id]':
-        this.decretaleOrganen.classificatieIds.join(','),
-      sort: '-binding-start',
-      page: {
-        size: 1,
-      },
-    });
-    return bestuursorganen.firstObject;
-  }
-
-  async createDefaultBestuursorgaanInTijd(bestuursorgaan, bestuursperiod) {
+  async createDefaultBestuursorgaanInTijd(bestuursorgaan) {
+    // TODO look into if we really need these dates and what they should be.
+    const similarBestuursorgaanInTijd = (
+      await this.model.selectedPeriod.heeftBestuursorganenInTijd
+    )[0];
     const bestuursorgaanInTijd = this.store.createRecord('bestuursorgaan', {
       isTijdsspecialisatieVan: bestuursorgaan,
-      bindingStart: bestuursperiod.bindingStart,
-      bindingEinde: bestuursperiod.bindingEinde,
+      heeftBestuursperiode: this.model.selectedPeriod,
+      bindingStart: similarBestuursorgaanInTijd?.bindingStart,
+      bindingEinde: similarBestuursorgaanInTijd?.bindingEinde,
     });
     await bestuursorgaanInTijd.save();
   }

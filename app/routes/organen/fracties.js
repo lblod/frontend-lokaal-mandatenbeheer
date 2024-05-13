@@ -8,28 +8,40 @@ import RSVP from 'rsvp';
 
 export default class FractiesRoute extends Route {
   @service store;
-  @service tijdsspecialisaties;
+  @service bestuursperioden;
 
   queryParams = {
     filter: { refreshModel: true },
     page: { refreshModel: true },
     size: { refreshModel: true },
     sort: { refreshModel: true },
-    startDate: { refreshModel: true },
-    endDate: { refreshModel: true },
+    bestuursperiode: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('organen');
 
-    const organenWithPeriods =
-      await this.tijdsspecialisaties.fetchBestuursOrganenWithTijdsperiods(
-        parentModel.bestuursorganen,
-        params
-      );
+    const bestuursPeriods = await this.store.query('bestuursperiode', {
+      sort: 'label',
+    });
+    let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
+      bestuursPeriods,
+      params.bestuursperiode
+    );
 
     const bestuursorganenIds = await Promise.all(
-      organenWithPeriods.bestuursorganen.map(async (o) => {
+      parentModel.bestuursorganen.map(async (o) => {
+        return (await o).get('id');
+      })
+    );
+
+    const tijdsspecialisaties = await this.store.query('bestuursorgaan', {
+      'filter[is-tijdsspecialisatie-van][:id:]': bestuursorganenIds.join(','),
+      'filter[heeft-bestuursperiode][:id:]': selectedPeriod.id,
+    });
+
+    const tijdsspecialisatiesIds = await Promise.all(
+      tijdsspecialisaties.map(async (o) => {
         return (await o).get('id');
       })
     );
@@ -40,8 +52,7 @@ export default class FractiesRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      'filter[bestuursorganen-in-tijd][id]': bestuursorganenIds.join(','),
-      include: 'bestuursorganen-in-tijd',
+      'filter[bestuursorganen-in-tijd][:id:]': tijdsspecialisatiesIds.join(','),
     });
 
     const form = await getFormFrom(this.store, FRACTIE_FORM_ID);
@@ -57,7 +68,9 @@ export default class FractiesRoute extends Route {
       defaultFractieType,
       fracties,
       bestuurseenheid: parentModel.bestuurseenheid,
-      ...organenWithPeriods,
+      bestuursPeriods,
+      selectedPeriod,
+      tijdsspecialisaties,
     });
   }
 

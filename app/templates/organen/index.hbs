@@ -11,8 +11,8 @@
           <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
             <div class="au-c-label">Bestuursperiode</div>
             <Mandatenbeheer::BestuursperiodenSelector
-              @options={{@model.bestuursPeriods}}
-              @selectedPeriod={{@model.selectedPeriod}}
+              @options={{this.model.bestuursPeriods}}
+              @selected={{this.model.selectedPeriod}}
               @onSelect={{this.selectPeriod}}
             />
           </div>
@@ -21,7 +21,7 @@
             <AuToggleSwitch
               @alignment="left"
               @identifier="filterActiveOrgans"
-              @checked={{this.activeFilter}}
+              @checked={{this.activeOrgans}}
               @onChange={{this.filterActiveOrgans}}
             >Enkel actieve organen</AuToggleSwitch>
           </div>
@@ -59,8 +59,11 @@
           <AuHeading @skin="2">Bestuursorganen</AuHeading>
         </Group>
         <Group>
-          <AuLink @route="organen.fracties" @skin="button-secondary">Beheer
-            fracties
+          <AuLink
+            @route="organen.fracties"
+            @skin="button-secondary"
+            @query={{hash bestuursperiode=this.bestuursperiode}}
+          >Beheer fracties
           </AuLink>
           <AuButton {{on "click" this.toggleModal}}>Voeg bestuursorgaan toe</AuButton>
         </Group>
@@ -70,6 +73,7 @@
         <Organen::OrgaanTable
           @content={{@model.bestuursorganen}}
           @sort={{this.sort}}
+          @bestuursperiodeId={{this.bestuursperiode}}
           @editRoute="organen.orgaan"
         />
       </div>

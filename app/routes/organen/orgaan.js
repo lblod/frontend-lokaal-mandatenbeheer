@@ -1,19 +1,16 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import {
-  getBestuursPeriods,
-  getSelectedBestuursorgaanWithPeriods,
-} from 'frontend-lmb/utils/bestuursperioden';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { queryRecord } from 'frontend-lmb/utils/query-record';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
 export default class OrganenOrgaanRoute extends Route {
   @service store;
+  @service bestuursperioden;
 
   queryParams = {
-    startDate: { refreshModel: true },
-    endDate: { refreshModel: true },
+    bestuursperiode: { refreshModel: true },
   };
 
   async model(params) {
@@ -27,23 +24,24 @@ export default class OrganenOrgaanRoute extends Route {
       }
     );
 
-    const tijdsspecialisaties = await bestuursorgaan.heeftTijdsspecialisaties;
+    const bestuursPeriods = await this.store.query('bestuursperiode', {
+      sort: 'label',
+      'filter[heeft-bestuursorganen-in-tijd][is-tijdsspecialisatie-van][:id:]':
+        bestuursorgaanId,
+    });
+    let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
+      bestuursPeriods,
+      params.bestuursperiode
+    );
 
-    let currentBestuursorgaan, startDate, endDate, bestuursPeriods;
-    if (tijdsspecialisaties.length != 0) {
-      const result = getSelectedBestuursorgaanWithPeriods(tijdsspecialisaties, {
-        startDate: params.startDate,
-        endDate: params.endDate,
-      });
-
-      currentBestuursorgaan = result.bestuursorgaan;
-      startDate = result.startDate;
-      endDate = result.endDate;
-
-      bestuursPeriods = getBestuursPeriods(tijdsspecialisaties);
-    }
-
-    const selectedPeriod = { startDate, endDate };
+    const currentBestuursorgaan = await queryRecord(
+      this.store,
+      'bestuursorgaan',
+      {
+        'filter[is-tijdsspecialisatie-van][:id:]': bestuursorgaanId,
+        'filter[heeft-bestuursperiode][:id:]': selectedPeriod.id,
+      }
+    );
 
     const bestuursorgaanFormDefinition = getFormFrom(
       this.store,

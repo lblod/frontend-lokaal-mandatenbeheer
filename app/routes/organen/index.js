@@ -3,13 +3,12 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
-import moment from 'moment';
 import RSVP from 'rsvp';
 
 export default class OrganenIndexRoute extends Route {
   @service store;
   @service decretaleOrganen;
-  @service tijdsspecialisaties;
+  @service bestuursperioden;
 
   // can't use pagination as we are filtering frontend side on optional properties, which seems to have limited support
   pageSize = 20000;
@@ -17,27 +16,32 @@ export default class OrganenIndexRoute extends Route {
     sort: { refreshModel: true },
     activeOrgans: { refreshModel: true },
     selectedTypes: { refreshModel: true },
-    startDate: { refreshModel: true },
-    endDate: { refreshModel: true },
+    bestuursperiode: { refreshModel: true },
   };
 
   async model(params) {
     const parentModel = this.modelFor('organen');
-    const organenWithPeriods =
-      await this.tijdsspecialisaties.fetchBestuursOrganenWithTijdsperiods(
-        parentModel.bestuursorganen,
-        params
-      );
 
-    const queryOptions = this.getOptions(parentModel.bestuurseenheid, params);
+    const bestuursPeriods = await this.store.query('bestuursperiode', {
+      sort: 'label',
+    });
+    let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
+      bestuursPeriods,
+      params.bestuursperiode
+    );
+
+    const queryOptions = this.getOptions(
+      parentModel.bestuurseenheid,
+      params,
+      selectedPeriod
+    );
     const allBestuursorganen = await this.store.query(
       'bestuursorgaan',
       queryOptions
     );
     const bestuursorganen = await this.filterBestuursorganen(
       allBestuursorganen,
-      params,
-      organenWithPeriods.selectedPeriod
+      params
     );
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
@@ -45,37 +49,32 @@ export default class OrganenIndexRoute extends Route {
       bestuurseenheid: parentModel.bestuurseenheid,
       bestuursorganen,
       form,
-      bestuursPeriods: organenWithPeriods.bestuursPeriods,
-      selectedPeriod: organenWithPeriods.selectedPeriod,
+      bestuursPeriods,
+      selectedPeriod,
     });
   }
 
-  getOptions(bestuurseenheid, params) {
+  getOptions(bestuurseenheid, params, bestuursperiode) {
     const queryParams = {
       sort: params.sort,
       page: {
         size: this.pageSize,
       },
-      filter: {
-        bestuurseenheid: {
-          id: bestuurseenheid.id,
-        },
-        ':has-no:is-tijdsspecialisatie-van': true,
-        classificatie: {
-          id: this.decretaleOrganen.classificatieIds.join(','),
-        },
-      },
+      'filter[bestuurseenheid][:id:]': bestuurseenheid.id,
+      'filter[:has-no:is-tijdsspecialisatie-van]': true,
+      'filter[heeft-tijdsspecialisaties][heeft-bestuursperiode][:id:]':
+        bestuursperiode.id,
+      'filter[classificatie][:id:]':
+        this.decretaleOrganen.classificatieIds.join(','),
       include: 'classificatie,heeft-tijdsspecialisaties',
     };
+    if (params.activeOrgans) {
+      queryParams['filter[:has-no:deactivated-at]'] = true;
+    }
     return queryParams;
   }
 
-  async filterBestuursorganen(bestuursorganen, params, bestuursPeriod) {
-    if (params.activeOrgans) {
-      bestuursorganen = bestuursorganen.filter((orgaan) => {
-        return orgaan.isActive;
-      });
-    }
+  async filterBestuursorganen(bestuursorganen, params) {
     return (
       await Promise.all(
         bestuursorganen.map(async (orgaan) => {
@@ -86,14 +85,7 @@ export default class OrganenIndexRoute extends Route {
               })
             )
           ).some((val) => val);
-          const tijdsspecialisaties = await orgaan.heeftTijdsspecialisaties;
-          const validPeriod = await tijdsspecialisaties.some((b) => {
-            return (
-              moment(b.bindingStart).format('YYYY-MM-DD') ==
-              bestuursPeriod.startDate
-            );
-          });
-          return { bool: validType && validPeriod, orgaan };
+          return { bool: validType, orgaan };
         })
       )
     )
