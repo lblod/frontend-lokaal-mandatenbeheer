@@ -51,7 +51,7 @@ export default class MandatarissenUpdateState extends Component {
       ).bevatIn
     ).slice();
     this.bestuursperiode =
-      await this.bestuursorganenOfMandaat[0].heeftBestuursperiode;
+      await this.bestuursorganenOfMandaat[0]?.heeftBestuursperiode;
     this.statusOptions = await this.getStatusOptions();
   });
 
