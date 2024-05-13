@@ -21,6 +21,11 @@ export default class PersonSelectorComponent extends Component {
     this.creatingPerson = false;
   }
 
+  constructor() {
+    super(...arguments);
+    this.onPersonChange();
+  }
+
   @action
   onPersonChange() {
     this.person = this.args.person;
