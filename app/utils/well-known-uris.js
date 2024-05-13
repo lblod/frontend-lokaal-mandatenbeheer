@@ -24,3 +24,11 @@ export const BELEIDSDOMEIN_CODES_CONCEPT_SCHEME =
   'http://data.vlaanderen.be/id/conceptscheme/BeleidsdomeinCode';
 export const BESTUURSORGAAN_CLASSIFICATIE_CODE_BURGEMEESTER =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/4955bd72cd0e4eb895fdbfab08da0284';
+export const MANDAAT_BURGEMEESTER_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000013';
+export const MANDAAT_DISTRICT_BURGEMEESTER_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001d';
+export const MANDAAT_SCHEPEN_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000014';
+export const MANDAAT_DISTRICT_SCHEPEN_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001e';
