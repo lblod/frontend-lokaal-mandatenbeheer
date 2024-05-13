@@ -9,6 +9,7 @@ export default class MandatarisModel extends Model {
   @attr('datetime') einde;
   @attr duplicationReason;
   @attr uri;
+  @attr('string') linkToBesluit;
   @attr('datetime', {
     defaultValue() {
       return new Date();
