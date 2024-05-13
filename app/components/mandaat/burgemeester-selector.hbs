@@ -1,0 +1,25 @@
+<AuToolbar
+  @size="large"
+  @nowrap="true"
+  class="au-u-padding-bottom-none"
+  as |Group|
+>
+  <Group>
+    <div class="au-o-flow">
+      <AuHeading @skin="2">Ambt burgemeester</AuHeading>
+    </div>
+  </Group>
+</AuToolbar>
+<div class="au-o-box">
+  {{#if this.errorMessage}}
+    <AuAlert
+      @title={{this.title}}
+      @skin="error"
+      @icon="alert-triangle"
+      @closable={{false}}
+    >
+      <p>{{this.errorMessage}}</p>
+    </AuAlert>
+  {{/if}}
+  <Person::Selector @person={{this.persoon}} @onUpdate={{this.onUpdate}} />
+</div>

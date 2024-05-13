@@ -40,13 +40,13 @@
     @showStartEndDate={{true}}
   />
 
-  <AuContent @skin="small">
+  <div class="au-o-box au-u-padding-top-none">
     <AuButton
       @skin="naked"
       @icon="add"
       {{on "click" this.createMandataris}}
     >Toevoegen</AuButton>
-  </AuContent>
+  </div>
   <AuModal
     @title={{(concat
       "Voeg mandataris toe aan "
@@ -65,4 +65,9 @@
       />
     </div>
   </AuModal>
+
+  <Mandaat::BurgemeesterSelector
+    @bestuurseenheid={{@model.bestuurseenheid}}
+    @bestuursorgaanInTijd={{@model.bestuursorgaanInTijd}}
+  />
 </div>

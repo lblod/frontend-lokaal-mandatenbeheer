@@ -1,5 +1,5 @@
 import Model, { attr } from '@ember-data/model';
-import { MANDATARIS_BEKRACHTIGD_STATE } from 'frontend-lmb/utils/well-known-uris';
+import { MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisPublicationStatusCodeModel extends Model {
   @attr uri;
@@ -7,6 +7,6 @@ export default class MandatarisPublicationStatusCodeModel extends Model {
   @attr('number') order;
 
   get isBekrachtigd() {
-    return this.uri === MANDATARIS_BEKRACHTIGD_STATE;
+    return this.uri === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
   }
 }
