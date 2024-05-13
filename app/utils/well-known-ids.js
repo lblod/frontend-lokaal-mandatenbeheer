@@ -18,6 +18,7 @@ export const CREATE_PERSON_FORM_ID = 'persoon';
 export const BESTUURSORGAAN_FORM_ID = 'bestuursorgaan';
 export const BESTUURSPERIODE_FORM_ID = 'bestuursperiode';
 export const VERHINDERD_STATE_ID = 'c301248f-0199-45ca-b3e5-4c596731d5fe';
+export const BESTUURSEENHEID_CONTACT_FORM_ID = 'bestuurseenheid-contact';
 
 export const INSTALLATIEVERGADERING_TE_BEHANDELEN =
   'b54dbe98-d618-4af7-9f01-791aa90774e4';

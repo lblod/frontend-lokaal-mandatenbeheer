@@ -31,6 +31,7 @@
           >Pas aan</AuButton>
           <Form::SaveWithHistory
             @save={{this.saveInstance}}
+            @isSaving={{this.save.isRunning}}
             @updateValue={{this.updateHistoryMessage}}
             @isModalOpen={{this.isSaveHistoryModalOpen}}
           >Pas aan</Form::SaveWithHistory>
