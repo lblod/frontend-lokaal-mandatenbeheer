@@ -12,7 +12,7 @@ export default class SystemNotificationModel extends Model {
 
   @belongsTo('gebruiker', {
     async: true,
-    inverse: 'system-notification',
+    inverse: 'systemNotifications',
   })
   gebruiker;
 }
