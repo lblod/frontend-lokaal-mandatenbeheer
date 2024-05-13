@@ -63,7 +63,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       einde: this.bindingEinde,
       bekleedt: burgemeesterMandaat,
       isBestuurlijkeAliasVan: null,
-      beleidsdomein: null,
+      beleidsdomein: [],
       status: await getEffectiefStatus(this.store),
       publicationStatus: await getDraftStatus(this.store),
     });
@@ -92,7 +92,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   async load() {
     const burgemeesterMandaat = await this.getBurgemeesterMandaat();
     this.persoon = await this.loadBurgemeesterPersoon(burgemeesterMandaat);
-    console.log(this.persoon);
   }
 
   constructor() {
