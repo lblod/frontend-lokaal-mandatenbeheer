@@ -9,9 +9,9 @@
     </AuHeading>
   </Group>
   <Group>
-    <AuLink @route="organen.orgaan.mandataris.new" @skin="button">
-      Voeg mandataris toe
-    </AuLink>
+    <AuButton {{on "click" (fn this.setIsCreatingMandataris true)}}>
+      Voeg nieuwe mandataris toe
+    </AuButton>
   </Group>
 </AuToolbar>
 <AuHeading @skin="3" class="au-u-regular au-u-padding-left">
@@ -39,3 +39,19 @@
 />
 
 {{outlet}}
+
+<AuModal
+  @title="Voeg nieuwe mandataris toe"
+  @modalOpen={{this.isCreatingMandataris}}
+  @closable={{true}}
+  @closeModal={{(fn this.setIsCreatingMandataris false)}}
+>
+  <div class="au-o-box">
+    <Form::NewInstance
+      @onCreate={{this.onCreate}}
+      @form={{@model.mandatarisNewForm}}
+      @buildSourceTtl={{this.buildSourceTtl}}
+      @buildMetaTtl={{this.buildMetaTtl}}
+    />
+  </div>
+</AuModal>

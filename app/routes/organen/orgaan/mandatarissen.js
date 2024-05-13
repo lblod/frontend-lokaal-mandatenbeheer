@@ -1,6 +1,8 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import moment from 'moment';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class OrganenMandatarissenRoute extends Route {
   @service store;
@@ -22,12 +24,17 @@ export default class OrganenMandatarissenRoute extends Route {
 
       mandatarissen = await this.store.query('mandataris', options);
     }
-
     const unsorted = await this.foldMandatarissen(mandatarissen);
+    const mandatarisNewForm = await getFormFrom(
+      this.store,
+      MANDATARIS_NEW_FORM_ID
+    );
 
     return {
       mandatarissen: this.reSortMandatarissen(params, unsorted),
       bestuursorgaan: parentModel.bestuursorgaan,
+      mandatarisNewForm: mandatarisNewForm,
+      currentBestuursorgaan: currentBestuursorgaan,
     };
   }
 
