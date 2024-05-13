@@ -33,6 +33,16 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     return this.bestuursorgaanInTijd.bindingEinde;
   }
 
+  constructor() {
+    super(...arguments);
+    this.load();
+  }
+
+  async load() {
+    const burgemeesterMandaat = await this.getBurgemeesterMandaat();
+    this.persoon = await this.loadBurgemeesterPersoon(burgemeesterMandaat);
+  }
+
   formatToDateString(dateTime) {
     return dateTime ? moment(dateTime).format('YYYY-MM-DD') : undefined;
   }
@@ -87,16 +97,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       showErrorToast(errorMessage);
       return null;
     }
-  }
-
-  async load() {
-    const burgemeesterMandaat = await this.getBurgemeesterMandaat();
-    this.persoon = await this.loadBurgemeesterPersoon(burgemeesterMandaat);
-  }
-
-  constructor() {
-    super(...arguments);
-    this.load();
   }
 
   @action
