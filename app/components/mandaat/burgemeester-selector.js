@@ -15,7 +15,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   @tracked persoon = null;
   @tracked mandataris = null;
-  @tracked hasMultipleBurgemeesters = false;
+  @tracked errorMessage = '';
 
   get bestuurseenheid() {
     return this.args.bestuurseenheid;
@@ -66,6 +66,22 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     });
   }
 
+  toUserReadableListing(array, itemToString) {
+    return `${array
+      .slice(0, -1)
+      .map((p) => itemToString(p))
+      .join(', ')} en ${itemToString(array.at(-1))}`;
+  }
+
+  async setMultipleBurgemeestersError(burgemeesters) {
+    const personen = await Promise.all(
+      burgemeesters.map((b) => b.isBestuurlijkeAliasVan)
+    );
+
+    this.errorMessage = `Er zijn meerdere burgemeesters gevonden:
+      ${this.toUserReadableListing(personen, (p) => `${p.gebruikteVoornaam} ${p.achternaam}`)}.`;
+  }
+
   async createMandataris(burgemeesterMandaat) {
     const newMandataris = this.store.createRecord('mandataris', {
       rangorde: null,
@@ -92,8 +108,8 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       this.mandataris = burgemeester;
       return await burgemeester.isBestuurlijkeAliasVan;
     } else {
-      this.hasMultipleBurgemeesters = true;
-      return null;
+      await this.setMultipleBurgemeestersError(burgemeesters);
+      return burgemeesters[0].isBestuurlijkeAliasVan;
     }
   }
 
