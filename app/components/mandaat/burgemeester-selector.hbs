@@ -1,3 +1,17 @@
+{{#if this.hasMultipleBurgemeesters}}
+  <div
+    class="au-o-box no-pagination au-u-padding-bottom-none au-u-margin-bottom-none"
+  >
+    <AuAlert
+      @title={{this.title}}
+      @skin="error"
+      @icon="alert-triangle"
+      @closable={{false}}
+    >
+      <p>Er zijn meerdere burgemeesters gevonden.</p>
+    </AuAlert>
+  </div>
+{{/if}}
 <AuToolbar
   @size="large"
   @nowrap="true"

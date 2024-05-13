@@ -9,14 +9,13 @@ import {
   getEffectiefStatus,
 } from 'frontend-lmb/utils/get-mandataris-status';
 import { queryRecord } from 'frontend-lmb/utils/query-record';
-import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
-  @service toaster;
 
   @tracked persoon = null;
   @tracked mandataris = null;
+  @tracked hasMultipleBurgemeesters = false;
 
   get bestuurseenheid() {
     return this.args.bestuurseenheid;
@@ -93,9 +92,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       this.mandataris = burgemeester;
       return await burgemeester.isBestuurlijkeAliasVan;
     } else {
-      const errorMessage = 'Er zijn meerdere burgemeesters gevonden.';
-      console.error(errorMessage);
-      showErrorToast(this.toaster, errorMessage);
+      this.hasMultipleBurgemeesters = true;
       return null;
     }
   }
