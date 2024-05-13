@@ -29,6 +29,9 @@ Router.map(function () {
   this.route('organen', function () {
     this.route('orgaan', { path: '/:id' }, function () {
       this.route('mandatarissen');
+      this.route('mandataris', function () {
+        this.route('new');
+      });
     });
     this.route('fracties');
   });
