@@ -71,3 +71,5 @@ inflector.irregular(
 inflector.irregular('minister-position', 'minister-positions');
 
 inflector.irregular('nationality', 'nationalities');
+
+inflector.irregular('system-notification', 'system-notifications');
