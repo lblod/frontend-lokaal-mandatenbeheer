@@ -1,6 +1,5 @@
 import Controller from '@ember/controller';
 
-import { restartableTask } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
@@ -11,8 +10,6 @@ export default class SettingsController extends Controller {
   get bestuurseenheid() {
     return { email: this.bestuurseenheidEmail };
   }
-
-  saveBestuurseenheidSettings = restartableTask(async () => {});
 
   get bestuurseenheidLabel() {
     return `${this.currentSession.groupClassification.label} ${this.currentSession.group.naam}`;
