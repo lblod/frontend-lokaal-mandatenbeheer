@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { BESTUURSORGAAN_CLASSIFICATIE_CODE_BURGEMEESTER } from 'frontend-lmb/utils/well-known-uris';
 import moment from 'moment';
 import {
-  getDraftStatus,
+  getDraftPublicationStatus,
   getEffectiefStatus,
 } from 'frontend-lmb/utils/get-mandataris-status';
 import { queryRecord } from 'frontend-lmb/utils/query-record';
@@ -75,7 +75,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       isBestuurlijkeAliasVan: null,
       beleidsdomein: [],
       status: await getEffectiefStatus(this.store),
-      publicationStatus: await getDraftStatus(this.store),
+      publicationStatus: await getDraftPublicationStatus(this.store),
     });
     await newMandataris.save();
     return newMandataris;

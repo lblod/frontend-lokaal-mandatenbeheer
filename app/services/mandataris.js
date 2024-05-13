@@ -1,6 +1,6 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import { getDraftStatus } from 'frontend-lmb/utils/get-mandataris-status';
+import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import moment from 'moment';
 
 export default class MandatarisService extends Service {
@@ -56,7 +56,7 @@ export default class MandatarisService extends Service {
       isBestuurlijkeAliasVan: replacementPerson,
       beleidsdomein: await newMandatarisState.beleidsdomein,
       status: toReplace.status,
-      publicationStatus: await getDraftStatus(this.store),
+      publicationStatus: await getDraftPublicationStatus(this.store),
     });
     await newMandataris.save();
 
