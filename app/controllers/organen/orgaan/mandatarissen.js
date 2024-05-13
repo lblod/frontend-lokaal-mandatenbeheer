@@ -34,6 +34,7 @@ export default class OrganenMandatarissenController extends Controller {
   @action
   async onCreate({ instanceTtl, instanceId }) {
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
+    setTimeout(() => this.router.refresh(), 1000);
     this.isCreatingMandataris = false;
   }
 
