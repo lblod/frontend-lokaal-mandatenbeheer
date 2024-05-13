@@ -8,7 +8,7 @@ import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandata
 
 const CREATE_MODE = 'create';
 
-export default class PrepareInstallatievergaderingController extends Controller {
+export default class VerkiezingenInstallatievergaderingController extends Controller {
   @service store;
   @service router;
 

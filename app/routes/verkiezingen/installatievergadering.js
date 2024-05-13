@@ -7,7 +7,6 @@ import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
-  @service currentSession;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -15,10 +14,14 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   };
 
   async model(params) {
-    const bestuurseenheid = this.currentSession.group;
-    const parentModel = this.modelFor('verkiezingen.verkiezingsuitslag');
+    const parentModel = this.modelFor('verkiezingen');
+    const bestuurseenheid = parentModel.bestuurseenheid;
+    const installatievergadering = await this.getInstallatievergadering(
+      bestuurseenheid.get('id')
+    );
+
     const bestuursorgaanInTijd =
-      await parentModel.installatievergadering.bestuursorgaanInTijd;
+      await installatievergadering.bestuursorgaanInTijd;
 
     let mandatarissen;
     if (bestuursorgaanInTijd) {
@@ -31,13 +34,27 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
 
     return RSVP.hash({
-      ...parentModel,
+      installatievergadering,
       bestuurseenheid,
       bestuursorgaanInTijd,
       mandatarisNewForm,
       mandatarissen,
       kandidatenlijsten,
     });
+  }
+
+  async getInstallatievergadering(bestuurseenheidId) {
+    return (
+      await this.store.query('installatievergadering', {
+        'filter[bestuursorgaan-in-tijd][is-tijdsspecialisatie-van][bestuurseenheid][id]':
+          bestuurseenheidId,
+        include: [
+          'status',
+          'bestuursorgaan-in-tijd',
+          'bestuursorgaan-in-tijd.is-tijdsspecialisatie-van',
+        ].join(','),
+      })
+    )[0];
   }
 
   async getMandatarissen(params, bestuursOrgaan) {

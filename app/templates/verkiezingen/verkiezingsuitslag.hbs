@@ -13,19 +13,12 @@
       </div>
     </Group>
     <Group>
-      {{#if @model.installatievergadering.teBehandelen}}
-        <AuLink
-          @skin="button"
-          @route="verkiezingen.verkiezingsuitslag.prepare"
-        >Start voorbereiding legislatuur</AuLink>
-      {{else}}
-        <p>Change installatievergadering status:</p>
-        <Shared::InstallatievergaderingStatusSelector
-          @options={{@model.ivStatuses}}
-          @selectedStatus={{@model.selectedStatus}}
-          @onSelect={{this.selectStatus}}
-        />
-      {{/if}}
+      <p>Change installatievergadering status:</p>
+      <Shared::InstallatievergaderingStatusSelector
+        @options={{@model.ivStatuses}}
+        @selectedStatus={{@model.selectedStatus}}
+        @onSelect={{this.selectStatus}}
+      />
     </Group>
   </AuToolbar>
 
