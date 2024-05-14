@@ -31,6 +31,12 @@ export default class BestuursorgaanModel extends Model {
   })
   bestuurseenheid;
 
+  @belongsTo('bestuurseenheid', {
+    async: true,
+    inverse: 'fakeBestuursorganen',
+  })
+  orginalBestuurseenheid;
+
   @belongsTo('bestuursorgaan-classificatie-code', {
     async: true,
     inverse: null,
