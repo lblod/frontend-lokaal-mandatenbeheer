@@ -48,66 +48,69 @@
   <div class="au-c-body-container au-c-body-container--scroll">
     <Verkiezingen::KieslijstSplitter
       @kandidatenlijst={{@model.kandidatenlijsten}}
-      @bestuursorgaan={{@model.bestuursorgaanInTijd}}
+      @bestuursorgaan={{@model.bestuursorganenInTijd}}
       @bestuurseenheid={{@model.bestuurseenheid}}
     />
-    <AuToolbar
-      @size="large"
-      @nowrap="true"
-      class="au-u-padding-bottom-none"
-      as |Group|
-    >
-      <Group>
-        <div class="au-o-flow">
-          <AuHeading @skin="3">Samenstelling gemeenteraad</AuHeading>
-        </div>
-      </Group>
-      <Group>
-        <p>Change installatievergadering status:</p>
-        <Shared::InstallatievergaderingStatusSelector
-          @options={{@model.ivStatuses}}
-          @selectedStatus={{@model.installatievergadering.status}}
-          @onSelect={{this.selectStatus}}
-        />
-      </Group>
-    </AuToolbar>
-    <Verkiezingen::DraftMandatarisList
-      @bestuursorgaan={{@model.bestuursorgaanInTijd}}
-      @sort={{this.sort}}
-      @page={{0}}
-      @size={{9999}}
-      @title=""
-      @showFractie={{true}}
-      @showFunctie={{true}}
-      @showRangorde={{true}}
-      @showBevoegdheid={{true}}
-      @showStartEndDate={{true}}
-    />
 
-    <AuContent @skin="small">
-      <AuButton
-        @skin="naked"
-        @icon="add"
-        {{on "click" this.createMandataris}}
-      >Toevoegen</AuButton>
-    </AuContent>
-    <AuModal
-      @title={{(concat
-        "Voeg mandataris toe aan "
-        @model.bestuursorgaanInTijd.isTijdsspecialisatieVan.naam
-      )}}
-      @modalOpen={{this.isCreating}}
-      @closable={{true}}
-      @closeModal={{this.cancel}}
-    >
-      <div class="au-o-box">
-        <Form::NewInstance
-          @onCreate={{this.onCreate}}
-          @form={{@model.mandatarisNewForm}}
-          @buildSourceTtl={{this.buildSourceTtl}}
-          @buildMetaTtl={{this.buildMetaTtl}}
-        />
-      </div>
-    </AuModal>
+    {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
+      <AuToolbar
+        @size="large"
+        @nowrap="true"
+        class="au-u-padding-bottom-none"
+        as |Group|
+      >
+        <Group>
+          <div class="au-o-flow">
+            <AuHeading @skin="3">Samenstelling
+              {{bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
+          </div>
+        </Group>
+        <Group>
+          <p>Change installatievergadering status:</p>
+          <Shared::InstallatievergaderingStatusSelector
+            @options={{@model.ivStatuses}}
+            @selectedStatus={{@model.installatievergadering.status}}
+            @onSelect={{this.selectStatus}}
+          />
+        </Group>
+      </AuToolbar>
+      <Verkiezingen::DraftMandatarisList
+        @bestuursorgaan={{bestuursorgaan}}
+        @sort={{this.sort}}
+        @page={{0}}
+        @size={{9999}}
+        @title=""
+        @showFractie={{true}}
+        @showFunctie={{true}}
+        @showRangorde={{true}}
+        @showBevoegdheid={{true}}
+        @showStartEndDate={{true}}
+      />
+
+      <AuContent @skin="small">
+        <AuButton
+          @skin="naked"
+          @icon="add"
+          {{on "click" this.createMandataris}}
+        >Toevoegen</AuButton>
+      </AuContent>
+      <AuModal
+        @title={{(concat
+          "Voeg mandataris toe aan " bestuursorgaan.isTijdsspecialisatieVan.naam
+        )}}
+        @modalOpen={{this.isCreating}}
+        @closable={{true}}
+        @closeModal={{this.cancel}}
+      >
+        <div class="au-o-box">
+          <Form::NewInstance
+            @onCreate={{this.onCreate}}
+            @form={{@model.mandatarisNewForm}}
+            @buildSourceTtl={{this.buildSourceTtl}}
+            @buildMetaTtl={{this.buildMetaTtl}}
+          />
+        </div>
+      </AuModal>
+    {{/each}}
   </div>
 {{/if}}

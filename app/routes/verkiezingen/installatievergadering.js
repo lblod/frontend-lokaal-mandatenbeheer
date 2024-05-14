@@ -59,15 +59,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     const bestuursorganenInTijd =
       await this.getBestuursorganenInTijd(selectedPeriod);
 
-    // TODO For now this is the gemeenteraad, should be split up in the different bestuursorganen we need.
-    const bestuursorgaanInTijd = (
-      await this.store.query('bestuursorgaan', {
-        'filter[is-tijdsspecialisatie-van][classificatie][:uri:]':
-          'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000005',
-        'filter[heeft-bestuursperiode][:id:]': selectedPeriod.id,
-      })
-    )[0];
-
     const kandidatenlijsten = await this.getKandidatenLijsten(selectedPeriod);
 
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
@@ -76,7 +67,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       ivStatuses,
       installatievergadering,
       bestuurseenheid,
-      bestuursorgaanInTijd,
+      bestuursorganenInTijd,
       mandatarisNewForm,
       kandidatenlijsten,
       bestuursPeriods,
