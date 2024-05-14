@@ -24,6 +24,12 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       'filter[installatievergaderingen][bestuurseenheid][:id:]':
         bestuurseenheid.id,
     });
+    if (bestuursPeriods.length == 0) {
+      return RSVP.hash({
+        bestuurseenheid,
+        isRelevant: false,
+      });
+    }
     let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
       bestuursPeriods,
       params.bestuursperiode
@@ -50,13 +56,11 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       })
     )[0];
 
-    let mandatarissen;
+    let mandatarissen, kandidatenlijsten;
     if (bestuursorgaanInTijd) {
       mandatarissen = await this.getMandatarissen(params, bestuursorgaanInTijd);
+      kandidatenlijsten = await this.getKandidatenLijsten(bestuursorgaanInTijd);
     }
-
-    let kandidatenlijsten =
-      await this.getKandidatenLijsten(bestuursorgaanInTijd);
 
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
 
@@ -70,6 +74,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       kandidatenlijsten,
       bestuursPeriods,
       selectedPeriod,
+      isRelevant: parentModel.isRelevant,
     });
   }
 

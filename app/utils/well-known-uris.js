@@ -8,6 +8,8 @@ export const FRACTIETYPE_ONAFHANKELIJK =
   'http://data.vlaanderen.be/id/concept/Fractietype/Onafhankelijk';
 export const FRACTIETYPE_SAMENWERKINGSVERBAND =
   'http://data.vlaanderen.be/id/concept/Fractietype/Samenwerkingsverband';
+export const BESTUURSEENHEID_CLASSIFICATIECODE_GEMEENTE =
+  'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000001';
 export const BESTUURSEENHEID_CLASSIFICATIECODE_OCMW =
   'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000002';
 export const MANDATARIS_VERHINDERD_STATE =

@@ -1,38 +1,24 @@
 {{page-title "Voorbereiding legislatuur"}}
 
-<AuToolbar
-  @size="large"
-  @nowrap="true"
-  class="au-u-padding-bottom-none"
-  as |Group|
->
-  <Group>
+{{#if (or (not @model.isRelevant) (not @model.installatievergadering))}}
+  <div class="au-o-box">
     <div class="au-o-flow">
       <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
     </div>
-  </Group>
-  <Group>
-    <Mandatenbeheer::BestuursperiodenSelector
-      @options={{@model.bestuursPeriods}}
-      @selected={{@model.selectedPeriod}}
-      @onSelect={{this.selectPeriod}}
-      @prefix="Bestuursperiode"
-    />
-    <AuLink
-      @route="verkiezingen.verkiezingsuitslag"
-      @model={{@model.selectedPeriod.id}}
-      @skin="button"
-    >Bekijk verkiezingsresultaten
-    </AuLink>
-  </Group>
-</AuToolbar>
-
-<div class="au-c-body-container au-c-body-container--scroll">
-  <Verkiezingen::KieslijstSplitter
-    @kandidatenlijst={{@model.kandidatenlijsten}}
-    @bestuursorgaan={{@model.bestuursorgaanInTijd}}
-    @bestuurseenheid={{@model.bestuurseenheid}}
-  />
+  </div>
+  <div class="au-o-box">
+    <AuAlert @icon="info-circle" @size="small">
+      <p>De voorbereiding van de legislatuur is niet mogelijk in de
+        bestuurseenheid
+        {{@model.bestuurseenheid.classificatie.label}}
+        {{@model.bestuurseenheid.naam}}.</p>
+      <p>
+        De voorbereiding van de legislatuur gebeurt in de bestuurseenheid
+        Gemeenteraad
+        {{@model.bestuurseenheid.naam}}</p>
+    </AuAlert>
+  </div>
+{{else}}
   <AuToolbar
     @size="large"
     @nowrap="true"
@@ -41,55 +27,87 @@
   >
     <Group>
       <div class="au-o-flow">
-        <AuHeading @skin="3">Samenstelling gemeenteraad</AuHeading>
+        <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
       </div>
     </Group>
     <Group>
-      <p>Change installatievergadering status:</p>
-      <Shared::InstallatievergaderingStatusSelector
-        @options={{@model.ivStatuses}}
-        @selectedStatus={{@model.installatievergadering.status}}
-        @onSelect={{this.selectStatus}}
+      <Mandatenbeheer::BestuursperiodenSelector
+        @options={{@model.bestuursPeriods}}
+        @selected={{@model.selectedPeriod}}
+        @onSelect={{this.selectPeriod}}
+        @prefix="Bestuursperiode"
       />
+      <AuLink
+        @route="verkiezingen.verkiezingsuitslag"
+        @model={{@model.selectedPeriod.id}}
+        @skin="button"
+      >Bekijk verkiezingsresultaten
+      </AuLink>
     </Group>
   </AuToolbar>
+  <div class="au-c-body-container au-c-body-container--scroll">
+    <Verkiezingen::KieslijstSplitter
+      @kandidatenlijst={{@model.kandidatenlijsten}}
+      @bestuursorgaan={{@model.bestuursorgaanInTijd}}
+      @bestuurseenheid={{@model.bestuurseenheid}}
+    />
+    <AuToolbar
+      @size="large"
+      @nowrap="true"
+      class="au-u-padding-bottom-none"
+      as |Group|
+    >
+      <Group>
+        <div class="au-o-flow">
+          <AuHeading @skin="3">Samenstelling gemeenteraad</AuHeading>
+        </div>
+      </Group>
+      <Group>
+        <p>Change installatievergadering status:</p>
+        <Shared::InstallatievergaderingStatusSelector
+          @options={{@model.ivStatuses}}
+          @selectedStatus={{@model.installatievergadering.status}}
+          @onSelect={{this.selectStatus}}
+        />
+      </Group>
+    </AuToolbar>
+    <Verkiezingen::DraftMandatarisList
+      @mandatarissen={{@model.mandatarissen}}
+      @sort={{this.sort}}
+      @page={{0}}
+      @size={{9999}}
+      @title=""
+      @showFractie={{true}}
+      @showFunctie={{true}}
+      @showRangorde={{true}}
+      @showBevoegdheid={{true}}
+      @showStartEndDate={{true}}
+    />
 
-  <Verkiezingen::DraftMandatarisList
-    @mandatarissen={{@model.mandatarissen}}
-    @sort={{this.sort}}
-    @page={{0}}
-    @size={{9999}}
-    @title=""
-    @showFractie={{true}}
-    @showFunctie={{true}}
-    @showRangorde={{true}}
-    @showBevoegdheid={{true}}
-    @showStartEndDate={{true}}
-  />
-
-  <AuContent @skin="small">
-    <AuButton
-      @skin="naked"
-      @icon="add"
-      {{on "click" this.createMandataris}}
-    >Toevoegen</AuButton>
-  </AuContent>
-  <AuModal
-    @title={{(concat
-      "Voeg mandataris toe aan "
-      @model.bestuursorgaanInTijd.isTijdsspecialisatieVan.naam
-    )}}
-    @modalOpen={{this.isCreating}}
-    @closable={{true}}
-    @closeModal={{this.cancel}}
-  >
-    <div class="au-o-box">
-      <Form::NewInstance
-        @onCreate={{this.onCreate}}
-        @form={{@model.mandatarisNewForm}}
-        @buildSourceTtl={{this.buildSourceTtl}}
-        @buildMetaTtl={{this.buildMetaTtl}}
-      />
-    </div>
-  </AuModal>
-</div>
+    <AuContent @skin="small">
+      <AuButton
+        @skin="naked"
+        @icon="add"
+        {{on "click" this.createMandataris}}
+      >Toevoegen</AuButton>
+    </AuContent>
+    <AuModal
+      @title={{(concat
+        "Voeg mandataris toe aan "
+        @model.bestuursorgaanInTijd.isTijdsspecialisatieVan.naam
+      )}}
+      @modalOpen={{this.isCreating}}
+      @closable={{true}}
+      @closeModal={{this.cancel}}
+    >
+      <div class="au-o-box">
+        <Form::NewInstance
+          @onCreate={{this.onCreate}}
+          @form={{@model.mandatarisNewForm}}
+          @buildSourceTtl={{this.buildSourceTtl}}
+          @buildMetaTtl={{this.buildMetaTtl}}
+        />
+      </div>
+    </AuModal>
+  </div>
+{{/if}}
