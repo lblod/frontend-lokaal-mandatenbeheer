@@ -1,22 +1,14 @@
 <AuToolbar
   @size="large"
   @nowrap="true"
-  class="au-u-padding-bottom-none"
+  class="au-u-padding-bottom-none au-u-padding-bottom-none"
   as |Group|
 >
-  <Group>
+  <Group class="au-u-margin-bottom-none">
     <div class="au-o-flow">
       <AuHeading @skin="3">Samenstelling
         {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
     </div>
-  </Group>
-  <Group>
-    <p>Change installatievergadering status:</p>
-    <Shared::InstallatievergaderingStatusSelector
-      @options={{@model.ivStatuses}}
-      @selectedStatus={{@model.installatievergadering.status}}
-      @onSelect={{this.selectStatus}}
-    />
   </Group>
 </AuToolbar>
 <Verkiezingen::DraftMandatarisList

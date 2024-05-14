@@ -59,5 +59,14 @@
         @form={{@model.mandatarisNewForm}}
       />
     {{/each}}
+
+    <div class="au-o-box">
+      <p>Change installatievergadering status:</p>
+      <Shared::InstallatievergaderingStatusSelector
+        @options={{@model.ivStatuses}}
+        @selectedStatus={{@model.installatievergadering.status}}
+        @onSelect={{this.selectStatus}}
+      />
+    </div>
   </div>
 {{/if}}
