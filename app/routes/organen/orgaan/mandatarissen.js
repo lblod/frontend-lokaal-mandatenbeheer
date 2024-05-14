@@ -100,13 +100,10 @@ export default class OrganenMandatarissenRoute extends Route {
 
         if (existing) {
           this.updateFoldedMandataris(mandataris, fractie, existing);
-        } else {
-          const firstOccurrence = this.buildFoldedMandataris(
-            mandataris,
-            fractie
-          );
-          persoonMandaatData[key] = firstOccurrence;
+          return;
         }
+        const firstOccurrence = this.buildFoldedMandataris(mandataris, fractie);
+        persoonMandaatData[key] = firstOccurrence;
       })
     );
     return Object.values(persoonMandaatData).map(
