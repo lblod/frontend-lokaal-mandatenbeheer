@@ -8,6 +8,7 @@ import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
   @service bestuursperioden;
+  @service bestuursorganen;
 
   queryParams = {
     filter: { refreshModel: true },

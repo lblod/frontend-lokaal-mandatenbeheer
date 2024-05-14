@@ -4,6 +4,7 @@ import RSVP from 'rsvp';
 
 export default class MandatarissenPersoonRoute extends Route {
   @service store;
+  @service bestuursorganen;
 
   async model(params) {
     const persoon = await this.store.findRecord('persoon', params.id);
@@ -22,10 +23,8 @@ export default class MandatarissenPersoonRoute extends Route {
       })
     );
 
-    const bestuursorganen = this.store.query('bestuursorgaan', {
-      'filter[:has-no:deactivated-at]': true,
-      'filter[:has-no:is-tijdsspecialisatie-van]': true,
-    });
+    const bestuursorganen =
+      await this.bestuursorganen.getAllRealPoliticalBestuursorganen();
 
     return RSVP.hash({
       persoon,
