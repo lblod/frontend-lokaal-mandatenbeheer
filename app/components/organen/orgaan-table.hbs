@@ -35,26 +35,26 @@
         >
           {{row.naam}}
         </LinkTo>
-        {{#if (await row.isDecretaal)}}
-          <AuPill>
-            Decretaal
-          </AuPill>
-        {{/if}}
-
       </td>
       <td>{{row.classificatie.label}}</td>
       <td>{{await row.nbMembers}}</td>
       <td>
         {{moment-format row.deactivatedAt "DD-MM-YYYY"}}</td>
       <td>
-        {{#if row.isActive}}
-          <AuPill @skin="success">
-            Actief
+        {{#if (await row.isDecretaal)}}
+          <AuPill>
+            Decretaal
           </AuPill>
         {{else}}
-          <AuPill @skin="error">
-            Inactief
-          </AuPill>
+          {{#if row.isActive}}
+            <AuPill @skin="success">
+              Actief
+            </AuPill>
+          {{else}}
+            <AuPill @skin="error">
+              Inactief
+            </AuPill>
+          {{/if}}
         {{/if}}
       </td>
     </c.body>

@@ -1,24 +1,33 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import RSVP from 'rsvp';
 
-export default class OrganenOrgaanMandatenRoute extends Route {
+export default class OrganenOrgaanIndexRoute extends Route {
   @service store;
 
   async model() {
-    const { currentBestuursorgaan } = this.modelFor('organen.orgaan');
+    const parentModel = this.modelFor('organen.orgaan');
 
-    const mandaten = await currentBestuursorgaan.bevat;
+    const mandaten = await parentModel.currentBestuursorgaan.bevat;
     const [orderedMandaten, availableBestuursfuncties] = await Promise.all([
       this.orderMandaten(mandaten),
       this.computeBestuursfuncties(mandaten),
     ]);
 
-    return {
+    const bestuursorgaanFormDefinition = getFormFrom(
+      this.store,
+      BESTUURSORGAAN_FORM_ID
+    );
+
+    return RSVP.hash({
+      bestuursorgaanFormDefinition,
       mandaten,
       orderedMandaten,
-      currentBestuursorgaan,
       availableBestuursfuncties,
-    };
+      ...parentModel,
+    });
   }
 
   async orderMandaten(mandaten) {

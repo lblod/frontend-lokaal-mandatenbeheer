@@ -20,16 +20,6 @@ export default class SharedBreadCrumbComponent extends Component {
       ],
     },
     {
-      route: 'organen.orgaan.mandaten',
-      crumbs: [
-        {
-          label: 'Bestuursorganen',
-          link: 'organen',
-        },
-        { label: 'Mandaten' },
-      ],
-    },
-    {
       route: 'organen.orgaan.mandatarissen',
       crumbs: [
         {
@@ -51,16 +41,6 @@ export default class SharedBreadCrumbComponent extends Component {
           link: 'organen.orgaan.mandatarissen',
         },
         { label: 'Voeg mandaat toe' },
-      ],
-    },
-    {
-      route: 'organen.orgaan.edit',
-      crumbs: [
-        {
-          label: 'Bestuursorganen',
-          link: 'organen',
-        },
-        { label: 'Bewerk bestuursorgaan' },
       ],
     },
     {

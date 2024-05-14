@@ -1,21 +1,72 @@
-<div class="au-c-body-container au-c-body-container--scroll">
-  <div class="au-o-box">
-    <Form::Instance
-      @instanceId={{this.model.instanceId}}
-      @form={{this.model.bestuursorgaanFormDefinition}}
-      @isEditable={{false}}
-    />
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom-none"
+  as |Group|
+>
+  <Group class="au-u-margin-bottom-none">
+    <AuHeading @skin="2">
+      Details
+    </AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      <AuButton {{on "click" this.toggleModal}}>Bewerk</AuButton>
+      {{#unless (await @model.bestuursorgaan.isDecretaal)}}
+        {{#if @model.bestuursorgaan.isActive}}
+          <AuButton
+            @icon="archive"
+            @skin="secondary"
+            @alert="true"
+            {{on "click" this.archiveOrgaan}}
+          >Archiveer</AuButton>
+        {{else}}
+          <AuButton
+            @icon="undo"
+            @skin="secondary"
+            @alert="true"
+            {{on "click" this.deArchiveOrgaan}}
+          >Heractiveer</AuButton>
+        {{/if}}
+      {{/unless}}
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+<AuHeading @skin="3" class="au-u-regular au-u-padding-left">
+  {{this.model.bestuursorgaan.naam}}
+</AuHeading>
+<AuHr />
 
-    {{#unless (await this.model.bestuursorgaan.isDecretaal)}}
-      <AuToolbar class="au-u-margin-top" as |Group|>
-        <Group>
-          <AuLink
-            @route="organen.orgaan.edit"
-            @model={{this.model.instanceId}}
-            @skin="button-secondary"
-          >Pas aan</AuLink>
-        </Group>
-      </AuToolbar>
-    {{/unless}}
+<div class="au-c-body-container au-c-body-container--scroll">
+
+  <div class="au-o-box">
+    <AuHeading @skin="5" class="au-u-margin-bottom-small">Details</AuHeading>
+
+    <Organen::Card @bestuursorgaan={{@model.currentBestuursorgaan}} />
+  </div>
+
+  <div class="au-o-box">
+    <AuHeading @skin="5" class="au-u-margin-bottom-small">Mandaten</AuHeading>
+
+    <Mandatenbeheer::BestuursorgaanMandaten
+      @orderedMandaten={{this.model.orderedMandaten}}
+      @availableBestuursfuncties={{this.model.availableBestuursfuncties}}
+      @bestuursorgaanIT={{this.model.currentBestuursorgaan}}
+    />
   </div>
 </div>
+
+<AuModal
+  @title="Bewerk bestuursorgaan"
+  @modalOpen={{this.isModalActive}}
+  @closable={{true}}
+  @closeModal={{this.toggleModal}}
+>
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{this.model.bestuursorgaan.id}}
+      @form={{this.model.bestuursorgaanFormDefinition}}
+      @onCancel={{this.toggleModal}}
+      @onSave={{this.onSave}}
+    />
+  </div>
+</AuModal>
