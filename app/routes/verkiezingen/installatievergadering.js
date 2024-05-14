@@ -71,7 +71,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     let mandatarissen, kandidatenlijsten;
     if (bestuursorgaanInTijd) {
       mandatarissen = await this.getMandatarissen(params, bestuursorgaanInTijd);
-      kandidatenlijsten = await this.getKandidatenLijsten(bestuursorgaanInTijd);
+      kandidatenlijsten = await this.getKandidatenLijsten(selectedPeriod);
     }
 
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
@@ -152,9 +152,10 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     return this.store.query('mandataris', queryParams);
   }
 
-  async getKandidatenLijsten(bestuursOrgaan) {
+  async getKandidatenLijsten(bestuursperiode) {
     const queryParams = {
-      'filter[verkiezing][bestuursorgaan-in-tijd][id]': bestuursOrgaan.id,
+      'filter[verkiezing][bestuursorgaan-in-tijd][heeft-bestuursperiode][:id:]':
+        bestuursperiode.id,
       include: 'resulterende-fracties',
     };
 
