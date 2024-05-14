@@ -16,9 +16,6 @@ export default class MandatarissenSearchRoute extends Route {
   };
 
   async model(params) {
-    const options = this.getOptions(params);
-    const personen = await this.store.query('persoon', options);
-
     const bestuursPeriods = await this.store.query('bestuursperiode', {
       sort: 'label',
     });
@@ -28,6 +25,8 @@ export default class MandatarissenSearchRoute extends Route {
     );
 
     const allBestuursfuncties = [];
+    const options = this.getOptions(params, selectedPeriod);
+    const personen = await this.store.query('persoon', options);
 
     await Promise.all(
       personen.map(async (persoon) =>
@@ -59,7 +58,7 @@ export default class MandatarissenSearchRoute extends Route {
     return allBestuursfuncties;
   };
 
-  getOptions(params) {
+  getOptions(params, bestuursperiode) {
     const queryParams = {
       sort: params.sort,
       page: {
@@ -67,8 +66,14 @@ export default class MandatarissenSearchRoute extends Route {
         size: params.size,
       },
       'filter[:has:is-aangesteld-als]': true,
-      include:
-        'is-aangesteld-als,is-aangesteld-als.bekleedt,is-aangesteld-als.bekleedt.bestuursfunctie',
+      'filter[is-aangesteld-als][bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
+        bestuursperiode.id,
+      include: [
+        'is-aangesteld-als',
+        'is-aangesteld-als.bekleedt',
+        'is-aangesteld-als.bekleedt.bestuursfunctie',
+        'is-aangesteld-als.bekleedt.bevat-in.heeft-bestuursperiode',
+      ].join(','),
     };
 
     if (params.filter && params.filter.length > 0) {
