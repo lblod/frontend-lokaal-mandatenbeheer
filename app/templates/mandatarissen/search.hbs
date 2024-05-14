@@ -23,16 +23,21 @@
               {{on "input" (perform this.search value="target.value")}}
             />
           </div>
-          {{#if false}}
-            <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
-              <div class="au-c-label">Mandaat</div>
-              <Mandatenbeheer::BestuursorgaanMandaten
-                @orderedMandaten={{this.model.orderedMandaten}}
-                @availableBestuursfuncties={{this.model.availableBestuursfuncties}}
-                @bestuursorgaanIT={{this.model.currentBestuursorgaan}}
-              />
-            </div>
-          {{/if}}
+          <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
+            <div class="au-c-label">Mandaat</div>
+            <PowerSelectMultiple
+              @allowClear={{true}}
+              @placeholder="Kies een mandaat"
+              @selected={{this.selectedBestuursfuncties}}
+              @options={{this.model.bestuursfuncties}}
+              @onChange={{this.updateFilterWithBestuursfunctie}}
+              @searchEnabled={{true}}
+              @noMatchesMessage="Geen resultaten"
+              as |functie|
+            >
+              {{functie.label}}
+            </PowerSelectMultiple>
+          </div>
           <div class="au-o-grid__item">
             <AuButton
               @skin="naked"
