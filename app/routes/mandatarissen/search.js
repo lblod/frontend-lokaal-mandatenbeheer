@@ -23,7 +23,7 @@ export default class MandatarissenSearchRoute extends Route {
       bestuursPeriods,
       params.bestuursperiode
     );
-    const allBestuursfuncties = [];
+
     const options = this.getOptions(
       params,
       selectedPeriod,
@@ -31,34 +31,23 @@ export default class MandatarissenSearchRoute extends Route {
     );
     const personen = await this.store.query('persoon', options);
 
-    await Promise.all(
-      personen.map(async (persoon) =>
-        allBestuursfuncties.push(
-          ...(await this.bestuursOrganenForPersoon(persoon))
-        )
-      )
-    );
+    const allBestuurfunctieCodes = [];
+    const mandatenVoorPeriode = await this.store.query('mandaat', {
+      'filter[bevat-in][heeft-bestuursperiode][:id:]': selectedPeriod.id,
+      include: ['bevat-in', 'bevat-in.heeft-bestuursperiode'].join(','),
+    });
+    for (const mandaat of mandatenVoorPeriode) {
+      allBestuurfunctieCodes.push(await mandaat.bestuursfunctie);
+    }
 
     return {
       personen,
       bestuursPeriods,
       selectedPeriod,
-      bestuursfuncties: [...new Set(allBestuursfuncties)],
+      bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
+      selectedBestuurfunctieIds: params.bestuursfunctie,
     };
   }
-
-  bestuursOrganenForPersoon = async (persoon) => {
-    const allBestuursfuncties = [];
-    const mandatarissen = await persoon?.isAangesteldAls;
-    if (mandatarissen.length >= 1) {
-      for (const mandataris of mandatarissen) {
-        const mandaat = await mandataris.bekleedt;
-        allBestuursfuncties.push(await mandaat.bestuursfunctie);
-      }
-    }
-
-    return allBestuursfuncties;
-  };
 
   getOptions(params, bestuursperiode, bestuursfunctieIds) {
     const queryParams = {
