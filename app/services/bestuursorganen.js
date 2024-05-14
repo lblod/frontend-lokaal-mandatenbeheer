@@ -47,4 +47,16 @@ export default class BestuursorganenService extends Service {
       include: 'classificatie,heeft-tijdsspecialisaties',
     });
   }
+
+  async getAllRelevantPoliticalBestuursorganenInTijd(bestuursperiode) {
+    return await this.store.query('bestuursorgaan', {
+      'filter[:has-no:heeft-tijdsspecialisaties]': true,
+      'filter[heeft-bestuursperiode][:id:]': bestuursperiode.id,
+      'filter[is-tijdsspecialisatie-van][:has-no:deactivated-at]': true,
+      'filter[is-tijdsspecialisatie-van][classificatie][id]':
+        this.decretaleOrganen.classificatieIds.join(','), // only organs with a political mandate
+      include:
+        'is-tijdsspecialisatie-van,is-tijdsspecialisatie-van.classificatie',
+    });
+  }
 }

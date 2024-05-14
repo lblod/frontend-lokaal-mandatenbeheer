@@ -22,3 +22,16 @@ export const MANDATARIS_AANGEWEZEN_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/e371f89a-9e83-4a8c-a98e-cd09226fa549';
 export const BELEIDSDOMEIN_CODES_CONCEPT_SCHEME =
   'http://data.vlaanderen.be/id/conceptscheme/BeleidsdomeinCode';
+
+export const GEMEENTERAAD_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000005';
+export const RMW_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000007';
+export const BURGEMEESTER_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/4955bd72cd0e4eb895fdbfab08da0284';
+export const CBS_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000006';
+export const VB_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000008';
+export const BCSD_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000009';

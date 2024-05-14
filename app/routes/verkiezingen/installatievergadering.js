@@ -4,6 +4,14 @@ import RSVP from 'rsvp';
 import { service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import {
+  BCSD_BESTUURSORGAAN_URI,
+  BURGEMEESTER_BESTUURSORGAAN_URI,
+  CBS_BESTUURSORGAAN_URI,
+  GEMEENTERAAD_BESTUURSORGAAN_URI,
+  RMW_BESTUURSORGAAN_URI,
+  VB_BESTUURSORGAAN_URI,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
@@ -48,6 +56,9 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       })
     )[0];
 
+    const bestuursorganenInTijd =
+      await this.getBestuursorganenInTijd(selectedPeriod);
+
     // TODO For now this is the gemeenteraad, should be split up in the different bestuursorganen we need.
     const bestuursorgaanInTijd = (
       await this.store.query('bestuursorgaan', {
@@ -77,6 +88,38 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       selectedPeriod,
       isRelevant: parentModel.isRelevant,
     });
+  }
+
+  async getBestuursorganenInTijd(selectedPeriod) {
+    const allBestuursOrganenInTijd = (
+      await this.bestuursorganen.getAllRelevantPoliticalBestuursorganenInTijd(
+        selectedPeriod
+      )
+    ).slice();
+
+    const bestuursorgaanOrder = [
+      GEMEENTERAAD_BESTUURSORGAAN_URI,
+      RMW_BESTUURSORGAAN_URI,
+      BURGEMEESTER_BESTUURSORGAAN_URI,
+      CBS_BESTUURSORGAAN_URI,
+      VB_BESTUURSORGAAN_URI,
+      BCSD_BESTUURSORGAAN_URI,
+    ];
+
+    const bestuursorgaanUris = await Promise.all(
+      allBestuursOrganenInTijd.map(async (orgaan) => {
+        return (await (await orgaan.isTijdsspecialisatieVan).classificatie).uri;
+      })
+    );
+
+    let sortedBestuursorganenInTijd = new Array(
+      allBestuursOrganenInTijd.length
+    );
+    await bestuursorgaanUris.forEach(function (uri, i) {
+      const index = bestuursorgaanOrder.indexOf(uri);
+      sortedBestuursorganenInTijd[index] = allBestuursOrganenInTijd[i];
+    });
+    return sortedBestuursorganenInTijd;
   }
 
   async getMandatarissen(params, bestuursOrgaan) {
