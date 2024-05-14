@@ -12,7 +12,6 @@ export default class MandatarissenSearchController extends Controller {
 
   @tracked bestuursperiode;
   @tracked bestuursfunctie;
-  @tracked selectedBestuursfuncties;
   @tracked searchData;
 
   @tracked filter = '';
@@ -29,27 +28,45 @@ export default class MandatarissenSearchController extends Controller {
   @action
   clearFilters() {
     this.bestuursperiode = null;
-    this.bestuursfunctie = null;
-    this.selectedBestuursfuncties = null;
+    this.bestuursfunctie = this.allBestuurfunctieCodeIds;
     this.filter = null;
     this.searchData = null;
+    this.page = 0;
   }
 
   @action
   selectPeriod(period) {
     this.bestuursperiode = period.id;
+    this.page = 0;
   }
 
   @action
   updateFilterWithBestuursfunctie(bestuursfunctieCodes) {
     if (!bestuursfunctieCodes || bestuursfunctieCodes.length == 0) {
-      this.bestuursfunctie = null;
-      this.selectedBestuursfuncties = null;
+      this.bestuursfunctie = this.allBestuurfunctieCodeIds;
       return;
     }
-    this.selectedBestuursfuncties = bestuursfunctieCodes;
     this.bestuursfunctie = bestuursfunctieCodes
       .map((functie) => functie.id)
+      .join(',');
+    this.page = 0;
+  }
+
+  get selectedBestuursfuncties() {
+    const bestuurfunctieIds = [
+      ...new Set(this.model.selectedBestuurfunctieIds?.split(',')),
+    ];
+    const bestuursfuncties = bestuurfunctieIds.map((id) =>
+      this.model.bestuursfuncties.find((functie) => functie.id == id)
+    );
+
+    return bestuursfuncties.filter((functie) => functie);
+  }
+
+  get allBestuurfunctieCodeIds() {
+    return this.model.bestuursfuncties
+      .filter((functie) => functie)
+      .map((code) => code.id)
       .join(',');
   }
 }
