@@ -26,15 +26,13 @@ export default class BestuursorganenService extends Service {
       'filter[:has-no:original-bestuurseenheid]': true,
       'filter[heeft-tijdsspecialisaties][heeft-bestuursperiode][:id:]':
         bestuursperiode.id,
-      'filter[classificatie][:id:]':
-        this.decretaleOrganen.classificatieIds.join(','),
       include: 'classificatie,heeft-tijdsspecialisaties',
     };
     if (queryParams.activeOrgans) {
       queryOptions['filter[:has-no:deactivated-at]'] = true;
     }
     const types = queryParams.selectedTypes.map((type) => {
-      return this.decretaleOrganen.get(type);
+      return this.decretaleOrganen.get(type).join(',');
     });
     queryOptions['filter[classificatie][:id:]'] = types.join(',');
     return await this.store.query('bestuursorgaan', queryOptions);

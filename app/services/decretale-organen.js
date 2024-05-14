@@ -63,14 +63,14 @@ export default class DecretaleOrganenService extends Service {
     ];
   }
 
-  get isDecretaal() {
+  get decretaleIds() {
     return [
       ...this.decretaleCodes.map((code) => code.id),
       ...this.gemeenteCodes.map((code) => code.id),
-    ].join(',');
+    ];
   }
 
-  get notDecretaal() {
-    return this.otherCodes.map((code) => code.id).join(',');
+  get nietDecretaleIds() {
+    return this.otherCodes.map((code) => code.id);
   }
 }

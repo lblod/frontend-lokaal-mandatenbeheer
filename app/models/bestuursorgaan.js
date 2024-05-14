@@ -96,10 +96,6 @@ export default class BestuursorgaanModel extends Model {
     });
   }
 
-  get notDecretaal() {
-    return this.isDecretaal.then((val) => !val);
-  }
-
   get isGemeentelijk() {
     return this.classificatieUri().then((uri) => {
       return this.decretaleOrganen.gemeenteCodeUris.some(
