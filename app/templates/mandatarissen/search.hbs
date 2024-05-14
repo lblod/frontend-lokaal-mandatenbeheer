@@ -19,7 +19,7 @@
             <AuInput
               value={{this.searchData}}
               @width="block"
-              placeholder="Zoek mandataris"
+              placeholder=""
               {{on "input" (perform this.search value="target.value")}}
             />
           </div>
@@ -27,7 +27,7 @@
             <div class="au-c-label">Mandaat</div>
             <PowerSelectMultiple
               @allowClear={{true}}
-              @placeholder="Kies een mandaat"
+              @placeholder="Kies een of meerdere mandaten"
               @selected={{this.selectedBestuursfuncties}}
               @options={{this.model.bestuursfuncties}}
               @onChange={{this.updateFilterWithBestuursfunctie}}
