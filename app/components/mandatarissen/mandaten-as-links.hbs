@@ -1,0 +1,7 @@
+<div {{did-insert (perform this.setup)}}>
+  {{#each this.dataTree as |mandataris|}}
+    <AuLink>
+      {{mandataris.bestuursfunctie.label}}
+    </AuLink>
+  {{/each}}
+</div>

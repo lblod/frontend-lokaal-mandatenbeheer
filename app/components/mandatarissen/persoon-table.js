@@ -1,14 +1,17 @@
 import Component from '@glimmer/component';
 
 export default class MandatarissenPersoonTable extends Component {
-  async mandaten(persoon) {
+  async mandatarissen(persoon) {
     const mandatarissen = await persoon.isAangesteldAls;
     const mandaten = await Promise.all(
       mandatarissen.map(async (mandataris) => {
-        return (await (await mandataris.bekleedt).bestuursfunctie).label;
+        console.log(mandataris);
+        return await (
+          await mandataris.bekleedt
+        ).bestuursfunctie;
       })
     );
-    const displayMandaten = [...new Set(mandaten)].join(', ');
-    return displayMandaten;
+    console.log(mandaten);
+    return mandaten;
   }
 }
