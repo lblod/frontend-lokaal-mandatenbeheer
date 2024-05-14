@@ -88,80 +88,108 @@ export default class OrganenMandatarissenRoute extends Route {
   }
 
   async foldMandatarissen(mandatarissen) {
-    const personMandaatData = {};
-    const folded = [];
+    // 'persoonId-mandaatId' to foldedMandataris
+    const persoonMandaatData = {};
     await Promise.all(
       mandatarissen.map(async (mandataris) => {
         const personId = (await mandataris.isBestuurlijkeAliasVan).id;
         const mandaatId = (await mandataris.bekleedt).id;
+        const fractie = mandataris.get('heeftLidmaatschap.binnenFractie.naam');
         const key = `${personId}-${mandaatId}`;
-        const existing = personMandaatData[key];
+        const existing = persoonMandaatData[key];
+
         if (existing) {
-          if (!mandataris.start || !existing.foldedStart) {
-            existing.foldedStart = null;
-          } else {
-            existing.foldedStart = moment.min(
-              moment(existing.foldedStart),
-              moment(mandataris.start)
-            );
-          }
-          if (!mandataris.einde || !existing.foldedEnd) {
-            existing.foldedEnd = null;
-          } else {
-            existing.foldedEnd = moment.max(
-              moment(existing.foldedEnd),
-              moment(mandataris.einde)
-            );
-          }
-          const fractie = mandataris.get(
-            'heeftLidmaatschap.binnenFractie.naam'
-          );
-          if (fractie && !existing.foldedFracties.includes(fractie)) {
-            existing.foldedFracties.push(fractie);
-          }
-          if (
-            moment(mandataris.einde).isSame(existing.foldedEnd) ||
-            !mandataris.einde
-          ) {
-            // keep the one with the oldest end date (if it is null, we assume this is the oldest as well)
-            existing.mandataris = mandataris;
-            existing.fractie = fractie;
-          }
+          this.updateFoldedMandataris(mandataris, fractie, existing);
         } else {
-          const fractie = mandataris.get(
-            'heeftLidmaatschap.binnenFractie.naam'
-          );
-          let fracties = [];
-          if (fractie) {
-            fracties = [fractie];
-          }
-          const firstOccurrence = {
-            foldedStart: mandataris.start,
-            foldedEnd: mandataris.einde,
+          const firstOccurrence = this.buildFoldedMandataris(
             mandataris,
-            foldedFracties: fracties,
-            fractie: fractie,
-          };
-          personMandaatData[key] = firstOccurrence;
-          folded.push(firstOccurrence);
+            fractie
+          );
+          persoonMandaatData[key] = firstOccurrence;
         }
       })
     );
-    return folded.map((entry) => {
-      const fracties = entry.foldedFracties;
-      fracties.sort((a, b) => a.localeCompare(b));
-      const currentFractie = entry.fractie;
-      const otherFracties = fracties.filter((f) => f != entry.fractie && f);
-      const fractieText = otherFracties.length
-        ? `${currentFractie} (${otherFracties.join(', ')})`
-        : currentFractie;
-      return {
-        mandataris: entry.mandataris,
-        foldedStart: entry.foldedStart,
-        foldedEnd: entry.foldedEnd,
-        foldedFracties: fractieText,
-      };
-    });
+    return Object.values(persoonMandaatData).map(
+      ({ foldedStart, foldedEnd, mandataris, fractie, foldedFracties }) => {
+        return {
+          foldedStart,
+          foldedEnd,
+          mandataris,
+          foldedFracties: this.fractiesToString(fractie, foldedFracties),
+        };
+      }
+    );
+  }
+
+  updateFoldedMandataris(mandataris, fractie, foldedMandataris) {
+    this.updateFoldedStart(mandataris, foldedMandataris);
+    this.updateFoldedEnd(mandataris, foldedMandataris);
+    this.updateFoldedFracties(fractie, foldedMandataris);
+    this.updateFoldedMandatarisAndFractie(
+      mandataris,
+      fractie,
+      foldedMandataris
+    );
+  }
+
+  updateFoldedStart(mandataris, foldedMandataris) {
+    if (!mandataris.start || !foldedMandataris.foldedStart) {
+      foldedMandataris.foldedStart = null;
+    } else {
+      foldedMandataris.foldedStart = moment.min(
+        moment(foldedMandataris.foldedStart),
+        moment(mandataris.start)
+      );
+    }
+  }
+
+  updateFoldedEnd(mandataris, foldedMandataris) {
+    if (!mandataris.einde || !foldedMandataris.foldedEnd) {
+      foldedMandataris.foldedEnd = null;
+    } else {
+      foldedMandataris.foldedEnd = moment.max(
+        moment(foldedMandataris.foldedEnd),
+        moment(mandataris.einde)
+      );
+    }
+  }
+
+  updateFoldedFracties(fractie, foldedMandataris) {
+    if (fractie && !foldedMandataris.foldedFracties.includes(fractie)) {
+      foldedMandataris.foldedFracties.push(fractie);
+    }
+  }
+
+  updateFoldedMandatarisAndFractie(mandataris, fractie, foldedMandataris) {
+    // keep the one with the latest end date (if it is null, we assume this is the latest one)
+    if (
+      moment(mandataris.einde).isSame(foldedMandataris.foldedEnd) ||
+      !mandataris.einde
+    ) {
+      foldedMandataris.mandataris = mandataris;
+      foldedMandataris.fractie = fractie;
+    }
+  }
+
+  buildFoldedMandataris(mandataris, fractie) {
+    const fracties = fractie ? [fractie] : [];
+
+    return {
+      foldedStart: mandataris.start,
+      foldedEnd: mandataris.einde,
+      mandataris,
+      fractie,
+      foldedFracties: fracties,
+    };
+  }
+
+  fractiesToString(currentFractie, allFracties) {
+    const sortedFracties = allFracties
+      .filter((f) => f != currentFractie && f) // TODO the "&& f" is confusing
+      .toSorted((a, b) => a.localeCompare(b));
+    return sortedFracties.length
+      ? `${currentFractie} (${sortedFracties.join(', ')})`
+      : currentFractie; // TODO Join with prefix and postfix
   }
 
   getOptions(params, bestuursOrgaan) {
