@@ -149,11 +149,6 @@ export default class MandatarissenUpdateState extends Component {
     );
   }
 
-  get showRangorde() {
-    const roleName = this.args.mandataris.get('bekleedt.bestuursfunctie.label');
-    return roleName && roleName.toLowerCase().indexOf('schepen') >= 0;
-  }
-
   get rangordePlaceholder() {
     const mandaatName = (
       this.args.mandataris.get('bekleedt.bestuursfunctie.label') || 'schepen'
