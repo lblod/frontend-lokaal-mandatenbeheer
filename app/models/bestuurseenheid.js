@@ -23,7 +23,11 @@ export default class Bestuurseenheid extends Model {
   })
   classificatie;
 
-  @hasMany('contact-punt', { async: true, inverse: null }) contactinfo;
+  @belongsTo('bestuurseenheid-contact', {
+    async: true,
+    inverse: null,
+  })
+  contact;
 
   @hasMany('bestuursorgaan', {
     async: true,

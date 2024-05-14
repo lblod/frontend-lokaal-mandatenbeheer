@@ -71,16 +71,20 @@
         />
       </div>
     {{/if}}
-    <div>
-      <AuLabel>
-        Beleidsdomeinen
-      </AuLabel>
-      <Mandatarissen::BeleidsdomeinSelectorWithCreate
-        @beleidsdomeinen={{this.selectedBeleidsdomeinen}}
-        @onSelect={{this.updateBeleidsdomeinen}}
-      />
-      <AuHelpText>Enkel voor burgemeester en schepenen</AuHelpText>
-    </div>
+    {{#if
+      (or @mandataris.bekleedt.isBurgemeester @mandataris.bekleedt.isSchepen)
+    }}
+      <div>
+        <AuLabel>
+          Beleidsdomeinen
+        </AuLabel>
+        <Mandatarissen::BeleidsdomeinSelectorWithCreate
+          @beleidsdomeinen={{this.selectedBeleidsdomeinen}}
+          @onSelect={{this.updateBeleidsdomeinen}}
+        />
+        <AuHelpText>Enkel voor burgemeester en schepenen</AuHelpText>
+      </div>
+    {{/if}}
     <div>
       <AuLabel>
         Fractie
@@ -99,7 +103,7 @@
         />
       {{/if}}
     </div>
-    {{#if this.showRangorde}}
+    {{#if @mandataris.bekleedt.isSchepen}}
       <div>
         <AuLabel>
           Rangorde

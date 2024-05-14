@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
-import { getDraftStatus } from 'frontend-lmb/utils/get-publication-status';
+import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { MANDATARIS_AANGEWEZEN_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenUpdateState extends Component {
@@ -149,11 +149,6 @@ export default class MandatarissenUpdateState extends Component {
     );
   }
 
-  get showRangorde() {
-    const roleName = this.args.mandataris.get('bekleedt.bestuursfunctie.label');
-    return roleName && roleName.toLowerCase().indexOf('schepen') >= 0;
-  }
-
   get rangordePlaceholder() {
     const mandaatName = (
       this.args.mandataris.get('bekleedt.bestuursfunctie.label') || 'schepen'
@@ -174,7 +169,7 @@ export default class MandatarissenUpdateState extends Component {
       isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
       beleidsdomein: this.selectedBeleidsdomeinen,
       status: this.newStatus,
-      publicationStatus: await getDraftStatus(this.store),
+      publicationStatus: await getDraftPublicationStatus(this.store),
       modified: new Date(),
     };
 

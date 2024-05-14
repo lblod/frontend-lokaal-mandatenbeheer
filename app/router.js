@@ -19,6 +19,7 @@ Router.map(function () {
   });
 
   this.route('contact');
+  this.route('settings');
 
   this.route('legaal', function () {
     this.route('disclaimer');
@@ -29,17 +30,11 @@ Router.map(function () {
   this.route('organen', function () {
     this.route('orgaan', { path: '/:id' }, function () {
       this.route('mandatarissen');
-      this.route('edit');
       this.route('mandataris', function () {
         this.route('new');
       });
-      this.route('mandaten');
     });
     this.route('fracties');
-  });
-
-  this.route('mandaat', function () {
-    this.route('edit', { path: '/:id/edit' });
   });
 
   this.route('mandatarissen', function () {

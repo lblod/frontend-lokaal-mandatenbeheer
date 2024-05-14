@@ -125,7 +125,8 @@ export default class InstanceComponent extends Component {
 
   @action
   async saveInstance() {
-    this.save.perform();
+    await this.save.perform();
+    this.isSaveHistoryModalOpen = false;
   }
 
   @action

@@ -1,0 +1,42 @@
+<div class="au-o-box--small au-u-background-gray-100">
+  <div class="au-o-grid au-o-grid--tiny">
+    <div class="au-o-grid__item au-u-1-2 au-u-1-2@medium">
+      <div class="au-c-description-label">Naam</div>
+      <div class="au-c-description-value">
+        {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}
+      </div>
+    </div>
+    <div class="au-o-grid__item au-u-1-2 au-u-1-2@medium">
+      <div class="au-c-description-label">Status</div>
+      <div class="au-c-description-value">
+        {{#if (await @bestuursorgaan.isDecretaal)}}
+          <AuPill>
+            Decretaal
+          </AuPill>
+        {{else}}
+          {{#if @bestuursorgaan.isTijdsspecialisatieVan.isActive}}
+            <AuPill @skin="success">
+              Actief
+            </AuPill>
+          {{else}}
+            <AuPill @skin="error">
+              Inactief
+            </AuPill>
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+    <div class="au-o-grid__item au-u-1-2 au-u-1-2@medium">
+      <div class="au-c-description-label">Type</div>
+      <div class="au-c-description-value">
+        {{@bestuursorgaan.isTijdsspecialisatieVan.classificatie.label}}
+      </div>
+    </div>
+    <div class="au-o-grid__item au-u-1-2 au-u-1-2@medium">
+      <div class="au-c-description-label">Bestuursperiode</div>
+      <div class="au-c-description-value">
+        {{@bestuursorgaan.heeftBestuursperiode.label}}
+      </div>
+    </div>
+  </div>
+</div>

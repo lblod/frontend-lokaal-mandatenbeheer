@@ -75,3 +75,5 @@ inflector.irregular('nationality', 'nationalities');
 inflector.irregular('system-notification', 'system-notifications');
 
 inflector.irregular('werkingsgebied', 'werkingsgebieden');
+
+inflector.irregular('bestuurseenheid-contact', 'bestuurseenheid-contacten');

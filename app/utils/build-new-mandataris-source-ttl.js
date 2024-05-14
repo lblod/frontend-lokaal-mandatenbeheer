@@ -1,11 +1,11 @@
-import { MANDATARIS_DRAFT_STATE } from './well-known-uris';
+import { MANDATARIS_DRAFT_PUBLICATION_STATE } from './well-known-uris';
 
 export const buildNewMandatarisSourceTtl = async (
   store,
   instanceUri,
   personId
 ) => {
-  const draftTriple = `<${instanceUri}> <http://mu.semte.ch/vocabularies/ext/lmb/hasPublicationStatus> <${MANDATARIS_DRAFT_STATE}>.`;
+  const draftTriple = `<${instanceUri}> <http://mu.semte.ch/vocabularies/ext/lmb/hasPublicationStatus> <${MANDATARIS_DRAFT_PUBLICATION_STATE}>.`;
   if (!personId) {
     return draftTriple;
   }

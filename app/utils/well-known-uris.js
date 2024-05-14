@@ -14,12 +14,14 @@ export const BESTUURSEENHEID_CLASSIFICATIECODE_OCMW =
   'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000002';
 export const MANDATARIS_VERHINDERD_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/c301248f-0199-45ca-b3e5-4c596731d5fe';
-export const MANDATARIS_BEKRACHTIGD_STATE =
-  'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/9d8fd14d-95d0-4f5e-b3a5-a56a126227b6';
-export const MANDATARIS_DRAFT_STATE =
-  'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/588ce330-4abb-4448-9776-a17d9305df07';
 export const MANDATARIS_AANGEWEZEN_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/e371f89a-9e83-4a8c-a98e-cd09226fa549';
+export const MANDATARIS_EFFECTIEF_STATE =
+  'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/21063a5b-912c-4241-841c-cc7fb3c73e75';
+export const MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE =
+  'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/9d8fd14d-95d0-4f5e-b3a5-a56a126227b6';
+export const MANDATARIS_DRAFT_PUBLICATION_STATE =
+  'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/588ce330-4abb-4448-9776-a17d9305df07';
 export const BELEIDSDOMEIN_CODES_CONCEPT_SCHEME =
   'http://data.vlaanderen.be/id/conceptscheme/BeleidsdomeinCode';
 
@@ -35,3 +37,12 @@ export const VB_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000008';
 export const BCSD_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000009';
+
+export const MANDAAT_BURGEMEESTER_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000013';
+export const MANDAAT_DISTRICT_BURGEMEESTER_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001d';
+export const MANDAAT_SCHEPEN_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000014';
+export const MANDAAT_DISTRICT_SCHEPEN_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001e';

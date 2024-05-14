@@ -1,11 +1,11 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'frontend-lmb/tests/helpers';
 
-module('Unit | Route | mandaat/edit', function (hooks) {
+module('Unit | Route | settings', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    let route = this.owner.lookup('route:mandaat/edit');
+    let route = this.owner.lookup('route:settings');
     assert.ok(route);
   });
 });
