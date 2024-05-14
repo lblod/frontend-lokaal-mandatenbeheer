@@ -68,11 +68,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       })
     )[0];
 
-    let mandatarissen, kandidatenlijsten;
-    if (bestuursorgaanInTijd) {
-      mandatarissen = await this.getMandatarissen(params, bestuursorgaanInTijd);
-      kandidatenlijsten = await this.getKandidatenLijsten(selectedPeriod);
-    }
+    const kandidatenlijsten = await this.getKandidatenLijsten(selectedPeriod);
 
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
 
@@ -82,7 +78,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       bestuurseenheid,
       bestuursorgaanInTijd,
       mandatarisNewForm,
-      mandatarissen,
       kandidatenlijsten,
       bestuursPeriods,
       selectedPeriod,
@@ -120,36 +115,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       sortedBestuursorganenInTijd[index] = allBestuursOrganenInTijd[i];
     });
     return sortedBestuursorganenInTijd;
-  }
-
-  async getMandatarissen(params, bestuursOrgaan) {
-    const queryParams = {
-      sort: params.sort,
-      page: {
-        number: 0,
-        size: 9999,
-      },
-      filter: {
-        bekleedt: {
-          'bevat-in': {
-            id: bestuursOrgaan.id,
-          },
-        },
-      },
-      include: [
-        'is-bestuurlijke-alias-van',
-        'bekleedt.bestuursfunctie',
-        'heeft-lidmaatschap.binnen-fractie',
-        'status',
-        'beleidsdomein',
-      ].join(','),
-    };
-
-    if (params.filter) {
-      queryParams['filter']['is-bestuurlijke-alias-van'] = params.filter;
-    }
-
-    return this.store.query('mandataris', queryParams);
   }
 
   async getKandidatenLijsten(bestuursperiode) {
