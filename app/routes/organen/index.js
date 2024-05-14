@@ -31,16 +31,11 @@ export default class OrganenIndexRoute extends Route {
       params.bestuursperiode
     );
 
-    const allBestuursorganen =
+    const bestuursorganen =
       await this.bestuursorganen.getFilteredRealPoliticalBestuursorganen(
         params,
         selectedPeriod
       );
-
-    const bestuursorganen = this.filterBestuursorganen(
-      allBestuursorganen,
-      params
-    );
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
     return RSVP.hash({
@@ -50,25 +45,6 @@ export default class OrganenIndexRoute extends Route {
       bestuursPeriods,
       selectedPeriod,
     });
-  }
-
-  async filterBestuursorganen(bestuursorganen, params) {
-    return (
-      await Promise.all(
-        bestuursorganen.map(async (orgaan) => {
-          const validType = (
-            await Promise.all(
-              params.selectedTypes.map(async (filter) => {
-                return await orgaan.get(filter);
-              })
-            )
-          ).some((val) => val);
-          return { bool: validType, orgaan };
-        })
-      )
-    )
-      .filter((val) => val.bool)
-      .map((val) => val.orgaan);
   }
 
   @action

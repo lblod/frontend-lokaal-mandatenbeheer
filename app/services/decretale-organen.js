@@ -47,10 +47,6 @@ export default class DecretaleOrganenService extends Service {
     ];
   }
 
-  get gemeenteCodeUris() {
-    return this.gemeenteCodes.map((code) => code.uri);
-  }
-
   get classificatieUris() {
     return [
       ...this.decretaleCodes.map((code) => code.uri),
@@ -65,5 +61,16 @@ export default class DecretaleOrganenService extends Service {
       ...this.gemeenteCodes.map((code) => code.id),
       ...this.otherCodes.map((code) => code.id),
     ];
+  }
+
+  get isDecretaal() {
+    return [
+      ...this.decretaleCodes.map((code) => code.id),
+      ...this.gemeenteCodes.map((code) => code.id),
+    ].join(',');
+  }
+
+  get notDecretaal() {
+    return this.otherCodes.map((code) => code.id).join(',');
   }
 }

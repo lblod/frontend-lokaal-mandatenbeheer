@@ -33,6 +33,10 @@ export default class BestuursorganenService extends Service {
     if (queryParams.activeOrgans) {
       queryOptions['filter[:has-no:deactivated-at]'] = true;
     }
+    const types = queryParams.selectedTypes.map((type) => {
+      return this.decretaleOrganen.get(type);
+    });
+    queryOptions['filter[classificatie][:id:]'] = types.join(',');
     return await this.store.query('bestuursorgaan', queryOptions);
   }
 
