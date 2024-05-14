@@ -13,16 +13,6 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
   };
 
   async model(params) {
-    // Should only be one.
-    // TODO add bestuursperiod selector
-    const installatievergaderingen = await this.store.query(
-      'installatievergadering',
-      {
-        include: 'status',
-      }
-    );
-    const installatievergadering = installatievergaderingen[0];
-
     const options = this.getOptions(params);
     const verkiezingsresultaten = await this.store.query(
       'verkiezingsresultaat',
@@ -30,7 +20,6 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
     );
 
     return {
-      installatievergadering,
       verkiezingsresultaten,
     };
   }
@@ -42,8 +31,8 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      'filter[kandidatenlijst][verkiezing][bestuursorgaan-in-tijd][id]':
-        params.bestuursorgaan_in_tijd_id,
+      'filter[kandidatenlijst][verkiezing][bestuursorgaan-in-tijd][heeft-bestuursperiode][:id:]':
+        params.id,
       'filter[:has:persoon]': 'true',
       include: ['kandidatenlijst', 'persoon'].join(','),
     };

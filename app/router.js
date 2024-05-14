@@ -49,7 +49,7 @@ Router.map(function () {
   });
 
   this.route('verkiezingen', function () {
-    this.route('verkiezingsuitslag');
+    this.route('verkiezingsuitslag', { path: '/:id/verkiezingsuitslag' });
     this.route('installatievergadering');
   });
 
