@@ -14,6 +14,8 @@ export const MANDATARIS_VERHINDERD_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/c301248f-0199-45ca-b3e5-4c596731d5fe';
 export const MANDATARIS_AANGEWEZEN_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/e371f89a-9e83-4a8c-a98e-cd09226fa549';
+export const MANDATARIS_TITELVOEREND_STATE =
+  'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/aacb3fed-b51d-4e0b-a411-f3fa641da1b3';
 export const MANDATARIS_EFFECTIEF_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/21063a5b-912c-4241-841c-cc7fb3c73e75';
 export const MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE =
@@ -32,3 +34,7 @@ export const MANDAAT_SCHEPEN_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000014';
 export const MANDAAT_DISTRICT_SCHEPEN_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001e';
+export const burgemeesterOnlyStates = [
+  MANDATARIS_AANGEWEZEN_STATE,
+  MANDATARIS_TITELVOEREND_STATE,
+];
