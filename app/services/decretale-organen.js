@@ -47,6 +47,10 @@ export default class DecretaleOrganenService extends Service {
     ];
   }
 
+  get gemeenteCodeUris() {
+    return this.gemeenteCodes.map((code) => code.uri);
+  }
+
   get classificatieUris() {
     return [
       ...this.decretaleCodes.map((code) => code.uri),
