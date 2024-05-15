@@ -62,54 +62,7 @@ export default class SharedBreadCrumbComponent extends Component {
     },
   ];
 
-  leidinggevenden = [
-    {
-      route: 'leidinggevenden.index',
-      crumbs: [{ label: 'Leidinggevenden' }],
-    },
-    {
-      route: 'leidinggevenden.bestuursfunctie.functionarissen.index',
-      crumbs: [
-        {
-          label: 'Leidinggevenden',
-          link: 'leidinggevenden',
-        },
-        { label: 'Functionaris' },
-      ],
-    },
-    {
-      route: 'leidinggevenden.bestuursfunctie.functionarissen.edit',
-      crumbs: [
-        {
-          label: 'Leidinggevenden',
-          link: 'leidinggevenden',
-        },
-        { label: 'Bewerk functionaris' },
-      ],
-    },
-    {
-      route: 'leidinggevenden.bestuursfunctie.functionarissen.new',
-      crumbs: [
-        {
-          label: 'Leidinggevenden',
-          link: 'leidinggevenden',
-        },
-        { label: 'Nieuwe aanstellingsperiode' },
-      ],
-    },
-    {
-      route: 'leidinggevenden.bestuursfunctie.contact-info',
-      crumbs: [
-        {
-          label: 'Leidinggevenden',
-          link: 'leidinggevenden',
-        },
-        { label: 'Bewerk contactgegevens' },
-      ],
-    },
-  ];
-
-  bread = this.mandatarissen.concat(this.verkiezingen, this.leidinggevenden);
+  bread = this.mandatarissen.concat(this.verkiezingen);
 
   get crumbsForRoute() {
     const results = this.bread.filter(
