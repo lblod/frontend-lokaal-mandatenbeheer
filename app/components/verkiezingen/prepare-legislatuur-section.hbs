@@ -27,12 +27,15 @@
     @showStartEndDate={{true}}
   />
 
-  <AuContent @skin="small">
+  <AuContent @skin="small au-u-flex au-u-flex--between ">
     <AuButton
       @skin="naked"
       @icon="add"
       {{on "click" this.createMandataris}}
     >Toevoegen</AuButton>
+    {{#if (await this.isRMW)}}
+      <AuButton @skin="naked" @icon="synchronize">Kopieer naar OCMW tabel</AuButton>
+    {{/if}}
   </AuContent>
   <AuModal
     @title={{(concat
