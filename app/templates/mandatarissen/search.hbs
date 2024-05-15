@@ -38,6 +38,21 @@
               {{functie.label}}
             </PowerSelectMultiple>
           </div>
+          <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
+            <div class="au-c-label">Fractie</div>
+            <PowerSelectMultiple
+              @allowClear={{true}}
+              @placeholder="Kies een of meerdere fracties"
+              @selected={{this.selectedFracties}}
+              @options={{this.model.fracties}}
+              @onChange={{this.updateFilterWithFractie}}
+              @searchEnabled={{true}}
+              @noMatchesMessage="Geen resultaten"
+              as |fractie|
+            >
+              {{fractie.naam}}
+            </PowerSelectMultiple>
+          </div>
           <div class="au-o-grid__item">
             <AuButton
               @skin="naked"

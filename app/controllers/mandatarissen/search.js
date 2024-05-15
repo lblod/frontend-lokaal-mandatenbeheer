@@ -6,12 +6,13 @@ import { tracked } from '@glimmer/tracking';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class MandatarissenSearchController extends Controller {
-  queryParams = ['sort', 'bestuursperiode', 'bestuursfunctie'];
+  queryParams = ['sort', 'bestuursperiode', 'bestuursfunctie', 'binnenFractie'];
 
   @service router;
 
   @tracked bestuursperiode;
   @tracked bestuursfunctie;
+  @tracked binnenFractie;
   @tracked searchData;
 
   @tracked filter = '';
@@ -29,6 +30,7 @@ export default class MandatarissenSearchController extends Controller {
   clearFilters() {
     this.bestuursperiode = null;
     this.bestuursfunctie = this.allBestuurfunctieCodeIds;
+    this.binnenFractie = this.allFractieIds;
     this.filter = null;
     this.searchData = null;
     this.page = 0;
@@ -50,6 +52,30 @@ export default class MandatarissenSearchController extends Controller {
       .map((functie) => functie.id)
       .join(',');
     this.page = 0;
+  }
+
+  @action
+  updateFilterWithFractie(fracties) {
+    if (!fracties || fracties.length == 0) {
+      this.binnenFractie = this.allFractieIds;
+      return;
+    }
+    this.binnenFractie = fracties.map((fractie) => fractie.id).join(',');
+    this.page = 0;
+  }
+
+  get selectedFracties() {
+    const fractieIds = [...new Set(this.model.selectedFracties?.split(','))];
+
+    if (fractieIds.length == this.model.fracties.length) {
+      return [];
+    }
+
+    const fracties = fractieIds.map((id) =>
+      this.model.fracties.find((fractie) => fractie.id == id)
+    );
+
+    return fracties.filter((fractie) => fractie);
   }
 
   get selectedBestuursfuncties() {
@@ -74,5 +100,9 @@ export default class MandatarissenSearchController extends Controller {
 
   get allBestuurfunctieCodeIds() {
     return this.uniqueBestuurfuncties.map((code) => code.id).join(',');
+  }
+
+  get allFractieIds() {
+    return this.model.fracties.map((fractie) => fractie.id).join(',');
   }
 }

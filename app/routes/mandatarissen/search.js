@@ -13,6 +13,7 @@ export default class MandatarissenSearchRoute extends Route {
     sort: { refreshModel: true },
     bestuursperiode: { refreshModel: true },
     bestuursfunctie: { refreshModel: true },
+    binnenFractie: { refreshModel: true },
   };
 
   async model(params) {
@@ -27,7 +28,8 @@ export default class MandatarissenSearchRoute extends Route {
     const options = this.getOptions(
       params,
       selectedPeriod,
-      params.bestuursfunctie
+      params.bestuursfunctie,
+      params.binnenFractie
     );
     const personen = await this.store.query('persoon', options);
 
@@ -40,16 +42,27 @@ export default class MandatarissenSearchRoute extends Route {
       allBestuurfunctieCodes.push(await mandaat.bestuursfunctie);
     }
 
+    const fracties = await this.store.query('fractie', {
+      'filter[bestuursorganen-in-tijd][heeft-bestuursperiode][:id:]':
+        selectedPeriod.id,
+      include: [
+        'bestuursorganen-in-tijd',
+        'bestuursorganen-in-tijd.heeft-bestuursperiode',
+      ].join(','),
+    });
+
     return {
       personen,
       bestuursPeriods,
       selectedPeriod,
       bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
       selectedBestuurfunctieIds: params.bestuursfunctie,
+      fracties,
+      selectedFracties: params.binnenFractie,
     };
   }
 
-  getOptions(params, bestuursperiode, bestuursfunctieIds) {
+  getOptions(params, bestuursperiode, bestuursfunctieIds, fractieIds) {
     const queryParams = {
       sort: params.sort,
       page: {
@@ -61,11 +74,15 @@ export default class MandatarissenSearchRoute extends Route {
         bestuursperiode.id,
       'filter[is-aangesteld-als][bekleedt][bestuursfunctie][:id:]':
         bestuursfunctieIds,
+      'filter[is-aangesteld-als][heeft-lidmaatschap][binnen-fractie][:id:]':
+        fractieIds,
       include: [
         'is-aangesteld-als',
         'is-aangesteld-als.bekleedt',
         'is-aangesteld-als.bekleedt.bestuursfunctie',
         'is-aangesteld-als.bekleedt.bevat-in.heeft-bestuursperiode',
+        'is-aangesteld-als.heeft-lidmaatschap',
+        'is-aangesteld-als.heeft-lidmaatschap.binnen-fractie',
       ].join(','),
     };
 
