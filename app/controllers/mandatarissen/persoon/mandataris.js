@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
-export default class MandatarissenMandatarisController extends Controller {
+export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
 
   get bestuursorganenTitle() {
@@ -13,7 +13,10 @@ export default class MandatarissenMandatarisController extends Controller {
 
   @action
   onMandatarisChanged(newMandataris) {
-    this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
+    this.router.transitionTo(
+      'mandatarissen.persoon.mandataris',
+      newMandataris.id
+    );
   }
 
   get persoon() {

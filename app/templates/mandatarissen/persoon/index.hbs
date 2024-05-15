@@ -1,0 +1,107 @@
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Bewerk mandataris<br /><strong
+      >{{@model.persoon.gebruikteVoornaam}}
+        {{@model.persoon.achternaam}}</strong></AuHeading>
+  </Group>
+</AuToolbar>
+<div class="au-c-body-container au-c-body-container--scroll">
+
+  <div class="au-o-box">
+    <Person::Card @persoon={{@model.persoon}} />
+  </div>
+
+  <div class="au-o-box">
+    <AuHeading @level="3" @skin="4">
+      Huidige mandaten
+    </AuHeading>
+
+    <AuHr />
+
+    <ul class="au-c-list-vertical">
+      {{#each @model.actieveMandatarissen as |mandataris|}}
+        <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
+        <AuHr />
+      {{else}}
+        <AuPill @icon="info-circle" class="au-u-margin-bottom">
+          Geen huidige mandaten beschikbaar
+        </AuPill>
+      {{/each}}
+    </ul>
+
+    <AuHeading @level="3" @skin="4">
+      Beëindigde mandaten
+    </AuHeading>
+
+    <AuHr />
+
+    <ul class="au-c-list-vertical">
+      {{#each @model.inactieveMandatarissen as |mandataris|}}
+        <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
+        <AuHr />
+      {{else}}
+        <AuPill @icon="info-circle">
+          Geen beëindigde mandaten beschikbaar
+        </AuPill>
+      {{/each}}
+    </ul>
+
+  </div>
+
+  <div class="au-o-box">
+    <div class="au-u-padding-top-small">
+      <AuButton
+        @skin="secondary"
+        @width="block"
+        {{on "click" this.toggleModal}}
+      >
+        <AuIcon @icon="add" @alignment="left" />
+        Voeg nieuw mandaat toe
+      </AuButton>
+    </div>
+  </div>
+</div>
+
+<AuModal
+  @title="Selecteer bestuursorgaan"
+  @modalOpen={{this.isModalOpen}}
+  @closeModal={{this.closeModal}}
+  as |Modal|
+>
+  <Modal.Body>
+    <AuContent class="au-u-margin-bottom-small">
+      Selecteer een bestuursorgaan waaraan je een mandaat wilt toevoegen.
+    </AuContent>
+    <PowerSelect
+      @allowClear={{false}}
+      @renderInPlace={{false}}
+      @searchEnabled={{true}}
+      @noMatchesMessage={{"Geen resultaten gevonden"}}
+      @searchMessage={{"Typ om een bestuursorgaan te zoeken"}}
+      @options={{@model.bestuursorganen}}
+      @selected={{this.selectedBestuursorgaan}}
+      @onChange={{fn (mut this.selectedBestuursorgaan)}}
+      @searchField="naam"
+      @placeholder="Selecteer een bestuursorgaan"
+      as |select|
+    >
+      {{select.naam}}
+    </PowerSelect>
+
+  </Modal.Body>
+  <Modal.Footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButton
+          @disabled={{not this.selectedBestuursorgaan}}
+          {{on "click" this.createMandataris}}
+        >
+          Voeg nieuw mandaat toe
+        </AuButton>
+        <AuButton @skin="secondary" {{on "click" this.closeModal}}>
+          Annuleer
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </Modal.Footer>
+</AuModal>
