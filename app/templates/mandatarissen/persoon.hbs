@@ -1,6 +1,32 @@
+{{page-title this.model.persoon.naam}}
 {{breadcrumb
   this.model.persoon.naam
   route="mandatarissen.persoon"
   model=this.model.persoon.id
 }}
-{{outlet}}
+
+<AuMainContainer as |main|>
+  <main.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__content">
+        <ul class="au-c-list-navigation">
+          <li class="au-c-list-navigation__item">
+            <AuNavigationLink @route="mandatarissen.persoon.index">
+              Detail
+            </AuNavigationLink>
+          </li>
+          <li class="au-c-list-navigation__item">
+            <AuNavigationLink @route="mandatarissen.persoon.mandaten">
+              Mandaten
+            </AuNavigationLink>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main.sidebar>
+  <main.content>
+    <AuBodyContainer id="content">
+      {{outlet}}
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>
