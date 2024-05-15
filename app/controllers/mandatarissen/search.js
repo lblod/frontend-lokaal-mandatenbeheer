@@ -56,17 +56,23 @@ export default class MandatarissenSearchController extends Controller {
     const bestuurfunctieIds = [
       ...new Set(this.model.selectedBestuurfunctieIds?.split(',')),
     ];
+
+    if (bestuurfunctieIds.length == this.uniqueBestuurfuncties.length) {
+      return [];
+    }
+
     const bestuursfuncties = bestuurfunctieIds.map((id) =>
-      this.model.bestuursfuncties.find((functie) => functie.id == id)
+      this.uniqueBestuurfuncties.find((functie) => functie.id == id)
     );
 
     return bestuursfuncties.filter((functie) => functie);
   }
 
+  get uniqueBestuurfuncties() {
+    return this.model.bestuursfuncties.filter((functie) => functie);
+  }
+
   get allBestuurfunctieCodeIds() {
-    return this.model.bestuursfuncties
-      .filter((functie) => functie)
-      .map((code) => code.id)
-      .join(',');
+    return this.uniqueBestuurfuncties.map((code) => code.id).join(',');
   }
 }
