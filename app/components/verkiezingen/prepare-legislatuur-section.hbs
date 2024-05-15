@@ -1,50 +1,54 @@
-<AuToolbar
-  @size="large"
-  @nowrap="true"
-  class="au-u-padding-bottom-none au-u-padding-bottom-none"
-  as |Group|
->
-  <Group class="au-u-margin-bottom-none">
-    <div class="au-o-flow">
-      <AuHeading @skin="3">Samenstelling
-        {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
-    </div>
-  </Group>
-</AuToolbar>
-<Verkiezingen::DraftMandatarisList
-  @bestuursorgaan={{@bestuursorgaan}}
-  @sort={{@sort}}
-  @page={{0}}
-  @size={{9999}}
-  @title=""
-  @showFractie={{true}}
-  @showFunctie={{true}}
-  @showRangorde={{true}}
-  @showBevoegdheid={{true}}
-  @showStartEndDate={{true}}
-/>
+{{#if (await this.isBurgemeester)}}
+  <Mandaat::BurgemeesterSelector @bestuursorgaanInTijd={{@bestuursorgaan}} />
+{{else}}
+  <AuToolbar
+    @size="large"
+    @nowrap="true"
+    class="au-u-padding-bottom-none au-u-padding-bottom-none"
+    as |Group|
+  >
+    <Group class="au-u-margin-bottom-none">
+      <div class="au-o-flow">
+        <AuHeading @skin="3">Samenstelling
+          {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
+      </div>
+    </Group>
+  </AuToolbar>
+  <Verkiezingen::DraftMandatarisList
+    @bestuursorgaan={{@bestuursorgaan}}
+    @sort={{@sort}}
+    @page={{0}}
+    @size={{9999}}
+    @title=""
+    @showFractie={{true}}
+    @showFunctie={{true}}
+    @showRangorde={{true}}
+    @showBevoegdheid={{true}}
+    @showStartEndDate={{true}}
+  />
 
-<AuContent @skin="small">
-  <AuButton
-    @skin="naked"
-    @icon="add"
-    {{on "click" this.createMandataris}}
-  >Toevoegen</AuButton>
-</AuContent>
-<AuModal
-  @title={{(concat
-    "Voeg mandataris toe aan " @bestuursorgaan.isTijdsspecialisatieVan.naam
-  )}}
-  @modalOpen={{this.isCreating}}
-  @closable={{true}}
-  @closeModal={{this.cancel}}
->
-  <div class="au-o-box">
-    <Form::NewInstance
-      @onCreate={{this.onCreate}}
-      @form={{@form}}
-      @buildSourceTtl={{this.buildSourceTtl}}
-      @buildMetaTtl={{this.buildMetaTtl}}
-    />
-  </div>
-</AuModal>
+  <AuContent @skin="small">
+    <AuButton
+      @skin="naked"
+      @icon="add"
+      {{on "click" this.createMandataris}}
+    >Toevoegen</AuButton>
+  </AuContent>
+  <AuModal
+    @title={{(concat
+      "Voeg mandataris toe aan " @bestuursorgaan.isTijdsspecialisatieVan.naam
+    )}}
+    @modalOpen={{this.isCreating}}
+    @closable={{true}}
+    @closeModal={{this.cancel}}
+  >
+    <div class="au-o-box">
+      <Form::NewInstance
+        @onCreate={{this.onCreate}}
+        @form={{@form}}
+        @buildSourceTtl={{this.buildSourceTtl}}
+        @buildMetaTtl={{this.buildMetaTtl}}
+      />
+    </div>
+  </AuModal>
+{{/if}}

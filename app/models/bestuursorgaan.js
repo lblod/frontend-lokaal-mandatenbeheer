@@ -112,6 +112,12 @@ export default class BestuursorgaanModel extends Model {
     });
   }
 
+  async hasBestuursorgaanClassificatie(classificatie) {
+    return this.classificatieUri().then((uri) => {
+      return classificatie === uri;
+    });
+  }
+
   get nbMembers() {
     return this.getNbMembers();
   }
