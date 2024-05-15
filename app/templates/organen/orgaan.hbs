@@ -1,4 +1,9 @@
 {{page-title this.model.bestuursorgaan.naam}}
+{{breadcrumb
+  this.model.bestuursorgaan.naam
+  route="organen.orgaan"
+  model=this.model.bestuursorgaan.id
+}}
 
 <AuMainContainer as |main|>
   <main.sidebar>
