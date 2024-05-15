@@ -109,40 +109,7 @@ export default class SharedBreadCrumbComponent extends Component {
     },
   ];
 
-  forms = [
-    {
-      route: 'forms.index',
-      crumbs: [{ label: 'Overzicht forms' }],
-    },
-    {
-      route: 'forms.form.instances',
-      crumbs: [
-        { label: 'Overzicht forms', link: 'forms' },
-        { label: 'Form instances' },
-      ],
-    },
-    {
-      route: 'forms.form.new',
-      crumbs: [
-        { label: 'Overzicht forms', link: 'forms' },
-        { label: 'Form instances', link: 'forms.form.instances' },
-        { label: 'Nieuwe form instance' },
-      ],
-    },
-    {
-      route: 'forms.form.instance',
-      crumbs: [
-        { label: 'Overzicht forms', link: 'forms' },
-        { label: 'Form instances', link: 'forms.form.instances' },
-        { label: 'Bewerk form instance' },
-      ],
-    },
-  ];
-  bread = this.mandatarissen.concat(
-    this.verkiezingen,
-    this.leidinggevenden,
-    this.forms
-  );
+  bread = this.mandatarissen.concat(this.verkiezingen, this.leidinggevenden);
 
   get crumbsForRoute() {
     const results = this.bread.filter(
