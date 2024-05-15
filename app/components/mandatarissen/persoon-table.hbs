@@ -18,6 +18,7 @@
         @currentSorting={{@sort}}
         @label="Familienaam"
       />
+      <th>Fracties</th>
       <th>Mandaten</th>
     </c.header>
 
@@ -31,6 +32,9 @@
         <LinkTo @route={{@detailRoute}} @model={{persoon.id}} class="au-c-link">
           {{persoon.achternaam}}
         </LinkTo>
+      </td>
+      <td>
+        {{await (this.fractiesFor persoon)}}
       </td>
       <td>
         <Mandatarissen::MandatenAsLinks @persoon={{persoon}} />
