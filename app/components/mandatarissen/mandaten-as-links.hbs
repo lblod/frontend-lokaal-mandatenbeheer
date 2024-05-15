@@ -1,7 +1,7 @@
 <div {{did-insert (perform this.setup)}}>
-  {{#each this.dataTree as |mandataris|}}
-    <AuLink>
-      {{mandataris.bestuursfunctie.label}}
+  {{#each this.mandatenAsLinks as |mandaatAsLink|}}
+    <AuLink @route={{mandaatAsLink.route}} @model={{mandaatAsLink.model}}>
+      {{mandaatAsLink.label}}{{#unless mandaatAsLink.isLast}},{{/unless}}
     </AuLink>
   {{/each}}
 </div>

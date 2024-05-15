@@ -5,18 +5,23 @@ import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 
 export default class MandatarissenMandatenAsLinks extends Component {
-  @tracked dataTree = A([]);
+  @tracked mandatenAsLinks = A([]);
 
   setup = restartableTask(async () => {
-    this.dataTree.clear();
-    for (const mandataris of (await this.args.mandatarissen) ?? []) {
-      const mandaat = await mandataris.bekleedt;
-      console.log({ mandaat });
+    const mandatarissen = await this.args.persoon.isAangesteldAls;
 
-      this.dataTree.pushObject({
-        bestuursfunctie: await mandaat.bestuursfunctie,
+    for (const mandataris of mandatarissen) {
+      const mandaat = await mandataris.bekleedt;
+      const bestuursfunctie = await mandaat.bestuursfunctie;
+
+      this.mandatenAsLinks.pushObject({
+        label: bestuursfunctie.label,
+        route: `mandatarissen.mandataris`,
+        model: mandataris.id,
+        isLast: mandatarissen.indexOf(mandataris) == mandatarissen.length - 1,
       });
     }
-    console.log(this.dataTree);
+
+    console.log(this.mandatenAsLinks);
   });
 }
