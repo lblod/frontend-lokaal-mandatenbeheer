@@ -9,6 +9,7 @@ import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandata
 import {
   BURGEMEESTER_BESTUURSORGAAN_URI,
   RMW_BESTUURSORGAAN_URI,
+  VB_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
 
 const CREATE_MODE = 'create';
@@ -38,6 +39,11 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   get isRMW() {
     return this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
       RMW_BESTUURSORGAAN_URI
+    );
+  }
+  get isLidVanVB() {
+    return this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
+      VB_BESTUURSORGAAN_URI
     );
   }
 

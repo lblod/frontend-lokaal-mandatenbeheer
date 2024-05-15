@@ -33,7 +33,7 @@
       @icon="add"
       {{on "click" this.createMandataris}}
     >Toevoegen</AuButton>
-    {{#if (await this.isRMW)}}
+    {{#if (or (await this.isRMW) (await this.isLidVanVB))}}
       <AuButton @skin="naked" @icon="synchronize">Kopieer naar OCMW tabel</AuButton>
     {{/if}}
   </AuContent>
