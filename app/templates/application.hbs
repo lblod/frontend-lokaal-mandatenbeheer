@@ -75,22 +75,7 @@
       <main.content>
         <AuBodyContainer>
           {{#unless this.isIndex}}
-            <AuToolbar @size="medium" @skin="tint" @border="bottom" as |Group|>
-              <Group>
-                <ul class="au-c-list-horizontal au-c-list-horizontal--small">
-                  <li class="au-c-list-horizontal__item">
-                    <AuLink @route="index">
-                      <AuIcon @icon="arrow-left" @alignment="left" />
-                      Overzicht modules
-                    </AuLink>
-                  </li>
-                  <li class="au-c-list-horizontal__item">
-                    <Shared::CompactMenu />
-                  </li>
-                  <Shared::BreadCrumb />
-                </ul>
-              </Group>
-            </AuToolbar>
+            <Shared::NavigationBar />
           {{/unless}}
           <AuBodyContainer id="content">
             {{outlet}}
