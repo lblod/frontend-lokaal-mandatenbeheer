@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 
+import { A } from '@ember/array';
 import { restartableTask } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
 
 export default class MandatarissenMandatenAsLinks extends Component {
   @tracked mandatenAsLinks = A([]);

@@ -1,9 +1,10 @@
 import Controller from '@ember/controller';
+
 import { action } from '@ember/object';
-import { task, timeout } from 'ember-concurrency';
 import { service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { tracked } from '@glimmer/tracking';
+import { task, timeout } from 'ember-concurrency';
 
 export default class MandatarissenSearchController extends Controller {
   queryParams = ['sort', 'bestuursperiode', 'bestuursfunctie', 'binnenFractie'];
