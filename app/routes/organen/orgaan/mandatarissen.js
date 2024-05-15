@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { toUserReadableListing } from 'frontend-lmb/utils/to-user-readable-listing';
 import moment from 'moment';
 
 export default class OrganenMandatarissenRoute extends Route {
@@ -185,8 +186,8 @@ export default class OrganenMandatarissenRoute extends Route {
       .filter((f) => f != currentFractie && f) // TODO the "&& f" is confusing
       .toSorted((a, b) => a.localeCompare(b));
     return sortedFracties.length
-      ? `${currentFractie} (${sortedFracties.join(', ')})`
-      : currentFractie; // TODO Join with prefix and postfix
+      ? `${currentFractie} (${toUserReadableListing(sortedFracties)})`
+      : currentFractie;
   }
 
   getOptions(params, bestuursOrgaan) {
