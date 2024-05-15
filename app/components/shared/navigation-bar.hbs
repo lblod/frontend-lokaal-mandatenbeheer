@@ -1,7 +1,6 @@
-<AuToolbar @border="bottom" @size="small" @skin="tint">
+<AuToolbar @border="bottom" @size="medium" @skin="tint">
   <nav aria-label="breadcrumbs">
     <ul class="au-c-list-horizontal au-c-list-horizontal--small">
-      {{! <ol class="au-c-list-horizontal au-c-list-horizontal--breadcrumbs"> }}
       <li class="au-c-list-horizontal__item">
         <AuLink @route="index">
           <AuIcon @icon="arrow-left" @alignment="left" />
@@ -14,7 +13,9 @@
       {{#each (breadcrumbs) as |breadcrumb|}}
         <li class="au-c-list-horizontal__item">
           {{#if (is-last breadcrumb (breadcrumbs))}}
-            {{breadcrumb.title}}
+            <strong>
+              {{breadcrumb.title}}
+            </strong>
           {{else}}
             <AuLink
               @route={{breadcrumb.data.route}}
@@ -25,7 +26,6 @@
           {{/if}}
         </li>
       {{/each}}
-      {{! </ol> }}
     </ul>
   </nav>
 </AuToolbar>
