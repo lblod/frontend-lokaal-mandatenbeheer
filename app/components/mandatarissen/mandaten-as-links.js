@@ -21,7 +21,5 @@ export default class MandatarissenMandatenAsLinks extends Component {
         isLast: mandatarissen.indexOf(mandataris) == mandatarissen.length - 1,
       });
     }
-
-    console.log(this.mandatenAsLinks);
   });
 }
