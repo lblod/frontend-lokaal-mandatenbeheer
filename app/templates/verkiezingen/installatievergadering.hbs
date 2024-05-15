@@ -61,12 +61,14 @@
     {{/each}}
 
     <div class="au-o-box">
-      <p>Change installatievergadering status:</p>
-      <Shared::InstallatievergaderingStatusSelector
-        @options={{@model.ivStatuses}}
-        @selectedStatus={{@model.installatievergadering.status}}
-        @onSelect={{this.selectStatus}}
-      />
+      <Tmp::Todo>
+        <p>Change installatievergadering status:</p>
+        <Shared::InstallatievergaderingStatusSelector
+          @options={{@model.ivStatuses}}
+          @selectedStatus={{@model.installatievergadering.status}}
+          @onSelect={{this.selectStatus}}
+        />
+      </Tmp::Todo>
     </div>
   </div>
 {{/if}}
