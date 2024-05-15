@@ -11,6 +11,10 @@ export default class MandatarissenMandatenAsLinks extends Component {
     const mandatarissen = await this.args.persoon.isAangesteldAls;
 
     for (const mandataris of mandatarissen) {
+      if (!mandataris.isActive) {
+        continue;
+      }
+
       const mandaat = await mandataris.bekleedt;
       const bestuursfunctie = await mandaat.bestuursfunctie;
 
