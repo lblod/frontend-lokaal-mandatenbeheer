@@ -60,6 +60,7 @@
     {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
       <Verkiezingen::PrepareLegislatuurSection
         @bestuursorgaan={{bestuursorgaan}}
+        @bestuursorganen={{@model.bestuursorganenInTijd}}
         @sort={{this.sort}}
         @form={{@model.mandatarisNewForm}}
       />

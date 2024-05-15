@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { restartableTask } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
@@ -46,6 +47,26 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       VB_BESTUURSORGAAN_URI
     );
   }
+
+  mirrorTable = restartableTask(async () => {
+    const bestuursorganen = this.args.bestuursorganen;
+    let syncId = null;
+    if (await this.isRMW) {
+      syncId = RMW_BESTUURSORGAAN_URI;
+    }
+    if (await this.isLidVanVB) {
+      syncId = VB_BESTUURSORGAAN_URI;
+    }
+
+    const bestuursorgaan = bestuursorganen.find(
+      async (bestuursorgaan) =>
+        (await bestuursorgaan.classificatie.uri) == syncId
+    );
+
+    if (!bestuursorgaan) {
+      throw `Could not sync`;
+    }
+  });
 
   @action
   cancel() {
