@@ -9,12 +9,11 @@ export default class MandatarissenMandatenAsLinks extends Component {
 
   setup = restartableTask(async () => {
     const mandatarissen = await this.args.persoon.isAangesteldAls;
+    const activeMandatarissen = mandatarissen.filter(
+      (mandataris) => mandataris.isActive
+    );
 
-    for (const mandataris of mandatarissen) {
-      if (!mandataris.isActive) {
-        continue;
-      }
-
+    for (const mandataris of activeMandatarissen) {
       const mandaat = await mandataris.bekleedt;
       const bestuursfunctie = await mandaat.bestuursfunctie;
 
@@ -22,7 +21,9 @@ export default class MandatarissenMandatenAsLinks extends Component {
         label: bestuursfunctie.label,
         route: `mandatarissen.mandataris`,
         model: mandataris.id,
-        isLast: mandatarissen.indexOf(mandataris) == mandatarissen.length - 1,
+        isLast:
+          activeMandatarissen.indexOf(mandataris) ==
+          activeMandatarissen.length - 1,
       });
     }
   });
