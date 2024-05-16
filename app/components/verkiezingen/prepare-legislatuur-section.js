@@ -138,10 +138,26 @@ export default class PrepareLegislatuurSectionComponent extends Component {
         });
         await mandaat.save();
       }
+
+      const lidmaatschap = await mandatarisToAdd.heeftLidmaatschap;
+      let newLidmaatschap = null;
+      if (lidmaatschap) {
+        newLidmaatschap = this.store.createRecord('lidmaatschap', {
+          binnenFractie: await lidmaatschap.binnenFractie,
+          lidGedurende: await lidmaatschap.lidGedurende,
+        });
+      }
+
       const newMandataris = await this.createMandatarisFromMandataris(
         mandatarisToAdd,
-        mandaat
+        mandaat,
+        newLidmaatschap
       );
+
+      if (newLidmaatschap) {
+        newLidmaatschap.lid = newMandataris;
+        await newLidmaatschap.save();
+      }
 
       const mandatarissen = await mandaat.bekleedDoor;
       mandatarissen.pushObject(newMandataris);
@@ -149,7 +165,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     }
   });
 
-  async createMandatarisFromMandataris(mandataris, mandaat) {
+  async createMandatarisFromMandataris(mandataris, mandaat, lidmaatschap) {
     return this.store.createRecord('mandataris', {
       rangorde: mandataris.rangorde,
       start: mandataris.start,
@@ -159,7 +175,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       beleidsdomein: await mandataris.beleidsdomein,
       status: await getEffectiefStatus(this.store),
       publicationStatus: await getDraftPublicationStatus(this.store),
-      heeftLidmaatschap: await mandataris.heeftLidmaatschap,
+      heeftLidmaatschap: lidmaatschap,
     });
   }
 
