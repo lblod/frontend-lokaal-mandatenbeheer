@@ -1,0 +1,74 @@
+{{page-title "Voorbereiding legislatuur"}}
+
+{{#if (or (not @model.isRelevant) (not @model.installatievergadering))}}
+  <div class="au-o-box">
+    <div class="au-o-flow">
+      <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
+    </div>
+  </div>
+  <div class="au-o-box">
+    <AuAlert @icon="info-circle" @size="small">
+      <p>De voorbereiding van de legislatuur is niet mogelijk in de
+        bestuurseenheid
+        {{@model.bestuurseenheid.classificatie.label}}
+        {{@model.bestuurseenheid.naam}}.</p>
+      <p>
+        De voorbereiding van de legislatuur gebeurt in de bestuurseenheid
+        Gemeenteraad
+        {{@model.bestuurseenheid.naam}}</p>
+    </AuAlert>
+  </div>
+{{else}}
+  <AuToolbar
+    @size="large"
+    @nowrap="true"
+    class="au-u-padding-bottom-none"
+    as |Group|
+  >
+    <Group>
+      <div class="au-o-flow">
+        <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
+      </div>
+    </Group>
+    <Group>
+      <Mandatenbeheer::BestuursperiodenSelector
+        @options={{@model.bestuursPeriods}}
+        @selected={{@model.selectedPeriod}}
+        @onSelect={{this.selectPeriod}}
+        @prefix="Bestuursperiode"
+      />
+      <AuLink
+        @route="verkiezingen.verkiezingsuitslag"
+        @model={{@model.selectedPeriod.id}}
+        @skin="button"
+      >Bekijk verkiezingsresultaten
+      </AuLink>
+    </Group>
+  </AuToolbar>
+  <div class="au-c-body-container au-c-body-container--scroll">
+    <Verkiezingen::KieslijstSplitter
+      @kandidatenlijst={{@model.kandidatenlijsten}}
+      @bestuursorgaan={{@model.bestuursorganenInTijd}}
+      @bestuurseenheid={{@model.bestuurseenheid}}
+    />
+
+    {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
+      <Verkiezingen::PrepareLegislatuurSection
+        @bestuursorgaan={{bestuursorgaan}}
+        @sort={{this.sort}}
+        @form={{@model.mandatarisNewForm}}
+      />
+    {{/each}}
+
+    <div class="au-o-box">
+      <Tmp::Todo>
+        <p>Change installatievergadering status:</p>
+        <Shared::InstallatievergaderingStatusSelector
+          @options={{@model.ivStatuses}}
+          @selectedStatus={{@model.installatievergadering.status}}
+          @onSelect={{this.selectStatus}}
+        />
+      </Tmp::Todo>
+    </div>
+  </div>
+{{/if}}

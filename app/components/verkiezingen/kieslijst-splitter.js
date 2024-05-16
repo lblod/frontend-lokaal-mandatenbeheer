@@ -139,7 +139,7 @@ export default class KieslijstSplitterComponent extends Component {
     const fractie = this.store.createRecord('fractie', {
       naam: name,
       fractietype: this.samenwerkingsVerband,
-      bestuursorganenInTijd: [this.args.bestuursorgaan],
+      bestuursorganenInTijd: [...this.args.bestuursorgaan],
       bestuurseenheid: this.args.bestuurseenheid,
       origineleKandidatenlijst: kieslijst,
     });

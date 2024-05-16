@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { BESTUURSORGAAN_CLASSIFICATIE_CODE_BURGEMEESTER } from 'frontend-lmb/utils/well-known-uris';
 import moment from 'moment';
 import {
   getDraftPublicationStatus,
@@ -18,20 +17,12 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @tracked mandataris = null;
   @tracked errorMessage = '';
 
-  get bestuurseenheid() {
-    return this.args.bestuurseenheid;
-  }
-
-  get bestuursorgaanInTijd() {
-    return this.args.bestuursorgaanInTijd;
-  }
-
   get bindingStart() {
-    return this.bestuursorgaanInTijd.bindingStart;
+    return this.args.bestuursorgaanInTijd.bindingStart;
   }
 
   get bindingEinde() {
-    return this.bestuursorgaanInTijd.bindingEinde;
+    return this.args.bestuursorgaanInTijd.bindingEinde;
   }
 
   constructor() {
@@ -52,16 +43,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     return await queryRecord(this.store, 'mandaat', {
       filter: {
         'bevat-in': {
-          'binding-start': this.formatToDateString(this.bindingStart),
-          'binding-einde': this.formatToDateString(this.bindingEinde),
-          'is-tijdsspecialisatie-van': {
-            classificatie: {
-              ':uri:': BESTUURSORGAAN_CLASSIFICATIE_CODE_BURGEMEESTER,
-            },
-            bestuurseenheid: {
-              ':id:': this.bestuurseenheid.id,
-            },
-          },
+          id: this.args.bestuursorgaanInTijd.id,
         },
       },
     });

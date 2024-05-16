@@ -1,137 +1,139 @@
-<div class="au-o-box no-pagination">
-  <h1 class="au-u-h2 au-u-margin-bottom-small">{{@title}}</h1>
-  <AuDataTable
-    @content={{this.resortedMandatarissen}}
-    @noDataMessage="Geen mandatarissen gevonden"
-    @sort={{@sort}}
-    @page={{@page}}
-    @size={{@size}}
-    as |t|
-  >
-    <t.content as |c|>
-      <c.header>
-        <AuDataTableThSortable
-          @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
-          @currentSorting={{@sort}}
-          @label="Voornaam"
-        />
-        <AuDataTableThSortable
-          @field="isBestuurlijkeAliasVan.achternaam"
-          @currentSorting={{@sort}}
-          @label="Familienaam"
-        />
-        {{#if @showFractie}}
+<div {{did-update this.onInit @sort}}>
+  <div class="au-o-box no-pagination">
+    <h1 class="au-u-h2 au-u-margin-bottom-small">{{@title}}</h1>
+    <AuDataTable
+      @content={{this.resortedMandatarissen}}
+      @noDataMessage="Geen mandatarissen gevonden"
+      @sort={{@sort}}
+      @page={{@page}}
+      @size={{@size}}
+      as |t|
+    >
+      <t.content as |c|>
+        <c.header>
           <AuDataTableThSortable
-            @field="heeftLidmaatschap.binnenFractie.naam"
+            @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
             @currentSorting={{@sort}}
-            @label="Fractie"
-          />
-        {{/if}}
-        {{#if @showFunctie}}
-          <AuDataTableThSortable
-            @field="bekleedt.bestuursfunctie.label"
-            @currentSorting={{@sort}}
-            @label="Mandaat"
-          />
-        {{/if}}
-        {{#if @showRangorde}}
-          <AuDataTableThSortable
-            @field="rangorde"
-            @currentSorting={{@sort}}
-            @label="Rangorde"
-          />
-        {{/if}}
-        {{#if @showBevoegdheid}}
-          <AuDataTableThSortable
-            @field="beleidsdomein"
-            @currentSorting={{@sort}}
-            @label="Bevoegdheid"
-          />
-        {{/if}}
-        {{#if @showStartEndDate}}
-          <AuDataTableThSortable
-            @field="start"
-            @currentSorting={{@sort}}
-            @label="Start mandaat"
+            @label="Voornaam"
           />
           <AuDataTableThSortable
-            @field="einde"
+            @field="isBestuurlijkeAliasVan.achternaam"
             @currentSorting={{@sort}}
-            @label="Einde mandaat"
+            @label="Familienaam"
           />
-        {{/if}}
-        <th>{{! Delete }}</th>
-      </c.header>
-
-      <c.body as |row|>
-        <Verkiezingen::EditOnHover
-          @editFunction={{this.openModal}}
-          @model={{row}}
-          @helpText="Pas de persoon aan"
-        >
-          {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-        </Verkiezingen::EditOnHover>
-        <Verkiezingen::EditOnHover
-          @editFunction={{this.openModal}}
-          @model={{row}}
-          @helpText="Pas de persoon aan"
-        >
-          {{row.isBestuurlijkeAliasVan.achternaam}}
-        </Verkiezingen::EditOnHover>
-        {{#if @showFractie}}
-          <td>
-            {{row.heeftLidmaatschap.binnenFractie.naam}}
-          </td>
-        {{/if}}
-        {{#if @showFunctie}}
-          <td>
-            {{row.bekleedt.bestuursfunctie.label}}
-          </td>
-        {{/if}}
-        {{#if @showRangorde}}
-          <td>
-            <Verkiezingen::RangordeInput
-              @mandataris={{row}}
-              @mandatarissen={{@mandatarissen}}
+          {{#if @showFractie}}
+            <AuDataTableThSortable
+              @field="heeftLidmaatschap.binnenFractie.naam"
+              @currentSorting={{@sort}}
+              @label="Fractie"
             />
-          </td>
-        {{/if}}
-        {{#if @showBevoegdheid}}
-          {{#if (eq this.editBeleidsdomeinen row.id)}}
-            <td {{on-click-outside this.closeEditBeleidsdomeinen}}>
-              <Mandatarissen::BeleidsdomeinSelectorWithCreate
-                @beleidsdomeinen={{row.beleidsdomein}}
-                @onSelect={{this.updateBeleidsdomeinen}}
+          {{/if}}
+          {{#if @showFunctie}}
+            <AuDataTableThSortable
+              @field="bekleedt.bestuursfunctie.label"
+              @currentSorting={{@sort}}
+              @label="Mandaat"
+            />
+          {{/if}}
+          {{#if @showRangorde}}
+            <AuDataTableThSortable
+              @field="rangorde"
+              @currentSorting={{@sort}}
+              @label="Rangorde"
+            />
+          {{/if}}
+          {{#if @showBevoegdheid}}
+            <AuDataTableThSortable
+              @field="beleidsdomein"
+              @currentSorting={{@sort}}
+              @label="Bevoegdheid"
+            />
+          {{/if}}
+          {{#if @showStartEndDate}}
+            <AuDataTableThSortable
+              @field="start"
+              @currentSorting={{@sort}}
+              @label="Start mandaat"
+            />
+            <AuDataTableThSortable
+              @field="einde"
+              @currentSorting={{@sort}}
+              @label="Einde mandaat"
+            />
+          {{/if}}
+          <th>{{! Delete }}</th>
+        </c.header>
+
+        <c.body as |row|>
+          <Verkiezingen::EditOnHover
+            @editFunction={{this.openModal}}
+            @model={{row}}
+            @helpText="Pas de persoon aan"
+          >
+            {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          </Verkiezingen::EditOnHover>
+          <Verkiezingen::EditOnHover
+            @editFunction={{this.openModal}}
+            @model={{row}}
+            @helpText="Pas de persoon aan"
+          >
+            {{row.isBestuurlijkeAliasVan.achternaam}}
+          </Verkiezingen::EditOnHover>
+          {{#if @showFractie}}
+            <td>
+              {{row.heeftLidmaatschap.binnenFractie.naam}}
+            </td>
+          {{/if}}
+          {{#if @showFunctie}}
+            <td>
+              {{row.bekleedt.bestuursfunctie.label}}
+            </td>
+          {{/if}}
+          {{#if @showRangorde}}
+            <td>
+              <Verkiezingen::RangordeInput
+                @mandataris={{row}}
+                @mandatarissen={{this.mandatarissen}}
               />
             </td>
-          {{else}}
-            <Verkiezingen::EditOnHover
-              @editFunction={{this.openEditBeleidsdomeinen}}
-              @model={{row}}
-              @helpText="Pas de beleidsdomeinen aan"
-            >
-              <Beleidsdomeinen @mandataris={{row}} />
-            </Verkiezingen::EditOnHover>
           {{/if}}
-        {{/if}}
-        {{#if @showStartEndDate}}
-          <td>
-            {{moment-format row.start "DD-MM-YYYY"}}
+          {{#if @showBevoegdheid}}
+            {{#if (eq this.editBeleidsdomeinen row.id)}}
+              <td {{on-click-outside this.closeEditBeleidsdomeinen}}>
+                <Mandatarissen::BeleidsdomeinSelectorWithCreate
+                  @beleidsdomeinen={{row.beleidsdomein}}
+                  @onSelect={{this.updateBeleidsdomeinen}}
+                />
+              </td>
+            {{else}}
+              <Verkiezingen::EditOnHover
+                @editFunction={{this.openEditBeleidsdomeinen}}
+                @model={{row}}
+                @helpText="Pas de beleidsdomeinen aan"
+              >
+                <Beleidsdomeinen @mandataris={{row}} />
+              </Verkiezingen::EditOnHover>
+            {{/if}}
+          {{/if}}
+          {{#if @showStartEndDate}}
+            <td>
+              {{moment-format row.start "DD-MM-YYYY"}}
+            </td>
+            <td>
+              {{moment-format row.einde "DD-MM-YYYY"}}
+            </td>
+          {{/if}}
+          <td class="au-u-text-right">
+            <AuButton
+              @icon="bin"
+              @alert={{true}}
+              {{on "click" (fn this.removeMandataris row)}}
+            >Verwijder</AuButton>
           </td>
-          <td>
-            {{moment-format row.einde "DD-MM-YYYY"}}
-          </td>
-        {{/if}}
-        <td class="au-u-text-right">
-          <AuButton
-            @icon="bin"
-            @alert={{true}}
-            {{on "click" (fn this.removeMandataris row)}}
-          >Verwijder</AuButton>
-        </td>
-      </c.body>
-    </t.content>
-  </AuDataTable>
+        </c.body>
+      </t.content>
+    </AuDataTable>
+  </div>
 </div>
 
 <AuModal

@@ -37,6 +37,12 @@ export default class Bestuurseenheid extends Model {
   })
   bestuursorganen;
 
+  @hasMany('bestuursorgaan', {
+    async: true,
+    inverse: 'orginalBestuurseenheid',
+  })
+  fakeBestuursorganen;
+
   rdfaBindings = {
     naam: 'http://www.w3.org/2004/02/skos/core#prefLabel',
     class: 'http://data.vlaanderen.be/ns/besluit#Bestuurseenheid',

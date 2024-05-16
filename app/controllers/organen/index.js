@@ -10,7 +10,7 @@ export default class OrganenIndexController extends Controller {
 
   @tracked sort = 'naam';
   @tracked activeOrgans = false;
-  @tracked selectedTypes = ['isDecretaal', 'notDecretaal'];
+  @tracked selectedTypes = ['decretaleIds', 'nietDecretaleIds'];
   @tracked bestuursperiode;
 
   @tracked isModalActive = false;
@@ -33,7 +33,7 @@ export default class OrganenIndexController extends Controller {
   @action
   clearFilters() {
     this.activeOrgans = false;
-    this.selectedTypes = ['isDecretaal', 'notDecretaal'];
+    this.selectedTypes = ['decretaleIds', 'nietDecretaleIds'];
     this.bestuursperiode = null;
   }
 

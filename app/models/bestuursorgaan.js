@@ -31,6 +31,12 @@ export default class BestuursorgaanModel extends Model {
   })
   bestuurseenheid;
 
+  @belongsTo('bestuurseenheid', {
+    async: true,
+    inverse: 'fakeBestuursorganen',
+  })
+  orginalBestuurseenheid;
+
   @belongsTo('bestuursorgaan-classificatie-code', {
     async: true,
     inverse: null,
@@ -90,10 +96,6 @@ export default class BestuursorgaanModel extends Model {
     });
   }
 
-  get notDecretaal() {
-    return this.isDecretaal.then((val) => !val);
-  }
-
   get isGemeentelijk() {
     return this.classificatieUri().then((uri) => {
       return this.decretaleOrganen.gemeenteCodeUris.some(
@@ -107,6 +109,12 @@ export default class BestuursorgaanModel extends Model {
       return this.decretaleOrganen.classificatieUris.some(
         (dcUri) => dcUri === uri
       );
+    });
+  }
+
+  async hasBestuursorgaanClassificatie(classificatie) {
+    return this.classificatieUri().then((uri) => {
+      return classificatie === uri;
     });
   }
 

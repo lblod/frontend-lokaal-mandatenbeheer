@@ -9,6 +9,7 @@ export default class OrganenIndexRoute extends Route {
   @service store;
   @service decretaleOrganen;
   @service bestuursperioden;
+  @service bestuursorganen;
 
   // can't use pagination as we are filtering frontend side on optional properties, which seems to have limited support
   pageSize = 20000;
@@ -30,19 +31,11 @@ export default class OrganenIndexRoute extends Route {
       params.bestuursperiode
     );
 
-    const queryOptions = this.getOptions(
-      parentModel.bestuurseenheid,
-      params,
-      selectedPeriod
-    );
-    const allBestuursorganen = await this.store.query(
-      'bestuursorgaan',
-      queryOptions
-    );
-    const bestuursorganen = await this.filterBestuursorganen(
-      allBestuursorganen,
-      params
-    );
+    const bestuursorganen =
+      await this.bestuursorganen.getFilteredRealPoliticalBestuursorganen(
+        params,
+        selectedPeriod
+      );
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
 
     return RSVP.hash({
@@ -52,45 +45,6 @@ export default class OrganenIndexRoute extends Route {
       bestuursPeriods,
       selectedPeriod,
     });
-  }
-
-  getOptions(bestuurseenheid, params, bestuursperiode) {
-    const queryParams = {
-      sort: params.sort,
-      page: {
-        size: this.pageSize,
-      },
-      'filter[bestuurseenheid][:id:]': bestuurseenheid.id,
-      'filter[:has-no:is-tijdsspecialisatie-van]': true,
-      'filter[heeft-tijdsspecialisaties][heeft-bestuursperiode][:id:]':
-        bestuursperiode.id,
-      'filter[classificatie][:id:]':
-        this.decretaleOrganen.classificatieIds.join(','),
-      include: 'classificatie,heeft-tijdsspecialisaties',
-    };
-    if (params.activeOrgans) {
-      queryParams['filter[:has-no:deactivated-at]'] = true;
-    }
-    return queryParams;
-  }
-
-  async filterBestuursorganen(bestuursorganen, params) {
-    return (
-      await Promise.all(
-        bestuursorganen.map(async (orgaan) => {
-          const validType = (
-            await Promise.all(
-              params.selectedTypes.map(async (filter) => {
-                return await orgaan.get(filter);
-              })
-            )
-          ).some((val) => val);
-          return { bool: validType, orgaan };
-        })
-      )
-    )
-      .filter((val) => val.bool)
-      .map((val) => val.orgaan);
   }
 
   @action

@@ -8,11 +8,17 @@ export default class InstallatievergaderingModel extends Model {
   })
   status;
 
-  @belongsTo('bestuursorgaan', {
+  @belongsTo('bestuurseenheid', {
     async: true,
     inverse: null,
   })
-  bestuursorgaanInTijd;
+  bestuurseenheid;
+
+  @belongsTo('bestuursperiode', {
+    async: true,
+    inverse: 'installatievergaderingen',
+  })
+  bestuursperiode;
 
   get teBehandelen() {
     return this.status.id == INSTALLATIEVERGADERING_TE_BEHANDELEN;

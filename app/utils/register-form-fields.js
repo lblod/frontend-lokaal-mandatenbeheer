@@ -13,6 +13,8 @@ import RDFConceptSchemeMultiSelectorComponent from 'frontend-lmb/components/rdf-
 import RdfInputFieldsConceptSchemeSelectorWithCreateComponent from 'frontend-lmb/components/rdf-input-fields/concept-scheme-selector-with-create';
 import RdfInputFieldsConceptSchemeMultiSelectorWithCreateComponent from 'frontend-lmb/components/rdf-input-fields/concept-scheme-multi-selector-with-create';
 import RdfInputFieldsMandatarisStatusSelectorComponent from 'frontend-lmb/components/rdf-input-fields/mandataris-status-selector';
+import RdfBeleidsdomeinCodeSelector from 'frontend-lmb/components/rdf-input-fields/beleidsdomein-code-selector';
+import RdfMandatarisRangorde from 'frontend-lmb/components/rdf-input-fields/mandataris-rangorde';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -82,6 +84,15 @@ export const registerCustomFormFields = () => {
       displayType:
         'http://lblod.data.gift/display-types/conceptSchemeMultiSelectorWithCreate',
       edit: RdfInputFieldsConceptSchemeMultiSelectorWithCreateComponent,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/mandatarisBeleidsdomein',
+      edit: RdfBeleidsdomeinCodeSelector,
+    },
+    {
+      displayType: 'http://lblod.data.gift/display-types/mandatarisRangorde',
+      edit: RdfMandatarisRangorde,
     },
   ]);
 };
