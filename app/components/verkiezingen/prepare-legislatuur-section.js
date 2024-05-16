@@ -66,7 +66,48 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     if (!bestuursorgaan) {
       throw `Could not sync`;
     }
+
+    const mandatarissenToSyncWith =
+      await this.getBestuursorgaanMandatarissen(bestuursorgaan);
+    const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
+      this.args.bestuursorgaan
+    );
+
+    for (const possibleMandatarisToAdd of mandatarissenToSyncWith) {
+      const isAlreadyAdded = currentMandatarissen.find(
+        (mandataris) => mandataris.id == possibleMandatarisToAdd.id
+      );
+
+      if (isAlreadyAdded) {
+        continue;
+      }
+    }
   });
+
+  async getBestuursorgaanMandatarissen(bestuursorgaan) {
+    const queryParams = {
+      page: {
+        number: 0,
+        size: 9999,
+      },
+      filter: {
+        bekleedt: {
+          'bevat-in': {
+            id: bestuursorgaan.id,
+          },
+        },
+      },
+      include: [
+        'is-bestuurlijke-alias-van',
+        'bekleedt.bestuursfunctie',
+        'heeft-lidmaatschap.binnen-fractie',
+        'status',
+        'beleidsdomein',
+      ].join(','),
+    };
+
+    return await this.store.query('mandataris', queryParams);
+  }
 
   @action
   cancel() {
