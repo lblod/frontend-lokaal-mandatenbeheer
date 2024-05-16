@@ -4,6 +4,7 @@ import RSVP from 'rsvp';
 
 export default class MandatarissenPersoonMandatenRoute extends Route {
   @service store;
+  @service bestuursorganen;
 
   async model() {
     const parentModel = await this.modelFor('mandatarissen.persoon');
