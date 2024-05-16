@@ -67,27 +67,18 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       throw `Could not sync`;
     }
 
-    const mandatarissenToSyncWith =
+    const mandatarissenToSyncAdd =
       await this.getBestuursorgaanMandatarissen(bestuursorgaan);
     const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
       this.args.bestuursorgaan
     );
 
-    for (const mandatarisToAdd of mandatarissenToSyncWith) {
-      const isAlreadyAdded = currentMandatarissen.find(
-        (mandataris) => mandataris.id == mandatarisToAdd.id
-      );
-
-      if (isAlreadyAdded) {
-        continue;
-      }
-
-      const mandaatOfMandatarisToAdd = await mandatarisToAdd.bekleedt;
-
-      const mandaten = await this.args.bestuursorgaan.bevat;
-      mandaten.pushObject(mandaatOfMandatarisToAdd);
-      await mandaten.save();
+    for (const mandataris of currentMandatarissen) {
+      mandataris.destroyRecord();
     }
+
+    // for (const mandatarisToAdd of mandatarissenToSyncAdd) {
+    // }
   });
 
   async getBestuursorgaanMandatarissen(bestuursorgaan) {
