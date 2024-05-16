@@ -73,14 +73,20 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       this.args.bestuursorgaan
     );
 
-    for (const possibleMandatarisToAdd of mandatarissenToSyncWith) {
+    for (const mandatarisToAdd of mandatarissenToSyncWith) {
       const isAlreadyAdded = currentMandatarissen.find(
-        (mandataris) => mandataris.id == possibleMandatarisToAdd.id
+        (mandataris) => mandataris.id == mandatarisToAdd.id
       );
 
       if (isAlreadyAdded) {
         continue;
       }
+
+      const mandaatOfMandatarisToAdd = await mandatarisToAdd.bekleedt;
+
+      const mandaten = await this.args.bestuursorgaan.bevat;
+      mandaten.pushObject(mandaatOfMandatarisToAdd);
+      await mandaten.save();
     }
   });
 
