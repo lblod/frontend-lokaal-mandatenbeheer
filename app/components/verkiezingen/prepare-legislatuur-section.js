@@ -79,20 +79,48 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     for (const mandataris of currentMandatarissen) {
       mandataris.destroyRecord();
     }
-
-    const mandatenOpBestuursOrgaan = await this.args.bestuursorgaan.bevat;
-
     for (const mandatarisToAdd of mandatarissenToSyncAdd) {
       const mandaatOfMandataris = await mandatarisToAdd.bekleedt;
       const bestuursfunctie = await mandaatOfMandataris.bestuursfunctie;
-      let mandaat = mandatenOpBestuursOrgaan.find(
-        async (mandaat) =>
-          (await mandaat.bestuursfunctie).id == bestuursfunctie.id
+
+      const mapping = {
+        'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000011':
+          'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000015',
+        'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000012':
+          'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000016',
+        'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000014':
+          'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000017',
+        'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000013':
+          'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000018',
+      };
+
+      const bestuurfunctieCodes = await this.store.query(
+        'bestuursfunctie-code',
+        { filter: { ':uri:': mapping[bestuursfunctie.uri] } }
       );
+
+      if (bestuurfunctieCodes.length == 0) {
+        throw `Could not find mirror of bestuursfunctie`;
+      }
+
+      const toBestuursfunctie = bestuurfunctieCodes[0];
+      const mandatenOpBestuursOrgaan = await this.args.bestuursorgaan.bevat;
+      let mandaat = null;
+
+      for (const existingMandaat of mandatenOpBestuursOrgaan) {
+        if (mandaat) {
+          continue;
+        }
+        const bestuursfunctie = await existingMandaat.bestuursfunctie;
+
+        if (bestuursfunctie.uri == toBestuursfunctie.uri) {
+          mandaat = existingMandaat;
+        }
+      }
 
       if (!mandaat) {
         mandaat = this.store.createRecord('mandaat', {
-          bestuursfunctie: bestuursfunctie,
+          bestuursfunctie: toBestuursfunctie,
           bevatIn: [this.args.bestuursorgaan],
         });
         await mandaat.save();
