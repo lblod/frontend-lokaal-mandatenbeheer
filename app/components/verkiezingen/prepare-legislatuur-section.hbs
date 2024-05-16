@@ -46,7 +46,14 @@
         @loading={{this.mirrorTable.isRunning}}
         @loadingMessage="Aan het synchroniseren"
         {{on "click" (perform this.mirrorTable)}}
-      >Sync</AuButton>
+      >
+        {{#if (await this.isRMW)}}
+          Sync met Gemeenteraad
+        {{/if}}
+        {{#if (await this.isLidVanVB)}}
+          Sync met College van Burgemeester en Schepenen
+        {{/if}}
+      </AuButton>
     {{/if}}
   </AuContent>
   <AuModal
