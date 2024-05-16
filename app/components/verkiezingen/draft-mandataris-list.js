@@ -7,20 +7,58 @@ import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
 
 export default class DraftMandatarisListComponent extends Component {
   @service toaster;
+  @service store;
 
   @tracked isModalOpen = false;
   @tracked mandataris;
   @tracked editBeleidsdomeinen;
+  @tracked mandatarissen;
+
+  constructor() {
+    super(...arguments);
+    this.onInit();
+  }
 
   get resortedMandatarissen() {
     if (!this.args.sort || this.args.sort.indexOf('rangorde') < 0) {
-      return this.args.mandatarissen;
+      return this.mandatarissen;
     }
-    const sorted = orderMandatarissenByRangorde([...this.args.mandatarissen]);
+    const sorted = orderMandatarissenByRangorde([...this.mandatarissen]);
     if (this.args.sort.startsWith('-')) {
       return sorted.reverse();
     }
     return sorted;
+  }
+
+  @action
+  async onInit() {
+    const queryParams = {
+      sort: this.args.sort,
+      page: {
+        number: 0,
+        size: 9999,
+      },
+      filter: {
+        bekleedt: {
+          'bevat-in': {
+            id: this.args.bestuursorgaan.id,
+          },
+        },
+      },
+      include: [
+        'is-bestuurlijke-alias-van',
+        'bekleedt.bestuursfunctie',
+        'heeft-lidmaatschap.binnen-fractie',
+        'status',
+        'beleidsdomein',
+      ].join(','),
+    };
+
+    if (this.args.filter) {
+      queryParams['filter']['is-bestuurlijke-alias-van'] = this.args.filter;
+    }
+
+    this.mandatarissen = this.store.query('mandataris', queryParams);
   }
 
   @action

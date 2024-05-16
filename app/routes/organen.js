@@ -7,7 +7,7 @@ export default class OrganenRoute extends Route {
   @service session;
   @service router;
   @service store;
-  @service decretaleOrganen;
+  @service bestuursorganen;
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
@@ -15,24 +15,12 @@ export default class OrganenRoute extends Route {
 
   async model() {
     const bestuurseenheid = this.currentSession.group;
-    const bestuursorganen = await this.getAllBestuursorganen(
-      bestuurseenheid.get('id')
-    );
+    const bestuursorganen =
+      await this.bestuursorganen.getAllRealPoliticalBestuursorganen();
 
     return RSVP.hash({
       bestuurseenheid,
       bestuursorganen,
-    });
-  }
-
-  async getAllBestuursorganen(bestuurseenheidId) {
-    return await this.store.query('bestuursorgaan', {
-      'filter[bestuurseenheid][id]': bestuurseenheidId,
-      'filter[:has-no:deactivated-at]': true,
-      'filter[:has-no:is-tijdsspecialisatie-van]': true,
-      'filter[classificatie][id]':
-        this.decretaleOrganen.classificatieIds.join(','), // only organs with a political mandate
-      include: 'classificatie,heeft-tijdsspecialisaties',
     });
   }
 }

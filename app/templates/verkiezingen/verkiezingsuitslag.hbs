@@ -12,21 +12,6 @@
         <AuHeading @skin="2">Verkiezingsuitslag</AuHeading>
       </div>
     </Group>
-    <Group>
-      {{#if @model.installatievergadering.teBehandelen}}
-        <AuLink
-          @skin="button"
-          @route="verkiezingen.verkiezingsuitslag.prepare"
-        >Start voorbereiding legislatuur</AuLink>
-      {{else}}
-        <p>Change installatievergadering status:</p>
-        <Shared::InstallatievergaderingStatusSelector
-          @options={{@model.ivStatuses}}
-          @selectedStatus={{@model.selectedStatus}}
-          @onSelect={{this.selectStatus}}
-        />
-      {{/if}}
-    </Group>
   </AuToolbar>
 
   <div class="au-o-box">

@@ -1,5 +1,5 @@
 import { queryRecord } from 'frontend-lmb/utils/query-record';
-import { MANDATARIS_AANGEWEZEN_STATE } from 'frontend-lmb/utils/well-known-uris';
+import { burgemeesterOnlyStates } from 'frontend-lmb/utils/well-known-uris';
 import { tracked } from '@glimmer/tracking';
 import { ORG } from 'frontend-lmb/rdf/namespaces';
 import { service } from '@ember/service';
@@ -58,7 +58,7 @@ export default class RdfInputFieldsMandatarisStatusSelectorComponent extends Rdf
     }
 
     return statuses.filter(
-      (status) => status.subject.value !== MANDATARIS_AANGEWEZEN_STATE
+      (status) => !burgemeesterOnlyStates.includes(status.subject.value)
     );
   }
 }

@@ -66,4 +66,15 @@ export default class DecretaleOrganenService extends Service {
       ...this.otherCodes.map((code) => code.id),
     ];
   }
+
+  get decretaleIds() {
+    return [
+      ...this.decretaleCodes.map((code) => code.id),
+      ...this.gemeenteCodes.map((code) => code.id),
+    ];
+  }
+
+  get nietDecretaleIds() {
+    return this.otherCodes.map((code) => code.id);
+  }
 }
