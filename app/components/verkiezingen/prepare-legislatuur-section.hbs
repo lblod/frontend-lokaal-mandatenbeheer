@@ -14,18 +14,23 @@
       </div>
     </Group>
   </AuToolbar>
-  <Verkiezingen::DraftMandatarisList
-    @bestuursorgaan={{@bestuursorgaan}}
-    @sort={{@sort}}
-    @page={{0}}
-    @size={{9999}}
-    @title=""
-    @showFractie={{true}}
-    @showFunctie={{true}}
-    @showRangorde={{true}}
-    @showBevoegdheid={{true}}
-    @showStartEndDate={{true}}
-  />
+  {{#if this.mirrorTable.isRunning}}
+    {{! Show skeleton loader }}
+    <AuLoader />
+  {{else}}
+    <Verkiezingen::DraftMandatarisList
+      @bestuursorgaan={{@bestuursorgaan}}
+      @sort={{@sort}}
+      @page={{0}}
+      @size={{9999}}
+      @title=""
+      @showFractie={{true}}
+      @showFunctie={{true}}
+      @showRangorde={{true}}
+      @showBevoegdheid={{true}}
+      @showStartEndDate={{true}}
+    />
+  {{/if}}
 
   <AuContent @skin="small au-u-flex au-u-flex--between ">
     <AuButton
