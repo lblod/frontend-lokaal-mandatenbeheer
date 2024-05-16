@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
-import { MANDATARIS_AANGEWEZEN_STATE } from 'frontend-lmb/utils/well-known-uris';
+import { burgemeesterOnlyStates } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -69,7 +69,7 @@ export default class MandatarissenUpdateState extends Component {
       return statuses;
     }
     return statuses.filter(
-      (status) => status.uri !== MANDATARIS_AANGEWEZEN_STATE
+      (status) => !burgemeesterOnlyStates.includes(status.uri)
     );
   }
 

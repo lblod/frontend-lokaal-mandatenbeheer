@@ -57,7 +57,7 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
       new NamedNode(MANDATARIS_VERHINDERD_STATE),
       this.storeOptions.sourceGraph
     );
-    if (!this.shouldRender) {
+    if (!this.shouldRender && this.replacements?.length > 0) {
       // without timeout, the form ttl doesn't update immediately
       setTimeout(() => this.selectReplacement([]), 100);
     }
