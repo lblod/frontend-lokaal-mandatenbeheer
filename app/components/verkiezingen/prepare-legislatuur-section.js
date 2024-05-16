@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
@@ -209,12 +209,11 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     this.editMode = null;
   }
 
-  @action
-  async onCreate({ instanceTtl, instanceId }) {
+  onCreate = restartableTask(async ({ instanceTtl, instanceId }) => {
     this.editMode = null;
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
-    setTimeout(() => this.router.refresh(), 1000);
-  }
+    await timeout(1000);
+  });
 
   @action
   async buildSourceTtl(instanceUri) {

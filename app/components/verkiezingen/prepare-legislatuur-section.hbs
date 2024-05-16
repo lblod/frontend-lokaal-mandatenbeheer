@@ -14,9 +14,8 @@
       </div>
     </Group>
   </AuToolbar>
-  {{#if this.mirrorTable.isRunning}}
+  {{#if (or this.mirrorTable.isRunning this.onCreate.isRunning)}}
     {{! Show skeleton loader }}
-    <AuLoader />
   {{else}}
     <Verkiezingen::DraftMandatarisList
       @bestuursorgaan={{@bestuursorgaan}}
@@ -36,6 +35,8 @@
     <AuButton
       @skin="naked"
       @icon="add"
+      @loading={{this.onCreate.isRunning}}
+      @loadingMessage="Aan het toevoegen"
       {{on "click" this.createMandataris}}
     >Toevoegen</AuButton>
     {{#if (or (await this.isRMW) (await this.isLidVanVB))}}
@@ -43,7 +44,7 @@
         @skin="naked"
         @icon="synchronize"
         @loading={{this.mirrorTable.isRunning}}
-        @loadingMessage="Synchroniseren"
+        @loadingMessage="Aan het synchroniseren"
         {{on "click" (perform this.mirrorTable)}}
       >Sync</AuButton>
     {{/if}}
@@ -58,7 +59,7 @@
   >
     <div class="au-o-box">
       <Form::NewInstance
-        @onCreate={{this.onCreate}}
+        @onCreate={{perform this.onCreate}}
         @form={{@form}}
         @buildSourceTtl={{this.buildSourceTtl}}
         @buildMetaTtl={{this.buildMetaTtl}}
