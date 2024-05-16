@@ -35,7 +35,7 @@ export const BURGEMEESTER_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/4955bd72cd0e4eb895fdbfab08da0284';
 export const CBS_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000006';
-export const VB_BESTUURSORGAAN_URI =
+export const VAST_BUREAU_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000008';
 export const BCSD_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000009';

@@ -10,7 +10,9 @@ import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandata
 import {
   BURGEMEESTER_BESTUURSORGAAN_URI,
   RMW_BESTUURSORGAAN_URI,
-  VB_BESTUURSORGAAN_URI,
+  VAST_BUREAU_BESTUURSORGAAN_URI,
+  CBS_BESTUURSORGAAN_URI,
+  GEMEENTERAAD_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
 import {
   getDraftPublicationStatus,
@@ -48,7 +50,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   }
   get isLidVanVB() {
     return this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
-      VB_BESTUURSORGAAN_URI
+      VAST_BUREAU_BESTUURSORGAAN_URI
     );
   }
 
@@ -56,22 +58,33 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     const bestuursorganen = this.args.bestuursorganen;
     let syncId = null;
     if (await this.isRMW) {
-      syncId = RMW_BESTUURSORGAAN_URI;
+      syncId = GEMEENTERAAD_BESTUURSORGAAN_URI;
     }
     if (await this.isLidVanVB) {
-      syncId = VB_BESTUURSORGAAN_URI;
+      syncId = CBS_BESTUURSORGAAN_URI;
     }
 
-    const bestuursorgaan = bestuursorganen.find(
-      async (bestuursorgaan) =>
-        (await bestuursorgaan.classificatie.uri) == syncId
-    );
+    let bestuursorgaanToSyncFrom = null;
+    for (const bestuursorgaan of bestuursorganen) {
+      const classificatie = await (
+        await bestuursorgaan.isTijdsspecialisatieVan
+      ).classificatie;
+      if (classificatie.uri == syncId) {
+        bestuursorgaanToSyncFrom = bestuursorgaan;
+      }
+    }
 
-    if (!bestuursorgaan) {
+    if (!bestuursorgaanToSyncFrom) {
       throw `Could not sync`;
     }
-    const mandatarissenToSyncAdd =
-      await this.getBestuursorgaanMandatarissen(bestuursorgaan);
+    const mandatarissenToSync = await this.getBestuursorgaanMandatarissen(
+      bestuursorgaanToSyncFrom
+    );
+
+    if (mandatarissenToSync.length == 0) {
+      throw `No mandatarissen found to sync`;
+    }
+
     const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
       this.args.bestuursorgaan
     );
@@ -79,7 +92,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     for (const mandataris of currentMandatarissen) {
       mandataris.destroyRecord();
     }
-    for (const mandatarisToAdd of mandatarissenToSyncAdd) {
+    for (const mandatarisToAdd of mandatarissenToSync) {
       const mandaatOfMandataris = await mandatarisToAdd.bekleedt;
       const bestuursfunctie = await mandaatOfMandataris.bestuursfunctie;
 
