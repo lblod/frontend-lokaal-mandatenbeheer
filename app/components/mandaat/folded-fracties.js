@@ -13,6 +13,10 @@ export default class MandaatFoldedFractiesComponent extends Component {
     return this.args.persoon;
   }
 
+  get bestuursperiode() {
+    return this.args.bestuursperiode;
+  }
+
   constructor(...args) {
     super(...args);
     this.load();
@@ -32,6 +36,13 @@ export default class MandaatFoldedFractiesComponent extends Component {
       filter: {
         'is-bestuurlijke-alias-van': {
           ':id:': persoon.id,
+        },
+        bekleedt: {
+          'bevat-in': {
+            'heeft-bestuursperiode': {
+              ':id:': this.bestuursperiode.id,
+            },
+          },
         },
       },
       include: 'heeft-lidmaatschap.binnen-fractie',

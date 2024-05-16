@@ -27,7 +27,7 @@ export default class OrganenOrgaanRoute extends Route {
       'filter[heeft-bestuursorganen-in-tijd][is-tijdsspecialisatie-van][:id:]':
         bestuursorgaanId,
     });
-    let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
+    let selectedBestuursperiode = this.bestuursperioden.getRelevantPeriod(
       bestuursPeriods,
       params.bestuursperiode
     );
@@ -37,13 +37,14 @@ export default class OrganenOrgaanRoute extends Route {
       'bestuursorgaan',
       {
         'filter[is-tijdsspecialisatie-van][:id:]': bestuursorgaanId,
-        'filter[heeft-bestuursperiode][:id:]': selectedPeriod.id,
+        'filter[heeft-bestuursperiode][:id:]': selectedBestuursperiode.id,
       }
     );
 
     return RSVP.hash({
       bestuursorgaan,
       currentBestuursorgaan,
+      selectedBestuursperiode,
     });
   }
 }

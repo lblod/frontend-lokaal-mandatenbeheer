@@ -29,6 +29,7 @@ export default class OrganenMandatarissenRoute extends Route {
     return {
       mandatarissen: this.reSortMandatarissen(params, unsorted),
       bestuursorgaan: parentModel.bestuursorgaan,
+      selectedBestuursperiode: parentModel.selectedBestuursperiode,
     };
   }
 
