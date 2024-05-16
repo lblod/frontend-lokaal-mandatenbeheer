@@ -1,15 +1,16 @@
 <AuToolbar
   @size="large"
   @nowrap="true"
-  class="au-u-padding-bottom-none"
+  class="au-u-padding-bottom-none au-u-margin-bottom-none"
   as |Group|
 >
-  <Group>
+  <Group class="au-u-margin-bottom-none">
     <div class="au-o-flow">
-      <AuHeading @skin="2">Ambt burgemeester</AuHeading>
+      <AuHeading @skin="3">Ambt burgemeester</AuHeading>
     </div>
   </Group>
 </AuToolbar>
+
 <div class="au-o-box">
   {{#if this.errorMessage}}
     <AuAlert

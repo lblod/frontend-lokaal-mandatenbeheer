@@ -1,14 +1,17 @@
-import Controller from '@ember/controller';
+import Component from '@glimmer/component';
+
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
+import { BURGEMEESTER_BESTUURSORGAAN_URI } from 'frontend-lmb/utils/well-known-uris';
 
 const CREATE_MODE = 'create';
 
-export default class PrepareInstallatievergaderingController extends Controller {
+export default class PrepareLegislatuurSectionComponent extends Component {
+  @service toaster;
   @service store;
   @service router;
 
@@ -21,6 +24,12 @@ export default class PrepareInstallatievergaderingController extends Controller 
 
   get isCreating() {
     return this.editMode === CREATE_MODE;
+  }
+
+  get isBurgemeester() {
+    return this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
+      BURGEMEESTER_BESTUURSORGAAN_URI
+    );
   }
 
   @action
@@ -42,13 +51,6 @@ export default class PrepareInstallatievergaderingController extends Controller 
 
   @action
   buildMetaTtl() {
-    return getBestuursorganenMetaTtl([this.model.bestuursorgaanInTijd]);
-  }
-
-  @action
-  async selectStatus(status) {
-    const installatievergadering = this.model.installatievergadering;
-    installatievergadering.status = status;
-    await installatievergadering.save();
+    return getBestuursorganenMetaTtl([this.args.bestuursorgaan]);
   }
 }

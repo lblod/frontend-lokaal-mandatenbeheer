@@ -8,6 +8,8 @@ export const FRACTIETYPE_ONAFHANKELIJK =
   'http://data.vlaanderen.be/id/concept/Fractietype/Onafhankelijk';
 export const FRACTIETYPE_SAMENWERKINGSVERBAND =
   'http://data.vlaanderen.be/id/concept/Fractietype/Samenwerkingsverband';
+export const BESTUURSEENHEID_CLASSIFICATIECODE_GEMEENTE =
+  'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000001';
 export const BESTUURSEENHEID_CLASSIFICATIECODE_OCMW =
   'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000002';
 export const MANDATARIS_VERHINDERD_STATE =
@@ -22,8 +24,20 @@ export const MANDATARIS_DRAFT_PUBLICATION_STATE =
   'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/588ce330-4abb-4448-9776-a17d9305df07';
 export const BELEIDSDOMEIN_CODES_CONCEPT_SCHEME =
   'http://data.vlaanderen.be/id/conceptscheme/BeleidsdomeinCode';
-export const BESTUURSORGAAN_CLASSIFICATIE_CODE_BURGEMEESTER =
+
+export const GEMEENTERAAD_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000005';
+export const RMW_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000007';
+export const BURGEMEESTER_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/4955bd72cd0e4eb895fdbfab08da0284';
+export const CBS_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000006';
+export const VB_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000008';
+export const BCSD_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000009';
+
 export const MANDAAT_BURGEMEESTER_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000013';
 export const MANDAAT_DISTRICT_BURGEMEESTER_CODE =
