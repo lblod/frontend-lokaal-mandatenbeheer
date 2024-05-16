@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { toUserReadableListing } from 'frontend-lmb/utils/to-user-readable-listing';
 import moment from 'moment';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
@@ -55,7 +54,7 @@ export default class OrganenMandatarissenRoute extends Route {
 
     const getValue = (folded, key) => {
       if (key.indexOf('heeft-lidmaatschap.binnen-fractie.naam') >= 0) {
-        return folded.foldedFracties;
+        return folded.mandataris.get('heeftLidmaatschap.binnenFractie.naam');
       }
       if (key.indexOf('start') >= 0) {
         return (
@@ -103,39 +102,31 @@ export default class OrganenMandatarissenRoute extends Route {
       mandatarissen.map(async (mandataris) => {
         const personId = (await mandataris.isBestuurlijkeAliasVan).id;
         const mandaatId = (await mandataris.bekleedt).id;
-        const fractie = mandataris.get('heeftLidmaatschap.binnenFractie.naam');
         const key = `${personId}-${mandaatId}`;
         const existing = persoonMandaatData[key];
 
         if (existing) {
-          this.updateFoldedMandataris(mandataris, fractie, existing);
+          this.updateFoldedMandataris(mandataris, existing);
           return;
         }
-        const firstOccurrence = this.buildFoldedMandataris(mandataris, fractie);
-        persoonMandaatData[key] = firstOccurrence;
+        persoonMandaatData[key] = this.buildFoldedMandataris(mandataris);
       })
     );
     return Object.values(persoonMandaatData).map(
-      ({ foldedStart, foldedEnd, mandataris, fractie, foldedFracties }) => {
+      ({ foldedStart, foldedEnd, mandataris }) => {
         return {
           foldedStart,
           foldedEnd,
           mandataris,
-          foldedFracties: this.fractiesToString(fractie, foldedFracties),
         };
       }
     );
   }
 
-  updateFoldedMandataris(mandataris, fractie, foldedMandataris) {
+  updateFoldedMandataris(mandataris, foldedMandataris) {
     this.updateFoldedStart(mandataris, foldedMandataris);
     this.updateFoldedEnd(mandataris, foldedMandataris);
-    this.updateFoldedFracties(fractie, foldedMandataris);
-    this.updateFoldedMandatarisAndFractie(
-      mandataris,
-      fractie,
-      foldedMandataris
-    );
+    this.updateMandataris(mandataris, foldedMandataris);
   }
 
   updateFoldedStart(mandataris, foldedMandataris) {
@@ -160,42 +151,23 @@ export default class OrganenMandatarissenRoute extends Route {
     }
   }
 
-  updateFoldedFracties(fractie, foldedMandataris) {
-    if (fractie && !foldedMandataris.foldedFracties.includes(fractie)) {
-      foldedMandataris.foldedFracties.push(fractie);
-    }
-  }
-
-  updateFoldedMandatarisAndFractie(mandataris, fractie, foldedMandataris) {
-    // keep the one with the latest end date (if it is null, we assume this is the latest one)
+  updateMandataris(mandataris, foldedMandataris) {
+    // Keep the one with the latest end date. If the end date is null,
+    // we assume this is the latest one.
     if (
       moment(mandataris.einde).isSame(foldedMandataris.foldedEnd) ||
       !mandataris.einde
     ) {
       foldedMandataris.mandataris = mandataris;
-      foldedMandataris.fractie = fractie;
     }
   }
 
-  buildFoldedMandataris(mandataris, fractie) {
-    const fracties = fractie ? [fractie] : [];
-
+  buildFoldedMandataris(mandataris) {
     return {
       foldedStart: mandataris.start,
       foldedEnd: mandataris.einde,
       mandataris,
-      fractie,
-      foldedFracties: fracties,
     };
-  }
-
-  fractiesToString(currentFractie, allFracties) {
-    const sortedFracties = allFracties
-      .filter((f) => f != currentFractie && f) // TODO the "&& f" is confusing
-      .toSorted((a, b) => a.localeCompare(b));
-    return sortedFracties.length
-      ? `${currentFractie} (${toUserReadableListing(sortedFracties)})`
-      : currentFractie;
   }
 
   getOptions(params, bestuursOrgaan) {
