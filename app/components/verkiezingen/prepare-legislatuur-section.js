@@ -12,6 +12,10 @@ import {
   RMW_BESTUURSORGAAN_URI,
   VB_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
+import {
+  getDraftPublicationStatus,
+  getEffectiefStatus,
+} from 'frontend-lmb/utils/get-mandataris-status';
 
 const CREATE_MODE = 'create';
 
@@ -66,7 +70,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     if (!bestuursorgaan) {
       throw `Could not sync`;
     }
-
     const mandatarissenToSyncAdd =
       await this.getBestuursorgaanMandatarissen(bestuursorgaan);
     const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
@@ -77,9 +80,47 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       mandataris.destroyRecord();
     }
 
-    // for (const mandatarisToAdd of mandatarissenToSyncAdd) {
-    // }
+    const mandatenOpBestuursOrgaan = await this.args.bestuursorgaan.bevat;
+
+    for (const mandatarisToAdd of mandatarissenToSyncAdd) {
+      const mandaatOfMandataris = await mandatarisToAdd.bekleedt;
+      const bestuursfunctie = await mandaatOfMandataris.bestuursfunctie;
+      let mandaat = mandatenOpBestuursOrgaan.find(
+        async (mandaat) =>
+          (await mandaat.bestuursfunctie).id == bestuursfunctie.id
+      );
+
+      if (!mandaat) {
+        mandaat = this.store.createRecord('mandaat', {
+          bestuursfunctie: bestuursfunctie,
+          bevatIn: [this.args.bestuursorgaan],
+        });
+        await mandaat.save();
+      }
+      const newMandataris = await this.createMandatarisFromMandataris(
+        mandatarisToAdd,
+        mandaat
+      );
+
+      const mandatarissen = await mandaat.bekleedDoor;
+      mandatarissen.pushObject(newMandataris);
+      await mandatarissen.save();
+    }
   });
+
+  async createMandatarisFromMandataris(mandataris, mandaat) {
+    return this.store.createRecord('mandataris', {
+      rangorde: mandataris.rangorde,
+      start: mandataris.start,
+      einde: mandataris.einde,
+      bekleedt: mandaat,
+      isBestuurlijkeAliasVan: await mandataris.isBestuurlijkeAliasVan,
+      beleidsdomein: await mandataris.beleidsdomein,
+      status: await getEffectiefStatus(this.store),
+      publicationStatus: await getDraftPublicationStatus(this.store),
+      heeftLidmaatschap: await mandataris.heeftLidmaatschap,
+    });
+  }
 
   async getBestuursorgaanMandatarissen(bestuursorgaan) {
     const queryParams = {
