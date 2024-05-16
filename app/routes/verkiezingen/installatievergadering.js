@@ -98,13 +98,15 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       })
     );
 
-    let sortedBestuursorganenInTijd = new Array(
-      allBestuursOrganenInTijd.length
-    );
-    await bestuursorgaanUris.forEach(function (uri, i) {
-      const index = bestuursorgaanOrder.indexOf(uri);
-      sortedBestuursorganenInTijd[index] = allBestuursOrganenInTijd[i];
+    let sortedBestuursorganenInTijd = [];
+    bestuursorgaanOrder.forEach((uri) => {
+      allBestuursOrganenInTijd.forEach((orgaan, index) => {
+        if (bestuursorgaanUris[index] === uri) {
+          sortedBestuursorganenInTijd.push(orgaan);
+        }
+      });
     });
+
     return sortedBestuursorganenInTijd;
   }
 
