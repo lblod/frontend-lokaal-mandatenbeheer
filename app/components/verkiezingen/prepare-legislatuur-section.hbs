@@ -1,7 +1,9 @@
 {{#if (await this.isBurgemeester)}}
   <Mandaat::BurgemeesterSelector @bestuursorgaanInTijd={{@bestuursorgaan}} />
 {{else}}
+
   <AuToolbar
+    {{did-insert (perform this.setupTable)}}
     @size="large"
     @nowrap="true"
     class="au-u-padding-bottom-none au-u-margin-bottom-none"
@@ -14,7 +16,13 @@
       </div>
     </Group>
   </AuToolbar>
-  {{#if (or this.mirrorTable.isRunning this.onCreate.isRunning)}}
+  {{#if
+    (or
+      this.mirrorTable.isRunning
+      this.onCreate.isRunning
+      this.setupTable.isRunning
+    )
+  }}
     {{! Show skeleton loader }}
   {{else}}
     <Verkiezingen::DraftMandatarisList
@@ -25,8 +33,8 @@
       @title=""
       @showFractie={{true}}
       @showFunctie={{true}}
-      @showRangorde={{true}}
-      @showBevoegdheid={{true}}
+      @showRangorde={{this.showRangorde}}
+      @showBevoegdheid={{this.showBeleidsDomein}}
       @showStartEndDate={{true}}
     />
   {{/if}}

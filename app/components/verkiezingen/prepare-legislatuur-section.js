@@ -35,6 +35,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service router;
 
   @tracked editMode = null;
+  @tracked showRangorde;
+  @tracked showBeleidsDomein;
 
   @action
   createMandataris() {
@@ -61,6 +63,18 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       VAST_BUREAU_BESTUURSORGAAN_URI
     );
   }
+
+  setupTable = restartableTask(async () => {
+    const isCBS = await this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
+      CBS_BESTUURSORGAAN_URI
+    );
+    const isGemeenteraad =
+      await this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
+        GEMEENTERAAD_BESTUURSORGAAN_URI
+      );
+    this.showRangorde = isGemeenteraad || (await this.isRMW) || isCBS;
+    this.showBeleidsDomein = isCBS;
+  });
 
   mirrorTable = restartableTask(async () => {
     const bestuursorganen = this.args.bestuursorganen;
