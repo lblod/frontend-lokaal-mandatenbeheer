@@ -33,6 +33,7 @@ export default class OrganenMandatarissenRoute extends Route {
     return {
       mandatarissen: this.reSortMandatarissen(params, unsorted),
       bestuursorgaan: parentModel.bestuursorgaan,
+      selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
       currentBestuursorgaan: currentBestuursorgaan,
     };
@@ -53,7 +54,7 @@ export default class OrganenMandatarissenRoute extends Route {
 
     const getValue = (folded, key) => {
       if (key.indexOf('heeft-lidmaatschap.binnen-fractie.naam') >= 0) {
-        return folded.foldedFracties;
+        return folded.mandataris.get('heeftLidmaatschap.binnenFractie.naam');
       }
       if (key.indexOf('start') >= 0) {
         return (
@@ -95,80 +96,78 @@ export default class OrganenMandatarissenRoute extends Route {
   }
 
   async foldMandatarissen(mandatarissen) {
-    const personMandaatData = {};
-    const folded = [];
+    // 'persoonId-mandaatId' to foldedMandataris
+    const persoonMandaatData = {};
     await Promise.all(
       mandatarissen.map(async (mandataris) => {
         const personId = (await mandataris.isBestuurlijkeAliasVan).id;
         const mandaatId = (await mandataris.bekleedt).id;
         const key = `${personId}-${mandaatId}`;
-        const existing = personMandaatData[key];
+        const existing = persoonMandaatData[key];
+
         if (existing) {
-          if (!mandataris.start || !existing.foldedStart) {
-            existing.foldedStart = null;
-          } else {
-            existing.foldedStart = moment.min(
-              moment(existing.foldedStart),
-              moment(mandataris.start)
-            );
-          }
-          if (!mandataris.einde || !existing.foldedEnd) {
-            existing.foldedEnd = null;
-          } else {
-            existing.foldedEnd = moment.max(
-              moment(existing.foldedEnd),
-              moment(mandataris.einde)
-            );
-          }
-          const fractie = mandataris.get(
-            'heeftLidmaatschap.binnenFractie.naam'
-          );
-          if (fractie && !existing.foldedFracties.includes(fractie)) {
-            existing.foldedFracties.push(fractie);
-          }
-          if (
-            moment(mandataris.einde).isSame(existing.foldedEnd) ||
-            !mandataris.einde
-          ) {
-            // keep the one with the oldest end date (if it is null, we assume this is the oldest as well)
-            existing.mandataris = mandataris;
-            existing.fractie = fractie;
-          }
-        } else {
-          const fractie = mandataris.get(
-            'heeftLidmaatschap.binnenFractie.naam'
-          );
-          let fracties = [];
-          if (fractie) {
-            fracties = [fractie];
-          }
-          const firstOccurrence = {
-            foldedStart: mandataris.start,
-            foldedEnd: mandataris.einde,
-            mandataris,
-            foldedFracties: fracties,
-            fractie: fractie,
-          };
-          personMandaatData[key] = firstOccurrence;
-          folded.push(firstOccurrence);
+          this.updateFoldedMandataris(mandataris, existing);
+          return;
         }
+        persoonMandaatData[key] = this.buildFoldedMandataris(mandataris);
       })
     );
-    return folded.map((entry) => {
-      const fracties = entry.foldedFracties;
-      fracties.sort((a, b) => a.localeCompare(b));
-      const currentFractie = entry.fractie;
-      const otherFracties = fracties.filter((f) => f != entry.fractie && f);
-      const fractieText = otherFracties.length
-        ? `${currentFractie} (${otherFracties.join(', ')})`
-        : currentFractie;
-      return {
-        mandataris: entry.mandataris,
-        foldedStart: entry.foldedStart,
-        foldedEnd: entry.foldedEnd,
-        foldedFracties: fractieText,
-      };
-    });
+    return Object.values(persoonMandaatData).map(
+      ({ foldedStart, foldedEnd, mandataris }) => {
+        return {
+          foldedStart,
+          foldedEnd,
+          mandataris,
+        };
+      }
+    );
+  }
+
+  updateFoldedMandataris(mandataris, foldedMandataris) {
+    this.updateFoldedStart(mandataris, foldedMandataris);
+    this.updateFoldedEnd(mandataris, foldedMandataris);
+    this.updateMandataris(mandataris, foldedMandataris);
+  }
+
+  updateFoldedStart(mandataris, foldedMandataris) {
+    if (!mandataris.start || !foldedMandataris.foldedStart) {
+      foldedMandataris.foldedStart = null;
+    } else {
+      foldedMandataris.foldedStart = moment.min(
+        moment(foldedMandataris.foldedStart),
+        moment(mandataris.start)
+      );
+    }
+  }
+
+  updateFoldedEnd(mandataris, foldedMandataris) {
+    if (!mandataris.einde || !foldedMandataris.foldedEnd) {
+      foldedMandataris.foldedEnd = null;
+    } else {
+      foldedMandataris.foldedEnd = moment.max(
+        moment(foldedMandataris.foldedEnd),
+        moment(mandataris.einde)
+      );
+    }
+  }
+
+  updateMandataris(mandataris, foldedMandataris) {
+    // Keep the one with the latest end date. If the end date is null,
+    // we assume this is the latest one.
+    if (
+      moment(mandataris.einde).isSame(foldedMandataris.foldedEnd) ||
+      !mandataris.einde
+    ) {
+      foldedMandataris.mandataris = mandataris;
+    }
+  }
+
+  buildFoldedMandataris(mandataris) {
+    return {
+      foldedStart: mandataris.start,
+      foldedEnd: mandataris.einde,
+      mandataris,
+    };
   }
 
   getOptions(params, bestuursOrgaan) {

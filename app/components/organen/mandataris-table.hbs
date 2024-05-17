@@ -56,7 +56,10 @@
           {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
         </LinkTo></td>
       <td>
-        {{row.foldedFracties}}
+        <Mandaat::FoldedFracties
+          @persoon={{row.mandataris.isBestuurlijkeAliasVan}}
+          @bestuursperiode={{@bestuursperiode}}
+        />
       </td>
       <td><LinkTo
           @route={{@mandaatRoute}}

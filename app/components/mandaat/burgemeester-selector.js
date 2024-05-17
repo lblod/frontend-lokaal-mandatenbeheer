@@ -11,6 +11,7 @@ import {
   BESTUURSFUNCTIE_BURGEMEESTER_ID,
   BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
 } from 'frontend-lmb/utils/well-known-ids';
+import { toUserReadableListing } from 'frontend-lmb/utils/to-user-readable-listing';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
@@ -75,13 +76,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     });
   }
 
-  toUserReadableListing(array, itemToString) {
-    return `${array
-      .slice(0, -1)
-      .map((p) => itemToString(p))
-      .join(', ')} en ${itemToString(array.at(-1))}`;
-  }
-
   async setMultipleBurgemeestersError(burgemeesters) {
     const personen = await Promise.all(
       burgemeesters.map((b) => b.isBestuurlijkeAliasVan)
@@ -91,7 +85,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     this.errorMessages = [
       ...this.errorMessages,
       `Er zijn meerdere personen gevonden met het mandaat ${mandaatName}. Enkel de eerste zal aangepast worden:
-      ${this.toUserReadableListing(personen, (p) => `${p.gebruikteVoornaam} ${p.achternaam}`)}.`,
+      ${toUserReadableListing(personen, (p) => `${p.gebruikteVoornaam} ${p.achternaam}`)}.`,
     ];
   }
 
