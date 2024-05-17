@@ -1,14 +1,20 @@
 import Component from '@glimmer/component';
 
 export default class MandatarissenPersoonTable extends Component {
-  async mandaten(persoon) {
+  async fractiesFor(persoon) {
     const mandatarissen = await persoon.isAangesteldAls;
-    const mandaten = await Promise.all(
+    const fractieLabels = await Promise.all(
       mandatarissen.map(async (mandataris) => {
-        return (await (await mandataris.bekleedt).bestuursfunctie).label;
+        if (!mandataris.isActive) {
+          return null;
+        }
+
+        const isLidVan = await mandataris.heeftLidmaatschap;
+        const binnenFractie = await isLidVan.binnenFractie;
+        return binnenFractie ? binnenFractie.naam : null;
       })
     );
-    const displayMandaten = [...new Set(mandaten)].join(', ');
-    return displayMandaten;
+
+    return [...new Set(fractieLabels.filter((label) => label))].join(', ');
   }
 }

@@ -18,21 +18,27 @@
         @currentSorting={{@sort}}
         @label="Familienaam"
       />
+      <th>Fracties</th>
       <th>Mandaten</th>
     </c.header>
 
-    <c.body as |row|>
+    <c.body as |persoon|>
       <td>
-        <LinkTo @route={{@detailRoute}} @model={{row.id}} class="au-c-link">
-          {{row.gebruikteVoornaam}}
+        <LinkTo @route={{@detailRoute}} @model={{persoon.id}} class="au-c-link">
+          {{persoon.gebruikteVoornaam}}
         </LinkTo>
       </td>
       <td>
-        <LinkTo @route={{@detailRoute}} @model={{row.id}} class="au-c-link">
-          {{row.achternaam}}
+        <LinkTo @route={{@detailRoute}} @model={{persoon.id}} class="au-c-link">
+          {{persoon.achternaam}}
         </LinkTo>
       </td>
-      <td>{{await (this.mandaten row)}}</td>
+      <td>
+        {{await (this.fractiesFor persoon)}}
+      </td>
+      <td>
+        <Mandatarissen::MandatenAsLinks @persoon={{persoon}} />
+      </td>
     </c.body>
   </t.content>
 </AuDataTable>

@@ -1,4 +1,9 @@
 {{page-title "Voorbereiding legislatuur"}}
+{{breadcrumb
+  "Voorbereiding legislatuur "
+  this.model.selectedPeriod.label
+  route="verkiezingen.installatievergadering"
+}}
 
 {{#if (or (not @model.isRelevant) (not @model.installatievergadering))}}
   <div class="au-o-box">
@@ -55,6 +60,7 @@
     {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
       <Verkiezingen::PrepareLegislatuurSection
         @bestuursorgaan={{bestuursorgaan}}
+        @bestuursorganen={{@model.bestuursorganenInTijd}}
         @sort={{this.sort}}
         @form={{@model.mandatarisNewForm}}
       />

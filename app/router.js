@@ -39,8 +39,11 @@ Router.map(function () {
 
   this.route('mandatarissen', function () {
     this.route('search');
-    this.route('persoon', { path: '/:id/persoon' });
-    this.route('mandataris', { path: '/:id/mandataris' });
+    this.route('mandataris', { path: '/:mandataris_id/mandataris' });
+    this.route('persoon', { path: '/:id/persoon' }, function () {
+      this.route('mandaten');
+      this.route('mandataris', { path: '/:mandataris_id/mandataris' });
+    });
   });
 
   this.route('verkiezingen', function () {

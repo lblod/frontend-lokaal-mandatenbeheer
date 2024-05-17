@@ -1,3 +1,8 @@
+{{breadcrumb
+  "Bewerk functionaris"
+  route="leidinggevenden.bestuursfunctie.functionarissen.edit"
+}}
+
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
     <AuHeading @skin="2">Bewerk aanstellingsperiode voor
@@ -11,7 +16,7 @@
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
     <Person::Card @persoon={{@model.functionaris.isBestuurlijkeAliasVan}} />
-
+    <AuHr />
     <div class="au-u-margin-top">
       <Form::Instance
         @instanceId={{@model.instanceId}}

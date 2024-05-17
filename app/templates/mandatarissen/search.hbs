@@ -1,37 +1,88 @@
-<div class="au-c-body-container">
-  <AuToolbar
-    @size="large"
-    @nowrap="true"
-    class="au-u-padding-bottom-none"
-    as |Group|
-  >
-    <Group>
-      <div class="au-o-flow">
-        <AuHeading @skin="2">Mandatarissen</AuHeading>
+<AuMainContainer as |main|>
+  <main.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__header au-u-margin-top-small">
+        <AuHeading @level="3" @skin="3">Filters</AuHeading>
       </div>
-    </Group>
-  </AuToolbar>
-
-  <div class="au-o-box">
-    <AuInput
-      value={{this.searchData}}
-      @icon="search"
-      @iconAlignment="left"
-      @width="block"
-      placeholder="Zoek mandataris"
-      {{on "input" (perform this.search value="target.value")}}
-    />
-  </div>
-
-  <div class="au-c-body-container au-c-body-container--scroll">
-    <div class="au-o-box">
-      <Mandatarissen::PersoonTable
-        @content={{@model.personen}}
-        @sort={{this.sort}}
-        @page={{this.page}}
-        @size={{this.size}}
-        @detailRoute="mandatarissen.persoon"
-      />
+      <div class="au-c-sidebar__content au-o-box">
+        <form class="au-o-grid au-o-grid--small">
+          <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
+            <div class="au-c-label">Bestuursperiode</div>
+            <Mandatenbeheer::BestuursperiodenSelector
+              @options={{this.model.bestuursPeriods}}
+              @selected={{this.model.selectedPeriod}}
+              @onSelect={{this.selectPeriod}}
+            />
+          </div>
+          <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
+            <div class="au-c-label">Persoon</div>
+            <AuInput
+              value={{this.searchData}}
+              @width="block"
+              placeholder="Zoek een persoon"
+              {{on "input" (perform this.search value="target.value")}}
+            />
+          </div>
+          <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
+            <div class="au-c-label">Mandaat</div>
+            <PowerSelectMultiple
+              @allowClear={{true}}
+              @placeholder="Kies een of meerdere mandaten"
+              @selected={{this.selectedBestuursfuncties}}
+              @options={{this.model.bestuursfuncties}}
+              @onChange={{this.updateFilterWithBestuursfunctie}}
+              @noMatchesMessage="Geen resultaten"
+              as |functie|
+            >
+              {{functie.label}}
+            </PowerSelectMultiple>
+          </div>
+          <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
+            <div class="au-c-label">Fractie</div>
+            <PowerSelectMultiple
+              @allowClear={{true}}
+              @placeholder="Kies een of meerdere fracties"
+              @selected={{this.selectedFracties}}
+              @options={{this.model.fracties}}
+              @onChange={{this.updateFilterWithFractie}}
+              @noMatchesMessage="Geen resultaten"
+              as |fractie|
+            >
+              {{fractie.naam}}
+            </PowerSelectMultiple>
+          </div>
+          <div class="au-o-grid__item">
+            <AuButton
+              @skin="naked"
+              @icon="x"
+              @iconAlignment="left"
+              {{on "click" this.clearFilters}}
+            >
+              Herstel alle filters
+            </AuButton>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
-</div>
+  </main.sidebar>
+  <main.content>
+    <AuBodyContainer id="content">
+      <AuToolbar @size="large" @nowrap="true" as |Group|>
+        <Group>
+          <div class="au-o-flow">
+            <AuHeading @skin="2">Mandatarissen</AuHeading>
+          </div>
+        </Group>
+      </AuToolbar>
+      <div class="au-c-body-container au-c-body-container--scroll">
+        <Mandatarissen::PersoonTable
+          @content={{@model.personen}}
+          @sort={{this.sort}}
+          @page={{this.page}}
+          @size={{this.size}}
+          @detailRoute="mandatarissen.persoon"
+        />
+      </div>
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>

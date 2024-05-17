@@ -10,7 +10,7 @@ import {
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
   RMW_BESTUURSORGAAN_URI,
-  VB_BESTUURSORGAAN_URI,
+  VAST_BUREAU_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class PrepareInstallatievergaderingRoute extends Route {
@@ -88,7 +88,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       RMW_BESTUURSORGAAN_URI,
       BURGEMEESTER_BESTUURSORGAAN_URI,
       CBS_BESTUURSORGAAN_URI,
-      VB_BESTUURSORGAAN_URI,
+      VAST_BUREAU_BESTUURSORGAAN_URI,
       BCSD_BESTUURSORGAAN_URI,
     ];
 

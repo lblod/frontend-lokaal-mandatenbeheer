@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
-export default class MandatarissenMandatarisController extends Controller {
+export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
 
   get bestuursorganenTitle() {

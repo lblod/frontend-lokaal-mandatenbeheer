@@ -65,14 +65,13 @@
 .au-c-description-label {
   @include au-font-size($au-h6);
   font-family: $au-font;
-  font-weight: $au-regular;
+  font-weight: $au-medium;
   color: $au-gray-600;
 }
 
 .au-c-description-value {
-  @include au-font-size($au-h5);
+  @include au-font-size($au-h6);
   font-family: $au-font;
-  font-weight: $au-medium;
   color: $au-gray-800;
 }
 
@@ -193,7 +192,8 @@
   z-index: 10;
 }
 
-.no-fractie-div, .clickable-cell {
+.no-fractie-div,
+.clickable-cell {
   padding: 0.6rem;
   font-size: var(--au-h6);
 }
@@ -214,7 +214,7 @@
   text-decoration: line-through;
 }
 
-.clickable-cell.selected.disabled{
+.clickable-cell.selected.disabled {
   cursor: pointer;
   background-color: var(--au-blue-300);
   text-decoration: none;

@@ -43,4 +43,8 @@ export default class PersoonModel extends Model {
     inverse: 'isBestuurlijkeAliasVan',
   })
   isAangesteldAls;
+
+  get naam() {
+    return `${this.gebruikteVoornaam} ${this.achternaam}`;
+  }
 }
