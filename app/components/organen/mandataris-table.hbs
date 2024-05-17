@@ -60,7 +60,10 @@
       </td>
       <td><LinkTo
           @route={{@mandaatRoute}}
-          @model={{row.mandataris.id}}
+          @models={{array
+            row.mandataris.isBestuurlijkeAliasVan.id
+            row.mandataris.id
+          }}
           class="au-c-link"
         >
           {{row.mandataris.bekleedt.bestuursfunctie.label}}
