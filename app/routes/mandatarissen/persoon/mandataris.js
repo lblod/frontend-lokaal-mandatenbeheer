@@ -27,6 +27,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     );
 
     const bestuursorganen = await (await mandataris.bekleedt).get('bevatIn');
+    const selectedBestuursperiode =
+      await bestuursorganen.firstObject.heeftBestuursperiode;
 
     return RSVP.hash({
       mandataris,
@@ -35,6 +37,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       mandatarisEditForm,
       mandatarisExtraInfoForm,
       bestuursorganen,
+      selectedBestuursperiode,
     });
   }
 
