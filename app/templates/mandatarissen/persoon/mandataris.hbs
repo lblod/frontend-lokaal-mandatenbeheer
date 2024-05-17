@@ -19,8 +19,12 @@
   <AuButtonGroup class="au-u-flex au-u-flex--end au-u-flex-self-start">
     <AuButton
       @disabled={{not this.model.mandataris.isActive}}
-      {{on "click" (fn (mut this.isChangingCurrentSituation) true)}}
-    >Wijzig huidige situatie</AuButton>
+      {{on "click" (fn (mut this.isChanging) true)}}
+    >Wijzig huidig mandaat</AuButton>
+    <AuButton
+      @skin="secondary"
+      {{on "click" (fn (mut this.isCorrecting) true)}}
+    >Corrigeer fouten</AuButton>
   </AuButtonGroup>
 </div>
 
@@ -71,7 +75,7 @@
   @title={{(concat
     "Verander Status " this.model.mandataris.bekleedt.bestuursfunctie.label
   )}}
-  @modalOpen={{this.isChangingCurrentSituation}}
+  @modalOpen={{this.isChanging}}
   @closable={{true}}
   @closeModal={{this.closeModals}}
 >
@@ -81,4 +85,23 @@
     @onStateChanged={{this.onUpdateState}}
     @mandataris={{this.model.mandataris}}
   />
+</AuModal>
+
+<AuModal
+  @title={{(concat
+    "Corrigeer fouten " this.model.mandataris.bekleedt.bestuursfunctie.label
+  )}}
+  @modalOpen={{this.isCorrecting}}
+  @closable={{true}}
+  @closeModal={{this.closeModals}}
+>
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{this.model.mandataris.id}}
+      @form={{this.model.mandatarisEditForm}}
+      @onSave={{this.onSave}}
+      @onCancel={{this.closeModals}}
+      @buildMetaTtl={{this.buildMetaTtl}}
+    />
+  </div>
 </AuModal>

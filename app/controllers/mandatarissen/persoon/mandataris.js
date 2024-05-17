@@ -1,12 +1,19 @@
 import Controller from '@ember/controller';
+
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
+import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
+
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
+  @service store;
 
-  @tracked isChangingCurrentSituation;
+  @tracked isChanging;
+  @tracked isCorrecting;
 
   get bestuursorganenTitle() {
     return this.model.bestuursorganen
@@ -25,7 +32,8 @@ export default class MandatarissenPersoonMandatarisController extends Controller
 
   @action
   closeModals() {
-    this.isChangingCurrentSituation = false;
+    this.isChanging = false;
+    this.isCorrecting = false;
   }
 
   @action
@@ -37,5 +45,20 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     ) {
       this.args.onMandatarisChanged(newMandataris);
     }
+  }
+
+  @action
+  async onSave({ instanceTtl }) {
+    this.editMode = null;
+    const store = new ForkingStore();
+    store.parse(instanceTtl, SOURCE_GRAPH, 'text/turtle');
+    const mandatarisUri = this.model.mandataris.uri;
+
+    await syncMandatarisMembership(mandatarisUri, this.store, {
+      store,
+      sourceGraph: SOURCE_GRAPH,
+    });
+
+    setTimeout(() => this.router.refresh(), 1000);
   }
 }
