@@ -49,18 +49,19 @@ export default class MandaatFoldedFractiesComponent extends Component {
     });
   }
 
+  // Using EmberData get returns undefined even if the relation is loaded
+  async fractieOrNull(mandataris) {
+    const lidmaatschap = await mandataris.heeftLidmaatschap;
+    return lidmaatschap ? (await lidmaatschap.binnenFractie).naam : null;
+  }
+
   async getFoldedFracties(mandatarissen) {
     let latestMandataris = null;
     const allFracties = new Set();
 
     await Promise.all(
       mandatarissen.map(async (mandataris) => {
-        // Using EmberData get returns undefined even if the relation is loaded
-        const fractie = (
-          await (
-            await mandataris.heeftLidmaatschap
-          ).binnenFractie
-        ).naam;
+        const fractie = await this.fractieOrNull(mandataris);
         allFracties.add(fractie);
 
         if (
@@ -73,9 +74,8 @@ export default class MandaatFoldedFractiesComponent extends Component {
       })
     );
 
-    const currentFractie = latestMandataris.get(
-      'heeftLidmaatschap.binnenFractie.naam'
-    );
+    const fractieOrNull = await this.fractieOrNull(latestMandataris);
+    const currentFractie = fractieOrNull ? fractieOrNull : 'Onafhankelijk';
 
     return { currentFractie, allFracties: Array.from(allFracties) };
   }
