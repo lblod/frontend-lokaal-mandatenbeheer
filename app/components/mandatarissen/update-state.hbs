@@ -71,20 +71,6 @@
         />
       </div>
     {{/if}}
-    {{#if
-      (or @mandataris.bekleedt.isBurgemeester @mandataris.bekleedt.isSchepen)
-    }}
-      <div>
-        <AuLabel>
-          Beleidsdomeinen
-        </AuLabel>
-        <Mandatarissen::BeleidsdomeinSelectorWithCreate
-          @beleidsdomeinen={{this.selectedBeleidsdomeinen}}
-          @onSelect={{this.updateBeleidsdomeinen}}
-        />
-        <AuHelpText>Enkel voor burgemeester en schepenen</AuHelpText>
-      </div>
-    {{/if}}
     <div>
       <AuLabel>
         Fractie
