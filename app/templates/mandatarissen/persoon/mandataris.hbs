@@ -6,14 +6,19 @@
 
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
-    <AuHeading @skin="2">Mandaat
-      <AuLink
-        @route="mandatarissen.persoon"
-        @model={{this.persoon.id}}
-      >{{this.persoon.gebruikteVoornaam}}
-        {{this.persoon.achternaam}}</AuLink>
-      <br />
-      {{this.bestuursorganenTitle}}
+    <AuHeading @skin="2">
+      <p class="au-u-h1">
+        {{this.bestuursorganenTitle}}
+      </p>
+      <AuLink @route="mandatarissen.persoon" @model={{this.persoon.id}}><p
+          class="au-u-h3"
+        >{{this.persoon.gebruikteVoornaam}}
+          {{this.persoon.achternaam}}</p></AuLink>
+
+      <AuButton
+        @disabled={{not this.model.mandataris.isActive}}
+        {{on "click" (fn (mut this.isChangingCurrentSituation) true)}}
+      >Wijzig huidige situatie</AuButton>
     </AuHeading>
   </Group>
 </AuToolbar>
@@ -60,3 +65,19 @@
     </ul>
   </div>
 </div>
+
+<AuModal
+  @title={{(concat
+    "Verander Status " this.model.mandataris.bekleedt.bestuursfunctie.label
+  )}}
+  @modalOpen={{this.isChangingCurrentSituation}}
+  @closable={{true}}
+  @closeModal={{this.closeModals}}
+>
+  <Mandatarissen::UpdateState
+    @noTitle={{true}}
+    @onCancel={{this.closeModals}}
+    @onStateChanged={{this.onUpdateState}}
+    @mandataris={{this.model.mandataris}}
+  />
+</AuModal>
