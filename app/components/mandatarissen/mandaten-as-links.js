@@ -19,8 +19,8 @@ export default class MandatarissenMandatenAsLinks extends Component {
 
       this.mandatenAsLinks.pushObject({
         label: bestuursfunctie.label,
-        route: `mandatarissen.mandataris`,
-        model: mandataris.id,
+        route: `mandatarissen.persoon.mandataris`,
+        model: [this.args.persoon.id, mandataris.id],
         isLast:
           activeMandatarissen.indexOf(mandataris) ==
           activeMandatarissen.length - 1,
