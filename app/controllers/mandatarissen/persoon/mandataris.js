@@ -13,10 +13,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
 
   @action
   onMandatarisChanged(newMandataris) {
-    this.router.transitionTo(
-      'mandatarissen.persoon.mandataris',
-      newMandataris.id
-    );
+    this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
   }
 
   get persoon() {
