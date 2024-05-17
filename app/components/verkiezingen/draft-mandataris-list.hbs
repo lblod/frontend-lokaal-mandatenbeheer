@@ -91,10 +91,12 @@
           {{/if}}
           {{#if @showRangorde}}
             <td>
-              <Verkiezingen::RangordeInput
-                @mandataris={{row}}
-                @mandatarissen={{this.mandatarissen}}
-              />
+              {{#if row.bekleedt.isSchepen}}
+                <Verkiezingen::RangordeInput
+                  @mandataris={{row}}
+                  @mandatarissen={{this.mandatarissen}}
+                />
+              {{/if}}
             </td>
           {{/if}}
           {{#if @showBevoegdheid}}
