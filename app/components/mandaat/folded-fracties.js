@@ -55,7 +55,12 @@ export default class MandaatFoldedFractiesComponent extends Component {
 
     await Promise.all(
       mandatarissen.map(async (mandataris) => {
-        const fractie = mandataris.get('heeftLidmaatschap.binnenFractie.naam');
+        // Using EmberData get returns undefined even if the relation is loaded
+        const fractie = (
+          await (
+            await mandataris.heeftLidmaatschap
+          ).binnenFractie
+        ).naam;
         allFracties.add(fractie);
 
         if (
@@ -77,7 +82,8 @@ export default class MandaatFoldedFractiesComponent extends Component {
 
   fractiesToString(currentFractie, allFracties) {
     const otherFracties = allFracties
-      .filter((f) => f != currentFractie && f) // TODO the "!=" and "&& f" are confusing
+      .filter(Boolean)
+      .filter((fractie) => fractie !== currentFractie)
       .toSorted((a, b) => a.localeCompare(b));
     return otherFracties.length
       ? `${currentFractie} (${toUserReadableListing(otherFracties)})`
