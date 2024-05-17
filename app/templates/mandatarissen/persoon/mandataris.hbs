@@ -4,8 +4,8 @@
   model=this.model.mandataris.id
 }}
 
-<div class="au-u-flex au-u-flex--row au-u-flex--between au-o-box">
-  <div>
+<div class="au-o-grid au-u-padding">
+  <div class="au-o-grid__item au-u-1-2">
     <p class="au-u-h1">
       {{this.bestuursorganenTitle}}
     </p>
@@ -16,16 +16,29 @@
       </p>
     </AuLink>
   </div>
-  <AuButtonGroup class="au-u-flex au-u-flex--end au-u-flex-self-start">
-    <AuButton
-      @disabled={{not this.model.mandataris.isActive}}
-      {{on "click" (fn (mut this.isChanging) true)}}
-    >Wijzig huidig mandaat</AuButton>
-    <AuButton
-      @skin="secondary"
-      {{on "click" (fn (mut this.isCorrecting) true)}}
-    >Corrigeer fouten</AuButton>
-  </AuButtonGroup>
+  <div class="au-o-grid__item au-u-1-2 au-u-text-left">
+    <div class="au-u-flex au-u-flex--end au-u-margin-bottom">
+      <AuButton
+        class="au-u-margin-right-small"
+        @disabled={{not this.model.mandataris.isActive}}
+        {{on "click" (fn (mut this.isChanging) true)}}
+      >Wijzig huidig mandaat</AuButton>
+      <AuButton
+        @skin="secondary"
+        {{on "click" (fn (mut this.isCorrecting) true)}}
+      >Corrigeer fouten</AuButton>
+    </div>
+    <AuAlert @skin="info" @icon="info-circle">
+      Om het mandaat te updaten met nieuwe informatie, zoals een
+      fractiewijziging, kies voor
+      <span class="au-u-bold">Wijzig huidig mandaat</span>. Dit zal een nieuwe
+      mandaat starten met de gewijzigde situatie.
+      <br />
+      Om fouten te corrigeren, bijvoorbeeld een typfout of een foutieve
+      startdatum, kies voor
+      <span class="au-u-bold">Corrigeer fouten</span>.
+    </AuAlert>
+  </div>
 </div>
 
 <div class="au-c-body-container au-c-body-container--scroll">
