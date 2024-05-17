@@ -40,6 +40,18 @@ export const VAST_BUREAU_BESTUURSORGAAN_URI =
 export const BCSD_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000009';
 
+export const MANDAAT_GEMEENTERAADSLID_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000011';
+export const MANDAAT_LID_RMW_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000015';
+export const MANDAAT_VOORZITTER_GEMEENTERAAD_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000012';
+export const VOORZITTER_RMW_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000016';
+export const LID_VAST_BUREAU_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000017';
+export const VOORZITTER_VAST_BUREAU_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000018';
 export const MANDAAT_BURGEMEESTER_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000013';
 export const MANDAAT_DISTRICT_BURGEMEESTER_CODE =

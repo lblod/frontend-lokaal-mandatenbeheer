@@ -13,6 +13,14 @@ import {
   VAST_BUREAU_BESTUURSORGAAN_URI,
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
+  MANDAAT_LID_RMW_CODE,
+  BESTUURSFUNCTIE_CODE_BURGEMEESTER,
+  MANDAAT_SCHEPEN_CODE,
+  MANDAAT_GEMEENTERAADSLID_CODE,
+  MANDAAT_VOORZITTER_GEMEENTERAAD_CODE,
+  VOORZITTER_RMW_CODE,
+  LID_VAST_BUREAU_CODE,
+  VOORZITTER_VAST_BUREAU_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 import {
   getDraftPublicationStatus,
@@ -66,23 +74,23 @@ export default class PrepareLegislatuurSectionComponent extends Component {
 
     let bestuursorgaanToSyncFrom = null;
     for (const bestuursorgaan of bestuursorganen) {
-      const classificatie = await (
-        await bestuursorgaan.isTijdsspecialisatieVan
-      ).classificatie;
+      const classificatie = await bestuursorgaan.get(
+        'isTijdsspecialisatieVan.classificatie'
+      );
       if (classificatie.uri == syncId) {
         bestuursorgaanToSyncFrom = bestuursorgaan;
       }
     }
 
     if (!bestuursorgaanToSyncFrom) {
-      throw `Could not sync`;
+      throw `Kon niet synchroniseren. Geen bestuursorgaan gevonden.`;
     }
     const mandatarissenToSync = await this.getBestuursorgaanMandatarissen(
       bestuursorgaanToSyncFrom
     );
 
     if (mandatarissenToSync.length == 0) {
-      throw `No mandatarissen found to sync`;
+      throw `Geen mandatarissen gevonden om te synchroniseren.`;
     }
 
     const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
@@ -92,28 +100,25 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     for (const mandataris of currentMandatarissen) {
       mandataris.destroyRecord();
     }
+
     for (const mandatarisToAdd of mandatarissenToSync) {
       const mandaatOfMandataris = await mandatarisToAdd.bekleedt;
       const bestuursfunctie = await mandaatOfMandataris.bestuursfunctie;
 
-      const mapping = {
-        'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000011':
-          'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000015',
-        'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000012':
-          'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000016',
-        'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000014':
-          'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000017',
-        'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000013':
-          'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000018',
+      const bestuursfunctieCodeMapping = {
+        [MANDAAT_GEMEENTERAADSLID_CODE]: MANDAAT_LID_RMW_CODE,
+        [MANDAAT_VOORZITTER_GEMEENTERAAD_CODE]: VOORZITTER_RMW_CODE,
+        [MANDAAT_SCHEPEN_CODE]: LID_VAST_BUREAU_CODE,
+        [BESTUURSFUNCTIE_CODE_BURGEMEESTER]: VOORZITTER_VAST_BUREAU_CODE,
       };
 
       const bestuurfunctieCodes = await this.store.query(
         'bestuursfunctie-code',
-        { filter: { ':uri:': mapping[bestuursfunctie.uri] } }
+        { filter: { ':uri:': bestuursfunctieCodeMapping[bestuursfunctie.uri] } }
       );
 
       if (bestuurfunctieCodes.length == 0) {
-        throw `Could not find mirror of bestuursfunctie`;
+        throw `Geen bestuursfunctie gevonden om te synchroniseren.`;
       }
 
       const toBestuursfunctie = bestuurfunctieCodes[0];
