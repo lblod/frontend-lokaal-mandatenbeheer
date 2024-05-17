@@ -18,8 +18,13 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
       'verkiezingsresultaat',
       options
     );
+    const selectedPeriod = await this.store.findRecord(
+      'bestuursperiode',
+      params.id
+    );
 
     return {
+      selectedPeriod,
       verkiezingsresultaten,
     };
   }

@@ -5,12 +5,14 @@ import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
-export default class MandatarissenMandatarisRoute extends Route {
+export default class MandatarissenPersoonMandatarisRoute extends Route {
   @service store;
 
   async model(params) {
-    const mandataris = await this.getMandataris(params.id);
-    const persoon = await mandataris.isBestuurlijkeAliasVan;
+    const parentModel = await this.modelFor('mandatarissen.persoon');
+    const persoon = parentModel.persoon;
+
+    const mandataris = await this.getMandataris(params.mandataris_id);
     const mandaat = await mandataris.bekleedt;
     const vervangers = await getUniqueVervangers(mandataris);
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);

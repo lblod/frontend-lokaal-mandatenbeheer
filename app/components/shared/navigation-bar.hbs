@@ -1,0 +1,31 @@
+<AuToolbar @border="bottom" @size="medium" @skin="tint">
+  <nav aria-label="breadcrumbs">
+    <ul class="au-c-list-horizontal au-c-list-horizontal--small">
+      <li class="au-c-list-horizontal__item">
+        <AuLink @route="index">
+          <AuIcon @icon="arrow-left" @alignment="left" />
+          Overzicht modules
+        </AuLink>
+      </li>
+      <li class="au-c-list-horizontal__item">
+        <Shared::CompactMenu />
+      </li>
+      {{#each (breadcrumbs) as |breadcrumb|}}
+        <li class="au-c-list-horizontal__item">
+          {{#if (is-last breadcrumb (breadcrumbs))}}
+            <strong>
+              {{breadcrumb.title}}
+            </strong>
+          {{else}}
+            <AuLink
+              @route={{breadcrumb.data.route}}
+              @model={{breadcrumb.data.model}}
+            >
+              {{breadcrumb.title}}
+            </AuLink>
+          {{/if}}
+        </li>
+      {{/each}}
+    </ul>
+  </nav>
+</AuToolbar>
