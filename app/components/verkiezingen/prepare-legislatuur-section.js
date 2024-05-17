@@ -35,8 +35,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service router;
 
   @tracked editMode = null;
-  @tracked showRangorde;
-  @tracked showBeleidsDomein;
 
   @action
   createMandataris() {
@@ -64,13 +62,9 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     );
   }
 
-  setupTable = restartableTask(async () => {
-    const isCBS = await this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
-      CBS_BESTUURSORGAAN_URI
-    );
-    this.showRangorde = isCBS;
-    this.showBeleidsDomein = isCBS;
-  });
+  get CBSClassification() {
+    return CBS_BESTUURSORGAAN_URI;
+  }
 
   mirrorTable = restartableTask(async () => {
     const bestuursorganen = this.args.bestuursorganen;
