@@ -171,17 +171,24 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   });
 
   async createMandatarisFromMandataris(mandataris, mandaat, lidmaatschap) {
-    return this.store.createRecord('mandataris', {
-      rangorde: mandataris.rangorde,
+    let propertiesForMandataris = {
+      rangorde: null,
       start: mandataris.start,
       einde: mandataris.einde,
       bekleedt: mandaat,
       isBestuurlijkeAliasVan: await mandataris.isBestuurlijkeAliasVan,
-      beleidsdomein: await mandataris.beleidsdomein,
+      beleidsdomein: [],
       status: await getEffectiefStatus(this.store),
       publicationStatus: await getDraftPublicationStatus(this.store),
       heeftLidmaatschap: lidmaatschap,
-    });
+    };
+
+    if (!(await this.isLidVanVB)) {
+      propertiesForMandataris.rangorde = mandataris.rangorde;
+      propertiesForMandataris.beleidsdomein = await mandataris.beleidsdomein;
+    }
+
+    return this.store.createRecord('mandataris', propertiesForMandataris);
   }
 
   async getBestuursorgaanMandatarissen(bestuursorgaan) {
