@@ -12,14 +12,16 @@
 </AuToolbar>
 
 <div class="au-o-box">
-  {{#if this.errorMessage}}
+  {{#if this.errorMessages}}
     <AuAlert
       @title={{this.title}}
-      @skin="error"
+      @skin="warning"
       @icon="alert-triangle"
       @closable={{false}}
     >
-      <p>{{this.errorMessage}}</p>
+      {{#each this.errorMessages as |message|}}
+        <p>{{message}}</p>
+      {{/each}}
     </AuAlert>
   {{/if}}
   <Person::Selector @person={{this.persoon}} @onUpdate={{this.onUpdate}} />
