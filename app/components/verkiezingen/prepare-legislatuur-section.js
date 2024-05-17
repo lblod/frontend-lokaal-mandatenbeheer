@@ -68,11 +68,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     const isCBS = await this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
       CBS_BESTUURSORGAAN_URI
     );
-    const isGemeenteraad =
-      await this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
-        GEMEENTERAAD_BESTUURSORGAAN_URI
-      );
-    this.showRangorde = isGemeenteraad || (await this.isRMW) || isCBS;
+    this.showRangorde = isCBS;
     this.showBeleidsDomein = isCBS;
   });
 
