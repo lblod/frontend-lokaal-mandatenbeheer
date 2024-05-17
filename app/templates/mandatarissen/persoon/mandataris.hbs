@@ -44,31 +44,19 @@
     />
   </div>
 
-  <div class="au-o-box">
-    <Mandatarissen::MandatarisEditPrompt
-      class="au-c-collapsible au-u-margin-top-small"
+  <AuHeading @level="3" @skin="4">
+    Historiek
+  </AuHeading>
+
+  <AuHr />
+
+  <ul class="au-c-list-vertical">
+    <Mandatarissen::History
       @mandataris={{@model.mandataris}}
-      @bestuursorganen={{@model.bestuursorganen}}
-      @mandatarisEditForm={{@model.mandatarisEditForm}}
-      @onMandatarisChanged={{this.onMandatarisChanged}}
+      @mandatarissen={{@model.mandatarissen}}
+      @form={{@model.mandatarisEditForm}}
     />
-  </div>
-
-  <div class="au-o-box">
-    <AuHeading @level="3" @skin="4">
-      Historiek
-    </AuHeading>
-
-    <AuHr />
-
-    <ul class="au-c-list-vertical">
-      <Mandatarissen::History
-        @mandataris={{@model.mandataris}}
-        @mandatarissen={{@model.mandatarissen}}
-        @form={{@model.mandatarisEditForm}}
-      />
-    </ul>
-  </div>
+  </ul>
 </div>
 
 <AuModal
