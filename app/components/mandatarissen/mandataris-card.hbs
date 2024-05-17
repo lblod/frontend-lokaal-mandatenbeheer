@@ -71,7 +71,7 @@
           <div class="au-c-description-value">
             {{#each @vervangers as |replaced index|}}
               <AuLink
-                @route="mandatarissen.persoon.mandataris"
+                @route="mandatarissen.mandataris"
                 @model={{replaced.id}}
                 @skin="secondary"
               >
@@ -92,7 +92,7 @@
           <div class="au-c-description-value">
             {{#each @mandataris.tijdelijkeVervangingen as |replacement index|}}
               <AuLink
-                @route="mandatarissen.persoon.mandataris"
+                @route="mandatarissen.mandataris"
                 @model={{replacement.id}}
                 @skin="secondary"
               >
