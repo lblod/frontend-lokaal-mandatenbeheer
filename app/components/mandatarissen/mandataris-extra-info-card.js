@@ -18,6 +18,17 @@ export default class MandatarisExtraInfoCardComponent extends Component {
     });
   }
 
+  get hasBeleidsdomeinen() {
+    if (
+      this.args.mandataris.get('bekleedt').get('isBurgemeester') ||
+      this.args.mandataris.get('bekleedt').get('isSchepen')
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @action
   toggleModal() {
     this.isModalActive = !this.isModalActive;
