@@ -1,7 +1,9 @@
 {{#if (await this.isBurgemeester)}}
   <Mandaat::BurgemeesterSelector @bestuursorgaanInTijd={{@bestuursorgaan}} />
 {{else}}
+
   <AuToolbar
+    {{did-insert (perform this.setupTable)}}
     @size="large"
     @nowrap="true"
     class="au-u-padding-bottom-none au-u-margin-bottom-none"
@@ -14,25 +16,53 @@
       </div>
     </Group>
   </AuToolbar>
-  <Verkiezingen::DraftMandatarisList
-    @bestuursorgaan={{@bestuursorgaan}}
-    @sort={{@sort}}
-    @page={{0}}
-    @size={{9999}}
-    @title=""
-    @showFractie={{true}}
-    @showFunctie={{true}}
-    @showRangorde={{true}}
-    @showBevoegdheid={{true}}
-    @showStartEndDate={{true}}
-  />
+  {{#if
+    (or
+      this.mirrorTable.isRunning
+      this.onCreate.isRunning
+      this.setupTable.isRunning
+    )
+  }}
+    {{! Show skeleton loader }}
+  {{else}}
+    <Verkiezingen::DraftMandatarisList
+      @bestuursorgaan={{@bestuursorgaan}}
+      @sort={{@sort}}
+      @page={{0}}
+      @size={{9999}}
+      @title=""
+      @showFractie={{true}}
+      @showFunctie={{true}}
+      @showRangorde={{this.showRangorde}}
+      @showBevoegdheid={{this.showBeleidsDomein}}
+      @showStartEndDate={{false}}
+    />
+  {{/if}}
 
-  <AuContent @skin="small">
+  <AuContent @skin="small au-u-flex au-u-flex--between ">
     <AuButton
       @skin="naked"
       @icon="add"
+      @loading={{this.onCreate.isRunning}}
+      @loadingMessage="Aan het toevoegen"
       {{on "click" this.createMandataris}}
     >Toevoegen</AuButton>
+    {{#if (or (await this.isRMW) (await this.isLidVanVB))}}
+      <AuButton
+        @skin="naked"
+        @icon="synchronize"
+        @loading={{this.mirrorTable.isRunning}}
+        @loadingMessage="Aan het synchroniseren"
+        {{on "click" (perform this.mirrorTable)}}
+      >
+        {{#if (await this.isRMW)}}
+          Sync met Gemeenteraad
+        {{/if}}
+        {{#if (await this.isLidVanVB)}}
+          Sync met College van Burgemeester en Schepenen
+        {{/if}}
+      </AuButton>
+    {{/if}}
   </AuContent>
   <AuModal
     @title={{(concat
@@ -44,7 +74,7 @@
   >
     <div class="au-o-box">
       <Form::NewInstance
-        @onCreate={{this.onCreate}}
+        @onCreate={{perform this.onCreate}}
         @form={{@form}}
         @buildSourceTtl={{this.buildSourceTtl}}
         @buildMetaTtl={{this.buildMetaTtl}}
