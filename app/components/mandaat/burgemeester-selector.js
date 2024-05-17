@@ -9,7 +9,6 @@ import {
 } from 'frontend-lmb/utils/get-mandataris-status';
 import {
   BESTUURSFUNCTIE_BURGEMEESTER_ID,
-  BESTUURSFUNCTIE_VOORZITTER_BCSD_ID,
   BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 
@@ -22,7 +21,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   // no need to track these
   burgemeesterMandate = null;
   voorzitterVastBureauMandate = null;
-  voorzitterBCSDMandate = null;
   targetMandatarisses = null;
 
   get bindingStart() {
@@ -60,7 +58,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
         bestuursfunctie: {
           id: [
             BESTUURSFUNCTIE_BURGEMEESTER_ID,
-            BESTUURSFUNCTIE_VOORZITTER_BCSD_ID,
             BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
           ].join(','),
         },
@@ -75,9 +72,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
         m.get('bestuursfunctie.id') ===
         BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID
       );
-    });
-    this.voorzitterBCSDMandate = mandates.find((m) => {
-      return m.get('bestuursfunctie.id') === BESTUURSFUNCTIE_VOORZITTER_BCSD_ID;
     });
   }
 
@@ -120,7 +114,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     const burgemeesters = await this.burgemeesterMandate.bekleedDoor;
     const voorzitterVastBureau =
       await this.voorzitterVastBureauMandate.bekleedDoor;
-    const voorzitterBCSD = await this.voorzitterBCSDMandate.bekleedDoor;
 
     const targetMandatarisses = [];
 
@@ -144,16 +137,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       await this.setMultipleBurgemeestersError(voorzitterVastBureau);
       targetMandatarisses.push(voorzitterVastBureau[0]);
     }
-    if (voorzitterBCSD.length === 0) {
-      targetMandatarisses.push(
-        await this.createMandataris(this.voorzitterBCSDMandate)
-      );
-    } else if (voorzitterBCSD.length === 1) {
-      targetMandatarisses.push(voorzitterBCSD[0]);
-    } else {
-      await this.setMultipleBurgemeestersError(voorzitterBCSD);
-      targetMandatarisses.push(voorzitterBCSD[0]);
-    }
+
     this.targetMandatarisses = targetMandatarisses;
 
     return burgemeesters[0]?.isBestuurlijkeAliasVan || null;
