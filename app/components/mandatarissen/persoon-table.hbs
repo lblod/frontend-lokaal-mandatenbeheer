@@ -34,7 +34,10 @@
         </LinkTo>
       </td>
       <td>
-        {{await (this.fractiesFor persoon)}}
+        <Mandaat::FoldedFracties
+          @persoon={{persoon}}
+          @bestuursperiode={{@bestuursperiode}}
+        />
       </td>
       <td>
         <Mandatarissen::MandatenAsLinks @persoon={{persoon}} />
