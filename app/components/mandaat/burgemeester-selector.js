@@ -7,14 +7,21 @@ import {
   getDraftPublicationStatus,
   getEffectiefStatus,
 } from 'frontend-lmb/utils/get-mandataris-status';
-import { queryRecord } from 'frontend-lmb/utils/query-record';
+import {
+  BESTUURSFUNCTIE_BURGEMEESTER_ID,
+  BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
+} from 'frontend-lmb/utils/well-known-ids';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
 
   @tracked persoon = null;
   @tracked mandataris = null;
-  @tracked errorMessage = '';
+  @tracked errorMessages = [];
+  // no need to track these
+  burgemeesterMandate = null;
+  voorzitterVastBureauMandate = null;
+  targetMandatarisses = null;
 
   get bindingStart() {
     return this.args.bestuursorgaanInTijd.bindingStart;
@@ -30,21 +37,41 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   }
 
   async load() {
-    const burgemeesterMandaat = await this.getBurgemeesterMandaat();
-    this.persoon = await this.loadBurgemeesterPersoon(burgemeesterMandaat);
+    await this.loadBurgemeesterMandates();
+    this.persoon = await this.loadBurgemeesterPersoon();
   }
 
   formatToDateString(dateTime) {
     return dateTime ? moment(dateTime).format('YYYY-MM-DD') : undefined;
   }
 
-  async getBurgemeesterMandaat() {
-    return await queryRecord(this.store, 'mandaat', {
+  async loadBurgemeesterMandates() {
+    const bestuursperiode =
+      await this.args.bestuursorgaanInTijd.heeftBestuursperiode;
+    const mandates = await this.store.query('mandaat', {
       filter: {
         'bevat-in': {
-          id: this.args.bestuursorgaanInTijd.id,
+          'heeft-bestuursperiode': {
+            id: bestuursperiode.id,
+          },
+        },
+        bestuursfunctie: {
+          id: [
+            BESTUURSFUNCTIE_BURGEMEESTER_ID,
+            BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
+          ].join(','),
         },
       },
+      include: 'bestuursfunctie',
+    });
+    this.burgemeesterMandate = mandates.find((m) => {
+      return m.get('bestuursfunctie.id') === BESTUURSFUNCTIE_BURGEMEESTER_ID;
+    });
+    this.voorzitterVastBureauMandate = mandates.find((m) => {
+      return (
+        m.get('bestuursfunctie.id') ===
+        BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID
+      );
     });
   }
 
@@ -59,9 +86,13 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     const personen = await Promise.all(
       burgemeesters.map((b) => b.isBestuurlijkeAliasVan)
     );
+    const mandaatName = burgemeesters[0].get('bekleedt.bestuursfunctie.label');
 
-    this.errorMessage = `Er zijn meerdere burgemeesters gevonden:
-      ${this.toUserReadableListing(personen, (p) => `${p.gebruikteVoornaam} ${p.achternaam}`)}.`;
+    this.errorMessages = [
+      ...this.errorMessages,
+      `Er zijn meerdere personen gevonden met het mandaat ${mandaatName}. Enkel de eerste zal aangepast worden:
+      ${this.toUserReadableListing(personen, (p) => `${p.gebruikteVoornaam} ${p.achternaam}`)}.`,
+    ];
   }
 
   async createMandataris(burgemeesterMandaat) {
@@ -79,26 +110,47 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     return newMandataris;
   }
 
-  async loadBurgemeesterPersoon(burgemeesterMandaat) {
-    const burgemeesters = await burgemeesterMandaat.bekleedDoor;
+  async loadBurgemeesterPersoon() {
+    const burgemeesters = await this.burgemeesterMandate.bekleedDoor;
+    const voorzitterVastBureau =
+      await this.voorzitterVastBureauMandate.bekleedDoor;
+
+    const targetMandatarisses = [];
 
     if (burgemeesters.length === 0) {
-      this.mandataris = await this.createMandataris(burgemeesterMandaat);
-      return null;
+      targetMandatarisses.push(
+        await this.createMandataris(this.burgemeesterMandate)
+      );
     } else if (burgemeesters.length === 1) {
-      const burgemeester = burgemeesters[0];
-      this.mandataris = burgemeester;
-      return await burgemeester.isBestuurlijkeAliasVan;
+      targetMandatarisses.push(burgemeesters[0]);
     } else {
       await this.setMultipleBurgemeestersError(burgemeesters);
-      return burgemeesters[0].isBestuurlijkeAliasVan;
+      targetMandatarisses.push(burgemeesters[0]);
     }
+    if (voorzitterVastBureau.length === 0) {
+      targetMandatarisses.push(
+        await this.createMandataris(this.voorzitterVastBureauMandate)
+      );
+    } else if (voorzitterVastBureau.length === 1) {
+      targetMandatarisses.push(voorzitterVastBureau[0]);
+    } else {
+      await this.setMultipleBurgemeestersError(voorzitterVastBureau);
+      targetMandatarisses.push(voorzitterVastBureau[0]);
+    }
+
+    this.targetMandatarisses = targetMandatarisses;
+
+    return burgemeesters[0]?.isBestuurlijkeAliasVan || null;
   }
 
   @action
   async onUpdate(persoon) {
     this.persoon = persoon;
-    this.mandataris.isBestuurlijkeAliasVan = persoon;
-    await this.mandataris.save();
+    await Promise.all(
+      this.targetMandatarisses.map((target) => {
+        target.isBestuurlijkeAliasVan = persoon;
+        return target.save();
+      })
+    );
   }
 }
