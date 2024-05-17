@@ -7,6 +7,7 @@ import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
+import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
@@ -60,5 +61,10 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     });
 
     setTimeout(() => this.router.refresh(), 1000);
+  }
+
+  @action
+  async buildMetaTtl() {
+    return getBestuursorganenMetaTtl(this.model.bestuursorganen);
   }
 }
