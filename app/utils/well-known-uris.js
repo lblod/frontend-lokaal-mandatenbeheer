@@ -52,3 +52,6 @@ export const burgemeesterOnlyStates = [
   MANDATARIS_AANGEWEZEN_STATE,
   MANDATARIS_TITELVOEREND_STATE,
 ];
+
+export const INSTALLATIVERGADERING_BEHANDELD_STATUS =
+  'http://data.lblod.info/id/concept/InstallatievergaderingStatus/c9fc3292-1576-4a82-8dcd-60795e22131f';
