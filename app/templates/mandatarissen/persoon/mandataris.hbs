@@ -6,15 +6,13 @@
 
 <div class="au-o-grid au-u-padding">
   <div class="au-o-grid__item au-u-1-2">
-    <p class="au-u-h1">
+    <p class="au-u-h1 au-u-medium">
       {{this.bestuursorganenTitle}}
     </p>
-    <AuLink @route="mandatarissen.persoon" @model={{this.persoon.id}}>
-      <p class="au-u-h3">
-        {{this.persoon.gebruikteVoornaam}}
-        {{this.persoon.achternaam}}
-      </p>
-    </AuLink>
+    <p class="au-u-h3">
+      {{this.persoon.gebruikteVoornaam}}
+      {{this.persoon.achternaam}}
+    </p>
   </div>
   <div class="au-o-grid__item au-u-1-2 au-u-text-left">
     <div class="au-u-flex au-u-flex--end au-u-margin-bottom">
@@ -31,12 +29,12 @@
     <AuAlert @skin="info" @icon="info-circle">
       Om het mandaat te updaten met nieuwe informatie, zoals een
       fractiewijziging, kies voor
-      <span class="au-u-bold">Wijzig huidig mandaat</span>. Dit zal een nieuwe
+      <span class="au-u-medium">Wijzig huidig mandaat</span>. Dit zal een nieuwe
       mandaat starten met de gewijzigde situatie.
       <br />
       Om fouten te corrigeren, bijvoorbeeld een typfout of een foutieve
       startdatum, kies voor
-      <span class="au-u-bold">Corrigeer fouten</span>.
+      <span class="au-u-medium">Corrigeer fouten</span>.
     </AuAlert>
   </div>
 </div>
