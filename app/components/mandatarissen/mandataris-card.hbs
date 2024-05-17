@@ -2,11 +2,8 @@
   Details mandaat
 </AuHeading>
 <AuCard as |c|>
-  <c.header>
+  <c.header class="au-u-background-gray-100">
     <div class="au-u-flex">
-      <AuHeading @level="2" @skin="4" class="flex-grow">
-        {{this.rol}}
-      </AuHeading>
       <AuPill
         @skin="link"
         @draft={{false}}
@@ -23,7 +20,7 @@
       </AuPill>
     </div>
   </c.header>
-  <c.content>
+  <c.content class="au-u-background-gray-100">
 
     <div class="au-o-grid au-o-grid--tiny">
       <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
