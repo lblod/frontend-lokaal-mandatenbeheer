@@ -17,9 +17,15 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @tracked isCorrecting;
 
   get bestuursorganenTitle() {
-    return this.model.bestuursorganen
-      .map((elem) => elem.isTijdsspecialisatieVan.get('naam'))
-      .join(' - ');
+    const bestuursfunctie = this.model.mandataris.bekleedt
+      .get('bestuursfunctie')
+      .get('label');
+    return (
+      `${bestuursfunctie}, ` +
+      this.model.bestuursorganen
+        .map((elem) => elem.isTijdsspecialisatieVan.get('naam'))
+        .join(' - ')
+    );
   }
 
   @action
