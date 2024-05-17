@@ -4,24 +4,25 @@
   model=this.model.mandataris.id
 }}
 
-<AuToolbar @border="bottom" @size="large" as |Group|>
-  <Group>
-    <AuHeading @skin="2">
-      <p class="au-u-h1">
-        {{this.bestuursorganenTitle}}
+<div class="au-u-flex au-u-flex--row au-u-flex--between au-o-box">
+  <div>
+    <p class="au-u-h1">
+      {{this.bestuursorganenTitle}}
+    </p>
+    <AuLink @route="mandatarissen.persoon" @model={{this.persoon.id}}>
+      <p class="au-u-h3">
+        {{this.persoon.gebruikteVoornaam}}
+        {{this.persoon.achternaam}}
       </p>
-      <AuLink @route="mandatarissen.persoon" @model={{this.persoon.id}}><p
-          class="au-u-h3"
-        >{{this.persoon.gebruikteVoornaam}}
-          {{this.persoon.achternaam}}</p></AuLink>
-
-      <AuButton
-        @disabled={{not this.model.mandataris.isActive}}
-        {{on "click" (fn (mut this.isChangingCurrentSituation) true)}}
-      >Wijzig huidige situatie</AuButton>
-    </AuHeading>
-  </Group>
-</AuToolbar>
+    </AuLink>
+  </div>
+  <AuButtonGroup class="au-u-flex au-u-flex--end au-u-flex-self-start">
+    <AuButton
+      @disabled={{not this.model.mandataris.isActive}}
+      {{on "click" (fn (mut this.isChangingCurrentSituation) true)}}
+    >Wijzig huidige situatie</AuButton>
+  </AuButtonGroup>
+</div>
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
