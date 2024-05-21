@@ -1,15 +1,22 @@
 <div {{did-update this.onMandatarisUpdate @mandataris}}>
-  {{#if this.fetchHistory.isRunning}}
+  {{#if this.loading}}
     Loading...
   {{else}}
     <AuTable>
       <:header>
         <tr>
-          <th>Veld</th>
-          <th>Aangepast van</th>
-          <th>Aangepast naar</th>
+          <th>Van</th>
+          <th>Tot</th>
+          <th>Status</th>
+          {{#if this.toonBeleidsdomeinen}}
+            <th>#Beleidsdomeinen</th>
+          {{/if}}
+          {{#if this.toonRangorde}}
+            <th>Rangorde</th>
+          {{/if}}
+          <th>Fractie</th>
           <th>Aangepast door</th>
-          <th>Aangepast op</th>
+          <th>Op</th>
           <th></th>
         </tr>
       </:header>
@@ -19,6 +26,8 @@
             @mandataris={{historyItem.mandataris}}
             @selected={{historyItem.selected}}
             @corrections={{historyItem.corrections}}
+            @toonBeleidsdomeinen={{this.toonBeleidsdomeinen}}
+            @toonRangorde={{this.toonRangorde}}
           />
         {{else}}
           <tr>

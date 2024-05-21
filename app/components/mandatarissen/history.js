@@ -2,19 +2,20 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { restartableTask } from 'ember-concurrency';
 
 export default class MandatarisHistoryComponent extends Component {
+  @tracked loading = true;
   @tracked history = [];
 
   @service store;
 
   constructor() {
     super(...arguments);
-    this.fetchHistory.perform();
+    this.fetchHistory();
   }
 
-  fetchHistory = restartableTask(async () => {
+  async fetchHistory() {
+    this.loading = true;
     const allMandatarissen = this.args.mandatarissen;
     const newHistory = await Promise.all(
       allMandatarissen.map(async (mandataris) => {
@@ -62,7 +63,8 @@ export default class MandatarisHistoryComponent extends Component {
       .sort((a, b) => {
         return b.mandataris.start.getTime() - a.mandataris.start.getTime();
       });
-  });
+    this.loading = false;
+  }
 
   get toonBeleidsdomeinen() {
     return this.history.some((h) => h.mandataris.beleidsdomein.length > 0);
@@ -83,6 +85,6 @@ export default class MandatarisHistoryComponent extends Component {
 
   @action
   async onMandatarisUpdate() {
-    await this.fetchHistory.perform();
+    await this.fetchHistory();
   }
 }
