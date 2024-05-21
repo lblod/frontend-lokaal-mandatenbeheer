@@ -12,17 +12,8 @@ export default class MandatarisCardComponent extends Component {
       ? this.args.mandataris.heeftLidmaatschap.get('binnenFractie').get('naam')
       : '';
   }
+
   get persoon() {
     return this.args.mandataris.isBestuurlijkeAliasVan;
-  }
-
-  get formattedBeleidsdomein() {
-    const beleidsdomeinenPromise = this.args.mandataris.beleidsdomein;
-    if (!beleidsdomeinenPromise.length) {
-      return [];
-    }
-    return beleidsdomeinenPromise.then((beleidsdomeinen) => {
-      return beleidsdomeinen.map((item) => item.label).join(', ');
-    });
   }
 }

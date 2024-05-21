@@ -1,8 +1,11 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { getUniqueVervangers } from 'frontend-lmb/models/mandataris';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
-import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import {
+  MANDATARIS_EDIT_FORM_ID,
+  MANDATARIS_EXTRA_INFO_FORM_ID,
+} from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
 export default class MandatarissenPersoonMandatarisRoute extends Route {
@@ -18,6 +21,10 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);
 
     const mandatarisEditForm = getFormFrom(this.store, MANDATARIS_EDIT_FORM_ID);
+    const mandatarisExtraInfoForm = getFormFrom(
+      this.store,
+      MANDATARIS_EXTRA_INFO_FORM_ID
+    );
 
     const bestuursorganen = await (await mandataris.bekleedt).get('bevatIn');
     const selectedBestuursperiode =
@@ -28,6 +35,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       vervangers,
       mandatarissen,
       mandatarisEditForm,
+      mandatarisExtraInfoForm,
       bestuursorganen,
       selectedBestuursperiode,
     });

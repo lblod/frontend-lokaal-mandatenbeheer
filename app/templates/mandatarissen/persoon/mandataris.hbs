@@ -28,6 +28,13 @@
   </div>
 
   <div class="au-o-box">
+    <Mandatarissen::MandatarisExtraInfoCard
+      @mandataris={{@model.mandataris}}
+      @form={{@model.mandatarisExtraInfoForm}}
+    />
+  </div>
+
+  <div class="au-o-box">
     <Mandatarissen::MandatarisEditPrompt
       class="au-c-collapsible au-u-margin-top-small"
       @mandataris={{@model.mandataris}}

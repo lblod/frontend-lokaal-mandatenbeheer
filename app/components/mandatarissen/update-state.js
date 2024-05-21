@@ -11,7 +11,6 @@ import { burgemeesterOnlyStates } from 'frontend-lmb/utils/well-known-uris';
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
   @tracked date = null;
-  @tracked selectedBeleidsdomeinen = [];
   @tracked selectedFractie = null;
   @tracked bestuurseenheid = null;
   @tracked bestuursorganenOfMandaat = [];
@@ -40,7 +39,6 @@ export default class MandatarissenUpdateState extends Component {
   load = task({ drop: true }, async () => {
     this.newStatus = this.args.mandataris.status;
     this.date = new Date();
-    this.selectedBeleidsdomeinen = this.args.mandataris.beleidsdomein.slice();
     this.rangorde = this.args.mandataris.rangorde;
     this.selectedFractie = await (
       await this.args.mandataris.heeftLidmaatschap
@@ -105,35 +103,11 @@ export default class MandatarissenUpdateState extends Component {
     return this.date.getTime() >= this.args.mandataris.start.getTime();
   }
 
-  get hasChangesInBeleidsdomeinen() {
-    if (
-      this.selectedBeleidsdomeinen.length !==
-      this.args.mandataris.beleidsdomein.length
-    ) {
-      return true;
-    }
-
-    // if the length is the same, a difference requires a new item to have been added
-
-    const oldIds = new Set();
-
-    this.args.mandataris.beleidsdomein.forEach((beleidsdomein) => {
-      oldIds.add(beleidsdomein.id);
-    });
-    for (let i = 0; i < this.selectedBeleidsdomeinen.length; i++) {
-      if (!oldIds.has(this.selectedBeleidsdomeinen[i].id)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   get hasChanges() {
     return (
       this.newStatus?.id !== this.args.mandataris.status?.id ||
       this.selectedFractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
-      this.hasChangesInBeleidsdomeinen ||
       this.rangorde !== this.args.mandataris.rangorde ||
       this.replacementUpdated
     );
@@ -167,7 +141,7 @@ export default class MandatarissenUpdateState extends Component {
       einde: endDate,
       bekleedt: this.args.mandataris.bekleedt,
       isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
-      beleidsdomein: this.selectedBeleidsdomeinen,
+      beleidsdomein: this.args.mandataris.beleidsdomein,
       status: this.newStatus,
       publicationStatus: await getDraftPublicationStatus(this.store),
       modified: new Date(),
@@ -282,10 +256,6 @@ export default class MandatarissenUpdateState extends Component {
       event.preventDefault();
     }
     this.rangorde = event.target.value;
-  }
-
-  @action updateBeleidsdomeinen(selectedBeleidsdomeinen) {
-    this.selectedBeleidsdomeinen = selectedBeleidsdomeinen;
   }
 
   @action updateFractie(newFractie) {

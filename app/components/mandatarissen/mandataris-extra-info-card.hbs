@@ -1,0 +1,46 @@
+<AuToolbar @size="large" class="au-u-padding-none au-u-bottom-none" as |Group|>
+
+  <Group>
+    <AuHeading @skin="4">
+      Bijkomende informatie
+    </AuHeading>
+  </Group>
+  <Group>
+    <AuButton
+      {{on "click" this.toggleModal}}
+      @disabled={{not this.hasBeleidsdomeinen}}
+    >Bewerk</AuButton>
+  </Group>
+</AuToolbar>
+
+<div class="au-o-box au-u-background-gray-100">
+  <div class="au-o-grid au-o-grid--small">
+    {{#if this.hasBeleidsdomeinen}}
+      <div class="au-o-grid__item au-u-5-6">
+        <div class="au-c-description-label"><div>Beleidsdomein(en)</div></div>
+        <div class="au-c-description-value">{{await
+            this.formattedBeleidsdomein
+          }}
+        </div>
+      </div>
+    {{else}}
+      Deze mandataris heeft geen velden met bijkomende info.
+    {{/if}}
+  </div>
+</div>
+
+<AuModal
+  @title="Bewerk bijkomende info mandataris"
+  @modalOpen={{this.isModalActive}}
+  @closable={{true}}
+  @closeModal={{this.toggleModal}}
+>
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{@mandataris.id}}
+      @form={{@form}}
+      @onCancel={{this.toggleModal}}
+      @onSave={{this.onSave}}
+    />
+  </div>
+</AuModal>
