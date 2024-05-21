@@ -1,26 +1,7 @@
 <tr ...attributes>
-  <td>
-    {{moment-format @mandataris.start "DD-MM-YYYY"}}
-  </td>
-  <td>
-    {{moment-format @mandataris.einde "DD-MM-YYYY"}}
-  </td>
-  <td>
-    {{@mandataris.status.label}}
-  </td>
-  {{#if @toonBeleidsdomeinen}}
-    <td>
-      {{this.beleidsdomeinCount}}
-    </td>
-  {{/if}}
-  {{#if @toonRangorde}}
-    <td>
-      {{@mandataris.rangorde}}
-    </td>
-  {{/if}}
-  <td>
-    {{@mandataris.heeftLidmaatschap.binnenFractie.naam}}
-  </td>
+  <td>veld</td>
+  <td>van</td>
+  <td>naar</td>
   <td>
     {{#if this.currentVersion.creator}}
       {{this.currentVersion.creator.voornaam}}
@@ -36,7 +17,7 @@
       Onbekend
     {{/if}}
   </td>
-  <td>
+  {{!-- <td>
     {{#if @selected}}
       Geselecteerde situatie
     {{else}}
@@ -50,9 +31,9 @@
         </AuLink>
       {{/if}}
     {{/if}}
-  </td>
+  </td> --}}
 </tr>
-{{#each this.correctionVersions as |version|}}
+{{!-- {{#each this.correctionVersions as |version|}}
   <tr class="au-u-para-tiny">
     <td colspan={{this.correctionColspan}}>-
       {{or version.description "Aangepast"}}</td>
@@ -60,4 +41,4 @@
     <td>{{moment-format version.issued "DD-MM-YY HH:mm"}}</td>
     <td></td>
   </tr>
-{{/each}}
+{{/each}} --}}
