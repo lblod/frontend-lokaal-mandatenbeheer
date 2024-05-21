@@ -52,6 +52,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     ) {
       this.args.onMandatarisChanged(newMandataris);
     }
+    this.closeModals();
   }
 
   @action
@@ -67,6 +68,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     });
 
     setTimeout(() => this.router.refresh(), 1000);
+    this.closeModals();
   }
 
   @action
