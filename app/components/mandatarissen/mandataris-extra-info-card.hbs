@@ -6,7 +6,10 @@
     </AuHeading>
   </Group>
   <Group>
-    <AuButton {{on "click" this.toggleModal}}>Bewerk</AuButton>
+    <AuButton
+      {{on "click" this.toggleModal}}
+      @disabled={{not this.hasBeleidsdomeinen}}
+    >Bewerk</AuButton>
   </Group>
 </AuToolbar>
 
