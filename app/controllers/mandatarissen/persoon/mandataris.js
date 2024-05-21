@@ -28,11 +28,6 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     );
   }
 
-  @action
-  onMandatarisChanged(newMandataris) {
-    this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
-  }
-
   get persoon() {
     return this.model.mandataris.isBestuurlijkeAliasVan;
   }
@@ -46,11 +41,8 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @action
   onUpdateState(newMandataris) {
     this.editMode = null;
-    if (
-      newMandataris != this.args.mandataris &&
-      this.args.onMandatarisChanged
-    ) {
-      this.args.onMandatarisChanged(newMandataris);
+    if (newMandataris != this.model.mandataris) {
+      this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
     }
     this.closeModals();
   }
