@@ -52,12 +52,3 @@
     {{/if}}
   </td>
 </tr>
-{{#each this.correctionVersions as |version|}}
-  <tr class="au-u-para-tiny">
-    <td colspan={{this.correctionColspan}}>-
-      {{or version.description "Aangepast"}}</td>
-    <td>{{version.creator.voornaam}} {{version.creator.achternaam}}</td>
-    <td>{{moment-format version.issued "DD-MM-YY HH:mm"}}</td>
-    <td></td>
-  </tr>
-{{/each}}
