@@ -6,8 +6,12 @@ import { inject as service } from '@ember/service';
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
 
+  queryParams = ['activeOnly'];
+
   @tracked isModalOpen = false;
   @tracked selectedBestuursorgaan = null;
+  @tracked activeOnly = true;
+  sort = 'is-bestuurlijke-alias-van.achternaam';
 
   @action
   toggleModal() {
@@ -28,5 +32,10 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       this.selectedBestuursorgaan.id,
       { queryParams: { person: this.model.persoon.id } }
     );
+  }
+
+  @action
+  toggleActiveOnly() {
+    this.activeOnly = !this.activeOnly;
   }
 }
