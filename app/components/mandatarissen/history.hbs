@@ -1,5 +1,5 @@
 <div {{did-update this.onMandatarisUpdate @mandataris}}>
-  {{#if this.loading}}
+  {{#if this.fetchHistory.isRunning}}
     Loading...
   {{else}}
     <AuTable>
