@@ -1,42 +1,50 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import RSVP from 'rsvp';
+import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
+import moment from 'moment';
 
 export default class MandatarissenPersoonMandatenRoute extends Route {
   @service store;
   @service bestuursorganen;
 
-  async model() {
+  queryParams = {
+    activeOnly: { refreshModel: true },
+    page: { refreshModel: true },
+    size: { refreshModel: true },
+    sort: { refreshModel: true },
+  };
+
+  async model(params) {
     const parentModel = await this.modelFor('mandatarissen.persoon');
     const persoon = parentModel.persoon;
-    const mandatarissen = await this.getMandatarissen(persoon);
-
-    const actieveMandatarissen = [];
-    const inactieveMandatarissen = [];
-    await Promise.all(
-      mandatarissen.map((mandataris) => {
-        const active = mandataris.isActive;
-        if (active) {
-          actieveMandatarissen.push(mandataris);
-        } else {
-          inactieveMandatarissen.push(mandataris);
-        }
-      })
-    );
+    const mandatarissen = await this.getMandatarissen(persoon, params);
 
     const bestuursorganen =
       await this.bestuursorganen.getAllRealPoliticalBestuursorganen();
 
-    return RSVP.hash({
+    const foldedMandatarissen = await foldMandatarisses(params, mandatarissen);
+
+    let filteredMandatarissen = foldedMandatarissen;
+    if (params.activeOnly) {
+      filteredMandatarissen = foldedMandatarissen.filter((mandataris) => {
+        const now = moment();
+        return (
+          moment(mandataris.foldedStart).isBefore(now) &&
+          (!mandataris.foldedEnd || moment(mandataris.foldedEnd).isAfter(now))
+        );
+      });
+    }
+
+    return {
       persoon,
-      actieveMandatarissen,
-      inactieveMandatarissen,
+      mandatarissen: filteredMandatarissen,
       bestuursorganen,
-    });
+    };
   }
 
-  async getMandatarissen(persoon) {
+  async getMandatarissen(persoon, params) {
     let queryParams = {
+      sort: params.sort,
       filter: {
         'is-bestuurlijke-alias-van': {
           id: persoon.id,
@@ -50,25 +58,6 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
       ].join(','),
     };
 
-    let mandatarissen = await this.store.query('mandataris', queryParams);
-    return this.keepLatestMandatarisPerMandaat(mandatarissen);
-  }
-
-  keepLatestMandatarisPerMandaat(mandatarissen) {
-    const mandaatIdToMandataris = {};
-
-    mandatarissen.forEach((mandataris) => {
-      const mandaatId = mandataris.bekleedt.id;
-      if (!mandaatIdToMandataris[mandaatId]) {
-        mandaatIdToMandataris[mandaatId] = mandataris;
-      } else {
-        const existingMandataris = mandaatIdToMandataris[mandaatId];
-        if (mandataris.start > existingMandataris.start) {
-          mandaatIdToMandataris[mandaatId] = mandataris;
-        }
-      }
-    });
-
-    return Object.values(mandaatIdToMandataris);
+    return await this.store.query('mandataris', queryParams);
   }
 }

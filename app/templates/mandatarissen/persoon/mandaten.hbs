@@ -16,51 +16,118 @@
   </Group>
 </AuToolbar>
 <AuHeading @skin="3" class="au-u-regular au-u-padding-left">
-  {{this.model.persoon.naam}}
+  {{@model.persoon.naam}}
 </AuHeading>
 
 <div class="au-c-body-container au-c-body-container--scroll">
-  <div class="au-o-box">
-    <AuHeading @level="3" @skin="4">
-      Huidige mandaten
-    </AuHeading>
-
-    <AuHr />
-
-    <ul class="au-c-list-vertical">
-      {{#each @model.actieveMandatarissen as |mandataris|}}
-        <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
-        <AuHr />
-      {{else}}
-        <AuPill @icon="info-circle" class="au-u-margin-bottom">
-          Geen huidige mandaten beschikbaar
-        </AuPill>
-      {{/each}}
-    </ul>
-
-    <AuHeading @level="3" @skin="4">
-      Beëindigde mandaten
-    </AuHeading>
-
-    <AuHr />
-
-    <ul class="au-c-list-vertical">
-      {{#each @model.inactieveMandatarissen as |mandataris|}}
-        <Mandatarissen::MandatarisSummary @mandataris={{mandataris}} />
-        <AuHr />
-      {{else}}
-        <AuPill @icon="info-circle">
-          Geen beëindigde mandaten beschikbaar
-        </AuPill>
-      {{/each}}
-    </ul>
+  <div class="au-u-regular au-u-padding">
+    <AuToggleSwitch
+      @checked={{this.activeOnly}}
+      @onChange={{this.toggleActiveOnly}}
+    >Verberg niet actieve posities</AuToggleSwitch>
 
   </div>
 
-  <div class="au-o-box">
-    <div class="au-u-padding-top-small">
-    </div>
-  </div>
+  <AuDataTable
+    @content={{@model.mandatarissen}}
+    @noDataMessage="Geen mandaten gevonden"
+    @sort={{this.sort}}
+    @page={{this.page}}
+    @size={{this.size}}
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        <AuDataTableThSortable
+          @field="bekleedt.bevatIn.isTijdsspecialisatieVan.naam"
+          @currentSorting={{this.sort}}
+          @label="Bestuursorgaan"
+        />
+        <AuDataTableThSortable
+          @field="bekleedt.bestuursfunctie.label"
+          @currentSorting={{this.sort}}
+          @label="Mandaat"
+        />
+        <AuDataTableThSortable
+          @field="heeftLidmaatschap.binnenFractie.naam"
+          @currentSorting={{this.sort}}
+          @label="Fractie"
+        />
+        <AuDataTableThSortable
+          @field="start"
+          @currentSorting={{this.sort}}
+          @label="Start mandaat"
+        />
+        <AuDataTableThSortable
+          @field="einde"
+          @currentSorting={{this.sort}}
+          @label="Einde mandaat"
+        />
+        <th>
+          Publicatie Status
+        </th>
+      </c.header>
+
+      <c.body as |row|>
+        <td>
+          {{#each row.mandataris.bekleedt.bevatIn as |orgaan index|}}
+            <LinkTo
+              @route="organen.orgaan"
+              @model={{orgaan.isTijdsspecialisatieVan.id}}
+              class="au-c-link"
+            >
+              {{orgaan.isTijdsspecialisatieVan.naam}}{{if
+                (lt index (sub row.mandataris.bekleedt.bevatIn.length 1))
+                ", "
+                ""
+              }}
+            </LinkTo>
+          {{/each}}
+        </td>
+        <td><LinkTo
+            @route="mandatarissen.persoon.mandataris"
+            @models={{array
+              row.mandataris.isBestuurlijkeAliasVan.id
+              row.mandataris.id
+            }}
+            class="au-c-link"
+          >
+            {{row.mandataris.bekleedt.bestuursfunctie.label}}
+          </LinkTo>
+        </td>
+        <td>
+          <Mandaat::FoldedFracties
+            @persoon={{row.mandataris.isBestuurlijkeAliasVan}}
+            @mandaat={{row.mandataris.bekleedt}}
+          />
+        </td>
+        <td>
+          {{moment-format row.foldedStart "DD-MM-YYYY"}}
+        </td>
+        <td>
+          {{moment-format row.foldedEnd "DD-MM-YYYY"}}
+        </td>
+        <td>
+          <AuPill
+            @skin={{if
+              (or
+                (not row.mandataris.publicationStatus.label)
+                (eq row.mandataris.publicationStatus.label "Bekrachtigd")
+              )
+              "success"
+              "default"
+            }}
+            @draft={{false}}
+            @size="regular"
+            @iconAlignment="left"
+            @hideText={{false}}
+          >
+            {{or row.mandataris.publicationStatus.label "Bekrachtigd"}}
+          </AuPill>
+        </td>
+      </c.body>
+    </t.content>
+  </AuDataTable>
 </div>
 
 <AuModal

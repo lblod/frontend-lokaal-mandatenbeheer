@@ -17,6 +17,10 @@ export default class MandaatFoldedFractiesComponent extends Component {
     return this.args.bestuursperiode;
   }
 
+  get mandaat() {
+    return this.args.mandaat;
+  }
+
   constructor(...args) {
     super(...args);
     this.load();
@@ -32,21 +36,31 @@ export default class MandaatFoldedFractiesComponent extends Component {
   }
 
   async getMandatarissen(persoon) {
-    return await this.store.query('mandataris', {
+    const options = {
       filter: {
         'is-bestuurlijke-alias-van': {
           ':id:': persoon.id,
         },
-        bekleedt: {
-          'bevat-in': {
-            'heeft-bestuursperiode': {
-              ':id:': this.bestuursperiode.id,
-            },
-          },
-        },
       },
       include: 'heeft-lidmaatschap.binnen-fractie',
-    });
+    };
+
+    if (this.bestuursperiode) {
+      options.filter.bekleedt = {
+        'bevat-in': {
+          'heeft-bestuursperiode': {
+            ':id:': this.bestuursperiode.id,
+          },
+        },
+      };
+    }
+    // mandaat takes precedence over bestuursperiode since it's more specific
+    if (this.mandaat) {
+      options.filter.bekleedt = {
+        ':id:': this.mandaat.id,
+      };
+    }
+    return await this.store.query('mandataris', options);
   }
 
   // Using EmberData get returns undefined even if the relation is loaded
