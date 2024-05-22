@@ -1,0 +1,16 @@
+<AuPill
+  @skin={{if
+    (or
+      (not @mandataris.publicationStatus.label)
+      (eq @mandataris.publicationStatus.label "Bekrachtigd")
+    )
+    "success"
+    "default"
+  }}
+  @draft={{false}}
+  @size="regular"
+  @iconAlignment="left"
+  @hideText={{false}}
+>
+  {{or @mandataris.publicationStatus.label "Bekrachtigd"}}
+</AuPill>
