@@ -26,7 +26,11 @@
         {{on "click" (fn (mut this.isCorrecting) true)}}
       >Corrigeer fouten</AuButton>
     </div>
-    <AuAlert @skin="info" @icon="info-circle">
+    <AuAlert
+      @skin="info"
+      @icon="info-circle"
+      class="alert-grey-info-circle-icon"
+    >
       Om het mandaat te updaten met nieuwe informatie, zoals een
       fractiewijziging, kies voor
       <span class="au-u-medium">Wijzig huidig mandaat</span>. Dit zal een nieuw

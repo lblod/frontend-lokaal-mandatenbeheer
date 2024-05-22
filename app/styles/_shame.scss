@@ -296,3 +296,11 @@
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
 }
+
+.alert-grey-info-circle-icon {
+  svg {
+    background-color: var(--vl-grey-70);
+    border-radius: 50%;
+    color: white;
+  }
+}
