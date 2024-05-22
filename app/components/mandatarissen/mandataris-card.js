@@ -13,4 +13,12 @@ export default class MandatarisCardComponent extends Component {
   get persoon() {
     return this.args.mandataris.isBestuurlijkeAliasVan;
   }
+
+  get skinForStatusPill() {
+    if (this.status && this.status == 'Effectief') {
+      return 'success';
+    }
+
+    return 'default';
+  }
 }
