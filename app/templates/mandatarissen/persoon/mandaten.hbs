@@ -72,7 +72,7 @@
         <td>
           {{#each row.mandataris.bekleedt.bevatIn as |orgaan index|}}
             <LinkTo
-              @route="organen.orgaan"
+              @route="organen.orgaan.mandatarissen"
               @model={{orgaan.isTijdsspecialisatieVan.id}}
               class="au-c-link"
             >
