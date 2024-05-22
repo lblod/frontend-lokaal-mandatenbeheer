@@ -55,19 +55,21 @@
     />
   </div>
 
-  <AuHeading @level="3" @skin="4">
-    Historiek
-  </AuHeading>
+  <div class="au-o-box">
+    <AuHeading @level="3" @skin="4">
+      Historiek
+    </AuHeading>
 
-  <AuHr />
+    <AuHr />
 
-  <ul class="au-c-list-vertical">
-    <Mandatarissen::History
-      @mandataris={{@model.mandataris}}
-      @mandatarissen={{@model.mandatarissen}}
-      @form={{@model.mandatarisEditForm}}
-    />
-  </ul>
+    <ul class="au-c-list-vertical">
+      <Mandatarissen::History
+        @mandataris={{@model.mandataris}}
+        @mandatarissen={{@model.mandatarissen}}
+        @form={{@model.mandatarisEditForm}}
+      />
+    </ul>
+  </div>
 </div>
 
 <AuModal
