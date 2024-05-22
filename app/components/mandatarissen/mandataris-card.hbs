@@ -1,110 +1,117 @@
-<AuCard as |c|>
-  <c.header>
-    <div class="au-u-flex">
-      <AuHeading @level="2" @skin="4" class="flex-grow">
-        {{this.rol}}
-      </AuHeading>
-      <AuPill
-        @skin="link"
-        @draft={{false}}
-        @size="regular"
-        @icon="info-circle"
-        @iconAlignment="left"
-        @hideText={{false}}
-      >
-        {{if
-          @mandataris.publicationStatus
-          @mandataris.publicationStatus.label
-          "Bekrachtigd"
-        }}
-      </AuPill>
-    </div>
-  </c.header>
-  <c.content>
+<AuToolbar @size="large" class="au-u-padding-none au-u-bottom-none" as |Group|>
+  <Group>
+    <AuHeading @skin="4">
+      Details mandaat
+    </AuHeading>
+  </Group>
+</AuToolbar>
 
-    <div class="au-o-grid au-o-grid--tiny">
-      <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
-        <div class="au-c-description-label">Status</div>
-        <div class="au-c-description-value">{{this.status}}</div>
+<div class="au-o-box au-u-background-gray-100">
+  <div class="au-o-grid au-o-grid--tiny">
+    <div class="au-o-grid__item au-u-1-2">
+      <div class="au-c-description-label">Status</div>
+      <div class="au-c-description-value au-u-margin-top-tiny">
+        <AuPill @skin={{this.skinForStatusPill}}>
+          {{this.status}}
+        </AuPill>
       </div>
-      <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
+    </div>
+    <div class="au-o-grid__item au-u-1-2">
+      <div class="au-c-description-label">Publicatie status</div>
+      <div class="au-c-description-value au-u-margin-top-tiny">
+        <Mandaat::PublicatieStatusPill @mandataris={{@mandataris}} />
+        <AuLinkExternal href="" class="au-u-margin-left-tiny">Bekijk bewijs</AuLinkExternal>
+        <p
+          class="au-u-italic au-u-h-functional au-u-flex au-u-flex--vertical-center"
+        >
+          <AuIcon @icon="info-circle" />
+          <span class="au-u-margin-right-tiny">Om een bekrachtiging terug te
+            trekken moet je de
+          </span>
+          <AuLinkExternal href="">
+            technische dienst contacteren
+          </AuLinkExternal>
+        </p>
+      </div>
+    </div>
+    {{#if @mandataris.bekleedt.isSchepen}}
+      <div class="au-o-grid__item au-u-1-2">
         <div class="au-c-description-label">Rangorde</div>
-        <div class="au-c-description-value">{{@mandataris.rangorde}}</div>
+        <div
+          class="au-c-description-value au-u-margin-top-tiny"
+        >{{@mandataris.rangorde}}</div>
       </div>
-      <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
-        <div class="au-c-description-label">Fractie</div>
-        <div class="au-c-description-value"><Mandaat::FoldedFracties
-            @persoon={{this.persoon}}
-            @mandaat={{@mandataris.mandaat}}
-          /></div>
+    {{/if}}
+    <div class="au-o-grid__item au-u-1-2">
+      <div class="au-c-description-label">Start periode</div>
+      <div class="au-c-description-value au-u-margin-top-tiny">
+        {{moment-format @mandataris.start "DD-MM-YYYY"}}
       </div>
-      <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
-        <div class="au-c-description-label">Startdatum</div>
-        <div class="au-c-description-value">
-          {{moment-format @mandataris.start "DD-MM-YYYY"}}
-        </div>
-      </div>
-      <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
-        <div class="au-c-description-label">Einddatum</div>
-        <div class="au-c-description-value">
-          {{#if @mandataris.einde}}
-            {{moment-format @mandataris.einde "DD-MM-YYYY"}}
-          {{else}}
-            heden
-          {{/if}}
-        </div>
-      </div>
-      {{#if @mandataris.linkToBesluit}}
-        <div class="au-o-grid__item au-u-5-6">
-          <div class="au-c-description-label"><div>Link naar besluit</div></div>
-          <div class="au-c-description-value"><AuLink
-            >{{@mandataris.linkToBesluit}}</AuLink></div>
-        </div>
-      {{/if}}
-
-      {{#if @vervangers}}
-        <div class="au-o-grid__item au-u-5-6">
-          <div class="au-c-description-label"><div>Vervanger van:</div></div>
-          <div class="au-c-description-value">
-            {{#each @vervangers as |replaced index|}}
-              <AuLink
-                @route="mandatarissen.mandataris"
-                @model={{replaced.id}}
-                @skin="secondary"
-              >
-                {{replaced.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-                {{replaced.isBestuurlijkeAliasVan.achternaam}}{{if
-                  (lt index (sub @vervangers.length 1))
-                  ","
-                }}
-              </AuLink>
-
-            {{/each}}
-          </div>
-        </div>
-      {{/if}}
-      {{#if @mandataris.tijdelijkeVervangingen}}
-        <div class="au-o-grid__item au-u-5-6">
-          <div class="au-c-description-label"><div>Vervangen door:</div></div>
-          <div class="au-c-description-value">
-            {{#each @mandataris.tijdelijkeVervangingen as |replacement index|}}
-              <AuLink
-                @route="mandatarissen.mandataris"
-                @model={{replacement.id}}
-                @skin="secondary"
-              >
-                {{replacement.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-                {{replacement.isBestuurlijkeAliasVan.achternaam}}{{if
-                  (lt index (sub @mandataris.tijdelijkeVervangingen.length 1))
-                  ","
-                }}
-              </AuLink>
-
-            {{/each}}
-          </div>
-        </div>
-      {{/if}}
     </div>
-  </c.content>
+    <div class="au-o-grid__item au-u-1-2">
+      <div class="au-c-description-label">Fractie</div>
+      <div
+        class="au-c-description-value au-u-margin-top-tiny"
+      >{{this.fractie}}</div>
+    </div>
+    <div class="au-o-grid__item au-u-1-2">
+      <div class="au-c-description-label">Einde periode</div>
+      <div class="au-c-description-value au-u-margin-top-tiny">
+        {{#if @mandataris.einde}}
+          {{moment-format @mandataris.einde "DD-MM-YYYY"}}
+        {{else}}
+          heden
+        {{/if}}
+      </div>
+    </div>
+    {{#if @mandataris.linkToBesluit}}
+      <div class="au-o-grid__item au-u-5-6">
+        <div class="au-c-description-label"><div>Link naar besluit</div></div>
+        <div class="au-c-description-value au-u-margin-top-tiny"><AuLink
+          >{{@mandataris.linkToBesluit}}</AuLink></div>
+      </div>
+    {{/if}}
 
-</AuCard>
+    {{#if @vervangers}}
+      <div class="au-o-grid__item au-u-5-6">
+        <div class="au-c-description-label"><div>Vervanger van:</div></div>
+        <div class="au-c-description-value au-u-margin-top-tiny">
+          {{#each @vervangers as |replaced index|}}
+            <AuLink
+              @route="mandatarissen.mandataris"
+              @model={{replaced.id}}
+              @skin="secondary"
+            >
+              {{replaced.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+              {{replaced.isBestuurlijkeAliasVan.achternaam}}{{if
+                (lt index (sub @vervangers.length 1))
+                ","
+              }}
+            </AuLink>
+          {{/each}}
+        </div>
+      </div>
+    {{/if}}
+    {{#if @mandataris.tijdelijkeVervangingen}}
+      <div class="au-o-grid__item au-u-5-6">
+        <div class="au-c-description-label"><div>Vervangen door:</div></div>
+        <div class="au-c-description-value">
+          {{#each @mandataris.tijdelijkeVervangingen as |replacement index|}}
+            <AuLink
+              @route="mandatarissen.mandataris"
+              @model={{replacement.id}}
+              @skin="secondary"
+            >
+              {{replacement.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+              {{replacement.isBestuurlijkeAliasVan.achternaam}}{{if
+                (lt index (sub @mandataris.tijdelijkeVervangingen.length 1))
+                ","
+              }}
+            </AuLink>
+
+          {{/each}}
+        </div>
+      </div>
+    {{/if}}
+  </div>
+</div>

@@ -108,22 +108,7 @@
           {{moment-format row.foldedEnd "DD-MM-YYYY"}}
         </td>
         <td>
-          <AuPill
-            @skin={{if
-              (or
-                (not row.mandataris.publicationStatus.label)
-                (eq row.mandataris.publicationStatus.label "Bekrachtigd")
-              )
-              "success"
-              "default"
-            }}
-            @draft={{false}}
-            @size="regular"
-            @iconAlignment="left"
-            @hideText={{false}}
-          >
-            {{or row.mandataris.publicationStatus.label "Bekrachtigd"}}
-          </AuPill>
+          <Mandaat::PublicatieStatusPill @mandataris={{row.mandataris}} />
         </td>
       </c.body>
     </t.content>

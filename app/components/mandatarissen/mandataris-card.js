@@ -1,9 +1,6 @@
 import Component from '@glimmer/component';
 
 export default class MandatarisCardComponent extends Component {
-  get rol() {
-    return this.args.mandataris.bekleedt.get('bestuursfunctie').get('label');
-  }
   get status() {
     return this.args.mandataris.status.get('label');
   }
@@ -15,5 +12,13 @@ export default class MandatarisCardComponent extends Component {
 
   get persoon() {
     return this.args.mandataris.isBestuurlijkeAliasVan;
+  }
+
+  get skinForStatusPill() {
+    if (this.status && this.status == 'Effectief') {
+      return 'success';
+    }
+
+    return 'default';
   }
 }

@@ -4,19 +4,44 @@
   model=this.model.mandataris.id
 }}
 
-<AuToolbar @border="bottom" @size="large" as |Group|>
-  <Group>
-    <AuHeading @skin="2">Mandaat
-      <AuLink
-        @route="mandatarissen.persoon"
-        @model={{this.persoon.id}}
-      >{{this.persoon.gebruikteVoornaam}}
-        {{this.persoon.achternaam}}</AuLink>
-      <br />
+<div class="au-o-grid au-u-padding">
+  <div class="au-o-grid__item au-u-1-2">
+    <p class="au-u-h2 au-u-medium">
       {{this.bestuursorganenTitle}}
-    </AuHeading>
-  </Group>
-</AuToolbar>
+    </p>
+    <p class="au-u-h3">
+      {{this.persoon.gebruikteVoornaam}}
+      {{this.persoon.achternaam}}
+    </p>
+  </div>
+  <div class="au-o-grid__item au-u-1-2 au-u-text-left">
+    <div class="au-u-flex au-u-flex--end au-u-margin-bottom">
+      <AuButton
+        class="au-u-margin-right-small"
+        @disabled={{not this.model.mandataris.isActive}}
+        {{on "click" (fn (mut this.isChanging) true)}}
+      >Wijzig huidig mandaat</AuButton>
+      <AuButton
+        @skin="secondary"
+        {{on "click" (fn (mut this.isCorrecting) true)}}
+      >Corrigeer fouten</AuButton>
+    </div>
+    <AuAlert
+      @skin="info"
+      @icon="info-circle"
+      class="alert-grey-info-circle-icon"
+    >
+      Om het mandaat te updaten met nieuwe informatie, zoals een
+      fractiewijziging, kies voor
+      <span class="au-u-medium">Wijzig huidig mandaat</span>. Dit zal een nieuw
+      mandaat starten met de gewijzigde situatie.
+      <br />
+      Om fouten te corrigeren, bijvoorbeeld een typfout of een foutieve
+      startdatum, kies voor
+      <span class="au-u-medium">Corrigeer fouten</span>.
+    </AuAlert>
+  </div>
+</div>
 
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box">
@@ -31,16 +56,6 @@
     <Mandatarissen::MandatarisExtraInfoCard
       @mandataris={{@model.mandataris}}
       @form={{@model.mandatarisExtraInfoForm}}
-    />
-  </div>
-
-  <div class="au-o-box">
-    <Mandatarissen::MandatarisEditPrompt
-      class="au-c-collapsible au-u-margin-top-small"
-      @mandataris={{@model.mandataris}}
-      @bestuursorganen={{@model.bestuursorganen}}
-      @mandatarisEditForm={{@model.mandatarisEditForm}}
-      @onMandatarisChanged={{this.onMandatarisChanged}}
     />
   </div>
 
@@ -60,3 +75,38 @@
     </ul>
   </div>
 </div>
+
+<AuModal
+  @title={{(concat
+    "Verander Status " this.model.mandataris.bekleedt.bestuursfunctie.label
+  )}}
+  @modalOpen={{this.isChanging}}
+  @closable={{true}}
+  @closeModal={{this.closeModals}}
+>
+  <Mandatarissen::UpdateState
+    @noTitle={{true}}
+    @onCancel={{this.closeModals}}
+    @onStateChanged={{this.onUpdateState}}
+    @mandataris={{this.model.mandataris}}
+  />
+</AuModal>
+
+<AuModal
+  @title={{(concat
+    "Corrigeer fouten " this.model.mandataris.bekleedt.bestuursfunctie.label
+  )}}
+  @modalOpen={{this.isCorrecting}}
+  @closable={{true}}
+  @closeModal={{this.closeModals}}
+>
+  <div class="au-o-box">
+    <Form::Instance
+      @instanceId={{this.model.mandataris.id}}
+      @form={{this.model.mandatarisEditForm}}
+      @onSave={{this.onSave}}
+      @onCancel={{this.closeModals}}
+      @buildMetaTtl={{this.buildMetaTtl}}
+    />
+  </div>
+</AuModal>
