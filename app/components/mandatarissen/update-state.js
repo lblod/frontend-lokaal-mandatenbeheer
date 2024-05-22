@@ -141,7 +141,7 @@ export default class MandatarissenUpdateState extends Component {
       einde: endDate,
       bekleedt: this.args.mandataris.bekleedt,
       isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
-      beleidsdomein: this.args.mandataris.beleidsdomein,
+      beleidsdomein: (await this.args.mandataris.beleidsdomein).slice(),
       status: this.newStatus,
       publicationStatus: await getDraftPublicationStatus(this.store),
       modified: new Date(),
