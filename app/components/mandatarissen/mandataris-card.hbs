@@ -17,20 +17,7 @@
     <div class="au-o-grid__item au-u-1-2">
       <div class="au-c-description-label">Publicatie status</div>
       <div class="au-c-description-value au-u-margin-top-tiny">
-        <AuPill
-          @skin="link"
-          @draft={{false}}
-          @size="regular"
-          @icon="info-circle"
-          @iconAlignment="left"
-          @hideText={{false}}
-        >
-          {{if
-            @mandataris.publicationStatus
-            @mandataris.publicationStatus.label
-            "Bekrachtigd"
-          }}
-        </AuPill>
+        <Mandaat::PublicatieStatusPill @mandataris={{@mandataris}} />
         <AuLinkExternal href="" class="au-u-margin-left-tiny">Bekijk bewijs</AuLinkExternal>
         <p
           class="au-u-italic au-u-h-functional au-u-flex au-u-flex--vertical-center"
