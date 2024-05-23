@@ -4,6 +4,7 @@ import { service } from '@ember/service';
 
 export default class SystemNotificationsRoute extends Route {
   @service currentSession;
+  @service session;
   @service store;
 
   queryParams = {
@@ -14,6 +15,10 @@ export default class SystemNotificationsRoute extends Route {
     isUnRead: { refreshModel: true },
     isArchived: { refreshModel: true },
   };
+
+  beforeModel(transition) {
+    this.session.requireAuthentication(transition, 'login');
+  }
 
   async model(params) {
     const filter = {
