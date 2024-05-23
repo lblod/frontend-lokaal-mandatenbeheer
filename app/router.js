@@ -44,6 +44,7 @@ Router.map(function () {
       this.route('mandaten');
       this.route('mandataris', { path: '/:mandataris_id/mandataris' });
     });
+    this.route('upload');
   });
 
   this.route('verkiezingen', function () {
