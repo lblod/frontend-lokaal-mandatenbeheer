@@ -5,13 +5,10 @@
     <AuHeading @skin="2">Systeem meldingen</AuHeading>
   </Group>
 </AuToolbar>
-
 <AuDataTable
   @content={{@model.notifications}}
-  @sort={{@sort}}
-  @page={{@page}}
-  @size={{@size}}
-  @isLoading={{false}}
+  @sort={{this.sort}}
+  @page={{this.page}}
   @noDataMessage="Geen systeem meldingen gevonden."
   as |t|
 >
@@ -19,17 +16,17 @@
     <c.header>
       <AuDataTableThSortable
         @field="subject"
-        @currentSorting={{@sort}}
         @label="Onderwerp"
+        class="no-sorting"
       />
       <AuDataTableThSortable
         @field="message"
-        @currentSorting={{@sort}}
         @label="Bericht"
+        class="no-sorting"
       />
       <AuDataTableThSortable
-        @field="createdAt"
-        @currentSorting={{@sort}}
+        @field="created-at"
+        @currentSorting={{this.sort}}
         @label="Aangemaakt op"
       />
       <th>{{! Actions dropdown }}</th>
