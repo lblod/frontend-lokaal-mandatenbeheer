@@ -45,11 +45,21 @@
           @hideText={{true}}
           role="menu"
         >
-          <AuButton @skin="link" @icon="check" role="menuitem">
-            Markeer als gelezen
+          <AuButton
+            @skin="link"
+            @icon="check"
+            role="menuitem"
+            {{on "click" (perform this.toggleDate notification "readAt")}}
+          >
+            {{this.readAtText notification}}
           </AuButton>
-          <AuButton @skin="link" @icon="archive" role="menuitem">
-            Archiveren
+          <AuButton
+            @skin="link"
+            @icon="archive"
+            role="menuitem"
+            {{on "click" (perform this.toggleDate notification "archivedAt")}}
+          >
+            {{this.archivedAtText notification}}
           </AuButton>
         </AuDropdown>
       </td>
