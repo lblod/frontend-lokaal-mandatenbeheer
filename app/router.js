@@ -20,6 +20,7 @@ Router.map(function () {
 
   this.route('contact');
   this.route('settings');
+  this.route('system-notifications');
 
   this.route('legaal', function () {
     this.route('disclaimer');
