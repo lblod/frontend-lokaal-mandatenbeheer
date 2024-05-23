@@ -2,12 +2,12 @@ import Controller from '@ember/controller';
 
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { restartableTask } from 'ember-concurrency';
 
 export default class SystemNotificationsController extends Controller {
-  queryParams = ['created-at', 'page', 'size'];
-
-  @tracked sort = 'created-at';
+  @service router;
+  @tracked sort = '-created-at';
 
   toggleDate = restartableTask(async (notification, modelAttribute) => {
     if (notification[modelAttribute]) {
@@ -41,5 +41,21 @@ export default class SystemNotificationsController extends Controller {
     }
 
     return 'notification-tableRow--unread';
+  }
+
+  get filterUnRead() {
+    return { isUnRead: true, isRead: null, isArchived: null, page: 0 };
+  }
+
+  get filterRead() {
+    return { isRead: true, isArchived: null, isUnRead: null, page: 0 };
+  }
+
+  get filterArchived() {
+    return { isArchived: true, isRead: null, isUnRead: null, page: 0 };
+  }
+
+  get filterAll() {
+    return { isArchived: null, isRead: null, isUnRead: null, page: 0 };
   }
 }

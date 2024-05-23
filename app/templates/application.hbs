@@ -44,7 +44,12 @@
       {{/if}}
     </li>
     <li class="au-c-list-horizontal__item">
-      <AuLink @hideText={{true}} @icon="drag" @route="system-notifications">
+      <AuLink
+        @hideText={{true}}
+        @icon="drag"
+        @route="system-notifications"
+        @query={{hash isRead=null isUnread=null isArchived=null}}
+      >
         Meldingen
       </AuLink>
     </li>
