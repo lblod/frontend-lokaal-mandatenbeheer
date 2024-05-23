@@ -36,7 +36,7 @@
     <c.body as |notification|>
       <td>{{notification.subject}}</td>
       <td>{{notification.message}}</td>
-      <td>{{notification.createdAt}}</td>
+      <td>{{moment-format notification.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
     </c.body>
   </t.content>
 </AuDataTable>
