@@ -5,3 +5,38 @@
     <AuHeading @skin="2">Systeem meldingen</AuHeading>
   </Group>
 </AuToolbar>
+
+<AuDataTable
+  @content={{@notifications}}
+  @sort={{@sort}}
+  @page={{@page}}
+  @size={{@size}}
+  @isLoading={{false}}
+  @noDataMessage="Geen systeem meldingen gevonden."
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @field="subject"
+        @currentSorting={{@sort}}
+        @label="Onderwerp"
+      />
+      <AuDataTableThSortable
+        @field="message"
+        @currentSorting={{@sort}}
+        @label="Bericht"
+      />
+      <AuDataTableThSortable
+        @field="createdAt"
+        @currentSorting={{@sort}}
+        @label="Aangemaakt op"
+      />
+    </c.header>
+    <c.body as |notification|>
+      <td>{{notification.subject}}</td>
+      <td>{{notification.message}}</td>
+      <td>{{notification.createdAt}}</td>
+    </c.body>
+  </t.content>
+</AuDataTable>
