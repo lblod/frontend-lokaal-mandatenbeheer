@@ -32,11 +32,27 @@
         @currentSorting={{@sort}}
         @label="Aangemaakt op"
       />
+      <th>{{! Actions dropdown }}</th>
     </c.header>
     <c.body as |notification|>
       <td>{{notification.subject}}</td>
       <td>{{notification.message}}</td>
       <td>{{moment-format notification.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
+      <td>
+        <AuDropdown
+          @skin={{this.skin}}
+          @icon="three-dots"
+          @hideText={{true}}
+          role="menu"
+        >
+          <AuButton @skin="link" @icon="check" role="menuitem">
+            Markeer als gelezen
+          </AuButton>
+          <AuButton @skin="link" @icon="archive" role="menuitem">
+            Archiveren
+          </AuButton>
+        </AuDropdown>
+      </td>
     </c.body>
   </t.content>
 </AuDataTable>
