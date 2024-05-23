@@ -28,4 +28,13 @@ export default class SystemNotificationsController extends Controller {
     }
     return 'Archiveer';
   }
+
+  @action
+  classIsRead(notification) {
+    if (notification.readAt) {
+      return '';
+    }
+
+    return 'notification-tableRow--unread';
+  }
 }
