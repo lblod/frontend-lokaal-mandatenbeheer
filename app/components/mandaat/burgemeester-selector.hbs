@@ -13,12 +13,7 @@
 
 <div class="au-o-box">
   {{#if this.errorMessages}}
-    <AuAlert
-      @title={{this.title}}
-      @skin="warning"
-      @icon="alert-triangle"
-      @closable={{false}}
-    >
+    <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
       {{#each this.errorMessages as |message|}}
         <p>{{message}}</p>
       {{/each}}
