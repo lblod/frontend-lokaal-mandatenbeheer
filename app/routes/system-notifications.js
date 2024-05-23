@@ -36,6 +36,11 @@ export default class SystemNotificationsRoute extends Route {
     return {
       notifications: notifications ?? [],
       sort: params.sort,
+      tabFilters: {
+        read: params.isRead,
+        unread: params.isUnRead,
+        archived: params.isArchived,
+      },
     };
   }
 }

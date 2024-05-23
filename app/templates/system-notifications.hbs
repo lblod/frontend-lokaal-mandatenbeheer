@@ -9,22 +9,35 @@
 <div class="au-u-margin-bottom au-u-padding-left au-u-padding-right">
   <AuTabs as |Tab|>
     <Tab>
-      <AuLink @route="system-notifications" @query={{this.filterAll}}>
+      <AuLink
+        class={{this.activeTabClass 1}}
+        @route="system-notifications"
+        @query={{this.filterAll}}
+      >
         Alle
       </AuLink>
     </Tab>
     <Tab>
-      <AuLink @route="system-notifications" @query={{this.filterUnRead}}>
+      <AuLink
+        class={{this.activeTabClass 2}}
+        @route="system-notifications"
+        @query={{this.filterUnRead}}
+      >
         Ongelezen
       </AuLink>
     </Tab>
     <Tab>
-      <AuLink @route="system-notifications" @query={{this.filterRead}}>
+      <AuLink
+        class={{this.activeTabClass 3}}
+        @route="system-notifications"
+        @query={{this.filterRead}}
+      >
         Gelezen
       </AuLink>
     </Tab>
     <Tab>
       <AuLink
+        class={{this.activeTabClass 4}}
         @route="system-notifications"
         @query={{this.filterArchived}}
       >Gearchiveerd
