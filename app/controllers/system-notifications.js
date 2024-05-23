@@ -55,27 +55,15 @@ export default class SystemNotificationsController extends Controller {
     return { isArchived: true, isRead: null, isUnRead: null, page: 0 };
   }
 
-  get filterAll() {
-    return { isArchived: null, isRead: null, isUnRead: null, page: 0 };
-  }
-
   @action
   activeTabClass(tabNumber) {
-    if (
-      !this.model.tabFilters.read &&
-      !this.model.tabFilters.unread &&
-      !this.model.tabFilters.archived &&
-      tabNumber == 1
-    ) {
+    if (this.model.tabFilters.unread && tabNumber == 1) {
       return 'active';
     }
-    if (this.model.tabFilters.read && tabNumber == 3) {
+    if (this.model.tabFilters.read && tabNumber == 2) {
       return 'active';
     }
-    if (this.model.tabFilters.unread && tabNumber == 2) {
-      return 'active';
-    }
-    if (this.model.tabFilters.archived && tabNumber == 4) {
+    if (this.model.tabFilters.archived && tabNumber == 3) {
       return 'active';
     }
 

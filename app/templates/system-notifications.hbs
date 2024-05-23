@@ -12,15 +12,6 @@
       <AuLink
         class={{this.activeTabClass 1}}
         @route="system-notifications"
-        @query={{this.filterAll}}
-      >
-        Alle
-      </AuLink>
-    </Tab>
-    <Tab>
-      <AuLink
-        class={{this.activeTabClass 2}}
-        @route="system-notifications"
         @query={{this.filterUnRead}}
       >
         Ongelezen
@@ -28,7 +19,7 @@
     </Tab>
     <Tab>
       <AuLink
-        class={{this.activeTabClass 3}}
+        class={{this.activeTabClass 2}}
         @route="system-notifications"
         @query={{this.filterRead}}
       >
@@ -37,7 +28,7 @@
     </Tab>
     <Tab>
       <AuLink
-        class={{this.activeTabClass 4}}
+        class={{this.activeTabClass 3}}
         @route="system-notifications"
         @query={{this.filterArchived}}
       >Gearchiveerd
@@ -74,9 +65,7 @@
         <th>{{! Actions dropdown }}</th>
       </c.header>
       <c.body as |notification|>
-        <td
-          class={{this.classIsRead notification}}
-        >{{notification.subject}}</td>
+        <td>{{notification.subject}}</td>
         <td>{{notification.message}}</td>
         <td>{{moment-format notification.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
         <td>
