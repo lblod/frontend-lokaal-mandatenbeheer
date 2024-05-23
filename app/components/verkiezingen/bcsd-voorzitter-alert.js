@@ -62,13 +62,15 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
     });
   }
 
-  async isMemberOfRMW(persoon) {
-    const rmwInTijd = await findFirst(
+  async isMember(persoon, bestuursfunctieCode, hasClassificationFunc) {
+    const bestuursorgaanInTijd = await findFirst(
       this.bestuursorganenInTijd,
-      async (bestuursorgaanInTijd) => await bestuursorgaanInTijd.isRMW
+      async (bestInTijd) => {
+        return await hasClassificationFunc(bestInTijd);
+      }
     );
 
-    if (!rmwInTijd) {
+    if (!bestuursorgaanInTijd) {
       return false;
     }
 
@@ -79,10 +81,10 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
         },
         bekleedt: {
           bestuursfunctie: {
-            ':uri:': MANDAAT_LID_RMW_CODE,
+            ':uri:': bestuursfunctieCode,
           },
           'bevat-in': {
-            ':uri:': rmwInTijd.uri,
+            ':uri:': bestuursorgaanInTijd.uri,
           },
         },
       },
@@ -90,31 +92,19 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
     return Boolean(mandataris);
   }
 
+  async isMemberOfRMW(persoon) {
+    return await this.isMember(
+      persoon,
+      MANDAAT_LID_RMW_CODE,
+      async (bestuursorgaanInTijd) => await bestuursorgaanInTijd.isRMW
+    );
+  }
+
   async isMemberOfVastBureau(persoon) {
-    const vastBureauInTijd = await findFirst(
-      this.bestuursorganenInTijd,
+    return await this.isMember(
+      persoon,
+      LID_VAST_BUREAU_CODE,
       async (bestuursorgaanInTijd) => await bestuursorgaanInTijd.isVastBureau
     );
-
-    if (!vastBureauInTijd) {
-      return false;
-    }
-
-    const mandataris = await queryRecord(this.store, 'mandataris', {
-      filter: {
-        'is-bestuurlijke-alias-van': {
-          ':uri:': persoon.uri,
-        },
-        bekleedt: {
-          bestuursfunctie: {
-            ':uri:': LID_VAST_BUREAU_CODE,
-          },
-          'bevat-in': {
-            ':uri:': vastBureauInTijd.uri,
-          },
-        },
-      },
-    });
-    return Boolean(mandataris);
   }
 }
