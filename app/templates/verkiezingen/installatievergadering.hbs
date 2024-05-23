@@ -57,13 +57,20 @@
       @bestuurseenheid={{@model.bestuurseenheid}}
     />
 
+    {{! This is not a bestuursorgaan, it is a bestuursorgaanInTijd }}
     {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
       <Verkiezingen::PrepareLegislatuurSection
         @bestuursorgaan={{bestuursorgaan}}
         @bestuursorganen={{@model.bestuursorganenInTijd}}
         @sort={{this.sort}}
         @form={{@model.mandatarisNewForm}}
-      />
+      >{{#if (await bestuursorgaan.isBCSD)}}
+          <Verkiezingen::BcsdVoorzitterAlert
+            @bcsdBestuursorgaanInTijd={{bestuursorgaan}}
+            @bestuursorganenInTijd={{@model.bestuursorganenInTijd}}
+          />
+        {{/if}}
+      </Verkiezingen::PrepareLegislatuurSection>
     {{/each}}
 
     <div class="au-o-box">

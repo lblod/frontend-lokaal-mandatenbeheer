@@ -21,11 +21,14 @@ import {
   VOORZITTER_RMW_CODE,
   LID_VAST_BUREAU_CODE,
   VOORZITTER_VAST_BUREAU_CODE,
+  BCSD_BESTUURSORGAAN_URI,
+  VOORZITTER_BCSD_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 import {
   getDraftPublicationStatus,
   getEffectiefStatus,
 } from 'frontend-lmb/utils/get-mandataris-status';
+import { queryRecord } from 'frontend-lmb/utils/query-record';
 
 const CREATE_MODE = 'create';
 
@@ -35,6 +38,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service router;
 
   @tracked editMode = null;
+  @tracked bcsdError = '';
 
   @action
   createMandataris() {
@@ -66,7 +70,76 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     return CBS_BESTUURSORGAAN_URI;
   }
 
+  constructor(...args) {
+    super(...args);
+    this.load();
+  }
+
+  async load() {
+    const voorzitter = await this.getVoorzitterBCSD();
+    if (!voorzitter) {
+      return;
+    }
+    const isMemberOfRMW = await this.isMemberOfRMW(voorzitter);
+    const isMemberOfVB = await this.isMemberOfVB(voorzitter);
+
+    if (!isMemberOfRMW && !isMemberOfVB) {
+      this.bcsdError =
+        'De voorzitter van de BCSD moet lid zijn van de RMW of het vast bureau.';
+    }
+  }
+
+  // TODO restrict to this bestuurseenheid
+  async getVoorzitterBCSD() {
+    return await queryRecord(this.store, 'persoon', {
+      filter: {
+        'is-aangesteld-als': {
+          bekleedt: {
+            bestuursfunctie: {
+              ':uri:': VOORZITTER_BCSD_CODE,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // TODO restrict to this bestuurseenheid
+  async isMemberOfRMW(persoon) {
+    const mandataris = await queryRecord(this.store, 'mandataris', {
+      filter: {
+        'is-bestuurlijke-alias-van': {
+          ':uri:': persoon.uri,
+        },
+        bekleedt: {
+          bestuursfunctie: {
+            ':uri:': LID_VAST_BUREAU_CODE,
+          },
+        },
+      },
+    });
+    return Boolean(mandataris);
+  }
+
+  // TODO restrict to this bestuurseenheid
+  async isMemberOfVB(persoon) {
+    const mandataris = await queryRecord(this.store, 'mandataris', {
+      filter: {
+        'is-bestuurlijke-alias-van': {
+          ':uri:': persoon.uri,
+        },
+        bekleedt: {
+          bestuursfunctie: {
+            ':uri:': MANDAAT_LID_RMW_CODE,
+          },
+        },
+      },
+    });
+    return Boolean(mandataris);
+  }
+
   mirrorTable = restartableTask(async () => {
+    // bestuursorganenInTijd
     const bestuursorganen = this.args.bestuursorganen;
     let syncId = null;
     if (await this.isRMW) {
