@@ -35,7 +35,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service router;
 
   @tracked editMode = null;
-  @tracked bcsdError = '';
 
   @action
   createMandataris() {

@@ -2,20 +2,6 @@
   <Mandaat::BurgemeesterSelector @bestuursorgaanInTijd={{@bestuursorgaan}} />
 {{else}}
 
-  <div class="au-o-box">
-    {{#if this.bcsdError}}
-      <AuAlert
-        @title={{this.title}}
-        @skin="warning"
-        @icon="alert-triangle"
-        @closable={{false}}
-      >
-        <p>{{this.bcsdError}}</p>
-      </AuAlert>
-    {{/if}}
-    <Person::Selector @person={{this.persoon}} @onUpdate={{this.onUpdate}} />
-  </div>
-
   {{yield}}
 
   <AuToolbar

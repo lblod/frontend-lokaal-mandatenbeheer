@@ -57,7 +57,6 @@
       @bestuurseenheid={{@model.bestuurseenheid}}
     />
 
-    {{! This is not a bestuursorgaan, it is a bestuursorgaanInTijd }}
     {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
       <Verkiezingen::PrepareLegislatuurSection
         @bestuursorgaan={{bestuursorgaan}}
