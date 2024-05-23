@@ -163,6 +163,13 @@
 .no-pagination {
   .au-c-data-table__actions--bottom {
     display: none;
+    pointer-events: none;
+  }
+}
+
+.no-sorting {
+  .au-c-data-table__sort {
+    display: none;
   }
 }
 

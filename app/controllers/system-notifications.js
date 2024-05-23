@@ -1,9 +1,14 @@
 import Controller from '@ember/controller';
 
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { restartableTask } from 'ember-concurrency';
 
 export default class SystemNotificationsController extends Controller {
+  queryParams = ['created-at', 'page', 'size'];
+
+  @tracked sort = 'created-at';
+
   toggleDate = restartableTask(async (notification, modelAttribute) => {
     if (notification[modelAttribute]) {
       notification[modelAttribute] = null;
@@ -16,7 +21,7 @@ export default class SystemNotificationsController extends Controller {
   @action
   readAtText(notification) {
     if (notification.readAt) {
-      return 'Markeer als niet gelezen'; // euh idk
+      return 'Markeer als niet gelezen';
     }
     return 'Markeer als gelezen';
   }
