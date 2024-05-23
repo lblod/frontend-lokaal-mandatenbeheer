@@ -65,34 +65,7 @@
         <th>{{! Actions dropdown }}</th>
       </c.header>
       <c.body as |notification|>
-        <td>{{notification.subject}}</td>
-        <td>{{notification.message}}</td>
-        <td>{{moment-format notification.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
-        <td>
-          <AuDropdown
-            @skin={{this.skin}}
-            @icon="three-dots"
-            @hideText={{true}}
-            role="menu"
-          >
-            <AuButton
-              @skin="link"
-              @icon="check"
-              role="menuitem"
-              {{on "click" (perform this.toggleDate notification "readAt")}}
-            >
-              {{this.readAtText notification}}
-            </AuButton>
-            <AuButton
-              @skin="link"
-              @icon="archive"
-              role="menuitem"
-              {{on "click" (perform this.toggleDate notification "archivedAt")}}
-            >
-              {{this.archivedAtText notification}}
-            </AuButton>
-          </AuDropdown>
-        </td>
+        <SystemNotificationRow @notification={{notification}} />
       </c.body>
     </t.content>
   </AuDataTable>
