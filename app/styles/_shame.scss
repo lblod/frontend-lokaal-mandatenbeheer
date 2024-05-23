@@ -311,3 +311,14 @@
     color: white;
   }
 }
+
+.notification-count-circle {
+  border-radius: 50%;
+  background-color: var(--au-blue-700);
+  color: var(--au-white);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
