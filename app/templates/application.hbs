@@ -43,6 +43,11 @@
         <Shared::LoginButton @isCompact={{true}} />
       {{/if}}
     </li>
+    <li class="au-c-list-horizontal__item">
+      <AuLink @hideText={{true}} @icon="drag" @route="system-notifications">
+        Meldingen
+      </AuLink>
+    </li>
   </AuMainHeader>
 
   {{#if this.session.isAuthenticated}}
