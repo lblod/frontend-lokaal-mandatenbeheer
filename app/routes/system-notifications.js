@@ -10,13 +10,28 @@ export default class SystemNotificationsRoute extends Route {
     sort: { refreshModel: true },
     page: { refreshModel: true },
     createdAt: { refreshModel: true },
+    isRead: { refreshModel: true },
+    isUnRead: { refreshModel: true },
+    isArchived: { refreshModel: true },
   };
 
   async model(params) {
-    const notifications = await this.store.query('system-notification', {
+    const filter = {
       'filter[gebruiker][:id:]': this.currentSession.user.id,
       sort: params.sort,
-    });
+    };
+
+    if (params.isRead) {
+      filter['filter[:has:read-at]'] = true;
+    }
+    if (params.isUnRead) {
+      filter['filter[:has-no:read-at]'] = true;
+    }
+    if (params.isArchived) {
+      filter['filter[:has:archived-at]'] = true;
+    }
+
+    const notifications = await this.store.query('system-notification', filter);
 
     return {
       notifications: notifications ?? [],

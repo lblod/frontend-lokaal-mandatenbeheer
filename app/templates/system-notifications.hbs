@@ -1,68 +1,102 @@
 {{page-title "Meldingen"}}
 
-<AuToolbar @border="bottom" @size="large" as |Group|>
+<AuToolbar @size="large" as |Group|>
   <Group>
     <AuHeading @skin="2">Systeem meldingen</AuHeading>
   </Group>
 </AuToolbar>
-<AuDataTable
-  @content={{@model.notifications}}
-  @sort={{this.sort}}
-  @page={{this.page}}
-  @noDataMessage="Geen systeem meldingen gevonden."
-  as |t|
->
-  <t.content as |c|>
-    <c.header>
-      <AuDataTableThSortable
-        @field="subject"
-        @label="Onderwerp"
-        class="no-sorting"
-      />
-      <AuDataTableThSortable
-        @field="message"
-        @label="Bericht"
-        class="no-sorting"
-      />
-      <AuDataTableThSortable
-        @field="created-at"
-        @currentSorting={{this.sort}}
-        @label="Aangemaakt op"
-      />
-      <th>{{! Actions dropdown }}</th>
-    </c.header>
-    <c.body as |notification|>
-      <td class={{this.classIsRead notification}}>{{notification.subject}}</td>
-      <td class={{this.classIsRead notification}}>{{notification.message}}</td>
-      <td class={{this.classIsRead notification}}>{{moment-format
-          notification.createdAt
-          "DD-MM-YYYY HH:mm:ss"
-        }}</td>
-      <td class={{this.classIsRead notification}}>
-        <AuDropdown
-          @skin={{this.skin}}
-          @icon="three-dots"
-          @hideText={{true}}
-          role="menu"
-        >
-          <AuButton
-            @skin="link"
-            @icon="check"
-            role="menuitem"
-            {{on "click" (perform this.toggleDate notification "readAt")}}
+
+<div class="au-u-margin-bottom au-u-padding-left au-u-padding-right">
+  <AuTabs as |Tab|>
+    <Tab>
+      <AuLink @route="system-notifications" @query={{this.filterAll}}>
+        Alle
+      </AuLink>
+    </Tab>
+    <Tab>
+      <AuLink @route="system-notifications" @query={{this.filterUnRead}}>
+        Ongelezen
+      </AuLink>
+    </Tab>
+    <Tab>
+      <AuLink @route="system-notifications" @query={{this.filterRead}}>
+        Gelezen
+      </AuLink>
+    </Tab>
+    <Tab>
+      <AuLink
+        @route="system-notifications"
+        @query={{this.filterArchived}}
+      >Gearchiveerd
+      </AuLink>
+    </Tab>
+  </AuTabs>
+</div>
+
+<div class="au-u-padding-left au-u-padding-right">
+  <AuDataTable
+    @content={{@model.notifications}}
+    @sort={{this.sort}}
+    @page={{this.page}}
+    @noDataMessage="Geen systeem meldingen gevonden."
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        <AuDataTableThSortable
+          @field="subject"
+          @label="Onderwerp"
+          class="no-sorting"
+        />
+        <AuDataTableThSortable
+          @field="message"
+          @label="Bericht"
+          class="no-sorting"
+        />
+        <AuDataTableThSortable
+          @field="created-at"
+          @currentSorting={{this.sort}}
+          @label="Aangemaakt op"
+        />
+        <th>{{! Actions dropdown }}</th>
+      </c.header>
+      <c.body as |notification|>
+        <td
+          class={{this.classIsRead notification}}
+        >{{notification.subject}}</td>
+        <td
+          class={{this.classIsRead notification}}
+        >{{notification.message}}</td>
+        <td class={{this.classIsRead notification}}>{{moment-format
+            notification.createdAt
+            "DD-MM-YYYY HH:mm:ss"
+          }}</td>
+        <td class={{this.classIsRead notification}}>
+          <AuDropdown
+            @skin={{this.skin}}
+            @icon="three-dots"
+            @hideText={{true}}
+            role="menu"
           >
-            {{this.readAtText notification}}
-          </AuButton>
-          <AuButton
-            @skin="link"
-            @icon="archive"
-            role="menuitem"
-            {{on "click" (perform this.toggleDate notification "archivedAt")}}
-          >
-            {{this.archivedAtText notification}}
-          </AuButton>
-        </AuDropdown>
-      </td>
-    </c.body>
-  </t.content>
-</AuDataTable>
+            <AuButton
+              @skin="link"
+              @icon="check"
+              role="menuitem"
+              {{on "click" (perform this.toggleDate notification "readAt")}}
+            >
+              {{this.readAtText notification}}
+            </AuButton>
+            <AuButton
+              @skin="link"
+              @icon="archive"
+              role="menuitem"
+              {{on "click" (perform this.toggleDate notification "archivedAt")}}
+            >
+              {{this.archivedAtText notification}}
+            </AuButton>
+          </AuDropdown>
+        </td>
+      </c.body>
+    </t.content>
+  </AuDataTable>
+</div>
