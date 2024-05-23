@@ -77,14 +77,9 @@
         <td
           class={{this.classIsRead notification}}
         >{{notification.subject}}</td>
-        <td
-          class={{this.classIsRead notification}}
-        >{{notification.message}}</td>
-        <td class={{this.classIsRead notification}}>{{moment-format
-            notification.createdAt
-            "DD-MM-YYYY HH:mm:ss"
-          }}</td>
-        <td class={{this.classIsRead notification}}>
+        <td>{{notification.message}}</td>
+        <td>{{moment-format notification.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
+        <td>
           <AuDropdown
             @skin={{this.skin}}
             @icon="three-dots"
