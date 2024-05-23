@@ -35,10 +35,13 @@
       <th>{{! Actions dropdown }}</th>
     </c.header>
     <c.body as |notification|>
-      <td>{{notification.subject}}</td>
-      <td>{{notification.message}}</td>
-      <td>{{moment-format notification.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
-      <td>
+      <td class={{this.classIsRead notification}}>{{notification.subject}}</td>
+      <td class={{this.classIsRead notification}}>{{notification.message}}</td>
+      <td class={{this.classIsRead notification}}>{{moment-format
+          notification.createdAt
+          "DD-MM-YYYY HH:mm:ss"
+        }}</td>
+      <td class={{this.classIsRead notification}}>
         <AuDropdown
           @skin={{this.skin}}
           @icon="three-dots"
