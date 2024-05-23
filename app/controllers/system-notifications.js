@@ -15,7 +15,7 @@ export default class SystemNotificationsController extends Controller {
     } else {
       notification[modelAttribute] = new Date();
     }
-    notification.save();
+    await notification.save();
   });
 
   @action

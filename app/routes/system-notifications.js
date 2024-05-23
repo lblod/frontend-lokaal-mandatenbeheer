@@ -23,9 +23,11 @@ export default class SystemNotificationsRoute extends Route {
 
     if (params.isRead) {
       filter['filter[:has:read-at]'] = true;
+      filter['filter[:has-no:archived-at]'] = true;
     }
     if (params.isUnRead) {
       filter['filter[:has-no:read-at]'] = true;
+      filter['filter[:has-no:archived-at]'] = true;
     }
     if (params.isArchived) {
       filter['filter[:has:archived-at]'] = true;
