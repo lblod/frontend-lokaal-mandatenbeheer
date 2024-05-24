@@ -1,7 +1,9 @@
 <div {{did-insert (perform this.setup)}}>
-  {{#each this.mandatenAsLinks as |mandaatAsLink|}}
+  {{#each this.mandatenAsLinks as |mandaatAsLink index|}}
     <AuLink @route={{mandaatAsLink.route}} @models={{mandaatAsLink.model}}>
-      {{mandaatAsLink.label}}{{#unless mandaatAsLink.isLast}},{{/unless}}
+      {{mandaatAsLink.label}}{{#if
+        (not-eq index (sub this.mandatenAsLinks.length 1))
+      }},{{/if}}
     </AuLink>
   {{/each}}
 </div>

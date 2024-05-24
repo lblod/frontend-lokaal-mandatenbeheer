@@ -21,9 +21,6 @@ export default class MandatarissenMandatenAsLinks extends Component {
         label: bestuursfunctie.label,
         route: `mandatarissen.persoon.mandataris`,
         model: [this.args.persoon.id, mandataris.id],
-        isLast:
-          activeMandatarissen.indexOf(mandataris) ==
-          activeMandatarissen.length - 1,
       });
     }
   });
