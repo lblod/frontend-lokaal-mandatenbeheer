@@ -30,17 +30,13 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
     }
 
     const voorzitter = await this.getVoorzitterBCSD();
-    if (!voorzitter) {
-      return;
-    }
     const isMemberOfRMW = await this.isMemberOfRMW(voorzitter);
     const isMemberOfVastBureau = await this.isMemberOfVastBureau(voorzitter);
 
     this.errorMessage =
-      isMemberOfRMW || isMemberOfVastBureau
+      !voorzitter || isMemberOfRMW || isMemberOfVastBureau
         ? ''
-        : 'De voorzitter van de BCSD moet lid zijn van de RMW of het Vast Bureau.';
-
+        : 'De voorzitter van het BCSD moet lid zijn van de RMW of het Vast Bureau.';
     await timeout(10000);
     this.handleErrorMessage.perform();
   });
@@ -63,6 +59,10 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
   }
 
   async isMember(persoon, bestuursfunctieCode, hasClassificationFunc) {
+    if (!persoon) {
+      return false;
+    }
+
     const bestuursorgaanInTijd = await findFirst(
       this.bestuursorganenInTijd,
       async (bestInTijd) => {
