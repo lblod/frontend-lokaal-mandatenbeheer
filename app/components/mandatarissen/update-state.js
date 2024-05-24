@@ -163,9 +163,11 @@ export default class MandatarissenUpdateState extends Component {
           this.selectedFractie
         );
       newMandataris.tijdelijkeVervangingen = [replacementMandataris];
-    } else if (this.newStatus.id === VERHINDERD_STATE_ID) {
+    } else {
       newMandataris.tijdelijkeVervangingen =
         (await this.args.mandataris.tijdelijkeVervangingen) || [];
+      newMandataris.vervangerVan =
+        (await this.args.mandataris.vervangerVan) || [];
     }
 
     this.args.mandataris.einde = this.date;

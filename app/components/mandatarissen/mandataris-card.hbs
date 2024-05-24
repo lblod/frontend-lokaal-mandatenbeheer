@@ -72,11 +72,11 @@
       </div>
     {{/if}}
 
-    {{#if @vervangers}}
+    {{#if (await this.vervangenen)}}
       <div class="au-o-grid__item au-u-5-6">
         <div class="au-c-description-label"><div>Vervanger van:</div></div>
         <div class="au-c-description-value au-u-margin-top-tiny">
-          {{#each @vervangers as |replaced index|}}
+          {{#each (await this.vervangenen) as |replaced index|}}
             <AuLink
               @route="mandatarissen.mandataris"
               @model={{replaced.id}}
@@ -84,7 +84,7 @@
             >
               {{replaced.isBestuurlijkeAliasVan.gebruikteVoornaam}}
               {{replaced.isBestuurlijkeAliasVan.achternaam}}{{if
-                (lt index (sub @vervangers.length 1))
+                (lt index (sub this.vervangenen.length 1))
                 ","
               }}
             </AuLink>
@@ -92,11 +92,11 @@
         </div>
       </div>
     {{/if}}
-    {{#if @mandataris.tijdelijkeVervangingen}}
+    {{#if (await this.vervangers)}}
       <div class="au-o-grid__item au-u-5-6">
         <div class="au-c-description-label"><div>Vervangen door:</div></div>
         <div class="au-c-description-value">
-          {{#each @mandataris.tijdelijkeVervangingen as |replacement index|}}
+          {{#each (await this.vervangers) as |replacement index|}}
             <AuLink
               @route="mandatarissen.mandataris"
               @model={{replacement.id}}
@@ -104,7 +104,7 @@
             >
               {{replacement.isBestuurlijkeAliasVan.gebruikteVoornaam}}
               {{replacement.isBestuurlijkeAliasVan.achternaam}}{{if
-                (lt index (sub @mandataris.tijdelijkeVervangingen.length 1))
+                (lt index (sub this.vervangers.length 1))
                 ","
               }}
             </AuLink>
