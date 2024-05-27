@@ -4,6 +4,7 @@ import {
   MANDAAT_DISTRICT_BURGEMEESTER_CODE,
   MANDAAT_DISTRICT_SCHEPEN_CODE,
   MANDAAT_SCHEPEN_CODE,
+  MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 const identity = Boolean;
@@ -52,8 +53,10 @@ export default class MandaatModel extends Model {
   }
 
   get isSchepen() {
-    return [MANDAAT_SCHEPEN_CODE, MANDAAT_DISTRICT_SCHEPEN_CODE].includes(
-      this.bestuursfunctie.get('uri')
-    );
+    return [
+      MANDAAT_SCHEPEN_CODE,
+      MANDAAT_DISTRICT_SCHEPEN_CODE,
+      MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE,
+    ].includes(this.bestuursfunctie.get('uri'));
   }
 }
