@@ -14,12 +14,12 @@ export default class MandatarisCardComponent extends Component {
     return this.args.mandataris.isBestuurlijkeAliasVan;
   }
 
-  get vervangers() {
-    return this.args.mandataris.uniqueVervangers;
+  get vervangersDoor() {
+    return this.args.mandataris.uniqueVervangersDoor;
   }
 
-  get vervangenen() {
-    return this.args.mandataris.uniqueVervangenen;
+  get vervangersVan() {
+    return this.args.mandataris.uniqueVervangersVan;
   }
 
   get skinForStatusPill() {

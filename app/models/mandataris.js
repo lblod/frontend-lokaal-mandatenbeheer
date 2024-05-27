@@ -92,11 +92,11 @@ export default class MandatarisModel extends Model {
     return false;
   }
 
-  get uniqueVervangers() {
+  get uniqueVervangersDoor() {
     return this.getUnique(this.tijdelijkeVervangingen);
   }
 
-  get uniqueVervangenen() {
+  get uniqueVervangersVan() {
     return this.getUnique(this.vervangerVan);
   }
 
