@@ -1,3 +1,11 @@
 import Route from '@ember/routing/route';
 
-export default class MandatarissenUploadRoute extends Route {}
+import { service } from '@ember/service';
+
+export default class MandatarissenUploadRoute extends Route {
+  @service session;
+
+  beforeModel(transition) {
+    this.session.requireAuthentication(transition, 'login');
+  }
+}
