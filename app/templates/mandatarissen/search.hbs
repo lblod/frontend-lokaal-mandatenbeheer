@@ -69,9 +69,12 @@
     <AuBodyContainer id="content">
       <AuToolbar @size="large" @nowrap="true" as |Group|>
         <Group>
-          <div class="au-o-flow">
-            <AuHeading @skin="2">Mandatarissen</AuHeading>
-          </div>
+          <AuHeading @skin="2">Mandatarissen</AuHeading>
+        </Group>
+        <Group>
+          <AuLink @route="mandatarissen.upload" @skin="button">
+            Importeer
+          </AuLink>
         </Group>
       </AuToolbar>
       <div class="au-c-body-container au-c-body-container--scroll">
