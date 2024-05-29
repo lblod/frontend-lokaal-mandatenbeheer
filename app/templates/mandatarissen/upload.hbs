@@ -1,4 +1,62 @@
 {{page-title "Upload"}}
-
-<AuFileUpload @endPoint="/mandataris-api/mandatarissen/upload-csv" />
-{{outlet}}
+<AuBodyContainer id="content">
+  <AuToolbar
+    class="au-u-flex au-u-flex--center au-u-margin-top"
+    @size="large"
+    @nowrap="true"
+    as |Group|
+  >
+    <div>
+      <Group>
+        <AuHeading @skin="2">Importeer mandatarissen</AuHeading>
+      </Group>
+    </div>
+  </AuToolbar>
+  <div class="au-u-flex au-u-flex--center">
+    <div class="au-u-margin-top au-u-3-5">
+      {{#let
+        (file-queue name="mandatarisCsv" onFileAdded=this.uploadFile.perform)
+        as |queue|
+      }}
+        <FileDropzone
+          @queue={{queue}}
+          @filter={{this.filter}}
+          class="au-c-file-upload"
+          as |dropzone|
+        >
+          {{#if dropzone.active}}
+            <p class="au-c-file-upload-message">
+              <AuIcon @icon="attachment" @alignment="left" />
+              <AuHelpText @skin="secondary">Sleep de bestanden naar hier om toe
+                te voegen</AuHelpText>
+            </p>
+          {{else if queue.files.length}}
+            <p class="au-c-file-upload-message">
+              <small class="au-c-small-text">Uploading</small>
+            </p>
+          {{else}}
+            <label>
+              <input
+                accept=".csv"
+                multiple={{false}}
+                type="file"
+                hidden=""
+                {{queue.selectFile}}
+              />
+              <span class="au-c-file-upload-label">
+                <span class="au-c-file-upload-label__title">
+                  <AuIcon @icon="attachment" @alignment="left" />
+                  Bestanden toevoegen
+                </span>
+                {{#if dropzone.supported}}
+                  <AuHelpText @skin="secondary">Sleep de bestanden naar hier om
+                    toe te voegen</AuHelpText>
+                {{/if}}
+              </span>
+            </label>
+          {{/if}}
+        </FileDropzone>
+      {{/let}}
+    </div>
+  </div>
+</AuBodyContainer>
