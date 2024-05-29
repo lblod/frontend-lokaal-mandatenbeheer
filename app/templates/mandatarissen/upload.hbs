@@ -12,7 +12,7 @@
       </Group>
     </div>
   </AuToolbar>
-  <div class="au-u-flex au-u-flex--center">
+  <div class="au-u-flex au-u-flex--center au-c-body-container--scroll">
     <div class="au-u-margin-top au-u-3-5">
       {{#let
         (file-queue name="mandatarisCsv" onFileAdded=this.uploadFile.perform)
@@ -57,6 +57,72 @@
           {{/if}}
         </FileDropzone>
       {{/let}}
+      {{#if this.uploadFile.isRunning}}
+        <AuLoader />
+      {{else}}
+        {{#if this.isFileUploaded}}
+          <AuCard
+            class="au-u-margin-top"
+            @expandable={{false}}
+            @isOpenInitially={{true}}
+            as |c|
+          >
+            <c.header>
+              <span class="au-u-h3">{{this.file.name}}</span>
+              <div class="au-u-flex au-u-flex-row au-u-margin-top-small">
+                {{#each this.file.pills as |status|}}
+                  <span class="au-u-margin-right-small">
+                    <AuPill @icon={{status.icon}} @skin={{status.skin}}>
+                      {{status.label}}
+                    </AuPill>
+                  </span>
+                {{/each}}
+              </div>
+            </c.header>
+            <c.content>
+              <ul>
+                <li>
+                  Personen aangemaakt:
+                  {{this.file.createdPersons}}
+                </li>
+                <li>
+                  Mandatarissen aangemaakt:
+                  {{this.file.createdMandatarissen}}
+                </li>
+                <li>
+                  Beleidsomeinen aangemaakt:
+                  {{this.file.createdBeleidsdomeinen}}
+                </li>
+              </ul>
+
+              {{#if this.file.hasErrors}}
+                <AuTable>
+                  <:title>Errors ({{this.file.errors.length}})</:title>
+                  <:body>
+                    {{#each this.file.errors as |content|}}
+                      <tr>
+                        <td>{{content}}</td>
+                      </tr>
+                    {{/each}}
+                  </:body>
+                </AuTable>
+              {{/if}}
+              {{#if this.file.hasWarnings}}
+                <AuTable>
+                  <:title>Warnings ({{this.file.warnings.length}})</:title>
+                  <:body>
+                    {{#each this.file.warnings as |content|}}
+                      <tr>
+                        <td>{{content}}</td>
+                      </tr>
+                    {{/each}}
+                  </:body>
+                </AuTable>
+              {{/if}}
+            </c.content>
+          </AuCard>
+        {{/if}}
+      {{/if}}
     </div>
   </div>
 </AuBodyContainer>
