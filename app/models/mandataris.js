@@ -95,7 +95,7 @@ export default class MandatarisModel extends Model {
     if (this.start?.getFullYear() < bestuursperiode.start) {
       return false;
     }
-    if (this.einde?.getFullYear() >= bestuursperiode.einde) {
+    if (this.einde?.getFullYear() > bestuursperiode.einde) {
       return false;
     }
     return true;
