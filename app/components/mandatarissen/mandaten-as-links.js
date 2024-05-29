@@ -10,12 +10,12 @@ export default class MandatarissenMandatenAsLinks extends Component {
 
   setup = restartableTask(async () => {
     const mandatarissen = await this.args.persoon.isAangesteldAls;
-    const activeMandatarissen = mandatarissen.filter((mandataris) =>
+    const mandatarissenInPeriode = mandatarissen.filter((mandataris) =>
       mandataris.inSelectedBestuursperiode(this.args.bestuursperiode)
     );
     const foldedMandatarissen = await foldMandatarisses(
       null,
-      activeMandatarissen
+      mandatarissenInPeriode
     );
 
     for (const foldedMandataris of foldedMandatarissen) {
