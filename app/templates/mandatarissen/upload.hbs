@@ -17,6 +17,27 @@
     {{did-insert this.resetValues}}
   >
     <div class="au-u-margin-top au-u-3-5">
+      <p class="au-u-text-center">
+        Aan de hand van het geuploaden csv bestand worden er personen en
+        mandatarissen aangemaakt. Als er een probleem met het csv bestand dan
+        zullen de fouten getoontd worden in een tabel onder de oplaadzone.
+      </p>
+      <br />
+      <p class="au-u-text-center">
+        Een voorbeeld van hoe je csv bestand er uit moet zien kan je hier
+        vinden. Let op de eerste lijn in de file wordt als header gezien en deze
+        namen worden gebruikt als variabele, geef je hier bijvoorbeeld
+        rijksregisternummer in, in plaats van rrn, dan zal dit fout gelinked
+        worden. De volgorde van de kolommen heeft echter geen belang.
+      </p>
+      <div
+        class="au-u-background-gray-100 au-u-padding au-u-margin-top au-u-margin-bottom"
+      >
+        rrn,firstName,lastName,mandateName,startDateTime,endDateTime,fractieName,rangordeString,beleidsdomeinNames
+        00000000097,Jos,Janssens,Schepen,2025-01-01T12:00:12.038Z,2030-05-13T11:32:12.038Z,Open
+        VLD,Eerste schepen,Cultuur|Sport en jeugd|Geitestoet
+        00000000196,Maria,Janssens,Gemeenteraadslid,2025-01-01T12:00:12.038Z,2030-05-13T11:32:12.038Z,Groen,,
+      </div>
       {{#let
         (file-queue name="mandatarisCsv" onFileAdded=this.uploadFile.perform)
         as |queue|
