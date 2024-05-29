@@ -29,6 +29,20 @@ export default class MandatarissenUploadController extends Controller {
     }
   });
 
+  mapErrorsOrWarnings(stringArray) {
+    const lineRegex = new RegExp(/\[line (\d+)\]/);
+    const messageRegex = new RegExp(/\[line \d+\] (.+)/);
+    return stringArray.map((stringValue) => {
+      const lineMatch = stringValue.match(lineRegex);
+      const messageMatch = stringValue.match(messageRegex);
+
+      return {
+        line: lineMatch ? lineMatch[0] : '',
+        message: messageMatch ? messageMatch[1] : stringValue,
+      };
+    });
+  }
+
   get file() {
     const pills = [];
 
@@ -52,8 +66,8 @@ export default class MandatarissenUploadController extends Controller {
       status: this.fileDetails.status,
       hasWarnings: this.fileDetails.warnings.length >= 1,
       hasErrors: this.fileDetails.errors.length >= 1,
-      errors: this.fileDetails.errors,
-      warnings: this.fileDetails.warnings,
+      errors: this.mapErrorsOrWarnings(this.fileDetails.errors),
+      warnings: this.mapErrorsOrWarnings(this.fileDetails.warnings),
       pills: pills,
       createdPersons: this.fileDetails.personsCreated,
       createdMandatarissen: this.fileDetails.mandatarissenCreated,

@@ -101,7 +101,8 @@
                   <:body>
                     {{#each this.file.errors as |content|}}
                       <tr>
-                        <td>{{content}}</td>
+                        <td>{{content.line}}</td>
+                        <td>{{content.message}}</td>
                       </tr>
                     {{/each}}
                   </:body>
@@ -113,7 +114,8 @@
                   <:body>
                     {{#each this.file.warnings as |content|}}
                       <tr>
-                        <td>{{content}}</td>
+                        <td>{{content.line}}</td>
+                        <td>{{content.message}}</td>
                       </tr>
                     {{/each}}
                   </:body>
