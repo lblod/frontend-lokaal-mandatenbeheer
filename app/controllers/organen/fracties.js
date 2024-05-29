@@ -17,13 +17,6 @@ export default class FractiesController extends Controller {
   create = 'create';
   @tracked instanceId = null;
 
-  get hasActiveChildRoute() {
-    return (
-      this.router.currentRouteName.startsWith('organen.fracties.') &&
-      this.router.currentRouteName != 'organen.fracties.index'
-    );
-  }
-
   @action
   openCreateFractieModal() {
     this.modal = 'create';
