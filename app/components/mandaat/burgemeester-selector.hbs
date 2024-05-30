@@ -24,5 +24,9 @@
       {{/each}}
     </AuAlert>
   {{/if}}
-  <Person::Selector @person={{this.persoon}} @onUpdate={{this.onUpdate}} />
+  <Person::Selector
+    @person={{this.persoon}}
+    @onUpdate={{this.onUpdate}}
+    @readOnly={{@readOnly}}
+  />
 </div>
