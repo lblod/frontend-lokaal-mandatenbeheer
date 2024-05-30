@@ -3,7 +3,10 @@ import RSVP from 'rsvp';
 
 import { service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
-import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import {
+  INSTALLATIEVERGADERING_BEHANDELD_ID,
+  MANDATARIS_NEW_FORM_ID,
+} from 'frontend-lmb/utils/well-known-ids';
 import {
   BCSD_BESTUURSORGAAN_URI,
   BURGEMEESTER_BESTUURSORGAAN_URI,
@@ -73,6 +76,9 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       bestuursPeriods,
       selectedPeriod,
       isRelevant: parentModel.isRelevant,
+      isBehandeld:
+        installatievergadering.get('status.id') ===
+        INSTALLATIEVERGADERING_BEHANDELD_ID,
     });
   }
 
