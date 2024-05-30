@@ -8,7 +8,7 @@
 {{#if (or (not @model.isRelevant) (not @model.installatievergadering))}}
   <div class="au-o-box">
     <div class="au-o-flow">
-      <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
+      <AuHeading @skin="2">{{this.title}}</AuHeading>
     </div>
   </div>
   <div class="au-o-box">
@@ -32,7 +32,7 @@
   >
     <Group>
       <div class="au-o-flow">
-        <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
+        <AuHeading @skin="2">{{this.title}}</AuHeading>
       </div>
     </Group>
     <Group>
@@ -51,11 +51,13 @@
     </Group>
   </AuToolbar>
   <div class="au-c-body-container au-c-body-container--scroll">
-    <Verkiezingen::KieslijstSplitter
-      @kandidatenlijst={{@model.kandidatenlijsten}}
-      @bestuursorgaan={{@model.bestuursorganenInTijd}}
-      @bestuurseenheid={{@model.bestuurseenheid}}
-    />
+    {{#unless @model.isBehandeld}}
+      <Verkiezingen::KieslijstSplitter
+        @kandidatenlijst={{@model.kandidatenlijsten}}
+        @bestuursorgaan={{@model.bestuursorganenInTijd}}
+        @bestuurseenheid={{@model.bestuurseenheid}}
+      />
+    {{/unless}}
 
     {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
       <Verkiezingen::PrepareLegislatuurSection
@@ -67,15 +69,17 @@
       />
     {{/each}}
 
-    <div class="au-o-box">
-      <Tmp::Todo>
-        <p>Change installatievergadering status:</p>
-        <Shared::InstallatievergaderingStatusSelector
-          @options={{@model.ivStatuses}}
-          @selectedStatus={{@model.installatievergadering.status}}
-          @onSelect={{this.selectStatus}}
-        />
-      </Tmp::Todo>
-    </div>
+    {{#unless @model.isBehandeld}}
+      <div class="au-o-box">
+        <Tmp::Todo>
+          <p>Change installatievergadering status:</p>
+          <Shared::InstallatievergaderingStatusSelector
+            @options={{@model.ivStatuses}}
+            @selectedStatus={{@model.installatievergadering.status}}
+            @onSelect={{this.selectStatus}}
+          />
+        </Tmp::Todo>
+      </div>
+    {{/unless}}
   </div>
 {{/if}}
