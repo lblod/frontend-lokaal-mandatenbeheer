@@ -9,7 +9,7 @@ import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { task } from 'ember-concurrency';
-import { INSTALLATIEVERGADERING_BEHANDELD } from 'frontend-lmb/utils/well-known-ids';
+import { INSTALLATIEVERGADERING_BEHANDELD_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
@@ -84,7 +84,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     const behandeldeVergaderingen = await this.store.query(
       'installatievergadering',
       {
-        'filter[status][:id:]': INSTALLATIEVERGADERING_BEHANDELD,
+        'filter[status][:id:]': INSTALLATIEVERGADERING_BEHANDELD_ID,
         'filter[bestuursperiode][:id:]': bestuursperiode.id,
       }
     );

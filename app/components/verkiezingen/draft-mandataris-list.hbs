@@ -61,24 +61,38 @@
               @label="Einde mandaat"
             />
           {{/if}}
-          <th>{{! Delete }}</th>
+          {{#unless @readOnly}}
+            <th>{{! Delete }}</th>
+          {{/unless}}
         </c.header>
 
         <c.body as |row|>
-          <Verkiezingen::EditOnHover
-            @editFunction={{this.openModal}}
-            @model={{row}}
-            @helpText="Pas de persoon aan"
-          >
-            {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-          </Verkiezingen::EditOnHover>
-          <Verkiezingen::EditOnHover
-            @editFunction={{this.openModal}}
-            @model={{row}}
-            @helpText="Pas de persoon aan"
-          >
-            {{row.isBestuurlijkeAliasVan.achternaam}}
-          </Verkiezingen::EditOnHover>
+          {{#if @readOnly}}
+            <td>
+              {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+            </td>
+          {{else}}
+            <Verkiezingen::EditOnHover
+              @editFunction={{this.openModal}}
+              @model={{row}}
+              @helpText="Pas de persoon aan"
+            >
+              {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+            </Verkiezingen::EditOnHover>
+          {{/if}}
+          {{#if @readOnly}}
+            <td>
+              {{row.isBestuurlijkeAliasVan.achternaam}}
+            </td>
+          {{else}}
+            <Verkiezingen::EditOnHover
+              @editFunction={{this.openModal}}
+              @model={{row}}
+              @helpText="Pas de persoon aan"
+            >
+              {{row.isBestuurlijkeAliasVan.achternaam}}
+            </Verkiezingen::EditOnHover>
+          {{/if}}
           {{#if @showFractie}}
             <td>
               {{row.heeftLidmaatschap.binnenFractie.naam}}
@@ -108,13 +122,19 @@
                 />
               </td>
             {{else}}
-              <Verkiezingen::EditOnHover
-                @editFunction={{this.openEditBeleidsdomeinen}}
-                @model={{row}}
-                @helpText="Pas de beleidsdomeinen aan"
-              >
-                <Beleidsdomeinen @mandataris={{row}} />
-              </Verkiezingen::EditOnHover>
+              {{#if @readOnly}}
+                <td>
+                  <Beleidsdomeinen @mandataris={{row}} />
+                </td>
+              {{else}}
+                <Verkiezingen::EditOnHover
+                  @editFunction={{this.openEditBeleidsdomeinen}}
+                  @model={{row}}
+                  @helpText="Pas de beleidsdomeinen aan"
+                >
+                  <Beleidsdomeinen @mandataris={{row}} />
+                </Verkiezingen::EditOnHover>
+              {{/if}}
             {{/if}}
           {{/if}}
           {{#if @showStartEndDate}}
@@ -125,13 +145,15 @@
               {{moment-format row.einde "DD-MM-YYYY"}}
             </td>
           {{/if}}
-          <td class="au-u-text-right">
-            <AuButton
-              @icon="bin"
-              @alert={{true}}
-              {{on "click" (fn this.removeMandataris row)}}
-            >Verwijder</AuButton>
-          </td>
+          {{#unless @readOnly}}
+            <td class="au-u-text-right">
+              <AuButton
+                @icon="bin"
+                @alert={{true}}
+                {{on "click" (fn this.removeMandataris row)}}
+              >Verwijder</AuButton>
+            </td>
+          {{/unless}}
         </c.body>
       </t.content>
     </AuDataTable>

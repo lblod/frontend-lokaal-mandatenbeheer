@@ -19,6 +19,7 @@
     {{! Show skeleton loader }}
   {{else}}
     <Verkiezingen::DraftMandatarisList
+      @readOnly={{@isBehandeld}}
       @bestuursorgaan={{@bestuursorgaan}}
       @sort={{@sort}}
       @page={{0}}
@@ -38,31 +39,34 @@
     />
   {{/if}}
 
-  <AuContent @skin="small au-u-flex au-u-flex--between ">
-    <AuButton
-      @skin="naked"
-      @icon="add"
-      @loading={{this.onCreate.isRunning}}
-      @loadingMessage="Aan het toevoegen"
-      {{on "click" this.createMandataris}}
-    >Toevoegen</AuButton>
-    {{#if (or (await this.isRMW) (await this.isLidVanVB))}}
+  {{#unless @isBehandeld}}
+    <AuContent @skin="small au-u-flex au-u-flex--between ">
       <AuButton
         @skin="naked"
-        @icon="synchronize"
-        @loading={{this.mirrorTable.isRunning}}
-        @loadingMessage="Aan het synchroniseren"
-        {{on "click" (perform this.mirrorTable)}}
-      >
-        {{#if (await this.isRMW)}}
-          Sync met Gemeenteraad
-        {{/if}}
-        {{#if (await this.isLidVanVB)}}
-          Sync met College van Burgemeester en Schepenen
-        {{/if}}
-      </AuButton>
-    {{/if}}
-  </AuContent>
+        @icon="add"
+        @loading={{this.onCreate.isRunning}}
+        @loadingMessage="Aan het toevoegen"
+        {{on "click" this.createMandataris}}
+      >Toevoegen</AuButton>
+      {{#if (or (await this.isRMW) (await this.isLidVanVB))}}
+        <AuButton
+          @skin="naked"
+          @icon="synchronize"
+          @loading={{this.mirrorTable.isRunning}}
+          @loadingMessage="Aan het synchroniseren"
+          {{on "click" (perform this.mirrorTable)}}
+        >
+          {{#if (await this.isRMW)}}
+            Sync met Gemeenteraad
+          {{/if}}
+          {{#if (await this.isLidVanVB)}}
+            Sync met College van Burgemeester en Schepenen
+          {{/if}}
+        </AuButton>
+      {{/if}}
+    </AuContent>
+  {{/unless}}
+
   <AuModal
     @title={{(concat
       "Voeg mandataris toe aan " @bestuursorgaan.isTijdsspecialisatieVan.naam

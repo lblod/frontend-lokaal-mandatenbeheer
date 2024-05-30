@@ -59,6 +59,7 @@
 
     {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
       <Verkiezingen::PrepareLegislatuurSection
+        @isBehandeld={{@model.isBehandeld}}
         @bestuursorgaan={{bestuursorgaan}}
         @bestuursorganen={{@model.bestuursorganenInTijd}}
         @sort={{this.sort}}
