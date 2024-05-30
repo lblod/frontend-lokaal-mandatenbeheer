@@ -106,10 +106,14 @@
           {{#if @showRangorde}}
             <td>
               {{#if row.bekleedt.isSchepen}}
-                <Verkiezingen::RangordeInput
-                  @mandataris={{row}}
-                  @mandatarissen={{this.mandatarissen}}
-                />
+                {{#if @readOnly}}
+                  {{row.rangorde}}
+                {{else}}
+                  <Verkiezingen::RangordeInput
+                    @mandataris={{row}}
+                    @mandatarissen={{this.mandatarissen}}
+                  />
+                {{/if}}
               {{/if}}
             </td>
           {{/if}}
