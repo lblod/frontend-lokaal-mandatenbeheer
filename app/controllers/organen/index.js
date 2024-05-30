@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import { INSTALLATIVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 export default class OrganenIndexController extends Controller {
   queryParams = ['sort', 'activeOrgans', 'selectedTypes', 'bestuursperiode'];
@@ -14,6 +15,7 @@ export default class OrganenIndexController extends Controller {
   @tracked bestuursperiode;
 
   @tracked isModalActive = false;
+  @tracked isInBehandeldLegislatuur;
 
   @action
   filterActiveOrgans() {
@@ -73,5 +75,18 @@ export default class OrganenIndexController extends Controller {
       bindingEinde: similarBestuursorgaanInTijd?.bindingEinde,
     });
     await bestuursorgaanInTijd.save();
+  }
+
+  @action
+  async setIsLegislatuurBehandeld() {
+    const behandeldeVergaderingen = await this.store.query(
+      'installatievergadering',
+      {
+        'filter[status][:uri:]': INSTALLATIVERGADERING_BEHANDELD_STATUS,
+        'filter[bestuursperiode][:id:]': this.model.selectedPeriod.id,
+      }
+    );
+
+    this.isInBehandeldLegislatuur = behandeldeVergaderingen.length >= 1;
   }
 }

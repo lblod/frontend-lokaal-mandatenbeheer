@@ -58,14 +58,23 @@
         <Group>
           <AuHeading @skin="2">Bestuursorganen</AuHeading>
         </Group>
-        <Group>
-          <AuLink
-            @route="organen.fracties"
-            @skin="button-secondary"
-            @query={{hash bestuursperiode=this.bestuursperiode}}
-          >Beheer fracties
-          </AuLink>
-          <AuButton {{on "click" this.toggleModal}}>Voeg bestuursorgaan toe</AuButton>
+        <Group {{did-insert this.setIsLegislatuurBehandeld}}>
+          {{#if this.isInBehandeldLegislatuur}}
+            <AuButton @disabled={{this.isInBehandeldLegislatuur}}>
+              Beheer fracties
+            </AuButton>
+          {{else}}
+            <AuLink
+              @route="organen.fracties"
+              @skin="button-secondary"
+              @query={{hash bestuursperiode=this.bestuursperiode}}
+            >Beheer fracties
+            </AuLink>
+          {{/if}}
+          <AuButton
+            @disabled={{this.isInBehandeldLegislatuur}}
+            {{on "click" this.toggleModal}}
+          >Voeg bestuursorgaan toe</AuButton>
         </Group>
       </AuToolbar>
 
