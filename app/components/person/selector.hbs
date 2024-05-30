@@ -7,25 +7,27 @@
     class="au-u-flex--stretch flex-grow"
     {{on "click" this.startEdit}}
   />
-  {{#if (and @inline this.selectNewPerson)}}
+  {{#unless @readOnly}}
+    {{#if (and @inline this.selectNewPerson)}}
+      <AuButton
+        {{on "click" this.cancelEdit}}
+        @icon="pencil"
+        @skin="secondary"
+      >Annuleer</AuButton>
+    {{else}}
+      <AuButton
+        {{on "click" this.startEdit}}
+        @icon="pencil"
+        @skin="secondary"
+      >Bewerk</AuButton>
+    {{/if}}
     <AuButton
-      {{on "click" this.cancelEdit}}
-      @icon="pencil"
+      {{on "click" this.removePerson}}
+      @icon="trash"
+      @hideText={{true}}
       @skin="secondary"
-    >Annuleer</AuButton>
-  {{else}}
-    <AuButton
-      {{on "click" this.startEdit}}
-      @icon="pencil"
-      @skin="secondary"
-    >Bewerk</AuButton>
-  {{/if}}
-  <AuButton
-    {{on "click" this.removePerson}}
-    @icon="trash"
-    @hideText={{true}}
-    @skin="secondary"
-  >Verwijder</AuButton>
+    >Verwijder</AuButton>
+  {{/unless}}
 </div>
 {{#if (and this.selectNewPerson @inline)}}
   <div class="au-o-nested-form">

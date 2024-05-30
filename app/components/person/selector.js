@@ -57,6 +57,10 @@ export default class PersonSelectorComponent extends Component {
 
   @action
   startEdit() {
+    if (this.args.readOnly) {
+      return;
+    }
+
     this.selectNewPerson = true;
   }
   @action
