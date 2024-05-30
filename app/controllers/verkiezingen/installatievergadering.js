@@ -26,6 +26,8 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
         { method: 'POST' }
       );
     }
+
+    this.router.refresh();
   }
 
   @action
