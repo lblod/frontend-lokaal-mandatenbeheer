@@ -1,5 +1,8 @@
 {{#if (await this.isBurgemeester)}}
-  <Mandaat::BurgemeesterSelector @bestuursorgaanInTijd={{@bestuursorgaan}} />
+  <Mandaat::BurgemeesterSelector
+    @bestuursorgaanInTijd={{@bestuursorgaan}}
+    @readOnly={{@isBehandeld}}
+  />
 {{else}}
 
   <AuToolbar
