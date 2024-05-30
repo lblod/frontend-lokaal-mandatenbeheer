@@ -32,4 +32,12 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
   selectPeriod(period) {
     this.bestuursperiode = period.id;
   }
+
+  get title() {
+    if (this.model.isBehandeld) {
+      return 'Legislatuur';
+    }
+
+    return 'Voorbereiding legislatuur';
+  }
 }
