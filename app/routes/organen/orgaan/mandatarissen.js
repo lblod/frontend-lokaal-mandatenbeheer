@@ -3,6 +3,7 @@ import { service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
+import { INSTALLATIVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 export default class OrganenMandatarissenRoute extends Route {
   @service store;
@@ -30,12 +31,22 @@ export default class OrganenMandatarissenRoute extends Route {
       MANDATARIS_NEW_FORM_ID
     );
 
+    const behandeldeVergaderingen = await this.store.query(
+      'installatievergadering',
+      {
+        'filter[status][:uri:]': INSTALLATIVERGADERING_BEHANDELD_STATUS,
+        'filter[bestuursperiode][:id:]':
+          currentBestuursorgaan.get('bestuursperiode.id'),
+      }
+    );
+
     return {
       mandatarissen: folded,
       bestuursorgaan: parentModel.bestuursorgaan,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
       currentBestuursorgaan: currentBestuursorgaan,
+      isInBehandeldeLegislatuur: behandeldeVergaderingen.length >= 1,
     };
   }
 
