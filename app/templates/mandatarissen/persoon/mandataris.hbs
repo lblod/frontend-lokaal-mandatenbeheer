@@ -15,14 +15,20 @@
     </p>
   </div>
   <div class="au-o-grid__item au-u-1-2 au-u-text-left">
-    <div class="au-u-flex au-u-flex--end au-u-margin-bottom">
+    <div
+      class="au-u-flex au-u-flex--end au-u-margin-bottom"
+      {{did-insert (perform this.canEditAndCorrect)}}
+    >
       <AuButton
         class="au-u-margin-right-small"
-        @disabled={{not this.model.mandataris.isActive}}
+        @disabled={{(or
+          (not this.model.mandataris.isActive) this.inCompletedLegislatuur
+        )}}
         {{on "click" (fn (mut this.isChanging) true)}}
       >Wijzig huidig mandaat</AuButton>
       <AuButton
         @skin="secondary"
+        @disabled={{this.inCompletedLegislatuur}}
         {{on "click" (fn (mut this.isCorrecting) true)}}
       >Corrigeer fouten</AuButton>
     </div>
@@ -56,6 +62,7 @@
     <Mandatarissen::MandatarisExtraInfoCard
       @mandataris={{@model.mandataris}}
       @form={{@model.mandatarisExtraInfoForm}}
+      @canEdit={{not this.inCompletedLegislatuur}}
     />
   </div>
 

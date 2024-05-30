@@ -8,7 +8,7 @@
   <Group>
     <AuButton
       {{on "click" this.toggleModal}}
-      @disabled={{not this.hasBeleidsdomeinen}}
+      @disabled={{(or (not this.hasBeleidsdomeinen) (not @canEdit))}}
     >Bewerk</AuButton>
   </Group>
 </AuToolbar>
