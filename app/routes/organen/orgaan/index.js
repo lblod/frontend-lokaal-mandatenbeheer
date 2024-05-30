@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import { INSTALLATIVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 import RSVP from 'rsvp';
 
 export default class OrganenOrgaanIndexRoute extends Route {
@@ -10,7 +11,8 @@ export default class OrganenOrgaanIndexRoute extends Route {
   async model() {
     const parentModel = this.modelFor('organen.orgaan');
 
-    const mandaten = await parentModel.currentBestuursorgaan.bevat;
+    const currentBestuursorgaan = await parentModel.currentBestuursorgaan;
+    const mandaten = await currentBestuursorgaan.bevat;
     const [orderedMandaten, availableBestuursfuncties] = await Promise.all([
       this.orderMandaten(mandaten),
       this.computeBestuursfuncties(mandaten),
@@ -21,7 +23,17 @@ export default class OrganenOrgaanIndexRoute extends Route {
       BESTUURSORGAAN_FORM_ID
     );
 
+    const behandeldeVergaderingen = await this.store.query(
+      'installatievergadering',
+      {
+        'filter[status][:uri:]': INSTALLATIVERGADERING_BEHANDELD_STATUS,
+        'filter[bestuursperiode][:id:]':
+          currentBestuursorgaan.get('bestuursperiode.id'),
+      }
+    );
+
     return RSVP.hash({
+      isInBehandeldeLegislatuur: behandeldeVergaderingen.length >= 1,
       bestuursorgaanFormDefinition,
       mandaten,
       orderedMandaten,
