@@ -1,12 +1,9 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { restartableTask } from 'ember-concurrency';
 
 export default class SystemNotificationRowComponent extends Component {
-  @tracked isHidden;
-
   toggleDate = restartableTask(async (notification, modelAttribute) => {
     if (notification[modelAttribute]) {
       notification[modelAttribute] = null;
@@ -14,7 +11,6 @@ export default class SystemNotificationRowComponent extends Component {
       notification[modelAttribute] = new Date();
     }
     await notification.save();
-    this.isHidden = true;
   });
 
   @action
