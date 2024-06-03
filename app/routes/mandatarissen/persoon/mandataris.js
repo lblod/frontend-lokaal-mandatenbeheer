@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { getUniqueVervangers } from 'frontend-lmb/models/mandataris';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import {
   MANDATARIS_EDIT_FORM_ID,
@@ -17,7 +16,6 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
 
     const mandataris = await this.getMandataris(params.mandataris_id);
     const mandaat = await mandataris.bekleedt;
-    const vervangers = await getUniqueVervangers(mandataris);
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);
 
     const mandatarisEditForm = getFormFrom(this.store, MANDATARIS_EDIT_FORM_ID);
@@ -32,7 +30,6 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
 
     return RSVP.hash({
       mandataris,
-      vervangers,
       mandatarissen,
       mandatarisEditForm,
       mandatarisExtraInfoForm,
