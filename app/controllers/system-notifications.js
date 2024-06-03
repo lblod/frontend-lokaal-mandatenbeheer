@@ -12,6 +12,7 @@ export default class SystemNotificationsController extends Controller {
   @service store;
   @service currentSession;
 
+  @tracked sort;
   @tracked isRead;
   @tracked isUnRead;
   @tracked isArchived;

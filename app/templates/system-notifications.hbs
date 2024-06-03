@@ -37,10 +37,7 @@
   </AuTabs>
 </div>
 
-<div
-  class="au-u-padding-left au-u-padding-right"
-  {{did-insert (perform this.getNotifications this.filterUnRead)}}
->
+<div class="au-u-padding-left au-u-padding-right">
   <AuDataTable
     @content={{this.notifications}}
     @sort={{@sort}}
