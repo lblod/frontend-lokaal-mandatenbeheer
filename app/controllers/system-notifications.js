@@ -4,34 +4,77 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
+import { restartableTask } from 'ember-concurrency';
+
 export default class SystemNotificationsController extends Controller {
   @service router;
-  @tracked sort = '-created-at';
+  @service store;
+  @service currentSession;
+
+  @tracked isRead;
+  @tracked isUnRead;
+  @tracked isArchived;
+
+  @tracked activeFilter;
+  @tracked notifications;
 
   get filterUnRead() {
-    return { isUnRead: true, isRead: null, isArchived: null, page: 0 };
+    return { isUnRead: true, isRead: false, isArchived: false };
   }
 
   get filterRead() {
-    return { isRead: true, isArchived: null, isUnRead: null, page: 0 };
+    return { isRead: true, isArchived: false, isUnRead: false };
   }
 
   get filterArchived() {
-    return { isArchived: true, isRead: null, isUnRead: null, page: 0 };
+    return { isArchived: true, isRead: false, isUnRead: false };
   }
 
   @action
-  activeTabClass(tabNumber) {
-    if (this.model.tabFilters.unread && tabNumber == 1) {
+  getActiveClass(action) {
+    if (!this.activeFilter) {
+      return '';
+    }
+
+    if (action === 'read' && this.activeFilter.isRead) {
       return 'active';
     }
-    if (this.model.tabFilters.read && tabNumber == 2) {
+    if (action === 'unread' && this.activeFilter.isUnRead) {
       return 'active';
     }
-    if (this.model.tabFilters.archived && tabNumber == 3) {
+    if (action === 'archived' && this.activeFilter.isArchived) {
       return 'active';
     }
 
     return '';
   }
+
+  getNotifications = restartableTask(
+    async ({ isRead, isUnRead, isArchived }) => {
+      const filter = {
+        'filter[gebruiker][:id:]': this.currentSession.user.id,
+        sort: this.sort,
+      };
+
+      if (isRead) {
+        this.activeFilter = this.filterRead;
+        filter['filter[:has:read-at]'] = true;
+        filter['filter[:has-no:archived-at]'] = true;
+      }
+      if (isUnRead) {
+        this.activeFilter = this.filterUnRead;
+        filter['filter[:has-no:read-at]'] = true;
+        filter['filter[:has-no:archived-at]'] = true;
+      }
+      if (isArchived) {
+        this.activeFilter = this.filterArchived;
+        filter['filter[:has:archived-at]'] = true;
+      }
+
+      this.notifications = await this.store.query(
+        'system-notification',
+        filter
+      );
+    }
+  );
 }

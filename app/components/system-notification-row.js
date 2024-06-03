@@ -11,6 +11,8 @@ export default class SystemNotificationRowComponent extends Component {
       notification[modelAttribute] = new Date();
     }
     await notification.save();
+
+    this.args.updateTable();
   });
 
   @action

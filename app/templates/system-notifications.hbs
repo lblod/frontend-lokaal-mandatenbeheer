@@ -10,37 +10,40 @@
   <AuTabs as |Tab|>
     <Tab>
       <AuLink
-        class={{this.activeTabClass 1}}
-        @route="system-notifications"
-        @query={{this.filterUnRead}}
+        @skin="primary"
+        class={{this.getActiveClass "unread"}}
+        {{on "click" (perform this.getNotifications this.filterUnRead)}}
       >
         Ongelezen
       </AuLink>
     </Tab>
     <Tab>
       <AuLink
-        class={{this.activeTabClass 2}}
-        @route="system-notifications"
-        @query={{this.filterRead}}
+        @skin="primary"
+        class={{this.getActiveClass "read"}}
+        {{on "click" (perform this.getNotifications this.filterRead)}}
       >
         Gelezen
       </AuLink>
     </Tab>
     <Tab>
       <AuLink
-        class={{this.activeTabClass 3}}
-        @route="system-notifications"
-        @query={{this.filterArchived}}
+        @skin="primary"
+        class={{this.getActiveClass "archived"}}
+        {{on "click" (perform this.getNotifications this.filterArchived)}}
       >Gearchiveerd
       </AuLink>
     </Tab>
   </AuTabs>
 </div>
 
-<div class="au-u-padding-left au-u-padding-right">
+<div
+  class="au-u-padding-left au-u-padding-right"
+  {{did-insert (perform this.getNotifications this.filterUnRead)}}
+>
   <AuDataTable
-    @content={{@model.notifications}}
-    @sort={{this.sort}}
+    @content={{this.notifications}}
+    @sort={{@sort}}
     @page={{this.page}}
     @noDataMessage="Geen systeem meldingen gevonden."
     as |t|
@@ -64,9 +67,16 @@
         />
         <th>{{! Actions dropdown }}</th>
       </c.header>
-      <c.body as |notification|>
-        <SystemNotificationRow @notification={{notification}} />
-      </c.body>
+      {{#if this.getNotifications.isRunning}}
+        <AuLoader />
+      {{else}}
+        <c.body as |notification|>
+          <SystemNotificationRow
+            @notification={{notification}}
+            @updateTable={{perform this.getNotifications this.activeFilter}}
+          />
+        </c.body>
+      {{/if}}
     </t.content>
   </AuDataTable>
 </div>
