@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
+
 import { restartableTask } from 'ember-concurrency';
 
 export default class SystemNotificationRowComponent extends Component {
@@ -29,14 +30,5 @@ export default class SystemNotificationRowComponent extends Component {
       return 'Terugzetten uit archief';
     }
     return 'Archiveer';
-  }
-
-  @action
-  classIsRead(notification) {
-    if (notification.readAt) {
-      return '';
-    }
-
-    return 'notification-tableRow--unread';
   }
 }
