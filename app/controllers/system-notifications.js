@@ -3,6 +3,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { getOwner } from '@ember/application';
 
 import { restartableTask } from 'ember-concurrency';
 
@@ -51,6 +52,7 @@ export default class SystemNotificationsController extends Controller {
 
   getNotifications = restartableTask(
     async ({ isRead, isUnRead, isArchived }) => {
+      this.updateNotificationCountInHeader();
       const filter = {
         'filter[gebruiker][:id:]': this.currentSession.user.id,
         sort: this.sort,
@@ -77,4 +79,11 @@ export default class SystemNotificationsController extends Controller {
       );
     }
   );
+
+  updateNotificationCountInHeader() {
+    const applicationController = getOwner(this).lookup(
+      'controller:application'
+    );
+    applicationController.setNotificationCount.perform();
+  }
 }
