@@ -1,4 +1,5 @@
 import Model, { attr } from '@ember-data/model';
+
 import {
   BESTUURSFUNCTIE_CODE_BURGEMEESTER,
   BESTUURSFUNCTIE_CODE_LEIDINGGEVEND_AMBTENAAR,

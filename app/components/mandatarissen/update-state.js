@@ -1,8 +1,10 @@
 import Component from '@glimmer/component';
+
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';

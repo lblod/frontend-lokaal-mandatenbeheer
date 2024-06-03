@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
-import ENV from 'frontend-lmb/config/environment';
+
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+
+import ENV from 'frontend-lmb/config/environment';
 
 export default class FormTripleContentComponent extends Component {
   @tracked expanded = false;

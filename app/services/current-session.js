@@ -1,5 +1,8 @@
-import Service, { inject as service } from '@ember/service';
+import Service from '@ember/service';
+
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+
 import { setContext, setUser } from '@sentry/ember';
 import { SHOULD_ENABLE_SENTRY } from 'frontend-lmb/utils/sentry';
 

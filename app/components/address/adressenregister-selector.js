@@ -1,8 +1,10 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
+
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+
+import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class AdressenregisterSelectorComponent extends Component {

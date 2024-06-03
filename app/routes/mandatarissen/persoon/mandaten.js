@@ -1,5 +1,7 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
+
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
 import moment from 'moment';
 

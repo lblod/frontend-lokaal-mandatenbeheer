@@ -1,8 +1,9 @@
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 
-import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
+
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 
 export default class InstanceTableComponent extends Component {

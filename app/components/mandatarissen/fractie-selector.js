@@ -1,8 +1,10 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
+
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+
+import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 

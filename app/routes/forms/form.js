@@ -1,5 +1,7 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
+
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 
 export default class FormRoute extends Route {

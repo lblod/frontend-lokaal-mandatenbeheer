@@ -1,6 +1,8 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+
 import { task, timeout } from 'ember-concurrency';
 
 export default class MockLoginController extends Controller {

@@ -1,5 +1,6 @@
-import { attr, hasMany } from '@ember-data/model';
 import ConceptModel from './concept';
+
+import { attr, hasMany } from '@ember-data/model';
 
 export default class BestuursperiodeModel extends ConceptModel {
   @attr('number') start;

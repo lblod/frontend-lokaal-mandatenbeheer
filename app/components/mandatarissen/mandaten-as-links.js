@@ -1,8 +1,9 @@
 import Component from '@glimmer/component';
 
 import { A } from '@ember/array';
-import { restartableTask } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+
+import { restartableTask } from 'ember-concurrency';
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
 
 export default class MandatarissenMandatenAsLinks extends Component {

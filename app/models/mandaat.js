@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+
 import {
   MANDAAT_BURGEMEESTER_CODE,
   MANDAAT_DISTRICT_BURGEMEESTER_CODE,

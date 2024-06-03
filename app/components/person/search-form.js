@@ -1,9 +1,11 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
+
+import { service } from '@ember/service';
 import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+
+import { task, timeout } from 'ember-concurrency';
 
 export default class SharedPersoonPersoonSearchFormComponent extends Component {
   @service store;

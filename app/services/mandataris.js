@@ -1,5 +1,7 @@
 import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
+
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import moment from 'moment';
 

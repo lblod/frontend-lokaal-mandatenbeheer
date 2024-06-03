@@ -1,4 +1,5 @@
 import Model, { belongsTo } from '@ember-data/model';
+
 import { INSTALLATIEVERGADERING_TE_BEHANDELEN } from 'frontend-lmb/utils/well-known-ids';
 
 export default class InstallatievergaderingModel extends Model {

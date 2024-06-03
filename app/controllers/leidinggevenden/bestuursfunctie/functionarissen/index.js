@@ -1,9 +1,10 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class LeidinggevendenBestuursfunctieFunctionarissenIndexController extends Controller {
-  @service() router;
+  @service router;
 
   sort = 'start';
   @tracked page = 0;

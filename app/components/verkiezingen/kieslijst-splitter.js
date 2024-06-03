@@ -1,9 +1,11 @@
 import Component from '@glimmer/component';
+
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
-import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
 import { A } from '@ember/array';
+
+import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
 
 export default class KieslijstSplitterComponent extends Component {
   @service store;

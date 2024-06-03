@@ -1,9 +1,11 @@
+import SelectorComponent from './selector';
+
 import { action } from '@ember/object';
+
 import {
   updateSimpleFormValue,
   triplesForPath,
 } from '@lblod/submission-form-helpers';
-import SelectorComponent from './selector';
 
 export default class RdfInstanceSelectorComponent extends SelectorComponent {
   async loadProvidedValue() {
