@@ -27,6 +27,7 @@
         {{on "click" (fn (mut this.isChanging) true)}}
       >Wijzig huidig mandaat</AuButton>
       <AuButton
+        @alert={{true}}
         @skin="secondary"
         @disabled={{this.inCompletedLegislatuur}}
         {{on "click" (fn (mut this.isCorrecting) true)}}
