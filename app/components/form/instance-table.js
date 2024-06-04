@@ -92,4 +92,28 @@ export default class InstanceTableComponent extends Component {
       headers: headers,
     };
   }
+
+  @action
+  labelForHeaderKey(key) {
+    const mapping = {
+      id: 'Id',
+      uri: 'Uri',
+      label: 'Label',
+      email: 'Email',
+      naam: 'Naam',
+      start: 'Startdatum',
+      einde: 'Einddatum',
+      voornaam: 'Voornaam',
+      achternaam: 'Achternaam',
+      roepnaam: 'Roepnaam',
+      test: 'Test',
+      startaanstellingsperiode: 'Start aanstellingsperiode',
+    };
+
+    if (!mapping[key]) {
+      return key;
+    }
+
+    return mapping[key];
+  }
 }
