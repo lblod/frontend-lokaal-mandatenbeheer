@@ -1,4 +1,4 @@
-{{page-title "Bestuursorganen"}}
+{{page-title "Organen"}}
 
 <AuMainContainer as |main|>
   <main.sidebar>
@@ -56,7 +56,7 @@
     <AuBodyContainer id="content">
       <AuToolbar @border="bottom" @size="large" as |Group|>
         <Group>
-          <AuHeading @skin="2">Bestuursorganen</AuHeading>
+          <AuHeading @skin="2">Organen</AuHeading>
         </Group>
         <Group {{did-insert this.setIsLegislatuurBehandeld}}>
           {{#if this.isInBehandeldLegislatuur}}
@@ -74,7 +74,7 @@
           <AuButton
             @disabled={{this.isInBehandeldLegislatuur}}
             {{on "click" this.toggleModal}}
-          >Voeg bestuursorgaan toe</AuButton>
+          >Voeg orgaan toe</AuButton>
         </Group>
       </AuToolbar>
 
@@ -91,7 +91,7 @@
 </AuMainContainer>
 
 <AuModal
-  @title="Voeg bestuursorgaan toe"
+  @title="Voeg orgaan toe"
   @modalOpen={{this.isModalActive}}
   @closable={{true}}
   @closeModal={{this.toggleModal}}
