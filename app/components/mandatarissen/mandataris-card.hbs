@@ -23,7 +23,9 @@
           @mandataris={{@mandataris}}
           @showInfoText={{true}}
         />
-        <AuLinkExternal href="" class="au-u-margin-left-tiny">Bekijk besluit</AuLinkExternal>
+        {{#if this.hasBesluit}}
+          <AuLinkExternal href="" class="au-u-margin-left-tiny">Bekijk besluit</AuLinkExternal>
+        {{/if}}
       </div>
     </div>
     {{#if @mandataris.bekleedt.isSchepen}}
