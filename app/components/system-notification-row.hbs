@@ -1,35 +1,28 @@
-{{#if this.isHidden}}
-  <td class="height-zero"></td>
-  <td class="height-zero"></td>
-  <td class="height-zero"></td>
-  <td class="height-zero"></td>
-{{else}}
-  <td>{{@notification.subject}}</td>
-  <td>{{@notification.message}}</td>
-  <td>{{moment-format @notification.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
-  <td>
-    <AuDropdown
-      @skin={{this.skin}}
-      @icon="three-dots"
-      @hideText={{true}}
-      role="menu"
+<td>{{@notification.subject}}</td>
+<td>{{@notification.message}}</td>
+<td>{{moment-format @notification.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
+<td>
+  <AuDropdown
+    @skin={{this.skin}}
+    @icon="three-dots"
+    @hideText={{true}}
+    role="menu"
+  >
+    <AuButton
+      @skin="link"
+      @icon="check"
+      role="menuitem"
+      {{on "click" (perform this.toggleDate @notification "readAt")}}
     >
-      <AuButton
-        @skin="link"
-        @icon="check"
-        role="menuitem"
-        {{on "click" (perform this.toggleDate @notification "readAt")}}
-      >
-        {{this.readAtText @notification}}
-      </AuButton>
-      <AuButton
-        @skin="link"
-        @icon="archive"
-        role="menuitem"
-        {{on "click" (perform this.toggleDate @notification "archivedAt")}}
-      >
-        {{this.archivedAtText @notification}}
-      </AuButton>
-    </AuDropdown>
-  </td>
-{{/if}}
+      {{this.readAtText @notification}}
+    </AuButton>
+    <AuButton
+      @skin="link"
+      @icon="archive"
+      role="menuitem"
+      {{on "click" (perform this.toggleDate @notification "archivedAt")}}
+    >
+      {{this.archivedAtText @notification}}
+    </AuButton>
+  </AuDropdown>
+</td>
