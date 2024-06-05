@@ -19,19 +19,13 @@
     <div class="au-o-grid__item au-u-1-2">
       <div class="au-c-description-label">Publicatie status</div>
       <div class="au-c-description-value au-u-margin-top-tiny">
-        <Mandaat::PublicatieStatusPill @mandataris={{@mandataris}} />
-        <AuLinkExternal href="" class="au-u-margin-left-tiny">Bekijk bewijs</AuLinkExternal>
-        <p
-          class="au-u-italic au-u-h-functional au-u-flex au-u-flex--vertical-center"
-        >
-          <AuIcon @icon="info-circle" />
-          <span class="au-u-margin-right-tiny">Om een bekrachtiging terug te
-            trekken moet je de
-          </span>
-          <AuLinkExternal href="">
-            technische dienst contacteren
-          </AuLinkExternal>
-        </p>
+        <Mandaat::PublicatieStatusPill
+          @mandataris={{@mandataris}}
+          @showInfoText={{true}}
+        />
+        {{#if this.hasBesluit}}
+          <AuLinkExternal href="" class="au-u-margin-left-tiny">Bekijk besluit</AuLinkExternal>
+        {{/if}}
       </div>
     </div>
     {{#if @mandataris.bekleedt.isSchepen}}

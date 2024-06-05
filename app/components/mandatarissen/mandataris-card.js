@@ -29,4 +29,8 @@ export default class MandatarisCardComponent extends Component {
 
     return 'default';
   }
+
+  get hasBesluit() {
+    return false;
+  }
 }

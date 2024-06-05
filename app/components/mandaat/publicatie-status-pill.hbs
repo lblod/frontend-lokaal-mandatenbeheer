@@ -1,16 +1,33 @@
-<AuPill
-  @skin={{if
-    (or
-      (not @mandataris.publicationStatus.label)
-      (eq @mandataris.publicationStatus.label "Bekrachtigd")
-    )
-    "success"
-    "default"
-  }}
-  @draft={{false}}
-  @size="regular"
-  @iconAlignment="left"
-  @hideText={{false}}
->
-  {{or @mandataris.publicationStatus.label "Bekrachtigd"}}
-</AuPill>
+<div>
+  <AuPill
+    @skin={{if
+      (or
+        (not @mandataris.publicationStatus.label)
+        (eq @mandataris.publicationStatus.label "Bekrachtigd")
+      )
+      "success"
+      "default"
+    }}
+    @draft={{false}}
+    @size="regular"
+    @iconAlignment="left"
+    @hideText={{false}}
+  >
+    {{or @mandataris.publicationStatus.label "Bekrachtigd"}}
+  </AuPill>
+  {{#if @showInfoText}}
+    {{#unless @mandataris.publicationStatus.label}}
+      <p
+        class="au-u-italic au-u-h-functional au-u-flex au-u-flex--vertical-center"
+      >
+        <AuIcon @icon="info-circle" />
+        <span class="au-u-margin-right-tiny">Om een bekrachtiging terug te
+          trekken moet je de
+        </span>
+        <AuLinkExternal href="">
+          technische dienst contacteren
+        </AuLinkExternal>
+      </p>
+    {{/unless}}
+  {{/if}}
+</div>
