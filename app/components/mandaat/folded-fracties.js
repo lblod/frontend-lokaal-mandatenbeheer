@@ -1,6 +1,8 @@
 import Component from '@glimmer/component';
+
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+
 import { toUserReadableListing } from 'frontend-lmb/utils/to-user-readable-listing';
 import moment from 'moment';
 

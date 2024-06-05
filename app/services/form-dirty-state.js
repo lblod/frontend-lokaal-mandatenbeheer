@@ -1,4 +1,5 @@
 import Service from '@ember/service';
+
 import ENV from 'frontend-lmb/config/environment';
 
 export default class FormDirtyStateService extends Service {

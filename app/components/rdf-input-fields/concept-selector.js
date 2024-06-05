@@ -1,8 +1,10 @@
+import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
+
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
-import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
+import { service } from '@ember/service';
+
 import { NamedNode } from 'rdflib';
 import { hasValidFieldOptions } from '@lblod/ember-submission-form-fields/utils/has-valid-field-options';
 import { task, timeout } from 'ember-concurrency';

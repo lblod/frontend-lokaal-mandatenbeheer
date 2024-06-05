@@ -1,11 +1,13 @@
 import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+
+import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
+
 import {
   DECRETALE_BESTUURSORGANEN_CONCEPT_SCHEME,
   GEMEENTE_BESTUURSORGANEN_CONCEPT_SCHEME,
   OTHER_BESTUURSORGANEN_CONCEPT_SCHEME,
 } from 'frontend-lmb/utils/well-known-ids';
-import { tracked } from '@glimmer/tracking';
 
 export default class DecretaleOrganenService extends Service {
   @service store;

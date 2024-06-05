@@ -1,6 +1,9 @@
 import Component from '@glimmer/component';
+
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
+import { guidFor } from '@ember/object/internals';
 
 import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
@@ -15,11 +18,9 @@ import {
   SOURCE_GRAPH,
   RESOURCE_CACHE_TIMEOUT,
 } from '../../utils/constants';
-import { inject as service } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
-import { guidFor } from '@ember/object/internals';
 
 export default class InstanceComponent extends Component {
   @service store;

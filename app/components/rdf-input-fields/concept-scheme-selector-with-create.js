@@ -1,6 +1,8 @@
-import { action } from '@ember/object';
-import { NamedNode } from 'rdflib';
 import RdfInputFieldsConceptSchemeSelectorComponent from './concept-scheme-selector';
+
+import { action } from '@ember/object';
+
+import { NamedNode } from 'rdflib';
 
 export default class RdfInputFieldsConceptSchemeSelectorWithCreateComponent extends RdfInputFieldsConceptSchemeSelectorComponent {
   @action

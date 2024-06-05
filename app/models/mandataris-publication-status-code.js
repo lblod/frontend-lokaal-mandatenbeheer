@@ -1,4 +1,5 @@
 import Model, { attr } from '@ember-data/model';
+
 import { MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisPublicationStatusCodeModel extends Model {
