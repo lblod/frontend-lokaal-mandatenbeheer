@@ -146,7 +146,6 @@ export default class MandatarissenUpdateState extends Component {
       beleidsdomein: (await this.args.mandataris.beleidsdomein).slice(),
       status: this.newStatus,
       publicationStatus: await getDraftPublicationStatus(this.store),
-      modified: new Date(),
     };
 
     const newMandataris = this.store.createRecord(
@@ -207,7 +206,6 @@ export default class MandatarissenUpdateState extends Component {
 
   endMandataris() {
     this.args.mandataris.einde = this.date;
-    this.args.mandataris.modified = new Date();
 
     return this.args.mandataris.save();
   }
