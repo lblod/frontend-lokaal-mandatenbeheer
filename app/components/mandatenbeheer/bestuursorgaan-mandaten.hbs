@@ -24,8 +24,14 @@
               @width="block"
               id="mandaat-aantal-houders"
               type="number"
+              min={{0}}
               {{on "input" this.updateAantalHouders}}
             />
+            {{#if this.errorMessageAantalHouders}}
+              <AuHelpText @error={{true}}>
+                {{this.errorMessageAantalHouders}}
+              </AuHelpText>
+            {{/if}}
           {{else}}
             {{mandaat.aantalHouders}}
           {{/if}}
@@ -34,7 +40,10 @@
           {{#if (eq this.editMandaat.id mandaat.id)}}
             <AuButton
               {{on "click" this.saveMandaat}}
-              @disabled={{not this.aantalHouders}}
+              @disabled={{(or
+                (not this.aantalHouders)
+                (not (this.isPositiveNumber this.aantalHouders))
+              )}}
             >
               Bewaar
             </AuButton>
