@@ -9,8 +9,8 @@ import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
-  @service() store;
-  @service() currentSession;
+  @service store;
+  @service currentSession;
   @service bestuursperioden;
 
   @tracked _fractie;

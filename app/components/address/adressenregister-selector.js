@@ -8,7 +8,7 @@ import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class AdressenregisterSelectorComponent extends Component {
-  @service() addressregister;
+  @service addressregister;
 
   @tracked address = null;
   @tracked addressSuggestion;
