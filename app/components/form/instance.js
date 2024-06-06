@@ -11,14 +11,8 @@ import {
   ForkingStore,
   validateForm,
 } from '@lblod/ember-submission-form-fields';
-import {
-  JSON_API_TYPE,
-  FORM_GRAPH,
-  META_GRAPH,
-  SOURCE_GRAPH,
-  RESOURCE_CACHE_TIMEOUT,
-} from '../../utils/constants';
-import { task, timeout } from 'ember-concurrency';
+import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
+import { task } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
 
@@ -26,6 +20,7 @@ export default class InstanceComponent extends Component {
   @service store;
   @service toaster;
   @service formDirtyState;
+  @service formRepository;
 
   @tracked sourceTriples;
   @tracked errorMessage;
@@ -48,40 +43,20 @@ export default class InstanceComponent extends Component {
 
   save = task({ keepLatest: true }, async () => {
     // TODO validation needs to be checked first before the form is actually saved
-    const triples = this.sourceTriples;
-    const definition = this.formInfo.definition;
+    const ttlCode = this.sourceTriples;
     const instanceId = this.formInfo.instanceId;
     this.errorMessage = null;
 
-    // post triples to backend
-    const result = await fetch(
-      `/form-content/${definition.id}/instances/${instanceId}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': JSON_API_TYPE,
-        },
-        body: JSON.stringify({
-          contentTtl: triples,
-          instanceUri: this.formInfo.sourceNode.value,
-          description: this.historyMessage,
-        }),
-      }
+    const result = await this.formRepository.updateFormInstance(
+      instanceId,
+      this.formInfo.sourceNode.value,
+      this.formInfo.definition.id,
+      ttlCode,
+      this.historyMessage
     );
 
-    await timeout(RESOURCE_CACHE_TIMEOUT);
-
-    if (!result.ok) {
-      this.errorMessage =
-        'Er ging iets mis bij het opslaan van het formulier. Probeer het later opnieuw.';
-      return;
-    }
-
-    const body = await result.json();
-
-    if (!body?.instance?.instanceUri) {
-      this.errorMessage =
-        'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.';
+    if (result.errorMessage) {
+      this.errorMessage = result.errorMessage;
       return;
     }
 
@@ -91,8 +66,8 @@ export default class InstanceComponent extends Component {
     if (this.args.onSave) {
       this.args.onSave({
         instanceId,
-        instanceTtl: triples,
-        response: body,
+        instanceTtl: ttlCode,
+        response: result.body,
       });
     }
 
