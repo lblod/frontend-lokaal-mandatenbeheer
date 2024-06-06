@@ -40,7 +40,6 @@ export default class InstanceComponent extends Component {
   }
 
   save = task({ keepLatest: true }, async () => {
-    // TODO validation needs to be checked first before the form is actually saved
     const ttlCode = this.sourceTriples;
     const instanceId = this.formInfo.instanceId;
     this.errorMessage = null;
