@@ -62,17 +62,11 @@ export default class FormRepositoryService extends Service {
 
     const { id } = await result.json();
 
-    if (!id) {
-      return {
-        id: null,
-        errorMessage:
-          'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.',
-      };
-    }
-
     return {
-      id: id,
-      errorMessage: null,
+      id: id ?? null,
+      errorMessage: id
+        ? null
+        : 'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.',
     };
   }
 
@@ -87,17 +81,11 @@ export default class FormRepositoryService extends Service {
 
     const body = await result.json();
 
-    if (!body?.instance?.instanceUri) {
-      return {
-        body: null,
-        errorMessage:
-          'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.',
-      };
-    }
-
     return {
-      body: body,
-      errorMessage: null,
+      body: body?.instance?.instanceUri ? body : null,
+      errorMessage: body?.instance?.instanceUri
+        ? null
+        : 'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.',
     };
   }
 }
