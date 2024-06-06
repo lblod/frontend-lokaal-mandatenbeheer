@@ -72,11 +72,6 @@ export default class NewInstanceComponent extends Component {
   });
 
   @action
-  async createInstance() {
-    this.save.perform();
-  }
-
-  @action
   cancel() {
     this.args.onCancel();
   }
