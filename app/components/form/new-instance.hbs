@@ -26,7 +26,7 @@
       <AuButtonGroup>
         <AuButton
           {{on "click" this.createInstance}}
-          @disabled={{this.isSaving}}
+          @disabled={{this.save.isRunning}}
         >
           Bewaar
         </AuButton>

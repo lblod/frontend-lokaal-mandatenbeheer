@@ -45,10 +45,6 @@ export default class NewInstanceComponent extends Component {
     return this.formInfo !== null;
   }
 
-  get isSaving() {
-    return this.save.isRunning;
-  }
-
   save = task({ keepLatest: true }, async () => {
     // TODO validation needs to be checked first before the form is actually saved
     const triples = this.sourceTriples;

@@ -27,7 +27,7 @@
         <AuButtonGroup>
           <AuButton
             {{on "click" this.tryOpenHistoryModal}}
-            @disabled={{or this.isSaving (not this.hasChanges)}}
+            @disabled={{or this.save.isRunning (not this.hasChanges)}}
           >Pas aan</AuButton>
           <Form::SaveWithHistory
             @save={{this.saveInstance}}

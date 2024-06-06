@@ -50,10 +50,6 @@ export default class InstanceComponent extends Component {
     return this.formInfo !== null;
   }
 
-  get isSaving() {
-    return this.save.isRunning;
-  }
-
   get isEditable() {
     if (this.args.isEditable === undefined) {
       return true;
