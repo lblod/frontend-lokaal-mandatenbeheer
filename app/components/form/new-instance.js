@@ -38,11 +38,7 @@ export default class NewInstanceComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.onInit();
-  }
-
-  get initialized() {
-    return this.formInfo !== null;
+    this.setupNewForm.perform();
   }
 
   save = task({ keepLatest: true }, async () => {
@@ -108,7 +104,7 @@ export default class NewInstanceComponent extends Component {
     this.args.onCancel();
   }
 
-  async onInit() {
+  setupNewForm = task(async () => {
     const form = this.args.form;
     const uri = `${form.prefix}${uuid()}`;
     const sourceTtl = this.args.buildSourceTtl
@@ -146,7 +142,7 @@ export default class NewInstanceComponent extends Component {
       sourceNode,
     };
     this.registerObserver(formStore);
-  }
+  });
 
   willDestroy() {
     super.willDestroy(...arguments);
