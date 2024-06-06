@@ -31,7 +31,7 @@
           @disabled={{or this.save.isRunning (not this.hasChanges)}}
         >Pas aan</AuButton>
         <Form::SaveWithHistory
-          @save={{this.saveInstance}}
+          @save={{perform this.save}}
           @isSaving={{this.save.isRunning}}
           @updateValue={{this.updateHistoryMessage}}
           @isModalOpen={{this.isSaveHistoryModalOpen}}

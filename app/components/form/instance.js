@@ -73,6 +73,7 @@ export default class InstanceComponent extends Component {
 
     this.formDirtyState.markClean(this.formId);
     this.hasChanges = false;
+    this.isSaveHistoryModalOpen = false;
   });
 
   @action
@@ -83,12 +84,6 @@ export default class InstanceComponent extends Component {
       return;
     }
     this.isSaveHistoryModalOpen = true;
-  }
-
-  @action
-  async saveInstance() {
-    await this.save.perform();
-    this.isSaveHistoryModalOpen = false;
   }
 
   @action
