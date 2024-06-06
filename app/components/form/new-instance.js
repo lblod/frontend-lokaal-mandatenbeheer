@@ -12,14 +12,8 @@ import {
   ForkingStore,
   validateForm,
 } from '@lblod/ember-submission-form-fields';
-import {
-  JSON_API_TYPE,
-  FORM_GRAPH,
-  META_GRAPH,
-  SOURCE_GRAPH,
-  RESOURCE_CACHE_TIMEOUT,
-} from '../../utils/constants';
-import { task, timeout } from 'ember-concurrency';
+import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
+import { task } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
 
@@ -27,6 +21,7 @@ export default class NewInstanceComponent extends Component {
   @service store;
   @service toaster;
   @service formDirtyState;
+  @service formRepository;
 
   @tracked sourceTriples;
   @tracked errorMessage;
@@ -43,8 +38,7 @@ export default class NewInstanceComponent extends Component {
 
   save = task({ keepLatest: true }, async () => {
     // TODO validation needs to be checked first before the form is actually saved
-    const triples = this.sourceTriples;
-    const definition = this.formInfo.definition;
+    const ttlCode = this.sourceTriples;
     this.errorMessage = null;
 
     if (!this.validate()) {
@@ -53,31 +47,14 @@ export default class NewInstanceComponent extends Component {
       return;
     }
 
-    // post triples to backend
-    const result = await fetch(`/form-content/${definition.id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': JSON_API_TYPE,
-      },
-      body: JSON.stringify({
-        contentTtl: triples,
-        instanceUri: this.formInfo.sourceNode.value,
-      }),
-    });
+    const result = await this.formRepository.createFormInstance(
+      this.formInfo.sourceNode.value,
+      this.formInfo.definition.id,
+      ttlCode
+    );
 
-    await timeout(RESOURCE_CACHE_TIMEOUT);
-
-    if (!result.ok) {
-      this.errorMessage =
-        'Er ging iets mis bij het opslaan van het formulier. Probeer het later opnieuw.';
-      return;
-    }
-
-    const { id } = await result.json();
-
-    if (!id) {
-      this.errorMessage =
-        'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.';
+    if (result.errorMessage) {
+      this.errorMessage = result.errorMessage;
       return;
     }
 
@@ -86,8 +63,8 @@ export default class NewInstanceComponent extends Component {
 
     if (this.args.onCreate) {
       this.args.onCreate({
-        instanceTtl: triples,
-        instanceId: id,
+        instanceTtl: ttlCode,
+        instanceId: result.id,
       });
     }
 
