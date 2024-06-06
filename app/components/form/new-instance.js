@@ -115,7 +115,11 @@ export default class NewInstanceComponent extends Component {
   }
 
   registerObserver(formStore) {
-    formStore.registerObserver(() => {
+    const onFormUpdate = () => {
+      if (this.isDestroyed) {
+        return;
+      }
+
       this.sourceTriples = this.formInfo.formStore.serializeDataMergedGraph(
         this.formInfo.graphs.sourceGraph
       );
@@ -132,7 +136,6 @@ export default class NewInstanceComponent extends Component {
     };
     formStore.registerObserver(onFormUpdate);
     onFormUpdate();
-    await timeout(55);
     this.args.formInitialized ? this.args.formInitialized() : null;
   }
 }
