@@ -43,11 +43,7 @@ export default class InstanceComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.onInit();
-  }
-
-  get initialized() {
-    return this.formInfo !== null;
+    this.setupFormForTtl.perform();
   }
 
   save = task({ keepLatest: true }, async () => {
@@ -136,10 +132,10 @@ export default class InstanceComponent extends Component {
   @action
   async onRestore(historicalInstance) {
     this.formInfo = null;
-    this.onInit(historicalInstance.formInstanceTtl);
+    this.setupFormForTtl.perform(historicalInstance.formInstanceTtl);
   }
 
-  async onInit(newFormTtl = null) {
+  setupFormForTtl = task(async (newFormTtl = null) => {
     const form = this.args.form;
     const instanceId = this.args.instanceId;
 
@@ -181,7 +177,7 @@ export default class InstanceComponent extends Component {
     };
 
     await this.registerObserver(formStore);
-  }
+  });
 
   async retrieveFormInstance(formId, id) {
     const response = await fetch(`/form-content/${formId}/instances/${id}`);

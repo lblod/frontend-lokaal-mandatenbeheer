@@ -1,4 +1,6 @@
-{{#if this.initialized}}
+{{#if this.setupFormForTtl.isRunning}}
+  <AuLoader />
+{{else}}
   <section>
     <RdfForm
       @groupClass="au-o-grid__item"
