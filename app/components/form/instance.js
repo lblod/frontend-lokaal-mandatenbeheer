@@ -50,13 +50,6 @@ export default class InstanceComponent extends Component {
     return this.formInfo !== null;
   }
 
-  get isEditable() {
-    if (this.args.isEditable === undefined) {
-      return true;
-    }
-    return Boolean(this.args.isEditable);
-  }
-
   save = task({ keepLatest: true }, async () => {
     // TODO validation needs to be checked first before the form is actually saved
     const triples = this.sourceTriples;
