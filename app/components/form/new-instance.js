@@ -114,7 +114,7 @@ export default class NewInstanceComponent extends Component {
   }
 
   registerObserver(formStore) {
-    const onFormUpdate = () => {
+    formStore.registerObserver(() => {
       if (this.isDestroyed) {
         return;
       }
