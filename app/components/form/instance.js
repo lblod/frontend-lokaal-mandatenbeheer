@@ -157,14 +157,11 @@ export default class InstanceComponent extends Component {
   willDestroy() {
     super.willDestroy(...arguments);
     this.formDirtyState.markClean(this.formId);
+    this.formInfo?.formStore?.clearObservers();
   }
 
   registerObserver(formStore) {
     formStore.registerObserver(() => {
-      if (this.isDestroyed) {
-        return;
-      }
-
       this.sourceTriples = this.formInfo.formStore.serializeDataMergedGraph(
         this.formInfo.graphs.sourceGraph
       );
