@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
@@ -8,14 +7,12 @@ import { guidFor } from '@ember/object/internals';
 import { v4 as uuid } from 'uuid';
 import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
-import {
-  ForkingStore,
-  validateForm,
-} from '@lblod/ember-submission-form-fields';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
 import { task } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
+import { isValidFormFromFormInfo } from 'frontend-lmb/utils/is-valid-form';
 
 export default class NewInstanceComponent extends Component {
   @service store;
@@ -37,11 +34,11 @@ export default class NewInstanceComponent extends Component {
   }
 
   save = task({ keepLatest: true }, async () => {
-    // TODO validation needs to be checked first before the form is actually saved
     const ttlCode = this.sourceTriples;
     this.errorMessage = null;
-
-    if (!this.validate()) {
+    const isValidForm = isValidFormFromFormInfo(this.formInfo);
+    this.forceShowErrors = !isValidForm;
+    if (!isValidForm) {
       this.errorMessage =
         'Niet alle velden zijn correct ingevuld. Probeer het later opnieuw.';
       return;
@@ -116,18 +113,7 @@ export default class NewInstanceComponent extends Component {
     this.formDirtyState.markClean(this.formId);
   }
 
-  validate() {
-    const hasNoErrors = validateForm(this.formInfo.formNode, {
-      ...this.formInfo.graphs,
-      sourceNode: this.formInfo.sourceNode,
-      store: this.formInfo.formStore,
-    });
-
-    this.forceShowErrors = !hasNoErrors;
-    return hasNoErrors;
-  }
-
-  async registerObserver(formStore) {
+  registerObserver(formStore) {
     const onFormUpdate = () => {
       if (this.isDestroyed) {
         return;

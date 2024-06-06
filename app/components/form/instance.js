@@ -7,14 +7,12 @@ import { guidFor } from '@ember/object/internals';
 
 import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
-import {
-  ForkingStore,
-  validateForm,
-} from '@lblod/ember-submission-form-fields';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
 import { task } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
+import { isValidFormFromFormInfo } from 'frontend-lmb/utils/is-valid-form';
 
 export default class InstanceComponent extends Component {
   @service store;
@@ -78,7 +76,9 @@ export default class InstanceComponent extends Component {
 
   @action
   async tryOpenHistoryModal() {
-    if (!this.validate()) {
+    const isValidForm = isValidFormFromFormInfo(this.formInfo);
+    this.forceShowErrors = !isValidForm;
+    if (!isValidForm) {
       this.errorMessage =
         'Niet alle velden zijn correct ingevuld. Gelieve deze eerst te corrigeren.';
       return;
@@ -160,19 +160,7 @@ export default class InstanceComponent extends Component {
     this.formDirtyState.markClean(this.formId);
   }
 
-  @action
-  validate() {
-    const hasNoErrors = validateForm(this.formInfo.formNode, {
-      ...this.formInfo.graphs,
-      sourceNode: this.formInfo.sourceNode,
-      store: this.formInfo.formStore,
-    });
-
-    this.forceShowErrors = !hasNoErrors;
-    return hasNoErrors;
-  }
-
-  async registerObserver(formStore) {
+  registerObserver(formStore) {
     const onFormUpdate = () => {
       if (this.isDestroyed) {
         return;
