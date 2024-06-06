@@ -71,11 +71,6 @@ export default class NewInstanceComponent extends Component {
     this.formDirtyState.markClean(this.formId);
   });
 
-  @action
-  cancel() {
-    this.args.onCancel();
-  }
-
   setupNewForm = task(async () => {
     const form = this.args.form;
     const uri = `${form.prefix}${uuid()}`;

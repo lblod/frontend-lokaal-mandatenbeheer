@@ -34,7 +34,7 @@
         </AuButton>
         {{#if @onCancel}}
           <Form::CancelWithConfirm
-            @cancel={{this.cancel}}
+            @cancel={{@onCancel}}
           >Annuleer</Form::CancelWithConfirm>
         {{/if}}
       </AuButtonGroup>

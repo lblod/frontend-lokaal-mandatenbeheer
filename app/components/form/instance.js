@@ -95,11 +95,6 @@ export default class InstanceComponent extends Component {
   }
 
   @action
-  cancel() {
-    this.args.onCancel();
-  }
-
-  @action
   async onRestore(historicalInstance) {
     this.formInfo = null;
     this.setupFormForTtl.perform(historicalInstance.formInstanceTtl);
