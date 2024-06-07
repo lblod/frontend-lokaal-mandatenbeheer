@@ -1,9 +1,13 @@
 <div {{did-insert (perform this.setup)}}>
-  {{#each this.mandatenAsLinks as |mandaatAsLink index|}}
-    <AuLink @route={{mandaatAsLink.route}} @models={{mandaatAsLink.model}}>
-      {{mandaatAsLink.label}}{{#if
-        (not-eq index (sub this.mandatenAsLinks.length 1))
-      }},{{/if}}
-    </AuLink>
-  {{/each}}
+  {{#if this.setup.isRunning}}
+    <p class="skeleton-text"></p>
+  {{else}}
+    {{#each this.mandatenAsLinks as |mandaatAsLink index|}}
+      <AuLink @route={{mandaatAsLink.route}} @models={{mandaatAsLink.model}}>
+        {{mandaatAsLink.label}}{{#if
+          (not-eq index (sub this.mandatenAsLinks.length 1))
+        }},{{/if}}
+      </AuLink>
+    {{/each}}
+  {{/if}}
 </div>
