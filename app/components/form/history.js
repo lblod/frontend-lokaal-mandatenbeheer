@@ -7,7 +7,6 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 
 export default class FormHistoryComponent extends Component {
-  @tracked loading = true;
   @tracked page = 0;
   @tracked size = 10;
   @tracked history = [];
@@ -21,7 +20,6 @@ export default class FormHistoryComponent extends Component {
   }
 
   fetchCurrentHistoryPage = task({ keepLatest: true }, async () => {
-    this.loading = true;
     const result = await fetch(
       `/form-content/${this.args.form.id}/instances/${this.args.instanceId}/history?page[size]=${this.size}&page[number]=${this.page}`
     );
@@ -52,7 +50,6 @@ export default class FormHistoryComponent extends Component {
       };
     });
 
-    this.loading = false;
   });
 
   restoreHistoryItem = task({ drop: true }, async (historyItem) => {
