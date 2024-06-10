@@ -1,6 +1,9 @@
 $gray-loader: var(--au-gray-200);
 
-.skeleton-background {
+.skeleton-base {
+  pointer-events: none;
+  color: transparent;
+  border-color: transparent;
   background: linear-gradient(
       0.25turn,
       transparent,
@@ -11,11 +14,17 @@ $gray-loader: var(--au-gray-200);
     radial-gradient(38px circle at 19px 19px, $gray-loader 50%, transparent 51%),
     linear-gradient($gray-loader, $gray-loader);
   animation: shimmer 20s infinite;
+  border-radius: var(--au-radius);
+}
+
+.skeleton-label {
+  @extend .skeleton-base;
+  height: 1rem;
+  width: 5rem;
 }
 
 .skeleton-text {
-  @extend .skeleton-background;
-  border-radius: var(--au-radius);
+  @extend .skeleton-base;
   height: 1rem;
   min-width: 1rem;
 }
