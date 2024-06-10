@@ -21,7 +21,7 @@
     </AuAlert>
   {{/if}}
 
-  {{#if this.isEditable}}
+  {{#if (and this.isEditable this.showEditButtons)}}
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>

@@ -33,6 +33,7 @@ export default class InstanceComponent extends Component {
   @tracked hasChanges = false;
   @tracked forceShowErrors = false;
   @tracked isSaveHistoryModalOpen = false;
+  @tracked showEditButtons = false;
 
   formStore = null;
   savedTriples = null;
@@ -247,5 +248,6 @@ export default class InstanceComponent extends Component {
     onFormUpdate();
     await timeout(55);
     this.args.formInitialized ? this.args.formInitialized() : null;
+    this.showEditButtons = true;
   }
 }
