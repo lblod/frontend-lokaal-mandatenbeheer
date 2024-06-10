@@ -113,6 +113,10 @@
       @onSave={{this.onSave}}
       @onCancel={{this.closeModals}}
       @buildMetaTtl={{this.buildMetaTtl}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
     />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::MandatarisCorrect />
+    {{/unless}}
   </div>
 </AuModal>

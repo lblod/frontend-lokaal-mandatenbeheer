@@ -29,6 +29,17 @@ $gray-loader: var(--au-gray-200);
   min-width: 1rem;
 }
 
+.skeleton-input-small {
+  @extend .skeleton-base;
+  height: 3rem;
+  width: 15rem;
+}
+.skeleton-input-full {
+  @extend .skeleton-base;
+  height: 3rem;
+  min-width: 1rem;
+}
+
 @keyframes shimmer {
   0% {
     background-position: -450px 0;

@@ -180,7 +180,6 @@ export default class InstanceComponent extends Component {
       FORM_GRAPH
     );
     const sourceNode = new NamedNode(instanceUri);
-    this.args.formInitialized ? this.args.formInitialized() : null;
 
     this.formInfo = {
       instanceId,
@@ -246,5 +245,6 @@ export default class InstanceComponent extends Component {
     };
     formStore.registerObserver(onFormUpdate);
     onFormUpdate();
+    this.args.formInitialized ? this.args.formInitialized() : null;
   }
 }
