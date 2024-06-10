@@ -41,6 +41,10 @@
       @form={{@form}}
       @onCancel={{this.toggleModal}}
       @onSave={{this.onSave}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
     />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::MandatarisExtraInfo />
+    {{/unless}}
   </div>
 </AuModal>
