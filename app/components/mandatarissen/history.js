@@ -4,6 +4,8 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 
+import { restartableTask } from 'ember-concurrency';
+
 export default class MandatarisHistoryComponent extends Component {
   @tracked loading = true;
   @tracked history = [];
@@ -12,11 +14,10 @@ export default class MandatarisHistoryComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.fetchHistory();
+    this.fetchHistory.perform();
   }
 
-  async fetchHistory() {
-    this.loading = true;
+  fetchHistory = restartableTask(async () => {
     const allMandatarissen = this.args.mandatarissen;
     const newHistory = await Promise.all(
       allMandatarissen.map(async (mandataris) => {
@@ -64,8 +65,7 @@ export default class MandatarisHistoryComponent extends Component {
       .sort((a, b) => {
         return b.mandataris.start.getTime() - a.mandataris.start.getTime();
       });
-    this.loading = false;
-  }
+  });
 
   get toonBeleidsdomeinen() {
     return this.history.some((h) => h.mandataris.beleidsdomein.length > 0);
@@ -86,6 +86,6 @@ export default class MandatarisHistoryComponent extends Component {
 
   @action
   async onMandatarisUpdate() {
-    await this.fetchHistory();
+    await this.fetchHistory.perform();
   }
 }
