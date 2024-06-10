@@ -49,7 +49,6 @@ export default class FormHistoryComponent extends Component {
         creator: userIdToUser[h.creator],
       };
     });
-
   });
 
   restoreHistoryItem = task({ drop: true }, async (historyItem) => {
