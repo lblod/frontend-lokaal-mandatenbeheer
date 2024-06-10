@@ -7,7 +7,6 @@ import { action } from '@ember/object';
 import { restartableTask } from 'ember-concurrency';
 
 export default class MandatarisHistoryComponent extends Component {
-  @tracked loading = true;
   @tracked history = [];
 
   @service store;
