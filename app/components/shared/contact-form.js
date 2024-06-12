@@ -14,9 +14,6 @@ export default class ContactFormComponent extends Component {
       label: 'Mandatenbeheer',
     },
     {
-      label: 'Leidinggevenden',
-    },
-    {
       label: 'Andere',
     },
   ];
