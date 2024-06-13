@@ -8,7 +8,6 @@ import { SHOULD_ENABLE_SENTRY } from 'frontend-lmb/utils/sentry';
 
 const MODULE = {
   MANDATENBEHEER: 'LoketLB-mandaatGebruiker',
-  LEIDINGGEVENDEN: 'LoketLB-leidinggevendenGebruiker',
 };
 
 export default class CurrentSessionService extends Service {
@@ -63,9 +62,5 @@ export default class CurrentSessionService extends Service {
 
   get canAccessMandaat() {
     return this.canAccess(MODULE.MANDATENBEHEER);
-  }
-
-  get canAccessLeidinggevenden() {
-    return this.canAccess(MODULE.LEIDINGGEVENDEN);
   }
 }

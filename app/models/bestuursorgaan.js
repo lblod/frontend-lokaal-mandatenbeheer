@@ -74,12 +74,6 @@ export default class BestuursorgaanModel extends Model {
   })
   heeftTijdsspecialisaties;
 
-  @hasMany('bestuursfunctie', {
-    async: true,
-    inverse: null,
-  })
-  bevatBestuursfunctie;
-
   @hasMany('mandaat', {
     async: true,
     inverse: 'bevatIn',

@@ -21,14 +21,6 @@
         Opstart nieuwe legislatuur
       </AuNavigationLink>
     </li>
-    {{#if this.currentSession.canAccessLeidinggevenden}}
-      <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="leidinggevenden">
-          <AuIcon @icon="user-popup" @alignment="left" />
-          Leidinggevenden
-        </AuNavigationLink>
-      </li>
-    {{/if}}
     <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="forms">
         <AuIcon @icon="draft" @alignment="left" />

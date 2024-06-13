@@ -53,20 +53,6 @@ Router.map(function () {
     this.route('installatievergadering');
   });
 
-  this.route('leidinggevenden', function () {
-    this.route(
-      'bestuursfunctie',
-      { path: '/:bestuursfunctie_id' },
-      function () {
-        this.route('contact-info');
-        this.route('functionarissen', function () {
-          this.route('edit', { path: '/:functionaris_id/edit' });
-          this.route('new');
-        });
-      }
-    );
-  });
-
   this.route('forms', function () {
     this.route('form', { path: '/:id' }, function () {
       this.route('new');
