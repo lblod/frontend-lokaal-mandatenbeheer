@@ -67,6 +67,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   }
 
   mirrorTable = restartableTask(async () => {
+    // bestuursorganenInTijd
     const bestuursorganen = this.args.bestuursorganen;
     let syncId = null;
     if (await this.isRMW) {
