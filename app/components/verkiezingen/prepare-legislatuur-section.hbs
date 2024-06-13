@@ -23,8 +23,16 @@
       @bestuursorganenInTijd={{@bestuursorganen}}
     />
   {{/if}}
-  {{#if (or this.mirrorTable.isRunning this.onCreate.isRunning)}}
-    {{! Show skeleton loader }}
+
+  {{#if
+    (and
+      (or this.mirrorTable.isRunning this.onCreate.isRunning)
+      this.skeletonRowsOfMirror
+    )
+  }}
+    <div class="au-o-box">
+      <Skeleton::Table @columns={{5}} @rows={{this.skeletonRowsOfMirror}} />
+    </div>
   {{else}}
     <Verkiezingen::DraftMandatarisList
       @readOnly={{@isBehandeld}}

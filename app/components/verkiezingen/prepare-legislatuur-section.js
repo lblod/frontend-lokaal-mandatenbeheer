@@ -35,6 +35,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service router;
 
   @tracked editMode = null;
+  @tracked skeletonRowsOfMirror = null;
 
   @action
   createMandataris() {
@@ -67,6 +68,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   }
 
   mirrorTable = restartableTask(async () => {
+    this.skeletonRowsOfMirror = null;
     // bestuursorganenInTijd
     const bestuursorganen = this.args.bestuursorganen;
     let syncId = null;
@@ -97,6 +99,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     if (mandatarissenToSync.length == 0) {
       throw `Geen mandatarissen gevonden om te synchroniseren.`;
     }
+    this.skeletonRowsOfMirror = mandatarissenToSync.length;
+    console.log(`rows`, mandatarissenToSync.length);
 
     const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
       this.args.bestuursorgaan
@@ -228,6 +232,11 @@ export default class PrepareLegislatuurSectionComponent extends Component {
 
   onCreate = restartableTask(async ({ instanceTtl, instanceId }) => {
     this.editMode = null;
+    this.skeletonRowsOfMirror = null;
+    const mandatarissen = await this.getBestuursorgaanMandatarissen(
+      this.args.bestuursorgaan
+    );
+    this.skeletonRowsOfMirror = mandatarissen.length;
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     await timeout(1000);
   });
