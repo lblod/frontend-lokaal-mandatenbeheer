@@ -3,7 +3,9 @@
   <:header>
     <tr>
       {{#each this.columns as |column|}}
-        <th class="skeleton-text"><p class="skeleton-text"></p></th>
+        <th
+          class="skeleton-text au-u-padding-left au-u-padding-right au-u-padding-bottom-small au-u-padding-top-small"
+        ><p class="skeleton-text"></p></th>
       {{/each}}
     </tr>
   </:header>
@@ -11,7 +13,7 @@
     {{#each this.rows as |row|}}
       <tr>
         {{#each this.columns as |column|}}
-          <td><p class="skeleton-text"></p></td>
+          <td><p class="skeleton-text au-u-padding"></p></td>
         {{/each}}
       </tr>
     {{/each}}
