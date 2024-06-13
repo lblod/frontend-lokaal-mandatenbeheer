@@ -1,9 +1,6 @@
 {{#if (await this.isBurgemeester)}}
   <Mandaat::BurgemeesterSelector @bestuursorgaanInTijd={{@bestuursorgaan}} />
 {{else}}
-
-  {{yield}}
-
   <AuToolbar
     @size="large"
     @nowrap="true"
@@ -17,6 +14,12 @@
       </div>
     </Group>
   </AuToolbar>
+  {{#if (await @bestuursorgaan.isBCSD)}}
+    <Verkiezingen::BcsdVoorzitterAlert
+      @bcsdBestuursorgaanInTijd={{@bestuursorgaan}}
+      @bestuursorganenInTijd={{@bestuursorganen}}
+    />
+  {{/if}}
   {{#if (or this.mirrorTable.isRunning this.onCreate.isRunning)}}
     {{! Show skeleton loader }}
   {{else}}
