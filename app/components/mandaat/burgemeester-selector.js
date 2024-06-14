@@ -41,7 +41,10 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   async load() {
     await this.loadBurgemeesterMandates();
+
+    if ((this.burgemeesterMandate && this, this.voorzitterVastBureauMandate)) {
     this.persoon = await this.loadBurgemeesterPersoon();
+    }
   }
 
   formatToDateString(dateTime) {
@@ -141,6 +144,10 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   @action
   async onUpdate(persoon) {
+    if (!persoon) {
+      return;
+    }
+
     this.persoon = persoon;
     await Promise.all(
       this.targetMandatarisses.map((target) => {
