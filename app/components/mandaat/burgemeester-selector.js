@@ -16,7 +16,6 @@ import {
 import { toUserReadableListing } from 'frontend-lmb/utils/to-user-readable-listing';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
-  @service toaster;
   @service store;
 
   @tracked persoon = null;
@@ -44,7 +43,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     await this.loadBurgemeesterMandates();
 
     if ((this.burgemeesterMandate && this, this.voorzitterVastBureauMandate)) {
-      this.persoon = await this.loadBurgemeesterPersoon();
+    this.persoon = await this.loadBurgemeesterPersoon();
     }
   }
 
@@ -71,35 +70,15 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       },
       include: 'bestuursfunctie',
     });
-    this.burgemeesterMandate = this.getMandateForIdFromMandatees(
-      BESTUURSFUNCTIE_BURGEMEESTER_ID,
-      mandates
-    );
-    this.voorzitterVastBureauMandate = this.getMandateForIdFromMandatees(
-      BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
-      mandates
-    );
-  }
-
-  getMandateForIdFromMandatees(bestuursfunctieId, mandatees) {
-    const mapping = {
-      [BESTUURSFUNCTIE_BURGEMEESTER_ID]: 'Burgemeester',
-      [BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID]: 'Voorzitter Vast Bureau',
-    };
-
-    const burgemeester = mandatees.find((m) => {
-      return m.get('bestuursfunctie.id') === bestuursfunctieId;
+    this.burgemeesterMandate = mandates.find((m) => {
+      return m.get('bestuursfunctie.id') === BESTUURSFUNCTIE_BURGEMEESTER_ID;
     });
-
-    if (!burgemeester) {
-      this.toaster.notify(
-        `Geen ${mapping[bestuursfunctieId] ?? ''} mandaat gevonden.`,
-        'Opgelet!',
-        { type: 'warning', timeOut: 5000 }
+    this.voorzitterVastBureauMandate = mandates.find((m) => {
+      return (
+        m.get('bestuursfunctie.id') ===
+        BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID
       );
-    }
-
-    return burgemeester;
+    });
   }
 
   async setMultipleBurgemeestersError(burgemeesters) {
