@@ -165,11 +165,11 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   @action
   async onUpdate(persoon) {
-    if (!persoon) {
+    this.persoon = persoon;
+
+    if (!this.persoon || !this.targetMandatarisses) {
       return;
     }
-
-    this.persoon = persoon;
     await Promise.all(
       this.targetMandatarisses.map((target) => {
         target.isBestuurlijkeAliasVan = persoon;
