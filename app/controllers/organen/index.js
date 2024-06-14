@@ -15,7 +15,7 @@ export default class OrganenIndexController extends Controller {
   @tracked bestuursperiode;
 
   @tracked isModalActive = false;
-  @tracked isInBehandeldLegislatuur;
+  @tracked isInTeBehandelenLegislatuur;
 
   @action
   filterActiveOrgans() {
@@ -87,6 +87,6 @@ export default class OrganenIndexController extends Controller {
       }
     );
 
-    this.isInBehandeldLegislatuur = behandeldeVergaderingen.length >= 1;
+    this.isInTeBehandelenLegislatuur = behandeldeVergaderingen.length === 0;
   }
 }
