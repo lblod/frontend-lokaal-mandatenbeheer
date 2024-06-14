@@ -17,12 +17,6 @@
     <AuIcon @icon="vote" @alignment="left" />
     Opstart nieuwe legislatuur
   </AuLink>
-  {{#if this.currentSession.canAccessLeidinggevenden}}
-    <AuLink @route="leidinggevenden" role="menuitem">
-      <AuIcon @icon="user-popup" @alignment="left" />
-      Leidinggevenden
-    </AuLink>
-  {{/if}}
   <AuLink @route="forms" role="menuitem">
     <AuIcon @icon="draft" @alignment="left" />
     Forms

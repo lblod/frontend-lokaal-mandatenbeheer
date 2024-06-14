@@ -63,13 +63,6 @@ inflector.irregular('concept', 'concepts');
 inflector.irregular('time-block', 'time-blocks');
 inflector.irregular('application-form-entry', 'application-form-entries');
 
-inflector.irregular(
-  'minister-position-function',
-  'minister-position-functions'
-);
-
-inflector.irregular('minister-position', 'minister-positions');
-
 inflector.irregular('nationality', 'nationalities');
 
 inflector.irregular('system-notification', 'system-notifications');
