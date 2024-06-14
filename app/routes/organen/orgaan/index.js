@@ -35,7 +35,7 @@ export default class OrganenOrgaanIndexRoute extends Route {
     );
 
     return RSVP.hash({
-      isInBehandeldeLegislatuur: behandeldeVergaderingen.length >= 1,
+      isInTeBehandelenLegislatuur: behandeldeVergaderingen.length === 0,
       bestuursorgaanFormDefinition,
       mandaten,
       orderedMandaten,
