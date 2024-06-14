@@ -17,7 +17,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
 
   @tracked isChanging;
   @tracked isCorrecting;
-  @tracked inCompletedLegislatuur;
+  @tracked isInTeBehandelenLegislatuur;
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt
@@ -76,7 +76,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     const bestuursorganen = await mandaat.bevatIn;
 
     if (!bestuursorganen[0]) {
-      this.inCompletedLegislatuur = false;
+      this.isInTeBehandelenLegislatuur = true;
       return;
     }
 
@@ -88,7 +88,6 @@ export default class MandatarissenPersoonMandatarisController extends Controller
         'filter[bestuursperiode][:id:]': bestuursperiode.id,
       }
     );
-
-    this.inCompletedLegislatuur = behandeldeVergaderingen.length >= 1;
+    this.isInTeBehandelenLegislatuur = behandeldeVergaderingen.length === 0;
   });
 }

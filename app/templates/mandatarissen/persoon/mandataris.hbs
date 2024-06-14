@@ -22,14 +22,14 @@
       <AuButton
         class="au-u-margin-right-small"
         @disabled={{(or
-          (not this.model.mandataris.isActive) this.inCompletedLegislatuur
+          (not this.model.mandataris.isActive) this.isInTeBehandelenLegislatuur
         )}}
         {{on "click" (fn (mut this.isChanging) true)}}
       >Wijzig huidig mandaat</AuButton>
       <AuButton
         @alert={{true}}
         @skin="secondary"
-        @disabled={{this.inCompletedLegislatuur}}
+        @disabled={{this.isInTeBehandelenLegislatuur}}
         {{on "click" (fn (mut this.isCorrecting) true)}}
       >Corrigeer fouten</AuButton>
     </div>
@@ -61,7 +61,7 @@
     <Mandatarissen::MandatarisExtraInfoCard
       @mandataris={{@model.mandataris}}
       @form={{@model.mandatarisExtraInfoForm}}
-      @canEdit={{not this.inCompletedLegislatuur}}
+      @canEdit={{not this.isInTeBehandelenLegislatuur}}
     />
   </div>
 
