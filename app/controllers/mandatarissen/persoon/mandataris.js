@@ -17,7 +17,8 @@ export default class MandatarissenPersoonMandatarisController extends Controller
 
   @tracked isChanging;
   @tracked isCorrecting;
-  @tracked isInTeBehandelenLegislatuur;
+  @tracked periodeHasLegislatuur;
+  @tracked behandeldeVergaderingen;
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt
@@ -71,23 +72,38 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     return getBestuursorganenMetaTtl(this.model.bestuursorganen);
   }
 
-  canEditAndCorrect = task(async () => {
+  checkLegislatuur = task(async () => {
     const mandaat = await this.model.mandataris.bekleedt;
     const bestuursorganen = await mandaat.bevatIn;
 
     if (!bestuursorganen[0]) {
-      this.isInTeBehandelenLegislatuur = true;
+      this.periodeHasLegislatuur = false;
+      this.behandeldeVergaderingen = null;
       return;
     }
 
     const bestuursperiode = await bestuursorganen[0].heeftBestuursperiode;
-    const behandeldeVergaderingen = await this.store.query(
+    this.periodeHasLegislatuur =
+      (await bestuursperiode.installatievergaderingen).length >= 1;
+
+    this.behandeldeVergaderingen = await this.store.query(
       'installatievergadering',
       {
         'filter[status][:uri:]': INSTALLATIVERGADERING_BEHANDELD_STATUS,
         'filter[bestuursperiode][:id:]': bestuursperiode.id,
       }
     );
-    this.isInTeBehandelenLegislatuur = behandeldeVergaderingen.length === 0;
   });
+
+  get isDisabledBecauseLegislatuur() {
+    if (
+      this.periodeHasLegislatuur &&
+      this.behandeldeVergaderingen &&
+      this.behandeldeVergaderingen.length === 0
+    ) {
+      return true;
+    }
+
+    return false;
+  }
 }
