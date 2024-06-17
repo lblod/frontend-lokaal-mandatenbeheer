@@ -25,17 +25,20 @@ export default class OrganenOrgaanIndexRoute extends Route {
       BESTUURSORGAAN_FORM_ID
     );
 
+    const bestuursperiode = await currentBestuursorgaan.heeftBestuursperiode;
+    const periodeHasLegislatuur =
+      (await bestuursperiode.installatievergaderingen).length >= 1;
     const behandeldeVergaderingen = await this.store.query(
       'installatievergadering',
       {
         'filter[status][:uri:]': INSTALLATIVERGADERING_BEHANDELD_STATUS,
-        'filter[bestuursperiode][:id:]':
-          currentBestuursorgaan.get('bestuursperiode.id'),
+        'filter[bestuursperiode][:id:]': bestuursperiode.id,
       }
     );
 
     return RSVP.hash({
-      isInTeBehandelenLegislatuur: behandeldeVergaderingen.length === 0,
+      isDisabledBecauseLegislatuur:
+        periodeHasLegislatuur && behandeldeVergaderingen.length === 0,
       bestuursorgaanFormDefinition,
       mandaten,
       orderedMandaten,
