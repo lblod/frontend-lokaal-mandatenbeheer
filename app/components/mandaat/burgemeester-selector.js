@@ -42,7 +42,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   async load() {
     await this.loadBurgemeesterMandates();
 
-    if ((this.burgemeesterMandate && this, this.voorzitterVastBureauMandate)) {
+    if (this.burgemeesterMandate && this.voorzitterVastBureauMandate) {
       this.persoon = await this.loadBurgemeesterPersoon();
     }
   }
