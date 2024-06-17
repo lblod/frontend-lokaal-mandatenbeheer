@@ -59,7 +59,7 @@
           <AuHeading @skin="2">Organen</AuHeading>
         </Group>
         <Group {{did-insert this.setIsLegislatuurBehandeld}}>
-          {{#if this.isInTeBehandelenLegislatuur}}
+          {{#if this.isDisabledBecauseLegislatuur}}
             <AuButton @disabled={{true}}>
               Beheer fracties
             </AuButton>
