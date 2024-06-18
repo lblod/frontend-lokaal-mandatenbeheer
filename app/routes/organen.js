@@ -13,6 +13,10 @@ export default class OrganenRoute extends Route {
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
+
+    if (!this.currentSession.canAccessMandaat) {
+      this.router.transitionTo('index');
+    }
   }
 
   async model() {
