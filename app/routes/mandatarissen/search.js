@@ -13,6 +13,7 @@ export default class MandatarissenSearchRoute extends Route {
     bestuursperiode: { refreshModel: true },
     bestuursfunctie: { refreshModel: true },
     binnenFractie: { refreshModel: true },
+    activeMandatarissen: { refreshModel: true },
   };
 
   async model(params) {
@@ -89,9 +90,17 @@ export default class MandatarissenSearchRoute extends Route {
     const mandatarissen = await this.store.query('mandataris', queryParams);
     const personen = await Promise.all(
       mandatarissen.map(async (mandataris) => {
-        return await mandataris.get('isBestuurlijkeAliasVan');
+        if (!params.activeMandatarissen || (await mandataris.isActive)) {
+          return await mandataris.get('isBestuurlijkeAliasVan');
+        }
       })
     );
+    if (params.activeMandatarissen) {
+      const active = personen.filter((persoon) => {
+        return persoon;
+      });
+      return [...new Set(active)];
+    }
     return [...new Set(personen)];
   }
 

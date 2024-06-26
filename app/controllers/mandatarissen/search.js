@@ -15,6 +15,7 @@ export default class MandatarissenSearchController extends Controller {
   @tracked bestuursfunctie;
   @tracked binnenFractie;
   @tracked searchData;
+  @tracked activeMandatarissen = false;
 
   @tracked filter = '';
   sort = 'is-bestuurlijke-alias-van.achternaam';
@@ -31,6 +32,12 @@ export default class MandatarissenSearchController extends Controller {
     this.binnenFractie = null;
     this.filter = null;
     this.searchData = null;
+    this.activeMandatarissen = false;
+  }
+
+  @action
+  filterActiveMandatarissen() {
+    this.activeMandatarissen = !this.activeMandatarissen;
   }
 
   @action
