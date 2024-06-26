@@ -77,7 +77,7 @@ export default class MandatarissenSearchRoute extends Route {
     };
 
     if (params.filter && params.filter.length > 0) {
-      queryParams.filter = params.filter;
+      queryParams['filter[is-bestuurlijke-alias-van]'] = params.filter;
     }
     if (params.bestuursfunctie) {
       queryParams['filter[bekleedt][bestuursfunctie][:id:]'] =
