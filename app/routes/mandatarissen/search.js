@@ -87,13 +87,12 @@ export default class MandatarissenSearchRoute extends Route {
     }
 
     const mandatarissen = await this.store.query('mandataris', queryParams);
-    // TODO compact these.
     const personen = await Promise.all(
       mandatarissen.map(async (mandataris) => {
         return await mandataris.get('isBestuurlijkeAliasVan');
       })
     );
-    return personen;
+    return [...new Set(personen)];
   }
 
   setupController(controller) {
