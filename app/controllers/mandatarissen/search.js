@@ -30,8 +30,8 @@ export default class MandatarissenSearchController extends Controller {
   @action
   clearFilters() {
     this.bestuursperiode = null;
-    this.bestuursfunctie = this.allBestuurfunctieCodeIds;
-    this.binnenFractie = this.allFractieIds;
+    this.bestuursfunctie = null;
+    this.binnenFractie = null;
     this.filter = null;
     this.searchData = null;
     this.page = 0;
@@ -45,10 +45,6 @@ export default class MandatarissenSearchController extends Controller {
 
   @action
   updateFilterWithBestuursfunctie(bestuursfunctieCodes) {
-    if (!bestuursfunctieCodes || bestuursfunctieCodes.length == 0) {
-      this.bestuursfunctie = this.allBestuurfunctieCodeIds;
-      return;
-    }
     this.bestuursfunctie = bestuursfunctieCodes
       .map((functie) => functie.id)
       .join(',');
@@ -57,10 +53,6 @@ export default class MandatarissenSearchController extends Controller {
 
   @action
   updateFilterWithFractie(fracties) {
-    if (!fracties || fracties.length == 0) {
-      this.binnenFractie = this.allFractieIds;
-      return;
-    }
     this.binnenFractie = fracties.map((fractie) => fractie.id).join(',');
     this.page = 0;
   }
@@ -97,13 +89,5 @@ export default class MandatarissenSearchController extends Controller {
 
   get uniqueBestuurfuncties() {
     return this.model.bestuursfuncties.filter((functie) => functie);
-  }
-
-  get allBestuurfunctieCodeIds() {
-    return this.uniqueBestuurfuncties.map((code) => code.id).join(',');
-  }
-
-  get allFractieIds() {
-    return this.model.fracties.map((fractie) => fractie.id).join(',');
   }
 }
