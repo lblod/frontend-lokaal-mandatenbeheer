@@ -57,7 +57,7 @@ export default class MandatarissenSearchRoute extends Route {
 
   async getPersonen(params, bestuursperiode) {
     const queryParams = {
-      // sort: params.sort,
+      sort: params.sort,
       page: {
         number: 0,
         size: 1000,

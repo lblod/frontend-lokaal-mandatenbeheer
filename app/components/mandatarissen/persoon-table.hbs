@@ -9,12 +9,12 @@
   <t.content as |c|>
     <c.header>
       <AuDataTableThSortable
-        @field="gebruikteVoornaam"
+        @field="is-bestuurlijke-alias-van.gebruikteVoornaam"
         @currentSorting={{@sort}}
         @label="Naam"
       />
       <AuDataTableThSortable
-        @field="achternaam"
+        @field="is-bestuurlijke-alias-van.achternaam"
         @currentSorting={{@sort}}
         @label="Familienaam"
       />

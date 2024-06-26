@@ -17,7 +17,7 @@ export default class MandatarissenSearchController extends Controller {
   @tracked searchData;
 
   @tracked filter = '';
-  sort = 'achternaam';
+  sort = 'is-bestuurlijke-alias-van.achternaam';
 
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
