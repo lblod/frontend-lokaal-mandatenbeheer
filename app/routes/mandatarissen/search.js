@@ -9,8 +9,6 @@ export default class MandatarissenSearchRoute extends Route {
 
   queryParams = {
     filter: { refreshModel: true },
-    page: { refreshModel: true },
-    size: { refreshModel: true },
     sort: { refreshModel: true },
     bestuursperiode: { refreshModel: true },
     bestuursfunctie: { refreshModel: true },
@@ -61,8 +59,8 @@ export default class MandatarissenSearchRoute extends Route {
     const queryParams = {
       // sort: params.sort,
       page: {
-        number: params.page,
-        size: params.size,
+        number: 0,
+        size: 1000,
       },
       'filter[bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
         bestuursperiode.id,
@@ -89,6 +87,7 @@ export default class MandatarissenSearchRoute extends Route {
     }
 
     const mandatarissen = await this.store.query('mandataris', queryParams);
+    // TODO compact these.
     const personen = await Promise.all(
       mandatarissen.map(async (mandataris) => {
         return await mandataris.get('isBestuurlijkeAliasVan');

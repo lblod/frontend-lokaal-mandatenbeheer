@@ -17,13 +17,10 @@ export default class MandatarissenSearchController extends Controller {
   @tracked searchData;
 
   @tracked filter = '';
-  @tracked page = 0;
   sort = 'achternaam';
-  size = 20;
 
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
-    this.page = 0;
     this.filter = searchData;
   });
 
@@ -34,13 +31,11 @@ export default class MandatarissenSearchController extends Controller {
     this.binnenFractie = null;
     this.filter = null;
     this.searchData = null;
-    this.page = 0;
   }
 
   @action
   selectPeriod(period) {
     this.bestuursperiode = period.id;
-    this.page = 0;
   }
 
   @action
@@ -48,13 +43,11 @@ export default class MandatarissenSearchController extends Controller {
     this.bestuursfunctie = bestuursfunctieCodes
       .map((functie) => functie.id)
       .join(',');
-    this.page = 0;
   }
 
   @action
   updateFilterWithFractie(fracties) {
     this.binnenFractie = fracties.map((fractie) => fractie.id).join(',');
-    this.page = 0;
   }
 
   get selectedFracties() {
