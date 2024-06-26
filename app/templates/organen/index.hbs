@@ -59,8 +59,8 @@
           <AuHeading @skin="2">Organen</AuHeading>
         </Group>
         <Group {{did-insert this.setIsLegislatuurBehandeld}}>
-          {{#if this.isInBehandeldLegislatuur}}
-            <AuButton @disabled={{this.isInBehandeldLegislatuur}}>
+          {{#if this.isDisabledBecauseLegislatuur}}
+            <AuButton @disabled={{true}}>
               Beheer fracties
             </AuButton>
           {{else}}
@@ -71,10 +71,7 @@
             >Beheer fracties
             </AuLink>
           {{/if}}
-          <AuButton
-            @disabled={{this.isInBehandeldLegislatuur}}
-            {{on "click" this.toggleModal}}
-          >Voeg orgaan toe</AuButton>
+          <AuButton {{on "click" this.toggleModal}}>Voeg orgaan toe</AuButton>
         </Group>
       </AuToolbar>
 

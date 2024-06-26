@@ -15,7 +15,7 @@ export default class OrganenIndexController extends Controller {
   @tracked bestuursperiode;
 
   @tracked isModalActive = false;
-  @tracked isInBehandeldLegislatuur;
+  @tracked isDisabledBecauseLegislatuur;
 
   @action
   filterActiveOrgans() {
@@ -79,6 +79,13 @@ export default class OrganenIndexController extends Controller {
 
   @action
   async setIsLegislatuurBehandeld() {
+    const periodeHasLegislatuur =
+      (await this.model.selectedPeriod.installatievergaderingen).length >= 1;
+    if (!periodeHasLegislatuur) {
+      this.isDisabledBecauseLegislatuur = false;
+      return;
+    }
+
     const behandeldeVergaderingen = await this.store.query(
       'installatievergadering',
       {
@@ -87,6 +94,6 @@ export default class OrganenIndexController extends Controller {
       }
     );
 
-    this.isInBehandeldLegislatuur = behandeldeVergaderingen.length >= 1;
+    this.isDisabledBecauseLegislatuur = behandeldeVergaderingen.length === 0;
   }
 }

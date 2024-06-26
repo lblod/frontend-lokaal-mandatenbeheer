@@ -12,7 +12,7 @@
   <Group>
     <AuButtonGroup>
       <AuButton
-        @disabled={{@model.isInBehandeldeLegislatuur}}
+        @disabled={{@model.isDisabledBecauseLegislatuur}}
         {{on "click" this.toggleModal}}
       >Bewerk</AuButton>
       {{#unless (await @model.bestuursorgaan.isDecretaal)}}
