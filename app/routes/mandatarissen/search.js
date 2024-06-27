@@ -33,7 +33,7 @@ export default class MandatarissenSearchRoute extends Route {
           return { period, disabled: false };
         }
         if (
-          (await ivs.at(0).get('status')) ==
+          ivs.at(0).get('status').get('uri') ==
           INSTALLATIVERGADERING_BEHANDELD_STATUS
         ) {
           return { period, disabled: false };
