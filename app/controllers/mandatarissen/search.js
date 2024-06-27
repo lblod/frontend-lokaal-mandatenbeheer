@@ -15,54 +15,46 @@ export default class MandatarissenSearchController extends Controller {
   @tracked bestuursfunctie;
   @tracked binnenFractie;
   @tracked searchData;
+  @tracked activeMandatarissen = false;
 
   @tracked filter = '';
-  @tracked page = 0;
-  sort = 'achternaam';
-  size = 20;
+  sort = 'is-bestuurlijke-alias-van.achternaam';
 
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
-    this.page = 0;
     this.filter = searchData;
   });
 
   @action
   clearFilters() {
     this.bestuursperiode = null;
-    this.bestuursfunctie = this.allBestuurfunctieCodeIds;
-    this.binnenFractie = this.allFractieIds;
+    this.bestuursfunctie = null;
+    this.binnenFractie = null;
     this.filter = null;
     this.searchData = null;
-    this.page = 0;
+    this.activeMandatarissen = false;
+  }
+
+  @action
+  filterActiveMandatarissen() {
+    this.activeMandatarissen = !this.activeMandatarissen;
   }
 
   @action
   selectPeriod(period) {
     this.bestuursperiode = period.id;
-    this.page = 0;
   }
 
   @action
   updateFilterWithBestuursfunctie(bestuursfunctieCodes) {
-    if (!bestuursfunctieCodes || bestuursfunctieCodes.length == 0) {
-      this.bestuursfunctie = this.allBestuurfunctieCodeIds;
-      return;
-    }
     this.bestuursfunctie = bestuursfunctieCodes
       .map((functie) => functie.id)
       .join(',');
-    this.page = 0;
   }
 
   @action
   updateFilterWithFractie(fracties) {
-    if (!fracties || fracties.length == 0) {
-      this.binnenFractie = this.allFractieIds;
-      return;
-    }
     this.binnenFractie = fracties.map((fractie) => fractie.id).join(',');
-    this.page = 0;
   }
 
   get selectedFracties() {
@@ -97,13 +89,5 @@ export default class MandatarissenSearchController extends Controller {
 
   get uniqueBestuurfuncties() {
     return this.model.bestuursfuncties.filter((functie) => functie);
-  }
-
-  get allBestuurfunctieCodeIds() {
-    return this.uniqueBestuurfuncties.map((code) => code.id).join(',');
-  }
-
-  get allFractieIds() {
-    return this.model.fracties.map((fractie) => fractie.id).join(',');
   }
 }

@@ -9,12 +9,11 @@ export default class MandatarissenSearchRoute extends Route {
 
   queryParams = {
     filter: { refreshModel: true },
-    page: { refreshModel: true },
-    size: { refreshModel: true },
     sort: { refreshModel: true },
     bestuursperiode: { refreshModel: true },
     bestuursfunctie: { refreshModel: true },
     binnenFractie: { refreshModel: true },
+    activeMandatarissen: { refreshModel: true },
   };
 
   async model(params) {
@@ -26,13 +25,7 @@ export default class MandatarissenSearchRoute extends Route {
       params.bestuursperiode
     );
 
-    const options = this.getOptions(
-      params,
-      selectedPeriod,
-      params.bestuursfunctie,
-      params.binnenFractie
-    );
-    const personen = await this.store.query('persoon', options);
+    const personen = await this.getPersonen(params, selectedPeriod);
 
     const allBestuurfunctieCodes = [];
     const mandatenVoorPeriode = await this.store.query('mandaat', {
@@ -63,35 +56,52 @@ export default class MandatarissenSearchRoute extends Route {
     };
   }
 
-  getOptions(params, bestuursperiode, bestuursfunctieIds, fractieIds) {
+  async getPersonen(params, bestuursperiode) {
     const queryParams = {
       sort: params.sort,
       page: {
-        number: params.page,
-        size: params.size,
+        number: 0,
+        size: 1000,
       },
-      'filter[:has:is-aangesteld-als]': true,
-      'filter[is-aangesteld-als][bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
+      'filter[bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
         bestuursperiode.id,
-      'filter[is-aangesteld-als][bekleedt][bestuursfunctie][:id:]':
-        bestuursfunctieIds,
-      'filter[is-aangesteld-als][heeft-lidmaatschap][binnen-fractie][:id:]':
-        fractieIds,
       include: [
-        'is-aangesteld-als',
-        'is-aangesteld-als.bekleedt',
-        'is-aangesteld-als.bekleedt.bestuursfunctie',
-        'is-aangesteld-als.bekleedt.bevat-in.heeft-bestuursperiode',
-        'is-aangesteld-als.heeft-lidmaatschap',
-        'is-aangesteld-als.heeft-lidmaatschap.binnen-fractie',
+        'is-bestuurlijke-alias-van',
+        'bekleedt',
+        'bekleedt.bestuursfunctie',
+        'bekleedt.bevat-in.heeft-bestuursperiode',
+        'heeft-lidmaatschap',
+        'heeft-lidmaatschap.binnen-fractie',
       ].join(','),
     };
 
     if (params.filter && params.filter.length > 0) {
-      queryParams.filter = params.filter;
+      queryParams['filter[is-bestuurlijke-alias-van]'] = params.filter;
+    }
+    if (params.bestuursfunctie) {
+      queryParams['filter[bekleedt][bestuursfunctie][:id:]'] =
+        params.bestuursfunctie;
+    }
+    if (params.binnenFractie) {
+      queryParams['filter[heeft-lidmaatschap][binnen-fractie][:id:]'] =
+        params.binnenFractie;
     }
 
-    return queryParams;
+    const mandatarissen = await this.store.query('mandataris', queryParams);
+    const personen = await Promise.all(
+      mandatarissen.map(async (mandataris) => {
+        if (!params.activeMandatarissen || (await mandataris.isActive)) {
+          return await mandataris.get('isBestuurlijkeAliasVan');
+        }
+      })
+    );
+    if (params.activeMandatarissen) {
+      const active = personen.filter((persoon) => {
+        return persoon;
+      });
+      return [...new Set(active)];
+    }
+    return [...new Set(personen)];
   }
 
   setupController(controller) {
