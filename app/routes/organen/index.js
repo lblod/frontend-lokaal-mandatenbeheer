@@ -6,6 +6,7 @@ import { action } from '@ember/object';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
+import { INSTALLATIVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 export default class OrganenIndexRoute extends Route {
   @service store;
@@ -39,6 +40,8 @@ export default class OrganenIndexRoute extends Route {
         selectedPeriod
       );
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
+    const legislatuurInBehandeling =
+      await this.legislatuurInBehandeling(selectedPeriod);
 
     return RSVP.hash({
       bestuurseenheid: parentModel.bestuurseenheid,
@@ -46,7 +49,26 @@ export default class OrganenIndexRoute extends Route {
       form,
       bestuursPeriods,
       selectedPeriod,
+      legislatuurInBehandeling,
     });
+  }
+
+  async legislatuurInBehandeling(selectedPeriod) {
+    const periodeHasLegislatuur =
+      (await selectedPeriod.installatievergaderingen).length >= 1;
+    if (!periodeHasLegislatuur) {
+      return false;
+    }
+
+    const behandeldeVergaderingen = await this.store.query(
+      'installatievergadering',
+      {
+        'filter[status][:uri:]': INSTALLATIVERGADERING_BEHANDELD_STATUS,
+        'filter[bestuursperiode][:id:]': selectedPeriod.id,
+      }
+    );
+
+    return behandeldeVergaderingen.length === 0;
   }
 
   @action
