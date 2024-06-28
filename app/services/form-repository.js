@@ -21,7 +21,7 @@ export default class FormRepositoryService extends Service {
 
     await timeout(RESOURCE_CACHE_TIMEOUT);
 
-    return await this._handleCreateFetchhResult(result);
+    return await this._handleCreateResult(result);
   }
 
   async updateFormInstance(
@@ -48,10 +48,10 @@ export default class FormRepositoryService extends Service {
 
     await timeout(RESOURCE_CACHE_TIMEOUT);
 
-    return await this._handleUpdateFetchhResult(result);
+    return await this._handleUpdateResult(result);
   }
 
-  async _handleCreateFetchhResult(result) {
+  async _handleCreateResult(result) {
     if (!result.ok) {
       return {
         id: null,
@@ -70,7 +70,7 @@ export default class FormRepositoryService extends Service {
     };
   }
 
-  async _handleUpdateFetchhResult(result) {
+  async _handleUpdateResult(result) {
     if (!result.ok) {
       return {
         body: null,
