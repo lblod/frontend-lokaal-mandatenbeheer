@@ -1,16 +1,16 @@
-{{#if this.initialized}}
+{{#unless this.setupFormForTtl.isRunning}}
   <section>
     <RdfForm
       @groupClass="au-o-grid__item"
       @form={{this.formInfo.form}}
-      @show={{(not this.isEditable)}}
+      @show={{false}}
       @graphs={{this.formInfo.graphs}}
       @sourceNode={{this.formInfo.sourceNode}}
       @formStore={{this.formInfo.formStore}}
       @forceShowErrors={{this.forceShowErrors}}
       @useNewListingLayout={{true}}
       @level={{2}}
-      class="au-u-max-width-medium {{unless this.isEditable 'disabled'}}"
+      class="au-u-max-width-medium"
     />
     {{yield}}
   </section>
@@ -21,42 +21,40 @@
     </AuAlert>
   {{/if}}
 
-  {{#if (and this.isEditable this.showEditButtons)}}
-    <AuToolbar as |Group|>
-      <Group>
-        <AuButtonGroup>
-          <AuButton
-            {{on "click" this.tryOpenHistoryModal}}
-            @disabled={{or this.isSaving (not this.hasChanges)}}
-          >Pas aan</AuButton>
-          <Form::SaveWithHistory
-            @save={{this.saveInstance}}
-            @isSaving={{this.save.isRunning}}
-            @updateValue={{this.updateHistoryMessage}}
-            @isModalOpen={{this.isSaveHistoryModalOpen}}
-          >Pas aan</Form::SaveWithHistory>
-          {{#if @onCancel}}
-            <Form::CancelWithConfirm
-              @cancel={{this.cancel}}
-            >Annuleer</Form::CancelWithConfirm>
-          {{/if}}
-        </AuButtonGroup>
-      </Group>
-    </AuToolbar>
+  <AuToolbar as |Group|>
+    <Group>
+      <AuButtonGroup>
+        <AuButton
+          {{on "click" this.tryOpenHistoryModal}}
+          @disabled={{or this.save.isRunning (not this.hasChanges)}}
+        >Pas aan</AuButton>
+        <Form::SaveWithHistory
+          @save={{perform this.save}}
+          @isSaving={{this.save.isRunning}}
+          @updateValue={{this.updateHistoryMessage}}
+          @isModalOpen={{this.isSaveHistoryModalOpen}}
+        >Pas aan</Form::SaveWithHistory>
+        {{#if @onCancel}}
+          <Form::CancelWithConfirm
+            @cancel={{@onCancel}}
+          >Annuleer</Form::CancelWithConfirm>
+        {{/if}}
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
 
-    <Form::TripleContent @triples={{this.sourceTriples}} />
-    {{#if @showHistory}}
-      <section class="au-u-margin-top-small">
-        <AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
-          History
-        </AuHeading>
+  <Form::TripleContent @triples={{this.sourceTriples}} />
+  {{#if @showHistory}}
+    <section class="au-u-margin-top-small">
+      <AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
+        History
+      </AuHeading>
 
-        <Form::History
-          @instanceId={{@instanceId}}
-          @form={{@form}}
-          @onRestore={{this.onRestore}}
-        />
-      </section>
-    {{/if}}
+      <Form::History
+        @instanceId={{@instanceId}}
+        @form={{@form}}
+        @onRestore={{this.onRestore}}
+      />
+    </section>
   {{/if}}
-{{/if}}
+{{/unless}}
