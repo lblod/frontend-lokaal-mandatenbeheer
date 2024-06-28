@@ -58,8 +58,8 @@
         <Group>
           <AuHeading @skin="2">Organen</AuHeading>
         </Group>
-        <Group {{did-insert this.setIsLegislatuurBehandeld}}>
-          {{#if this.isDisabledBecauseLegislatuur}}
+        <Group>
+          {{#if @model.isBehandeld}}
             <AuButton @disabled={{true}}>
               Beheer fracties
             </AuButton>
