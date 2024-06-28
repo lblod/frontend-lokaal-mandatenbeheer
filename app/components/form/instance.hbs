@@ -1,6 +1,4 @@
-{{#if this.setupFormForTtl.isRunning}}
-  <AuLoader />
-{{else}}
+{{#unless this.setupFormForTtl.isRunning}}
   <section>
     <RdfForm
       @groupClass="au-o-grid__item"
@@ -59,4 +57,4 @@
       />
     </section>
   {{/if}}
-{{/if}}
+{{/unless}}

@@ -1,6 +1,4 @@
-{{#if this.setupNewForm.isRunning}}
-  <AuLoader />
-{{else}}
+{{#unless this.setupNewForm.isRunning}}
   <section>
     <RdfForm
       @groupClass="au-o-grid__item"
@@ -42,4 +40,4 @@
   </AuToolbar>
 
   <Form::TripleContent @triples={{this.sourceTriples}} />
-{{/if}}
+{{/unless}}
