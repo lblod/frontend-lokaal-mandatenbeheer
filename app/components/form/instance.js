@@ -140,7 +140,7 @@ export default class InstanceComponent extends Component {
       sourceNode,
     };
 
-    await this.registerObserver(formStore);
+    this.registerObserver(formStore);
   });
 
   async retrieveFormInstance(formId, id) {
