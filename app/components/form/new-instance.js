@@ -12,7 +12,7 @@ import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
 import { task } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
-import { isValidFormFromFormInfo } from 'frontend-lmb/utils/is-valid-form';
+import { isValidForm } from 'frontend-lmb/utils/is-valid-form';
 
 export default class NewInstanceComponent extends Component {
   @service store;
@@ -36,9 +36,9 @@ export default class NewInstanceComponent extends Component {
   save = task({ keepLatest: true }, async () => {
     const ttlCode = this.sourceTriples;
     this.errorMessage = null;
-    const isValidForm = isValidFormFromFormInfo(this.formInfo);
-    this.forceShowErrors = !isValidForm;
-    if (!isValidForm) {
+    const isValid = isValidForm(this.formInfo);
+    this.forceShowErrors = !isValid;
+    if (!isValid) {
       this.errorMessage =
         'Niet alle velden zijn correct ingevuld. Probeer het later opnieuw.';
       return;

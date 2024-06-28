@@ -1,6 +1,6 @@
 import { validateForm } from '@lblod/ember-submission-form-fields';
 
-export function isValidFormFromFormInfo(formInfo) {
+export function isValidForm(formInfo) {
   if (isFormInfo(formInfo)) {
     return false;
   }
