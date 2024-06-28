@@ -191,7 +191,7 @@ export default class InstanceComponent extends Component {
       sourceNode,
     };
 
-    this.registerObserver(formStore);
+    await this.registerObserver(formStore);
   }
 
   async retrieveFormInstance(formId, id) {
@@ -246,7 +246,6 @@ export default class InstanceComponent extends Component {
     };
     formStore.registerObserver(onFormUpdate);
     onFormUpdate();
-    await timeout(55);
     this.args.formInitialized ? this.args.formInitialized() : null;
     this.showEditButtons = true;
   }
