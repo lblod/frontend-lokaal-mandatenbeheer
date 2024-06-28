@@ -20,6 +20,8 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @tracked periodeHasLegislatuur;
   @tracked behandeldeVergaderingen;
 
+  @tracked formInitialized;
+
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt
       .get('bestuursfunctie')
@@ -40,6 +42,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   closeModals() {
     this.isChanging = false;
     this.isCorrecting = false;
+    this.formInitialized = false;
   }
 
   @action

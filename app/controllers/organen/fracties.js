@@ -17,6 +17,8 @@ export default class FractiesController extends Controller {
   create = 'create';
   @tracked instanceId = null;
 
+  @tracked formInitialized;
+
   @action
   openCreateFractieModal() {
     this.modal = 'create';
@@ -29,10 +31,12 @@ export default class FractiesController extends Controller {
   @action
   closeModal() {
     this.modal = null;
+    this.formInitialized = false;
   }
   @action
   saveModal() {
     this.modal = null;
+    this.formInitialized = false;
     this.send('reloadModel');
   }
 

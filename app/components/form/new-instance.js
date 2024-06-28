@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
@@ -8,25 +7,18 @@ import { guidFor } from '@ember/object/internals';
 import { v4 as uuid } from 'uuid';
 import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
-import {
-  ForkingStore,
-  validateForm,
-} from '@lblod/ember-submission-form-fields';
-import {
-  JSON_API_TYPE,
-  FORM_GRAPH,
-  META_GRAPH,
-  SOURCE_GRAPH,
-  RESOURCE_CACHE_TIMEOUT,
-} from '../../utils/constants';
-import { task, timeout } from 'ember-concurrency';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
+import { task } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
+import { isValidForm } from 'frontend-lmb/utils/is-valid-form';
 
 export default class NewInstanceComponent extends Component {
   @service store;
   @service toaster;
   @service formDirtyState;
+  @service formRepository;
 
   @tracked sourceTriples;
   @tracked errorMessage;
@@ -38,54 +30,28 @@ export default class NewInstanceComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.onInit();
-  }
-
-  get initialized() {
-    return this.formInfo !== null;
-  }
-
-  get isSaving() {
-    return this.save.isRunning;
+    this.setupNewForm.perform();
   }
 
   save = task({ keepLatest: true }, async () => {
-    // TODO validation needs to be checked first before the form is actually saved
-    const triples = this.sourceTriples;
-    const definition = this.formInfo.definition;
+    const ttlCode = this.sourceTriples;
     this.errorMessage = null;
-
-    if (!this.validate()) {
+    const isValid = isValidForm(this.formInfo);
+    this.forceShowErrors = !isValid;
+    if (!isValid) {
       this.errorMessage =
         'Niet alle velden zijn correct ingevuld. Probeer het later opnieuw.';
       return;
     }
 
-    // post triples to backend
-    const result = await fetch(`/form-content/${definition.id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': JSON_API_TYPE,
-      },
-      body: JSON.stringify({
-        contentTtl: triples,
-        instanceUri: this.formInfo.sourceNode.value,
-      }),
-    });
+    const result = await this.formRepository.createFormInstance(
+      this.formInfo.sourceNode.value,
+      this.formInfo.definition.id,
+      ttlCode
+    );
 
-    await timeout(RESOURCE_CACHE_TIMEOUT);
-
-    if (!result.ok) {
-      this.errorMessage =
-        'Er ging iets mis bij het opslaan van het formulier. Probeer het later opnieuw.';
-      return;
-    }
-
-    const { id } = await result.json();
-
-    if (!id) {
-      this.errorMessage =
-        'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.';
+    if (result.errorMessage) {
+      this.errorMessage = result.errorMessage;
       return;
     }
 
@@ -94,25 +60,15 @@ export default class NewInstanceComponent extends Component {
 
     if (this.args.onCreate) {
       this.args.onCreate({
-        instanceTtl: triples,
-        instanceId: id,
+        instanceTtl: ttlCode,
+        instanceId: result.id,
       });
     }
 
     this.formDirtyState.markClean(this.formId);
   });
 
-  @action
-  async createInstance() {
-    this.save.perform();
-  }
-
-  @action
-  cancel() {
-    this.args.onCancel();
-  }
-
-  async onInit() {
+  setupNewForm = task(async () => {
     const form = this.args.form;
     const uri = `${form.prefix}${uuid()}`;
     const sourceTtl = this.args.buildSourceTtl
@@ -150,22 +106,12 @@ export default class NewInstanceComponent extends Component {
       sourceNode,
     };
     this.registerObserver(formStore);
-  }
+  });
 
   willDestroy() {
     super.willDestroy(...arguments);
     this.formDirtyState.markClean(this.formId);
-  }
-
-  validate() {
-    const hasNoErrors = validateForm(this.formInfo.formNode, {
-      ...this.formInfo.graphs,
-      sourceNode: this.formInfo.sourceNode,
-      store: this.formInfo.formStore,
-    });
-
-    this.forceShowErrors = !hasNoErrors;
-    return hasNoErrors;
+    this.formInfo?.formStore?.clearObservers();
   }
 
   registerObserver(formStore) {
@@ -190,5 +136,6 @@ export default class NewInstanceComponent extends Component {
     };
     formStore.registerObserver(onFormUpdate);
     onFormUpdate();
+    this.args.formInitialized ? this.args.formInitialized() : null;
   }
 }

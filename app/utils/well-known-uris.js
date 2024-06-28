@@ -18,6 +18,8 @@ export const MANDATARIS_TITELVOEREND_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/aacb3fed-b51d-4e0b-a411-f3fa641da1b3';
 export const MANDATARIS_EFFECTIEF_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/21063a5b-912c-4241-841c-cc7fb3c73e75';
+export const MANDATARIS_BEEINDIGD_STATE =
+  'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/b8866fa2-d61c-4e3d-afaf-8a29eaaa7fb9';
 export const MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE =
   'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/9d8fd14d-95d0-4f5e-b3a5-a56a126227b6';
 export const MANDATARIS_DRAFT_PUBLICATION_STATE =

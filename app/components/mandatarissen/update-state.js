@@ -34,10 +34,6 @@ export default class MandatarissenUpdateState extends Component {
     this.load.perform();
   }
 
-  get loading() {
-    return this.load.isRunning;
-  }
-
   load = task({ drop: true }, async () => {
     this.newStatus = this.args.mandataris.status;
     this.date = new Date();
@@ -117,7 +113,7 @@ export default class MandatarissenUpdateState extends Component {
 
   get disabled() {
     return (
-      this.loading ||
+      this.load.isRunning ||
       !this.newStatus ||
       !this.date ||
       !this.validDate ||

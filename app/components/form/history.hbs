@@ -1,5 +1,5 @@
-{{#if this.loading}}
-  Loading...
+{{#if this.fetchCurrentHistoryPage.isRunning}}
+  <Skeleton::Table @columns={{4}} @rows={{this.size}} />
 {{else}}
   <AuTable @size={{this.size}}>
     <:header>

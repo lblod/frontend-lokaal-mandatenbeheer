@@ -1,4 +1,4 @@
-{{#if this.initialized}}
+{{#unless this.setupNewForm.isRunning}}
   <section>
     <RdfForm
       @groupClass="au-o-grid__item"
@@ -25,14 +25,14 @@
     <Group>
       <AuButtonGroup>
         <AuButton
-          {{on "click" this.createInstance}}
-          @disabled={{this.isSaving}}
+          {{on "click" (perform this.save)}}
+          @disabled={{this.save.isRunning}}
         >
           Bewaar
         </AuButton>
         {{#if @onCancel}}
           <Form::CancelWithConfirm
-            @cancel={{this.cancel}}
+            @cancel={{@onCancel}}
           >Annuleer</Form::CancelWithConfirm>
         {{/if}}
       </AuButtonGroup>
@@ -40,6 +40,4 @@
   </AuToolbar>
 
   <Form::TripleContent @triples={{this.sourceTriples}} />
-{{else}}
-  <div>loading...</div>
-{{/if}}
+{{/unless}}

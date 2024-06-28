@@ -7,25 +7,18 @@ import { guidFor } from '@ember/object/internals';
 
 import { RDF, FORM } from '../../rdf/namespaces';
 import { NamedNode } from 'rdflib';
-import {
-  ForkingStore,
-  validateForm,
-} from '@lblod/ember-submission-form-fields';
-import {
-  JSON_API_TYPE,
-  FORM_GRAPH,
-  META_GRAPH,
-  SOURCE_GRAPH,
-  RESOURCE_CACHE_TIMEOUT,
-} from '../../utils/constants';
-import { task, timeout } from 'ember-concurrency';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { FORM_GRAPH, META_GRAPH, SOURCE_GRAPH } from '../../utils/constants';
+import { task } from 'ember-concurrency';
 import { notifyFormSavedSuccessfully } from 'frontend-lmb/utils/toasts';
 import { loadFormInto } from 'frontend-lmb/utils/loadFormInto';
+import { isValidForm } from 'frontend-lmb/utils/is-valid-form';
 
 export default class InstanceComponent extends Component {
   @service store;
   @service toaster;
   @service formDirtyState;
+  @service formRepository;
 
   @tracked sourceTriples;
   @tracked errorMessage;
@@ -33,6 +26,7 @@ export default class InstanceComponent extends Component {
   @tracked hasChanges = false;
   @tracked forceShowErrors = false;
   @tracked isSaveHistoryModalOpen = false;
+  @tracked showEditButtons = false;
 
   formStore = null;
   savedTriples = null;
@@ -42,60 +36,24 @@ export default class InstanceComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.onInit();
-  }
-
-  get initialized() {
-    return this.formInfo !== null;
-  }
-
-  get isSaving() {
-    return this.save.isRunning;
-  }
-
-  get isEditable() {
-    if (this.args.isEditable === undefined) {
-      return true;
-    }
-    return Boolean(this.args.isEditable);
+    this.setupFormForTtl.perform();
   }
 
   save = task({ keepLatest: true }, async () => {
-    // TODO validation needs to be checked first before the form is actually saved
-    const triples = this.sourceTriples;
-    const definition = this.formInfo.definition;
+    const ttlCode = this.sourceTriples;
     const instanceId = this.formInfo.instanceId;
     this.errorMessage = null;
 
-    // post triples to backend
-    const result = await fetch(
-      `/form-content/${definition.id}/instances/${instanceId}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': JSON_API_TYPE,
-        },
-        body: JSON.stringify({
-          contentTtl: triples,
-          instanceUri: this.formInfo.sourceNode.value,
-          description: this.historyMessage,
-        }),
-      }
+    const result = await this.formRepository.updateFormInstance(
+      instanceId,
+      this.formInfo.sourceNode.value,
+      this.formInfo.definition.id,
+      ttlCode,
+      this.historyMessage
     );
 
-    await timeout(RESOURCE_CACHE_TIMEOUT);
-
-    if (!result.ok) {
-      this.errorMessage =
-        'Er ging iets mis bij het opslaan van het formulier. Probeer het later opnieuw.';
-      return;
-    }
-
-    const body = await result.json();
-
-    if (!body?.instance?.instanceUri) {
-      this.errorMessage =
-        'Het formulier werd niet correct opgeslagen. Probeer het later opnieuw.';
+    if (result.errorMessage) {
+      this.errorMessage = result.errorMessage;
       return;
     }
 
@@ -105,29 +63,26 @@ export default class InstanceComponent extends Component {
     if (this.args.onSave) {
       this.args.onSave({
         instanceId,
-        instanceTtl: triples,
-        response: body,
+        instanceTtl: ttlCode,
+        response: result.body,
       });
     }
 
     this.formDirtyState.markClean(this.formId);
     this.hasChanges = false;
+    this.isSaveHistoryModalOpen = false;
   });
 
   @action
   async tryOpenHistoryModal() {
-    if (!this.validate()) {
+    const isValid = isValidForm(this.formInfo);
+    this.forceShowErrors = !isValid;
+    if (!isValid) {
       this.errorMessage =
         'Niet alle velden zijn correct ingevuld. Gelieve deze eerst te corrigeren.';
       return;
     }
     this.isSaveHistoryModalOpen = true;
-  }
-
-  @action
-  async saveInstance() {
-    await this.save.perform();
-    this.isSaveHistoryModalOpen = false;
   }
 
   @action
@@ -139,17 +94,12 @@ export default class InstanceComponent extends Component {
   }
 
   @action
-  cancel() {
-    this.args.onCancel();
-  }
-
-  @action
   async onRestore(historicalInstance) {
     this.formInfo = null;
-    this.onInit(historicalInstance.formInstanceTtl);
+    this.setupFormForTtl.perform(historicalInstance.formInstanceTtl);
   }
 
-  async onInit(newFormTtl = null) {
+  setupFormForTtl = task(async (newFormTtl = null) => {
     const form = this.args.form;
     const instanceId = this.args.instanceId;
 
@@ -191,7 +141,7 @@ export default class InstanceComponent extends Component {
     };
 
     this.registerObserver(formStore);
-  }
+  });
 
   async retrieveFormInstance(formId, id) {
     const response = await fetch(`/form-content/${formId}/instances/${id}`);
@@ -207,18 +157,7 @@ export default class InstanceComponent extends Component {
   willDestroy() {
     super.willDestroy(...arguments);
     this.formDirtyState.markClean(this.formId);
-  }
-
-  @action
-  validate() {
-    const hasNoErrors = validateForm(this.formInfo.formNode, {
-      ...this.formInfo.graphs,
-      sourceNode: this.formInfo.sourceNode,
-      store: this.formInfo.formStore,
-    });
-
-    this.forceShowErrors = !hasNoErrors;
-    return hasNoErrors;
+    this.formInfo?.formStore?.clearObservers();
   }
 
   registerObserver(formStore) {
@@ -245,5 +184,7 @@ export default class InstanceComponent extends Component {
     };
     formStore.registerObserver(onFormUpdate);
     onFormUpdate();
+    this.args.formInitialized ? this.args.formInitialized() : null;
+    this.showEditButtons = true;
   }
 }

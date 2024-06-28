@@ -29,6 +29,7 @@
   </div>
 </div>
 
+<AuModalContainer />
 <AuModal
   @title="Bewerk bijkomende info mandataris"
   @modalOpen={{this.isModalActive}}
@@ -41,6 +42,10 @@
       @form={{@form}}
       @onCancel={{this.toggleModal}}
       @onSave={{this.onSave}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
     />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::MandatarisExtraInfo />
+    {{/unless}}
   </div>
 </AuModal>

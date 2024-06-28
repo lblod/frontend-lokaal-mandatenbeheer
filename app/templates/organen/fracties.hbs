@@ -36,6 +36,7 @@
   </div>
 </div>
 
+<AuModalContainer />
 <AuModal
   @title="Voeg fractie toe"
   @modalOpen={{eq this.modal this.create}}
@@ -64,9 +65,12 @@
       @form={{this.model.form}}
       @onSave={{this.saveModal}}
       @onCancel={{this.closeModal}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
     />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::Fractie />
+    {{/unless}}
   </div>
-
 </AuModal>
 
 {{outlet}}

@@ -58,8 +58,8 @@
         <Group>
           <AuHeading @skin="2">Organen</AuHeading>
         </Group>
-        <Group {{did-insert this.setIsLegislatuurBehandeld}}>
-          {{#if this.isDisabledBecauseLegislatuur}}
+        <Group>
+          {{#if @model.legislatuurInBehandeling}}
             <AuButton @disabled={{true}}>
               Beheer fracties
             </AuButton>
@@ -87,6 +87,7 @@
   </main.content>
 </AuMainContainer>
 
+<AuModalContainer />
 <AuModal
   @title="Voeg orgaan toe"
   @modalOpen={{this.isModalActive}}
@@ -99,6 +100,10 @@
       @form={{this.model.form}}
       @buildSourceTtl={{this.buildSourceTtlCreateBestuursorgaan}}
       @onCancel={{this.toggleModal}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
     />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::CreateBestuursorgaan />
+    {{/unless}}
   </div>
 </AuModal>
