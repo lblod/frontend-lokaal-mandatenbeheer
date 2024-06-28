@@ -40,7 +40,8 @@ export default class OrganenIndexRoute extends Route {
         selectedPeriod
       );
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
-    const isBehandeld = await this.isBehandeld(selectedPeriod);
+    const legislatuurInBehandeling =
+      await this.legislatuurInBehandeling(selectedPeriod);
 
     return RSVP.hash({
       bestuurseenheid: parentModel.bestuurseenheid,
@@ -48,11 +49,11 @@ export default class OrganenIndexRoute extends Route {
       form,
       bestuursPeriods,
       selectedPeriod,
-      isBehandeld,
+      legislatuurInBehandeling,
     });
   }
 
-  async isBehandeld(selectedPeriod) {
+  async legislatuurInBehandeling(selectedPeriod) {
     const periodeHasLegislatuur =
       (await selectedPeriod.installatievergaderingen).length >= 1;
     if (!periodeHasLegislatuur) {
