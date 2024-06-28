@@ -75,8 +75,9 @@
       <AuLabel>
         Fractie
       </AuLabel>
-      {{#if this.loading}}
-        Loading...
+      {{#if this.load.isRunning}}
+        <AuLabel for="input" class="skeleton-label au-u-margin-top" />
+        <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
       {{else}}
         <Mandatarissen::FractieSelector
           @fractie={{this.selectedFractie}}

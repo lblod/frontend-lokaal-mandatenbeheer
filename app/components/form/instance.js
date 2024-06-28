@@ -33,6 +33,7 @@ export default class InstanceComponent extends Component {
   @tracked hasChanges = false;
   @tracked forceShowErrors = false;
   @tracked isSaveHistoryModalOpen = false;
+  @tracked showEditButtons = false;
 
   formStore = null;
   savedTriples = null;
@@ -190,7 +191,7 @@ export default class InstanceComponent extends Component {
       sourceNode,
     };
 
-    this.registerObserver(formStore);
+    await this.registerObserver(formStore);
   }
 
   async retrieveFormInstance(formId, id) {
@@ -221,7 +222,7 @@ export default class InstanceComponent extends Component {
     return hasNoErrors;
   }
 
-  registerObserver(formStore) {
+  async registerObserver(formStore) {
     const onFormUpdate = () => {
       if (this.isDestroyed) {
         return;
@@ -245,5 +246,7 @@ export default class InstanceComponent extends Component {
     };
     formStore.registerObserver(onFormUpdate);
     onFormUpdate();
+    this.args.formInitialized ? this.args.formInitialized() : null;
+    this.showEditButtons = true;
   }
 }

@@ -1,0 +1,50 @@
+$gray-loader: var(--au-gray-200);
+
+.skeleton-base {
+  pointer-events: none;
+  color: transparent;
+  border-color: transparent;
+  background: linear-gradient(
+      0.25turn,
+      transparent,
+      var(--au-white),
+      transparent
+    ),
+    linear-gradient($gray-loader, $gray-loader),
+    radial-gradient(38px circle at 19px 19px, $gray-loader 50%, transparent 51%),
+    linear-gradient($gray-loader, $gray-loader);
+  animation: shimmer 20s infinite;
+  border-radius: var(--au-radius);
+}
+
+.skeleton-label {
+  @extend .skeleton-base;
+  height: 1rem;
+  width: 5rem;
+}
+
+.skeleton-text {
+  @extend .skeleton-base;
+  height: 1rem;
+  min-width: 1rem;
+}
+
+.skeleton-input-small {
+  @extend .skeleton-base;
+  height: 3rem;
+  width: 15rem;
+}
+.skeleton-input-full {
+  @extend .skeleton-base;
+  height: 3rem;
+  min-width: 1rem;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -450px 0;
+  }
+  100% {
+    background-position: 450px 0;
+  }
+}

@@ -1,6 +1,6 @@
 <div {{did-update this.onMandatarisUpdate @mandataris}}>
-  {{#if this.loading}}
-    Loading...
+  {{#if this.fetchHistory.isRunning}}
+    <Skeleton::Table @columns={{7}} @rows={{@mandatarissen.length}} />
   {{else}}
     <AuTable>
       <:header>

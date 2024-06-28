@@ -168,7 +168,7 @@ export default class NewInstanceComponent extends Component {
     return hasNoErrors;
   }
 
-  registerObserver(formStore) {
+  async registerObserver(formStore) {
     const onFormUpdate = () => {
       if (this.isDestroyed) {
         return;
@@ -190,5 +190,7 @@ export default class NewInstanceComponent extends Component {
     };
     formStore.registerObserver(onFormUpdate);
     onFormUpdate();
+    await timeout(55);
+    this.args.formInitialized ? this.args.formInitialized() : null;
   }
 }

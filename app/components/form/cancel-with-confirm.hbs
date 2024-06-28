@@ -1,5 +1,6 @@
 <AuButton @skin="secondary" {{on "click" this.cancel}}>{{yield}}</AuButton>
 
+<AuModalContainer />
 <AuModal
   @id="exit-confirmation"
   @modalOpen={{this.isModalOpen}}

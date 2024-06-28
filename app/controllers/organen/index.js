@@ -41,6 +41,9 @@ export default class OrganenIndexController extends Controller {
 
   @action
   toggleModal() {
+    if (this.isModalActive) {
+      this.formInitialized = false;
+    }
     this.isModalActive = !this.isModalActive;
   }
 

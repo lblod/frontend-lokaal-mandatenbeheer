@@ -1,1 +1,7 @@
-<div>{{this.fractiesText}}</div>
+<div>
+  {{#if this.load.isRunning}}
+    <p class="skeleton-text"></p>
+  {{else}}
+    {{this.fractiesText}}
+  {{/if}}
+</div>

@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 
 import { toUserReadableListing } from 'frontend-lmb/utils/to-user-readable-listing';
 import moment from 'moment';
+import { task } from 'ember-concurrency';
 
 export default class MandaatFoldedFractiesComponent extends Component {
   @service store;
@@ -25,17 +26,17 @@ export default class MandaatFoldedFractiesComponent extends Component {
 
   constructor(...args) {
     super(...args);
-    this.load();
+    this.load.perform();
   }
 
-  async load() {
+  load = task(async () => {
     const mandatarissen = await this.getMandatarissen(this.persoon);
 
     const { currentFractie, allFracties } =
       await this.getFoldedFracties(mandatarissen);
 
     this.fractiesText = this.fractiesToString(currentFractie, allFracties);
-  }
+  });
 
   async getMandatarissen(persoon) {
     const options = {
