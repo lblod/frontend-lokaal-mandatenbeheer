@@ -26,6 +26,7 @@ export default class MandatarissenSearchRoute extends Route {
       params.bestuursperiode
     );
 
+    // This map is made for disabling certain options in the powerselect
     const periodMap = await Promise.all(
       bestuursPeriods.map(async (period) => {
         const ivs = await period.installatievergaderingen;
