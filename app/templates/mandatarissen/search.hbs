@@ -8,11 +8,24 @@
         <form class="au-o-grid au-o-grid--small">
           <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
             <div class="au-c-label">Bestuursperiode</div>
-            <Mandatenbeheer::BestuursperiodenSelector
-              @options={{this.model.bestuursPeriods}}
+            <PowerSelect
+              @renderInPlace={{true}}
               @selected={{this.model.selectedPeriod}}
-              @onSelect={{this.selectPeriod}}
-            />
+              @options={{this.model.bestuursPeriods}}
+              class="is-optional"
+              @onChange={{this.selectPeriod}}
+              @searchEnabled={{false}}
+              @noMatchesMessage="Geen bestuursperioden"
+              as |period|
+            >
+              {{#if period.disabled}}
+                {{period.period.label}}
+                <AuPill @icon="info-circle" @size="small">Voorbereiding
+                  legislatuur nog actief</AuPill>
+              {{else}}
+                {{period.period.label}}
+              {{/if}}
+            </PowerSelect>
           </div>
           <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
             <div class="au-c-label">Persoon</div>
@@ -89,7 +102,7 @@
       <div class="au-c-body-container au-c-body-container--scroll">
         <Mandatarissen::PersoonTable
           @content={{@model.personen}}
-          @bestuursperiode={{@model.selectedPeriod}}
+          @bestuursperiode={{@model.selectedPeriod.period}}
           @sort={{this.sort}}
           @page={{this.page}}
           @size={{this.size}}

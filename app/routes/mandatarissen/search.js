@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { INSTALLATIVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenSearchRoute extends Route {
   @service store;
@@ -23,6 +24,23 @@ export default class MandatarissenSearchRoute extends Route {
     let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
       bestuursPeriods,
       params.bestuursperiode
+    );
+
+    // This map is made for disabling certain options in the powerselect
+    const periodMap = await Promise.all(
+      bestuursPeriods.map(async (period) => {
+        const ivs = await period.installatievergaderingen;
+        if (ivs.length < 1) {
+          return { period, disabled: false };
+        }
+        if (
+          ivs.at(0).get('status').get('uri') ==
+          INSTALLATIVERGADERING_BEHANDELD_STATUS
+        ) {
+          return { period, disabled: false };
+        }
+        return { period, disabled: true };
+      })
     );
 
     const personen = await this.getPersonen(params, selectedPeriod);
@@ -47,8 +65,8 @@ export default class MandatarissenSearchRoute extends Route {
 
     return {
       personen,
-      bestuursPeriods,
-      selectedPeriod,
+      bestuursPeriods: periodMap,
+      selectedPeriod: { period: selectedPeriod, disabled: false },
       bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
       selectedBestuurfunctieIds: params.bestuursfunctie,
       fracties,

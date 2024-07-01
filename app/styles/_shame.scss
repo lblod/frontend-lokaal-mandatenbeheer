@@ -327,3 +327,8 @@
   height: 0px !important;
   padding: 0px !important;
 }
+
+.ember-power-select-group[aria-disabled=true] .ember-power-select-option,
+.ember-power-select-option[aria-disabled=true] {
+  color: var(--au-gray-400);
+}

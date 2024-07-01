@@ -41,8 +41,8 @@ export default class MandatarissenSearchController extends Controller {
   }
 
   @action
-  selectPeriod(period) {
-    this.bestuursperiode = period.id;
+  selectPeriod(periodMap) {
+    this.bestuursperiode = periodMap.period.id;
   }
 
   @action
