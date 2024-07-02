@@ -52,6 +52,8 @@ export const MANDAAT_VOORZITTER_BCSD_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001a';
 export const MANDAAT_BURGEMEESTER_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000013';
+export const MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/7b038cc40bba10bec833ecfe6f15bc7a';
 export const MANDAAT_DISTRICT_BURGEMEESTER_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001d';
 export const MANDAAT_SCHEPEN_CODE =
