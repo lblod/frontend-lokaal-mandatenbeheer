@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { INSTALLATIVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
+import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenSearchRoute extends Route {
   @service store;
@@ -35,7 +35,7 @@ export default class MandatarissenSearchRoute extends Route {
         }
         if (
           ivs.at(0).get('status').get('uri') ==
-          INSTALLATIVERGADERING_BEHANDELD_STATUS
+          INSTALLATIEVERGADERING_BEHANDELD_STATUS
         ) {
           return { period, disabled: false };
         }
