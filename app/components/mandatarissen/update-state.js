@@ -6,9 +6,10 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
-import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import {
+  MANDATARIS_TITELVOEREND_STATE,
+  MANDATARIS_VERHINDERD_STATE,
   burgemeesterOnlyStates,
   notBurgemeesterStates,
 } from 'frontend-lmb/utils/well-known-uris';
@@ -86,9 +87,13 @@ export default class MandatarissenUpdateState extends Component {
 
   get showReplacement() {
     return (
-      this.newStatus?.id === VERHINDERD_STATE_ID &&
+      (this.newStatus?.get('uri') === MANDATARIS_VERHINDERD_STATE ||
+        this.newStatus?.get('uri') === MANDATARIS_TITELVOEREND_STATE) &&
       // if we are already verhinderd it does not make sense to change the replacements here, keep them  the same and don't show the selector
-      this.args.mandataris.status?.id !== VERHINDERD_STATE_ID
+      (this.args.mandataris.status?.get('uri') !==
+        MANDATARIS_VERHINDERD_STATE ||
+        this.args.mandataris.status?.get('uri') !==
+          MANDATARIS_TITELVOEREND_STATE)
     );
   }
 
