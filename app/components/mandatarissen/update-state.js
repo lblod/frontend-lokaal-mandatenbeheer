@@ -8,7 +8,10 @@ import { service } from '@ember/service';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
-import { burgemeesterOnlyStates } from 'frontend-lmb/utils/well-known-uris';
+import {
+  burgemeesterOnlyStates,
+  notBurgemeesterStates,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -62,7 +65,9 @@ export default class MandatarissenUpdateState extends Component {
     const statuses = this.mandatarisStatus.statuses.slice();
 
     if (isBurgemeester) {
-      return statuses;
+      return statuses.filter(
+        (status) => !notBurgemeesterStates.includes(status.uri)
+      );
     }
     return statuses.filter(
       (status) => !burgemeesterOnlyStates.includes(status.uri)
