@@ -1,6 +1,7 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 import {
+  MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
   MANDAAT_BURGEMEESTER_CODE,
   MANDAAT_DISTRICT_BURGEMEESTER_CODE,
   MANDAAT_DISTRICT_SCHEPEN_CODE,
@@ -49,6 +50,7 @@ export default class MandaatModel extends Model {
   get isBurgemeester() {
     return [
       MANDAAT_BURGEMEESTER_CODE,
+      MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
       MANDAAT_DISTRICT_BURGEMEESTER_CODE,
     ].includes(this.bestuursfunctie.get('uri'));
   }
