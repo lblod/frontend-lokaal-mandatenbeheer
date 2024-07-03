@@ -90,10 +90,8 @@ export default class MandatarissenUpdateState extends Component {
       (this.newStatus?.get('uri') === MANDATARIS_VERHINDERD_STATE ||
         this.newStatus?.get('uri') === MANDATARIS_TITELVOEREND_STATE) &&
       // if we are already verhinderd it does not make sense to change the replacements here, keep them  the same and don't show the selector
-      (this.args.mandataris.status?.get('uri') !==
-        MANDATARIS_VERHINDERD_STATE ||
-        this.args.mandataris.status?.get('uri') !==
-          MANDATARIS_TITELVOEREND_STATE)
+      this.args.mandataris.status?.get('uri') !== MANDATARIS_VERHINDERD_STATE &&
+      this.args.mandataris.status?.get('uri') !== MANDATARIS_TITELVOEREND_STATE
     );
   }
 
