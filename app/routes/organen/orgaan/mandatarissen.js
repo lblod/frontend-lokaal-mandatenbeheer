@@ -54,6 +54,7 @@ export default class OrganenMandatarissenRoute extends Route {
             id: bestuursOrgaan.id,
           },
         },
+        ':has:is-bestuurlijke-alias-van': true,
       },
       include: [
         'is-bestuurlijke-alias-van',
