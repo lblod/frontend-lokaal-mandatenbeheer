@@ -83,10 +83,7 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
     const findStatusForUri = (uri) => {
       return this.model.ivStatuses.find((s) => s.uri === uri);
     };
-    console.log(
-      `findStatusForUri`,
-      findStatusForUri(INSTALLATIVERGADERING_BEHANDELD_STATUS)
-    );
+
     const nextStatusFor = {
       [INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS]: {
         status: findStatusForUri(
