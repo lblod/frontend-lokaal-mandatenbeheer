@@ -12,7 +12,10 @@ import {
 import { task, timeout } from 'ember-concurrency';
 import { MANDAAT, ORG } from 'frontend-lmb/rdf/namespaces';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
-import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
+import {
+  MANDATARIS_TITELVOEREND_STATE,
+  MANDATARIS_VERHINDERD_STATE,
+} from 'frontend-lmb/utils/well-known-uris';
 import { NamedNode } from 'rdflib';
 
 export default class MandatarisReplacementSelector extends InputFieldComponent {
@@ -53,12 +56,19 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
   }
 
   checkIfShouldRender() {
-    this.shouldRender = this.storeOptions.store.any(
-      this.storeOptions.sourceNode,
-      MANDAAT('status'),
-      new NamedNode(MANDATARIS_VERHINDERD_STATE),
-      this.storeOptions.sourceGraph
-    );
+    this.shouldRender =
+      this.storeOptions.store.any(
+        this.storeOptions.sourceNode,
+        MANDAAT('status'),
+        new NamedNode(MANDATARIS_VERHINDERD_STATE),
+        this.storeOptions.sourceGraph
+      ) ||
+      this.storeOptions.store.any(
+        this.storeOptions.sourceNode,
+        MANDAAT('status'),
+        new NamedNode(MANDATARIS_TITELVOEREND_STATE),
+        this.storeOptions.sourceGraph
+      );
     if (!this.shouldRender && this.replacements?.length > 0) {
       // without timeout, the form ttl doesn't update immediately
       setTimeout(() => this.selectReplacement([]), 100);

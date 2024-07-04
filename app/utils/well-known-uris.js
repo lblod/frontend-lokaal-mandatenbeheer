@@ -62,10 +62,12 @@ export const MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/59a90e03-4f22-4bb9-8c91-132618db4b38';
 export const MANDAAT_DISTRICT_SCHEPEN_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001e';
+
 export const burgemeesterOnlyStates = [
   MANDATARIS_AANGEWEZEN_STATE,
   MANDATARIS_TITELVOEREND_STATE,
 ];
+export const notBurgemeesterStates = [MANDATARIS_VERHINDERD_STATE];
 
 export const INSTALLATIEVERGADERING_BEHANDELD_STATUS =
   'http://data.lblod.info/id/concept/InstallatievergaderingStatus/c9fc3292-1576-4a82-8dcd-60795e22131f';
