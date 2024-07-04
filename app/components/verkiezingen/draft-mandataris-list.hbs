@@ -152,6 +152,7 @@
           {{#unless @readOnly}}
             <td class="au-u-text-right">
               <AuButton
+                @skin="link"
                 @icon="bin"
                 @alert={{true}}
                 {{on "click" (fn this.removeMandataris row)}}
