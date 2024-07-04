@@ -21,6 +21,7 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
   @tracked bestuursperiode;
   @tracked statusPillSkin = 'info';
   @tracked statusPillLabel = 'info';
+  @tracked nextStatus;
 
   @action
   async selectStatus(status) {
@@ -48,6 +49,7 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
 
   get title() {
     this.setInstallatievergaderingStatusPill.perform();
+    this.setNextStatus.perform();
     if (this.model.isBehandeld) {
       return 'Legislatuur';
     }
@@ -74,5 +76,37 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
 
     this.statusPillSkin = uriLabelMap[status.uri].skin;
     this.statusPillLabel = uriLabelMap[status.uri].label;
+  });
+
+  setNextStatus = task(async () => {
+    const currentStatus = await this.model.installatievergadering.status;
+    const findStatusForUri = (uri) => {
+      return this.model.ivStatuses.find((s) => s.uri === uri);
+    };
+    console.log(
+      `findStatusForUri`,
+      findStatusForUri(INSTALLATIVERGADERING_BEHANDELD_STATUS)
+    );
+    const nextStatusFor = {
+      [INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS]: {
+        status: findStatusForUri(
+          INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS
+        ),
+        label: 'Klaarzetten voor vergadering',
+        icon: 'circle-step-3',
+      },
+      [INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS]: {
+        status: findStatusForUri(INSTALLATIVERGADERING_BEHANDELD_STATUS),
+        label: 'Voorbereiding afronden',
+        icon: 'circle-step-4',
+      },
+      [INSTALLATIVERGADERING_BEHANDELD_STATUS]: {
+        status: null,
+        label: 'Voorbereiding afgerond',
+        icon: 'check',
+      },
+    };
+
+    this.nextStatus = nextStatusFor[currentStatus.uri];
   });
 }

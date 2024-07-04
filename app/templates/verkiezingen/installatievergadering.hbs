@@ -62,6 +62,15 @@
       >Bekijk verkiezingsuitslag
         {{this.model.selectedPeriod.start}}
       </AuLink>
+      <AuButton
+        @disabled={{not this.nextStatus.status}}
+        @icon={{this.nextStatus.icon}}
+        @loading={{this.setNextStatus.isRunning}}
+        @loadingMessage="Volgende status ophalen"
+        {{on "click" (fn this.selectStatus this.nextStatus.status)}}
+      >
+        {{this.nextStatus.label}}
+      </AuButton>
     </Group>
   </AuToolbar>
   <div class="au-c-body-container au-c-body-container--scroll">
@@ -83,7 +92,8 @@
       />
     {{/each}}
 
-    {{#unless @model.isBehandeld}}
+    {{! Keeping the selector for development purposes }}
+    {{#unless true}}
       <div class="au-o-box">
         <Tmp::Todo>
           <p>Change installatievergadering status:</p>
