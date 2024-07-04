@@ -58,8 +58,9 @@
       <AuLink
         @route="verkiezingen.verkiezingsuitslag"
         @model={{@model.selectedPeriod.id}}
-        @skin="button"
+        @skin="button-secondary"
       >Bekijk verkiezingsuitslag
+        {{this.model.selectedPeriod.start}}
       </AuLink>
     </Group>
   </AuToolbar>
