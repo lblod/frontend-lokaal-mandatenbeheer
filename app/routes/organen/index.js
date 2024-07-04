@@ -6,7 +6,7 @@ import { action } from '@ember/object';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
-import { INSTALLATIVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
+import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 export default class OrganenIndexRoute extends Route {
   @service store;
@@ -63,7 +63,7 @@ export default class OrganenIndexRoute extends Route {
     const behandeldeVergaderingen = await this.store.query(
       'installatievergadering',
       {
-        'filter[status][:uri:]': INSTALLATIVERGADERING_BEHANDELD_STATUS,
+        'filter[status][:uri:]': INSTALLATIEVERGADERING_BEHANDELD_STATUS,
         'filter[bestuursperiode][:id:]': selectedPeriod.id,
       }
     );

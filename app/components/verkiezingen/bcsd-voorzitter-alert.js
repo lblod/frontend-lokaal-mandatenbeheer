@@ -5,9 +5,9 @@ import { task, timeout } from 'ember-concurrency';
 import { findFirst } from 'frontend-lmb/utils/async-array-functions';
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
-  LID_VAST_BUREAU_CODE,
+  MANDAAT_LID_VAST_BUREAU_CODE,
   MANDAAT_LID_RMW_CODE,
-  VOORZITTER_BCSD_CODE,
+  MANDAAT_VOORZITTER_BCSD_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
@@ -47,7 +47,7 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
         'is-aangesteld-als': {
           bekleedt: {
             bestuursfunctie: {
-              ':uri:': VOORZITTER_BCSD_CODE,
+              ':uri:': MANDAAT_VOORZITTER_BCSD_CODE,
             },
             'bevat-in': {
               ':uri:': this.bcsdBestuursorgaanInTijd.uri,
@@ -103,7 +103,7 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
   async isMemberOfVastBureau(persoon) {
     return await this.isMember(
       persoon,
-      LID_VAST_BUREAU_CODE,
+      MANDAAT_LID_VAST_BUREAU_CODE,
       async (bestuursorgaanInTijd) => await bestuursorgaanInTijd.isVastBureau
     );
   }

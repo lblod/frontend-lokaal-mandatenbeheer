@@ -10,7 +10,7 @@ import {
   BURGEMEESTER_BESTUURSORGAAN_URI,
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
-  INSTALLATIVERGADERING_BEHANDELD_STATUS,
+  INSTALLATIEVERGADERING_BEHANDELD_STATUS,
   RMW_BESTUURSORGAAN_URI,
   VAST_BUREAU_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
@@ -77,7 +77,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       isRelevant: parentModel.isRelevant,
       isBehandeld:
         installatievergadering.get('status.uri') ===
-        INSTALLATIVERGADERING_BEHANDELD_STATUS,
+        INSTALLATIEVERGADERING_BEHANDELD_STATUS,
     });
   }
 

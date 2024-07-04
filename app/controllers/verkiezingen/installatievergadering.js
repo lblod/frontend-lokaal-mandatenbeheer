@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { INSTALLATIVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
+import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 export default class VerkiezingenInstallatievergaderingController extends Controller {
   queryParams = ['bestuursperiode'];
@@ -19,7 +19,7 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
 
     if (
       installatievergadering.get('status.uri') ===
-      INSTALLATIVERGADERING_BEHANDELD_STATUS
+      INSTALLATIEVERGADERING_BEHANDELD_STATUS
     ) {
       await fetch(
         `/installatievergadering-api/${installatievergadering.id}/move-ocmw-organs`,
