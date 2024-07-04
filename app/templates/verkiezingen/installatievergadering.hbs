@@ -32,21 +32,29 @@
     as |Group|
   >
     <Group>
-      <div class="au-o-flow">
-        <AuHeading @skin="2">{{this.title}}
+      <div class="au-o-flow au-u-flex">
+        <AuHeading @skin="2">
+          {{this.title}}
+          <br />
+          <div class="au-u-padding-right-large au-u-light">
+            <Mandatenbeheer::BestuursperiodenSelector
+              @options={{@model.bestuursPeriods}}
+              @selected={{@model.selectedPeriod}}
+              @onSelect={{this.selectPeriod}}
+              @prefix="Bestuursperiode"
+            />
+          </div>
+        </AuHeading>
+        <span
+          class="au-u-margin-top-none au-u-padding-top-small au-u-padding-left-small"
+        >
           <AuPill @skin={{this.statusPillSkin}}>
             {{this.statusPillLabel}}
           </AuPill>
-        </AuHeading>
+        </span>
       </div>
     </Group>
     <Group>
-      <Mandatenbeheer::BestuursperiodenSelector
-        @options={{@model.bestuursPeriods}}
-        @selected={{@model.selectedPeriod}}
-        @onSelect={{this.selectPeriod}}
-        @prefix="Bestuursperiode"
-      />
       <AuLink
         @route="verkiezingen.verkiezingsuitslag"
         @model={{@model.selectedPeriod.id}}
