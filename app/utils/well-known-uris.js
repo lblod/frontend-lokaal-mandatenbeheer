@@ -66,3 +66,7 @@ export const notBurgemeesterStates = [MANDATARIS_VERHINDERD_STATE];
 
 export const INSTALLATIEVERGADERING_BEHANDELD_STATUS =
   'http://data.lblod.info/id/concept/InstallatievergaderingStatus/c9fc3292-1576-4a82-8dcd-60795e22131f';
+export const INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS =
+  'http://data.lblod.info/id/concept/InstallatievergaderingStatus/b54dbe98-d618-4af7-9f01-791aa90774e4';
+export const INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS =
+  'http://data.lblod.info/id/concept/InstallatievergaderingStatus/a40b8f8a-8de2-4710-8d9b-3fc43a4b740e';

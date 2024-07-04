@@ -33,7 +33,11 @@
   >
     <Group>
       <div class="au-o-flow">
-        <AuHeading @skin="2">{{this.title}}</AuHeading>
+        <AuHeading @skin="2">{{this.title}}
+          <AuPill @skin={{this.statusPillSkin}}>
+            {{this.statusPillLabel}}
+          </AuPill>
+        </AuHeading>
       </div>
     </Group>
     <Group>
