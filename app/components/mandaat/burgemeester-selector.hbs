@@ -11,6 +11,40 @@
   </Group>
 </AuToolbar>
 
+<div class="au-o-box no-pagination">
+  {{#if this.setAangewezenBurgemeester.isRunning}}
+    <Skeleton::Table @columns={{2}} @rows={{1}} />
+  {{else}}
+    <AuDataTable
+      @content={{this.aangewezenBurgemeesters}}
+      @page={{1}}
+      @fields="gebruikteVoornaam achternaam"
+      @noDataMessage="Geen burgemeester aangewezen"
+      @sort={{this.sort}}
+      as |t|
+    >
+      <t.content as |c|>
+        <c.header>
+          <AuDataTableThSortable
+            @field="gebruikteVoornaam"
+            @currentSorting={{this.sort}}
+            @label="Voornaam"
+          />
+          <AuDataTableThSortable
+            @field="achternaam"
+            @currentSorting={{this.sort}}
+            @label="Familienaam"
+          />
+        </c.header>
+        <c.body as |persoon|>
+          <td>{{persoon.gebruikteVoornaam}}</td>
+          <td>{{persoon.achternaam}}</td>
+        </c.body>
+      </t.content>
+    </AuDataTable>
+  {{/if}}
+</div>
+
 <div class="au-o-box">
   {{#if this.errorMessages}}
     <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
@@ -19,9 +53,4 @@
       {{/each}}
     </AuAlert>
   {{/if}}
-  <Person::Selector
-    @person={{this.persoon}}
-    @onUpdate={{this.onUpdate}}
-    @readOnly={{@readOnly}}
-  />
 </div>

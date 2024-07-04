@@ -14,6 +14,7 @@ import {
   BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 import { toUserReadableListing } from 'frontend-lmb/utils/to-user-readable-listing';
+import { restartableTask } from 'ember-concurrency';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
@@ -21,6 +22,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @tracked persoon = null;
   @tracked mandataris = null;
   @tracked errorMessages = [];
+  @tracked aangewezenBurgemeesters;
   // no need to track these
   burgemeesterMandate = null;
   voorzitterVastBureauMandate = null;
@@ -44,12 +46,19 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
     if (this.burgemeesterMandate && this.voorzitterVastBureauMandate) {
       this.persoon = await this.loadBurgemeesterPersoon();
+      this.setAangewezenBurgemeester.perform();
     }
   }
 
   formatToDateString(dateTime) {
     return dateTime ? moment(dateTime).format('YYYY-MM-DD') : undefined;
   }
+
+  setAangewezenBurgemeester = restartableTask(async () => {
+    const persoon = await this.store.findRecord('persoon', this.persoon.id);
+
+    this.aangewezenBurgemeesters = [persoon];
+  });
 
   async loadBurgemeesterMandates() {
     const bestuursperiode =
