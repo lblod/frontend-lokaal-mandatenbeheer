@@ -6,8 +6,8 @@
     <AuContent @skin="small" class="au-u-flex-self-end">
       <AuButton
         @icon="add"
-        @loading={{this.setup.isRunning}}
-        @loadingMessage="Aan het toevoegen"
+        @loading={{(or this.setup.isRunning this.onUpdate.isRunning)}}
+        @loadingMessage="laden"
         @disabled={{this.persoon}}
         {{on "click" (fn (mut this.isPersonSelectOpen) true)}}
       >
@@ -18,7 +18,7 @@
 </div>
 
 <div class="no-pagination au-u-margin-left au-u-margin-right">
-  {{#if this.setup.isRunning}}
+  {{#if (or this.setup.isRunning this.onUpdate.isRunning)}}
     <Skeleton::Table @columns={{3}} @rows={{1}} />
   {{else}}
     <AuDataTable
@@ -93,7 +93,7 @@
     {{else}}
       <Person::SearchForm
         @showDefaultHead={{false}}
-        @onSelect={{this.onUpdate}}
+        @onSelect={{perform this.onUpdate}}
         @onCreateNewPerson={{this.onCreateNewPerson}}
         @onCancel={{this.closeModal}}
       />

@@ -53,6 +53,8 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       this.persoon = await this.loadBurgemeesterPersoon();
       this.aangewezenBurgemeesters = this.persoon ? [this.persoon] : null;
     }
+
+    this.closeModal();
   });
 
   formatToDateString(dateTime) {
@@ -150,10 +152,8 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     return burgemeesters[0]?.isBestuurlijkeAliasVan || null;
   }
 
-  @action
-  async onUpdate(persoon) {
+  onUpdate = restartableTask(async (persoon) => {
     this.persoon = persoon;
-
     if (!this.targetMandatarisses) {
       return;
     }
@@ -164,8 +164,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       })
     );
     this.setup.perform();
-    this.closeModal();
-  }
+  });
 
   @action
   closeModal() {
@@ -185,15 +184,13 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @action
   async onSelectNewPerson({ instanceId }) {
     this.persoon = await this.store.findRecord('persoon', instanceId);
-    this.setup.perform();
-    this.closeModal();
+    await this.onUpdate.perform(this.persoon);
   }
 
   @action
   async removeBurgemeester() {
     this.persoon = null;
     this.aangewezenBurgemeesters = [];
-    await this.onUpdate(this.persoon);
-    this.setup.perform();
+    await this.onUpdate.perform(this.persoon);
   }
 }
