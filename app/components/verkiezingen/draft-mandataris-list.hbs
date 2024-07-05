@@ -151,9 +151,9 @@
           {{/if}}
           {{#unless @readOnly}}
             <td class="au-u-text-right">
+              <AuButton @skin="link">Bewerk</AuButton>
               <AuButton
                 @skin="link"
-                @icon="bin"
                 @alert={{true}}
                 {{on "click" (fn this.removeMandataris row)}}
               >Verwijder</AuButton>
