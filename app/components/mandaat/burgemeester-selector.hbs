@@ -1,18 +1,24 @@
-<AuToolbar
-  @size="large"
-  @nowrap="true"
-  class="au-u-padding-bottom-none au-u-margin-bottom-none"
-  as |Group|
+<div
+  class="au-u-flex au-u-flex--between au-u-margin-bottom au-u-margin-left au-u-margin-right"
 >
-  <Group class="au-u-margin-bottom-none">
-    <div class="au-o-flow">
-      <AuHeading @skin="3">Ambt burgemeester</AuHeading>
-    </div>
-  </Group>
-</AuToolbar>
+  <AuHeading @skin="3" class="au-u-flex-self-start">Ambt Burgemeester</AuHeading>
+  {{#unless @isBehandeld}}
+    <AuContent @skin="small" class="au-u-flex-self-end">
+      <AuButton
+        @icon="add"
+        @loading={{this.setup.isRunning}}
+        @loadingMessage="Aan het toevoegen"
+        @disabled={{this.persoon}}
+        {{on "click" this.toggleSelectPersonModal}}
+      >
+        Toevoegen
+      </AuButton>
+    </AuContent>
+  {{/unless}}
+</div>
 
-<div class="au-o-box no-pagination">
-  {{#if this.setAangewezenBurgemeester.isRunning}}
+<div class="no-pagination au-u-margin-left au-u-margin-right">
+  {{#if this.setup.isRunning}}
     <Skeleton::Table @columns={{2}} @rows={{1}} />
   {{else}}
     <AuDataTable
@@ -54,3 +60,30 @@
     </AuAlert>
   {{/if}}
 </div>
+
+<AuModalContainer />
+<AuModal
+  @title={{"Selecteer een persoon"}}
+  @modalOpen={{this.isPersonSelectOpen}}
+  @closeModal={{this.toggleSelectPersonModal}}
+  @closable={{true}}
+>
+  <div class="au-o-box">
+
+    {{#if this.isCreatingPerson}}
+      <Form::NewInstance
+        @onCreate={{this.onSelectNewPerson}}
+        @form={{this.createPersonFormDefinition}}
+        @onCancel={{this.toggleSelectPersonModal}}
+        @buildSourceTtl={{this.buildSourceTtl}}
+      />
+    {{else}}
+      <Person::SearchForm
+        @showDefaultHead={{false}}
+        @onSelect={{this.onUpdate}}
+        @onCreateNewPerson={{this.onCreateNewPerson}}
+        @onCancel={{this.toggleSelectPersonModal}}
+      />
+    {{/if}}
+  </div>
+</AuModal>

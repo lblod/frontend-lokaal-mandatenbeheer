@@ -12,9 +12,11 @@ import {
 import {
   BESTUURSFUNCTIE_BURGEMEESTER_ID,
   BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
+  CREATE_PERSON_FORM_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 import { toUserReadableListing } from 'frontend-lmb/utils/to-user-readable-listing';
 import { restartableTask } from 'ember-concurrency';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
@@ -23,6 +25,9 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @tracked mandataris = null;
   @tracked errorMessages = [];
   @tracked aangewezenBurgemeesters;
+  @tracked isPersonSelectOpen;
+  @tracked isCreatingPerson;
+  @tracked createPersonFormDefinition;
   // no need to track these
   burgemeesterMandate = null;
   voorzitterVastBureauMandate = null;
@@ -38,27 +43,21 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.load();
+    this.setup.perform();
   }
 
-  async load() {
+  setup = restartableTask(async () => {
     await this.loadBurgemeesterMandates();
 
     if (this.burgemeesterMandate && this.voorzitterVastBureauMandate) {
       this.persoon = await this.loadBurgemeesterPersoon();
-      this.setAangewezenBurgemeester.perform();
+      this.aangewezenBurgemeesters = [this.persoon];
     }
-  }
+  });
 
   formatToDateString(dateTime) {
     return dateTime ? moment(dateTime).format('YYYY-MM-DD') : undefined;
   }
-
-  setAangewezenBurgemeester = restartableTask(async () => {
-    const persoon = await this.store.findRecord('persoon', this.persoon.id);
-
-    this.aangewezenBurgemeesters = [persoon];
-  });
 
   async loadBurgemeesterMandates() {
     const bestuursperiode =
@@ -153,7 +152,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   @action
   async onUpdate(persoon) {
-    this.persoon = persoon;
+    this.persoon = await this.store.findRecord('persoon', this.persoon.id);
 
     if (!this.targetMandatarisses) {
       return;
@@ -164,5 +163,29 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
         return target.save();
       })
     );
+    this.setup.perform();
+    this.isPersonSelectOpen = false;
+  }
+
+  @action
+  toggleSelectPersonModal() {
+    this.isPersonSelectOpen = !this.isPersonSelectOpen;
+  }
+
+  @action
+  async onCreateNewPerson() {
+    this.createPersonFormDefinition = await getFormFrom(
+      this.store,
+      CREATE_PERSON_FORM_ID
+    );
+    this.isCreatingPerson = true;
+  }
+
+  @action
+  async onSelectNewPerson({ instanceId }) {
+    this.persoon = await this.store.findRecord('persoon', instanceId);
+    this.setup.perform();
+    this.isCreatingPerson = false;
+    this.isPersonSelectOpen = false;
   }
 }
