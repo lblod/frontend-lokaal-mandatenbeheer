@@ -50,11 +50,8 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
   get title() {
     this.setInstallatievergaderingStatusPill.perform();
     this.setNextStatus.perform();
-    if (this.model.isBehandeld) {
-      return 'Legislatuur';
-    }
 
-    return 'Voorbereiding legislatuur';
+    return this.model.selectedPeriod.label;
   }
 
   setInstallatievergaderingStatusPill = task(async () => {

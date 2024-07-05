@@ -1,7 +1,5 @@
 {{page-title "Voorbereiding legislatuur"}}
 {{breadcrumb
-  this.title
-  " "
   this.model.selectedPeriod.label
   route="verkiezingen.installatievergadering"
 }}
@@ -32,26 +30,21 @@
     as |Group|
   >
     <Group>
-      <div class="au-o-flow au-u-flex">
+      <div class="au-o-flow au-u-flex au-u-flex--column">
         <AuHeading @skin="2">
           {{this.title}}
-          <br />
-          <div class="au-u-padding-right-large au-u-light">
-            <Mandatenbeheer::BestuursperiodenSelector
-              @options={{@model.bestuursPeriods}}
-              @selected={{@model.selectedPeriod}}
-              @onSelect={{this.selectPeriod}}
-              @prefix="Bestuursperiode"
-            />
-          </div>
-        </AuHeading>
-        <span
-          class="au-u-margin-top-none au-u-padding-top-small au-u-padding-left-small"
-        >
           <AuPill @skin={{this.statusPillSkin}}>
             {{this.statusPillLabel}}
           </AuPill>
-        </span>
+        </AuHeading>
+        <div class="au-o-grid au-o-grid__item au-u-light">
+          <Mandatenbeheer::BestuursperiodenSelector
+            @options={{@model.bestuursPeriods}}
+            @selected={{@model.selectedPeriod}}
+            @onSelect={{this.selectPeriod}}
+            @prefix="Bestuursperiode"
+          />
+        </div>
       </div>
     </Group>
     <Group>
