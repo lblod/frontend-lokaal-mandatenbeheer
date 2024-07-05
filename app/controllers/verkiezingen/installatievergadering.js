@@ -3,12 +3,11 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 import {
   INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS,
   INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS,
-  INSTALLATIVERGADERING_BEHANDELD_STATUS,
+  INSTALLATIEVERGADERING_BEHANDELD_STATUS,
 } from 'frontend-lmb/utils/well-known-uris';
 
 import { task } from 'ember-concurrency';
@@ -57,7 +56,7 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
   setInstallatievergaderingStatusPill = task(async () => {
     const status = await this.model.installatievergadering.status;
     const uriLabelMap = {
-      [INSTALLATIVERGADERING_BEHANDELD_STATUS]: {
+      [INSTALLATIEVERGADERING_BEHANDELD_STATUS]: {
         skin: 'success',
         label: 'Installatievergadering: Behandeld',
       },
@@ -90,11 +89,11 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
         icon: 'circle-step-3',
       },
       [INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS]: {
-        status: findStatusForUri(INSTALLATIVERGADERING_BEHANDELD_STATUS),
+        status: findStatusForUri(INSTALLATIEVERGADERING_BEHANDELD_STATUS),
         label: 'Voorbereiding afronden',
         icon: 'circle-step-4',
       },
-      [INSTALLATIVERGADERING_BEHANDELD_STATUS]: {
+      [INSTALLATIEVERGADERING_BEHANDELD_STATUS]: {
         status: null,
         label: 'Voorbereiding afgerond',
         icon: 'check',
