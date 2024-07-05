@@ -151,7 +151,10 @@
           {{/if}}
           {{#unless @readOnly}}
             <td class="au-u-text-right">
-              <AuButton @skin="link">Bewerk</AuButton>
+              <AuButton
+                @skin="link"
+                {{on "click" (fn this.openEditMandataris row)}}
+              >Bewerk</AuButton>
               <AuButton
                 @skin="link"
                 @alert={{true}}
@@ -178,5 +181,29 @@
       @onUpdate={{this.updatePerson}}
       @inline="false"
     />
+  </div>
+</AuModal>
+<AuModal
+  @title={{(concat
+    "Editeer mandataris" this.mandataris.bekleedt.bestuursfunctie.label
+  )}}
+  @modalOpen={{this.isEditing}}
+  @closable={{true}}
+  @closeModal={{this.closeEditModal}}
+>
+  <div class="au-o-box">
+    {{#if (and this.mandatarisEdit this.mandatarisEditForm this.buildMetaTtl)}}
+      <Form::Instance
+        @instanceId={{this.mandatarisEdit.id}}
+        @form={{this.mandatarisEditForm}}
+        @onSave={{this.saveMandatarisChanges}}
+        @onCancel={{fn (mut this.isEditing) false}}
+        @buildMetaTtl={{this.buildMetaTtl}}
+        @formInitialized={{fn (mut this.isEditFormInitialized) true}}
+      />
+    {{/if}}
+    {{#unless this.isEditFormInitialized}}
+      <Skeleton::Forms::MandatarisCorrect />
+    {{/unless}}
   </div>
 </AuModal>
