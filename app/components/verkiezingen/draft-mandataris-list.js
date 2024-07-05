@@ -5,9 +5,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
-import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
-import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 
 export default class DraftMandatarisListComponent extends Component {
   @service toaster;
@@ -21,8 +18,6 @@ export default class DraftMandatarisListComponent extends Component {
   @tracked isEditing;
   @tracked isEditFormInitialized;
   @tracked mandatarisEdit;
-  @tracked mandatarisEditForm;
-  @tracked buildMetaTtl;
 
   constructor() {
     super(...arguments);
@@ -136,12 +131,6 @@ export default class DraftMandatarisListComponent extends Component {
   async openEditMandataris(mandataris) {
     this.isEditing = true;
     this.mandatarisEdit = mandataris;
-    this.mandatarisEditForm = await getFormFrom(
-      this.store,
-      MANDATARIS_EDIT_FORM_ID
-    );
-    this.buildMetaTtl = () =>
-      getBestuursorganenMetaTtl([this.args.bestuursorgaan]);
   }
 
   @action
