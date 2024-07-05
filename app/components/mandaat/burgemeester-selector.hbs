@@ -9,7 +9,7 @@
         @loading={{this.setup.isRunning}}
         @loadingMessage="Aan het toevoegen"
         @disabled={{this.persoon}}
-        {{on "click" this.toggleSelectPersonModal}}
+        {{on "click" (fn (mut this.isPersonSelectOpen) true)}}
       >
         Toevoegen
       </AuButton>
@@ -19,12 +19,12 @@
 
 <div class="no-pagination au-u-margin-left au-u-margin-right">
   {{#if this.setup.isRunning}}
-    <Skeleton::Table @columns={{2}} @rows={{1}} />
+    <Skeleton::Table @columns={{3}} @rows={{1}} />
   {{else}}
     <AuDataTable
       @content={{this.aangewezenBurgemeesters}}
       @page={{1}}
-      @fields="gebruikteVoornaam achternaam"
+      @fields="gebruikteVoornaam achternaam actions"
       @noDataMessage="Geen burgemeester aangewezen"
       @sort={{this.sort}}
       as |t|
@@ -41,10 +41,23 @@
             @currentSorting={{this.sort}}
             @label="Familienaam"
           />
+          <th>
+            {{! actions }}
+          </th>
         </c.header>
         <c.body as |persoon|>
           <td>{{persoon.gebruikteVoornaam}}</td>
           <td>{{persoon.achternaam}}</td>
+          <td class="au-u-text-right">
+            {{#if this.persoon}}
+              <AuButton
+                @skin="link"
+                @icon="bin"
+                @alert={{true}}
+                {{on "click" this.removeBurgemeester}}
+              >Verwijder</AuButton>
+            {{/if}}
+          </td>
         </c.body>
       </t.content>
     </AuDataTable>
@@ -65,7 +78,7 @@
 <AuModal
   @title={{"Selecteer een persoon"}}
   @modalOpen={{this.isPersonSelectOpen}}
-  @closeModal={{this.toggleSelectPersonModal}}
+  @closeModal={{this.closeModal}}
   @closable={{true}}
 >
   <div class="au-o-box">
@@ -74,7 +87,7 @@
       <Form::NewInstance
         @onCreate={{this.onSelectNewPerson}}
         @form={{this.createPersonFormDefinition}}
-        @onCancel={{this.toggleSelectPersonModal}}
+        @onCancel={{this.closeModal}}
         @buildSourceTtl={{this.buildSourceTtl}}
       />
     {{else}}
@@ -82,7 +95,7 @@
         @showDefaultHead={{false}}
         @onSelect={{this.onUpdate}}
         @onCreateNewPerson={{this.onCreateNewPerson}}
-        @onCancel={{this.toggleSelectPersonModal}}
+        @onCancel={{this.closeModal}}
       />
     {{/if}}
   </div>

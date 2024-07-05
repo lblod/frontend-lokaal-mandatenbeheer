@@ -51,7 +51,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
     if (this.burgemeesterMandate && this.voorzitterVastBureauMandate) {
       this.persoon = await this.loadBurgemeesterPersoon();
-      this.aangewezenBurgemeesters = [this.persoon];
+      this.aangewezenBurgemeesters = this.persoon ? [this.persoon] : null;
     }
   });
 
@@ -152,7 +152,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   @action
   async onUpdate(persoon) {
-    this.persoon = await this.store.findRecord('persoon', this.persoon.id);
+    this.persoon = persoon;
 
     if (!this.targetMandatarisses) {
       return;
@@ -164,12 +164,13 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       })
     );
     this.setup.perform();
-    this.isPersonSelectOpen = false;
+    this.closeModal();
   }
 
   @action
-  toggleSelectPersonModal() {
-    this.isPersonSelectOpen = !this.isPersonSelectOpen;
+  closeModal() {
+    this.isCreatingPerson = false;
+    this.isPersonSelectOpen = false;
   }
 
   @action
@@ -185,7 +186,14 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   async onSelectNewPerson({ instanceId }) {
     this.persoon = await this.store.findRecord('persoon', instanceId);
     this.setup.perform();
-    this.isCreatingPerson = false;
-    this.isPersonSelectOpen = false;
+    this.closeModal();
+  }
+
+  @action
+  async removeBurgemeester() {
+    this.persoon = null;
+    this.aangewezenBurgemeesters = [];
+    await this.onUpdate(this.persoon);
+    this.setup.perform();
   }
 }
