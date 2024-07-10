@@ -10,7 +10,7 @@ import {
   getEffectiefStatus,
 } from 'frontend-lmb/utils/get-mandataris-status';
 import {
-  BESTUURSFUNCTIE_BURGEMEESTER_ID,
+  BESTUURSFUNCTIE_AANGEWEZEN_BURGEMEESTER_ID,
   BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
   CREATE_PERSON_FORM_ID,
 } from 'frontend-lmb/utils/well-known-ids';
@@ -73,7 +73,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
         },
         bestuursfunctie: {
           id: [
-            BESTUURSFUNCTIE_BURGEMEESTER_ID,
+            BESTUURSFUNCTIE_AANGEWEZEN_BURGEMEESTER_ID,
             BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
           ].join(','),
         },
@@ -81,7 +81,10 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       include: 'bestuursfunctie',
     });
     this.burgemeesterMandate = mandates.find((m) => {
-      return m.get('bestuursfunctie.id') === BESTUURSFUNCTIE_BURGEMEESTER_ID;
+      return (
+        m.get('bestuursfunctie.id') ===
+        BESTUURSFUNCTIE_AANGEWEZEN_BURGEMEESTER_ID
+      );
     });
     this.voorzitterVastBureauMandate = mandates.find((m) => {
       return (
