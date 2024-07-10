@@ -25,18 +25,16 @@
       class="au-u-margin-left-tiny"
     >Bekijk besluit</AuLinkExternal>
   {{/if}}
-  {{#if @showInfoText}}
-    {{#if this.isMandatarisBekrachtigd}}
-      <p
-        class="au-u-italic au-u-h-functional au-u-flex au-u-flex--vertical-center"
-      >
-        <span class="au-u-margin-top-small u-u-margin-right-tiny">Om een
-          bekrachtiging terug te trekken moet je de
-          <AuLinkExternal
-            href="mailto:lokaalmandatenbeheer@vlaanderen.be?subject=Bekrachtiging terugtrekken - Lokaal Mandatenbeheer"
-          >technische dienst contacteren</AuLinkExternal>
-        </span>
-      </p>
-    {{/if}}
+  {{#if (and @showInfoText this.isMandatarisBekrachtigd)}}
+    <p
+      class="au-u-italic au-u-h-functional au-u-flex au-u-flex--vertical-center"
+    >
+      <span class="au-u-margin-top-small u-u-margin-right-tiny">Om een
+        bekrachtiging terug te trekken moet je de
+        <AuLinkExternal
+          href="mailto:lokaalmandatenbeheer@vlaanderen.be?subject=Bekrachtiging terugtrekken - Lokaal Mandatenbeheer"
+        >technische dienst contacteren</AuLinkExternal>
+      </span>
+    </p>
   {{/if}}
 </div>
