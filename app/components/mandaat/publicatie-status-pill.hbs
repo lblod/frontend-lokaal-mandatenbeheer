@@ -15,6 +15,12 @@
   >
     {{or @mandataris.publicationStatus.label "Bekrachtigd"}}
   </AuPill>
+  {{#if (and @showBekijkBewijs @mandataris.linkToBesluit)}}
+    <AuLinkExternal
+      href={{@mandataris.linkToBesluit}}
+      class="au-u-margin-left-tiny"
+    >Bekijk besluit</AuLinkExternal>
+  {{/if}}
   {{#if @showInfoText}}
     {{#unless @mandataris.publicationStatus.label}}
       <p
