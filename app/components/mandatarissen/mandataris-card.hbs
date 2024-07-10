@@ -23,8 +23,11 @@
           @mandataris={{@mandataris}}
           @showInfoText={{true}}
         />
-        {{#if this.hasBesluit}}
-          <AuLinkExternal href="" class="au-u-margin-left-tiny">Bekijk besluit</AuLinkExternal>
+        {{#if @mandataris.linkToBesluit}}
+          <AuLinkExternal
+            href={{@mandataris.linkToBesluit}}
+            class="au-u-margin-left-tiny"
+          >Bekijk besluit</AuLinkExternal>
         {{/if}}
       </div>
     </div>
