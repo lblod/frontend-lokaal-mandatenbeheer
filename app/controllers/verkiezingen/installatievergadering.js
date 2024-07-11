@@ -58,15 +58,15 @@ export default class VerkiezingenInstallatievergaderingController extends Contro
     const uriLabelMap = {
       [INSTALLATIEVERGADERING_BEHANDELD_STATUS]: {
         skin: 'success',
-        label: 'Installatievergadering: Behandeld',
+        label: 'Behandeld',
       },
       [INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS]: {
         skin: 'info',
-        label: 'Installatievergadering: Te behandelen',
+        label: 'Te behandelen',
       },
       [INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS]: {
         skin: 'warning',
-        label: 'Klaar voor installatievergadering',
+        label: 'Klaar voor vergadering',
       },
     };
 
