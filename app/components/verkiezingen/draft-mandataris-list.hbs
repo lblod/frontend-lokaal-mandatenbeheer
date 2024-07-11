@@ -142,7 +142,7 @@
     {{#if this.mandatarisEdit}}
       <Form::Instance
         @instanceId={{this.mandatarisEdit.id}}
-        @form={{@mandatarisNewForm}}
+        @form={{@form}}
         @onSave={{this.saveMandatarisChanges}}
         @onCancel={{fn (mut this.isEditing) false}}
         @buildMetaTtl={{@buildMetaTtl}}

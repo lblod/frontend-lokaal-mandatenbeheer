@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 
 import RSVP from 'rsvp';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
-import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import { MANDATARIS_EXTENDED_FORM } from 'frontend-lmb/utils/well-known-ids';
 import {
   BCSD_BESTUURSORGAAN_URI,
   BURGEMEESTER_BESTUURSORGAAN_URI,
@@ -63,14 +63,14 @@ export default class PrepareInstallatievergaderingRoute extends Route {
 
     const kandidatenlijsten = await this.getKandidatenLijsten(selectedPeriod);
 
-    const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
+    const mandatarisForm = getFormFrom(this.store, MANDATARIS_EXTENDED_FORM);
 
     return RSVP.hash({
       ivStatuses,
       installatievergadering,
       bestuurseenheid,
       bestuursorganenInTijd,
-      mandatarisNewForm,
+      mandatarisForm,
       kandidatenlijsten,
       bestuursPeriods,
       selectedPeriod,
