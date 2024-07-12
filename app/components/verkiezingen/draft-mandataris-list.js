@@ -22,20 +22,16 @@ export default class DraftMandatarisListComponent extends Component {
   }
 
   get resortedMandatarissen() {
-    if (!this.args.sort || this.args.sort.indexOf('rangorde') < 0) {
-      return this.mandatarissen;
+    if (!this.mandatarissen) {
+      return [];
     }
-    const sorted = orderMandatarissenByRangorde([...this.mandatarissen]);
-    if (this.args.sort.startsWith('-')) {
-      return sorted.reverse();
-    }
-    return sorted;
+
+    return orderMandatarissenByRangorde([...this.mandatarissen]);
   }
 
   @action
   async onInit() {
     const queryParams = {
-      sort: this.args.sort,
       page: {
         number: 0,
         size: 9999,
@@ -60,7 +56,7 @@ export default class DraftMandatarisListComponent extends Component {
       queryParams['filter']['is-bestuurlijke-alias-van'] = this.args.filter;
     }
 
-    this.mandatarissen = this.store.query('mandataris', queryParams);
+    this.mandatarissen = await this.store.query('mandataris', queryParams);
   }
 
   @action
