@@ -31,16 +31,8 @@
     >
       <t.content as |c|>
         <c.header>
-          <AuDataTableThSortable
-            @field="gebruikteVoornaam"
-            @currentSorting={{this.sort}}
-            @label="Voornaam"
-          />
-          <AuDataTableThSortable
-            @field="achternaam"
-            @currentSorting={{this.sort}}
-            @label="Familienaam"
-          />
+          <th>Voornaam</th>
+          <th>Familienaam</th>
           <th>
             {{! actions }}
           </th>
