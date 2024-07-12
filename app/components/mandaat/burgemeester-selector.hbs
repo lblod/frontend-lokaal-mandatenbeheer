@@ -2,7 +2,7 @@
   class="au-u-flex au-u-flex--between au-u-margin-bottom au-u-margin-left au-u-margin-right"
 >
   <AuHeading @skin="3" class="au-u-flex-self-start">Ambt Burgemeester</AuHeading>
-  {{#unless @isBehandeld}}
+  {{#unless @readOnly}}
     <AuContent @skin="small" class="au-u-flex-self-end">
       <AuButton
         @icon="add"
