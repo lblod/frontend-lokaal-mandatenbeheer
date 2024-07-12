@@ -86,8 +86,14 @@ export default class DraftMandatarisListComponent extends Component {
   }
 
   @action
-  saveMandatarisChanges() {
+  async closeEditMandataris() {
     this.isEditing = false;
+    this.mandatarisEdit = null;
+  }
+
+  @action
+  saveMandatarisChanges() {
+    this.closeEditMandataris();
     this.isEditFormInitialized = false;
     this.onInit();
   }

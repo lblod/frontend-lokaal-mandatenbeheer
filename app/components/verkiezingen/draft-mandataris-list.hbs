@@ -136,7 +136,7 @@
   )}}
   @modalOpen={{this.isEditing}}
   @closable={{true}}
-  @closeModal={{fn (mut this.isEditing) false}}
+  @closeModal={{this.closeEditMandataris}}
 >
   <div class="au-o-box">
     {{#if this.mandatarisEdit}}
@@ -144,7 +144,7 @@
         @instanceId={{this.mandatarisEdit.id}}
         @form={{@form}}
         @onSave={{this.saveMandatarisChanges}}
-        @onCancel={{fn (mut this.isEditing) false}}
+        @onCancel={{this.closeEditMandataris}}
         @buildMetaTtl={{@buildMetaTtl}}
         @formInitialized={{fn (mut this.isEditFormInitialized) true}}
       />
