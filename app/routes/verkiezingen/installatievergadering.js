@@ -21,8 +21,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   @service bestuursorganen;
 
   queryParams = {
-    filter: { refreshModel: true },
-    sort: { refreshModel: true },
     bestuursperiode: { refreshModel: true },
   };
 

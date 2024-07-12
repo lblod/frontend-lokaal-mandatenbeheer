@@ -12,7 +12,7 @@ import {
 
 import { task } from 'ember-concurrency';
 
-export default class VerkiezingenInstallatievergaderingController extends Controller {
+export default class PrepareInstallatievergaderingController extends Controller {
   queryParams = ['bestuursperiode'];
   @service store;
   @service router;
