@@ -47,6 +47,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
         'bekleedt.bevat-in',
         'beleidsdomein',
         'status',
+        'publication-status',
         'tijdelijke-vervangingen',
         'heeft-lidmaatschap.binnen-fractie',
       ].join(','),
