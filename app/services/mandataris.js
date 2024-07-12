@@ -3,6 +3,8 @@ import Service from '@ember/service';
 import { service } from '@ember/service';
 
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
+import { MANDATARIS_WAARNEMEND_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
+
 import moment from 'moment';
 
 export default class MandatarisService extends Service {
@@ -42,12 +44,26 @@ export default class MandatarisService extends Service {
     newMandatarisState,
     newFractie
   ) {
+    let mandatarisStatus = toReplace.status;
+
+    const mandaat = await toReplace.bekleedt;
     const existing = await this.getOverlappingMandate(
       toReplace,
       replacementPerson
     );
+
+    if (mandaat && mandaat.isBurgemeester) {
+      mandatarisStatus = this.store.findRecord(
+        'mandataris-status-code',
+        MANDATARIS_WAARNEMEND_STATE_ID
+      );
+    }
+
     if (existing) {
-      return existing;
+      const mandataris = await this.store.findRecord('mandataris', existing.id);
+      mandataris.status = mandatarisStatus;
+      mandataris.save();
+      return mandataris;
     }
 
     const newMandataris = this.store.createRecord('mandataris', {
@@ -57,7 +73,7 @@ export default class MandatarisService extends Service {
       bekleedt: toReplace.bekleedt,
       isBestuurlijkeAliasVan: replacementPerson,
       beleidsdomein: await newMandatarisState.beleidsdomein,
-      status: toReplace.status,
+      status: mandatarisStatus,
       publicationStatus: await getDraftPublicationStatus(this.store),
     });
     await newMandataris.save();
