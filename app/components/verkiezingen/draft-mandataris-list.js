@@ -60,7 +60,7 @@ export default class DraftMandatarisListComponent extends Component {
       queryParams['filter']['is-bestuurlijke-alias-van'] = this.args.filter;
     }
 
-    this.mandatarissen = this.store.query('mandataris', queryParams);
+    this.mandatarissen = await this.store.query('mandataris', queryParams);
   }
 
   @action
@@ -76,6 +76,7 @@ export default class DraftMandatarisListComponent extends Component {
           'Er ging iets mis bij het verwijderen van de mandataris. Probeer het later opnieuw.';
         this.toaster.error(errorMessage, 'Error');
       });
+    await this.onInit();
   }
 
   @action
