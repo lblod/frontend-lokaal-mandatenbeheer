@@ -1,65 +1,32 @@
-<div {{did-update this.onInit @sort}}>
+<div {{did-update this.onInit}}>
   <div class="au-o-box no-pagination">
     <h1 class="au-u-h2 au-u-margin-bottom-small">{{@title}}</h1>
     <AuDataTable
       @content={{this.resortedMandatarissen}}
       @noDataMessage="Geen mandatarissen gevonden"
-      @sort={{@sort}}
       @page={{@page}}
       @size={{@size}}
       as |t|
     >
       <t.content as |c|>
         <c.header>
-          <AuDataTableThSortable
-            @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
-            @currentSorting={{@sort}}
-            @label="Voornaam"
-          />
-          <AuDataTableThSortable
-            @field="isBestuurlijkeAliasVan.achternaam"
-            @currentSorting={{@sort}}
-            @label="Familienaam"
-          />
+          <th class="au-u-padding-small">Voornaam</th>
+          <th>Familienaam</th>
           {{#if @showFractie}}
-            <AuDataTableThSortable
-              @field="heeftLidmaatschap.binnenFractie.naam"
-              @currentSorting={{@sort}}
-              @label="Fractie"
-            />
+            <th>Fractie</th>
           {{/if}}
           {{#if @showFunctie}}
-            <AuDataTableThSortable
-              @field="bekleedt.bestuursfunctie.label"
-              @currentSorting={{@sort}}
-              @label="Mandaat"
-            />
+            <th>Mandaat</th>
           {{/if}}
           {{#if @showRangorde}}
-            <AuDataTableThSortable
-              @field="rangorde"
-              @currentSorting={{@sort}}
-              @label="Rangorde"
-            />
+            <th>Rangorde</th>
           {{/if}}
           {{#if @showBevoegdheid}}
-            <AuDataTableThSortable
-              @field="beleidsdomein"
-              @currentSorting={{@sort}}
-              @label="Bevoegdheden"
-            />
+            <th>Bevoegdheden</th>
           {{/if}}
           {{#if @showStartEndDate}}
-            <AuDataTableThSortable
-              @field="start"
-              @currentSorting={{@sort}}
-              @label="Start mandaat"
-            />
-            <AuDataTableThSortable
-              @field="einde"
-              @currentSorting={{@sort}}
-              @label="Einde mandaat"
-            />
+            <th>Start mandaat</th>
+            <th>Einde mandaat</th>
           {{/if}}
           {{#unless @readOnly}}
             <th>{{! Delete }}</th>

@@ -23,24 +23,14 @@
   {{else}}
     <AuDataTable
       @content={{this.aangewezenBurgemeesters}}
-      @page={{1}}
       @fields="gebruikteVoornaam achternaam actions"
       @noDataMessage="Geen burgemeester aangewezen"
-      @sort={{this.sort}}
       as |t|
     >
       <t.content as |c|>
         <c.header>
-          <AuDataTableThSortable
-            @field="gebruikteVoornaam"
-            @currentSorting={{this.sort}}
-            @label="Voornaam"
-          />
-          <AuDataTableThSortable
-            @field="achternaam"
-            @currentSorting={{this.sort}}
-            @label="Familienaam"
-          />
+          <th class="au-u-padding-small">Voornaam</th>
+          <th>Familienaam</th>
           <th>
             {{! actions }}
           </th>
