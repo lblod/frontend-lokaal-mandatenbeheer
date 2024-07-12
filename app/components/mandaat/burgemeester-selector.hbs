@@ -31,22 +31,26 @@
         <c.header>
           <th class="au-u-padding-small">Voornaam</th>
           <th>Familienaam</th>
-          <th>
-            {{! actions }}
-          </th>
+          {{#unless @readOnly}}
+            <th>
+              {{! actions }}
+            </th>
+          {{/unless}}
         </c.header>
         <c.body as |persoon|>
           <td>{{persoon.gebruikteVoornaam}}</td>
           <td>{{persoon.achternaam}}</td>
-          <td class="au-u-text-right">
-            {{#if this.persoon}}
-              <AuButton
-                @skin="link"
-                @alert={{true}}
-                {{on "click" this.removeBurgemeester}}
-              >Verwijder</AuButton>
-            {{/if}}
-          </td>
+          {{#unless @readOnly}}
+            <td class="au-u-text-right">
+              {{#if (this.persoon)}}
+                <AuButton
+                  @skin="link"
+                  @alert={{true}}
+                  {{on "click" this.removeBurgemeester}}
+                >Verwijder</AuButton>
+              {{/if}}
+            </td>
+          {{/unless}}
         </c.body>
       </t.content>
     </AuDataTable>
