@@ -42,7 +42,7 @@
           <td>{{persoon.achternaam}}</td>
           {{#unless @readOnly}}
             <td class="au-u-text-right">
-              {{#if (this.persoon)}}
+              {{#if this.persoon}}
                 <AuButton
                   @skin="link"
                   @alert={{true}}
