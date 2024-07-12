@@ -67,32 +67,12 @@
         </c.header>
 
         <c.body as |row|>
-          {{#if @readOnly}}
-            <td>
-              {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-            </td>
-          {{else}}
-            <Verkiezingen::EditOnHover
-              @editFunction={{this.openModal}}
-              @model={{row}}
-              @helpText="Pas de persoon aan"
-            >
-              {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-            </Verkiezingen::EditOnHover>
-          {{/if}}
-          {{#if @readOnly}}
-            <td>
-              {{row.isBestuurlijkeAliasVan.achternaam}}
-            </td>
-          {{else}}
-            <Verkiezingen::EditOnHover
-              @editFunction={{this.openModal}}
-              @model={{row}}
-              @helpText="Pas de persoon aan"
-            >
-              {{row.isBestuurlijkeAliasVan.achternaam}}
-            </Verkiezingen::EditOnHover>
-          {{/if}}
+          <td>
+            {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+          </td>
+          <td>
+            {{row.isBestuurlijkeAliasVan.achternaam}}
+          </td>
           {{#if @showFractie}}
             <td>
               {{row.heeftLidmaatschap.binnenFractie.naam}}
@@ -118,28 +98,9 @@
             </td>
           {{/if}}
           {{#if @showBevoegdheid}}
-            {{#if (eq this.editBeleidsdomeinen row.id)}}
-              <td {{on-click-outside this.closeEditBeleidsdomeinen}}>
-                <Mandatarissen::BeleidsdomeinSelectorWithCreate
-                  @beleidsdomeinen={{row.beleidsdomein}}
-                  @onSelect={{this.updateBeleidsdomeinen}}
-                />
-              </td>
-            {{else}}
-              {{#if @readOnly}}
-                <td>
-                  <Beleidsdomeinen @mandataris={{row}} />
-                </td>
-              {{else}}
-                <Verkiezingen::EditOnHover
-                  @editFunction={{this.openEditBeleidsdomeinen}}
-                  @model={{row}}
-                  @helpText="Pas de beleidsdomeinen aan"
-                >
-                  <Beleidsdomeinen @mandataris={{row}} />
-                </Verkiezingen::EditOnHover>
-              {{/if}}
-            {{/if}}
+            <td>
+              <Beleidsdomeinen @mandataris={{row}} />
+            </td>
           {{/if}}
           {{#if @showStartEndDate}}
             <td>
@@ -152,7 +113,11 @@
           {{#unless @readOnly}}
             <td class="au-u-text-right">
               <AuButton
-                @icon="bin"
+                @skin="link"
+                {{on "click" (fn this.openEditMandataris row)}}
+              >Bewerk</AuButton>
+              <AuButton
+                @skin="link"
                 @alert={{true}}
                 {{on "click" (fn this.removeMandataris row)}}
               >Verwijder</AuButton>
@@ -166,16 +131,26 @@
 
 <AuModalContainer />
 <AuModal
-  @title="Selecteer een persoon"
-  @modalOpen={{this.isModalOpen}}
+  @title={{(concat
+    "Editeer mandataris" this.mandataris.bekleedt.bestuursfunctie.label
+  )}}
+  @modalOpen={{this.isEditing}}
   @closable={{true}}
-  @closeModal={{this.closeModal}}
+  @closeModal={{this.closeEditMandataris}}
 >
   <div class="au-o-box">
-    <Person::Selector
-      @person={{this.mandataris.isBestuurlijkeAliasVan}}
-      @onUpdate={{this.updatePerson}}
-      @inline="false"
-    />
+    {{#if this.mandatarisEdit}}
+      <Form::Instance
+        @instanceId={{this.mandatarisEdit.id}}
+        @form={{@form}}
+        @onSave={{this.saveMandatarisChanges}}
+        @onCancel={{this.closeEditMandataris}}
+        @buildMetaTtl={{@buildMetaTtl}}
+        @formInitialized={{fn (mut this.isEditFormInitialized) true}}
+      />
+    {{/if}}
+    {{#unless this.isEditFormInitialized}}
+      <Skeleton::Forms::MandatarisCorrect />
+    {{/unless}}
   </div>
 </AuModal>

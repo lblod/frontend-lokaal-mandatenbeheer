@@ -1,15 +1,67 @@
-<AuToolbar
-  @size="large"
-  @nowrap="true"
-  class="au-u-padding-bottom-none au-u-margin-bottom-none"
-  as |Group|
+<div
+  class="au-u-flex au-u-flex--between au-u-margin-bottom au-u-margin-left au-u-margin-right"
 >
-  <Group class="au-u-margin-bottom-none">
-    <div class="au-o-flow">
-      <AuHeading @skin="3">Ambt burgemeester</AuHeading>
-    </div>
-  </Group>
-</AuToolbar>
+  <AuHeading @skin="3" class="au-u-flex-self-start">Ambt Burgemeester</AuHeading>
+  {{#unless @readOnly}}
+    <AuContent @skin="small" class="au-u-flex-self-end">
+      <AuButton
+        @icon="add"
+        @loading={{(or this.setup.isRunning this.onUpdate.isRunning)}}
+        @loadingMessage="laden"
+        @disabled={{this.persoon}}
+        {{on "click" (fn (mut this.isPersonSelectOpen) true)}}
+      >
+        Toevoegen
+      </AuButton>
+    </AuContent>
+  {{/unless}}
+</div>
+
+<div class="no-pagination au-u-margin-left au-u-margin-right">
+  {{#if (or this.setup.isRunning this.onUpdate.isRunning)}}
+    <Skeleton::Table @columns={{3}} @rows={{1}} />
+  {{else}}
+    <AuDataTable
+      @content={{this.aangewezenBurgemeesters}}
+      @page={{1}}
+      @fields="gebruikteVoornaam achternaam actions"
+      @noDataMessage="Geen burgemeester aangewezen"
+      @sort={{this.sort}}
+      as |t|
+    >
+      <t.content as |c|>
+        <c.header>
+          <AuDataTableThSortable
+            @field="gebruikteVoornaam"
+            @currentSorting={{this.sort}}
+            @label="Voornaam"
+          />
+          <AuDataTableThSortable
+            @field="achternaam"
+            @currentSorting={{this.sort}}
+            @label="Familienaam"
+          />
+          <th>
+            {{! actions }}
+          </th>
+        </c.header>
+        <c.body as |persoon|>
+          <td>{{persoon.gebruikteVoornaam}}</td>
+          <td>{{persoon.achternaam}}</td>
+          <td class="au-u-text-right">
+            {{#if this.persoon}}
+              <AuButton
+                @skin="link"
+                @alert={{true}}
+                {{on "click" this.removeBurgemeester}}
+              >Verwijder</AuButton>
+            {{/if}}
+          </td>
+        </c.body>
+      </t.content>
+    </AuDataTable>
+  {{/if}}
+</div>
 
 <div class="au-o-box">
   {{#if this.errorMessages}}
@@ -19,9 +71,31 @@
       {{/each}}
     </AuAlert>
   {{/if}}
-  <Person::Selector
-    @person={{this.persoon}}
-    @onUpdate={{this.onUpdate}}
-    @readOnly={{@readOnly}}
-  />
 </div>
+
+<AuModalContainer />
+<AuModal
+  @title={{"Selecteer een persoon"}}
+  @modalOpen={{this.isPersonSelectOpen}}
+  @closeModal={{this.closeModal}}
+  @closable={{true}}
+>
+  <div class="au-o-box">
+
+    {{#if this.isCreatingPerson}}
+      <Form::NewInstance
+        @onCreate={{this.onSelectNewPerson}}
+        @form={{this.createPersonFormDefinition}}
+        @onCancel={{this.closeModal}}
+        @buildSourceTtl={{this.buildSourceTtl}}
+      />
+    {{else}}
+      <Person::SearchForm
+        @showDefaultHead={{false}}
+        @onSelect={{perform this.onUpdate}}
+        @onCreateNewPerson={{this.onCreateNewPerson}}
+        @onCancel={{this.closeModal}}
+      />
+    {{/if}}
+  </div>
+</AuModal>
