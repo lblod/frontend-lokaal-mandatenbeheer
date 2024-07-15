@@ -36,24 +36,17 @@ export default class FractiesRoute extends Route {
       await Promise.all(
         bestuursPeriods.map(async (period) => {
           const ivs = await period.installatievergaderingen;
-          let valid = false;
-          if (ivs.length < 1) {
-            valid = true;
-          } else if (
-            ivs.at(0).get('status').get('uri') ==
-            INSTALLATIEVERGADERING_BEHANDELD_STATUS
+          if (
+            ivs.length === 0 ||
+            ivs[0].get('status').get('uri') ===
+              INSTALLATIEVERGADERING_BEHANDELD_STATUS
           ) {
-            valid = true;
+            return period;
           }
-          return {
-            value: period,
-            valid,
-          };
+          return null;
         })
       )
-    )
-      .filter((v) => v.valid)
-      .map((data) => data.value);
+    ).filter(Boolean);
 
     let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
       filteredBestuursPeriods,
