@@ -53,17 +53,17 @@ export default class MandatarisService extends Service {
     );
 
     if (mandaat && mandaat.isBurgemeester) {
-      mandatarisStatus = this.store.findRecord(
+      mandatarisStatus = await this.store.findRecord(
         'mandataris-status-code',
         MANDATARIS_WAARNEMEND_STATE_ID
       );
     }
 
     if (existing) {
-      const mandataris = await this.store.findRecord('mandataris', existing.id);
-      mandataris.status = mandatarisStatus;
-      mandataris.save();
-      return mandataris;
+      existing.status = mandatarisStatus;
+      existing.save();
+
+      return existing;
     }
 
     const newMandataris = this.store.createRecord('mandataris', {
