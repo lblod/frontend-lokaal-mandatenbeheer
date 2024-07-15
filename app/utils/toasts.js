@@ -16,4 +16,15 @@ const showErrorToast = (toaster, message, title = 'Error') => {
   toaster.error(message, title);
 };
 
-export { notifyFormSavedSuccessfully, showSuccessToast, showErrorToast };
+const showWarningToast = (toaster, message, title = 'Opgelet') => {
+  toaster.warning(message, title, {
+    timeOut: 5000,
+  });
+};
+
+export {
+  notifyFormSavedSuccessfully,
+  showSuccessToast,
+  showErrorToast,
+  showWarningToast,
+};
