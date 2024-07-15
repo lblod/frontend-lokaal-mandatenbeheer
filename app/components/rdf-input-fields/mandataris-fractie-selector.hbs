@@ -1,4 +1,9 @@
-<AuLabel>{{this.title}}</AuLabel>
+<AuLabel
+  for="fractie"
+  @error={{this.hasErrors}}
+  @warning={{this.hasWarnings}}
+  @required={{this.isRequired}}
+>{{this.title}}</AuLabel>
 {{#if this.initialized}}
   <div class={{if this.hasErrors "ember-power-select--error"}}>
     <Mandatarissen::FractieSelector
@@ -9,6 +14,13 @@
       @onClose={{fn (mut this.hasBeenFocused) true}}
     />
   </div>
+  {{#each this.errors as |error|}}
+    <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+  {{/each}}
+
+  {{#each this.warnings as |warning|}}
+    <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+  {{/each}}
 {{else}}
   <p class="skeleton-input-full au-u-margin-top"></p>
 {{/if}}

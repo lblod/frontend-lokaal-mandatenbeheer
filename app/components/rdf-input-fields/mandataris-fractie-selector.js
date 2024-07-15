@@ -79,7 +79,6 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @action
   async onSelectFractie(fractie) {
     const uri = fractie?.uri;
-
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
     this.selectedFractie = fractie;
     this.hasBeenFocused = true;
