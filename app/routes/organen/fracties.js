@@ -28,7 +28,7 @@ export default class FractiesRoute extends Route {
 
     const bestuursPeriods = await this.store.query('bestuursperiode', {
       sort: 'label',
-      'filter[:has:heeft-bestuursorganen-in-tijd]': 'true',
+      'filter[:has:heeft-bestuursorganen-in-tijd]': true,
       include: 'installatievergaderingen',
     });
 
