@@ -61,6 +61,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   @action
   async updateMandaat(mandate) {
     const uri = mandate?.uri;
+
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
     this.hasBeenFocused = true;
     super.updateValidations();
