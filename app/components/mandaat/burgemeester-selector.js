@@ -103,7 +103,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     this.errorMessages = [
       ...this.errorMessages,
       `Er zijn meerdere personen gevonden met het mandaat ${mandaatName}. Enkel de eerste zal aangepast worden:
-      ${toUserReadableListing(personen, (p) => `${p.gebruikteVoornaam} ${p.achternaam}`)}.`,
+      ${toUserReadableListing(personen, (p) => `${p?.gebruikteVoornaam} ${p?.achternaam}`)}.`,
     ];
   }
 
