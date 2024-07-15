@@ -87,15 +87,6 @@ export default class MandatarisModel extends Model {
     }
     return false;
   }
-  inSelectedBestuursperiode(bestuursperiode) {
-    if (this.start?.getFullYear() < bestuursperiode.start) {
-      return false;
-    }
-    if (this.einde?.getFullYear() > bestuursperiode.einde) {
-      return false;
-    }
-    return true;
-  }
 
   get uniqueVervangersDoor() {
     return this.getUnique(this.tijdelijkeVervangingen);
