@@ -26,6 +26,7 @@ import {
   getDraftPublicationStatus,
   getEffectiefStatus,
 } from 'frontend-lmb/utils/get-mandataris-status';
+import { showWarningToast } from 'frontend-lmb/utils/toasts';
 
 const CREATE_MODE = 'create';
 
@@ -90,14 +91,22 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     }
 
     if (!bestuursorgaanToSyncFrom) {
-      throw `Kon niet synchroniseren. Geen bestuursorgaan gevonden.`;
+      showWarningToast(
+        this.toaster,
+        'Kon niet synchroniseren. Geen bestuursorgaan gevonden.'
+      );
+      return;
     }
     const mandatarissenToSync = await this.getBestuursorgaanMandatarissen(
       bestuursorgaanToSyncFrom
     );
 
     if (mandatarissenToSync.length == 0) {
-      throw `Geen mandatarissen gevonden om te synchroniseren.`;
+      showWarningToast(
+        this.toaster,
+        'Geen mandatarissen gevonden om over te nemen.'
+      );
+      return;
     }
     this.skeletonRowsOfMirror = mandatarissenToSync.length;
     console.log(`rows`, mandatarissenToSync.length);
@@ -127,7 +136,11 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       );
 
       if (bestuurfunctieCodes.length == 0) {
-        throw `Geen bestuursfunctie gevonden om te synchroniseren.`;
+        showWarningToast(
+          this.toaster,
+          'Geen bestuursfunctie gevonden om te synchroniseren.'
+        );
+        return;
       }
 
       const toBestuursfunctie = bestuurfunctieCodes[0];
