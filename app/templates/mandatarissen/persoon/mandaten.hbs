@@ -10,6 +10,13 @@
     </AuHeading>
   </Group>
   <Group>
+    <AuButton
+      skin="secondary"
+      @disabled={{true}}
+      {{on "click" (perform this.wordtOnafhankelijk)}}
+    >
+      Onafhankelijk worden
+    </AuButton>
     <AuButton {{on "click" this.toggleModal}}>
       Voeg nieuw mandaat toe
     </AuButton>
