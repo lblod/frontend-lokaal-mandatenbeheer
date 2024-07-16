@@ -4,6 +4,8 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
+import { task } from 'ember-concurrency';
+
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
 
@@ -39,4 +41,8 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   toggleActiveOnly() {
     this.activeOnly = !this.activeOnly;
   }
+
+  wordtOnafhankelijk = task(async () => {
+    console.log(`Wordt onafhankelijk`);
+  });
 }
