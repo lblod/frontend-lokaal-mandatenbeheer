@@ -77,10 +77,6 @@ export default class MandatarisModel extends Model {
     );
   }
 
-  get isEffective() {
-    return this.status.isEffective;
-  }
-
   get isActive() {
     if (!this.einde) {
       return true;
