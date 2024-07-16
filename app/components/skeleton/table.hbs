@@ -1,0 +1,21 @@
+{{! template-lint-disable no-unused-block-params }}
+<AuTable>
+  <:header>
+    <tr>
+      {{#each this.columns as |column|}}
+        <th
+          class="skeleton-text au-u-padding-left au-u-padding-right au-u-padding-bottom-small au-u-padding-top-small"
+        ><p class="skeleton-text"></p></th>
+      {{/each}}
+    </tr>
+  </:header>
+  <:body>
+    {{#each this.rows as |row|}}
+      <tr>
+        {{#each this.columns as |column|}}
+          <td><p class="skeleton-text au-u-padding-small"></p></td>
+        {{/each}}
+      </tr>
+    {{/each}}
+  </:body>
+</AuTable>

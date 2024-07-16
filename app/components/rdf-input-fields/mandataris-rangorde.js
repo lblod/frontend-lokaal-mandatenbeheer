@@ -1,8 +1,10 @@
-import { inject as service } from '@ember/service';
+import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
+
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { guidFor } from '@ember/object/internals';
+
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { ORG } from 'frontend-lmb/rdf/namespaces';
 import { getByUri } from 'frontend-lmb/utils/get-by-uri';

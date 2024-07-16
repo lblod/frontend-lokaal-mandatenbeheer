@@ -1,8 +1,9 @@
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 
-import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
+
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 
 export default class InstanceTableComponent extends Component {
@@ -91,5 +92,29 @@ export default class InstanceTableComponent extends Component {
       formDefinition: form,
       headers: headers,
     };
+  }
+
+  @action
+  labelForHeaderKey(key) {
+    const mapping = {
+      id: 'Id',
+      uri: 'Uri',
+      label: 'Label',
+      email: 'Email',
+      naam: 'Naam',
+      start: 'Startdatum',
+      einde: 'Einddatum',
+      voornaam: 'Voornaam',
+      achternaam: 'Achternaam',
+      roepnaam: 'Roepnaam',
+      test: 'Test',
+      startaanstellingsperiode: 'Start aanstellingsperiode',
+    };
+
+    if (!mapping[key]) {
+      return key;
+    }
+
+    return mapping[key];
   }
 }

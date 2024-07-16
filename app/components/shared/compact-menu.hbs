@@ -7,7 +7,7 @@
 >
   <AuLink @route="organen" role="menuitem">
     <AuIcon @icon="users" @alignment="left" />
-    Bestuursorganen
+    Organen
   </AuLink>
   <AuLink @route="mandatarissen.search" role="menuitem">
     <AuIcon @icon="user-fill" @alignment="left" />
@@ -15,14 +15,8 @@
   </AuLink>
   <AuLink @route="verkiezingen.installatievergadering" role="menuitem">
     <AuIcon @icon="vote" @alignment="left" />
-    Verkiezingen
+    Opstart nieuwe legislatuur
   </AuLink>
-  {{#if this.currentSession.canAccessLeidinggevenden}}
-    <AuLink @route="leidinggevenden" role="menuitem">
-      <AuIcon @icon="user-popup" @alignment="left" />
-      Leidinggevenden
-    </AuLink>
-  {{/if}}
   <AuLink @route="forms" role="menuitem">
     <AuIcon @icon="draft" @alignment="left" />
     Forms

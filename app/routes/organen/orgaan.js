@@ -1,5 +1,7 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
+
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import RSVP from 'rsvp';
 

@@ -1,4 +1,5 @@
 import Model, { attr } from '@ember-data/model';
+
 import {
   FRACTIETYPE_ONAFHANKELIJK,
   FRACTIETYPE_SAMENWERKINGSVERBAND,

@@ -1,12 +1,14 @@
 import RdfInputFieldsConceptSchemeMultiSelectorWithCreateComponent from './concept-scheme-multi-selector-with-create';
+
+import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+
 import {
   triplesForPath,
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
 import { ORG } from 'frontend-lmb/rdf/namespaces';
-import { inject as service } from '@ember/service';
 import { getByUri } from 'frontend-lmb/utils/get-by-uri';
-import { tracked } from '@glimmer/tracking';
 
 export default class RdfBeleidsdomeinCodeSelector extends RdfInputFieldsConceptSchemeMultiSelectorWithCreateComponent {
   @service store;

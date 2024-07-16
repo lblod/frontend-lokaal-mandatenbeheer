@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
+
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
+
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSPERIODE_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 

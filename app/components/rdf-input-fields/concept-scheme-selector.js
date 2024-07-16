@@ -1,9 +1,11 @@
+import ConceptSchemeSelectorComponent from './concept-selector';
+
 import { action } from '@ember/object';
+
 import {
   triplesForPath,
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
-import ConceptSchemeSelectorComponent from './concept-selector';
 
 export default class RdfInputFieldsConceptSchemeSelectorComponent extends ConceptSchemeSelectorComponent {
   async loadProvidedValue() {

@@ -1,5 +1,7 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
+
 import { BESTUURSEENHEID_CLASSIFICATIECODE_GEMEENTE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class VerkiezingenRoute extends Route {
@@ -8,6 +10,10 @@ export default class VerkiezingenRoute extends Route {
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
+
+    if (!this.currentSession.canAccessMandaat) {
+      this.router.transitionTo('index');
+    }
   }
 
   async model() {

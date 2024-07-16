@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+
 import { tracked } from '@glimmer/tracking';
 
 export default class ContactFormComponent extends Component {
@@ -11,9 +12,6 @@ export default class ContactFormComponent extends Component {
     },
     {
       label: 'Mandatenbeheer',
-    },
-    {
-      label: 'Leidinggevenden',
     },
     {
       label: 'Andere',

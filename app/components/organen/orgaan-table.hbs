@@ -1,6 +1,6 @@
 <AuDataTable
   @content={{@content}}
-  @noDataMessage="Geen bestuursorganen gevonden"
+  @noDataMessage="Geen organen gevonden"
   @sort={{@sort}}
   as |t|
 >
@@ -9,7 +9,7 @@
       <AuDataTableThSortable
         @field="naam"
         @currentSorting={{@sort}}
-        @label="Bestuursorgaan"
+        @label="Orgaan"
       />
       <AuDataTableThSortable
         @field="classificatie.label"

@@ -1,4 +1,5 @@
 import Service from '@ember/service';
+
 import { service } from '@ember/service';
 
 export default class BestuursperiodenService extends Service {

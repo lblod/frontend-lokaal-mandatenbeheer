@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
 
 export default class FormsRoute extends Route {
   @service session;
@@ -8,6 +9,10 @@ export default class FormsRoute extends Route {
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
+
+    if (!this.currentSession.canAccessMandaat) {
+      this.router.transitionTo('index');
+    }
   }
 
   async model() {

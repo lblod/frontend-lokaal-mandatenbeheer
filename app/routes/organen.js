@@ -1,5 +1,7 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
+
 import RSVP from 'rsvp';
 
 export default class OrganenRoute extends Route {
@@ -11,6 +13,10 @@ export default class OrganenRoute extends Route {
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
+
+    if (!this.currentSession.canAccessMandaat) {
+      this.router.transitionTo('index');
+    }
   }
 
   async model() {

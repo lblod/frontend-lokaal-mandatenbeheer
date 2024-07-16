@@ -1,11 +1,13 @@
-import Service, { inject as service } from '@ember/service';
+import Service from '@ember/service';
+
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+
 import { setContext, setUser } from '@sentry/ember';
 import { SHOULD_ENABLE_SENTRY } from 'frontend-lmb/utils/sentry';
 
 const MODULE = {
   MANDATENBEHEER: 'LoketLB-mandaatGebruiker',
-  LEIDINGGEVENDEN: 'LoketLB-leidinggevendenGebruiker',
 };
 
 export default class CurrentSessionService extends Service {
@@ -60,9 +62,5 @@ export default class CurrentSessionService extends Service {
 
   get canAccessMandaat() {
     return this.canAccess(MODULE.MANDATENBEHEER);
-  }
-
-  get canAccessLeidinggevenden() {
-    return this.canAccess(MODULE.LEIDINGGEVENDEN);
   }
 }

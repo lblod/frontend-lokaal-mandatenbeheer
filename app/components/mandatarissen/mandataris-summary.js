@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+
 import { restartableTask } from 'ember-concurrency';
 
 export default class MandatenbeheerMandatarisSummaryComponent extends Component {

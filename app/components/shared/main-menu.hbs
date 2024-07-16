@@ -6,7 +6,7 @@
     <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="organen">
         <AuIcon @icon="users" @alignment="left" />
-        Bestuursorganen
+        Organen
       </AuNavigationLink>
     </li>
     <li class="au-c-list-navigation__item">
@@ -18,17 +18,9 @@
     <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="verkiezingen.installatievergadering">
         <AuIcon @icon="vote" @alignment="left" />
-        Verkiezingen
+        Opstart nieuwe legislatuur
       </AuNavigationLink>
     </li>
-    {{#if this.currentSession.canAccessLeidinggevenden}}
-      <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="leidinggevenden">
-          <AuIcon @icon="user-popup" @alignment="left" />
-          Leidinggevenden
-        </AuNavigationLink>
-      </li>
-    {{/if}}
     <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="forms">
         <AuIcon @icon="draft" @alignment="left" />

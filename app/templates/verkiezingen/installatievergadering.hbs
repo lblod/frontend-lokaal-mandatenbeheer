@@ -1,6 +1,5 @@
 {{page-title "Voorbereiding legislatuur"}}
 {{breadcrumb
-  "Voorbereiding legislatuur "
   this.model.selectedPeriod.label
   route="verkiezingen.installatievergadering"
 }}
@@ -8,7 +7,7 @@
 {{#if (or (not @model.isRelevant) (not @model.installatievergadering))}}
   <div class="au-o-box">
     <div class="au-o-flow">
-      <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
+      <AuHeading @skin="2">{{this.title}}</AuHeading>
     </div>
   </div>
   <div class="au-o-box">
@@ -19,7 +18,7 @@
         {{@model.bestuurseenheid.naam}}.</p>
       <p>
         De voorbereiding van de legislatuur gebeurt in de bestuurseenheid
-        Gemeenteraad
+        Gemeente
         {{@model.bestuurseenheid.naam}}</p>
     </AuAlert>
   </div>
@@ -31,50 +30,72 @@
     as |Group|
   >
     <Group>
-      <div class="au-o-flow">
-        <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
+      <div class="au-o-flow au-u-flex au-u-flex--column">
+        <AuHeading @skin="2">
+          {{this.title}}
+          <AuPill @skin={{this.statusPillSkin}}>
+            {{this.statusPillLabel}}
+          </AuPill>
+        </AuHeading>
+        <div class="au-o-grid au-o-grid__item au-u-light">
+          <Mandatenbeheer::BestuursperiodenSelector
+            @options={{@model.bestuursPeriods}}
+            @selected={{@model.selectedPeriod}}
+            @onSelect={{this.selectPeriod}}
+            @prefix="Bestuursperiode"
+          />
+        </div>
       </div>
     </Group>
     <Group>
-      <Mandatenbeheer::BestuursperiodenSelector
-        @options={{@model.bestuursPeriods}}
-        @selected={{@model.selectedPeriod}}
-        @onSelect={{this.selectPeriod}}
-        @prefix="Bestuursperiode"
-      />
       <AuLink
         @route="verkiezingen.verkiezingsuitslag"
         @model={{@model.selectedPeriod.id}}
-        @skin="button"
-      >Bekijk verkiezingsresultaten
+        @skin="button-secondary"
+      >Bekijk verkiezingsuitslag
+        {{this.model.selectedPeriod.start}}
       </AuLink>
+      <AuButton
+        @disabled={{not this.nextStatus.status}}
+        @icon={{this.nextStatus.icon}}
+        @loading={{this.setNextStatus.isRunning}}
+        @loadingMessage="Volgende status ophalen"
+        {{on "click" (fn this.selectStatus this.nextStatus.status)}}
+      >
+        {{this.nextStatus.label}}
+      </AuButton>
     </Group>
   </AuToolbar>
   <div class="au-c-body-container au-c-body-container--scroll">
-    <Verkiezingen::KieslijstSplitter
-      @kandidatenlijst={{@model.kandidatenlijsten}}
-      @bestuursorgaan={{@model.bestuursorganenInTijd}}
-      @bestuurseenheid={{@model.bestuurseenheid}}
-    />
+    {{#unless @model.isBehandeld}}
+      <Verkiezingen::KieslijstSplitter
+        @kandidatenlijst={{@model.kandidatenlijsten}}
+        @bestuursorgaan={{@model.bestuursorganenInTijd}}
+        @bestuurseenheid={{@model.bestuurseenheid}}
+      />
+    {{/unless}}
 
     {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
       <Verkiezingen::PrepareLegislatuurSection
+        @isBehandeld={{@model.isBehandeld}}
         @bestuursorgaan={{bestuursorgaan}}
         @bestuursorganen={{@model.bestuursorganenInTijd}}
-        @sort={{this.sort}}
-        @form={{@model.mandatarisNewForm}}
+        @form={{@model.mandatarisForm}}
       />
     {{/each}}
 
-    <div class="au-o-box">
-      <Tmp::Todo>
-        <p>Change installatievergadering status:</p>
-        <Shared::InstallatievergaderingStatusSelector
-          @options={{@model.ivStatuses}}
-          @selectedStatus={{@model.installatievergadering.status}}
-          @onSelect={{this.selectStatus}}
-        />
-      </Tmp::Todo>
-    </div>
+    {{! Keeping the selector for development purposes }}
+    {{#unless true}}
+      <div class="au-o-box">
+        <Tmp::Todo>
+          <p>Change installatievergadering status:</p>
+          <Shared::InstallatievergaderingStatusSelector
+            @options={{@model.ivStatuses}}
+            @selectedStatus={{@model.installatievergadering.status}}
+            @onSelect={{this.selectStatus}}
+          />
+        </Tmp::Todo>
+      </div>
+    {{/unless}}
   </div>
 {{/if}}

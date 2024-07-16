@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+
 import { task } from 'ember-concurrency';
 
 export default class MandatenbeheerBestuursorgaanMandatenComponent extends Component {
@@ -16,6 +18,7 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
 
   @tracked editMandaat = null;
   @tracked aantalHouders;
+  @tracked errorMessageAantalHouders;
 
   constructor() {
     super(...arguments);
@@ -83,7 +86,15 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
     if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
     }
-    this.aantalHouders = event.target.value;
+    const aantal = event.target.value;
+
+    if (aantal && !this.isPositiveNumber(aantal)) {
+      this.errorMessageAantalHouders = 'Dit moet een positief getal zijn.';
+    } else {
+      this.errorMessageAantalHouders = null;
+    }
+
+    this.aantalHouders = aantal;
   }
   @action
   async saveMandaat() {
@@ -96,5 +107,10 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
   cancelEditMandaat() {
     this.aantalHouders = null;
     this.editMandaat = false;
+  }
+
+  @action
+  isPositiveNumber(value) {
+    return value && Number(value) >= 0;
   }
 }

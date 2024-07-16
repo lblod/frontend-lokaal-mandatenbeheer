@@ -1,4 +1,155 @@
 {{page-title "Upload"}}
+{{breadcrumb "Importeer csv-bestand" route="mandatarissen.upload"}}
+<AuBodyContainer id="content">
+  <AuToolbar
+    class="au-u-flex au-u-flex--center au-u-margin-top"
+    @size="large"
+    @nowrap="true"
+    as |Group|
+  >
+    <div>
+      <Group>
+        <AuHeading @skin="2">Importeer mandatarissen</AuHeading>
+      </Group>
+    </div>
+  </AuToolbar>
+  <div
+    class="au-u-flex au-u-flex--center au-c-body-container--scroll"
+    {{did-insert this.resetValues}}
+  >
+    <div class="au-u-margin-top au-u-3-5">
+      <p class="au-u-text-center">
+        Aan de hand van het geuploaden csv bestand worden er personen en
+        mandatarissen aangemaakt. Als er een probleem met het csv bestand dan
+        zullen de fouten getoontd worden in een tabel onder de oplaadzone.
+      </p>
+      <br />
+      <p class="au-u-text-center">
+        Een voorbeeld van hoe je csv bestand er uit moet zien kan je hier
+        vinden. Let op de eerste lijn in de file wordt als header gezien en deze
+        namen worden gebruikt als variabele, geef je hier bijvoorbeeld
+        rijksregisternummer in, in plaats van rrn, dan zal dit fout gelinked
+        worden. De volgorde van de kolommen heeft echter geen belang.
+      </p>
+      <div
+        class="au-u-background-gray-100 au-u-padding au-u-margin-top au-u-margin-bottom"
+      >
+        rrn,firstName,lastName,mandateName,startDateTime,endDateTime,fractieName,rangordeString,beleidsdomeinNames
+        00000000097,Jos,Janssens,Schepen,2025-01-01T12:00:12.038Z,2030-05-13T11:32:12.038Z,Open
+        VLD,Eerste schepen,Cultuur|Sport en jeugd|Geitestoet
+        00000000196,Maria,Janssens,Gemeenteraadslid,2025-01-01T12:00:12.038Z,2030-05-13T11:32:12.038Z,Groen,,
+      </div>
+      {{#let
+        (file-queue name="mandatarisCsv" onFileAdded=this.uploadFile.perform)
+        as |queue|
+      }}
+        <FileDropzone
+          @queue={{queue}}
+          @filter={{this.filter}}
+          class="au-c-file-upload"
+          as |dropzone|
+        >
+          {{#if dropzone.active}}
+            <p class="au-c-file-upload-message">
+              <AuIcon @icon="attachment" @alignment="left" />
+              <AuHelpText @skin="secondary">Sleep de bestanden naar hier om toe
+                te voegen</AuHelpText>
+            </p>
+          {{else if queue.files.length}}
+            <p class="au-c-file-upload-message">
+              <small class="au-c-small-text">Uploading</small>
+            </p>
+          {{else}}
+            <label>
+              <input
+                accept=".csv"
+                multiple={{false}}
+                type="file"
+                hidden=""
+                {{queue.selectFile}}
+              />
+              <span class="au-c-file-upload-label">
+                <span class="au-c-file-upload-label__title">
+                  <AuIcon @icon="attachment" @alignment="left" />
+                  Bestanden toevoegen
+                </span>
+                {{#if dropzone.supported}}
+                  <AuHelpText @skin="secondary">Sleep de bestanden naar hier om
+                    toe te voegen</AuHelpText>
+                {{/if}}
+              </span>
+            </label>
+          {{/if}}
+        </FileDropzone>
+      {{/let}}
+      {{#if this.uploadFile.isRunning}}
+        <AuLoader />
+      {{else}}
+        {{#if this.isFileUploaded}}
+          <AuCard
+            class="au-u-margin-top"
+            @expandable={{false}}
+            @isOpenInitially={{true}}
+            as |c|
+          >
+            <c.header>
+              <span class="au-u-h3">{{this.file.name}}</span>
+              <div class="au-u-flex au-u-flex-row au-u-margin-top-small">
+                {{#each this.file.pills as |status|}}
+                  <span class="au-u-margin-right-small">
+                    <AuPill @icon={{status.icon}} @skin={{status.skin}}>
+                      {{status.label}}
+                    </AuPill>
+                  </span>
+                {{/each}}
+              </div>
+            </c.header>
+            <c.content>
+              <ul>
+                <li>
+                  Personen aangemaakt:
+                  {{this.file.createdPersons}}
+                </li>
+                <li>
+                  Mandatarissen aangemaakt:
+                  {{this.file.createdMandatarissen}}
+                </li>
+                <li>
+                  Beleidsomeinen aangemaakt:
+                  {{this.file.createdBeleidsdomeinen}}
+                </li>
+              </ul>
 
-<AuFileUpload @endPoint="/mandataris-api/mandatarissen/upload-csv" />
-{{outlet}}
+              {{#if this.file.hasErrors}}
+                <AuTable>
+                  <:title>Errors ({{this.file.errors.length}})</:title>
+                  <:body>
+                    {{#each this.file.errors as |content|}}
+                      <tr>
+                        <td>{{content.line}}</td>
+                        <td>{{content.message}}</td>
+                      </tr>
+                    {{/each}}
+                  </:body>
+                </AuTable>
+              {{/if}}
+              {{#if this.file.hasWarnings}}
+                <AuTable>
+                  <:title>Warnings ({{this.file.warnings.length}})</:title>
+                  <:body>
+                    {{#each this.file.warnings as |content|}}
+                      <tr>
+                        <td>{{content.line}}</td>
+                        <td>{{content.message}}</td>
+                      </tr>
+                    {{/each}}
+                  </:body>
+                </AuTable>
+              {{/if}}
+            </c.content>
+          </AuCard>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</AuBodyContainer>

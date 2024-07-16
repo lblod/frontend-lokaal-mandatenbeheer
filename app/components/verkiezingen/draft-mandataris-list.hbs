@@ -1,84 +1,45 @@
-<div {{did-update this.onInit @sort}}>
+<div {{did-update this.onInit}}>
   <div class="au-o-box no-pagination">
     <h1 class="au-u-h2 au-u-margin-bottom-small">{{@title}}</h1>
     <AuDataTable
       @content={{this.resortedMandatarissen}}
       @noDataMessage="Geen mandatarissen gevonden"
-      @sort={{@sort}}
       @page={{@page}}
       @size={{@size}}
       as |t|
     >
       <t.content as |c|>
         <c.header>
-          <AuDataTableThSortable
-            @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
-            @currentSorting={{@sort}}
-            @label="Voornaam"
-          />
-          <AuDataTableThSortable
-            @field="isBestuurlijkeAliasVan.achternaam"
-            @currentSorting={{@sort}}
-            @label="Familienaam"
-          />
+          <th class="au-u-padding-small">Voornaam</th>
+          <th>Familienaam</th>
           {{#if @showFractie}}
-            <AuDataTableThSortable
-              @field="heeftLidmaatschap.binnenFractie.naam"
-              @currentSorting={{@sort}}
-              @label="Fractie"
-            />
+            <th>Fractie</th>
           {{/if}}
           {{#if @showFunctie}}
-            <AuDataTableThSortable
-              @field="bekleedt.bestuursfunctie.label"
-              @currentSorting={{@sort}}
-              @label="Mandaat"
-            />
+            <th>Mandaat</th>
           {{/if}}
           {{#if @showRangorde}}
-            <AuDataTableThSortable
-              @field="rangorde"
-              @currentSorting={{@sort}}
-              @label="Rangorde"
-            />
+            <th>Rangorde</th>
           {{/if}}
           {{#if @showBevoegdheid}}
-            <AuDataTableThSortable
-              @field="beleidsdomein"
-              @currentSorting={{@sort}}
-              @label="Bevoegdheden"
-            />
+            <th>Bevoegdheden</th>
           {{/if}}
           {{#if @showStartEndDate}}
-            <AuDataTableThSortable
-              @field="start"
-              @currentSorting={{@sort}}
-              @label="Start mandaat"
-            />
-            <AuDataTableThSortable
-              @field="einde"
-              @currentSorting={{@sort}}
-              @label="Einde mandaat"
-            />
+            <th>Start mandaat</th>
+            <th>Einde mandaat</th>
           {{/if}}
-          <th>{{! Delete }}</th>
+          {{#unless @readOnly}}
+            <th>{{! Delete }}</th>
+          {{/unless}}
         </c.header>
 
         <c.body as |row|>
-          <Verkiezingen::EditOnHover
-            @editFunction={{this.openModal}}
-            @model={{row}}
-            @helpText="Pas de persoon aan"
-          >
+          <td>
             {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-          </Verkiezingen::EditOnHover>
-          <Verkiezingen::EditOnHover
-            @editFunction={{this.openModal}}
-            @model={{row}}
-            @helpText="Pas de persoon aan"
-          >
+          </td>
+          <td>
             {{row.isBestuurlijkeAliasVan.achternaam}}
-          </Verkiezingen::EditOnHover>
+          </td>
           {{#if @showFractie}}
             <td>
               {{row.heeftLidmaatschap.binnenFractie.naam}}
@@ -92,30 +53,21 @@
           {{#if @showRangorde}}
             <td>
               {{#if row.bekleedt.isSchepen}}
-                <Verkiezingen::RangordeInput
-                  @mandataris={{row}}
-                  @mandatarissen={{this.mandatarissen}}
-                />
+                {{#if @readOnly}}
+                  {{row.rangorde}}
+                {{else}}
+                  <Verkiezingen::RangordeInput
+                    @mandataris={{row}}
+                    @mandatarissen={{this.mandatarissen}}
+                  />
+                {{/if}}
               {{/if}}
             </td>
           {{/if}}
           {{#if @showBevoegdheid}}
-            {{#if (eq this.editBeleidsdomeinen row.id)}}
-              <td {{on-click-outside this.closeEditBeleidsdomeinen}}>
-                <Mandatarissen::BeleidsdomeinSelectorWithCreate
-                  @beleidsdomeinen={{row.beleidsdomein}}
-                  @onSelect={{this.updateBeleidsdomeinen}}
-                />
-              </td>
-            {{else}}
-              <Verkiezingen::EditOnHover
-                @editFunction={{this.openEditBeleidsdomeinen}}
-                @model={{row}}
-                @helpText="Pas de beleidsdomeinen aan"
-              >
-                <Beleidsdomeinen @mandataris={{row}} />
-              </Verkiezingen::EditOnHover>
-            {{/if}}
+            <td>
+              <Beleidsdomeinen @mandataris={{row}} />
+            </td>
           {{/if}}
           {{#if @showStartEndDate}}
             <td>
@@ -125,30 +77,47 @@
               {{moment-format row.einde "DD-MM-YYYY"}}
             </td>
           {{/if}}
-          <td class="au-u-text-right">
-            <AuButton
-              @icon="bin"
-              @alert={{true}}
-              {{on "click" (fn this.removeMandataris row)}}
-            >Verwijder</AuButton>
-          </td>
+          {{#unless @readOnly}}
+            <td class="au-u-text-right">
+              <AuButton
+                @skin="link"
+                {{on "click" (fn this.openEditMandataris row)}}
+              >Bewerk</AuButton>
+              <AuButton
+                @skin="link"
+                @alert={{true}}
+                {{on "click" (fn this.removeMandataris row)}}
+              >Verwijder</AuButton>
+            </td>
+          {{/unless}}
         </c.body>
       </t.content>
     </AuDataTable>
   </div>
 </div>
 
+<AuModalContainer />
 <AuModal
-  @title="Selecteer een persoon"
-  @modalOpen={{this.isModalOpen}}
+  @title={{(concat
+    "Editeer mandataris" this.mandataris.bekleedt.bestuursfunctie.label
+  )}}
+  @modalOpen={{this.isEditing}}
   @closable={{true}}
-  @closeModal={{this.closeModal}}
+  @closeModal={{this.closeEditMandataris}}
 >
   <div class="au-o-box">
-    <Person::Selector
-      @person={{this.mandataris.isBestuurlijkeAliasVan}}
-      @onUpdate={{this.updatePerson}}
-      @inline="false"
-    />
+    {{#if this.mandatarisEdit}}
+      <Form::Instance
+        @instanceId={{this.mandatarisEdit.id}}
+        @form={{@form}}
+        @onSave={{this.saveMandatarisChanges}}
+        @onCancel={{this.closeEditMandataris}}
+        @buildMetaTtl={{@buildMetaTtl}}
+        @formInitialized={{fn (mut this.isEditFormInitialized) true}}
+      />
+    {{/if}}
+    {{#unless this.isEditFormInitialized}}
+      <Skeleton::Forms::MandatarisCorrect />
+    {{/unless}}
   </div>
 </AuModal>

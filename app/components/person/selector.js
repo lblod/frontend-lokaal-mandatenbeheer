@@ -1,10 +1,12 @@
+import Component from '@glimmer/component';
+
 import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
+
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { CREATE_PERSON_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
-import Component from '@glimmer/component';
 
 export default class PersonSelectorComponent extends Component {
   inputId = 'input-' + guidFor(this);
@@ -57,6 +59,10 @@ export default class PersonSelectorComponent extends Component {
 
   @action
   startEdit() {
+    if (this.args.readOnly) {
+      return;
+    }
+
     this.selectNewPerson = true;
   }
   @action

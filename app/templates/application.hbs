@@ -43,6 +43,26 @@
         <Shared::LoginButton @isCompact={{true}} />
       {{/if}}
     </li>
+    {{#if this.session.isAuthenticated}}
+      <li
+        class="au-c-list-horizontal__item"
+        {{did-insert (perform this.setNotificationCount)}}
+      >
+        <AuLink
+          @hideText={{false}}
+          @route="system-notifications"
+          @query={{hash isRead=null isUnRead=true isArchived=null}}
+        >
+          <div class="notification-count-circle">
+            {{#if this.setNotificationCount.isRunning}}
+              0
+            {{else}}
+              {{this.notificationCount}}
+            {{/if}}
+          </div>
+        </AuLink>
+      </li>
+    {{/if}}
   </AuMainHeader>
 
   {{#if this.session.isAuthenticated}}

@@ -1,9 +1,3 @@
-export const FUNCTIONARIS_STATUS_CODE_AANGESTELD =
-  'http://data.vlaanderen.be/id/concept/functionarisStatusCode/45b4b155-d22a-4eaf-be3a-97022c6b7fcd';
-export const BESTUURSFUNCTIE_CODE_LEIDINGGEVEND_AMBTENAAR =
-  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/855489b9-b584-4f34-90b2-39aea808cd9f';
-export const BESTUURSFUNCTIE_CODE_BURGEMEESTER =
-  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000013';
 export const FRACTIETYPE_ONAFHANKELIJK =
   'http://data.vlaanderen.be/id/concept/Fractietype/Onafhankelijk';
 export const FRACTIETYPE_SAMENWERKINGSVERBAND =
@@ -14,12 +8,12 @@ export const BESTUURSEENHEID_CLASSIFICATIECODE_OCMW =
   'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000002';
 export const MANDATARIS_VERHINDERD_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/c301248f-0199-45ca-b3e5-4c596731d5fe';
-export const MANDATARIS_AANGEWEZEN_STATE =
-  'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/e371f89a-9e83-4a8c-a98e-cd09226fa549';
 export const MANDATARIS_TITELVOEREND_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/aacb3fed-b51d-4e0b-a411-f3fa641da1b3';
 export const MANDATARIS_EFFECTIEF_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/21063a5b-912c-4241-841c-cc7fb3c73e75';
+export const MANDATARIS_BEEINDIGD_STATE =
+  'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/b8866fa2-d61c-4e3d-afaf-8a29eaaa7fb9';
 export const MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE =
   'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/9d8fd14d-95d0-4f5e-b3a5-a56a126227b6';
 export const MANDATARIS_DRAFT_PUBLICATION_STATE =
@@ -46,14 +40,18 @@ export const MANDAAT_LID_RMW_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000015';
 export const MANDAAT_VOORZITTER_GEMEENTERAAD_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000012';
-export const VOORZITTER_RMW_CODE =
+export const MANDAAT_VOORZITTER_RMW_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000016';
-export const LID_VAST_BUREAU_CODE =
+export const MANDAAT_LID_VAST_BUREAU_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000017';
-export const VOORZITTER_VAST_BUREAU_CODE =
+export const MANDAAT_VOORZITTER_VAST_BUREAU_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000018';
+export const MANDAAT_VOORZITTER_BCSD_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001a';
 export const MANDAAT_BURGEMEESTER_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000013';
+export const MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/7b038cc40bba10bec833ecfe6f15bc7a';
 export const MANDAAT_DISTRICT_BURGEMEESTER_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001d';
 export const MANDAAT_SCHEPEN_CODE =
@@ -62,10 +60,13 @@ export const MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/59a90e03-4f22-4bb9-8c91-132618db4b38';
 export const MANDAAT_DISTRICT_SCHEPEN_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001e';
-export const burgemeesterOnlyStates = [
-  MANDATARIS_AANGEWEZEN_STATE,
-  MANDATARIS_TITELVOEREND_STATE,
-];
 
-export const INSTALLATIVERGADERING_BEHANDELD_STATUS =
+export const burgemeesterOnlyStates = [MANDATARIS_TITELVOEREND_STATE];
+export const notBurgemeesterStates = [MANDATARIS_VERHINDERD_STATE];
+
+export const INSTALLATIEVERGADERING_BEHANDELD_STATUS =
   'http://data.lblod.info/id/concept/InstallatievergaderingStatus/c9fc3292-1576-4a82-8dcd-60795e22131f';
+export const INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS =
+  'http://data.lblod.info/id/concept/InstallatievergaderingStatus/b54dbe98-d618-4af7-9f01-791aa90774e4';
+export const INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS =
+  'http://data.lblod.info/id/concept/InstallatievergaderingStatus/a40b8f8a-8de2-4710-8d9b-3fc43a4b740e';

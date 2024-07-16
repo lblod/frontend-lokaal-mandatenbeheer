@@ -1,26 +1,61 @@
 {{#if (await this.isBurgemeester)}}
-  <Mandaat::BurgemeesterSelector @bestuursorgaanInTijd={{@bestuursorgaan}} />
+  <Mandaat::BurgemeesterSelector
+    @bestuursorgaanInTijd={{@bestuursorgaan}}
+    @readOnly={{@isBehandeld}}
+  />
 {{else}}
+  <div class="au-u-flex au-u-flex--between au-u-margin-left au-u-margin-right">
+    <AuHeading @skin="3" class="au-u-flex-self-start">Samenstelling
+      {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
+    {{#unless @isBehandeld}}
+      <AuContent @skin="small" class="au-u-flex-self-end">
+        {{#if (or (await this.isRMW) (await this.isLidVanVB))}}
+          <AuButton
+            @skin="secondary"
+            @icon="synchronize"
+            @loading={{this.mirrorTable.isRunning}}
+            @loadingMessage="Aan het synchroniseren"
+            {{on "click" (perform this.mirrorTable)}}
+          >
+            {{#if (await this.isRMW)}}
+              Neem over van Gemeenteraad
+            {{/if}}
+            {{#if (await this.isLidVanVB)}}
+              Neem over van College van Burgemeester en Schepenen
+            {{/if}}
+          </AuButton>
+        {{/if}}
+        <AuButton
+          @icon="add"
+          @loading={{this.onCreate.isRunning}}
+          @loadingMessage="Aan het toevoegen"
+          {{on "click" this.createMandataris}}
+        >
+          Toevoegen
+        </AuButton>
+      </AuContent>
+    {{/unless}}
+  </div>
+  {{#if (await @bestuursorgaan.isBCSD)}}
+    <Verkiezingen::BcsdVoorzitterAlert
+      @bcsdBestuursorgaanInTijd={{@bestuursorgaan}}
+      @bestuursorganenInTijd={{@bestuursorganen}}
+    />
+  {{/if}}
 
-  <AuToolbar
-    @size="large"
-    @nowrap="true"
-    class="au-u-padding-bottom-none au-u-margin-bottom-none"
-    as |Group|
-  >
-    <Group class="au-u-margin-bottom-none">
-      <div class="au-o-flow">
-        <AuHeading @skin="3">Samenstelling
-          {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
-      </div>
-    </Group>
-  </AuToolbar>
-  {{#if (or this.mirrorTable.isRunning this.onCreate.isRunning)}}
-    {{! Show skeleton loader }}
+  {{#if
+    (and
+      (or this.mirrorTable.isRunning this.onCreate.isRunning)
+      this.skeletonRowsOfMirror
+    )
+  }}
+    <div class="au-o-box">
+      <Skeleton::Table @columns={{5}} @rows={{this.skeletonRowsOfMirror}} />
+    </div>
   {{else}}
     <Verkiezingen::DraftMandatarisList
+      @readOnly={{@isBehandeld}}
       @bestuursorgaan={{@bestuursorgaan}}
-      @sort={{@sort}}
       @page={{0}}
       @size={{9999}}
       @title=""
@@ -35,34 +70,12 @@
         this.CBSClassification
       }}
       @showStartEndDate={{false}}
+      @form={{@form}}
+      @buildMetaTtl={{this.buildMetaTtl}}
     />
   {{/if}}
 
-  <AuContent @skin="small au-u-flex au-u-flex--between ">
-    <AuButton
-      @skin="naked"
-      @icon="add"
-      @loading={{this.onCreate.isRunning}}
-      @loadingMessage="Aan het toevoegen"
-      {{on "click" this.createMandataris}}
-    >Toevoegen</AuButton>
-    {{#if (or (await this.isRMW) (await this.isLidVanVB))}}
-      <AuButton
-        @skin="naked"
-        @icon="synchronize"
-        @loading={{this.mirrorTable.isRunning}}
-        @loadingMessage="Aan het synchroniseren"
-        {{on "click" (perform this.mirrorTable)}}
-      >
-        {{#if (await this.isRMW)}}
-          Sync met Gemeenteraad
-        {{/if}}
-        {{#if (await this.isLidVanVB)}}
-          Sync met College van Burgemeester en Schepenen
-        {{/if}}
-      </AuButton>
-    {{/if}}
-  </AuContent>
+  <AuModalContainer />
   <AuModal
     @title={{(concat
       "Voeg mandataris toe aan " @bestuursorgaan.isTijdsspecialisatieVan.naam

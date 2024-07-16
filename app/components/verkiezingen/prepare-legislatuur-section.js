@@ -14,18 +14,19 @@ import {
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
   MANDAAT_LID_RMW_CODE,
-  BESTUURSFUNCTIE_CODE_BURGEMEESTER,
   MANDAAT_SCHEPEN_CODE,
   MANDAAT_GEMEENTERAADSLID_CODE,
   MANDAAT_VOORZITTER_GEMEENTERAAD_CODE,
-  VOORZITTER_RMW_CODE,
-  LID_VAST_BUREAU_CODE,
-  VOORZITTER_VAST_BUREAU_CODE,
+  MANDAAT_VOORZITTER_RMW_CODE,
+  MANDAAT_LID_VAST_BUREAU_CODE,
+  MANDAAT_VOORZITTER_VAST_BUREAU_CODE,
+  MANDAAT_BURGEMEESTER_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 import {
   getDraftPublicationStatus,
   getEffectiefStatus,
 } from 'frontend-lmb/utils/get-mandataris-status';
+import { showWarningToast } from 'frontend-lmb/utils/toasts';
 
 const CREATE_MODE = 'create';
 
@@ -35,6 +36,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service router;
 
   @tracked editMode = null;
+  @tracked skeletonRowsOfMirror = null;
 
   @action
   createMandataris() {
@@ -67,6 +69,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   }
 
   mirrorTable = restartableTask(async () => {
+    this.skeletonRowsOfMirror = null;
+    // bestuursorganenInTijd
     const bestuursorganen = this.args.bestuursorganen;
     let syncId = null;
     if (await this.isRMW) {
@@ -87,15 +91,25 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     }
 
     if (!bestuursorgaanToSyncFrom) {
-      throw `Kon niet synchroniseren. Geen bestuursorgaan gevonden.`;
+      showWarningToast(
+        this.toaster,
+        'Kon niet synchroniseren. Geen bestuursorgaan gevonden.'
+      );
+      return;
     }
     const mandatarissenToSync = await this.getBestuursorgaanMandatarissen(
       bestuursorgaanToSyncFrom
     );
 
     if (mandatarissenToSync.length == 0) {
-      throw `Geen mandatarissen gevonden om te synchroniseren.`;
+      showWarningToast(
+        this.toaster,
+        'Geen mandatarissen gevonden om over te nemen.'
+      );
+      return;
     }
+    this.skeletonRowsOfMirror = mandatarissenToSync.length;
+    console.log(`rows`, mandatarissenToSync.length);
 
     const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
       this.args.bestuursorgaan
@@ -111,9 +125,9 @@ export default class PrepareLegislatuurSectionComponent extends Component {
 
       const bestuursfunctieCodeMapping = {
         [MANDAAT_GEMEENTERAADSLID_CODE]: MANDAAT_LID_RMW_CODE,
-        [MANDAAT_VOORZITTER_GEMEENTERAAD_CODE]: VOORZITTER_RMW_CODE,
-        [MANDAAT_SCHEPEN_CODE]: LID_VAST_BUREAU_CODE,
-        [BESTUURSFUNCTIE_CODE_BURGEMEESTER]: VOORZITTER_VAST_BUREAU_CODE,
+        [MANDAAT_VOORZITTER_GEMEENTERAAD_CODE]: MANDAAT_VOORZITTER_RMW_CODE,
+        [MANDAAT_SCHEPEN_CODE]: MANDAAT_LID_VAST_BUREAU_CODE,
+        [MANDAAT_BURGEMEESTER_CODE]: MANDAAT_VOORZITTER_VAST_BUREAU_CODE,
       };
 
       const bestuurfunctieCodes = await this.store.query(
@@ -122,7 +136,11 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       );
 
       if (bestuurfunctieCodes.length == 0) {
-        throw `Geen bestuursfunctie gevonden om te synchroniseren.`;
+        showWarningToast(
+          this.toaster,
+          'Geen bestuursfunctie gevonden om te synchroniseren.'
+        );
+        return;
       }
 
       const toBestuursfunctie = bestuurfunctieCodes[0];
@@ -227,6 +245,11 @@ export default class PrepareLegislatuurSectionComponent extends Component {
 
   onCreate = restartableTask(async ({ instanceTtl, instanceId }) => {
     this.editMode = null;
+    this.skeletonRowsOfMirror = null;
+    const mandatarissen = await this.getBestuursorgaanMandatarissen(
+      this.args.bestuursorgaan
+    );
+    this.skeletonRowsOfMirror = mandatarissen.length;
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     await timeout(1000);
   });

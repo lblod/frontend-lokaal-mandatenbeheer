@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
@@ -7,6 +8,7 @@ export default class MandatarisExtraInfoCardComponent extends Component {
   @service router;
 
   @tracked isModalActive = false;
+  @tracked formInitialized;
 
   get formattedBeleidsdomein() {
     const beleidsdomeinenPromise = this.args.mandataris.beleidsdomein;
@@ -31,6 +33,10 @@ export default class MandatarisExtraInfoCardComponent extends Component {
 
   @action
   toggleModal() {
+    if (this.isModalActive) {
+      this.formInitialized = false;
+    }
+
     this.isModalActive = !this.isModalActive;
   }
 

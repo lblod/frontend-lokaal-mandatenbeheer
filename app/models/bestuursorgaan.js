@@ -1,6 +1,13 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
-import { inject as service } from '@ember/service';
+
+import { service } from '@ember/service';
+
 import { queryRecord } from 'frontend-lmb/utils/query-record';
+import {
+  BCSD_BESTUURSORGAAN_URI,
+  RMW_BESTUURSORGAAN_URI,
+  VAST_BUREAU_BESTUURSORGAAN_URI,
+} from 'frontend-lmb/utils/well-known-uris';
 
 /**
  * Bestuursorgaan and bestuursorgaan in de tijd are not the same,
@@ -67,12 +74,6 @@ export default class BestuursorgaanModel extends Model {
   })
   heeftTijdsspecialisaties;
 
-  @hasMany('bestuursfunctie', {
-    async: true,
-    inverse: null,
-  })
-  bevatBestuursfunctie;
-
   @hasMany('mandaat', {
     async: true,
     inverse: 'bevatIn',
@@ -120,6 +121,17 @@ export default class BestuursorgaanModel extends Model {
 
   get nbMembers() {
     return this.getNbMembers();
+  }
+
+  get isBCSD() {
+    return this.hasBestuursorgaanClassificatie(BCSD_BESTUURSORGAAN_URI);
+  }
+
+  get isRMW() {
+    return this.hasBestuursorgaanClassificatie(RMW_BESTUURSORGAAN_URI);
+  }
+  get isVastBureau() {
+    return this.hasBestuursorgaanClassificatie(VAST_BUREAU_BESTUURSORGAAN_URI);
   }
 
   async getNbMembers() {

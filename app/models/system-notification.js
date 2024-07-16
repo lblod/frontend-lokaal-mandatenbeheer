@@ -5,8 +5,12 @@ export default class SystemNotificationModel extends Model {
 
   @attr('string') subject;
   @attr('string') message;
-
-  @attr('datetime') createdAt;
+  @attr('datetime', {
+    defaultValue() {
+      return new Date();
+    },
+  })
+  createdAt;
   @attr('datetime') readAt;
   @attr('datetime') archivedAt;
 

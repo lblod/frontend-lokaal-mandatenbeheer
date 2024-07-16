@@ -14,6 +14,7 @@ export default class OrganenIndexController extends Controller {
   @tracked bestuursperiode;
 
   @tracked isModalActive = false;
+  @tracked isDisabledBecauseLegislatuur;
 
   @action
   filterActiveOrgans() {
@@ -39,6 +40,9 @@ export default class OrganenIndexController extends Controller {
 
   @action
   toggleModal() {
+    if (this.isModalActive) {
+      this.formInitialized = false;
+    }
     this.isModalActive = !this.isModalActive;
   }
 

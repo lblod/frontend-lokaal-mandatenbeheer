@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+
 import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
@@ -10,12 +11,7 @@ export default class MandatarisModel extends Model {
   @attr duplicationReason;
   @attr uri;
   @attr('string') linkToBesluit;
-  @attr('datetime', {
-    defaultValue() {
-      return new Date();
-    },
-  })
-  modified;
+  @attr('datetime') modified;
 
   @belongsTo('mandaat', { async: true, inverse: 'bekleedDoor' })
   bekleedt;
@@ -96,6 +92,44 @@ export default class MandatarisModel extends Model {
     }
     return false;
   }
+  inSelectedBestuursperiode(bestuursperiode) {
+    if (this.start?.getFullYear() < bestuursperiode.start) {
+      return false;
+    }
+    if (this.einde?.getFullYear() > bestuursperiode.einde) {
+      return false;
+    }
+    return true;
+  }
+
+  get uniqueVervangersDoor() {
+    return this.getUnique(this.tijdelijkeVervangingen);
+  }
+
+  get uniqueVervangersVan() {
+    return this.getUnique(this.vervangerVan);
+  }
+
+  async getUnique(people) {
+    const vervangers = new Map();
+
+    for (let vervanger of people.slice()) {
+      const persoon = await vervanger.isBestuurlijkeAliasVan;
+      if (!vervangers.has(persoon.id)) {
+        vervangers.set(persoon.id, vervanger);
+      } else {
+        const existingVervanger = vervangers.get(persoon.id);
+        const existingEinde = existingVervanger.einde;
+        const newEinde = vervanger.einde;
+
+        // Keep the most recent
+        if (!newEinde || (existingEinde && newEinde > existingEinde)) {
+          vervangers.set(persoon.id, vervanger);
+        }
+      }
+    }
+    return Array.from(vervangers.values());
+  }
 
   async save() {
     const creating = !this.id;
@@ -132,25 +166,3 @@ export async function getUniqueBestuursorganen(mandataris) {
 
   return Array.from(bestuursorganen);
 }
-
-export const getUniqueVervangers = async (mandataris) => {
-  const duplicateVervangers = await mandataris.vervangerVan;
-  const vervangers = new Map();
-
-  for (let vervanger of duplicateVervangers) {
-    const persoon = await vervanger.isBestuurlijkeAliasVan;
-    if (!vervangers.has(persoon.id)) {
-      vervangers.set(persoon.id, vervanger);
-    } else {
-      const existingVervanger = vervangers.get(persoon.id);
-      const existingEinde = existingVervanger.einde;
-      const newEinde = vervanger.einde;
-
-      // Keep the most recent vervanger
-      if (!newEinde || (existingEinde && newEinde > existingEinde)) {
-        vervangers.set(persoon.id, vervanger);
-      }
-    }
-  }
-  return Array.from(vervangers.values());
-};

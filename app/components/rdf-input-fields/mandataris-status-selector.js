@@ -1,9 +1,14 @@
-import { queryRecord } from 'frontend-lmb/utils/query-record';
-import { burgemeesterOnlyStates } from 'frontend-lmb/utils/well-known-uris';
-import { tracked } from '@glimmer/tracking';
-import { ORG } from 'frontend-lmb/rdf/namespaces';
-import { service } from '@ember/service';
 import RdfInputFieldsConceptSchemeSelectorComponent from './concept-scheme-selector';
+
+import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
+
+import { queryRecord } from 'frontend-lmb/utils/query-record';
+import {
+  burgemeesterOnlyStates,
+  notBurgemeesterStates,
+} from 'frontend-lmb/utils/well-known-uris';
+import { ORG } from 'frontend-lmb/rdf/namespaces';
 
 export default class RdfInputFieldsMandatarisStatusSelectorComponent extends RdfInputFieldsConceptSchemeSelectorComponent {
   @service store;
@@ -54,7 +59,9 @@ export default class RdfInputFieldsMandatarisStatusSelectorComponent extends Rdf
       ?.isBurgemeester;
 
     if (isBurgemeester) {
-      return statuses;
+      return statuses.filter(
+        (status) => !notBurgemeesterStates.includes(status.subject.value)
+      );
     }
 
     return statuses.filter(

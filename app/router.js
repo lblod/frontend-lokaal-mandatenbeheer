@@ -20,6 +20,7 @@ Router.map(function () {
 
   this.route('contact');
   this.route('settings');
+  this.route('system-notifications');
 
   this.route('legaal', function () {
     this.route('disclaimer');
@@ -50,20 +51,6 @@ Router.map(function () {
   this.route('verkiezingen', function () {
     this.route('verkiezingsuitslag', { path: '/:id/verkiezingsuitslag' });
     this.route('installatievergadering');
-  });
-
-  this.route('leidinggevenden', function () {
-    this.route(
-      'bestuursfunctie',
-      { path: '/:bestuursfunctie_id' },
-      function () {
-        this.route('contact-info');
-        this.route('functionarissen', function () {
-          this.route('edit', { path: '/:functionaris_id/edit' });
-          this.route('new');
-        });
-      }
-    );
   });
 
   this.route('forms', function () {

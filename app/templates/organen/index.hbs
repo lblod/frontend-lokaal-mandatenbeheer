@@ -1,4 +1,4 @@
-{{page-title "Bestuursorganen"}}
+{{page-title "Organen"}}
 
 <AuMainContainer as |main|>
   <main.sidebar>
@@ -56,16 +56,27 @@
     <AuBodyContainer id="content">
       <AuToolbar @border="bottom" @size="large" as |Group|>
         <Group>
-          <AuHeading @skin="2">Bestuursorganen</AuHeading>
+          <AuHeading @skin="2">Organen</AuHeading>
         </Group>
         <Group>
-          <AuLink
-            @route="organen.fracties"
-            @skin="button-secondary"
-            @query={{hash bestuursperiode=this.bestuursperiode}}
-          >Beheer fracties
-          </AuLink>
-          <AuButton {{on "click" this.toggleModal}}>Voeg bestuursorgaan toe</AuButton>
+          {{#if
+            (or
+              @model.legislatuurInBehandeling
+              (eq @model.bestuursorganen.length 0)
+            )
+          }}
+            <AuButton @disabled={{true}}>
+              Beheer fracties
+            </AuButton>
+          {{else}}
+            <AuLink
+              @route="organen.fracties"
+              @skin="button-secondary"
+              @query={{hash bestuursperiode=this.bestuursperiode}}
+            >Beheer fracties
+            </AuLink>
+          {{/if}}
+          <AuButton {{on "click" this.toggleModal}}>Voeg orgaan toe</AuButton>
         </Group>
       </AuToolbar>
 
@@ -81,8 +92,9 @@
   </main.content>
 </AuMainContainer>
 
+<AuModalContainer />
 <AuModal
-  @title="Voeg bestuursorgaan toe"
+  @title="Voeg orgaan toe"
   @modalOpen={{this.isModalActive}}
   @closable={{true}}
   @closeModal={{this.toggleModal}}
@@ -93,6 +105,10 @@
       @form={{this.model.form}}
       @buildSourceTtl={{this.buildSourceTtlCreateBestuursorgaan}}
       @onCancel={{this.toggleModal}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
     />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::CreateBestuursorgaan />
+    {{/unless}}
   </div>
 </AuModal>

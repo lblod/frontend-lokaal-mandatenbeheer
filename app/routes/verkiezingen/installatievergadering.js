@@ -1,14 +1,16 @@
 import Route from '@ember/routing/route';
-import RSVP from 'rsvp';
 
 import { service } from '@ember/service';
+
+import RSVP from 'rsvp';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
-import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import { MANDATARIS_EXTENDED_FORM } from 'frontend-lmb/utils/well-known-ids';
 import {
   BCSD_BESTUURSORGAAN_URI,
   BURGEMEESTER_BESTUURSORGAAN_URI,
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
+  INSTALLATIEVERGADERING_BEHANDELD_STATUS,
   RMW_BESTUURSORGAAN_URI,
   VAST_BUREAU_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
@@ -19,8 +21,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   @service bestuursorganen;
 
   queryParams = {
-    filter: { refreshModel: true },
-    sort: { refreshModel: true },
     bestuursperiode: { refreshModel: true },
   };
 
@@ -61,18 +61,21 @@ export default class PrepareInstallatievergaderingRoute extends Route {
 
     const kandidatenlijsten = await this.getKandidatenLijsten(selectedPeriod);
 
-    const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
+    const mandatarisForm = getFormFrom(this.store, MANDATARIS_EXTENDED_FORM);
 
     return RSVP.hash({
       ivStatuses,
       installatievergadering,
       bestuurseenheid,
       bestuursorganenInTijd,
-      mandatarisNewForm,
+      mandatarisForm,
       kandidatenlijsten,
       bestuursPeriods,
       selectedPeriod,
       isRelevant: parentModel.isRelevant,
+      isBehandeld:
+        installatievergadering.get('status.uri') ===
+        INSTALLATIEVERGADERING_BEHANDELD_STATUS,
     });
   }
 

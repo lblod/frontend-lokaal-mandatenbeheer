@@ -8,7 +8,7 @@
   <Group>
     <AuButton
       {{on "click" this.toggleModal}}
-      @disabled={{not this.hasBeleidsdomeinen}}
+      @disabled={{(or (not this.hasBeleidsdomeinen) (not @canEdit))}}
     >Bewerk</AuButton>
   </Group>
 </AuToolbar>
@@ -24,11 +24,12 @@
         </div>
       </div>
     {{else}}
-      Deze mandataris heeft geen velden met bijkomende info.
+      Deze mandataris heeft geen bijkomende informatie.
     {{/if}}
   </div>
 </div>
 
+<AuModalContainer />
 <AuModal
   @title="Bewerk bijkomende info mandataris"
   @modalOpen={{this.isModalActive}}
@@ -41,6 +42,10 @@
       @form={{@form}}
       @onCancel={{this.toggleModal}}
       @onSave={{this.onSave}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
     />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::MandatarisExtraInfo />
+    {{/unless}}
   </div>
 </AuModal>

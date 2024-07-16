@@ -1,12 +1,18 @@
 import Component from '@glimmer/component';
+
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
-import { VERHINDERD_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
-import { burgemeesterOnlyStates } from 'frontend-lmb/utils/well-known-uris';
+import {
+  MANDATARIS_TITELVOEREND_STATE,
+  MANDATARIS_VERHINDERD_STATE,
+  burgemeesterOnlyStates,
+  notBurgemeesterStates,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -30,10 +36,6 @@ export default class MandatarissenUpdateState extends Component {
     super(...arguments);
     this.bestuurseenheid = this.currentSession.group;
     this.load.perform();
-  }
-
-  get loading() {
-    return this.load.isRunning;
   }
 
   load = task({ drop: true }, async () => {
@@ -64,7 +66,9 @@ export default class MandatarissenUpdateState extends Component {
     const statuses = this.mandatarisStatus.statuses.slice();
 
     if (isBurgemeester) {
-      return statuses;
+      return statuses.filter(
+        (status) => !notBurgemeesterStates.includes(status.uri)
+      );
     }
     return statuses.filter(
       (status) => !burgemeesterOnlyStates.includes(status.uri)
@@ -83,9 +87,11 @@ export default class MandatarissenUpdateState extends Component {
 
   get showReplacement() {
     return (
-      this.newStatus?.id === VERHINDERD_STATE_ID &&
+      (this.newStatus?.get('uri') === MANDATARIS_VERHINDERD_STATE ||
+        this.newStatus?.get('uri') === MANDATARIS_TITELVOEREND_STATE) &&
       // if we are already verhinderd it does not make sense to change the replacements here, keep them  the same and don't show the selector
-      this.args.mandataris.status?.id !== VERHINDERD_STATE_ID
+      this.args.mandataris.status?.get('uri') !== MANDATARIS_VERHINDERD_STATE &&
+      this.args.mandataris.status?.get('uri') !== MANDATARIS_TITELVOEREND_STATE
     );
   }
 
@@ -115,7 +121,7 @@ export default class MandatarissenUpdateState extends Component {
 
   get disabled() {
     return (
-      this.loading ||
+      this.load.isRunning ||
       !this.newStatus ||
       !this.date ||
       !this.validDate ||
@@ -144,7 +150,6 @@ export default class MandatarissenUpdateState extends Component {
       beleidsdomein: (await this.args.mandataris.beleidsdomein).slice(),
       status: this.newStatus,
       publicationStatus: await getDraftPublicationStatus(this.store),
-      modified: new Date(),
     };
 
     const newMandataris = this.store.createRecord(
@@ -163,9 +168,11 @@ export default class MandatarissenUpdateState extends Component {
           this.selectedFractie
         );
       newMandataris.tijdelijkeVervangingen = [replacementMandataris];
-    } else if (this.newStatus.id === VERHINDERD_STATE_ID) {
+    } else {
       newMandataris.tijdelijkeVervangingen =
         (await this.args.mandataris.tijdelijkeVervangingen) || [];
+      newMandataris.vervangerVan =
+        (await this.args.mandataris.vervangerVan) || [];
     }
 
     this.args.mandataris.einde = this.date;
@@ -203,7 +210,6 @@ export default class MandatarissenUpdateState extends Component {
 
   endMandataris() {
     this.args.mandataris.einde = this.date;
-    this.args.mandataris.modified = new Date();
 
     return this.args.mandataris.save();
   }

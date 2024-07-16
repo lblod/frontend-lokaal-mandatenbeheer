@@ -17,12 +17,7 @@ export default class FractiesController extends Controller {
   create = 'create';
   @tracked instanceId = null;
 
-  get hasActiveChildRoute() {
-    return (
-      this.router.currentRouteName.startsWith('organen.fracties.') &&
-      this.router.currentRouteName != 'organen.fracties.index'
-    );
-  }
+  @tracked formInitialized;
 
   @action
   openCreateFractieModal() {
@@ -36,10 +31,12 @@ export default class FractiesController extends Controller {
   @action
   closeModal() {
     this.modal = null;
+    this.formInitialized = false;
   }
   @action
   saveModal() {
     this.modal = null;
+    this.formInitialized = false;
     this.send('reloadModel');
   }
 

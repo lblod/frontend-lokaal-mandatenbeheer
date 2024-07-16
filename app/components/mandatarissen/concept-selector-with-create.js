@@ -1,7 +1,8 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import { guidFor } from '@ember/object/internals';
+
+import { service } from '@ember/service';
 import { action } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
 
 export default class ConceptSelectorWithCreateComponent extends Component {
   inputId = 'select-' + guidFor(this);
