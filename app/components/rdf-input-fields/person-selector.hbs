@@ -1,6 +1,20 @@
-<AuLabel>{{this.title}}</AuLabel>
+<AuLabel
+  for="person"
+  @error={{this.hasErrors}}
+  @warning={{this.hasWarnings}}
+  @required={{this.isRequired}}
+>{{this.title}}</AuLabel>
 {{#if this.initialized}}
-  <Person::Selector @person={{this.person}} @onUpdate={{this.onUpdate}} />
+  <div class={{if this.hasErrors "ember-power-select--error"}}>
+    <Person::Selector @person={{this.person}} @onUpdate={{this.onUpdate}} />
+  </div>
+  {{#each this.errors as |error|}}
+    <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+  {{/each}}
+
+  {{#each this.warnings as |warning|}}
+    <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+  {{/each}}
 {{else}}
   <p class="skeleton-input-full au-u-margin-top"></p>
 {{/if}}

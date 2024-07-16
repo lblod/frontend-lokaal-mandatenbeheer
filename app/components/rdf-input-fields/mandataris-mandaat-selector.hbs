@@ -1,13 +1,25 @@
-<div>
-  <AuLabel for="mandaat">Mandaat</AuLabel>
-  {{#if this.initialized}}
+<AuLabel
+  for="mandaat"
+  @error={{this.hasErrors}}
+  @warning={{this.hasWarnings}}
+  @required={{this.isRequired}}
+>Mandaat</AuLabel>
+{{#if this.initialized}}
+  <div class={{if this.hasErrors "ember-power-select--error"}}>
     <Mandatenbeheer::MandaatBestuursorganenSelector
       @onSelect={{this.updateMandaat}}
       @bestuursorganen={{this.bestuursorganen}}
       @mandaat={{this.mandaat}}
-      @allowClear={{true}}
+      @allowClear={{false}}
     />
-  {{else}}
-    <p class="skeleton-input-full au-u-margin-top"></p>
-  {{/if}}
-</div>
+  </div>
+  {{#each this.errors as |error|}}
+    <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+  {{/each}}
+
+  {{#each this.warnings as |warning|}}
+    <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+  {{/each}}
+{{else}}
+  <p class="skeleton-input-full au-u-margin-top"></p>
+{{/if}}
