@@ -5,7 +5,10 @@ import { action } from '@ember/object';
 
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { FRACTIE_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
-import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
+import {
+  FRACTIETYPE_SAMENWERKINGSVERBAND,
+  INSTALLATIEVERGADERING_BEHANDELD_STATUS,
+} from 'frontend-lmb/utils/well-known-uris';
 import RSVP from 'rsvp';
 
 export default class FractiesRoute extends Route {
@@ -25,9 +28,28 @@ export default class FractiesRoute extends Route {
 
     const bestuursPeriods = await this.store.query('bestuursperiode', {
       sort: 'label',
+      'filter[:has:heeft-bestuursorganen-in-tijd]': true,
+      include: 'installatievergaderingen',
     });
+
+    const filteredBestuursPeriods = (
+      await Promise.all(
+        bestuursPeriods.map(async (period) => {
+          const ivs = await period.installatievergaderingen;
+          if (
+            ivs.length === 0 ||
+            ivs[0].get('status').get('uri') ===
+              INSTALLATIEVERGADERING_BEHANDELD_STATUS
+          ) {
+            return period;
+          }
+          return null;
+        })
+      )
+    ).filter(Boolean);
+
     let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
-      bestuursPeriods,
+      filteredBestuursPeriods,
       params.bestuursperiode
     );
 
@@ -70,7 +92,7 @@ export default class FractiesRoute extends Route {
       defaultFractieType,
       fracties,
       bestuurseenheid: parentModel.bestuurseenheid,
-      bestuursPeriods,
+      bestuursPeriods: filteredBestuursPeriods,
       selectedPeriod,
       tijdsspecialisaties,
     });

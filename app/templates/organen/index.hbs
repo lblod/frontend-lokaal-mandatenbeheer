@@ -59,7 +59,12 @@
           <AuHeading @skin="2">Organen</AuHeading>
         </Group>
         <Group>
-          {{#if @model.legislatuurInBehandeling}}
+          {{#if
+            (or
+              @model.legislatuurInBehandeling
+              (eq @model.bestuursorganen.length 0)
+            )
+          }}
             <AuButton @disabled={{true}}>
               Beheer fracties
             </AuButton>
