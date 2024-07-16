@@ -6,6 +6,10 @@ import { service } from '@ember/service';
 
 import { task } from 'ember-concurrency';
 import moment from 'moment';
+import {
+  MANDATARIS_BEEINDIGD_STATE,
+  MANDATARIS_VERHINDERD_STATE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
@@ -59,19 +63,30 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     return false;
   });
 
-  isDateInbetweenStartAndEnd(foldedMandataris) {
+  async isMandatarisActive(foldedMandataris) {
     const now = moment();
-    return (
+    const todayIsInBetweenPeriod =
       moment(foldedMandataris.foldedStart).isBefore(now) &&
       (!foldedMandataris.foldedEnd ||
-        moment(foldedMandataris.foldedEnd).isAfter(now))
+        moment(foldedMandataris.foldedEnd).isAfter(now));
+
+    if (!todayIsInBetweenPeriod) {
+      return false;
+    }
+
+    const status = await foldedMandataris.mandataris.status;
+    return (
+      status &&
+      status.uri !== MANDATARIS_VERHINDERD_STATE &&
+      status.uri !== MANDATARIS_BEEINDIGD_STATE
     );
   }
 
   checkFracties = task(async (foldedMandatarissen) => {
     let notAllOnafhankelijk = true;
     for (const fold of foldedMandatarissen) {
-      if (!this.isDateInbetweenStartAndEnd || !notAllOnafhankelijk) {
+      const isActive = await this.isMandatarisActive(fold);
+      if (!isActive || !notAllOnafhankelijk) {
         continue;
       }
 
