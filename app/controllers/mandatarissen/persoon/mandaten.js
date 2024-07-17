@@ -115,10 +115,9 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     }
 
     for (const mandataris of this.possibelOnafhankelijkeMandatarissen) {
+      const person = await mandataris.isBestuurlijkeAliasVan;
       let onafhankelijkeFractie =
-        await this.fractieService.findOnafhankelijkeFractieForPerson(
-          await mandataris.isBestuurlijkeAliasVan
-        );
+        await this.fractieService.findOnafhankelijkeFractieForPerson(person);
 
       if (!onafhankelijkeFractie) {
         const bestuursorganenInTijd =
@@ -131,13 +130,16 @@ export default class MandatarissenPersoonMandatenController extends Controller {
           );
       }
 
-      console.log({ onafhankelijkeFractie });
+      await this.mandatarisService.updateOldLidmaatschap(mandataris);
+      const dateNow = new Date();
       const overwrites = {
+        start: dateNow,
         publicationStatus: await getDraftPublicationStatus(this.store),
         fractie: onafhankelijkeFractie,
       };
       await this.mandatarisService.createFrom(mandataris, overwrites);
+      mandataris.einde = dateNow;
+      mandataris.save();
     }
-    this.checkFracties.perform();
   });
 }
