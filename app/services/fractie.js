@@ -31,17 +31,19 @@ export default class FractieService extends Service {
 
   async findOnafhankelijkeFractieForPerson(person) {
     const mandatarissen = await person.isAangesteldAls;
-    const onafhankelijkeLidmaatschappen = await this.store.query(
-      'lidmaatschap',
-      {
-        include: 'lid,binnen-fractie,binnen-fractie.fractietype',
-        'filter[lid][:uri:]': mandatarissen
-          .map((mandataris) => mandataris.uri)
-          .join(','),
-        'filter[binnen-fractie][fractietype][:uri:]': FRACTIETYPE_ONAFHANKELIJK,
+    for (const mandataris of mandatarissen) {
+      const lid = await mandataris.heeftLidmaatschap;
+      if (!lid) {
+        continue;
       }
-    );
 
-    return onafhankelijkeLidmaatschappen[0]?.binnenFractie ?? null;
+      const fractie = await lid.binnenFractie;
+      const type = await fractie.fractietype;
+      if (type.isOnafhankelijk) {
+        return fractie;
+      }
+    }
+
+    return null;
   }
 }
