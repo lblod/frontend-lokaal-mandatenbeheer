@@ -16,7 +16,8 @@ export default class MandatarissenPersoonMandatenController extends Controller {
 
   queryParams = ['activeOnly'];
 
-  @tracked isBecomeOnafhankelijkDisabled = false;
+  @tracked canBecomeOnafhankelijk;
+  @tracked possibelOnafhankelijkeMandatarissen = [];
   @tracked isModalOpen = false;
   @tracked selectedBestuursorgaan = null;
   @tracked activeOnly = true;
@@ -83,25 +84,35 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   }
 
   checkFracties = task(async (foldedMandatarissen) => {
-    let notAllOnafhankelijk = true;
+    this.canBecomeOnafhankelijk = false;
+    this.possibelOnafhankelijkeMandatarissen = [];
     for (const fold of foldedMandatarissen) {
       const isActive = await this.isMandatarisActive(fold);
-      if (!isActive || !notAllOnafhankelijk) {
+      if (!isActive) {
         continue;
       }
 
       const isOnafhankelijk =
         await this.isFractieOfFoldedMandatarisOnafhankelijk.perform(fold);
       if (!isOnafhankelijk) {
-        notAllOnafhankelijk = false;
+        this.possibelOnafhankelijkeMandatarissen.push(fold.mandataris);
         continue;
       }
     }
 
-    this.isBecomeOnafhankelijkDisabled = notAllOnafhankelijk;
+    this.canBecomeOnafhankelijk =
+      this.possibelOnafhankelijkeMandatarissen.length >= 1;
   });
 
   wordtOnafhankelijk = task(async () => {
     console.log(`Wordt onafhankelijk`);
+    if (!this.canBecomeOnafhankelijk) {
+      return;
+    }
+
+    console.log(
+      `possibelOnafhankelijkeMandatarissen`,
+      this.possibelOnafhankelijkeMandatarissen
+    );
   });
 }

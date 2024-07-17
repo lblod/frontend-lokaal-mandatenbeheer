@@ -12,7 +12,7 @@
   <Group>
     <AuButton
       skin="secondary"
-      @disabled={{this.isBecomeOnafhankelijkDisabled}}
+      @disabled={{not this.canBecomeOnafhankelijk}}
       {{on "click" (perform this.wordtOnafhankelijk)}}
     >
       Onafhankelijk worden
