@@ -137,7 +137,7 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   async changeMandatarisState() {
-    await this.updateOldLidmaatschap();
+    await this.mandatarisService.updateOldLidmaatschap(this.args.mandataris);
 
     const endDate = this.args.mandataris.einde;
 
@@ -184,28 +184,6 @@ export default class MandatarissenUpdateState extends Component {
     );
 
     return newMandataris;
-  }
-
-  async updateOldLidmaatschap() {
-    const oldLidmaatschap = await this.args.mandataris.heeftLidmaatschap;
-    if (!oldLidmaatschap) {
-      return;
-    }
-    let oldTijdsinterval = await oldLidmaatschap.lidGedurende;
-
-    if (!oldTijdsinterval) {
-      // old membership instances don't necessarily have a tijdsinterval
-      oldTijdsinterval = this.store.createRecord('tijdsinterval', {
-        begin: this.args.mandataris.start,
-        einde: this.date,
-      });
-      await oldTijdsinterval.save();
-      oldLidmaatschap.lidGedurende = oldTijdsinterval;
-      await oldLidmaatschap.save();
-    }
-    oldTijdsinterval.einde = this.date;
-
-    await oldTijdsinterval.save();
   }
 
   endMandataris() {
