@@ -92,7 +92,7 @@ export default class MandatarisService extends Service {
       einde: newMandataris.einde,
     });
 
-    // await newTijdsinterval.save(); TODO: uncomment this
+    await newTijdsinterval.save();
 
     const newLidmaatschap = this.store.createRecord('lidmaatschap', {
       binnenFractie: fractie,
@@ -100,7 +100,7 @@ export default class MandatarisService extends Service {
       lidGedurende: newTijdsinterval,
     });
     console.log({ newLidmaatschap });
-    // await newLidmaatschap.save(); TODO: uncomment this
+    await newLidmaatschap.save();
   }
 
   async createFrom(mandataris, newMandatarisProps) {
@@ -119,7 +119,7 @@ export default class MandatarisService extends Service {
         newMandatarisProps.publicationStatus ??
         (await mandataris.publicationStatus),
     });
-    // await newMandataris.save(); TODO: uncomment this
+    await newMandataris.save();
     await this.createNewLidmaatschap(
       newMandataris,
       newMandatarisProps.fractie ?? mandataris.fractie

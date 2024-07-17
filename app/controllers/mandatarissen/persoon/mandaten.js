@@ -110,7 +110,6 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   });
 
   wordtOnafhankelijk = task(async () => {
-    console.log(`Wordt onafhankelijk`);
     if (!this.canBecomeOnafhankelijk) {
       return;
     }
