@@ -116,13 +116,22 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     }
 
     for (const mandataris of this.possibelOnafhankelijkeMandatarissen) {
-      const bestuursorganenInTijd = await getUniqueBestuursorganen(mandataris);
-      const bestuurseenheid = await bestuursorganenInTijd[0]?.bestuurseenheid;
-      const onafhankelijkeFractie =
-        await this.fractieService.createOnafhankelijkeFractie(
-          bestuursorganenInTijd,
-          bestuurseenheid
+      let onafhankelijkeFractie =
+        await this.fractieService.findOnafhankelijkeFractieForPerson(
+          await mandataris.isBestuurlijkeAliasVan
         );
+
+      if (!onafhankelijkeFractie) {
+        const bestuursorganenInTijd =
+          await getUniqueBestuursorganen(mandataris);
+        const bestuurseenheid = await bestuursorganenInTijd[0]?.bestuurseenheid;
+        onafhankelijkeFractie =
+          await this.fractieService.createOnafhankelijkeFractie(
+            bestuursorganenInTijd,
+            bestuurseenheid
+          );
+      }
+
       console.log({ onafhankelijkeFractie });
       const overwrites = {
         publicationStatus: await getDraftPublicationStatus(this.store),
