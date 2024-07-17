@@ -141,5 +141,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       mandataris.einde = dateNow;
       mandataris.save();
     }
+
+    this.router.refresh();
   });
 }
