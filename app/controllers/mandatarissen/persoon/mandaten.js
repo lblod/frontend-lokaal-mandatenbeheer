@@ -10,9 +10,14 @@ import {
   MANDATARIS_BEEINDIGD_STATE,
   MANDATARIS_VERHINDERD_STATE,
 } from 'frontend-lmb/utils/well-known-uris';
+import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
+import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
 
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
+  @service store;
+  @service('mandataris') mandatarisService;
+  @service('fractie') fractieService;
 
   queryParams = ['activeOnly'];
 
@@ -110,9 +115,24 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       return;
     }
 
-    console.log(
-      `possibelOnafhankelijkeMandatarissen`,
-      this.possibelOnafhankelijkeMandatarissen
-    );
+    for (const mandataris of this.possibelOnafhankelijkeMandatarissen) {
+      const bestuursorganenInTijd = await getUniqueBestuursorganen(mandataris);
+      const bestuurseenheid = await bestuursorganenInTijd[0]?.bestuurseenheid;
+      const onafhankelijkeFractie =
+        await this.fractieService.createOnafhankelijkeFractie(
+          bestuursorganenInTijd,
+          bestuurseenheid
+        );
+      console.log({ onafhankelijkeFractie });
+      const overwrites = {
+        publicationStatus: await getDraftPublicationStatus(this.store),
+        fractie: onafhankelijkeFractie,
+      };
+      const newMandataris = await this.mandatarisService.createFrom(
+        mandataris,
+        overwrites
+      );
+      console.log(`Newly created mandataris`, newMandataris);
+    }
   });
 }
