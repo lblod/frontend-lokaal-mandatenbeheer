@@ -136,11 +136,8 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         publicationStatus: await getDraftPublicationStatus(this.store),
         fractie: onafhankelijkeFractie,
       };
-      const newMandataris = await this.mandatarisService.createFrom(
-        mandataris,
-        overwrites
-      );
-      console.log(`Newly created mandataris`, newMandataris);
+      await this.mandatarisService.createFrom(mandataris, overwrites);
     }
+    this.checkFracties.perform();
   });
 }

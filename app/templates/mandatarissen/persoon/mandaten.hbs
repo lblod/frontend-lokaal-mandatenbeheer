@@ -12,6 +12,8 @@
   <Group>
     <AuButton
       skin="secondary"
+      @loading={{this.checkFracties.isRunning}}
+      @loadingMessage=" "
       @disabled={{not this.canBecomeOnafhankelijk}}
       {{on "click" (perform this.wordtOnafhankelijk)}}
     >
