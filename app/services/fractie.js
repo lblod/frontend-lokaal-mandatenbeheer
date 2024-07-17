@@ -28,4 +28,20 @@ export default class FractieService extends Service {
 
     return onafhankelijke;
   }
+
+  async findOnafhankelijkeFractieForPerson(person) {
+    const mandatarissen = await person.isAangesteldAls;
+    const onafhankelijkeLidmaatschappen = await this.store.query(
+      'lidmaatschap',
+      {
+        include: 'lid,binnen-fractie,binnen-fractie.fractietype',
+        'filter[lid][:uri:]': mandatarissen
+          .map((mandataris) => mandataris.uri)
+          .join(','),
+        'filter[binnen-fractie][fractietype][:uri:]': FRACTIETYPE_ONAFHANKELIJK,
+      }
+    );
+
+    return onafhankelijkeLidmaatschappen[0]?.binnenFractie ?? null;
+  }
 }
