@@ -1,9 +1,14 @@
 import Service from '@ember/service';
 
 import { service } from '@ember/service';
+import { fold } from 'frontend-lmb/utils/fold-mandatarisses';
 
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { MANDATARIS_WAARNEMEND_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
+import {
+  MANDATARIS_BEEINDIGD_STATE,
+  MANDATARIS_VERHINDERD_STATE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 import moment from 'moment';
 
@@ -124,7 +129,7 @@ export default class MandatarisService extends Service {
     await oldTijdsinterval.save();
   }
 
-  async createFrom(mandataris, newMandatarisProps) {
+  async createNewFrom(mandataris, newMandatarisProps) {
     const newMandataris = this.store.createRecord('mandataris', {
       rangorde: newMandatarisProps.rangorde ?? mandataris.rangorde,
       start: newMandatarisProps.start ?? mandataris.start,
@@ -145,7 +150,26 @@ export default class MandatarisService extends Service {
       newMandataris,
       newMandatarisProps.fractie ?? mandataris.fractie
     );
-    console.log({ newMandataris });
-    return newMandataris;
+  }
+
+  async isMandatarisActive(mandataris) {
+    // assuming that there always be a folded mandataris for the mandataris
+    const foldedMandataris = (await fold([mandataris])).at(0);
+    const now = moment();
+    const todayIsInBetweenPeriod =
+      moment(foldedMandataris.foldedStart).isBefore(now) &&
+      (!foldedMandataris.foldedEnd ||
+        moment(foldedMandataris.foldedEnd).isAfter(now));
+
+    if (!todayIsInBetweenPeriod) {
+      return false;
+    }
+
+    const status = await foldedMandataris.mandataris.status;
+    return (
+      status &&
+      status.uri !== MANDATARIS_VERHINDERD_STATE &&
+      status.uri !== MANDATARIS_BEEINDIGD_STATE
+    );
   }
 }

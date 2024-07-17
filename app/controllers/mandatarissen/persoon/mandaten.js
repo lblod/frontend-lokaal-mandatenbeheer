@@ -5,11 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { task } from 'ember-concurrency';
-import moment from 'moment';
-import {
-  MANDATARIS_BEEINDIGD_STATE,
-  MANDATARIS_VERHINDERD_STATE,
-} from 'frontend-lmb/utils/well-known-uris';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
 
@@ -54,51 +49,21 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     this.activeOnly = !this.activeOnly;
   }
 
-  isFractieOfFoldedMandatarisOnafhankelijk = task(async (foldedMandataris) => {
-    const lid = await foldedMandataris.mandataris.heeftLidmaatschap;
-    if (!lid) {
-      return true;
-    }
-
-    const fractie = await lid.binnenFractie;
-    if (fractie) {
-      const type = await fractie.fractietype;
-      return type ? type.isOnafhankelijk : false;
-    }
-
-    return false;
-  });
-
-  async isMandatarisActive(foldedMandataris) {
-    const now = moment();
-    const todayIsInBetweenPeriod =
-      moment(foldedMandataris.foldedStart).isBefore(now) &&
-      (!foldedMandataris.foldedEnd ||
-        moment(foldedMandataris.foldedEnd).isAfter(now));
-
-    if (!todayIsInBetweenPeriod) {
-      return false;
-    }
-
-    const status = await foldedMandataris.mandataris.status;
-    return (
-      status &&
-      status.uri !== MANDATARIS_VERHINDERD_STATE &&
-      status.uri !== MANDATARIS_BEEINDIGD_STATE
-    );
-  }
-
   checkFracties = task(async (foldedMandatarissen) => {
     this.canBecomeOnafhankelijk = false;
     this.possibelOnafhankelijkeMandatarissen = [];
     for (const fold of foldedMandatarissen) {
-      const isActive = await this.isMandatarisActive(fold);
+      const isActive = await this.mandatarisService.isMandatarisActive(
+        fold.mandataris
+      );
       if (!isActive) {
         continue;
       }
 
       const isOnafhankelijk =
-        await this.isFractieOfFoldedMandatarisOnafhankelijk.perform(fold);
+        await this.fractieService.isMandatarisFractieOnafhankelijk(
+          fold.mandataris
+        );
       if (!isOnafhankelijk) {
         this.possibelOnafhankelijkeMandatarissen.push(fold.mandataris);
         continue;
@@ -137,7 +102,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         publicationStatus: await getDraftPublicationStatus(this.store),
         fractie: onafhankelijkeFractie,
       };
-      await this.mandatarisService.createFrom(mandataris, overwrites);
+      await this.mandatarisService.createNewFrom(mandataris, overwrites);
       mandataris.einde = dateNow;
       mandataris.save();
     }
