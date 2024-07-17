@@ -92,13 +92,39 @@ export default class MandatarisService extends Service {
       einde: newMandataris.einde,
     });
 
-    await newTijdsinterval.save();
+    // await newTijdsinterval.save(); TODO: uncomment this
 
     const newLidmaatschap = this.store.createRecord('lidmaatschap', {
       binnenFractie: fractie,
       lid: newMandataris,
       lidGedurende: newTijdsinterval,
     });
-    await newLidmaatschap.save();
+    console.log({ newLidmaatschap });
+    // await newLidmaatschap.save(); TODO: uncomment this
+  }
+
+  async createFrom(mandataris, newMandatarisProps) {
+    const newMandataris = this.store.createRecord('mandataris', {
+      rangorde: newMandatarisProps.rangorde ?? mandataris.rangorde,
+      start: newMandatarisProps.start ?? mandataris.start,
+      einde: newMandatarisProps.einde ?? mandataris.einde,
+      bekleedt: newMandatarisProps.bekleedt ?? (await mandataris.bekleedt),
+      isBestuurlijkeAliasVan:
+        newMandatarisProps.isBestuurlijkeAliasVan ??
+        (await mandataris.isBestuurlijkeAliasVan),
+      beleidsdomein:
+        newMandatarisProps.beleidsdomein ?? (await mandataris.beleidsdomein),
+      status: newMandatarisProps.status ?? (await mandataris.status),
+      publicationStatus:
+        newMandatarisProps.publicationStatus ??
+        (await mandataris.publicationStatus),
+    });
+    // await newMandataris.save(); TODO: uncomment this
+    await this.createNewLidmaatschap(
+      newMandataris,
+      newMandatarisProps.fractie ?? mandataris.fractie
+    );
+
+    return newMandataris;
   }
 }
