@@ -95,14 +95,27 @@ export default class MandatarissenPersoonMandatenController extends Controller {
           );
       }
 
-      await this.mandatarisService.updateOldLidmaatschap(mandataris);
       const dateNow = new Date();
-      const overwrites = {
-        start: dateNow,
-        publicationStatus: await getDraftPublicationStatus(this.store),
-        fractie: onafhankelijkeFractie,
-      };
-      await this.mandatarisService.createNewFrom(mandataris, overwrites);
+      const newMandatarisProps = await this.mandatarisService.createNewProps(
+        mandataris,
+        {
+          start: dateNow,
+          publicationStatus: await getDraftPublicationStatus(this.store),
+          fractie: onafhankelijkeFractie,
+        }
+      );
+      const newMandataris = await this.store.createRecord(
+        'mandataris',
+        newMandatarisProps
+      );
+      newMandataris.save();
+
+      await this.mandatarisService.updateOldLidmaatschap(mandataris);
+      await this.mandatarisService.createNewLidmaatschap(
+        newMandataris,
+        onafhankelijkeFractie
+      );
+
       mandataris.einde = dateNow;
       mandataris.save();
     }

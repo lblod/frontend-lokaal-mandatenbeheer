@@ -129,27 +129,21 @@ export default class MandatarisService extends Service {
     await oldTijdsinterval.save();
   }
 
-  async createNewFrom(mandataris, newMandatarisProps) {
-    const newMandataris = this.store.createRecord('mandataris', {
-      rangorde: newMandatarisProps.rangorde ?? mandataris.rangorde,
-      start: newMandatarisProps.start ?? mandataris.start,
-      einde: newMandatarisProps.einde ?? mandataris.einde,
-      bekleedt: newMandatarisProps.bekleedt ?? (await mandataris.bekleedt),
+  async createNewProps(mandataris, overwrites) {
+    return {
+      rangorde: overwrites.rangorde ?? mandataris.rangorde,
+      start: overwrites.start ?? mandataris.start,
+      einde: overwrites.einde ?? mandataris.einde,
+      bekleedt: overwrites.bekleedt ?? (await mandataris.bekleedt),
       isBestuurlijkeAliasVan:
-        newMandatarisProps.isBestuurlijkeAliasVan ??
+        overwrites.isBestuurlijkeAliasVan ??
         (await mandataris.isBestuurlijkeAliasVan),
       beleidsdomein:
-        newMandatarisProps.beleidsdomein ?? (await mandataris.beleidsdomein),
-      status: newMandatarisProps.status ?? (await mandataris.status),
+        overwrites.beleidsdomein ?? (await mandataris.beleidsdomein).slice(),
+      status: overwrites.status ?? (await mandataris.status),
       publicationStatus:
-        newMandatarisProps.publicationStatus ??
-        (await mandataris.publicationStatus),
-    });
-    await newMandataris.save();
-    await this.createNewLidmaatschap(
-      newMandataris,
-      newMandatarisProps.fractie ?? mandataris.fractie
-    );
+        overwrites.publicationStatus ?? (await mandataris.publicationStatus),
+    };
   }
 
   async isMandatarisActive(mandataris) {
