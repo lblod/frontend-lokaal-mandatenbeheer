@@ -13,11 +13,11 @@
     <AuButton
       skin="secondary"
       @loading={{(or
-        this.checkFracties.isRunning this.wordtOnafhankelijk.isRunning
+        this.checkFracties.isRunning this.becomeOnafhankelijk.isRunning
       )}}
       @loadingMessage="Onafhankelijk worden"
       @disabled={{not this.canBecomeOnafhankelijk}}
-      {{on "click" (perform this.wordtOnafhankelijk)}}
+      {{on "click" (perform this.becomeOnafhankelijk)}}
     >
       Onafhankelijk worden
     </AuButton>
