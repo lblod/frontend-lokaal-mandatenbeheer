@@ -44,20 +44,15 @@ export default class MandatarisService extends Service {
     newMandatarisState,
     newFractie
   ) {
-    let mandatarisStatus = toReplace.status;
+    const mandatarisStatus = await this.store.findRecord(
+      'mandataris-status-code',
+      MANDATARIS_WAARNEMEND_STATE_ID
+    );
 
-    const mandaat = await toReplace.bekleedt;
     const existing = await this.getOverlappingMandate(
       toReplace,
       replacementPerson
     );
-
-    if (mandaat && mandaat.isBurgemeester) {
-      mandatarisStatus = await this.store.findRecord(
-        'mandataris-status-code',
-        MANDATARIS_WAARNEMEND_STATE_ID
-      );
-    }
 
     if (existing) {
       existing.status = mandatarisStatus;
