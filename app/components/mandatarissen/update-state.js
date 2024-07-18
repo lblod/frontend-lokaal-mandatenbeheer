@@ -167,8 +167,6 @@ export default class MandatarissenUpdateState extends Component {
           newMandatarisProps,
           this.selectedFractie
         );
-      this.selectedReplacement.fractie = this.selectedFractie;
-      this.selectedReplacement.save();
 
       newMandataris.tijdelijkeVervangingen = [replacementMandataris];
     } else {
