@@ -110,6 +110,8 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       );
       newMandataris.save();
 
+      person.fractie = onafhankelijkeFractie;
+      person.save();
       await this.mandatarisService.updateOldLidmaatschap(mandataris);
       await this.mandatarisService.createNewLidmaatschap(
         newMandataris,
