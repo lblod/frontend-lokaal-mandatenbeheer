@@ -7,6 +7,7 @@ import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
+import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 export default class OrganenMandatarissenController extends Controller {
   @service router;
@@ -15,6 +16,7 @@ export default class OrganenMandatarissenController extends Controller {
   @tracked filter = '';
   @tracked page = 0;
   @tracked isCreatingMandataris = false;
+  @tracked isActivePreparationLegislatuur = true;
   sort = 'is-bestuurlijke-alias-van.achternaam';
   // we are folding the mandataris instances, so just pick a very high number here and hope our government is reasonable about the
   // number of mandatarisses that can exist
@@ -50,5 +52,18 @@ export default class OrganenMandatarissenController extends Controller {
       instanceUri,
       this.person
     );
+  }
+
+  @action
+  async legislatuurInBehandeling() {
+    const behandeldeVergaderingen = await this.store.query(
+      'installatievergadering',
+      {
+        'filter[status][:uri:]': INSTALLATIEVERGADERING_BEHANDELD_STATUS,
+        'filter[bestuursperiode][:id:]': this.queryParams.bestuursperiode,
+      }
+    );
+
+    this.isActivePreparationLegislatuur = behandeldeVergaderingen.length === 0;
   }
 }

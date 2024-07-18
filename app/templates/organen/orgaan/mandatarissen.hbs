@@ -9,10 +9,12 @@
       Mandatarissen
     </AuHeading>
   </Group>
-  <Group>
-    <AuButton {{on "click" (fn this.setIsCreatingMandataris true)}}>
-      Voeg nieuwe mandataris toe
-    </AuButton>
+  <Group {{did-insert this.legislatuurInBehandeling}}>
+    {{#unless this.isActivePreparationLegislatuur}}
+      <AuButton {{on "click" (fn this.setIsCreatingMandataris true)}}>
+        Voeg nieuwe mandataris toe
+      </AuButton>
+    {{/unless}}
   </Group>
 </AuToolbar>
 <AuHeading @skin="3" class="au-u-regular au-u-padding-left">
