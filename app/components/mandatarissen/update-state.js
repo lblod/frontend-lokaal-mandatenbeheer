@@ -167,6 +167,9 @@ export default class MandatarissenUpdateState extends Component {
           newMandatarisProps,
           this.selectedFractie
         );
+      this.selectedReplacement.fractie = this.selectedFractie;
+      this.selectedReplacement.save();
+
       newMandataris.tijdelijkeVervangingen = [replacementMandataris];
     } else {
       newMandataris.tijdelijkeVervangingen =
@@ -182,6 +185,10 @@ export default class MandatarissenUpdateState extends Component {
       newMandataris,
       this.selectedFractie
     );
+
+    const personOfMandataris = await newMandataris.isBestuurlijkeAliasVan;
+    personOfMandataris.fractie = this.selectedFractie;
+    personOfMandataris.save();
 
     return newMandataris;
   }
