@@ -10,11 +10,12 @@
     </AuHeading>
   </Group>
   <Group {{did-insert this.legislatuurInBehandeling}}>
-    {{#unless this.isActivePreparationLegislatuur}}
-      <AuButton {{on "click" (fn this.setIsCreatingMandataris true)}}>
-        Voeg nieuwe mandataris toe
-      </AuButton>
-    {{/unless}}
+    <AuButton
+      {{on "click" (fn this.setIsCreatingMandataris true)}}
+      @disabled={{this.isActivePreparationLegislatuur}}
+    >
+      Voeg nieuwe mandataris toe
+    </AuButton>
   </Group>
 </AuToolbar>
 <AuHeading @skin="3" class="au-u-regular au-u-padding-left">
