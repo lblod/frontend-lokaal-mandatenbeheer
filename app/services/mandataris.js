@@ -44,7 +44,7 @@ export default class MandatarisService extends Service {
     newMandatarisState,
     newFractie
   ) {
-    let mandatarisStatus = await this.store.findRecord(
+    const mandatarisStatus = await this.store.findRecord(
       'mandataris-status-code',
       MANDATARIS_WAARNEMEND_STATE_ID
     );
