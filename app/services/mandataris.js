@@ -5,10 +5,7 @@ import { fold } from 'frontend-lmb/utils/fold-mandatarisses';
 
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { MANDATARIS_WAARNEMEND_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
-import {
-  MANDATARIS_BEEINDIGD_STATE,
-  MANDATARIS_VERHINDERD_STATE,
-} from 'frontend-lmb/utils/well-known-uris';
+import { MANDATARIS_BEEINDIGD_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 import moment from 'moment';
 
@@ -160,10 +157,6 @@ export default class MandatarisService extends Service {
     }
 
     const status = await foldedMandataris.mandataris.status;
-    return (
-      status &&
-      status.uri !== MANDATARIS_VERHINDERD_STATE &&
-      status.uri !== MANDATARIS_BEEINDIGD_STATE
-    );
+    return status && status.uri !== MANDATARIS_BEEINDIGD_STATE;
   }
 }
