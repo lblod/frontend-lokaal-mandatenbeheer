@@ -142,21 +142,4 @@ export default class MandatarisService extends Service {
         overwrites.publicationStatus ?? (await mandataris.publicationStatus),
     };
   }
-
-  async isMandatarisActive(mandataris) {
-    // assuming that there always be a folded mandataris for the mandataris
-    const foldedMandataris = (await fold([mandataris])).at(0);
-    const now = moment();
-    const todayIsInBetweenPeriod =
-      moment(foldedMandataris.foldedStart).isBefore(now) &&
-      (!foldedMandataris.foldedEnd ||
-        moment(foldedMandataris.foldedEnd).isAfter(now));
-
-    if (!todayIsInBetweenPeriod) {
-      return false;
-    }
-
-    const status = await foldedMandataris.mandataris.status;
-    return status && status.uri !== MANDATARIS_BEEINDIGD_STATE;
-  }
 }
