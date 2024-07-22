@@ -9,10 +9,10 @@
       Mandatarissen
     </AuHeading>
   </Group>
-  <Group {{did-insert this.legislatuurInBehandeling}}>
+  <Group>
     <AuButton
       {{on "click" (fn this.setIsCreatingMandataris true)}}
-      @disabled={{this.isActivePreparationLegislatuur}}
+      @disabled={{@model.legislatuurInBehandeling}}
     >
       Voeg nieuwe mandataris toe
     </AuButton>
