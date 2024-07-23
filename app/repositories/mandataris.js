@@ -9,6 +9,7 @@ export default class MandatarisRepository {
 
     if (response.status !== 200) {
       console.error(jsonReponse.message);
+      throw jsonReponse.message;
     }
 
     return jsonReponse.isActive;
