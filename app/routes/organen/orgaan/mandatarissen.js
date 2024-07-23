@@ -8,6 +8,7 @@ import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
 
 export default class OrganenMandatarissenRoute extends Route {
   @service store;
+  @service installatievergadering;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -32,12 +33,18 @@ export default class OrganenMandatarissenRoute extends Route {
       MANDATARIS_NEW_FORM_ID
     );
 
+    const legislatuurInBehandeling =
+      await this.installatievergadering.activeOrNoLegislature(
+        parentModel.selectedBestuursperiode
+      );
+
     return {
       mandatarissen: folded,
       bestuursorgaan: parentModel.bestuursorgaan,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
       currentBestuursorgaan: currentBestuursorgaan,
+      legislatuurInBehandeling,
     };
   }
 
