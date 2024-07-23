@@ -3,7 +3,7 @@ export default class MandatarisRepository {
 
   async isActive(mandatarisId) {
     const response = await fetch(
-      `${this.PREFIX}/mandatarissen/${mandatarisId}dff/isActive`
+      `${this.PREFIX}/mandatarissen/${mandatarisId}/isActive`
     );
     const jsonReponse = await response.json();
 
