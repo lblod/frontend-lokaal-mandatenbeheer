@@ -8,6 +8,8 @@ import { task } from 'ember-concurrency';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
 import MandatarisRepository from 'frontend-lmb/repositories/mandataris';
+import PersoonRepository from 'frontend-lmb/repositories/persoon';
+import FractieRepository from 'frontend-lmb/repositories/fractie';
 
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
@@ -25,6 +27,8 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   sort = 'is-bestuurlijke-alias-van.achternaam';
 
   mandatarisRepository = new MandatarisRepository();
+  persoonRepository = new PersoonRepository();
+  fractieRepository = new FractieRepository();
 
   @action
   toggleModal() {
@@ -59,6 +63,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       const isActive = await this.mandatarisRepository.isActive(
         fold.mandataris.id
       );
+
       if (!isActive) {
         continue;
       }
@@ -84,19 +89,25 @@ export default class MandatarissenPersoonMandatenController extends Controller {
 
     for (const mandataris of this.possibelOnafhankelijkeMandatarissen) {
       const person = await mandataris.isBestuurlijkeAliasVan;
-      let onafhankelijkeFractie =
-        await this.fractieService.findOnafhankelijkeFractieForPerson(person);
+      let onafhankelijkeFractieUri =
+        await this.persoonRepository.findOnafhankelijkeFractie(person.id);
 
-      if (!onafhankelijkeFractie) {
+      if (!onafhankelijkeFractieUri) {
         const bestuursorganenInTijd =
           await getUniqueBestuursorganen(mandataris);
         const bestuurseenheid = await bestuursorganenInTijd[0]?.bestuurseenheid;
-        onafhankelijkeFractie =
-          await this.fractieService.createOnafhankelijkeFractie(
-            bestuursorganenInTijd,
-            bestuurseenheid
+        onafhankelijkeFractieUri =
+          await this.fractieRepository.createOnafhankelijkeFractie(
+            bestuursorganenInTijd.map((boi) => boi.uri),
+            bestuurseenheid.uri
           );
       }
+
+      const onafhankelijkeFractie = (
+        await this.store.query('fractie', {
+          'filter[:uri:]': onafhankelijkeFractieUri,
+        })
+      ).at(0);
 
       const dateNow = new Date();
       const newMandatarisProps = await this.mandatarisService.createNewProps(
