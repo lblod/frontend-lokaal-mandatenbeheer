@@ -9,7 +9,6 @@ import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandat
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 
 import MandatarisRepository from 'frontend-lmb/repositories/mandataris';
-import PersoonRepository from 'frontend-lmb/repositories/persoon';
 
 export default class OrganenMandatarissenController extends Controller {
   @service router;
@@ -25,7 +24,6 @@ export default class OrganenMandatarissenController extends Controller {
   size = 900000;
 
   mandatarisRepository = new MandatarisRepository();
-  persoonRepository = new PersoonRepository();
 
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
