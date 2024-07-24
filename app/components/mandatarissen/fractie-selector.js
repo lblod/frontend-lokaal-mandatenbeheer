@@ -8,6 +8,8 @@ import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 
+import FractieRepository from 'frontend-lmb/repositories/fractie';
+
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
   @service currentSession;
@@ -18,6 +20,8 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @tracked bestuursorganen = [];
   @tracked bestuursorganenId;
   @tracked fractieOptions = [];
+
+  fractieRepository = new FractieRepository();
 
   constructor() {
     super(...arguments);
@@ -56,9 +60,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     );
 
     if (!onafhankelijke) {
-      onafhankelijke = await this.fractieService.createOnafhankelijkeFractie(
-        this.bestuursorganen,
-        this.args.bestuurseenheid
+      onafhankelijke = await this.fractieRepository.createOnafhankelijkeFractie(
+        this.bestuursorganen.map((bo) => bo.uri),
+        this.args.bestuurseenheid.uri
       );
       this.fractieOptions = [...fracties, onafhankelijke];
       return;
