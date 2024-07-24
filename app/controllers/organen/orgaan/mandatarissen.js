@@ -14,6 +14,7 @@ import PersoonRepository from 'frontend-lmb/repositories/persoon';
 export default class OrganenMandatarissenController extends Controller {
   @service router;
   @service store;
+  @service('mandataris') mandatarisService;
 
   @tracked filter = '';
   @tracked page = 0;
@@ -39,23 +40,11 @@ export default class OrganenMandatarissenController extends Controller {
 
   @action
   async onCreate({ instanceTtl, instanceId }) {
-    await this.updateCurrentFractieOnPersoon(instanceId);
+    await this.mandatarisService.updateCurrentFractie(instanceId);
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
 
     setTimeout(() => this.router.refresh(), 1000);
     this.isCreatingMandataris = false;
-  }
-
-  async updateCurrentFractieOnPersoon(mandatarisId) {
-    const mandataris = await this.store.findRecord('mandataris', mandatarisId);
-    const persoon = await mandataris.isBestuurlijkeAliasVan;
-    const bestuursperiode = await this.mandatarisRepository.getBestuursperiode(
-      mandataris.id
-    );
-    await this.persoonRepository.updateCurrentFractie(
-      persoon.id,
-      bestuursperiode.id
-    );
   }
 
   @action

@@ -11,6 +11,7 @@ import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandata
 export default class OrganenMandatarisNewController extends Controller {
   @service router;
   @service store;
+  @service('mandataris') mandatarisService;
 
   queryParams = ['person'];
 
@@ -24,6 +25,7 @@ export default class OrganenMandatarisNewController extends Controller {
 
   @action
   async onCreate({ instanceTtl, instanceId }) {
+    await this.mandatarisService.updateCurrentFractie(instanceId);
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     this.router.transitionTo('organen.orgaan.mandatarissen');
   }
