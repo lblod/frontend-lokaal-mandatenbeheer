@@ -91,7 +91,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
         icon: 'circle-step-3',
         modalMessage:
           'Ben je klaar met de voorbereiding? Als je naar de volgende status gaat wordt deze beschikbaar gemaakt voor een compatibel notuleringspakket.',
-        statusLabel:
+        statusPillLabel:
           uriLabelMap[INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS]
             .label,
         statusPillSkin:
