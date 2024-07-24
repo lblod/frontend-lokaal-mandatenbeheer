@@ -1,9 +1,9 @@
-export default class MandatarisRepository {
-  PREFIX = '/mandataris-api';
+import { BASE_API_URL } from 'frontend-lmb/utils/constants';
 
+export default class MandatarisRepository {
   async isActive(mandatarisId) {
     const response = await fetch(
-      `${this.PREFIX}/mandatarissen/${mandatarisId}/isActive`
+      `${BASE_API_URL}/mandatarissen/${mandatarisId}/isActive`
     );
     const jsonReponse = await response.json();
 
@@ -17,7 +17,7 @@ export default class MandatarisRepository {
 
   async getBestuursperiode(mandatarisId) {
     const response = await fetch(
-      `${this.PREFIX}/mandatarissen/${mandatarisId}/bestuursperiode`
+      `${BASE_API_URL}/mandatarissen/${mandatarisId}/bestuursperiode`
     );
     const jsonReponse = await response.json();
 
