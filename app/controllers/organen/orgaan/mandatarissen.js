@@ -8,6 +8,9 @@ import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestu
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 
+import MandatarisRepository from 'frontend-lmb/repositories/mandataris';
+import PersoonRepository from 'frontend-lmb/repositories/persoon';
+
 export default class OrganenMandatarissenController extends Controller {
   @service router;
   @service store;
@@ -19,6 +22,9 @@ export default class OrganenMandatarissenController extends Controller {
   // we are folding the mandataris instances, so just pick a very high number here and hope our government is reasonable about the
   // number of mandatarisses that can exist
   size = 900000;
+
+  mandatarisRepository = new MandatarisRepository();
+  persoonRepository = new PersoonRepository();
 
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
@@ -33,9 +39,23 @@ export default class OrganenMandatarissenController extends Controller {
 
   @action
   async onCreate({ instanceTtl, instanceId }) {
+    await this.updateCurrentFractieOnPersoon(instanceId);
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
+
     setTimeout(() => this.router.refresh(), 1000);
     this.isCreatingMandataris = false;
+  }
+
+  async updateCurrentFractieOnPersoon(mandatarisId) {
+    const mandataris = await this.store.findRecord('mandataris', mandatarisId);
+    const persoon = await mandataris.isBestuurlijkeAliasVan;
+    const bestuursperiode = await this.mandatarisRepository.getBestuursperiode(
+      mandataris.id
+    );
+    await this.persoonRepository.updateCurrentFractie(
+      persoon.id,
+      bestuursperiode.id
+    );
   }
 
   @action
