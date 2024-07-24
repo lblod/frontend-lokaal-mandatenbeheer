@@ -1,15 +1,12 @@
 import Service from '@ember/service';
 
 import { service } from '@ember/service';
-import { fold } from 'frontend-lmb/utils/fold-mandatarisses';
 
 export default class FractieService extends Service {
   @service store;
 
   async isMandatarisFractieOnafhankelijk(mandataris) {
-    // assuming that there always be a folded mandataris for the mandataris
-    const foldedMandataris = (await fold([mandataris])).at(0);
-    const lid = await foldedMandataris.mandataris.heeftLidmaatschap;
+    const lid = await mandataris.heeftLidmaatschap;
     if (!lid) {
       return true;
     }

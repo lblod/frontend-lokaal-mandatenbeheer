@@ -65,7 +65,6 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       if (!isActive) {
         continue;
       }
-
       const isOnafhankelijk =
         await this.fractieService.isMandatarisFractieOnafhankelijk(mandataris);
       if (!isOnafhankelijk) {
