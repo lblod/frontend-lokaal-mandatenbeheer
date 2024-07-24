@@ -3,7 +3,6 @@
   this.model.selectedPeriod.label
   route="verkiezingen.installatievergadering"
 }}
-
 {{#if (or (not @model.isRelevant) (not @model.installatievergadering))}}
   <div class="au-o-box">
     <div class="au-o-flow">
@@ -60,7 +59,7 @@
         @icon={{this.nextStatus.icon}}
         @loading={{this.setNextStatus.isRunning}}
         @loadingMessage="Volgende status ophalen"
-        {{on "click" (fn this.selectStatus this.nextStatus.status)}}
+        {{on "click" this.openModal}}
       >
         {{this.nextStatus.label}}
       </AuButton>
@@ -98,4 +97,40 @@
       </div>
     {{/unless}}
   </div>
+  <AuModalContainer />
+  <AuModal
+    @title="Volgende status"
+    @modalOpen={{this.isModalOpen}}
+    @closable={{true}}
+    @closeModal={{this.closeModal}}
+    as |Modal|
+  >
+    <Modal.Body>
+      <p>
+        {{this.nextStatus.modalMessage}}
+      </p>
+      <p>We veranderen de status van de installatievergadering van
+        <AuPill @skin={{this.statusPillSkin}}>
+          {{this.statusPillLabel}}
+        </AuPill>
+        naar
+        <AuPill @skin={{this.nextStatus.statusPillSkin}}>
+          {{this.nextStatus.statusPillLabel}}
+        </AuPill>.</p>
+    </Modal.Body>
+    <Modal.Footer>
+      <AuToolbar as |Group|>
+        <Group class="au-u-1-1">
+          <AuButtonGroup class="au-u-flex au-u-flex--between au-u-1-1">
+            <AuButton @skin="secondary" {{on "click" this.closeModal}}>
+              Annuleer
+            </AuButton>
+            <AuButton {{on "click" this.selectStatus}}>
+              Bevestigen
+            </AuButton>
+          </AuButtonGroup>
+        </Group>
+      </AuToolbar>
+    </Modal.Footer>
+  </AuModal>
 {{/if}}

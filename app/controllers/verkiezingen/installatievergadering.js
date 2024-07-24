@@ -12,6 +12,20 @@ import {
 
 import { task } from 'ember-concurrency';
 
+const uriLabelMap = {
+  [INSTALLATIEVERGADERING_BEHANDELD_STATUS]: {
+    skin: 'success',
+    label: 'Behandeld',
+  },
+  [INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS]: {
+    skin: 'info',
+    label: 'Te behandelen',
+  },
+  [INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS]: {
+    skin: 'warning',
+    label: 'Klaar voor vergadering',
+  },
+};
 export default class PrepareInstallatievergaderingController extends Controller {
   queryParams = ['bestuursperiode'];
   @service store;
@@ -21,11 +35,13 @@ export default class PrepareInstallatievergaderingController extends Controller 
   @tracked statusPillSkin = 'info';
   @tracked statusPillLabel = 'info';
   @tracked nextStatus;
+  @tracked isModalOpen = false;
 
   @action
-  async selectStatus(status) {
+  async selectStatus() {
+    this.isModalOpen = false;
     const installatievergadering = this.model.installatievergadering;
-    installatievergadering.status = status;
+    installatievergadering.status = this.nextStatus.status;
     await installatievergadering.save();
 
     if (
@@ -55,20 +71,6 @@ export default class PrepareInstallatievergaderingController extends Controller 
 
   setInstallatievergaderingStatusPill = task(async () => {
     const status = await this.model.installatievergadering.status;
-    const uriLabelMap = {
-      [INSTALLATIEVERGADERING_BEHANDELD_STATUS]: {
-        skin: 'success',
-        label: 'Behandeld',
-      },
-      [INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS]: {
-        skin: 'info',
-        label: 'Te behandelen',
-      },
-      [INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS]: {
-        skin: 'warning',
-        label: 'Klaar voor vergadering',
-      },
-    };
 
     this.statusPillSkin = uriLabelMap[status.uri].skin;
     this.statusPillLabel = uriLabelMap[status.uri].label;
@@ -87,11 +89,25 @@ export default class PrepareInstallatievergaderingController extends Controller 
         ),
         label: 'Klaarzetten voor vergadering',
         icon: 'circle-step-3',
+        modalMessage:
+          'Ben je klaar met de voorbereiding? Als je naar de volgende status gaat wordt deze beschikbaar gemaakt voor een compatibel notuleringspakket.',
+        statusLabel:
+          uriLabelMap[INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS]
+            .label,
+        statusPillSkin:
+          uriLabelMap[INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS]
+            .skin,
       },
       [INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS]: {
         status: findStatusForUri(INSTALLATIEVERGADERING_BEHANDELD_STATUS),
         label: 'Voorbereiding afronden',
         icon: 'circle-step-4',
+        modalMessage:
+          'Door naar de volgende status te gaan wordt de voorbereiding afgesloten en zal je de deze niet meer kunnen bewerken.',
+        statusPillLabel:
+          uriLabelMap[INSTALLATIEVERGADERING_BEHANDELD_STATUS].label,
+        statusPillSkin:
+          uriLabelMap[INSTALLATIEVERGADERING_BEHANDELD_STATUS].skin,
       },
       [INSTALLATIEVERGADERING_BEHANDELD_STATUS]: {
         status: null,
@@ -102,4 +118,13 @@ export default class PrepareInstallatievergaderingController extends Controller 
 
     this.nextStatus = nextStatusFor[currentStatus.uri];
   });
+  @action
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  @action
+  closeModal() {
+    this.isModalOpen = false;
+  }
 }
