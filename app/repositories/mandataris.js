@@ -1,4 +1,4 @@
-import { API } from 'frontend-lmb/utils/constants';
+import { API, STATUS_CODE } from 'frontend-lmb/utils/constants';
 
 export default class MandatarisRepository {
   async isActive(mandatarisId) {
@@ -7,7 +7,7 @@ export default class MandatarisRepository {
     );
     const jsonReponse = await response.json();
 
-    if (response.status !== 200) {
+    if (response.status !== STATUS_CODE.OK) {
       console.error(jsonReponse.message);
       throw jsonReponse.message;
     }
@@ -21,7 +21,7 @@ export default class MandatarisRepository {
     );
     const jsonReponse = await response.json();
 
-    if (response.status !== 200) {
+    if (response.status !== STATUS_CODE.OK) {
       console.error(jsonReponse.message);
       throw jsonReponse.message;
     }

@@ -1,4 +1,4 @@
-import { API } from 'frontend-lmb/utils/constants';
+import { API, STATUS_CODE } from 'frontend-lmb/utils/constants';
 
 export default class PersoonRepository {
   async findOnafhankelijkeFractie(persoonId) {
@@ -7,7 +7,7 @@ export default class PersoonRepository {
     );
     const jsonReponse = await response.json();
 
-    if (response.status !== 200) {
+    if (response.status !== STATUS_CODE.OK) {
       console.error(jsonReponse.message);
       throw jsonReponse.message;
     }
@@ -24,7 +24,7 @@ export default class PersoonRepository {
     );
     const jsonReponse = await response.json();
 
-    if (response.status !== 200) {
+    if (response.status !== STATUS_CODE.OK) {
       console.error(jsonReponse.message);
       throw jsonReponse.message;
     }
