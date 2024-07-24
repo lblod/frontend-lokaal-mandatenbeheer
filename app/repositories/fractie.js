@@ -1,4 +1,4 @@
-import { BASE_API_URL } from 'frontend-lmb/utils/constants';
+import { API } from 'frontend-lmb/utils/constants';
 
 export default class FractieRepository {
   async createOnafhankelijkeFractie(
@@ -6,7 +6,7 @@ export default class FractieRepository {
     bestuurseenheidUri
   ) {
     const response = await fetch(
-      `${BASE_API_URL}/fracties/onafhankelijke-fractie`,
+      `${API.MANDATARIS_SERVICE}/fracties/onafhankelijke-fractie`,
       {
         method: 'POST',
         headers: {
