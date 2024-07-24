@@ -1,16 +1,19 @@
 import Service from '@ember/service';
 
 import { service } from '@ember/service';
-import { fold } from 'frontend-lmb/utils/fold-mandatarisses';
 
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { MANDATARIS_WAARNEMEND_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
-import { MANDATARIS_BEEINDIGD_STATE } from 'frontend-lmb/utils/well-known-uris';
-
 import moment from 'moment';
+
+import MandatarisRepository from 'frontend-lmb/repositories/mandataris';
+import PersoonRepository from 'frontend-lmb/repositories/persoon';
 
 export default class MandatarisService extends Service {
   @service store;
+
+  mandatarisRepository = new MandatarisRepository();
+  persoonRepository = new PersoonRepository();
 
   async getOverlappingMandate(mandataris, person, endDate = null) {
     const mandate = await mandataris.bekleedt;
@@ -141,5 +144,17 @@ export default class MandatarisService extends Service {
       publicationStatus:
         overwrites.publicationStatus ?? (await mandataris.publicationStatus),
     };
+  }
+
+  async updateCurrentFractie(mandatarisId) {
+    const mandataris = await this.store.findRecord('mandataris', mandatarisId);
+    const persoon = await mandataris.isBestuurlijkeAliasVan;
+    const bestuursperiode = await this.mandatarisRepository.getBestuursperiode(
+      mandataris.id
+    );
+    await this.persoonRepository.updateCurrentFractie(
+      persoon.id,
+      bestuursperiode.id
+    );
   }
 }

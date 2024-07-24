@@ -11,6 +11,7 @@ export default class FormRepositoryService extends Service {
     const result = await fetch(`/form-content/${definitionId}`, {
       method: 'POST',
       headers: {
+        Accept: 'application/json',
         'Content-Type': JSON_API_TYPE,
       },
       body: JSON.stringify({
