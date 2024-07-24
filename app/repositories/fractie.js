@@ -1,4 +1,4 @@
-import { API } from 'frontend-lmb/utils/constants';
+import { API, STATUS_CODE } from 'frontend-lmb/utils/constants';
 
 export default class FractieRepository {
   async createOnafhankelijkeFractie(
@@ -22,7 +22,7 @@ export default class FractieRepository {
 
     const jsonReponse = await response.json();
 
-    if (response.status !== 201) {
+    if (response.status !== STATUS_CODE.CREATED) {
       throw new Error(jsonReponse.message);
     }
 

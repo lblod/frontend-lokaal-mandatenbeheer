@@ -20,3 +20,7 @@ export const RESOURCE_CACHE_TIMEOUT = 1000;
 export const API = {
   MANDATARIS_SERVICE: '/mandataris-api',
 };
+export const STATUS_CODE = {
+  CREATED: 201,
+  OK: 200,
+};
