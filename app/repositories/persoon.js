@@ -1,9 +1,9 @@
-import { BASE_API_URL } from 'frontend-lmb/utils/constants';
+import { API } from 'frontend-lmb/utils/constants';
 
 export default class PersoonRepository {
   async findOnafhankelijkeFractie(persoonId) {
     const response = await fetch(
-      `${BASE_API_URL}/personen/${persoonId}/onafhankelijke-fractie`
+      `${API.MANDATARIS_SERVICE}/personen/${persoonId}/onafhankelijke-fractie`
     );
     const jsonReponse = await response.json();
 
@@ -17,7 +17,7 @@ export default class PersoonRepository {
 
   async updateCurrentFractie(persoonId, bestuursperiodeId) {
     const response = await fetch(
-      `${BASE_API_URL}/personen/${persoonId}/current-fractie/${bestuursperiodeId}`,
+      `${API.MANDATARIS_SERVICE}/personen/${persoonId}/current-fractie/${bestuursperiodeId}`,
       {
         method: 'PUT',
       }
