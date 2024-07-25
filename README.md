@@ -28,7 +28,7 @@ Frontend of the lokaal mandatenbeheer application
 
 ## Feature flags
 
-Feature flags are used to enable/disable features in the application. They are defined in config/environment.js.
+Feature flags are used to enable/disable features in the application. They are defined in [config/environment.js](config/environment.js).
 
 ```javascript
 // in config/environment.js
@@ -43,9 +43,9 @@ let ENV = {
 
 The configuration can be manually overridden by adding a query parameter to the URL:
 
-?feature-new-feature=false to disable the 'new-feature'
-?feature-beta-feature=true to enable the 'beta-feature'
-The overriding will be saved in a cookie, so it will persist across page reloads. The cookie can be cleared by adding ?clear-feature-overrides=true to the URL.
+`?feature-new-feature=false` to disable the 'new-feature'
+`?feature-beta-feature=true` to enable the 'beta-feature'
+The overriding will be saved in a cookie, so it will persist across page reloads. The cookie can be cleared by adding `?clear-feature-overrides=true` to the URL.
 
 The feature flags can be used in the application by injecting the features service and calling the isEnabled method.
 
@@ -67,7 +67,7 @@ export default class ExampleComponent extends Component {
 }
 ```
 
-Or in template files by using the is-feature-enabled helper:
+Or in template files by using the `is-feature-enabled` helper:
 
 ```handlebars
 {{#if (is-feature-enabled "new-feature")}}
