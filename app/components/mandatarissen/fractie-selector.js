@@ -141,6 +141,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   async fetchOnafhankelijkeFractie() {
+    // TODO: his should be the persons onafhankelijke fractie | for other ticket
     const onafhankelijke = await this.store.query('fractie', {
       page: { size: 1 },
       'filter[fractietype][:uri:]': FRACTIETYPE_ONAFHANKELIJK,
