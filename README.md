@@ -47,7 +47,7 @@ The configuration can be manually overridden by adding a query parameter to the 
 `?feature-beta-feature=true` to enable the 'beta-feature'
 The overriding will be saved in a cookie, so it will persist across page reloads. The cookie can be cleared by adding `?clear-feature-overrides=true` to the URL.
 
-The feature flags can be used in the application by injecting the features service and calling the isEnabled method.
+The feature flags can be used in the application by injecting the `features` service and calling the `isEnabled` method.
 
 ```javascript
 import { inject as service } from "@ember/service";
