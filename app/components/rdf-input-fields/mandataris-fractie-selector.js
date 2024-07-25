@@ -35,6 +35,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @tracked initialized = false;
   @tracked bestuurseenheid = null;
   @tracked bestuursperiode;
+  @tracked person;
 
   constructor() {
     super(...arguments);
@@ -98,7 +99,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
         this.storeOptions.sourceGraph
       );
       if (!mandataris) {
-        return;
+        throw `Could not find mandataris in form`;
       }
       const personNode = this.storeOptions.store.any(
         mandataris,
@@ -107,29 +108,31 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
         this.storeOptions.sourceGraph
       );
 
-      let person = null;
       if (!personNode) {
         const fallbackPersons = await this.store.query('persoon', {
           'filter[is-aangesteld-als][:uri:]': mandataris.value,
         });
         if (fallbackPersons.length === 0) {
           select.actions.close();
+          this.errors.pop();
+          this.warnings.push({
+            resultMessage:
+              'Je moet eerst een persoon aanduiden vooraleer je een fractie kan aanduiden.',
+          });
           return;
         } else {
-          person = fallbackPersons.at(0);
+          this.person = fallbackPersons.at(0);
         }
       } else {
         const personMatches = await this.store.query('persoon', {
           'filter[:uri:]': personNode.value,
         });
         if (!personMatches.length == 0) {
-          person = personMatches.at(0);
+          this.person = personMatches.at(0);
         } else {
           throw `Could not find person of mandataris: ${mandataris.value}`;
         }
       }
-
-      console.log({ person });
     }
   }
 }
