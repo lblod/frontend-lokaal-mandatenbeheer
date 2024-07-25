@@ -32,7 +32,7 @@ module.exports = function (environment) {
       switchRedirectUrl: '{{ACMIDM_SWITCH_REDIRECT_URL}}',
     },
     features: {
-      'show-forms-module-on-overview': false,
+      'show-forms-module': false,
     },
     lpdcUrl: '{{LPDC_URL}}',
     worshipDecisionsDatabaseUrl: '{{WORSHIP_DECISIONS_DATABASE_URL}}',
