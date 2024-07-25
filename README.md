@@ -30,7 +30,7 @@ Frontend of the lokaal mandatenbeheer application
 
 Feature flags are used to enable/disable features in the application. They are defined in config/environment.js.
 
-```
+```javascript
 // in config/environment.js
 let ENV = {
   // Other configuration settings...
@@ -49,11 +49,11 @@ The overriding will be saved in a cookie, so it will persist across page reloads
 
 The feature flags can be used in the application by injecting the features service and calling the isEnabled method.
 
-```
+```javascript
 import { inject as service } from "@ember/service";
 
 export default class ExampleComponent extends Component {
-@service features;
+  @service features;
 
   doSomething() {
     if (this.features.isEnabled("new-feature")) {
@@ -69,7 +69,7 @@ export default class ExampleComponent extends Component {
 
 Or in template files by using the is-feature-enabled helper:
 
-```
+```handlebars
 {{#if (is-feature-enabled "new-feature")}}
   <p>New feature is enabled!</p>
 {{else}}
