@@ -38,10 +38,10 @@ export default class PrepareInstallatievergaderingController extends Controller 
   @tracked isModalOpen = false;
 
   @action
-  async selectStatus() {
+  async selectStatus(status) {
     this.isModalOpen = false;
     const installatievergadering = this.model.installatievergadering;
-    installatievergadering.status = this.nextStatus.status;
+    installatievergadering.status = status;
     await installatievergadering.save();
 
     if (

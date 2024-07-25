@@ -106,17 +106,18 @@
     as |Modal|
   >
     <Modal.Body>
-      <p>
-        {{this.nextStatus.modalMessage}}
-      </p>
-      <p>We veranderen de status van de installatievergadering van
+      <p>Van
         <AuPill @skin={{this.statusPillSkin}}>
           {{this.statusPillLabel}}
         </AuPill>
-        naar
+        →
         <AuPill @skin={{this.nextStatus.statusPillSkin}}>
           {{this.nextStatus.statusPillLabel}}
-        </AuPill>.</p>
+        </AuPill></p>
+      <br />
+      <p>
+        {{this.nextStatus.modalMessage}}
+      </p>
     </Modal.Body>
     <Modal.Footer>
       <AuToolbar as |Group|>
@@ -125,7 +126,9 @@
             <AuButton @skin="secondary" {{on "click" this.closeModal}}>
               Annuleer
             </AuButton>
-            <AuButton {{on "click" this.selectStatus}}>
+            <AuButton
+              {{on "click" (fn this.selectStatus this.nextStatus.status)}}
+            >
               Bevestigen
             </AuButton>
           </AuButtonGroup>
