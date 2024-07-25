@@ -12,6 +12,7 @@
       @bestuurseenheid={{this.bestuurseenheid}}
       @bestuursperiode={{this.bestuursperiode}}
       @onClose={{fn (mut this.hasBeenFocused) true}}
+      @handleSelectOpen={{this.findPerson}}
     />
   </div>
   {{#each this.errors as |error|}}
