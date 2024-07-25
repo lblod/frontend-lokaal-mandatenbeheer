@@ -90,6 +90,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   @action
   async findPerson(select, event) {
+    this.warnings.splice(0, this.warnings.length);
     event.preventDefault();
     if (select.isOpen) {
       const mandataris = this.storeOptions.store.any(
