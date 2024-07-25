@@ -21,11 +21,13 @@
         Opstart nieuwe legislatuur
       </AuNavigationLink>
     </li>
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="forms">
-        <AuIcon @icon="draft" @alignment="left" />
-        Forms
-      </AuNavigationLink>
-    </li>
+    {{#if (is-feature-enabled "show-forms-module")}}
+      <li class="au-c-list-navigation__item">
+        <AuNavigationLink @route="forms">
+          <AuIcon @icon="draft" @alignment="left" />
+          Forms
+        </AuNavigationLink>
+      </li>
+    {{/if}}
   </ul>
 </nav>
