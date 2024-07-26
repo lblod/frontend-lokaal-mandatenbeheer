@@ -6,13 +6,11 @@ import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-sta
 import { MANDATARIS_WAARNEMEND_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 import moment from 'moment';
 
-import PersoonRepository from 'frontend-lmb/repositories/persoon';
 import { mandatarisRepository } from 'frontend-lmb/repositories/mandataris';
+import { persoonRepository } from 'frontend-lmb/repositories/persoon';
 
 export default class MandatarisService extends Service {
   @service store;
-
-  persoonRepository = new PersoonRepository();
 
   async getOverlappingMandate(mandataris, person, endDate = null) {
     const mandate = await mandataris.bekleedt;
@@ -151,7 +149,7 @@ export default class MandatarisService extends Service {
     const bestuursperiode = await mandatarisRepository.getBestuursperiode(
       mandataris.id
     );
-    await this.persoonRepository.updateCurrentFractie(
+    await persoonRepository.updateCurrentFractie(
       persoon.id,
       bestuursperiode.id
     );
