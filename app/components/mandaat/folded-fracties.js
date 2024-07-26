@@ -32,10 +32,10 @@ export default class MandaatFoldedFractiesComponent extends Component {
   load = task(async () => {
     const mandatarissen = await this.getMandatarissen(this.persoon);
 
-    const { currentFractie, allFracties } =
+    const { latestFractie, allFracties } =
       await this.getFoldedFracties(mandatarissen);
 
-    this.fractiesText = this.fractiesToString(currentFractie, allFracties);
+    this.fractiesText = this.fractiesToString(latestFractie, allFracties);
   });
 
   async getMandatarissen(persoon) {
@@ -74,6 +74,7 @@ export default class MandaatFoldedFractiesComponent extends Component {
 
   async getFoldedFracties(mandatarissen) {
     let latestMandataris = null;
+    let latestFractie = null;
     const allFracties = new Set();
 
     await Promise.all(
@@ -82,22 +83,24 @@ export default class MandaatFoldedFractiesComponent extends Component {
         allFracties.add(fractie);
 
         if (
-          !latestMandataris ||
-          moment(mandataris.einde).isAfter(latestMandataris.einde) ||
-          !mandataris.einde
+          !latestFractie &&
+          (!latestMandataris ||
+            moment(mandataris.einde).isAfter(latestMandataris.einde) ||
+            !mandataris.einde)
         ) {
           latestMandataris = mandataris;
+          latestFractie = fractie;
         }
       })
     );
 
-    const fractieOrNull = await this.fractieOrNull(latestMandataris);
-    const currentFractie = fractieOrNull ? fractieOrNull : 'Onafhankelijk';
-
-    return { currentFractie, allFracties: Array.from(allFracties) };
+    return { latestFractie, allFracties: Array.from(allFracties) };
   }
 
   fractiesToString(currentFractie, allFracties) {
+    if (!currentFractie) {
+      return 'Niet beschikbaar';
+    }
     const otherFracties = allFracties
       .filter(Boolean)
       .filter((fractie) => fractie !== currentFractie)
