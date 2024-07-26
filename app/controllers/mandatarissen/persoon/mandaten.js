@@ -8,9 +8,9 @@ import { task } from 'ember-concurrency';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
 
-import PersoonRepository from 'frontend-lmb/repositories/persoon';
 import { fractieRepository } from 'frontend-lmb/repositories/fractie';
 import { mandatarisRepository } from 'frontend-lmb/repositories/mandataris';
+import { persoonRepository } from 'frontend-lmb/repositories/persoon';
 
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
@@ -26,8 +26,6 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @tracked selectedBestuursorgaan = null;
   @tracked activeOnly = true;
   sort = 'is-bestuurlijke-alias-van.achternaam';
-
-  persoonRepository = new PersoonRepository();
 
   @action
   toggleModal() {
@@ -83,7 +81,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     for (const mandataris of this.possibelOnafhankelijkeMandatarissen) {
       const person = await mandataris.isBestuurlijkeAliasVan;
       let onafhankelijkeFractieUri =
-        await this.persoonRepository.findOnafhankelijkeFractie(person.id);
+        await persoonRepository.findOnafhankelijkeFractie(person.id);
 
       if (!onafhankelijkeFractieUri) {
         const bestuursorganenInTijd =
