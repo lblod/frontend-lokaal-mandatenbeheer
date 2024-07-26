@@ -2,7 +2,7 @@ import { API, STATUS_CODE } from 'frontend-lmb/utils/constants';
 
 export const mandatarisRepository = {
   isActive,
-  getBestuursperiode,
+  updateCurrentFractieForPerson,
 };
 
 async function isActive(mandatarisId) {
@@ -19,9 +19,12 @@ async function isActive(mandatarisId) {
   return jsonReponse.isActive;
 }
 
-async function getBestuursperiode(mandatarisId) {
+async function updateCurrentFractieForPerson(mandatarisId) {
   const response = await fetch(
-    `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/bestuursperiode`
+    `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/current-fractie`,
+    {
+      method: 'PUT',
+    }
   );
   const jsonReponse = await response.json();
 
@@ -30,8 +33,5 @@ async function getBestuursperiode(mandatarisId) {
     throw jsonReponse.message;
   }
 
-  return {
-    uri: jsonReponse.uri,
-    id: jsonReponse.id,
-  };
+  return jsonReponse.current;
 }

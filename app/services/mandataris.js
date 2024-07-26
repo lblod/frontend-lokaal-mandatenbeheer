@@ -145,13 +145,6 @@ export default class MandatarisService extends Service {
 
   async updateCurrentFractie(mandatarisId) {
     const mandataris = await this.store.findRecord('mandataris', mandatarisId);
-    const persoon = await mandataris.isBestuurlijkeAliasVan;
-    const bestuursperiode = await mandatarisRepository.getBestuursperiode(
-      mandataris.id
-    );
-    await persoonRepository.updateCurrentFractie(
-      persoon.id,
-      bestuursperiode.id
-    );
+    await mandatarisRepository.updateCurrentFractieForPerson(mandataris.id);
   }
 }
