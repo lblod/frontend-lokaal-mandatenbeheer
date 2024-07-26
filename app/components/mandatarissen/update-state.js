@@ -137,20 +137,20 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   async changeMandatarisState() {
-    await this.updateOldLidmaatschap();
+    await this.mandatarisService.updateOldLidmaatschap(this.args.mandataris);
 
     const endDate = this.args.mandataris.einde;
 
-    const newMandatarisProps = {
-      rangorde: this.rangorde,
-      start: this.date,
-      einde: endDate,
-      bekleedt: this.args.mandataris.bekleedt,
-      isBestuurlijkeAliasVan: this.args.mandataris.isBestuurlijkeAliasVan,
-      beleidsdomein: (await this.args.mandataris.beleidsdomein).slice(),
-      status: this.newStatus,
-      publicationStatus: await getDraftPublicationStatus(this.store),
-    };
+    const newMandatarisProps = await this.mandatarisService.createNewProps(
+      this.args.mandataris,
+      {
+        rangorde: this.rangorde,
+        start: this.date,
+        einde: endDate,
+        status: this.newStatus,
+        publicationStatus: await getDraftPublicationStatus(this.store),
+      }
+    );
 
     const newMandataris = this.store.createRecord(
       'mandataris',
@@ -184,28 +184,6 @@ export default class MandatarissenUpdateState extends Component {
     );
 
     return newMandataris;
-  }
-
-  async updateOldLidmaatschap() {
-    const oldLidmaatschap = await this.args.mandataris.heeftLidmaatschap;
-    if (!oldLidmaatschap) {
-      return;
-    }
-    let oldTijdsinterval = await oldLidmaatschap.lidGedurende;
-
-    if (!oldTijdsinterval) {
-      // old membership instances don't necessarily have a tijdsinterval
-      oldTijdsinterval = this.store.createRecord('tijdsinterval', {
-        begin: this.args.mandataris.start,
-        einde: this.date,
-      });
-      await oldTijdsinterval.save();
-      oldLidmaatschap.lidGedurende = oldTijdsinterval;
-      await oldLidmaatschap.save();
-    }
-    oldTijdsinterval.einde = this.date;
-
-    await oldTijdsinterval.save();
   }
 
   endMandataris() {

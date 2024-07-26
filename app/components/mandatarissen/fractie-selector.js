@@ -12,6 +12,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
   @service currentSession;
   @service bestuursperioden;
+  @service('fractie') fractieService;
 
   @tracked _fractie;
   @tracked bestuursorganen = [];
@@ -55,7 +56,10 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     );
 
     if (!onafhankelijke) {
-      onafhankelijke = await this.createOnafhankelijkeFractie();
+      onafhankelijke = await this.fractieService.createOnafhankelijkeFractie(
+        this.bestuursorganen,
+        this.args.bestuurseenheid
+      );
       this.fractieOptions = [...fracties, onafhankelijke];
       return;
     }
@@ -139,23 +143,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       include: 'fractietype',
     });
     return onafhankelijke.length ? onafhankelijke[0] : null;
-  }
-
-  async createOnafhankelijkeFractie() {
-    const onafhankelijkeFractieType = (
-      await this.store.query('fractietype', {
-        page: { size: 1 },
-        'filter[:uri:]': FRACTIETYPE_ONAFHANKELIJK,
-      })
-    ).at(0);
-    const onafhankelijke = this.store.createRecord('fractie', {
-      naam: 'Onafhankelijk',
-      fractietype: onafhankelijkeFractieType,
-      bestuursorganenInTijd: this.bestuursorganen,
-      bestuurseenheid: this.args.bestuurseenheid,
-    });
-    onafhankelijke.save();
-    return onafhankelijke;
   }
 
   @action
