@@ -8,8 +8,6 @@ import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestu
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 
-import MandatarisRepository from 'frontend-lmb/repositories/mandataris';
-
 export default class OrganenMandatarissenController extends Controller {
   @service router;
   @service store;
@@ -22,8 +20,6 @@ export default class OrganenMandatarissenController extends Controller {
   // we are folding the mandataris instances, so just pick a very high number here and hope our government is reasonable about the
   // number of mandatarisses that can exist
   size = 900000;
-
-  mandatarisRepository = new MandatarisRepository();
 
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
