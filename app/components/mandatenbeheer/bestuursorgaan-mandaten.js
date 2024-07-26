@@ -19,11 +19,15 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
   @tracked editMandaat = null;
   @tracked aantalHouders;
   @tracked errorMessageAantalHouders;
+  @tracked showMinMax = false;
 
   constructor() {
     super(...arguments);
     this.selectedBestuursfunctie =
       this.args.availableBestuursfuncties.firstObject;
+    this.showMinMax = this.args.orderedMandaten.some(
+      (obj) => obj.minAantalHouders !== undefined
+    );
   }
 
   createMandaat = task({ drop: true }, async () => {
