@@ -10,7 +10,7 @@ import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
 
 import MandatarisRepository from 'frontend-lmb/repositories/mandataris';
 import PersoonRepository from 'frontend-lmb/repositories/persoon';
-import FractieRepository from 'frontend-lmb/repositories/fractie';
+import { fractieRepository } from 'frontend-lmb/repositories/fractie';
 
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
@@ -29,7 +29,6 @@ export default class MandatarissenPersoonMandatenController extends Controller {
 
   mandatarisRepository = new MandatarisRepository();
   persoonRepository = new PersoonRepository();
-  fractieRepository = new FractieRepository();
 
   @action
   toggleModal() {
@@ -92,7 +91,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
           await getUniqueBestuursorganen(mandataris);
         const bestuurseenheid = await bestuursorganenInTijd[0]?.bestuurseenheid;
         onafhankelijkeFractieUri =
-          await this.fractieRepository.createOnafhankelijkeFractie(
+          await fractieRepository.createOnafhankelijkeFractie(
             bestuursorganenInTijd.map((boi) => boi.uri),
             bestuurseenheid.uri
           );
