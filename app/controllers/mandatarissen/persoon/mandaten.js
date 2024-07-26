@@ -8,9 +8,9 @@ import { task } from 'ember-concurrency';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
 
-import MandatarisRepository from 'frontend-lmb/repositories/mandataris';
 import PersoonRepository from 'frontend-lmb/repositories/persoon';
 import { fractieRepository } from 'frontend-lmb/repositories/fractie';
+import { mandatarisRepository } from 'frontend-lmb/repositories/mandataris';
 
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
@@ -27,7 +27,6 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @tracked activeOnly = true;
   sort = 'is-bestuurlijke-alias-van.achternaam';
 
-  mandatarisRepository = new MandatarisRepository();
   persoonRepository = new PersoonRepository();
 
   @action
@@ -60,7 +59,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     this.canBecomeOnafhankelijk = false;
     this.possibelOnafhankelijkeMandatarissen = [];
     for (const mandataris of mandatarissen) {
-      const isActive = await this.mandatarisRepository.isActive(mandataris.id);
+      const isActive = await mandatarisRepository.isActive(mandataris.id);
       if (!isActive) {
         continue;
       }
