@@ -22,10 +22,10 @@
         </td>
         {{#if this.showMinMax}}
           <td class="au-u-visible-small-up">
-            {{mandaat.minAantalHouders}}
+            {{if mandaat.minAantalHouders mandaat.minAantalHouders "Onbepaald"}}
           </td>
           <td class="au-u-visible-small-up">
-            {{mandaat.maxAantalHouders}}
+            {{if mandaat.maxAantalHouders mandaat.maxAantalHouders "Onbepaald"}}
           </td>
         {{/if}}
         <td class="au-u-visible-small-up">
