@@ -2,6 +2,7 @@ import { API, STATUS_CODE } from 'frontend-lmb/utils/constants';
 
 export const fractieRepository = {
   createOnafhankelijkeFractie,
+  isMandatarisFractieOnafhankelijk,
 };
 
 async function createOnafhankelijkeFractie(
@@ -30,4 +31,20 @@ async function createOnafhankelijkeFractie(
   }
 
   return jsonReponse.uri;
+}
+
+// Could be a call to the mandataris service*
+async function isMandatarisFractieOnafhankelijk(mandatarisModel) {
+  const lid = await mandatarisModel.heeftLidmaatschap;
+  if (!lid) {
+    return true;
+  }
+
+  const fractie = await lid.binnenFractie;
+  if (fractie) {
+    const type = await fractie.fractietype;
+    return type ? type.isOnafhankelijk : false;
+  }
+
+  return false;
 }
