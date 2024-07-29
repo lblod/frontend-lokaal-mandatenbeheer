@@ -7,7 +7,6 @@ import { MANDATARIS_WAARNEMEND_STATE_ID } from 'frontend-lmb/utils/well-known-id
 import moment from 'moment';
 
 import { mandatarisRepository } from 'frontend-lmb/repositories/mandataris';
-import { persoonRepository } from 'frontend-lmb/repositories/persoon';
 
 export default class MandatarisService extends Service {
   @service store;
