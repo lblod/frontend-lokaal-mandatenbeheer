@@ -1,34 +1,37 @@
 import { API, STATUS_CODE } from 'frontend-lmb/utils/constants';
 
-export default class MandatarisRepository {
-  async isActive(mandatarisId) {
-    const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/isActive`
-    );
-    const jsonReponse = await response.json();
+export const mandatarisRepository = {
+  isActive,
+  updateCurrentFractieForPerson,
+};
 
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
-      throw jsonReponse.message;
-    }
+async function isActive(mandatarisId) {
+  const response = await fetch(
+    `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/isActive`
+  );
+  const jsonReponse = await response.json();
 
-    return jsonReponse.isActive;
+  if (response.status !== STATUS_CODE.OK) {
+    console.error(jsonReponse.message);
+    throw jsonReponse.message;
   }
 
-  async getBestuursperiode(mandatarisId) {
-    const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/bestuursperiode`
-    );
-    const jsonReponse = await response.json();
+  return jsonReponse.isActive;
+}
 
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
-      throw jsonReponse.message;
+async function updateCurrentFractieForPerson(mandatarisId) {
+  const response = await fetch(
+    `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/current-fractie`,
+    {
+      method: 'PUT',
     }
+  );
+  const jsonReponse = await response.json();
 
-    return {
-      uri: jsonReponse.uri,
-      id: jsonReponse.id,
-    };
+  if (response.status !== STATUS_CODE.OK) {
+    console.error(jsonReponse.message);
+    throw jsonReponse.message;
   }
+
+  return jsonReponse.current;
 }
