@@ -4,9 +4,9 @@ export const persoonRepository = {
   findOnafhankelijkeFractie,
 };
 
-async function findOnafhankelijkeFractie(persoonId) {
+async function findOnafhankelijkeFractie(persoonId, bestuursperiodeId) {
   const response = await fetch(
-    `${API.MANDATARIS_SERVICE}/personen/${persoonId}/onafhankelijke-fractie`
+    `${API.MANDATARIS_SERVICE}/personen/${persoonId}/onafhankelijke-fractie/${bestuursperiodeId}`
   );
   const jsonReponse = await response.json();
 

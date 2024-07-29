@@ -79,8 +79,14 @@ export default class MandatarissenPersoonMandatenController extends Controller {
 
     for (const mandataris of this.possibelOnafhankelijkeMandatarissen) {
       const person = await mandataris.isBestuurlijkeAliasVan;
+      const bestuursperiode =
+        await mandatarisRepository.getBestuursperiode(mandataris);
+
       let onafhankelijkeFractieUri =
-        await persoonRepository.findOnafhankelijkeFractie(person.id);
+        await persoonRepository.findOnafhankelijkeFractie(
+          person.id,
+          bestuursperiode.id
+        );
 
       if (!onafhankelijkeFractieUri) {
         const bestuursorganenInTijd =
