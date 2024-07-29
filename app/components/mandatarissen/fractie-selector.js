@@ -28,12 +28,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     this.load();
   }
 
-  @action
-  async handleSelectOpen(select, event) {
-    await this.args.handleSelectOpen(select, event);
-    await this.load();
-  }
-
   async load() {
     await this.loadBestuursorganen();
     await this.loadFracties();
@@ -51,18 +45,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   async loadFracties() {
     let fracties = [];
-    console.log(`perosn args`, this.args.person);
 
     if (this.args.isUpdatingState && this._fractie) {
       fracties = await this.getFractiesWhenUpdateState();
-    } else if (this.args.person) {
-      const onafhankelijk =
-        await this.persoonRepository.findOnafhankelijkeFractie(
-          this.args.person.id
-        );
-      if(onafhankelijk) {
-        fracties =
-      }
     } else {
       fracties = await this.fetchFracties();
     }
