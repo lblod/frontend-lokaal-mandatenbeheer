@@ -118,10 +118,11 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         'mandataris',
         newMandatarisProps
       );
-      newMandataris.save();
+      await newMandataris.save();
 
-      person.fractie = onafhankelijkeFractie;
-      person.save();
+      await mandatarisRepository.updateCurrentFractieForPerson(
+        newMandataris.id
+      );
       await this.mandatarisService.updateOldLidmaatschap(mandataris);
       await this.mandatarisService.createNewLidmaatschap(
         newMandataris,
@@ -129,7 +130,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       );
 
       mandataris.einde = dateNow;
-      mandataris.save();
+      await mandataris.save();
     }
 
     this.router.refresh();
