@@ -16,7 +16,6 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
   @service store;
   @service('mandataris') mandatarisService;
-  @service('fractie') fractieService;
 
   queryParams = ['activeOnly'];
 
@@ -62,7 +61,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         continue;
       }
       const isOnafhankelijk =
-        await this.fractieService.isMandatarisFractieOnafhankelijk(mandataris);
+        await fractieRepository.isMandatarisFractieOnafhankelijk(mandataris);
       if (!isOnafhankelijk) {
         this.possibelOnafhankelijkeMandatarissen.push(mandataris);
         continue;
