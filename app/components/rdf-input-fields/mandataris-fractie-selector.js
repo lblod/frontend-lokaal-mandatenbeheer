@@ -54,7 +54,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   async load() {
     await Promise.all([
-      await this.findPersonInForm.perform(),
+      this.findPersonInForm.perform(),
       this.loadBestuursorganen(),
       this.loadProvidedValue(),
     ]);
@@ -99,15 +99,23 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   findPersonInForm = restartableTask(async () => {
-    const store = this.storeOptions.store;
-    const mandatarisNode = store.any(
+    const mandatarisNode = this.storeOptions.store.any(
       undefined,
       RDF('type'),
       MANDAAT('Mandataris'),
       this.storeOptions.sourceGraph
     );
+    this.person = await this.findMandatarisPersonInStore(mandatarisNode);
+    if (!this.person) {
+      this.person = await this.findMandatarisPersonByQuery(
+        mandatarisNode.value
+      );
+    }
+  });
+
+  async findMandatarisPersonInStore(mandatarisNode) {
     if (mandatarisNode) {
-      const possiblePersonNode = store.any(
+      const possiblePersonNode = this.storeOptions.store.any(
         mandatarisNode,
         MANDAAT('isBestuurlijkeAliasVan'),
         undefined,
@@ -118,11 +126,23 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
           'filter[:uri:]': possiblePersonNode.value,
         });
         if (personMatches.length === 0) {
-          throw 'person is newly created';
+          console.log(`person is possibly newly created`);
+          return null;
         } else {
-          this.person = personMatches.at(0);
+          return personMatches.at(0);
         }
       }
     }
-  });
+  }
+
+  async findMandatarisPersonByQuery(mandatarisUri) {
+    const mandatarisMatches = await this.store.query('mandataris', {
+      'filter[:uri:]': mandatarisUri,
+    });
+    if (mandatarisMatches.length === 0) {
+      return null;
+    }
+
+    return await mandatarisMatches.at(0).isBestuurlijkeAliasVan;
+  }
 }
