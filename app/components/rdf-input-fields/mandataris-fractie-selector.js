@@ -10,6 +10,7 @@ import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValu
 import { NamedNode } from 'rdflib';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { MANDAAT, RDF } from 'frontend-lmb/rdf/namespaces';
+import { restartableTask } from 'ember-concurrency';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
@@ -43,7 +44,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     super(...arguments);
     this.load();
     this.storeOptions.store.registerObserver(async () => {
-      await this.findPersonInForm();
+      this.findPersonInForm.perform();
     });
   }
 
@@ -52,7 +53,11 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   async load() {
-    await Promise.all([this.loadBestuursorganen(), this.loadProvidedValue()]);
+    await Promise.all([
+      await this.findPersonInForm.perform(),
+      this.loadBestuursorganen(),
+      this.loadProvidedValue(),
+    ]);
     this.initialized = true;
   }
 
@@ -93,7 +98,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     super.updateValidations();
   }
 
-  async findPersonInForm() {
+  findPersonInForm = restartableTask(async () => {
     const store = this.storeOptions.store;
     const mandatarisNode = store.any(
       undefined,
@@ -119,5 +124,5 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
         }
       }
     }
-  }
+  });
 }
