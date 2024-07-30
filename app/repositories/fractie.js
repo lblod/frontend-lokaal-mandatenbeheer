@@ -3,6 +3,7 @@ import { API, STATUS_CODE } from 'frontend-lmb/utils/constants';
 export const fractieRepository = {
   createOnafhankelijkeFractie,
   isMandatarisFractieOnafhankelijk,
+  getAllUrisForPerson,
 };
 
 async function createOnafhankelijkeFractie(
@@ -47,4 +48,28 @@ async function isMandatarisFractieOnafhankelijk(mandatarisModel) {
   }
 
   return false;
+}
+
+async function getAllUrisForPerson(persoonId, mandaatUri) {
+  const response = await fetch(
+    `${API.MANDATARIS_SERVICE}/fracties/${persoonId}/persoon`,
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        mandaatUri: mandaatUri,
+      }),
+    }
+  );
+
+  const jsonReponse = await response.json();
+
+  if (response.status !== STATUS_CODE.OK) {
+    throw new Error(jsonReponse.message);
+  }
+
+  return jsonReponse.fractieUris;
 }

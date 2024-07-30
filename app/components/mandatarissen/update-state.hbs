@@ -87,6 +87,7 @@
           @bestuursperiode={{this.bestuursperiode}}
           @mandataris={{@mandataris}}
           @isUpdatingState={{true}}
+          @person={{await @mandataris.isBestuurlijkeAliasVan}}
         />
       {{/if}}
     </div>
