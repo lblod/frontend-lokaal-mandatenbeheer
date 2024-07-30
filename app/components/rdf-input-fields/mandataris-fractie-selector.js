@@ -101,6 +101,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   findPersonInForm = restartableTask(async () => {
     this.isPersonInForm = false;
+    this.person = null;
     const mandatarisNode = this.storeOptions.store.any(
       undefined,
       RDF('type'),
