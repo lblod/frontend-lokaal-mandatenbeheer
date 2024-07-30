@@ -9,6 +9,7 @@ import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { NamedNode } from 'rdflib';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { MANDAAT, RDF } from 'frontend-lmb/rdf/namespaces';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
@@ -34,10 +35,16 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @tracked initialized = false;
   @tracked bestuurseenheid = null;
   @tracked bestuursperiode;
+  @tracked person;
+
+  emptySelectorOptions = [];
 
   constructor() {
     super(...arguments);
     this.load();
+    this.storeOptions.store.registerObserver(async () => {
+      await this.findPersonInForm();
+    });
   }
 
   get title() {
@@ -84,5 +91,33 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     this.selectedFractie = fractie;
     this.hasBeenFocused = true;
     super.updateValidations();
+  }
+
+  async findPersonInForm() {
+    const store = this.storeOptions.store;
+    const mandatarisNode = store.any(
+      undefined,
+      RDF('type'),
+      MANDAAT('Mandataris'),
+      this.storeOptions.sourceGraph
+    );
+    if (mandatarisNode) {
+      const possiblePersonNode = store.any(
+        mandatarisNode,
+        MANDAAT('isBestuurlijkeAliasVan'),
+        undefined,
+        this.storeOptions.sourceGraph
+      );
+      if (possiblePersonNode) {
+        const personMatches = await this.store.query('persoon', {
+          'filter[:uri:]': possiblePersonNode.value,
+        });
+        if (personMatches.length === 0) {
+          throw 'person is newly created';
+        } else {
+          this.person = personMatches.at(0);
+        }
+      }
+    }
   }
 }

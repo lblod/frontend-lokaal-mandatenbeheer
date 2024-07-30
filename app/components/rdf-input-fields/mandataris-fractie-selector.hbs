@@ -5,22 +5,26 @@
   @required={{this.isRequired}}
 >{{this.title}}</AuLabel>
 {{#if this.initialized}}
-  <div class={{if this.hasErrors "ember-power-select--error"}}>
-    <Mandatarissen::FractieSelector
-      @fractie={{this.selectedFractie}}
-      @onSelect={{this.onSelectFractie}}
-      @bestuurseenheid={{this.bestuurseenheid}}
-      @bestuursperiode={{this.bestuursperiode}}
-      @onClose={{fn (mut this.hasBeenFocused) true}}
-    />
-  </div>
-  {{#each this.errors as |error|}}
-    <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
-  {{/each}}
+  {{#if this.person}}
+    <div class={{if this.hasErrors "ember-power-select--error"}}>
+      <Mandatarissen::FractieSelector
+        @fractie={{this.selectedFractie}}
+        @onSelect={{this.onSelectFractie}}
+        @bestuurseenheid={{this.bestuurseenheid}}
+        @bestuursperiode={{this.bestuursperiode}}
+        @onClose={{fn (mut this.hasBeenFocused) true}}
+      />
+    </div>
+    {{#each this.errors as |error|}}
+      <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+    {{/each}}
 
-  {{#each this.warnings as |warning|}}
-    <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
-  {{/each}}
+    {{#each this.warnings as |warning|}}
+      <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+    {{/each}}
+  {{else}}
+    <p>Selecteer eerst een persoon</p>
+  {{/if}}
 {{else}}
   <p class="skeleton-input-full au-u-margin-top"></p>
 {{/if}}
