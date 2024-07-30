@@ -46,10 +46,18 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   async loadFracties() {
     let fracties = [];
 
-    if (this.args.isUpdatingState && this._fractie) {
+    if (this.args.isUpdatingState) {
+      console.log('wijzig situation');
       fracties = await this.getFractiesWhenUpdateState();
-    } else {
+    }
+
+    if (!this.args.isUpdatingState && !this.args.isInCreatingForm) {
+      console.log('correcting situation');
       fracties = await this.fetchFracties();
+    }
+
+    if (!this.args.isUpdatingState && this.args.isInCreatingForm) {
+      console.log('create situation');
     }
 
     let onafhankelijke = fracties.find((f) =>

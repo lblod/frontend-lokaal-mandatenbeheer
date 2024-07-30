@@ -13,6 +13,8 @@
         @bestuurseenheid={{this.bestuurseenheid}}
         @bestuursperiode={{this.bestuursperiode}}
         @onClose={{fn (mut this.hasBeenFocused) true}}
+        @person={{this.person}}
+        @isInCreatingForm={{this.isPersonInForm}}
       />
     </div>
     {{#each this.errors as |error|}}

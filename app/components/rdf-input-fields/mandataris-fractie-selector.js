@@ -37,6 +37,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @tracked bestuurseenheid = null;
   @tracked bestuursperiode;
   @tracked person;
+  @tracked isPersonInForm;
 
   emptySelectorOptions = [];
 
@@ -99,6 +100,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   findPersonInForm = restartableTask(async () => {
+    this.isPersonInForm = false;
     const mandatarisNode = this.storeOptions.store.any(
       undefined,
       RDF('type'),
@@ -129,6 +131,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
           console.log(`person is possibly newly created`);
           return null;
         } else {
+          this.isPersonInForm = true;
           return personMatches.at(0);
         }
       }
