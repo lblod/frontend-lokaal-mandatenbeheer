@@ -14,11 +14,13 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
   @service currentSession;
   @service bestuursperioden;
+  @service('fractie') fractieService;
 
   @tracked _fractie;
   @tracked bestuursorganen = [];
   @tracked bestuursorganenId;
   @tracked fractieOptions = [];
+  onafhankelijkeTmpFractie;
 
   constructor() {
     super(...arguments);
@@ -26,6 +28,17 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       this._fractie = this.args.fractie;
     }
     this.load();
+  }
+
+  async willDestroy() {
+    super.willDestroy(...arguments);
+    if (
+      this._fractie &&
+      this.onafhankelijkeTmpFractie &&
+      this._fractie.uri !== this.onafhankelijkeTmpFractie.uri
+    ) {
+      await this.onafhankelijkeTmpFractie.destroy();
+    }
   }
 
   async load() {
@@ -45,13 +58,14 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   async loadFracties() {
     let fracties = [];
-
     if (this.args.isUpdatingState) {
+      console.log(`update state`);
       const personFracties = await this.getPersonFracties();
       fracties = await this.getFractiesWithOnafhankelijke(personFracties);
     }
 
     if (!this.args.isUpdatingState && !this.args.isInCreatingForm) {
+      console.log(`correcting`);
       const samenwerkendeFracties = await this.fetchFracties();
       fracties = await this.getFractiesWithOnafhankelijke(
         samenwerkendeFracties
@@ -59,11 +73,13 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     }
 
     if (!this.args.isUpdatingState && this.args.isInCreatingForm) {
+      console.log(`create`);
       const currentFractie = await this.args.person.fractie;
 
       if (currentFractie) {
         fracties = [currentFractie];
       } else {
+        console.log('showing all no current set');
         const samenwerkendeFracties = await this.fetchFracties();
         fracties = await this.getFractiesWithOnafhankelijke(
           samenwerkendeFracties
@@ -81,10 +97,15 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       person.id,
       mandaat.uri
     );
-
-    return this.store.query('fractie', {
-      'filter[:uri:]': uris.join(','),
-    });
+    const models = Promise.all(
+      uris.map(async (uri) => {
+        const fracties = await this.store.query('fractie', {
+          'filter[:uri:]': uri,
+        });
+        return fracties.at(0);
+      })
+    );
+    return await models;
   }
 
   async fetchFracties(searchData) {
@@ -106,26 +127,28 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     return await this.store.query('fractie', queryParams);
   }
 
+  async getPerson() {
+    if (this.args.mandataris) {
+      return await this.args.mandataris.isBestuurlijkeAliasVan;
+    }
+
+    return this.args.person;
+  }
+
   async getFractiesWithOnafhankelijke(fracties) {
     const hasOnafhankelijkeFractie =
       await persoonRepository.findOnafhankelijkeFractie(
-        this.args.person.id,
+        (await this.getPerson()).id,
         this.args.bestuursperiode.id
       );
     if (!hasOnafhankelijkeFractie) {
-      console.log('creating a uri');
-      const createdUri = await fractieRepository.createOnafhankelijkeFractie(
-        this.bestuursorganen.map((boit) => boit.uri),
-        this.args.bestuurseenheid.uri
-      );
-      this.createdOnafhankelijkeFractie = {
-        uri: createdUri,
-        naam: 'Onafhankelijk',
-      };
+      this.onafhankelijkeTmpFractie =
+        await this.fractieService.createOnafhankelijkeFractieWithoutSave(
+          this.bestuursorganen,
+          this.args.bestuurseenheid
+        );
 
-      return Array.from(
-        new Set([...fracties, this.createdOnafhankelijkeFractie])
-      );
+      return Array.from(new Set([...fracties, this.onafhankelijkeTmpFractie]));
     }
 
     const fractieModels = await this.store.query('fractie', {

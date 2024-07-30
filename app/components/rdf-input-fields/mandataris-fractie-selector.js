@@ -45,7 +45,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     super(...arguments);
     this.load();
     this.storeOptions.store.registerObserver(async () => {
-      this.findPersonInForm.perform();
+      await this.findPersonInForm.perform();
     });
   }
 
