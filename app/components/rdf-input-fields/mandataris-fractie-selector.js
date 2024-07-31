@@ -129,7 +129,6 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
           'filter[:uri:]': possiblePersonNode.value,
         });
         if (personMatches.length === 0) {
-          console.log(`person is possibly newly created`);
           return null;
         } else {
           this.isPersonInForm = true;

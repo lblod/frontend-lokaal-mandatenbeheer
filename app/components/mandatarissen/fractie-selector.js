@@ -59,13 +59,11 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   async loadFracties() {
     let fracties = [];
     if (this.args.isUpdatingState) {
-      console.log(`update state`);
       const personFracties = await this.getPersonFracties();
       fracties = await this.getFractiesWithOnafhankelijke(personFracties);
     }
 
     if (!this.args.isUpdatingState && !this.args.isInCreatingForm) {
-      console.log(`correcting`);
       const samenwerkendeFracties = await this.fetchFracties();
       fracties = await this.getFractiesWithOnafhankelijke(
         samenwerkendeFracties
@@ -73,13 +71,11 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     }
 
     if (!this.args.isUpdatingState && this.args.isInCreatingForm) {
-      console.log(`create`);
       const currentFractie = await this.args.person.fractie;
 
       if (currentFractie) {
         fracties = [currentFractie];
       } else {
-        console.log('showing all no current set');
         const samenwerkendeFracties = await this.fetchFracties();
         fracties = await this.getFractiesWithOnafhankelijke(
           samenwerkendeFracties
