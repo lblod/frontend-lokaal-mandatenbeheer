@@ -139,7 +139,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       );
     if (!hasOnafhankelijkeFractie) {
       this.onafhankelijkeTmpFractie =
-        await this.fractieService.createOnafhankelijkeFractieWithoutSave(
+        await this.fractieService.createOnafhankelijkeFractie(
           this.bestuursorganen,
           this.args.bestuurseenheid
         );

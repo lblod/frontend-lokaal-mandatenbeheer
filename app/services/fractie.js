@@ -7,10 +7,7 @@ import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 export default class FractieService extends Service {
   @service store;
 
-  async createOnafhankelijkeFractieWithoutSave(
-    bestuursorganen,
-    bestuurseenheid
-  ) {
+  async createOnafhankelijkeFractie(bestuursorganen, bestuurseenheid) {
     if (!bestuurseenheid) {
       throw `Could not create onafhankelijke fractie`;
     }
@@ -27,6 +24,7 @@ export default class FractieService extends Service {
       bestuursorganenInTijd: bestuursorganen,
       bestuurseenheid: bestuurseenheid,
     });
+    onafhankelijke.save();
 
     return onafhankelijke;
   }
