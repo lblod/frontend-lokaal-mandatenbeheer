@@ -147,6 +147,14 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       return Array.from(new Set([...fracties, this.onafhankelijkeTmpFractie]));
     }
 
+    const isOnafhankelijkeIncluded = fracties.find(
+      (fractie) => fractie.uri === hasOnafhankelijkeFractie
+    );
+
+    if (isOnafhankelijkeIncluded) {
+      return fracties;
+    }
+
     const fractieModels = await this.store.query('fractie', {
       'filter[:uri:]': hasOnafhankelijkeFractie.uri,
     });
