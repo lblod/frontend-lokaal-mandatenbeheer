@@ -31,9 +31,9 @@ export default class FractieApiService extends Service {
       `${API.MANDATARIS_SERVICE}/fracties/${mandatarisId}/current-fractie`,
       { method: 'PUT' }
     );
-    const jsonReponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
+      const jsonReponse = await response.json();
       console.error(jsonReponse.message);
       throw {
         status: response.status,
