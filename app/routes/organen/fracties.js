@@ -13,6 +13,7 @@ import RSVP from 'rsvp';
 
 export default class FractiesRoute extends Route {
   @service store;
+  @service fractieApi;
   @service bestuursperioden;
 
   queryParams = {
@@ -64,20 +65,9 @@ export default class FractiesRoute extends Route {
       'filter[heeft-bestuursperiode][:id:]': selectedPeriod.id,
     });
 
-    const tijdsspecialisatiesIds = await Promise.all(
-      tijdsspecialisaties.map(async (o) => {
-        return (await o).get('id');
-      })
+    const fracties = await this.fractieApi.forBestuursperiode(
+      selectedPeriod.id
     );
-
-    const fracties = await this.store.query('fractie', {
-      sort: params.sort,
-      page: {
-        number: params.page,
-        size: params.size,
-      },
-      'filter[bestuursorganen-in-tijd][:id:]': tijdsspecialisatiesIds.join(','),
-    });
 
     const form = await getFormFrom(this.store, FRACTIE_FORM_ID);
     const defaultFractieType = (
