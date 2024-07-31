@@ -14,6 +14,7 @@ import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
   @service store;
+  @service fractieApi;
 
   @tracked isChanging;
   @tracked isCorrecting;
@@ -65,6 +66,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       store,
       sourceGraph: SOURCE_GRAPH,
     });
+    await this.fractieApi.updateCurrentFractie(this.model.mandataris.id);
 
     setTimeout(() => this.router.refresh(), 1000);
     this.closeModals();
