@@ -25,4 +25,20 @@ export default class FractieApiService extends Service {
       'filter[:id:]': jsonReponse.fracties.join(','),
     });
   }
+
+  async updateCurrentFractie(mandatarisId) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/fracties/${mandatarisId}/current-fractie`,
+      { method: 'PUT' }
+    );
+    const jsonReponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonReponse.message);
+      throw {
+        status: response.status,
+        message: jsonReponse.message,
+      };
+    }
+  }
 }
