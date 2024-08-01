@@ -5,12 +5,14 @@ import { service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
+import moment from 'moment';
 
 export default class OrganenMandatarissenRoute extends Route {
   @service store;
   @service installatievergadering;
 
   queryParams = {
+    activeOnly: { refreshModel: true },
     filter: { refreshModel: true },
     page: { refreshModel: true },
     size: { refreshModel: true },
@@ -39,7 +41,7 @@ export default class OrganenMandatarissenRoute extends Route {
       );
 
     return {
-      mandatarissen: folded,
+      mandatarissen: this.getFilteredMandatarissen(folded, params),
       bestuursorgaan: parentModel.bestuursorgaan,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
@@ -76,5 +78,15 @@ export default class OrganenMandatarissenRoute extends Route {
     }
 
     return queryParams;
+  }
+
+  getFilteredMandatarissen(mandatarissen, params) {
+    let filteredMandatarissen = mandatarissen;
+    if (params.activeOnly) {
+      filteredMandatarissen = mandatarissen.filter((mandataris) =>
+        moment().isBetween(mandataris.foldedStart, mandataris.foldedEnd)
+      );
+    }
+    return filteredMandatarissen;
   }
 }
