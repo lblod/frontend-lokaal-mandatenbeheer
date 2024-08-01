@@ -11,9 +11,13 @@
     <div class="au-o-grid__item au-u-1-2">
       <div class="au-c-description-label">Status</div>
       <div class="au-c-description-value au-u-margin-top-tiny">
-        <AuPill @skin={{this.skinForStatusPill}}>
-          {{this.status}}
-        </AuPill>
+        {{#if this.status}}
+          <AuPill @skin={{this.skinForStatusPill}}>
+            {{this.status}}
+          </AuPill>
+        {{else}}
+          <p>Niet beschikbaar</p>
+        {{/if}}
       </div>
     </div>
     <div class="au-o-grid__item au-u-1-2">
