@@ -6,18 +6,20 @@ import { action } from '@ember/object';
 
 import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
-import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
   @service currentSession;
   @service bestuursperioden;
   @service('fractie') fractieService;
+  @service fractieApi;
+  @service persoonApi;
 
   @tracked _fractie;
   @tracked bestuursorganen = [];
   @tracked bestuursorganenId;
   @tracked fractieOptions = [];
+  onafhankelijkeTmpFractie;
 
   constructor() {
     super(...arguments);
@@ -25,6 +27,17 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       this._fractie = this.args.fractie;
     }
     this.load();
+  }
+
+  async willDestroy() {
+    super.willDestroy(...arguments);
+    if (
+      this._fractie &&
+      this.onafhankelijkeTmpFractie &&
+      this._fractie.uri !== this.onafhankelijkeTmpFractie.uri
+    ) {
+      await this.onafhankelijkeTmpFractie.destroy();
+    }
   }
 
   async load() {
@@ -44,105 +57,45 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   async loadFracties() {
     let fracties = [];
+    const person = await this.getPerson();
 
-    if (this.args.isUpdatingState && this._fractie) {
-      fracties = await this.getFractiesWhenUpdateState();
-    } else {
-      fracties = await this.fetchFracties();
+    if (this.args.isUpdatingState) {
+      fracties = await this.persoonApi.getMandatarisFracties(
+        person.id,
+        this.args.bestuursperiode.id
+      );
     }
 
-    let onafhankelijke = fracties.find((f) =>
-      f.get('fractietype.isOnafhankelijk')
-    );
-
-    if (!onafhankelijke) {
-      onafhankelijke = await this.fractieService.createOnafhankelijkeFractie(
-        this.bestuursorganen,
-        this.args.bestuurseenheid
+    if (!this.args.isUpdatingState && !this.args.isInCreatingForm) {
+      fracties = await this.fractieApi.forBestuursperiode(
+        this.args.bestuursperiode.id
       );
-      this.fractieOptions = [...fracties, onafhankelijke];
-      return;
+    }
+
+    if (!this.args.isUpdatingState && this.args.isInCreatingForm) {
+      const currentFractie = await this.persoonApi.getCurrentFractie(
+        person.id,
+        this.args.bestuursperiode.id
+      );
+
+      if (currentFractie) {
+        fracties = [currentFractie];
+      } else {
+        fracties = await this.fractieApi.forBestuursperiode(
+          this.args.bestuursperiode.id
+        );
+      }
     }
 
     this.fractieOptions = fracties;
   }
 
-  async getFractiesWhenUpdateState() {
-    const mandatarissen = await this.store.query('mandataris', {
-      include: 'heeft-lidmaatschap,heeft-lidmaatschap.binnen-fractie',
-      filter: {
-        bekleedt: { id: this.args.mandataris.bekleedt.id },
-        'is-bestuurlijke-alias-van': {
-          id: this.args.mandataris.isBestuurlijkeAliasVan.id,
-        },
-      },
-    });
-    const fracties = await this.fractiesVanMandatarissen(mandatarissen);
-
-    return fracties;
-  }
-
-  async fractiesVanMandatarissen(mandatarissen) {
-    const fracties = [];
-    let containsOnafhankelijke = false;
-    for (const mandate of mandatarissen) {
-      const lidmaatschap = await mandate.heeftLidmaatschap;
-      if (!lidmaatschap) {
-        continue;
-      }
-      const fractie = await lidmaatschap.binnenFractie;
-      if (!fractie) {
-        continue;
-      }
-
-      if (!fracties.find((fractieModel) => fractieModel.id == fractie.id)) {
-        fracties.push(fractie);
-      }
-
-      if (fractie.get('fractietype.isOnafhankelijk')) {
-        containsOnafhankelijke = true;
-      }
+  async getPerson() {
+    if (this.args.mandataris) {
+      return await this.args.mandataris.isBestuurlijkeAliasVan;
     }
 
-    if (!containsOnafhankelijke) {
-      let onafhankelijke = await this.fetchOnafhankelijkeFractie();
-      return onafhankelijke ? [...fracties, onafhankelijke] : fracties;
-    }
-
-    return fracties;
-  }
-
-  async fetchFracties(searchData) {
-    let queryParams = {
-      sort: 'naam',
-      include: 'fractietype',
-      filter: {
-        'bestuursorganen-in-tijd': {
-          id: this.bestuursorganenId.join(','),
-        },
-      },
-    };
-    if (searchData) {
-      queryParams.filter.naam = searchData;
-    }
-    let fracties = await this.store.query('fractie', queryParams);
-    // Only show one onafhankelijke fractie
-    return fracties.filter((obj, index) => {
-      return (
-        !obj.get('fractietype.isOnafhankelijk') ||
-        index ===
-          fracties.findIndex((o) => o.get('fractietype.isOnafhankelijk'))
-      );
-    });
-  }
-
-  async fetchOnafhankelijkeFractie() {
-    const onafhankelijke = await this.store.query('fractie', {
-      page: { size: 1 },
-      'filter[fractietype][:uri:]': FRACTIETYPE_ONAFHANKELIJK,
-      include: 'fractietype',
-    });
-    return onafhankelijke.length ? onafhankelijke[0] : null;
+    return this.args.person;
   }
 
   @action
