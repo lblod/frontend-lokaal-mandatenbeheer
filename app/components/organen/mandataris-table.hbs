@@ -29,6 +29,11 @@
         @label="Mandaat"
       />
       <AuDataTableThSortable
+        @field="status.label"
+        @currentSorting={{@sort}}
+        @label="Status"
+      />
+      <AuDataTableThSortable
         @field="start"
         @currentSorting={{@sort}}
         @label="Start mandaat"
@@ -72,6 +77,9 @@
         >
           {{row.mandataris.bekleedt.bestuursfunctie.label}}
         </LinkTo></td>
+      <td>
+        {{row.mandataris.status.label}}
+      </td>
       <td>
         {{moment-format row.foldedStart "DD-MM-YYYY"}}</td>
       <td>
