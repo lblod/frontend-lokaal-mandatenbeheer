@@ -26,7 +26,7 @@ export default class OrganenMandatarisNewController extends Controller {
   @action
   async onCreate({ instanceTtl, instanceId }) {
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
-    await this.fractieAPi.updateCurrentFractie(instanceId);
+    await this.fractieApi.updateCurrentFractie(instanceId);
     this.router.transitionTo('organen.orgaan.mandatarissen');
   }
 
