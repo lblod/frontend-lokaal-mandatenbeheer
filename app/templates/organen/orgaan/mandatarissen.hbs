@@ -10,7 +10,10 @@
     </AuHeading>
   </Group>
   <Group>
-    <AuButton {{on "click" (fn this.setIsCreatingMandataris true)}}>
+    <AuButton
+      {{on "click" (fn this.setIsCreatingMandataris true)}}
+      @disabled={{@model.legislatuurInBehandeling}}
+    >
       Voeg nieuwe mandataris toe
     </AuButton>
   </Group>

@@ -11,11 +11,11 @@
   </Group>
   <Group>
     <AuButtonGroup>
-      <AuButton
-        @disabled={{@model.isDisabledBecauseLegislatuur}}
-        {{on "click" this.toggleModal}}
-      >Bewerk</AuButton>
       {{#unless (await @model.bestuursorgaan.isDecretaal)}}
+        <AuButton
+          @disabled={{@model.isDisabledBecauseLegislatuur}}
+          {{on "click" this.toggleModal}}
+        >Bewerk</AuButton>
         {{#if @model.bestuursorgaan.isActive}}
           <AuButton
             @icon="archive"

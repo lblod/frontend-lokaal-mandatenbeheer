@@ -27,6 +27,12 @@ export default class PersoonModel extends Model {
   })
   geslacht;
 
+  @belongsTo('fractie', {
+    async: true,
+    inverse: null,
+  })
+  fractie;
+
   @hasMany('nationality', {
     async: true,
     inverse: null,

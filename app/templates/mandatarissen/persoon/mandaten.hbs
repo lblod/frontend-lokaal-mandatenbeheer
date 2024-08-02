@@ -10,6 +10,17 @@
     </AuHeading>
   </Group>
   <Group>
+    <AuButton
+      skin="secondary"
+      @loading={{(or
+        this.checkFracties.isRunning this.becomeOnafhankelijk.isRunning
+      )}}
+      @loadingMessage="Onafhankelijk worden"
+      @disabled={{not this.canBecomeOnafhankelijk}}
+      {{on "click" (perform this.becomeOnafhankelijk)}}
+    >
+      Onafhankelijk worden
+    </AuButton>
     <AuButton {{on "click" this.toggleModal}}>
       Voeg nieuw mandaat toe
     </AuButton>
@@ -28,91 +39,95 @@
 
   </div>
 
-  <AuDataTable
-    @content={{@model.mandatarissen}}
-    @noDataMessage="Geen mandaten gevonden"
-    @sort={{this.sort}}
-    @page={{this.page}}
-    @size={{this.size}}
-    as |t|
-  >
-    <t.content as |c|>
-      <c.header>
-        <AuDataTableThSortable
-          @field="bekleedt.bevatIn.isTijdsspecialisatieVan.naam"
-          @currentSorting={{this.sort}}
-          @label="Bestuursorgaan"
-        />
-        <AuDataTableThSortable
-          @field="bekleedt.bestuursfunctie.label"
-          @currentSorting={{this.sort}}
-          @label="Mandaat"
-        />
-        <AuDataTableThSortable
-          @field="heeftLidmaatschap.binnenFractie.naam"
-          @currentSorting={{this.sort}}
-          @label="Fractie"
-        />
-        <AuDataTableThSortable
-          @field="start"
-          @currentSorting={{this.sort}}
-          @label="Start mandaat"
-        />
-        <AuDataTableThSortable
-          @field="einde"
-          @currentSorting={{this.sort}}
-          @label="Einde mandaat"
-        />
-        <th>
-          Publicatie Status
-        </th>
-      </c.header>
+  {{#if this.checkFracties.isRunning}}
+    <Skeleton::Table @columns={{6}} @rows={{@model.mandatarissen.length}} />
+  {{else}}
+    <AuDataTable
+      @content={{@model.mandatarissen}}
+      @noDataMessage="Geen mandaten gevonden"
+      @sort={{this.sort}}
+      @page={{this.page}}
+      @size={{this.size}}
+      as |t|
+    >
+      <t.content as |c|>
+        <c.header>
+          <AuDataTableThSortable
+            @field="bekleedt.bevatIn.isTijdsspecialisatieVan.naam"
+            @currentSorting={{this.sort}}
+            @label="Bestuursorgaan"
+          />
+          <AuDataTableThSortable
+            @field="bekleedt.bestuursfunctie.label"
+            @currentSorting={{this.sort}}
+            @label="Mandaat"
+          />
+          <AuDataTableThSortable
+            @field="heeftLidmaatschap.binnenFractie.naam"
+            @currentSorting={{this.sort}}
+            @label="Fractie"
+          />
+          <AuDataTableThSortable
+            @field="start"
+            @currentSorting={{this.sort}}
+            @label="Start mandaat"
+          />
+          <AuDataTableThSortable
+            @field="einde"
+            @currentSorting={{this.sort}}
+            @label="Einde mandaat"
+          />
+          <th>
+            Publicatie Status
+          </th>
+        </c.header>
 
-      <c.body as |row|>
-        <td>
-          {{#each row.mandataris.bekleedt.bevatIn as |orgaan index|}}
-            <LinkTo
-              @route="organen.orgaan.mandatarissen"
-              @model={{orgaan.isTijdsspecialisatieVan.id}}
+        <c.body as |row|>
+          <td>
+            {{#each row.mandataris.bekleedt.bevatIn as |orgaan index|}}
+              <LinkTo
+                @route="organen.orgaan.mandatarissen"
+                @model={{orgaan.isTijdsspecialisatieVan.id}}
+                class="au-c-link"
+              >
+                {{orgaan.isTijdsspecialisatieVan.naam}}{{if
+                  (lt index (sub row.mandataris.bekleedt.bevatIn.length 1))
+                  ", "
+                  ""
+                }}
+              </LinkTo>
+            {{/each}}
+          </td>
+          <td><LinkTo
+              @route="mandatarissen.persoon.mandataris"
+              @models={{array
+                row.mandataris.isBestuurlijkeAliasVan.id
+                row.mandataris.id
+              }}
               class="au-c-link"
             >
-              {{orgaan.isTijdsspecialisatieVan.naam}}{{if
-                (lt index (sub row.mandataris.bekleedt.bevatIn.length 1))
-                ", "
-                ""
-              }}
+              {{row.mandataris.bekleedt.bestuursfunctie.label}}
             </LinkTo>
-          {{/each}}
-        </td>
-        <td><LinkTo
-            @route="mandatarissen.persoon.mandataris"
-            @models={{array
-              row.mandataris.isBestuurlijkeAliasVan.id
-              row.mandataris.id
-            }}
-            class="au-c-link"
-          >
-            {{row.mandataris.bekleedt.bestuursfunctie.label}}
-          </LinkTo>
-        </td>
-        <td>
-          <Mandaat::FoldedFracties
-            @persoon={{row.mandataris.isBestuurlijkeAliasVan}}
-            @mandaat={{row.mandataris.bekleedt}}
-          />
-        </td>
-        <td>
-          {{moment-format row.foldedStart "DD-MM-YYYY"}}
-        </td>
-        <td>
-          {{moment-format row.foldedEnd "DD-MM-YYYY"}}
-        </td>
-        <td>
-          <Mandaat::PublicatieStatusPill @mandataris={{row.mandataris}} />
-        </td>
-      </c.body>
-    </t.content>
-  </AuDataTable>
+          </td>
+          <td>
+            <Mandaat::FoldedFracties
+              @persoon={{row.mandataris.isBestuurlijkeAliasVan}}
+              @mandaat={{row.mandataris.bekleedt}}
+            />
+          </td>
+          <td>
+            {{moment-format row.foldedStart "DD-MM-YYYY"}}
+          </td>
+          <td>
+            {{moment-format row.foldedEnd "DD-MM-YYYY"}}
+          </td>
+          <td>
+            <Mandaat::PublicatieStatusPill @mandataris={{row.mandataris}} />
+          </td>
+        </c.body>
+      </t.content>
+    </AuDataTable>
+  {{/if}}
 </div>
 
 <AuModalContainer />

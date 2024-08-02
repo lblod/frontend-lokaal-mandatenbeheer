@@ -17,8 +17,10 @@
     <AuIcon @icon="vote" @alignment="left" />
     Opstart nieuwe legislatuur
   </AuLink>
-  <AuLink @route="forms" role="menuitem">
-    <AuIcon @icon="draft" @alignment="left" />
-    Forms
-  </AuLink>
+  {{#if (is-feature-enabled "show-forms-module")}}
+    <AuLink @route="forms" role="menuitem">
+      <AuIcon @icon="draft" @alignment="left" />
+      Forms
+    </AuLink>
+  {{/if}}
 </AuDropdown>

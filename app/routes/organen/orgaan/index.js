@@ -4,11 +4,11 @@ import { service } from '@ember/service';
 
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
-import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 import RSVP from 'rsvp';
 
 export default class OrganenOrgaanIndexRoute extends Route {
   @service store;
+  @service installatievergadering;
 
   async model() {
     const parentModel = this.modelFor('organen.orgaan');
@@ -26,19 +26,10 @@ export default class OrganenOrgaanIndexRoute extends Route {
     );
 
     const bestuursperiode = await currentBestuursorgaan.heeftBestuursperiode;
-    const periodeHasLegislatuur =
-      (await bestuursperiode.installatievergaderingen).length >= 1;
-    const behandeldeVergaderingen = await this.store.query(
-      'installatievergadering',
-      {
-        'filter[status][:uri:]': INSTALLATIEVERGADERING_BEHANDELD_STATUS,
-        'filter[bestuursperiode][:id:]': bestuursperiode.id,
-      }
-    );
 
     return RSVP.hash({
       isDisabledBecauseLegislatuur:
-        periodeHasLegislatuur && behandeldeVergaderingen.length === 0,
+        this.installatievergadering.activeOrNoLegislature(bestuursperiode),
       bestuursorgaanFormDefinition,
       mandaten,
       orderedMandaten,

@@ -39,6 +39,7 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
 
     return {
       persoon,
+      foldedMandatarissen,
       mandatarissen: filteredMandatarissen,
       bestuursorganen,
     };
@@ -61,5 +62,11 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
     };
 
     return await this.store.query('mandataris', queryParams);
+  }
+
+  setupController(controller, model) {
+    super.setupController(controller, model);
+
+    controller.checkFracties.perform(model.foldedMandatarissen);
   }
 }

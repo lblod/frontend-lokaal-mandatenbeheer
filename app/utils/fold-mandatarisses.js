@@ -4,7 +4,7 @@ export const foldMandatarisses = async (params, mandatarisses) => {
   return sort(params, await fold(mandatarisses));
 };
 
-async function fold(mandatarissen) {
+export async function fold(mandatarissen) {
   // 'persoonId-mandaatId' to foldedMandataris
   const persoonMandaatData = {};
   await Promise.all(

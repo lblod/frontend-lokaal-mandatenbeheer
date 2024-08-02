@@ -9,14 +9,25 @@
     <t.content as |c|>
       <c.header>
         <th>Naam</th>
-        <th>Aantal Houders</th>
+        {{#if this.showMinMax}}
+          <th>Min aantal houders</th>
+          <th>Max aantal houders</th>
+        {{/if}}
+        <th>Aantal houders</th>
         <th></th>
       </c.header>
       <c.body as |mandaat|>
         <td class="au-u-visible-small-up">
           {{mandaat.bestuursfunctie.label}}
         </td>
-
+        {{#if this.showMinMax}}
+          <td class="au-u-visible-small-up">
+            {{if mandaat.minAantalHouders mandaat.minAantalHouders "Onbepaald"}}
+          </td>
+          <td class="au-u-visible-small-up">
+            {{if mandaat.maxAantalHouders mandaat.maxAantalHouders "Onbepaald"}}
+          </td>
+        {{/if}}
         <td class="au-u-visible-small-up">
           {{#if (eq this.editMandaat.id mandaat.id)}}
             <AuInput

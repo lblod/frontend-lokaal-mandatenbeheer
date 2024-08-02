@@ -14,6 +14,8 @@ const identity = Boolean;
 export default class MandaatModel extends Model {
   @attr uri;
   @attr aantalHouders;
+  @attr minAantalHouders;
+  @attr maxAantalHouders;
 
   @belongsTo('bestuursfunctie-code', {
     async: true,
