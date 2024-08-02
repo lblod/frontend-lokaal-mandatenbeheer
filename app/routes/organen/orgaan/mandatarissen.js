@@ -10,6 +10,7 @@ import moment from 'moment';
 export default class OrganenMandatarissenRoute extends Route {
   @service store;
   @service installatievergadering;
+  @service('mandataris') mandatarisService;
 
   queryParams = {
     activeOnly: { refreshModel: true },
@@ -41,7 +42,7 @@ export default class OrganenMandatarissenRoute extends Route {
       );
 
     return {
-      mandatarissen: this.getFilteredMandatarissen(folded, params),
+      mandatarissen: await this.getFilteredMandatarissen(folded, params),
       bestuursorgaan: parentModel.bestuursorgaan,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
@@ -80,13 +81,20 @@ export default class OrganenMandatarissenRoute extends Route {
     return queryParams;
   }
 
-  getFilteredMandatarissen(mandatarissen, params) {
-    let filteredMandatarissen = mandatarissen;
+  async getFilteredMandatarissen(mandatarissen, params) {
     if (params.activeOnly) {
-      filteredMandatarissen = mandatarissen.filter((mandataris) =>
-        moment().isBetween(mandataris.foldedStart, mandataris.foldedEnd)
+      const filteredMandatarissen = await Promise.all(
+        mandatarissen.map(async (fold) => {
+          const isActive = await this.mandatarisService.isMandatarisActive(
+            fold.mandataris
+          );
+          return isActive ? fold : null;
+        })
       );
+
+      return filteredMandatarissen.filter((fold) => fold !== null);
     }
-    return filteredMandatarissen;
+
+    return mandatarissen;
   }
 }
