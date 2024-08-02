@@ -5,12 +5,10 @@ import { service } from '@ember/service';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
-import moment from 'moment';
 
 export default class OrganenMandatarissenRoute extends Route {
   @service store;
   @service installatievergadering;
-  @service('mandataris') mandatarisService;
 
   queryParams = {
     activeOnly: { refreshModel: true },
@@ -42,7 +40,7 @@ export default class OrganenMandatarissenRoute extends Route {
       );
 
     return {
-      mandatarissen: await this.getFilteredMandatarissen(folded, params),
+      mandatarissen: this.getFilteredMandatarissen(folded, params),
       bestuursorgaan: parentModel.bestuursorgaan,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
@@ -81,11 +79,11 @@ export default class OrganenMandatarissenRoute extends Route {
     return queryParams;
   }
 
- getFilteredMandatarissen(mandatarissen, params) {
+  getFilteredMandatarissen(mandatarissen, params) {
     let filteredMandatarissen = mandatarissen;
     if (params.activeOnly) {
-      filteredMandatarissen = mandatarissen.filter((mandataris) =>
-        mandataris.mandataris.isActive
+      filteredMandatarissen = mandatarissen.filter(
+        (mandataris) => mandataris.mandataris.isActive
       );
     }
     return filteredMandatarissen;
