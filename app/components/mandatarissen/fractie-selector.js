@@ -99,7 +99,10 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       fracties = [...fracties, this.onafhankelijkeTmpFractie];
     }
 
-    if (!(await this.isFractiesIncludingOnafhankelijk(fracties))) {
+    if (
+      !(await this.isFractiesIncludingOnafhankelijk(fracties)) &&
+      !this.args.isInCreatingForm
+    ) {
       fracties = [...fracties, onafhankelijkeFractie];
     }
 
