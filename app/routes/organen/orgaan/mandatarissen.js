@@ -81,20 +81,13 @@ export default class OrganenMandatarissenRoute extends Route {
     return queryParams;
   }
 
-  async getFilteredMandatarissen(mandatarissen, params) {
+ getFilteredMandatarissen(mandatarissen, params) {
+    let filteredMandatarissen = mandatarissen;
     if (params.activeOnly) {
-      const filteredMandatarissen = await Promise.all(
-        mandatarissen.map(async (fold) => {
-          const isActive = await this.mandatarisService.isMandatarisActive(
-            fold.mandataris
-          );
-          return isActive ? fold : null;
-        })
+      filteredMandatarissen = mandatarissen.filter((mandataris) =>
+        mandataris.mandataris.isActive
       );
-
-      return filteredMandatarissen.filter((fold) => fold !== null);
     }
-
-    return mandatarissen;
+    return filteredMandatarissen;
   }
 }
