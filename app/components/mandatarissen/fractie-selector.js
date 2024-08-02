@@ -87,6 +87,17 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       }
     }
 
+    const onafhankelijkeFractie =
+      await this.fractieService.findOnafhankelijkeFractieForPerson(person);
+    if (!onafhankelijkeFractie) {
+      this.onafhankelijkeTmpFractie =
+        await this.fractieService.createOnafhankelijkeFractie(
+          this.bestuursorganen,
+          this.args.bestuurseenheid
+        );
+      fracties = [...fracties, this.onafhankelijkeTmpFractie];
+    }
+
     this.fractieOptions = fracties;
   }
 
