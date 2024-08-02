@@ -116,10 +116,7 @@ export default class OrganenMandatarissenController extends Controller {
       console.error(jsonReponse.message);
       showErrorToast(this.toaster, jsonReponse.message);
     }
-    showSuccessToast(
-      this.toaster,
-      `Mandataris ${jsonReponse.createdMandate} werd succesvol aangemaakt.`
-    );
+    showSuccessToast(this.toaster, `Mandataris werd succesvol aangemaakt.`);
     this.toggleDoubleMandateModal();
   }
 }
