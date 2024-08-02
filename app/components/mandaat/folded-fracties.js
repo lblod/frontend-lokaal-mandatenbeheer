@@ -32,10 +32,10 @@ export default class MandaatFoldedFractiesComponent extends Component {
   load = task(async () => {
     const mandatarissen = await this.getMandatarissen(this.persoon);
 
-    const { latestFractie, allFracties } =
+    const { latestFracties, allFracties } =
       await this.getFoldedFracties(mandatarissen);
 
-    this.fractiesText = this.fractiesToString(latestFractie, allFracties);
+    this.fractiesText = this.fractiesToString(latestFracties, allFracties);
   });
 
   async getMandatarissen(persoon) {
@@ -74,7 +74,7 @@ export default class MandaatFoldedFractiesComponent extends Component {
 
   async getFoldedFracties(mandatarissen) {
     let latestMandataris = null;
-    let latestFractie = null;
+    let latestFracties = new Set();
     const allFracties = new Set();
 
     await Promise.all(
@@ -82,31 +82,41 @@ export default class MandaatFoldedFractiesComponent extends Component {
         const fractie = await this.fractieOrNull(mandataris);
         allFracties.add(fractie);
 
-        if (
-          !latestFractie &&
-          (!latestMandataris ||
-            moment(mandataris.einde).isAfter(latestMandataris.einde) ||
-            !mandataris.einde)
+        if (!latestMandataris || mandataris.einde == latestMandataris.einde) {
+          latestMandataris = mandataris;
+          latestFracties.add(fractie);
+        } else if (
+          !mandataris.einde ||
+          moment(mandataris.einde).isAfter(latestMandataris.einde)
         ) {
           latestMandataris = mandataris;
-          latestFractie = fractie;
+          latestFracties.clear();
+          latestFracties.add(fractie);
         }
       })
     );
 
-    return { latestFractie, allFracties: Array.from(allFracties) };
+    return {
+      latestFracties: Array.from(latestFracties),
+      allFracties: Array.from(allFracties),
+    };
   }
 
-  fractiesToString(currentFractie, allFracties) {
-    if (!currentFractie) {
+  fractiesToString(latestFracties, allFracties) {
+    const currentFracties = latestFracties
+      .filter(Boolean)
+      .toSorted((a, b) => a.localeCompare(b));
+    if (currentFracties.length == 0) {
       return 'Niet beschikbaar';
     }
+    const currentFractiesString = currentFracties.join(', ');
     const otherFracties = allFracties
       .filter(Boolean)
-      .filter((fractie) => fractie !== currentFractie)
+      .filter((fractie) => !currentFracties.includes(fractie))
+      .filter((fractie) => fractie != 'Onafhankelijk')
       .toSorted((a, b) => a.localeCompare(b));
     return otherFracties.length
-      ? `${currentFractie} (${toUserReadableListing(otherFracties)})`
-      : currentFractie;
+      ? `${currentFractiesString} (${toUserReadableListing(otherFracties)})`
+      : currentFractiesString;
   }
 }
