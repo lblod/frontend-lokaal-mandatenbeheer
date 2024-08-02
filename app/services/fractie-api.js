@@ -21,6 +21,10 @@ export default class FractieApiService extends Service {
       };
     }
 
+    if (jsonReponse.fracties.length === 0) {
+      return [];
+    }
+
     return await this.store.query('fractie', {
       'filter[:id:]': jsonReponse.fracties.join(','),
     });
