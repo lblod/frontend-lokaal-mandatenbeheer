@@ -188,10 +188,10 @@ export default class MandatarissenUpdateState extends Component {
     return newMandataris;
   }
 
-  endMandataris() {
+  async endMandataris() {
     this.args.mandataris.einde = this.date;
 
-    return this.args.mandataris.save();
+    return await this.args.mandataris.save();
   }
 
   onStateChanged(newMandataris) {
