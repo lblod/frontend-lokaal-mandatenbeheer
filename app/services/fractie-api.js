@@ -52,8 +52,10 @@ export default class FractieApiService extends Service {
   async getSamenWerkendeFractiesOnly(fracties) {
     const samenWerkendeFracties = await Promise.all(
       fracties.map(async (fractie) => {
-        console.log(`fractie naam`, fractie.naam);
         const type = await fractie.fractietype;
+        if (!type) {
+          return null;
+        }
 
         return type.uri !== FRACTIETYPE_ONAFHANKELIJK ? fractie : null;
       })

@@ -6,6 +6,7 @@ import { action } from '@ember/object';
 
 import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
@@ -98,7 +99,22 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       fracties = [...fracties, this.onafhankelijkeTmpFractie];
     }
 
+    if (!(await this.isFractiesIncludingOnafhankelijk(fracties))) {
+      fracties = [...fracties, onafhankelijkeFractie];
+    }
+
     this.fractieOptions = fracties;
+  }
+
+  async isFractiesIncludingOnafhankelijk(fracties) {
+    const onafhankelijke = await Promise.all(
+      fracties.map(async (fractie) => {
+        const type = await fractie.fractietype;
+        return type.uri === FRACTIETYPE_ONAFHANKELIJK;
+      })
+    );
+
+    return onafhankelijke.includes(true);
   }
 
   async getPerson() {
