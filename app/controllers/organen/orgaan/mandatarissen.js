@@ -12,9 +12,12 @@ export default class OrganenMandatarissenController extends Controller {
   @service router;
   @service store;
 
+  queryParams = ['activeOnly'];
+
   @tracked filter = '';
   @tracked page = 0;
   @tracked isCreatingMandataris = false;
+  @tracked activeOnly = false;
   sort = 'is-bestuurlijke-alias-van.achternaam';
   // we are folding the mandataris instances, so just pick a very high number here and hope our government is reasonable about the
   // number of mandatarisses that can exist
@@ -50,5 +53,10 @@ export default class OrganenMandatarissenController extends Controller {
       instanceUri,
       this.person
     );
+  }
+
+  @action
+  toggleActiveOnly() {
+    this.activeOnly = !this.activeOnly;
   }
 }

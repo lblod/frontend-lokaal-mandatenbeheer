@@ -11,6 +11,7 @@ export default class OrganenMandatarissenRoute extends Route {
   @service installatievergadering;
 
   queryParams = {
+    activeOnly: { refreshModel: true },
     filter: { refreshModel: true },
     page: { refreshModel: true },
     size: { refreshModel: true },
@@ -39,7 +40,7 @@ export default class OrganenMandatarissenRoute extends Route {
       );
 
     return {
-      mandatarissen: folded,
+      mandatarissen: this.getFilteredMandatarissen(folded, params),
       bestuursorgaan: parentModel.bestuursorgaan,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
@@ -76,5 +77,15 @@ export default class OrganenMandatarissenRoute extends Route {
     }
 
     return queryParams;
+  }
+
+  getFilteredMandatarissen(mandatarissen, params) {
+    let filteredMandatarissen = mandatarissen;
+    if (params.activeOnly) {
+      filteredMandatarissen = mandatarissen.filter(
+        (mandataris) => mandataris.mandataris.isActive
+      );
+    }
+    return filteredMandatarissen;
   }
 }
