@@ -31,6 +31,7 @@ export default class MandatarissenUpdateState extends Component {
   @service store;
   @service toaster;
   @service('mandataris') mandatarisService;
+  @service fractieApi;
 
   constructor() {
     super(...arguments);
@@ -182,6 +183,7 @@ export default class MandatarissenUpdateState extends Component {
       newMandataris,
       this.selectedFractie
     );
+    await this.fractieApi.updateCurrentFractie(newMandataris.id);
 
     return newMandataris;
   }
