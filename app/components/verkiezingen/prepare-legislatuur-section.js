@@ -109,7 +109,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       return;
     }
     this.skeletonRowsOfMirror = mandatarissenToSync.length;
-    console.log(`rows`, mandatarissenToSync.length);
 
     const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
       this.args.bestuursorgaan

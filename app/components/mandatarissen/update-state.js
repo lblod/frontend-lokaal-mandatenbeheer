@@ -13,6 +13,7 @@ import {
   burgemeesterOnlyStates,
   notBurgemeesterStates,
 } from 'frontend-lmb/utils/well-known-uris';
+import { mandatarisRepository } from 'frontend-lmb/repositories/mandataris';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -167,6 +168,7 @@ export default class MandatarissenUpdateState extends Component {
           newMandatarisProps,
           this.selectedFractie
         );
+
       newMandataris.tijdelijkeVervangingen = [replacementMandataris];
     } else {
       newMandataris.tijdelijkeVervangingen =
@@ -182,14 +184,15 @@ export default class MandatarissenUpdateState extends Component {
       newMandataris,
       this.selectedFractie
     );
+    await mandatarisRepository.updateCurrentFractieForPerson(newMandataris.id);
 
     return newMandataris;
   }
 
-  endMandataris() {
+  async endMandataris() {
     this.args.mandataris.einde = this.date;
 
-    return this.args.mandataris.save();
+    return await this.args.mandataris.save();
   }
 
   onStateChanged(newMandataris) {
