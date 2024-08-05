@@ -7,6 +7,7 @@ import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well
 export default class MandatarissenSearchRoute extends Route {
   @service store;
   @service bestuursperioden;
+  @service fractieApi;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -54,14 +55,9 @@ export default class MandatarissenSearchRoute extends Route {
       allBestuurfunctieCodes.push(await mandaat.bestuursfunctie);
     }
 
-    const fracties = await this.store.query('fractie', {
-      'filter[bestuursorganen-in-tijd][heeft-bestuursperiode][:id:]':
-        selectedPeriod.id,
-      include: [
-        'bestuursorganen-in-tijd',
-        'bestuursorganen-in-tijd.heeft-bestuursperiode',
-      ].join(','),
-    });
+    const samenWerkendFracties = await this.fractieApi.forBestuursperiode(
+      selectedPeriod.id
+    );
 
     return {
       personen,
@@ -69,7 +65,7 @@ export default class MandatarissenSearchRoute extends Route {
       selectedPeriod: { period: selectedPeriod, disabled: false },
       bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
       selectedBestuurfunctieIds: params.bestuursfunctie,
-      fracties,
+      fracties: [...samenWerkendFracties],
       selectedFracties: params.binnenFractie,
     };
   }
