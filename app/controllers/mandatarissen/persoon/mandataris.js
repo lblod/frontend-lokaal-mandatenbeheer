@@ -14,6 +14,7 @@ import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
   @service store;
+  @service('mandataris') mandatarisService;
 
   @tracked isChanging;
   @tracked isCorrecting;
@@ -61,6 +62,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     store.parse(instanceTtl, SOURCE_GRAPH, 'text/turtle');
     const mandatarisUri = this.model.mandataris.uri;
 
+    await this.mandatarisService.updateCurrentFractie(this.model.mandataris.id);
     await syncMandatarisMembership(mandatarisUri, this.store, {
       store,
       sourceGraph: SOURCE_GRAPH,

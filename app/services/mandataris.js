@@ -1,13 +1,12 @@
 import Service from '@ember/service';
 
 import { service } from '@ember/service';
-import { fold } from 'frontend-lmb/utils/fold-mandatarisses';
 
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { MANDATARIS_WAARNEMEND_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
-import { MANDATARIS_BEEINDIGD_STATE } from 'frontend-lmb/utils/well-known-uris';
-
 import moment from 'moment';
+
+import { mandatarisRepository } from 'frontend-lmb/repositories/mandataris';
 
 export default class MandatarisService extends Service {
   @service store;
@@ -138,20 +137,8 @@ export default class MandatarisService extends Service {
     };
   }
 
-  async isMandatarisActive(mandataris) {
-    // assuming that there always be a folded mandataris for the mandataris
-    const foldedMandataris = (await fold([mandataris])).at(0);
-    const now = moment();
-    const todayIsInBetweenPeriod =
-      moment(foldedMandataris.foldedStart).isBefore(now) &&
-      (!foldedMandataris.foldedEnd ||
-        moment(foldedMandataris.foldedEnd).isAfter(now));
-
-    if (!todayIsInBetweenPeriod) {
-      return false;
-    }
-
-    const status = await foldedMandataris.mandataris.status;
-    return status && status.uri !== MANDATARIS_BEEINDIGD_STATE;
+  async updateCurrentFractie(mandatarisId) {
+    const mandataris = await this.store.findRecord('mandataris', mandatarisId);
+    await mandatarisRepository.updateCurrentFractieForPerson(mandataris.id);
   }
 }

@@ -67,6 +67,8 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
   setupController(controller, model) {
     super.setupController(controller, model);
 
-    controller.checkFracties.perform(model.foldedMandatarissen);
+    controller.checkFracties.perform(
+      model.foldedMandatarissen.map((fold) => fold.mandataris)
+    );
   }
 }

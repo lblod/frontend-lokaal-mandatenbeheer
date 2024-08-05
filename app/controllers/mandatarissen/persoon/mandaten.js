@@ -8,11 +8,14 @@ import { task } from 'ember-concurrency';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
 
+import { fractieRepository } from 'frontend-lmb/repositories/fractie';
+import { mandatarisRepository } from 'frontend-lmb/repositories/mandataris';
+import { persoonRepository } from 'frontend-lmb/repositories/persoon';
+
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
   @service store;
   @service('mandataris') mandatarisService;
-  @service('fractie') fractieService;
 
   queryParams = ['activeOnly'];
 
@@ -49,23 +52,18 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     this.activeOnly = !this.activeOnly;
   }
 
-  checkFracties = task(async (foldedMandatarissen) => {
+  checkFracties = task(async (mandatarissen) => {
     this.canBecomeOnafhankelijk = false;
     this.possibelOnafhankelijkeMandatarissen = [];
-    for (const fold of foldedMandatarissen) {
-      const isActive = await this.mandatarisService.isMandatarisActive(
-        fold.mandataris
-      );
+    for (const mandataris of mandatarissen) {
+      const isActive = await mandatarisRepository.isActive(mandataris.id);
       if (!isActive) {
         continue;
       }
-
       const isOnafhankelijk =
-        await this.fractieService.isMandatarisFractieOnafhankelijk(
-          fold.mandataris
-        );
+        await fractieRepository.isMandatarisFractieOnafhankelijk(mandataris);
       if (!isOnafhankelijk) {
-        this.possibelOnafhankelijkeMandatarissen.push(fold.mandataris);
+        this.possibelOnafhankelijkeMandatarissen.push(mandataris);
         continue;
       }
     }
@@ -81,19 +79,31 @@ export default class MandatarissenPersoonMandatenController extends Controller {
 
     for (const mandataris of this.possibelOnafhankelijkeMandatarissen) {
       const person = await mandataris.isBestuurlijkeAliasVan;
-      let onafhankelijkeFractie =
-        await this.fractieService.findOnafhankelijkeFractieForPerson(person);
+      const bestuursperiode =
+        await mandatarisRepository.getBestuursperiode(mandataris);
 
-      if (!onafhankelijkeFractie) {
+      let onafhankelijkeFractieUri =
+        await persoonRepository.findOnafhankelijkeFractie(
+          person.id,
+          bestuursperiode.id
+        );
+
+      if (!onafhankelijkeFractieUri) {
         const bestuursorganenInTijd =
           await getUniqueBestuursorganen(mandataris);
         const bestuurseenheid = await bestuursorganenInTijd[0]?.bestuurseenheid;
-        onafhankelijkeFractie =
-          await this.fractieService.createOnafhankelijkeFractie(
-            bestuursorganenInTijd,
-            bestuurseenheid
+        onafhankelijkeFractieUri =
+          await fractieRepository.createOnafhankelijkeFractie(
+            bestuursorganenInTijd.map((boi) => boi.uri),
+            bestuurseenheid.uri
           );
       }
+
+      const onafhankelijkeFractie = (
+        await this.store.query('fractie', {
+          'filter[:uri:]': onafhankelijkeFractieUri,
+        })
+      ).at(0);
 
       const dateNow = new Date();
       const newMandatarisProps = await this.mandatarisService.createNewProps(
@@ -108,10 +118,11 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         'mandataris',
         newMandatarisProps
       );
-      newMandataris.save();
+      await newMandataris.save();
 
-      person.fractie = onafhankelijkeFractie;
-      person.save();
+      await mandatarisRepository.updateCurrentFractieForPerson(
+        newMandataris.id
+      );
       await this.mandatarisService.updateOldLidmaatschap(mandataris);
       await this.mandatarisService.createNewLidmaatschap(
         newMandataris,
@@ -119,7 +130,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       );
 
       mandataris.einde = dateNow;
-      mandataris.save();
+      await mandataris.save();
     }
 
     this.router.refresh();

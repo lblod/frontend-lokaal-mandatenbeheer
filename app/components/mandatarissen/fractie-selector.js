@@ -7,6 +7,7 @@ import { action } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
+import { fractieRepository } from 'frontend-lmb/repositories/fractie';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
@@ -56,9 +57,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     );
 
     if (!onafhankelijke) {
-      onafhankelijke = await this.fractieService.createOnafhankelijkeFractie(
-        this.bestuursorganen,
-        this.args.bestuurseenheid
+      onafhankelijke = await fractieRepository.createOnafhankelijkeFractie(
+        this.bestuursorganen.map((bo) => bo.uri),
+        this.args.bestuurseenheid.uri
       );
       this.fractieOptions = [...fracties, onafhankelijke];
       return;
@@ -137,6 +138,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   async fetchOnafhankelijkeFractie() {
+    // TODO: his should be the persons onafhankelijke fractie | for other ticket
     const onafhankelijke = await this.store.query('fractie', {
       page: { size: 1 },
       'filter[fractietype][:uri:]': FRACTIETYPE_ONAFHANKELIJK,
