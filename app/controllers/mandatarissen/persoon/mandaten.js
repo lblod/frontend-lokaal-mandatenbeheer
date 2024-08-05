@@ -109,20 +109,20 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         'mandataris',
         newMandatarisProps
       );
-      newMandataris.save();
+      await newMandataris.save();
 
       await this.mandatarisService.updateOldLidmaatschap(mandataris);
       await this.mandatarisService.createNewLidmaatschap(
         newMandataris,
         onafhankelijkeFractie
       );
-      await this.fractieAPi.updateCurrentFractie(newMandataris.id);
+      await this.fractieApi.updateCurrentFractie(newMandataris.id);
       await this.mandatarisService.removeDanglingFractiesInPeriod(
         newMandataris.id
       );
 
       mandataris.einde = dateNow;
-      mandataris.save();
+      await mandataris.save();
     }
 
     this.router.refresh();
