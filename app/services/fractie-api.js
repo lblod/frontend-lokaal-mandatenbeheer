@@ -3,7 +3,7 @@ import Service from '@ember/service';
 import { service } from '@ember/service';
 
 import { API, STATUS_CODE } from 'frontend-lmb/utils/constants';
-import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
+import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
 
 export default class FractieApiService extends Service {
   @service store;
@@ -28,9 +28,10 @@ export default class FractieApiService extends Service {
 
     const fracties = await this.store.query('fractie', {
       'filter[:id:]': jsonReponse.fracties.join(','),
+      'filter[fractietype][:uri:]': FRACTIETYPE_SAMENWERKINGSVERBAND,
     });
 
-    return this.getSamenWerkendeFractiesOnly(fracties);
+    return fracties.filter((f) => f);
   }
 
   async updateCurrentFractie(mandatarisId) {
@@ -47,20 +48,5 @@ export default class FractieApiService extends Service {
         message: jsonReponse.message,
       };
     }
-  }
-
-  async getSamenWerkendeFractiesOnly(fracties) {
-    const samenWerkendeFracties = await Promise.all(
-      fracties.map(async (fractie) => {
-        const type = await fractie.fractietype;
-        if (!type) {
-          return null;
-        }
-
-        return type.uri !== FRACTIETYPE_ONAFHANKELIJK ? fractie : null;
-      })
-    );
-
-    return samenWerkendeFracties.filter((fractie) => fractie);
   }
 }
