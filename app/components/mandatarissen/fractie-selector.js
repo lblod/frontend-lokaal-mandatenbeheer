@@ -45,18 +45,18 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   async loadFracties() {
-    let fracties = [];
+    this.fractieOptions = [];
     const person = await this.getPerson();
 
     if (this.args.isUpdatingState) {
-      fracties = await this.persoonApi.getMandatarisFracties(
+      this.fractieOptions = await this.persoonApi.getMandatarisFracties(
         person.id,
         this.args.bestuursperiode.id
       );
     }
 
     if (!this.args.isUpdatingState && !this.args.isInCreatingForm) {
-      fracties = await this.fractieApi.forBestuursperiode(
+      this.fractieOptions = await this.fractieApi.forBestuursperiode(
         this.args.bestuursperiode.id
       );
     }
@@ -68,9 +68,10 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       );
 
       if (currentFractie) {
-        fracties = [currentFractie];
+        this.fractieOptions = [currentFractie];
+        return;
       } else {
-        fracties = await this.fractieApi.forBestuursperiode(
+        this.fractieOptions = await this.fractieApi.forBestuursperiode(
           this.args.bestuursperiode.id
         );
       }
@@ -84,16 +85,14 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
           this.bestuursorganen,
           this.args.bestuurseenheid
         );
-      console.log(`created`, onafhankelijkeTmpFractie);
-      this.fractieOptions = [...fracties, onafhankelijkeTmpFractie];
+      this.fractieOptions = [...this.fractieOptions, onafhankelijkeTmpFractie];
     }
 
     if (
       !(await this.isFractiesIncludingOnafhankelijk(this.fractieOptions)) &&
       !this.args.isInCreatingForm
     ) {
-      console.log(`no onafhankklleijke in it`);
-      this.fractieOptions = [...fracties, onafhankelijkeFractie];
+      this.fractieOptions = [...this.fractieOptions, onafhankelijkeFractie];
     }
   }
 
