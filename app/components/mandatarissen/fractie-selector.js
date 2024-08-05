@@ -8,7 +8,6 @@ import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 
-const TEMPORARY_FRACTIE_URI = 'http://temporary-fractie';
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
   @service currentSession;
@@ -21,7 +20,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @tracked bestuursorganen = [];
   @tracked bestuursorganenId;
   @tracked fractieOptions = [];
-  onafhankelijkeTmpFractie;
 
   constructor() {
     super(...arguments);
@@ -47,7 +45,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   async loadFracties() {
-    console.log(`load fracties`);
     let fracties = [];
     const person = await this.getPerson();
 
@@ -81,27 +78,23 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
     const onafhankelijkeFractie =
       await this.fractieService.findOnafhankelijkeFractieForPerson(person);
-    if (!onafhankelijkeFractie && !this.onafhankelijkeTmpFractie) {
-      console.log(`set onafhank to TEMP URI`);
-      this.onafhankelijkeTmpFractie = {
-        uri: TEMPORARY_FRACTIE_URI,
-        naam: 'Independant',
-        fractietype: { uri: FRACTIETYPE_ONAFHANKELIJK },
-      };
-      fracties = [...fracties, this.onafhankelijkeTmpFractie];
+    if (!onafhankelijkeFractie) {
+      const onafhankelijkeTmpFractie =
+        await this.fractieService.createOnafhankelijkeFractie(
+          this.bestuursorganen,
+          this.args.bestuurseenheid
+        );
+      console.log(`created`, onafhankelijkeTmpFractie);
+      this.fractieOptions = [...fracties, onafhankelijkeTmpFractie];
     }
 
     if (
-      !(await this.isFractiesIncludingOnafhankelijk(fracties)) &&
+      !(await this.isFractiesIncludingOnafhankelijk(this.fractieOptions)) &&
       !this.args.isInCreatingForm
     ) {
-      fracties = [
-        ...fracties,
-        onafhankelijkeFractie ?? this.onafhankelijkeTmpFractie,
-      ];
+      console.log(`no onafhankklleijke in it`);
+      this.fractieOptions = [...fracties, onafhankelijkeFractie];
     }
-
-    this.fractieOptions = fracties;
   }
 
   async isFractiesIncludingOnafhankelijk(fracties) {
@@ -125,49 +118,8 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   @action
   async select(fractie) {
-    console.log({ fractie });
-    const selected = await this.handlePossibleOnafhankelijkeFractie(fractie);
-    console.log(`setting fractie`, selected);
-    this._fractie = selected;
-    this.args.onSelect(selected);
-  }
-
-  async handlePossibleOnafhankelijkeFractie(fractie) {
-    console.log({
-      selected: fractie.uri ?? null,
-      current: this._fractie?.uri ?? null,
-      tempOnafhankelijk: this.onafhankelijkeTmpFractie?.uri ?? null,
-    });
-    if (this._fractie && fractie.uri === this._fractie.uri) {
-      console.log(`same option`);
-      return fractie;
-    }
-    if (
-      fractie &&
-      this.onafhankelijkeTmpFractie &&
-      this.onafhankelijkeTmpFractie.uri !== TEMPORARY_FRACTIE_URI &&
-      fractie.uri !== this.onafhankelijkeTmpFractie.uri
-    ) {
-      await this.onafhankelijkeTmpFractie.destroyRecord();
-      this.onafhankelijkeTmpFractie = null;
-      console.log(`Destroyed the temp onahfnkelijke`);
-    }
-    if (
-      this.onafhankelijkeTmpFractie &&
-      this.onafhankelijkeTmpFractie.uri === TEMPORARY_FRACTIE_URI &&
-      fractie.uri === TEMPORARY_FRACTIE_URI
-    ) {
-      this.onafhankelijkeTmpFractie =
-        await this.fractieService.createOnafhankelijkeFractie(
-          this.bestuursorganen,
-          this.args.bestuurseenheid
-        );
-      console.log(`created temnp `);
-      return this.onafhankelijkeTmpFractie;
-    }
-
-    console.log(`just return fractie`);
-    return fractie;
+    this._fractie = fractie;
+    this.args.onSelect(this._fractie);
   }
 
   search = task({ restartable: true }, async (searchData) => {

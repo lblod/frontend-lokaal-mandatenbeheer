@@ -184,6 +184,9 @@ export default class MandatarissenUpdateState extends Component {
       this.selectedFractie
     );
     await this.fractieApi.updateCurrentFractie(newMandataris.id);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(
+      newMandataris.id
+    );
 
     return newMandataris;
   }

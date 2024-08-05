@@ -49,4 +49,22 @@ export default class FractieApiService extends Service {
       };
     }
   }
+
+  async removeFractieWhenNoLidmaatschap(bestuursperiodeId) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/fracties/cleanup/bestuursperiode/${bestuursperiodeId}`,
+      { method: 'DELETE' }
+    );
+    const jsonReponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonReponse.message);
+      throw {
+        status: response.status,
+        message: jsonReponse.message,
+      };
+    }
+
+    console.info(`Removed ${jsonReponse.fracties.length} dangling fractie(s).`);
+  }
 }

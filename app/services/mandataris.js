@@ -11,6 +11,7 @@ import moment from 'moment';
 
 export default class MandatarisService extends Service {
   @service store;
+  @service fractieApi;
 
   async getOverlappingMandate(mandataris, person, endDate = null) {
     const mandate = await mandataris.bekleedt;
@@ -153,5 +154,16 @@ export default class MandatarisService extends Service {
 
     const status = await foldedMandataris.mandataris.status;
     return status && status.uri !== MANDATARIS_BEEINDIGD_STATE;
+  }
+
+  async removeDanglingFractiesInPeriod(mandatarisId) {
+    const mandataris = await this.store.findRecord('mandataris', mandatarisId);
+    const mandaat = await mandataris.bekleedt;
+    const bestuursorganenInTijd = await mandaat.bevatIn;
+    if (bestuursorganenInTijd.length >= 1) {
+      const first = bestuursorganenInTijd.at(0);
+      const periode = await first.heeftBestuursperiode;
+      await this.fractieApi.removeFractieWhenNoLidmaatschap(periode.id);
+    }
   }
 }

@@ -117,6 +117,9 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         onafhankelijkeFractie
       );
       await this.fractieAPi.updateCurrentFractie(newMandataris.id);
+      await this.mandatarisService.removeDanglingFractiesInPeriod(
+        newMandataris.id
+      );
 
       mandataris.einde = dateNow;
       mandataris.save();

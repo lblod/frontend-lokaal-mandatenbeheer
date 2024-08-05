@@ -15,6 +15,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @service router;
   @service store;
   @service fractieApi;
+  @service('mandataris') mandatarisService;
 
   @tracked isChanging;
   @tracked isCorrecting;
@@ -67,6 +68,9 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       sourceGraph: SOURCE_GRAPH,
     });
     await this.fractieApi.updateCurrentFractie(this.model.mandataris.id);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(
+      this.model.mandataris.id
+    );
 
     setTimeout(() => this.router.refresh(), 1000);
     this.closeModals();

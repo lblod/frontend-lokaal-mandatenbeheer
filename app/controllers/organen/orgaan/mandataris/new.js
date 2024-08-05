@@ -12,6 +12,7 @@ export default class OrganenMandatarisNewController extends Controller {
   @service router;
   @service store;
   @service fractieApi;
+  @service('mandataris') mandatarisService;
 
   queryParams = ['person'];
 
@@ -27,6 +28,7 @@ export default class OrganenMandatarisNewController extends Controller {
   async onCreate({ instanceTtl, instanceId }) {
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     await this.fractieApi.updateCurrentFractie(instanceId);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
     this.router.transitionTo('organen.orgaan.mandatarissen');
   }
 

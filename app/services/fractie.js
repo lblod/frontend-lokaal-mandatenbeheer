@@ -25,7 +25,7 @@ export default class FractieService extends Service {
       bestuursorganenInTijd: bestuursorganen,
       bestuurseenheid: bestuurseenheid,
     });
-    onafhankelijke.save();
+    await onafhankelijke.save();
 
     return onafhankelijke;
   }
