@@ -2,18 +2,29 @@ import Controller from '@ember/controller';
 
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import {
+  placeholderOnafhankelijk,
+  SEARCH_TIMEOUT,
+} from 'frontend-lmb/utils/constants';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
 
 export default class MandatarissenSearchController extends Controller {
-  queryParams = ['sort', 'bestuursperiode', 'bestuursfunctie', 'binnenFractie'];
+  queryParams = [
+    'sort',
+    'bestuursperiode',
+    'bestuursfunctie',
+    'binnenFractie',
+    'onafhankelijkeFractie',
+  ];
 
   @service router;
+  @service fractieApi;
 
   @tracked bestuursperiode;
   @tracked bestuursfunctie;
   @tracked binnenFractie;
+  @tracked onafhankelijkeFractie;
   @tracked searchData;
   @tracked activeMandatarissen = false;
 
@@ -30,6 +41,7 @@ export default class MandatarissenSearchController extends Controller {
     this.bestuursperiode = null;
     this.bestuursfunctie = null;
     this.binnenFractie = null;
+    this.onafhankelijkeFractie = null;
     this.filter = null;
     this.searchData = null;
     this.activeMandatarissen = false;
@@ -53,13 +65,28 @@ export default class MandatarissenSearchController extends Controller {
   }
 
   @action
-  updateFilterWithFractie(fracties) {
-    this.binnenFractie = fracties.map((fractie) => fractie.id).join(',');
+  async updateFilterWithFractie(fracties) {
+    this.onafhankelijkeFractie = fracties.find(
+      (fractie) => fractie.id === placeholderOnafhankelijk.id
+    )
+      ? true
+      : null;
+    if (this.onafhankelijkeFractie) {
+      const onafhankelijkeFracties =
+        await this.fractieApi.onafhankelijkeForBestuursperiode(
+          this.model.selectedPeriod.period.id
+        );
+      fracties.push(...onafhankelijkeFracties);
+    }
+
+    this.binnenFractie = fracties
+      .filter((f) => f.id !== placeholderOnafhankelijk.id)
+      .map((fractie) => fractie.id)
+      .join(',');
   }
 
   get selectedFracties() {
     const fractieIds = [...new Set(this.model.selectedFracties?.split(','))];
-
     if (fractieIds.length == this.model.fracties.length) {
       return [];
     }
@@ -67,6 +94,10 @@ export default class MandatarissenSearchController extends Controller {
     const fracties = fractieIds.map((id) =>
       this.model.fracties.find((fractie) => fractie.id == id)
     );
+
+    if (this.onafhankelijkeFractie) {
+      fracties.push(placeholderOnafhankelijk);
+    }
 
     return fracties.filter((fractie) => fractie);
   }
