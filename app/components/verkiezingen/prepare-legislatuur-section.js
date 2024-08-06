@@ -34,6 +34,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service toaster;
   @service store;
   @service router;
+  @service fractieApi;
+  @service('mandataris') mandatarisService;
 
   @tracked editMode = null;
   @tracked skeletonRowsOfMirror = null;
@@ -250,7 +252,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     );
     this.skeletonRowsOfMirror = mandatarissen.length;
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
-    await timeout(1000);
+    await this.fractieApi.updateCurrentFractie(instanceId);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
   });
 
   @action
