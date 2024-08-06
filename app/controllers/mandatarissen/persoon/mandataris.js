@@ -41,10 +41,13 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   }
 
   @action
-  closeModals() {
+  async closeModals() {
     this.isChanging = false;
     this.isCorrecting = false;
     this.formInitialized = false;
+    await this.mandatarisService.removeDanglingFractiesInPeriod(
+      this.model.mandataris.id
+    );
   }
 
   @action
