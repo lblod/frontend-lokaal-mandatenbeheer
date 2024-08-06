@@ -4,8 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-import { task, timeout } from 'ember-concurrency';
-import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { task } from 'ember-concurrency';
 import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
@@ -26,13 +25,13 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     if (this.args.fractie) {
       this._fractie = this.args.fractie;
     }
-    this.load();
+    this.load.perform();
   }
 
-  async load() {
+  load = task(async () => {
     await this.loadBestuursorganen();
     await this.loadFracties();
-  }
+  });
 
   async loadBestuursorganen() {
     if (this.args.bestuursperiode) {
@@ -49,6 +48,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     const person = await this.getPerson();
 
     if (this.args.isUpdatingState) {
+      console.log(`\t UPDATE STATE`);
       this.fractieOptions = await this.persoonApi.getMandatarisFracties(
         person.id,
         this.args.bestuursperiode.id
@@ -56,17 +56,19 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     }
 
     if (!this.args.isUpdatingState && !this.args.isInCreatingForm) {
+      console.log(`\t CORRECTING STATE`);
       this.fractieOptions = await this.fractieApi.forBestuursperiode(
         this.args.bestuursperiode.id
       );
     }
 
     if (!this.args.isUpdatingState && this.args.isInCreatingForm) {
+      console.log(`\t CREATE STATE`);
       const currentFractie = await this.persoonApi.getCurrentFractie(
         person.id,
         this.args.bestuursperiode.id
       );
-
+      console.log(`Current fractie in selector`, currentFractie);
       if (currentFractie) {
         this.fractieOptions = [currentFractie];
         return;
@@ -120,10 +122,4 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     this._fractie = fractie;
     this.args.onSelect(this._fractie);
   }
-
-  search = task({ restartable: true }, async (searchData) => {
-    await timeout(SEARCH_TIMEOUT);
-    let searchResults = await this.fetchFracties(searchData);
-    return searchResults;
-  });
 }
