@@ -78,11 +78,14 @@ export default class MandatarissenSearchController extends Controller {
         );
       fracties.push(...onafhankelijkeFracties);
     }
-
-    this.binnenFractie = fracties
-      .filter((f) => f.id !== placeholderOnafhankelijk.id)
-      .map((fractie) => fractie.id)
-      .join(',');
+    const cleanFracties = fracties.filter(
+      (f) => f.id !== placeholderOnafhankelijk.id
+    );
+    if (fracties.length === 0 && !this.onafhankelijkeFractie) {
+      this.binnenFractie = null;
+      return;
+    }
+    this.binnenFractie = cleanFracties.map((fractie) => fractie.id).join(',');
   }
 
   get selectedFracties() {

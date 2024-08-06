@@ -98,25 +98,20 @@ export default class MandatarissenSearchRoute extends Route {
       queryParams['filter[bekleedt][bestuursfunctie][:id:]'] =
         params.bestuursfunctie;
     }
-    if (params.binnenFractie) {
+    if (params.binnenFractie !== null) {
       queryParams['filter[heeft-lidmaatschap][binnen-fractie][:id:]'] =
         params.binnenFractie;
     }
-
     const mandatarissen = await this.store.query('mandataris', queryParams);
-    const personen = await Promise.all(
-      mandatarissen.map(async (mandataris) => {
-        if (!params.activeMandatarissen || (await mandataris.isActive)) {
-          return await mandataris.get('isBestuurlijkeAliasVan');
-        }
-      })
-    );
-    if (params.activeMandatarissen) {
-      const active = personen.filter((persoon) => {
-        return persoon;
-      });
-      return [...new Set(active)];
-    }
+    const personen = (
+      await Promise.all(
+        mandatarissen.map(async (mandataris) => {
+          if (!params.activeMandatarissen || (await mandataris.isActive)) {
+            return await mandataris.get('isBestuurlijkeAliasVan');
+          }
+        })
+      )
+    ).filter((p) => p);
     return [...new Set(personen)];
   }
 

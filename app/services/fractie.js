@@ -39,6 +39,9 @@ export default class FractieService extends Service {
       }
 
       const fractie = await lid.binnenFractie;
+      if (!fractie) {
+        return null;
+      }
       const type = await fractie.fractietype;
       if (type.isOnafhankelijk) {
         return fractie;
