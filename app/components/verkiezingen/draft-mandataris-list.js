@@ -9,6 +9,7 @@ import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
 export default class DraftMandatarisListComponent extends Component {
   @service toaster;
   @service store;
+  @service fractieApi;
 
   @tracked mandatarissen;
 
@@ -88,9 +89,10 @@ export default class DraftMandatarisListComponent extends Component {
   }
 
   @action
-  saveMandatarisChanges() {
+  async saveMandatarisChanges({ instanceId }) {
     this.closeEditMandataris();
+    await this.fractieApi.updateCurrentFractie(instanceId);
     this.isEditFormInitialized = false;
-    this.onInit();
+    await this.onInit();
   }
 }
