@@ -15,6 +15,7 @@
             style="background-color: #007A37; border-color: #007A37;"
             @icon="table-row-end-add"
             @loadingMessage="Genereren"
+            {{on "click" (fn (mut this.isGeneratingRows) true)}}
           >
             Genereer rijen
           </AuButton>
@@ -103,6 +104,20 @@
         @buildSourceTtl={{this.buildSourceTtl}}
         @buildMetaTtl={{this.buildMetaTtl}}
       />
+    </div>
+  </AuModal>
+
+  <AuModalContainer />
+  <AuModal
+    @title={{(concat
+      "Genereer rijen voor " @bestuursorgaan.isTijdsspecialisatieVan.naam
+    )}}
+    @modalOpen={{this.isGeneratingRows}}
+    @closable={{true}}
+    @closeModal={{(fn (mut this.isGeneratingRows) false)}}
+  >
+    <div class="au-o-box">
+      content
     </div>
   </AuModal>
 {{/if}}

@@ -35,6 +35,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service('mandataris') mandatarisService;
 
   @tracked editMode = null;
+  @tracked isGeneratingRows;
   @tracked skeletonRowsOfMirror = null;
 
   @action
@@ -222,6 +223,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @action
   cancel() {
     this.editMode = null;
+    this.isGeneratingRows = false;
   }
 
   onCreate = restartableTask(async ({ instanceTtl, instanceId }) => {
