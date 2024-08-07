@@ -117,7 +117,10 @@
     @closeModal={{(fn (mut this.isGeneratingRows) false)}}
   >
     <div class="au-o-box">
-      content
+      <Verkiezingen::GenerateRowsForm
+        @bestuursorgaan={{@bestuursorgaan}}
+        @onCancel={{(fn (mut this.isGeneratingRows) false)}}
+      />
     </div>
   </AuModal>
 {{/if}}

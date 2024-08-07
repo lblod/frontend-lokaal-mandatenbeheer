@@ -1,0 +1,29 @@
+{{#if this.initForm.isRunning}}
+  <AuLabel for="input" class="skeleton-label au-u-margin-top" />
+  <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
+{{else}}
+  <RdfForm
+    @groupClass="au-o-grid__item"
+    @form={{this.form}}
+    @graphs={{this.graphs}}
+    @sourceNode={{this.sourceNode}}
+    @formStore={{this.forkingStore}}
+    @forceShowErrors={{false}}
+    @useNewListingLayout={{true}}
+    @level={{2}}
+    class="au-u-max-width-medium"
+  />
+
+  <AuToolbar class="au-u-margin-top" as |Group|>
+    <Group>
+      <AuButtonGroup>
+        <AuButton {{on "click" (perform this.onConfigReady)}}>
+          Genereer
+        </AuButton>
+        <Form::CancelWithConfirm
+          @cancel={{@onCancel}}
+        >Annuleer</Form::CancelWithConfirm>
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
+{{/if}}

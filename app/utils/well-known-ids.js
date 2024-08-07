@@ -8,6 +8,7 @@ export const MANDATARIS_EXTRA_INFO_FORM_ID = 'mandataris-extra-info';
 export const MANDATARIS_NEW_FORM_ID = 'mandataris-new';
 export const MANDATARIS_EXTENDED_FORM = 'mandataris-ext';
 export const CONTACTINFO_FORM_ID = 'contactinfo';
+export const VERKIEZINGEN_GENERATE_ROWS_FORM_ID = 'verkiezingen-generate-rows';
 export const DECRETALE_BESTUURSORGANEN_CONCEPT_SCHEME =
   '2e127dcf-d6c8-4134-ac39-8be1d7fbdfaf';
 export const GEMEENTE_BESTUURSORGANEN_CONCEPT_SCHEME =
