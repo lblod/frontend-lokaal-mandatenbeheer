@@ -11,7 +11,7 @@
     @placeholder="Zoek mandaat"
     @searchField="label"
     @selected={{this.selectedMandaat}}
-    @onChange={{fn (mut this.selectedMandaat)}}
+    @onChange={{this.selectMandaat}}
     @onClose={{@onClose}}
     @options={{this.mandaatOptions}}
     as |mandaat|
@@ -21,10 +21,19 @@
   <br />
   <AuLabel for="input">Aantal rijen</AuLabel>
   <AuInput
+    @disabled={{not this.selectedMandaat}}
     value={{this.rowsToGenerate}}
     id="input-rows-to-generate"
-    {{on "keyup" (perform this.validateRows)}}
+    type="number"
+    min={{0}}
+    max={{100}}
+    {{on "focus" (perform this.validateRows)}}
   />
+  <div>
+    {{#each this.rowWarnings as |warning|}}
+      <AuHelpText @warning={{true}}>{{warning}}</AuHelpText>
+    {{/each}}
+  </div>
   <AuToolbar class="au-u-margin-top" as |Group|>
     <Group>
       <AuButtonGroup>
