@@ -2,6 +2,22 @@
   <AuLabel for="input" class="skeleton-label au-u-margin-top" />
   <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
 {{else}}
+  <PowerSelect
+    @noMatchesMessage="Geen resultaten"
+    @searchMessage="Typ om te zoeken"
+    @searchEnabled={{true}}
+    @allowClear={{false}}
+    @disabled={{@disabled}}
+    @placeholder="Zoek mandaat"
+    @searchField="label"
+    @selected={{this.selectedMandaat}}
+    @onChange={{fn (mut this.selectedMandaat)}}
+    @onClose={{@onClose}}
+    @options={{this.mandaatOptions}}
+    as |mandaat|
+  >
+    {{mandaat.label}}
+  </PowerSelect>
   <AuToolbar class="au-u-margin-top" as |Group|>
     <Group>
       <AuButtonGroup>
