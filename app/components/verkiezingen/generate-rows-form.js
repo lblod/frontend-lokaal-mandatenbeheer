@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 
 import { task, restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { NamedNode } from 'rdflib';
 
 import {
   FORM_GRAPH,
@@ -14,7 +13,7 @@ import {
 } from 'frontend-lmb/utils/constants';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { VERKIEZINGEN_GENERATE_ROWS_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
-import { FORM, RDF } from 'frontend-lmb/rdf/namespaces';
+import { EXT, FORM, RDF } from 'frontend-lmb/rdf/namespaces';
 import { isValidForm } from 'frontend-lmb/utils/is-valid-form';
 
 export default class GenerateRowsFormComponent extends Component {
@@ -52,7 +51,7 @@ export default class GenerateRowsFormComponent extends Component {
       ),
       formStore: builderStore,
       graphs,
-      sourceNode: new NamedNode('http://generate-rows/sourceNode'),
+      sourceNode: EXT('source'),
     };
   });
 
@@ -61,6 +60,19 @@ export default class GenerateRowsFormComponent extends Component {
     if (this.showErrors) {
       return;
     }
-    console.log('valid');
+
+    console.log({
+      rows: this.getFieldValue('rows'),
+      startDate: this.getFieldValue('startDate'),
+    });
   });
+
+  getFieldValue(predicate) {
+    return this.formInfo.formStore.any(
+      this.formInfo.sourceNode,
+      EXT(predicate),
+      undefined,
+      this.formInfo.graphs.sourceGraph
+    )?.value;
+  }
 }
