@@ -1,4 +1,4 @@
-{{#if (await this.isBurgemeester)}}
+{{#if (await @bestuursorgaan.isBurgemeester)}}
   <Mandaat::BurgemeesterSelector
     @bestuursorgaanInTijd={{@bestuursorgaan}}
     @readOnly={{@isBehandeld}}
@@ -19,7 +19,9 @@
             Genereer rijen
           </AuButton>
         {{/if}}
-        {{#if (or (await this.isRMW) (await this.isLidVanVB))}}
+        {{#if
+          (or (await @bestuursorgaan.isRMW) (await @bestuursorgaan.isLidVanVB))
+        }}
           <AuButton
             @skin="secondary"
             @icon="synchronize"
@@ -27,10 +29,10 @@
             @loadingMessage="Aan het synchroniseren"
             {{on "click" (perform this.mirrorTable)}}
           >
-            {{#if (await this.isRMW)}}
+            {{#if (await @bestuursorgaan.isRMW)}}
               Neem over van Gemeenteraad
             {{/if}}
-            {{#if (await this.isLidVanVB)}}
+            {{#if (await @bestuursorgaan.isLidVanVB)}}
               Neem over van College van Burgemeester en Schepenen
             {{/if}}
           </AuButton>

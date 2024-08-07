@@ -8,9 +8,6 @@ import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestu
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 import {
-  BURGEMEESTER_BESTUURSORGAAN_URI,
-  RMW_BESTUURSORGAAN_URI,
-  VAST_BUREAU_BESTUURSORGAAN_URI,
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
   MANDAAT_LID_RMW_CODE,
@@ -47,23 +44,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
 
   get isCreating() {
     return this.editMode === CREATE_MODE;
-  }
-
-  get isBurgemeester() {
-    return this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
-      BURGEMEESTER_BESTUURSORGAAN_URI
-    );
-  }
-
-  get isRMW() {
-    return this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
-      RMW_BESTUURSORGAAN_URI
-    );
-  }
-  get isLidVanVB() {
-    return this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
-      VAST_BUREAU_BESTUURSORGAAN_URI
-    );
   }
 
   get CBSClassification() {

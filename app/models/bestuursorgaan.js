@@ -5,6 +5,7 @@ import { service } from '@ember/service';
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
   BCSD_BESTUURSORGAAN_URI,
+  BURGEMEESTER_BESTUURSORGAAN_URI,
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
   RMW_BESTUURSORGAAN_URI,
@@ -143,6 +144,10 @@ export default class BestuursorgaanModel extends Model {
 
   get isVastBureau() {
     return this.hasBestuursorgaanClassificatie(VAST_BUREAU_BESTUURSORGAAN_URI);
+  }
+
+  get isBurgemeester() {
+    return this.hasBestuursorgaanClassificatie(BURGEMEESTER_BESTUURSORGAAN_URI);
   }
 
   async getNbMembers() {
