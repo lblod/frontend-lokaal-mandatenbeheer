@@ -51,12 +51,12 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   }
 
   @action
-  onUpdateState(newMandataris) {
+  async onUpdateState(newMandataris) {
     this.editMode = null;
     if (newMandataris != this.model.mandataris) {
       this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
     }
-    this.closeModals();
+    await this.closeModals();
   }
 
   @action
@@ -71,9 +71,6 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       sourceGraph: SOURCE_GRAPH,
     });
     await this.fractieApi.updateCurrentFractie(this.model.mandataris.id);
-    await this.mandatarisService.removeDanglingFractiesInPeriod(
-      this.model.mandataris.id
-    );
 
     setTimeout(() => this.router.refresh(), 1000);
     this.closeModals();
