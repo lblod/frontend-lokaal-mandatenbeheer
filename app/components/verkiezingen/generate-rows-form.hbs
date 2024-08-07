@@ -4,11 +4,11 @@
 {{else}}
   <RdfForm
     @groupClass="au-o-grid__item"
-    @form={{this.form}}
-    @graphs={{this.graphs}}
-    @sourceNode={{this.sourceNode}}
-    @formStore={{this.forkingStore}}
-    @forceShowErrors={{false}}
+    @form={{this.formInfo.form}}
+    @graphs={{this.formInfo.graphs}}
+    @sourceNode={{this.formInfo.sourceNode}}
+    @formStore={{this.formInfo.formStore}}
+    @forceShowErrors={{this.showErrors}}
     @useNewListingLayout={{true}}
     @level={{2}}
     class="au-u-max-width-medium"

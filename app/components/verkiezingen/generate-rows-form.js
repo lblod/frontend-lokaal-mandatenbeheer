@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { task } from 'ember-concurrency';
+import { task, restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { NamedNode } from 'rdflib';
 
@@ -15,14 +15,14 @@ import {
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { VERKIEZINGEN_GENERATE_ROWS_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { FORM, RDF } from 'frontend-lmb/rdf/namespaces';
+import { isValidForm } from 'frontend-lmb/utils/is-valid-form';
 
 export default class GenerateRowsFormComponent extends Component {
   @service store;
 
-  @tracked form;
-  @tracked forkingStore;
-  @tracked graphs;
-  @tracked sourceNode;
+  @tracked formInfo;
+  @tracked showErrors;
+  @tracked isFormValid;
 
   constructor() {
     super(...arguments);
@@ -31,28 +31,36 @@ export default class GenerateRowsFormComponent extends Component {
   }
 
   initForm = task(async () => {
-    this.graphs = {
+    const graphs = {
       formGraph: FORM_GRAPH,
       metaGraph: META_GRAPH,
       sourceGraph: SOURCE_GRAPH,
     };
-    this.sourceNode = new NamedNode('http://generate-rows/sourceNode');
     const formDefinition = await getFormFrom(
       this.store,
       VERKIEZINGEN_GENERATE_ROWS_FORM_ID
     );
-    this.forkingStore = new ForkingStore();
-    this.forkingStore.parse(
-      formDefinition.formTtl,
-      this.graphs.formGraph,
-      'text/turtle'
-    );
+    const builderStore = new ForkingStore();
+    builderStore.parse(formDefinition.formTtl, graphs.formGraph, 'text/turtle');
 
-    this.form = this.forkingStore.any(
-      undefined,
-      RDF('type'),
-      FORM('Form'),
-      this.graphs.formGraph
-    );
+    this.formInfo = {
+      form: builderStore.any(
+        undefined,
+        RDF('type'),
+        FORM('Form'),
+        graphs.formGraph
+      ),
+      formStore: builderStore,
+      graphs,
+      sourceNode: new NamedNode('http://generate-rows/sourceNode'),
+    };
+  });
+
+  onConfigReady = restartableTask(async () => {
+    this.showErrors = !isValidForm(this.formInfo);
+    if (this.showErrors) {
+      return;
+    }
+    console.log('valid');
   });
 }
