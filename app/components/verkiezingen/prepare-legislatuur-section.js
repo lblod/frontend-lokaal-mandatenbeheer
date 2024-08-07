@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
@@ -34,6 +34,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service toaster;
   @service store;
   @service router;
+  @service fractieApi;
+  @service('mandataris') mandatarisService;
 
   @tracked editMode = null;
   @tracked skeletonRowsOfMirror = null;
@@ -109,7 +111,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       return;
     }
     this.skeletonRowsOfMirror = mandatarissenToSync.length;
-    console.log(`rows`, mandatarissenToSync.length);
 
     const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
       this.args.bestuursorgaan
@@ -251,7 +252,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     );
     this.skeletonRowsOfMirror = mandatarissen.length;
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
-    await timeout(1000);
+    await this.fractieApi.updateCurrentFractie(instanceId);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
   });
 
   @action

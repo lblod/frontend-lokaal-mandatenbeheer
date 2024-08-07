@@ -14,6 +14,8 @@ import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
   @service store;
+  @service fractieApi;
+  @service('mandataris') mandatarisService;
 
   @tracked isChanging;
   @tracked isCorrecting;
@@ -39,19 +41,22 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   }
 
   @action
-  closeModals() {
+  async closeModals() {
     this.isChanging = false;
     this.isCorrecting = false;
     this.formInitialized = false;
+    await this.mandatarisService.removeDanglingFractiesInPeriod(
+      this.model.mandataris.id
+    );
   }
 
   @action
-  onUpdateState(newMandataris) {
+  async onUpdateState(newMandataris) {
     this.editMode = null;
     if (newMandataris != this.model.mandataris) {
       this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
     }
-    this.closeModals();
+    await this.closeModals();
   }
 
   @action
@@ -65,6 +70,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       store,
       sourceGraph: SOURCE_GRAPH,
     });
+    await this.fractieApi.updateCurrentFractie(this.model.mandataris.id);
 
     setTimeout(() => this.router.refresh(), 1000);
     this.closeModals();

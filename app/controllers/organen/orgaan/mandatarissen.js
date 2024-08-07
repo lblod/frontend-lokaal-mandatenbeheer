@@ -11,6 +11,8 @@ import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandata
 export default class OrganenMandatarissenController extends Controller {
   @service router;
   @service store;
+  @service fractieApi;
+  @service('mandataris') mandatarisService;
 
   queryParams = ['activeOnly'];
 
@@ -37,6 +39,8 @@ export default class OrganenMandatarissenController extends Controller {
   @action
   async onCreate({ instanceTtl, instanceId }) {
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
+    await this.fractieApi.updateCurrentFractie(instanceId);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
     setTimeout(() => this.router.refresh(), 1000);
     this.isCreatingMandataris = false;
   }

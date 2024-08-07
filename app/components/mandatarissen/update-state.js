@@ -31,6 +31,7 @@ export default class MandatarissenUpdateState extends Component {
   @service store;
   @service toaster;
   @service('mandataris') mandatarisService;
+  @service fractieApi;
 
   constructor() {
     super(...arguments);
@@ -182,14 +183,18 @@ export default class MandatarissenUpdateState extends Component {
       newMandataris,
       this.selectedFractie
     );
+    await this.fractieApi.updateCurrentFractie(newMandataris.id);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(
+      newMandataris.id
+    );
 
     return newMandataris;
   }
 
-  endMandataris() {
+  async endMandataris() {
     this.args.mandataris.einde = this.date;
 
-    return this.args.mandataris.save();
+    return await this.args.mandataris.save();
   }
 
   onStateChanged(newMandataris) {
