@@ -2,18 +2,6 @@
   <AuLabel for="input" class="skeleton-label au-u-margin-top" />
   <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
 {{else}}
-  <RdfForm
-    @groupClass="au-o-grid__item"
-    @form={{this.formInfo.form}}
-    @graphs={{this.formInfo.graphs}}
-    @sourceNode={{this.formInfo.sourceNode}}
-    @formStore={{this.formInfo.formStore}}
-    @forceShowErrors={{this.showErrors}}
-    @useNewListingLayout={{true}}
-    @level={{2}}
-    class="au-u-max-width-medium"
-  />
-
   <AuToolbar class="au-u-margin-top" as |Group|>
     <Group>
       <AuButtonGroup>
