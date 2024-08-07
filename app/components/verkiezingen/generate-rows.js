@@ -12,8 +12,8 @@ export default class GenerateRowsFormComponent extends Component {
   initForm = task(async () => {});
 
   generateMandatarissen = task(async (config) => {
-    const { rows, startDate } = config;
+    const { rows, mandaat } = config;
     console.log({ rows });
-    console.log({ startDate });
+    console.log({ mandaat });
   });
 }

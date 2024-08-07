@@ -18,10 +18,20 @@
   >
     {{mandaat.label}}
   </PowerSelect>
+  <br />
+  <AuLabel for="input">Aantal rijen</AuLabel>
+  <AuInput
+    value={{this.rowsToGenerate}}
+    id="input-rows-to-generate"
+    {{on "keyup" (perform this.validateRows)}}
+  />
   <AuToolbar class="au-u-margin-top" as |Group|>
     <Group>
       <AuButtonGroup>
-        <AuButton {{on "click" (perform this.onConfigReady)}}>
+        <AuButton
+          @disabled={{this.isInvaldForGeneration}}
+          {{on "click" (perform this.onConfigReady)}}
+        >
           Genereer
         </AuButton>
         <AuButton @skin="secondary" {{on "click" @onCancel}}>

@@ -3,13 +3,15 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { task, restartableTask } from 'ember-concurrency';
+import { task, restartableTask, timeout } from 'ember-concurrency';
+import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 export default class GenerateRowsFormComponent extends Component {
   @service store;
 
   @tracked mandaatOptions;
   @tracked selectedMandaat;
+  @tracked rowsToGenerate;
 
   constructor() {
     super(...arguments);
@@ -31,10 +33,27 @@ export default class GenerateRowsFormComponent extends Component {
     );
   });
 
+  validateRows = restartableTask(async (event) => {
+    await timeout(INPUT_DEBOUNCE);
+    const inputValue = parseInt(event.target?.value);
+    if (isNaN(inputValue)) {
+      this.rowsToGenerate = null;
+      this.rowsError = 'Geef een positief getal in.';
+      return;
+    }
+
+    this.rowsToGenerate = inputValue;
+    console.log(`rowsToGenerate:`, this.rowsToGenerate);
+  });
+
   onConfigReady = restartableTask(async () => {
     this.args.onConfigReceived({
-      rows: 0,
-      startDate: null,
+      rows: this.rowsToGenerate,
+      mandaat: this.selectedMandaat.parent,
     });
   });
+
+  get isInvaldForGeneration() {
+    return !this.selectedMandaat || this.rowsToGenerate <= 0;
+  }
 }
