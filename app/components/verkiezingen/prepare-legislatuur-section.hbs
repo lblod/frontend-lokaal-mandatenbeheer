@@ -9,6 +9,16 @@
       {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
     {{#unless @isBehandeld}}
       <AuContent @skin="small" class="au-u-flex-self-end">
+        {{#if (or (await @bestuursorgaan.isGR) (await @bestuursorgaan.isCBS))}}
+          {{! template-lint-disable no-inline-styles }}
+          <AuButton
+            style="background-color: #007A37; border-color: #007A37;"
+            @icon="table-row-end-add"
+            @loadingMessage="Genereren"
+          >
+            Genereer rijen
+          </AuButton>
+        {{/if}}
         {{#if (or (await this.isRMW) (await this.isLidVanVB))}}
           <AuButton
             @skin="secondary"
