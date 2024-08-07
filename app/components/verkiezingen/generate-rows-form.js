@@ -61,7 +61,7 @@ export default class GenerateRowsFormComponent extends Component {
       return;
     }
 
-    console.log({
+    this.args.onConfigReceived({
       rows: this.getFieldValue('rows'),
       startDate: this.getFieldValue('startDate'),
     });
