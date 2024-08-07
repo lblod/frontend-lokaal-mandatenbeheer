@@ -20,9 +20,9 @@
         <AuButton {{on "click" (perform this.onConfigReady)}}>
           Genereer
         </AuButton>
-        <Form::CancelWithConfirm
-          @cancel={{@onCancel}}
-        >Annuleer</Form::CancelWithConfirm>
+        <AuButton @skin="secondary" {{on "click" @onCancel}}>
+          Annuleer
+        </AuButton>
       </AuButtonGroup>
     </Group>
   </AuToolbar>
