@@ -3,8 +3,10 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { A } from '@ember/array';
 
 import { task, restartableTask, timeout } from 'ember-concurrency';
+
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 export default class GenerateRowsFormComponent extends Component {
@@ -13,8 +15,9 @@ export default class GenerateRowsFormComponent extends Component {
   @tracked mandaatOptions;
   @tracked selectedMandaat;
   @tracked rowsToGenerate;
-  @tracked rowWarnings = [];
+  @tracked rowWarnings = A([]);
   @tracked lengthExistingMandaten = 0;
+  @tracked rowsToCreateHelpText;
 
   constructor() {
     super(...arguments);
@@ -43,7 +46,6 @@ export default class GenerateRowsFormComponent extends Component {
   }
 
   checkPossibleMandatenToGenerate = restartableTask(async () => {
-    this.rowWarnings = [];
     this.lengthExistingMandaten = (
       await this.store.query('mandataris', {
         page: {
@@ -55,26 +57,14 @@ export default class GenerateRowsFormComponent extends Component {
     ).length;
 
     if (
-      this.selectedMandaat.parent.maxAantalHouders &&
-      this.lengthExistingMandaten >=
-        this.selectedMandaat.parent.maxAantalHouders
-    ) {
-      this.rowWarnings.push(
-        `Je hebt het maximum aantal houders voor dit mandaat bereikt.`
-      );
-    }
-    if (
       this.selectedMandaat.parent.minAantalHouders &&
       this.lengthExistingMandaten < this.selectedMandaat.parent.minAantalHouders
     ) {
       const minimumToCreate =
         this.selectedMandaat.parent.minAantalHouders -
         this.lengthExistingMandaten;
-      this.rowWarnings.push(
-        `Je moet nog minimum ${minimumToCreate} mandaten aanmaken voor dit bestuursorgaan.`
-      );
+      this.rowsToCreateHelpText = `Je moet nog minimum ${minimumToCreate} mandaten aanmaken voor dit bestuursorgaan.`;
     }
-
     if (this.selectedMandaat.parent.maxAantalHouders) {
       this.rowsToGenerate =
         this.selectedMandaat.parent.maxAantalHouders -
@@ -86,11 +76,21 @@ export default class GenerateRowsFormComponent extends Component {
 
   validateRows = restartableTask(async (event) => {
     await timeout(INPUT_DEBOUNCE);
+    this.rowWarnings.clear();
     const inputValue = parseInt(event.target?.value);
     if (isNaN(inputValue)) {
       this.rowsToGenerate = null;
-      this.rowWarnings.push('Geef een positief getal in.');
+      this.rowWarnings.pushObject('Geef een positief getal in.');
       return;
+    }
+    if (
+      this.selectedMandaat.parent.maxAantalHouders &&
+      this.lengthExistingMandaten >=
+        this.selectedMandaat.parent.maxAantalHouders
+    ) {
+      this.rowWarnings.pushObject(
+        `Je hebt het maximum aantal houders voor dit mandaat bereikt.`
+      );
     }
     if (
       inputValue + this.lengthExistingMandaten >
@@ -100,8 +100,8 @@ export default class GenerateRowsFormComponent extends Component {
         inputValue -
         this.selectedMandaat.parent.maxAantalHouders +
         this.lengthExistingMandaten;
-      this.rowWarnings.push(
-        `Je gaat meer mandaten aanmaken dan er gewenst is ${toMuch} teveel.`
+      this.rowWarnings.pushObject(
+        `Je gaat meer mandaten aanmaken dan er gewenst is. ${toMuch} teveel.`
       );
     }
 
