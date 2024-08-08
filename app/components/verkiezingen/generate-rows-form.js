@@ -12,32 +12,11 @@ import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 export default class GenerateRowsFormComponent extends Component {
   @service store;
 
-  @tracked mandaatOptions;
   @tracked selectedMandaat;
   @tracked rowsToGenerate;
   @tracked rowWarnings = A([]);
   @tracked lengthExistingMandaten = 0;
   @tracked rowsToCreateHelpText;
-
-  constructor() {
-    super(...arguments);
-
-    this.initForm.perform();
-  }
-
-  initForm = task(async () => {
-    const mandaten = await this.args.bestuursorgaan.bevat;
-    this.mandaatOptions = await Promise.all(
-      mandaten.map(async (mandaat) => {
-        const bestuursfunctie = await mandaat.bestuursfunctie;
-
-        return {
-          parent: mandaat,
-          label: bestuursfunctie.label,
-        };
-      })
-    );
-  });
 
   @action
   async selectMandaat(mandaatOption) {

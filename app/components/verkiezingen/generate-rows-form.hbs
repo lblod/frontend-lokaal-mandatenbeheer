@@ -1,48 +1,43 @@
-{{#if this.initForm.isRunning}}
-  <AuLabel for="input" class="skeleton-label au-u-margin-top" />
-  <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
-{{else}}
-  <PowerSelect
-    @noMatchesMessage="Geen resultaten"
-    @searchMessage="Typ om te zoeken"
-    @searchEnabled={{true}}
-    @allowClear={{false}}
-    @disabled={{@disabled}}
-    @placeholder="Zoek mandaat"
-    @searchField="label"
-    @selected={{this.selectedMandaat}}
-    @onChange={{this.selectMandaat}}
-    @onClose={{@onClose}}
-    @options={{this.mandaatOptions}}
-    as |mandaat|
-  >
-    {{mandaat.label}}
-  </PowerSelect>
-  <br />
-  <AuLabel for="input">Aantal rijen</AuLabel>
-  <AuInput
-    @disabled={{not this.selectedMandaat}}
-    value={{this.rowsToGenerate}}
-    id="input-rows-to-generate"
-    {{on "keyup" (perform this.validateRows)}}
-  />
-  <AuHelpText>{{this.rowsToCreateHelpText}}</AuHelpText>
-  {{#each this.rowWarnings as |warning|}}
-    <AuHelpText @warning={{true}}>{{warning}}</AuHelpText>
-  {{/each}}
-  <AuToolbar class="au-u-margin-top" as |Group|>
-    <Group>
-      <AuButtonGroup>
-        <AuButton
-          @disabled={{this.isInvaldForGeneration}}
-          {{on "click" (perform this.onConfigReady)}}
-        >
-          Genereer
-        </AuButton>
-        <AuButton @skin="secondary" {{on "click" @onCancel}}>
-          Annuleer
-        </AuButton>
-      </AuButtonGroup>
-    </Group>
-  </AuToolbar>
-{{/if}}
+<PowerSelect
+  @noMatchesMessage="Geen resultaten"
+  @searchMessage="Typ om te zoeken"
+  @searchEnabled={{true}}
+  @allowClear={{false}}
+  @disabled={{@disabled}}
+  @placeholder="Zoek mandaat"
+  @searchField="label"
+  @selected={{this.selectedMandaat}}
+  @onChange={{this.selectMandaat}}
+  @onClose={{@onClose}}
+  @options={{@mandaatOptions}}
+  as |mandaat|
+>
+  {{mandaat.label}}
+</PowerSelect>
+<br />
+<AuLabel for="input">Aantal rijen</AuLabel>
+<AuInput
+  @disabled={{not this.selectedMandaat}}
+  value={{this.rowsToGenerate}}
+  id="input-rows-to-generate"
+  {{on "keyup" (perform this.validateRows)}}
+/>
+<AuHelpText>{{this.rowsToCreateHelpText}}</AuHelpText>
+{{#each this.rowWarnings as |warning|}}
+  <AuHelpText @warning={{true}}>{{warning}}</AuHelpText>
+{{/each}}
+<AuToolbar class="au-u-margin-top" as |Group|>
+  <Group>
+    <AuButtonGroup>
+      <AuButton
+        @disabled={{this.isInvaldForGeneration}}
+        {{on "click" (perform this.onConfigReady)}}
+      >
+        Genereer
+      </AuButton>
+      <AuButton @skin="secondary" {{on "click" @onCancel}}>
+        Annuleer
+      </AuButton>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>

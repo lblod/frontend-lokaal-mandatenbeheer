@@ -1,5 +1,19 @@
-<Verkiezingen::GenerateRowsForm
-  @bestuursorgaan={{@bestuursorgaan}}
-  @onCancel={{@onCancel}}
-  @onConfigReceived={{perform this.generateMandatarissen}}
-/>
+{{#if this.initForm.isRunning}}
+  <AuLabel for="input" class="skeleton-label au-u-margin-top" />
+  <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
+  <AuLabel for="input" class="skeleton-label au-u-margin-top" />
+  <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
+  <AuButtonGroup class="au-u-margin-top">
+    <AuButton class="skeleton-base">Genereer</AuButton>
+    <AuButton class="skeleton-base">Annuleer</AuButton>
+  </AuButtonGroup>
+{{else}}
+  <Verkiezingen::GenerateRowsForm
+    @bestuursorgaan={{@bestuursorgaan}}
+    @startDate={{this.startDate}}
+    @endDate={{this.endDate}}
+    @mandaatOptions={{this.mandaatOptions}}
+    @onCancel={{@onCancel}}
+    @onConfigReceived={{perform this.generateMandatarissen}}
+  />
+{{/if}}

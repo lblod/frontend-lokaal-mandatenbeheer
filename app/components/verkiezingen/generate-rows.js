@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
 
-import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+
+import { task } from 'ember-concurrency';
 
 import {
   getDraftPublicationStatus,
@@ -15,23 +17,40 @@ export default class GenerateRowsFormComponent extends Component {
   effectiefStatus;
   draftPublicationStatus;
 
+  @tracked startDate;
+  @tracked endDate;
+  @tracked mandaatOptions;
+
   constructor() {
     super(...arguments);
 
-    this.backgroundInit.perform();
+    this.initForm.perform();
   }
 
-  backgroundInit = task(async () => {
+  initForm = task(async () => {
     this.effectiefStatus = await getEffectiefStatus(this.store);
     this.draftPublicationStatus = await getDraftPublicationStatus(this.store);
+    this.startDate = new Date(this.args.bestuursorgaan.bindingStart);
+    this.endDate = new Date(this.args.bestuursorgaan.bindingEinde);
+    const mandaten = await this.args.bestuursorgaan.bevat;
+    this.mandaatOptions = await Promise.all(
+      mandaten.map(async (mandaat) => {
+        const bestuursfunctie = await mandaat.bestuursfunctie;
+
+        return {
+          parent: mandaat,
+          label: bestuursfunctie.label,
+        };
+      })
+    );
   });
 
   generateMandatarissen = task(async (config) => {
-    const { rows, mandaat } = config;
+    const { rows, mandaat, startDate, endDate } = config;
     const mandatarisProps = {
       rangorde: null,
-      start: new Date(this.args.bestuursorgaan.bindingStart),
-      einde: new Date(this.args.bestuursorgaan.bindingEinde),
+      start: startDate,
+      einde: endDate,
       bekleedt: mandaat,
       isBestuurlijkeAliasVan: null,
       beleidsdomein: [],
