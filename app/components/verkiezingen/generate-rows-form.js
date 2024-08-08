@@ -108,7 +108,7 @@ export default class GenerateRowsFormComponent extends Component {
     this.rowsToGenerate = inputValue;
   });
 
-  onConfigReady = restartableTask(async () => {
+  onConfigReady = task(async () => {
     this.args.onConfigReceived({
       rows: this.rowsToGenerate,
       mandaat: this.selectedMandaat.parent,
