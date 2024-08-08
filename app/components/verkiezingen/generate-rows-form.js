@@ -113,6 +113,7 @@ export default class GenerateRowsFormComponent extends Component {
       rows: this.rowsToGenerate,
       mandaat: this.selectedMandaat.parent,
     });
+    this.args.onCancel();
   });
 
   get isInvaldForGeneration() {
