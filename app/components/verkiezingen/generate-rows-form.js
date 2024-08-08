@@ -33,6 +33,7 @@ export default class GenerateRowsFormComponent extends Component {
   }
 
   checkPossibleMandatenToGenerate = restartableTask(async () => {
+    this.rowWarnings.clear();
     this.lengthExistingMandaten = (
       await this.store.query('mandataris', {
         page: {
@@ -52,6 +53,7 @@ export default class GenerateRowsFormComponent extends Component {
         this.lengthExistingMandaten;
       this.rowsToCreateHelpText = `Je moet nog minimum ${minimumToCreate} ${minimumToCreate <= 1 ? 'mandaat' : 'mandaten'} aanmaken voor dit bestuursorgaan.`;
     }
+    this.addWarningWhenMandatenAreAtMax();
     if (this.selectedMandaat.parent.maxAantalHouders) {
       this.rowsToGenerate =
         this.selectedMandaat.parent.maxAantalHouders -
@@ -70,15 +72,7 @@ export default class GenerateRowsFormComponent extends Component {
       this.rowWarnings.pushObject('Geef een positief getal in.');
       return;
     }
-    if (
-      this.selectedMandaat.parent.maxAantalHouders &&
-      this.lengthExistingMandaten >=
-        this.selectedMandaat.parent.maxAantalHouders
-    ) {
-      this.rowWarnings.pushObject(
-        `Je hebt het maximum aantal houders voor dit mandaat bereikt.`
-      );
-    }
+    this.addWarningWhenMandatenAreAtMax();
     if (
       inputValue + this.lengthExistingMandaten >
       this.selectedMandaat.parent.maxAantalHouders
@@ -105,6 +99,18 @@ export default class GenerateRowsFormComponent extends Component {
     });
     this.args.onCancel();
   });
+
+  addWarningWhenMandatenAreAtMax() {
+    if (
+      this.selectedMandaat.parent.maxAantalHouders &&
+      this.lengthExistingMandaten >=
+        this.selectedMandaat.parent.maxAantalHouders
+    ) {
+      this.rowWarnings.pushObject(
+        `Je hebt het maximum aantal houders voor dit mandaat bereikt.`
+      );
+    }
+  }
 
   get isInvaldForGeneration() {
     return !this.selectedMandaat || this.rowsToGenerate <= 0;
