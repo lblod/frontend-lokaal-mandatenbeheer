@@ -1,4 +1,4 @@
-{{#if (await this.isBurgemeester)}}
+{{#if (await @bestuursorgaan.isBurgemeester)}}
   <Mandaat::BurgemeesterSelector
     @bestuursorgaanInTijd={{@bestuursorgaan}}
     @readOnly={{@isBehandeld}}
@@ -9,7 +9,22 @@
       {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
     {{#unless @isBehandeld}}
       <AuContent @skin="small" class="au-u-flex-self-end">
-        {{#if (or (await this.isRMW) (await this.isLidVanVB))}}
+        {{#if (or (await @bestuursorgaan.isGR) (await @bestuursorgaan.isCBS))}}
+          {{! template-lint-disable no-inline-styles }}
+          <AuButton
+            style="background-color: #007A37; border-color: #007A37;"
+            @icon="table-row-end-add"
+            @loadingMessage="Genereren"
+            {{on "click" (fn (mut this.isGeneratingRows) true)}}
+          >
+            Genereer rijen
+          </AuButton>
+        {{/if}}
+        {{#if
+          (or
+            (await @bestuursorgaan.isRMW) (await @bestuursorgaan.isVastBureau)
+          )
+        }}
           <AuButton
             @skin="secondary"
             @icon="synchronize"
@@ -17,10 +32,10 @@
             @loadingMessage="Aan het synchroniseren"
             {{on "click" (perform this.mirrorTable)}}
           >
-            {{#if (await this.isRMW)}}
+            {{#if (await @bestuursorgaan.isRMW)}}
               Neem over van Gemeenteraad
             {{/if}}
-            {{#if (await this.isLidVanVB)}}
+            {{#if (await @bestuursorgaan.isVastBureau)}}
               Neem over van College van Burgemeester en Schepenen
             {{/if}}
           </AuButton>
@@ -45,7 +60,11 @@
 
   {{#if
     (and
-      (or this.mirrorTable.isRunning this.onCreate.isRunning)
+      (or
+        this.initialLoad.isRunning
+        this.mirrorTable.isRunning
+        this.getMandatarissen.isRunning
+      )
       this.skeletonRowsOfMirror
     )
   }}
@@ -55,9 +74,8 @@
   {{else}}
     <Verkiezingen::DraftMandatarisList
       @readOnly={{@isBehandeld}}
-      @bestuursorgaan={{@bestuursorgaan}}
-      @page={{0}}
-      @size={{9999}}
+      @mandatarissen={{this.mandatarissen}}
+      @updateMandatarissen={{perform this.getMandatarissen}}
       @title=""
       @showFractie={{true}}
       @showFunctie={{true}}
@@ -90,6 +108,24 @@
         @form={{@form}}
         @buildSourceTtl={{this.buildSourceTtl}}
         @buildMetaTtl={{this.buildMetaTtl}}
+      />
+    </div>
+  </AuModal>
+
+  <AuModalContainer />
+  <AuModal
+    @title={{(concat
+      "Genereer rijen voor " @bestuursorgaan.isTijdsspecialisatieVan.naam
+    )}}
+    @modalOpen={{this.isGeneratingRows}}
+    @closable={{true}}
+    @closeModal={{(fn (mut this.isGeneratingRows) false)}}
+  >
+    <div class="au-o-box">
+      <Verkiezingen::GenerateRows
+        @bestuursorgaan={{@bestuursorgaan}}
+        @onCancel={{(fn (mut this.isGeneratingRows) false)}}
+        @onCreated={{perform this.getMandatarissen}}
       />
     </div>
   </AuModal>

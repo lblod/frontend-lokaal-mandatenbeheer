@@ -1,0 +1,65 @@
+<PowerSelect
+  @noMatchesMessage="Geen resultaten"
+  @searchMessage="Typ om te zoeken"
+  @searchEnabled={{true}}
+  @allowClear={{false}}
+  @disabled={{@disabled}}
+  @placeholder="Zoek mandaat"
+  @searchField="label"
+  @selected={{this.selectedMandaat}}
+  @onChange={{this.selectMandaat}}
+  @onClose={{@onClose}}
+  @options={{@mandaatOptions}}
+  as |mandaat|
+>
+  {{mandaat.label}}
+</PowerSelect>
+<br />
+<AuDatePicker
+  @alignment={{this.alignment}}
+  @label="Start mandaat"
+  @value={{this.startDate}}
+  @min={{@startDate}}
+  @max={{@endDate}}
+  @first-day={{1}}
+  @onChange={{fn (mut this.startDate)}}
+/>
+<br />
+<AuDatePicker
+  @alignment={{this.alignment}}
+  @label="Einde mandaat"
+  @value={{this.endDate}}
+  @min={{@startDate}}
+  @max={{@endDate}}
+  @first-day={{1}}
+  @onChange={{fn (mut this.endDate)}}
+/>
+<br />
+<AuLabel for="input">Aantal rijen</AuLabel>
+<AuInput
+  @disabled={{not this.selectedMandaat}}
+  value={{this.rowsToGenerate}}
+  id="input-rows-to-generate"
+  {{on "keyup" (perform this.validateRows)}}
+/>
+<AuHelpText>{{this.rowsToCreateHelpText}}</AuHelpText>
+{{#each this.rowWarnings as |warning|}}
+  <AuHelpText @warning={{true}}>{{warning}}</AuHelpText>
+{{/each}}
+<AuToolbar class="au-u-margin-top" as |Group|>
+  <Group>
+    <AuButtonGroup>
+      <AuButton
+        @loading={{this.loadingMessage}}
+        @loadingMessage={{this.loadingMessage}}
+        @disabled={{this.isInvaldForGeneration}}
+        {{on "click" (perform this.onConfigReady)}}
+      >
+        Genereer
+      </AuButton>
+      <AuButton @skin="secondary" {{on "click" @onCancel}}>
+        Annuleer
+      </AuButton>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
