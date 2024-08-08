@@ -46,7 +46,7 @@ export default class GenerateRowsFormComponent extends Component {
   });
 
   generateMandatarissen = task(async (config) => {
-    const { rows, mandaat, startDate, endDate } = config;
+    const { rows, mandaat, startDate, endDate, existingMandaten } = config;
     const mandatarisProps = {
       rangorde: null,
       start: startDate,
@@ -60,12 +60,12 @@ export default class GenerateRowsFormComponent extends Component {
 
     for (let index = 0; index < rows; index++) {
       if (mandaat.isSchepen) {
-        const rangordeAsNumber = index + 1;
+        const rangordeAsNumber = existingMandaten + index + 1;
         mandatarisProps.rangorde = `${rangordeNumberMapping[rangordeAsNumber] ?? 'Eerste'} schepenen`;
       }
 
       const mandataris = this.store.createRecord('mandataris', mandatarisProps);
-      await mandataris.save();
+      mandataris.save();
     }
   });
 }

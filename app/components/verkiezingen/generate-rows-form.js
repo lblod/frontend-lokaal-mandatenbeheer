@@ -101,6 +101,7 @@ export default class GenerateRowsFormComponent extends Component {
       startDate: this.startDate ?? this.args.startDate,
       endDate: this.endDate,
       rows: this.rowsToGenerate,
+      existingMandaten: this.lengthExistingMandaten,
     });
     this.args.onCancel();
   });
