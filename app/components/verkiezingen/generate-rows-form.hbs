@@ -15,6 +15,26 @@
   {{mandaat.label}}
 </PowerSelect>
 <br />
+<AuDatePicker
+  @alignment={{this.alignment}}
+  @label="Start mandaat"
+  @value={{this.startDate}}
+  @min={{@startDate}}
+  @max={{@endDate}}
+  @first-day={{1}}
+  @onChange={{fn (mut this.startDate)}}
+/>
+<br />
+<AuDatePicker
+  @alignment={{this.alignment}}
+  @label="Einde mandaat"
+  @value={{this.endDate}}
+  @min={{@startDate}}
+  @max={{@endDate}}
+  @first-day={{1}}
+  @onChange={{fn (mut this.endDate)}}
+/>
+<br />
 <AuLabel for="input">Aantal rijen</AuLabel>
 <AuInput
   @disabled={{not this.selectedMandaat}}

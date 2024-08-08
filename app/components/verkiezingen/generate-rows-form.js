@@ -13,10 +13,18 @@ export default class GenerateRowsFormComponent extends Component {
   @service store;
 
   @tracked selectedMandaat;
+  @tracked startDate;
+  @tracked endDate;
   @tracked rowsToGenerate;
   @tracked rowWarnings = A([]);
   @tracked lengthExistingMandaten = 0;
   @tracked rowsToCreateHelpText;
+
+  constructor() {
+    super(...arguments);
+    this.startDate = this.args.startDate;
+    this.endDate = this.args.endDate;
+  }
 
   @action
   async selectMandaat(mandaatOption) {
@@ -89,8 +97,10 @@ export default class GenerateRowsFormComponent extends Component {
 
   onConfigReady = task(async () => {
     this.args.onConfigReceived({
-      rows: this.rowsToGenerate,
       mandaat: this.selectedMandaat.parent,
+      startDate: this.startDate ?? this.args.startDate,
+      endDate: this.endDate,
+      rows: this.rowsToGenerate,
     });
     this.args.onCancel();
   });
