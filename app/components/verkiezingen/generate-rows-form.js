@@ -63,7 +63,7 @@ export default class GenerateRowsFormComponent extends Component {
       const minimumToCreate =
         this.selectedMandaat.parent.minAantalHouders -
         this.lengthExistingMandaten;
-      this.rowsToCreateHelpText = `Je moet nog minimum ${minimumToCreate} mandaten aanmaken voor dit bestuursorgaan.`;
+      this.rowsToCreateHelpText = `Je moet nog minimum ${minimumToCreate} ${minimumToCreate <= 1 ? 'mandaat' : 'mandaten'} aanmaken voor dit bestuursorgaan.`;
     }
     if (this.selectedMandaat.parent.maxAantalHouders) {
       this.rowsToGenerate =
