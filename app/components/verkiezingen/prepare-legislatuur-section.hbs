@@ -21,7 +21,9 @@
           </AuButton>
         {{/if}}
         {{#if
-          (or (await @bestuursorgaan.isRMW) (await @bestuursorgaan.isLidVanVB))
+          (or
+            (await @bestuursorgaan.isRMW) (await @bestuursorgaan.isVastBureau)
+          )
         }}
           <AuButton
             @skin="secondary"
@@ -33,7 +35,7 @@
             {{#if (await @bestuursorgaan.isRMW)}}
               Neem over van Gemeenteraad
             {{/if}}
-            {{#if (await @bestuursorgaan.isLidVanVB)}}
+            {{#if (await @bestuursorgaan.isVastBureau)}}
               Neem over van College van Burgemeester en Schepenen
             {{/if}}
           </AuButton>
@@ -59,9 +61,9 @@
   {{#if
     (and
       (or
+        this.initialLoad.isRunning
         this.mirrorTable.isRunning
-        this.onCreate.isRunning
-        this.onRowsGenerated.isRunning
+        this.getMandatarissen.isRunning
       )
       this.skeletonRowsOfMirror
     )
@@ -72,9 +74,8 @@
   {{else}}
     <Verkiezingen::DraftMandatarisList
       @readOnly={{@isBehandeld}}
-      @bestuursorgaan={{@bestuursorgaan}}
-      @page={{0}}
-      @size={{9999}}
+      @mandatarissen={{this.mandatarissen}}
+      @updateMandatarissen={{perform this.getMandatarissen}}
       @title=""
       @showFractie={{true}}
       @showFunctie={{true}}
@@ -124,7 +125,7 @@
       <Verkiezingen::GenerateRows
         @bestuursorgaan={{@bestuursorgaan}}
         @onCancel={{(fn (mut this.isGeneratingRows) false)}}
-        @onCreated={{perform this.onRowsGenerated}}
+        @onCreated={{perform this.getMandatarissen}}
       />
     </div>
   </AuModal>

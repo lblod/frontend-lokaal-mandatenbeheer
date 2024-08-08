@@ -97,7 +97,6 @@ export default class GenerateRowsFormComponent extends Component {
       rows: this.rowsToGenerate,
       existingMandaten: this.lengthExistingMandaten,
     });
-    this.args.onCancel();
   });
 
   addWarningWhenMandatenAreAtMax() {
@@ -110,6 +109,10 @@ export default class GenerateRowsFormComponent extends Component {
         `Je hebt het maximum aantal houders voor dit mandaat bereikt.`
       );
     }
+  }
+
+  get loadingMessage() {
+    return this.args.loadingMessage;
   }
 
   get isInvaldForGeneration() {

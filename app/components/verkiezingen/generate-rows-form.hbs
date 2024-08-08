@@ -50,6 +50,8 @@
   <Group>
     <AuButtonGroup>
       <AuButton
+        @loading={{this.loadingMessage}}
+        @loadingMessage={{this.loadingMessage}}
         @disabled={{this.isInvaldForGeneration}}
         {{on "click" (perform this.onConfigReady)}}
       >

@@ -20,6 +20,7 @@ export default class GenerateRowsFormComponent extends Component {
   @tracked startDate;
   @tracked endDate;
   @tracked mandaatOptions;
+  @tracked loadingMessageOfGeneration;
 
   constructor() {
     super(...arguments);
@@ -46,6 +47,7 @@ export default class GenerateRowsFormComponent extends Component {
   });
 
   generateMandatarissen = task(async (config) => {
+    const addedMandatarissen = [];
     const { rows, mandaat, startDate, endDate, existingMandaten } = config;
     const mandatarisProps = {
       rangorde: null,
@@ -65,11 +67,14 @@ export default class GenerateRowsFormComponent extends Component {
       }
 
       const mandataris = this.store.createRecord('mandataris', mandatarisProps);
-      mandataris.save();
+      await mandataris.save();
+      addedMandatarissen.push(mandataris);
+      this.loadingMessageOfGeneration = `Generating ${index + 1} of ${rows}`;
     }
-
+    this.loadingMessageOfGeneration = null;
     this.args.onCreated({
-      addedMandatarissen: rows,
+      added: addedMandatarissen,
     });
+    this.args.onCancel();
   });
 }
