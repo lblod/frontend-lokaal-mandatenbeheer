@@ -67,5 +67,9 @@ export default class GenerateRowsFormComponent extends Component {
       const mandataris = this.store.createRecord('mandataris', mandatarisProps);
       mandataris.save();
     }
+
+    this.args.onCreated({
+      addedMandatarissen: rows,
+    });
   });
 }

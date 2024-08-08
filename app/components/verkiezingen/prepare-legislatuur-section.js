@@ -2,8 +2,10 @@ import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask } from 'ember-concurrency';
 import { service } from '@ember/service';
+
+import { restartableTask, timeout, task } from 'ember-concurrency';
+
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
@@ -236,6 +238,15 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
+  });
+
+  onRowsGenerated = task(async ({ addedMandatarissen }) => {
+    const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
+      this.args.bestuursorgaan
+    );
+    this.skeletonRowsOfMirror =
+      addedMandatarissen + currentMandatarissen.length;
+    await timeout(100);
   });
 
   @action

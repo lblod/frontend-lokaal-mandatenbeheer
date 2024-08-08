@@ -58,7 +58,11 @@
 
   {{#if
     (and
-      (or this.mirrorTable.isRunning this.onCreate.isRunning)
+      (or
+        this.mirrorTable.isRunning
+        this.onCreate.isRunning
+        this.onRowsGenerated.isRunning
+      )
       this.skeletonRowsOfMirror
     )
   }}
@@ -120,6 +124,7 @@
       <Verkiezingen::GenerateRows
         @bestuursorgaan={{@bestuursorgaan}}
         @onCancel={{(fn (mut this.isGeneratingRows) false)}}
+        @onCreated={{perform this.onRowsGenerated}}
       />
     </div>
   </AuModal>
