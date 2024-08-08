@@ -14,6 +14,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @service('mandataris') mandatarisService;
   @service('fractie') fractieService;
   @service fractieApi;
+  @service persoonApi;
 
   queryParams = ['activeOnly'];
 
@@ -126,5 +127,9 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     }
 
     this.router.refresh();
+  });
+
+  endActiveMandaten = task(async () => {
+    await this.persoonApi.endActiveMandates(this.model.persoon.id);
   });
 }
