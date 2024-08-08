@@ -64,10 +64,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       this.mandatarissen.removeObjects(removed);
     }
     if (added && added.length >= 1) {
-      console.log(`adding`, added.length);
       if (added.length >= 2) {
         this.skeletonRowsOfMirror = this.mandatarissen.length + added.length;
-        console.log(`skeletonRowsOfMirror`, this.skeletonRowsOfMirror);
       }
       this.mandatarissen.pushObjects(added);
     }
