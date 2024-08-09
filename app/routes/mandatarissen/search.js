@@ -60,6 +60,10 @@ export default class MandatarissenSearchRoute extends Route {
     const samenWerkendFracties = await this.fractieApi.forBestuursperiode(
       selectedPeriod.id
     );
+    let selectedFracties = params.binnenFractie;
+    if (params.onafhankelijkeFractie === 'true') {
+      selectedFracties += `, ${placeholderOnafhankelijk}`;
+    }
 
     return {
       personen,
@@ -68,7 +72,7 @@ export default class MandatarissenSearchRoute extends Route {
       bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
       selectedBestuurfunctieIds: params.bestuursfunctie,
       fracties: [...samenWerkendFracties, placeholderOnafhankelijk],
-      selectedFracties: params.binnenFractie,
+      selectedFracties,
     };
   }
 
