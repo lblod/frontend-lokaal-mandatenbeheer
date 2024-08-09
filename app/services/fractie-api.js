@@ -2,7 +2,13 @@ import Service from '@ember/service';
 
 import { service } from '@ember/service';
 
-import { API, STATUS_CODE } from 'frontend-lmb/utils/constants';
+import { timeout } from 'ember-concurrency';
+
+import {
+  API,
+  RESOURCE_CACHE_TIMEOUT,
+  STATUS_CODE,
+} from 'frontend-lmb/utils/constants';
 import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
 
 export default class FractieApiService extends Service {
@@ -48,6 +54,8 @@ export default class FractieApiService extends Service {
         message: jsonReponse.message,
       };
     }
+
+    await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 
   async removeFractieWhenNoLidmaatschap(bestuursperiodeId) {
@@ -65,6 +73,7 @@ export default class FractieApiService extends Service {
       };
     }
 
+    await timeout(RESOURCE_CACHE_TIMEOUT);
     console.info(`Removed ${jsonReponse.fracties.length} dangling fractie(s).`);
   }
 }
