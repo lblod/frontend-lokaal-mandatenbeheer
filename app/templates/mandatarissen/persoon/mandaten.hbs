@@ -10,7 +10,11 @@
     </AuHeading>
   </Group>
   <Group>
-    <AuButton {{on "click" (perform this.endActiveMandaten)}}>
+    <AuButton
+      @loading={{this.endActiveMandaten.isRunning}}
+      @loadingMessage="Beëindigen"
+      {{on "click" (perform this.endActiveMandaten)}}
+    >
       Beeindig mandaten
     </AuButton>
     <AuButton
