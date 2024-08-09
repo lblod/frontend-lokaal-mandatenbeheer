@@ -2,7 +2,13 @@ import Service from '@ember/service';
 
 import { service } from '@ember/service';
 
-import { API, STATUS_CODE } from 'frontend-lmb/utils/constants';
+import { timeout } from 'ember-concurrency';
+
+import {
+  API,
+  RESOURCE_CACHE_TIMEOUT,
+  STATUS_CODE,
+} from 'frontend-lmb/utils/constants';
 
 export default class PersoonApiService extends Service {
   @service store;
@@ -71,5 +77,7 @@ export default class PersoonApiService extends Service {
         message: jsonReponse.message,
       };
     }
+
+    await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 }

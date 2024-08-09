@@ -137,5 +137,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       this.toaster,
       `Active mandatatarissen beëindigd voor ${this.model.persoon.naam}`
     );
+    this.activeOnly = false;
+    this.router.refresh();
   });
 }
