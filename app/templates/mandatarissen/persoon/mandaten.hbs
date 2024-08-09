@@ -11,6 +11,13 @@
   </Group>
   <Group>
     <AuButton
+      @loading={{this.endActiveMandaten.isRunning}}
+      @loadingMessage="Beëindigen"
+      {{on "click" (perform this.endActiveMandaten)}}
+    >
+      Beeindig mandaten
+    </AuButton>
+    <AuButton
       skin="secondary"
       @loading={{(or
         this.checkFracties.isRunning this.becomeOnafhankelijk.isRunning
