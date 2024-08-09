@@ -25,7 +25,7 @@ export default class FractieService extends Service {
       bestuursorganenInTijd: bestuursorganen,
       bestuurseenheid: bestuurseenheid,
     });
-    onafhankelijke.save();
+    await onafhankelijke.save();
 
     return onafhankelijke;
   }
@@ -37,10 +37,9 @@ export default class FractieService extends Service {
       if (!lid) {
         continue;
       }
-
       const fractie = await lid.binnenFractie;
       if (!fractie) {
-        return null;
+        continue;
       }
       const type = await fractie.fractietype;
       if (type.isOnafhankelijk) {

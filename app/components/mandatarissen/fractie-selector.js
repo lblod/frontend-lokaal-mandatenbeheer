@@ -48,7 +48,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     const person = await this.getPerson();
 
     if (this.args.isUpdatingState) {
-      console.log(`\t UPDATE STATE`);
       this.fractieOptions = await this.persoonApi.getMandatarisFracties(
         person.id,
         this.args.bestuursperiode.id
@@ -56,19 +55,16 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     }
 
     if (!this.args.isUpdatingState && !this.args.isInCreatingForm) {
-      console.log(`\t CORRECTING STATE`);
       this.fractieOptions = await this.fractieApi.forBestuursperiode(
         this.args.bestuursperiode.id
       );
     }
 
     if (!this.args.isUpdatingState && this.args.isInCreatingForm) {
-      console.log(`\t CREATE STATE`);
       const currentFractie = await this.persoonApi.getCurrentFractie(
         person.id,
         this.args.bestuursperiode.id
       );
-      console.log(`Current fractie in selector`, currentFractie);
       if (currentFractie) {
         this.fractieOptions = [currentFractie];
         return;
