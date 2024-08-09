@@ -23,3 +23,9 @@ export const API = {
 export const STATUS_CODE = {
   OK: 200,
 };
+
+export const placeholderOnafhankelijk = {
+  uri: `http://placeholder-onafhankelijk`,
+  id: 'ONAFHANKELIJK-ID',
+  naam: 'Onafhankelijk',
+};
