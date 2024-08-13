@@ -10,7 +10,7 @@ import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValu
 import { NamedNode } from 'rdflib';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { MANDAAT, RDF } from 'frontend-lmb/rdf/namespaces';
-import { restartableTask } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
@@ -101,20 +101,33 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   findPersonInForm = restartableTask(async () => {
     this.isPersonInForm = false;
-    this.person = null;
     const mandatarisNode = this.storeOptions.store.any(
       undefined,
       RDF('type'),
       MANDAAT('Mandataris'),
       this.storeOptions.sourceGraph
     );
-    this.person = await this.findMandatarisPersonInStore(mandatarisNode);
-    if (!this.person) {
-      this.person = await this.findMandatarisPersonByQuery(
-        mandatarisNode.value
-      );
+    let newPerson = await this.findMandatarisPersonInStore(mandatarisNode);
+    if (!newPerson) {
+      newPerson = await this.findMandatarisPersonByQuery(mandatarisNode.value);
     }
+    await this.clearFractieIfDifferentPerson(newPerson);
+    this.person = newPerson;
   });
+
+  async clearFractieIfDifferentPerson(newPerson) {
+    if (!this.selectedFractie) {
+      return;
+    }
+    if (!newPerson || this.person !== newPerson) {
+      this.initialized = false;
+      await this.onSelectFractie(null);
+      // hack to have the fractie selector reinitialize and recompute the possible fractions
+      await timeout(100);
+      this.initialized = true;
+      return;
+    }
+  }
 
   async findMandatarisPersonInStore(mandatarisNode) {
     if (mandatarisNode) {
