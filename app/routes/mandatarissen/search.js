@@ -3,10 +3,12 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
+import { placeholderOnafhankelijk } from 'frontend-lmb/utils/constants';
 
 export default class MandatarissenSearchRoute extends Route {
   @service store;
   @service bestuursperioden;
+  @service fractieApi;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -14,6 +16,7 @@ export default class MandatarissenSearchRoute extends Route {
     bestuursperiode: { refreshModel: true },
     bestuursfunctie: { refreshModel: true },
     binnenFractie: { refreshModel: true },
+    onafhankelijkeFractie: { refreshModel: true },
     activeMandatarissen: { refreshModel: true },
   };
 
@@ -54,14 +57,13 @@ export default class MandatarissenSearchRoute extends Route {
       allBestuurfunctieCodes.push(await mandaat.bestuursfunctie);
     }
 
-    const fracties = await this.store.query('fractie', {
-      'filter[bestuursorganen-in-tijd][heeft-bestuursperiode][:id:]':
-        selectedPeriod.id,
-      include: [
-        'bestuursorganen-in-tijd',
-        'bestuursorganen-in-tijd.heeft-bestuursperiode',
-      ].join(','),
-    });
+    const samenWerkendFracties = await this.fractieApi.forBestuursperiode(
+      selectedPeriod.id
+    );
+    let selectedFracties = params.binnenFractie;
+    if (params.onafhankelijkeFractie === 'true') {
+      selectedFracties += `, ${placeholderOnafhankelijk}`;
+    }
 
     return {
       personen,
@@ -69,8 +71,8 @@ export default class MandatarissenSearchRoute extends Route {
       selectedPeriod: { period: selectedPeriod, disabled: false },
       bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
       selectedBestuurfunctieIds: params.bestuursfunctie,
-      fracties,
-      selectedFracties: params.binnenFractie,
+      fracties: [...samenWerkendFracties, placeholderOnafhankelijk],
+      selectedFracties,
     };
   }
 
@@ -100,25 +102,20 @@ export default class MandatarissenSearchRoute extends Route {
       queryParams['filter[bekleedt][bestuursfunctie][:id:]'] =
         params.bestuursfunctie;
     }
-    if (params.binnenFractie) {
+    if (params.binnenFractie !== null) {
       queryParams['filter[heeft-lidmaatschap][binnen-fractie][:id:]'] =
         params.binnenFractie;
     }
-
     const mandatarissen = await this.store.query('mandataris', queryParams);
-    const personen = await Promise.all(
-      mandatarissen.map(async (mandataris) => {
-        if (!params.activeMandatarissen || (await mandataris.isActive)) {
-          return await mandataris.get('isBestuurlijkeAliasVan');
-        }
-      })
-    );
-    if (params.activeMandatarissen) {
-      const active = personen.filter((persoon) => {
-        return persoon;
-      });
-      return [...new Set(active)];
-    }
+    const personen = (
+      await Promise.all(
+        mandatarissen.map(async (mandataris) => {
+          if (!params.activeMandatarissen || (await mandataris.isActive)) {
+            return await mandataris.get('isBestuurlijkeAliasVan');
+          }
+        })
+      )
+    ).filter((p) => p);
     return [...new Set(personen)];
   }
 

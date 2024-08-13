@@ -9,6 +9,8 @@ import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { NamedNode } from 'rdflib';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { MANDAAT, RDF } from 'frontend-lmb/rdf/namespaces';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
@@ -34,10 +36,17 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @tracked initialized = false;
   @tracked bestuurseenheid = null;
   @tracked bestuursperiode;
+  @tracked person;
+  @tracked isPersonInForm;
+
+  emptySelectorOptions = [];
 
   constructor() {
     super(...arguments);
     this.load();
+    this.storeOptions.store.registerObserver(async () => {
+      await this.findPersonInForm.perform();
+    });
   }
 
   get title() {
@@ -45,7 +54,11 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   async load() {
-    await Promise.all([this.loadBestuursorganen(), this.loadProvidedValue()]);
+    await Promise.all([
+      this.findPersonInForm.perform(),
+      this.loadBestuursorganen(),
+      this.loadProvidedValue(),
+    ]);
     this.initialized = true;
   }
 
@@ -84,5 +97,68 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     this.selectedFractie = fractie;
     this.hasBeenFocused = true;
     super.updateValidations();
+  }
+
+  findPersonInForm = restartableTask(async () => {
+    this.isPersonInForm = false;
+    const mandatarisNode = this.storeOptions.store.any(
+      undefined,
+      RDF('type'),
+      MANDAAT('Mandataris'),
+      this.storeOptions.sourceGraph
+    );
+    let newPerson = await this.findMandatarisPersonInStore(mandatarisNode);
+    if (!newPerson) {
+      newPerson = await this.findMandatarisPersonByQuery(mandatarisNode.value);
+    }
+    await this.clearFractieIfDifferentPerson(newPerson);
+    this.person = newPerson;
+  });
+
+  async clearFractieIfDifferentPerson(newPerson) {
+    if (!this.selectedFractie) {
+      return;
+    }
+    if (!newPerson || this.person !== newPerson) {
+      this.initialized = false;
+      await this.onSelectFractie(null);
+      // hack to have the fractie selector reinitialize and recompute the possible fractions
+      await timeout(100);
+      this.initialized = true;
+      return;
+    }
+  }
+
+  async findMandatarisPersonInStore(mandatarisNode) {
+    if (mandatarisNode) {
+      const possiblePersonNode = this.storeOptions.store.any(
+        mandatarisNode,
+        MANDAAT('isBestuurlijkeAliasVan'),
+        undefined,
+        this.storeOptions.sourceGraph
+      );
+      if (possiblePersonNode) {
+        const personMatches = await this.store.query('persoon', {
+          'filter[:uri:]': possiblePersonNode.value,
+        });
+        if (personMatches.length === 0) {
+          return null;
+        } else {
+          this.isPersonInForm = true;
+          return personMatches.at(0);
+        }
+      }
+    }
+  }
+
+  async findMandatarisPersonByQuery(mandatarisUri) {
+    const mandatarisMatches = await this.store.query('mandataris', {
+      'filter[:uri:]': mandatarisUri,
+    });
+    if (mandatarisMatches.length === 0) {
+      return null;
+    }
+
+    return await mandatarisMatches.at(0).isBestuurlijkeAliasVan;
   }
 }

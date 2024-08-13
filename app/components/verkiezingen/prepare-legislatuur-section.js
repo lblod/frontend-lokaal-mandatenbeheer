@@ -2,15 +2,15 @@ import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask, timeout } from 'ember-concurrency';
 import { service } from '@ember/service';
+import { A } from '@ember/array';
+
+import { restartableTask, task } from 'ember-concurrency';
+
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 import {
-  BURGEMEESTER_BESTUURSORGAAN_URI,
-  RMW_BESTUURSORGAAN_URI,
-  VAST_BUREAU_BESTUURSORGAAN_URI,
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
   MANDAAT_LID_RMW_CODE,
@@ -34,9 +34,46 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service toaster;
   @service store;
   @service router;
+  @service fractieApi;
+  @service('mandataris') mandatarisService;
 
   @tracked editMode = null;
+  @tracked isGeneratingRows;
   @tracked skeletonRowsOfMirror = null;
+  @tracked mandatarissen = A();
+
+  constructor() {
+    super(...arguments);
+
+    this.initialLoad.perform();
+  }
+
+  initialLoad = task(async () => {
+    this.mandatarissen.clear();
+    const mandatarissen = await this.getBestuursorgaanMandatarissen(
+      this.args.bestuursorgaan
+    );
+    this.skeletonRowsOfMirror = this.mandatarissen.length;
+    this.getMandatarissen.perform({ added: mandatarissen });
+  });
+
+  getMandatarissen = restartableTask(async (state) => {
+    const { added, removed, updated } = state;
+
+    if (removed && removed.length >= 1) {
+      this.mandatarissen.removeObjects(removed);
+    }
+    if (added && added.length >= 1) {
+      if (added.length >= 2) {
+        this.skeletonRowsOfMirror = this.mandatarissen.length + added.length;
+      }
+      this.mandatarissen.pushObjects(added);
+    }
+
+    if (updated) {
+      await this.initialLoad.perform();
+    }
+  });
 
   @action
   createMandataris() {
@@ -47,41 +84,22 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     return this.editMode === CREATE_MODE;
   }
 
-  get isBurgemeester() {
-    return this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
-      BURGEMEESTER_BESTUURSORGAAN_URI
-    );
-  }
-
-  get isRMW() {
-    return this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
-      RMW_BESTUURSORGAAN_URI
-    );
-  }
-  get isLidVanVB() {
-    return this.args.bestuursorgaan.hasBestuursorgaanClassificatie(
-      VAST_BUREAU_BESTUURSORGAAN_URI
-    );
-  }
-
   get CBSClassification() {
     return CBS_BESTUURSORGAAN_URI;
   }
 
   mirrorTable = restartableTask(async () => {
     this.skeletonRowsOfMirror = null;
-    // bestuursorganenInTijd
-    const bestuursorganen = this.args.bestuursorganen;
     let syncId = null;
-    if (await this.isRMW) {
+    if (await this.args.bestuursorgaan.isRMW) {
       syncId = GEMEENTERAAD_BESTUURSORGAAN_URI;
     }
-    if (await this.isLidVanVB) {
+    if (await this.args.bestuursorgaan.isVastBureau) {
       syncId = CBS_BESTUURSORGAAN_URI;
     }
 
     let bestuursorgaanToSyncFrom = null;
-    for (const bestuursorgaan of bestuursorganen) {
+    for (const bestuursorgaan of this.args.bestuursorganen) {
       const classificatie = await bestuursorgaan.get(
         'isTijdsspecialisatieVan.classificatie'
       );
@@ -109,16 +127,12 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       return;
     }
     this.skeletonRowsOfMirror = mandatarissenToSync.length;
-    console.log(`rows`, mandatarissenToSync.length);
 
-    const currentMandatarissen = await this.getBestuursorgaanMandatarissen(
-      this.args.bestuursorgaan
-    );
-
-    for (const mandataris of currentMandatarissen) {
+    for (const mandataris of this.mandatarissen) {
       mandataris.destroyRecord();
     }
 
+    const newMandatarissen = [];
     for (const mandatarisToAdd of mandatarissenToSync) {
       const mandaatOfMandataris = await mandatarisToAdd.bekleedt;
       const bestuursfunctie = await mandaatOfMandataris.bestuursfunctie;
@@ -189,7 +203,13 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       const mandatarissen = await mandaat.bekleedDoor;
       mandatarissen.pushObject(newMandataris);
       await mandatarissen.save();
+
+      newMandatarissen.push(newMandataris);
     }
+    await this.getMandatarissen.perform({
+      added: newMandatarissen,
+      removed: this.mandatarissen,
+    });
   });
 
   async createMandatarisFromMandataris(mandataris, mandaat, lidmaatschap) {
@@ -241,17 +261,16 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @action
   cancel() {
     this.editMode = null;
+    this.isGeneratingRows = false;
   }
 
   onCreate = restartableTask(async ({ instanceTtl, instanceId }) => {
     this.editMode = null;
-    this.skeletonRowsOfMirror = null;
-    const mandatarissen = await this.getBestuursorgaanMandatarissen(
-      this.args.bestuursorgaan
-    );
-    this.skeletonRowsOfMirror = mandatarissen.length;
+    const mandataris = await this.store.findRecord('mandataris', instanceId);
+    await this.getMandatarissen.perform({ added: [mandataris] });
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
-    await timeout(1000);
+    await this.fractieApi.updateCurrentFractie(instanceId);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
   });
 
   @action

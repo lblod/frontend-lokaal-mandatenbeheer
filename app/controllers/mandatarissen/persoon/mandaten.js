@@ -6,18 +6,21 @@ import { service } from '@ember/service';
 
 import { task } from 'ember-concurrency';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
-import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
+import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
+  @service toaster;
   @service store;
   @service('mandataris') mandatarisService;
   @service('fractie') fractieService;
+  @service fractieApi;
+  @service persoonApi;
 
   queryParams = ['activeOnly'];
 
   @tracked canBecomeOnafhankelijk;
-  @tracked possibelOnafhankelijkeMandatarissen = [];
+  @tracked currentNonOnafhankelijkeMandatarissen = [];
   @tracked isModalOpen = false;
   @tracked selectedBestuursorgaan = null;
   @tracked activeOnly = true;
@@ -51,7 +54,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
 
   checkFracties = task(async (foldedMandatarissen) => {
     this.canBecomeOnafhankelijk = false;
-    this.possibelOnafhankelijkeMandatarissen = [];
+    this.currentNonOnafhankelijkeMandatarissen = [];
     for (const fold of foldedMandatarissen) {
       const isActive = await this.mandatarisService.isMandatarisActive(
         fold.mandataris
@@ -65,34 +68,48 @@ export default class MandatarissenPersoonMandatenController extends Controller {
           fold.mandataris
         );
       if (!isOnafhankelijk) {
-        this.possibelOnafhankelijkeMandatarissen.push(fold.mandataris);
+        this.currentNonOnafhankelijkeMandatarissen.push(fold.mandataris);
         continue;
       }
     }
 
     this.canBecomeOnafhankelijk =
-      this.possibelOnafhankelijkeMandatarissen.length >= 1;
+      this.currentNonOnafhankelijkeMandatarissen.length >= 1;
   });
+
+  async createOnafhankelijkeFractie(mandataris) {
+    const mandaat = await mandataris.bekleedt;
+    const mandaatBestuursorganenInTijd = await mandaat.bevatIn;
+    const activePeriod =
+      await mandaatBestuursorganenInTijd[0].heeftBestuursperiode;
+    const bestuursorgaan =
+      await mandaatBestuursorganenInTijd[0].isTijdsspecialisatieVan;
+    const bestuurseenheid = await bestuursorgaan.bestuurseenheid;
+    const bestuursOrganenInTijd = await this.store.query('bestuursorgaan', {
+      'filter[is-tijdsspecialisatie-van][bestuurseenheid][:id:]':
+        bestuurseenheid.id,
+      'filter[heeft-bestuursperiode][:id:]': activePeriod.id,
+    });
+
+    return await this.fractieService.createOnafhankelijkeFractie(
+      bestuursOrganenInTijd,
+      bestuurseenheid
+    );
+  }
 
   becomeOnafhankelijk = task(async () => {
     if (!this.canBecomeOnafhankelijk) {
       return;
     }
 
-    for (const mandataris of this.possibelOnafhankelijkeMandatarissen) {
+    for (const mandataris of this.currentNonOnafhankelijkeMandatarissen) {
       const person = await mandataris.isBestuurlijkeAliasVan;
       let onafhankelijkeFractie =
         await this.fractieService.findOnafhankelijkeFractieForPerson(person);
 
       if (!onafhankelijkeFractie) {
-        const bestuursorganenInTijd =
-          await getUniqueBestuursorganen(mandataris);
-        const bestuurseenheid = await bestuursorganenInTijd[0]?.bestuurseenheid;
         onafhankelijkeFractie =
-          await this.fractieService.createOnafhankelijkeFractie(
-            bestuursorganenInTijd,
-            bestuurseenheid
-          );
+          await this.createOnafhankelijkeFractie(mandataris);
       }
 
       const dateNow = new Date();
@@ -108,20 +125,32 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         'mandataris',
         newMandatarisProps
       );
-      newMandataris.save();
+      await newMandataris.save();
 
-      person.fractie = onafhankelijkeFractie;
-      person.save();
       await this.mandatarisService.updateOldLidmaatschap(mandataris);
       await this.mandatarisService.createNewLidmaatschap(
         newMandataris,
         onafhankelijkeFractie
       );
+      await this.fractieApi.updateCurrentFractie(newMandataris.id);
+      await this.mandatarisService.removeDanglingFractiesInPeriod(
+        newMandataris.id
+      );
 
       mandataris.einde = dateNow;
-      mandataris.save();
+      await mandataris.save();
     }
 
+    this.router.refresh();
+  });
+
+  endActiveMandaten = task(async () => {
+    await this.persoonApi.endActiveMandates(this.model.persoon.id);
+    showSuccessToast(
+      this.toaster,
+      `Active mandatatarissen beëindigd voor ${this.model.persoon.naam}`
+    );
+    this.activeOnly = false;
     this.router.refresh();
   });
 }

@@ -1,17 +1,21 @@
-<PowerSelect
-  @loadingMessage="Aan het laden..."
-  @noMatchesMessage="Geen resultaten"
-  @searchMessage="Typ om te zoeken"
-  @searchEnabled={{true}}
-  @allowClear={{true}}
-  @disabled={{@disabled}}
-  @placeholder="Zoek fractie"
-  @search={{perform this.search}}
-  @selected={{this._fractie}}
-  @onChange={{this.select}}
-  @onClose={{@onClose}}
-  @options={{this.fractieOptions}}
-  as |fractie|
->
-  {{fractie.naam}}
-</PowerSelect>
+{{#if this.load.isRunning}}
+  <p class="skeleton-input-full au-u-margin-top"></p>
+{{else}}
+  <PowerSelect
+    @loadingMessage="Aan het laden..."
+    @noMatchesMessage="Geen resultaten"
+    @searchMessage="Typ om te zoeken"
+    @searchEnabled={{true}}
+    @allowClear={{@allowClear}}
+    @disabled={{@disabled}}
+    @placeholder="Zoek fractie"
+    @searchField="naam"
+    @selected={{this._fractie}}
+    @onChange={{this.select}}
+    @onClose={{@onClose}}
+    @options={{this.fractieOptions}}
+    as |fractie|
+  >
+    {{fractie.naam}}
+  </PowerSelect>
+{{/if}}
