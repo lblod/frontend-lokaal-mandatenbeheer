@@ -1,0 +1,123 @@
+<!-- app/templates/rekenhof.hbs -->
+
+<style>
+/* Existing styles */
+.rekenhof-container {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.query-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.query-button:hover {
+  background-color: #0056b3;
+}
+
+.styled-table {
+  width: 100%;
+  margin: 25px 0;
+  font-size: 10px;
+  text-align: left;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  table-layout: auto; /* Allow table to adjust column widths based on content */
+}
+
+.styled-table thead tr {
+  background-color: #007bff;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+  word-wrap: break-word; /* Handle long text */
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #007bff;
+}
+
+.styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.manual-input {
+  display: none;
+}
+
+</style>
+
+<div class="au-o-grid__item au-u-1-1">
+  <div class="rekenhof-container au-c-toolbar__group--row">
+    <h1 class="au-c-description-label">Current Bestuursorgaan URI</h1>
+    <p class="au-c-description-value">{{this.currentSession.group.uri}}</p>
+    <button class="query-button au-c-button au-c-button--toggle" {{on "click" this.queryApi}}>Query API</button>
+  </div>
+</div>
+
+{{#if this.apiResults}}
+  <div class="au-o-grid__item au-u-1-1">
+    <table class="styled-table au-c-data-table">
+      <thead>
+        <tr>
+          <th>Voornaam</th>
+          <th>Achternaam</th>
+          <th>Geboortedatum</th>
+          <th>Geslacht</th>
+          <th>RRN</th>
+          <th>Bestuurseenheid</th>
+          <th>Status Label</th>
+          <th>Startdatum</th>
+          <th>Einddatum</th>
+          <th>Vork brutosalaris na aftrek sociale bijdragen</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each this.apiResults as |result|}}
+          <tr>
+            <td>{{result.voornaam}}</td>
+            <td>{{result.achternaam}}</td>
+            <td>{{result.geboortedatum}}</td>
+            <td>{{result.geslacht}}</td>
+            <td>{{result.rrn}}</td>
+            <td>{{result.bestuursorgaanTijdsspecialisatieLabel}}</td>
+            <td>{{result.statusLabel}}</td>
+            <td>{{result.startdatum}}</td>
+            <td>{{result.einddatum}}</td>
+            <td>
+              <select class="salary-dropdown" {{on "change" this.handleSalaryChange}}>
+                <option value="option1">niet vergoed</option>
+                <option value="option2">tussen 1 en 5393 eur/jaar</option>
+                <option value="option3">tussen 5340 en 11880 eur/jaar</option>
+                <option value="option4">tussen 11881 en 59399 eur/jaar</option>
+                <option value="option5">59400 en 118798 eur/jaar</option>
+                <option value="manual">Manual Input</option>
+              </select>
+              <input type="number" class="manual-input" {{on "input" this.handleManualInput}} placeholder="Enter amount" />
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+{{/if}}
