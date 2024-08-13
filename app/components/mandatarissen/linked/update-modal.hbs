@@ -1,0 +1,32 @@
+<div {{did-update this.checkIfMandateAlreadyExists @recentUpdate}}>
+  <AuModal
+    @title={{this.doubleMandateTitle}}
+    @modalOpen={{this.doubleMandateModal}}
+    @closable={{true}}
+    @closeModal={{this.toggleDoubleMandateModal}}
+    as |Modal|
+  >
+    <Modal.Body>
+      <p>
+        {{this.doubleMandateText}}
+      </p>
+    </Modal.Body>
+    <Modal.Footer>
+      <AuToolbar as |Group|>
+        <Group>
+          <AuButtonGroup>
+            <AuButton {{on "click" this.createDoubleMandataris}}>
+              Ja
+            </AuButton>
+            <AuButton
+              @skin="secondary"
+              {{on "click" this.toggleDoubleMandateModal}}
+            >
+              Nee
+            </AuButton>
+          </AuButtonGroup>
+        </Group>
+      </AuToolbar>
+    </Modal.Footer>
+  </AuModal>
+</div>
