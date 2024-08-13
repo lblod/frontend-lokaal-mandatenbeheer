@@ -11,57 +11,25 @@ export default class DraftMandatarisListComponent extends Component {
   @service store;
   @service fractieApi;
 
-  @tracked mandatarissen;
-
   @tracked isEditing;
   @tracked isEditFormInitialized;
   @tracked mandatarisEdit;
 
   constructor() {
     super(...arguments);
-    this.onInit();
+  }
+
+  get mandatarissen() {
+    return this.args.mandatarissen;
   }
 
   get resortedMandatarissen() {
-    if (!this.mandatarissen) {
-      return [];
-    }
-
     return orderMandatarissenByRangorde([...this.mandatarissen]);
   }
 
   @action
-  async onInit() {
-    const queryParams = {
-      page: {
-        number: 0,
-        size: 9999,
-      },
-      filter: {
-        bekleedt: {
-          'bevat-in': {
-            id: this.args.bestuursorgaan.id,
-          },
-        },
-      },
-      include: [
-        'is-bestuurlijke-alias-van',
-        'bekleedt.bestuursfunctie',
-        'heeft-lidmaatschap.binnen-fractie',
-        'status',
-        'beleidsdomein',
-      ].join(','),
-    };
-
-    if (this.args.filter) {
-      queryParams['filter']['is-bestuurlijke-alias-van'] = this.args.filter;
-    }
-
-    this.mandatarissen = await this.store.query('mandataris', queryParams);
-  }
-
-  @action
   async removeMandataris(mandataris) {
+    this.args.updateMandatarissen({ removed: [mandataris] });
     mandataris
       .destroyRecord()
       .then(() => {
@@ -73,7 +41,6 @@ export default class DraftMandatarisListComponent extends Component {
           'Er ging iets mis bij het verwijderen van de mandataris. Probeer het later opnieuw.';
         this.toaster.error(errorMessage, 'Error');
       });
-    await this.onInit();
   }
 
   @action
@@ -90,9 +57,13 @@ export default class DraftMandatarisListComponent extends Component {
 
   @action
   async saveMandatarisChanges({ instanceId }) {
-    this.closeEditMandataris();
     await this.fractieApi.updateCurrentFractie(instanceId);
     this.isEditFormInitialized = false;
-    await this.onInit();
+    const updatedMandataris = await this.store.findRecord(
+      'mandataris',
+      instanceId
+    );
+    this.args.updateMandatarissen({ updated: updatedMandataris });
+    this.closeEditMandataris();
   }
 }
