@@ -1,9 +1,9 @@
 <div {{did-update this.checkIfMandateAlreadyExists @recentUpdate}}>
   <AuModal
     @title={{this.doubleMandateTitle}}
-    @modalOpen={{this.doubleMandateModal}}
+    @modalOpen={{this.isModalOpen}}
     @closable={{true}}
-    @closeModal={{this.toggleDoubleMandateModal}}
+    @closeModal={{this.closeModal}}
     as |Modal|
   >
     <Modal.Body>
@@ -18,10 +18,7 @@
             <AuButton {{on "click" this.createDoubleMandataris}}>
               Ja
             </AuButton>
-            <AuButton
-              @skin="secondary"
-              {{on "click" this.toggleDoubleMandateModal}}
-            >
+            <AuButton @skin="secondary" {{on "click" this.closeModal}}>
               Nee
             </AuButton>
           </AuButtonGroup>

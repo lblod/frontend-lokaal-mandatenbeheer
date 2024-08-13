@@ -12,21 +12,22 @@ export default class MandatarissenLinkedUpdateModal extends Component {
 
   @tracked doubleMandateTitle = '';
   @tracked doubleMandateText = '';
-  @tracked doubleMandateModal = false;
-
-  @action
-  toggleDoubleMandateModal() {
-    this.doubleMandateModal = !this.doubleMandateModal;
-  }
+  @tracked isModalOpen = false;
 
   @action
   checkIfMandateAlreadyExists() {
-    console.log('did update triggered');
-    console.log(this.args.recentUpdate);
     if (!this.args.recentUpdate) {
       return;
     }
     this.checkDoubleMandataris();
+  }
+
+  @action
+  closeModal() {
+    this.isModalOpen = false;
+    if (this.args.callback) {
+      this.args.callback();
+    }
   }
 
   @action
@@ -42,10 +43,13 @@ export default class MandatarissenLinkedUpdateModal extends Component {
     }
 
     if (!jsonReponse.duplicateMandate || jsonReponse.hasDouble) {
+      if (this.args.callback) {
+        this.args.callback();
+      }
       return;
     }
 
-    this.doubleMandateModal = true;
+    this.isModalOpen = true;
     const currentMandate = jsonReponse.currentMandate;
     const duplicateMandate = jsonReponse.duplicateMandate;
     this.doubleMandateTitle = `Aanmaken mandaat ${duplicateMandate}`;
@@ -68,6 +72,10 @@ export default class MandatarissenLinkedUpdateModal extends Component {
       showErrorToast(this.toaster, jsonReponse.message);
     }
     showSuccessToast(this.toaster, `Mandataris werd succesvol aangemaakt.`);
-    this.toggleDoubleMandateModal();
+    this.isModalOpen = false;
+
+    if (this.args.callback) {
+      this.args.callback();
+    }
   }
 }
