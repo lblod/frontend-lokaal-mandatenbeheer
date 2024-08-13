@@ -7,13 +7,16 @@ import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { getUniqueBestuursorganen } from 'frontend-lmb/models/mandataris';
+import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
+  @service toaster;
   @service store;
   @service('mandataris') mandatarisService;
   @service('fractie') fractieService;
   @service fractieApi;
+  @service persoonApi;
 
   queryParams = ['activeOnly'];
 
@@ -125,6 +128,16 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       await mandataris.save();
     }
 
+    this.router.refresh();
+  });
+
+  endActiveMandaten = task(async () => {
+    await this.persoonApi.endActiveMandates(this.model.persoon.id);
+    showSuccessToast(
+      this.toaster,
+      `Active mandatatarissen beëindigd voor ${this.model.persoon.naam}`
+    );
+    this.activeOnly = false;
     this.router.refresh();
   });
 }
