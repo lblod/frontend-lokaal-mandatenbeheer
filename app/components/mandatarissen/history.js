@@ -62,6 +62,12 @@ export default class MandatarisHistoryComponent extends Component {
         };
       })
       .sort((a, b) => {
+        if (!b?.mandataris?.start) {
+          return -1;
+        }
+        if (!a?.mandataris?.start) {
+          return 1;
+        }
         return b.mandataris.start.getTime() - a.mandataris.start.getTime();
       });
   });
