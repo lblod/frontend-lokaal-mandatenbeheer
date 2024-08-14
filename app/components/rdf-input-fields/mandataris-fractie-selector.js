@@ -37,6 +37,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @tracked bestuurseenheid = null;
   @tracked bestuursperiode;
   @tracked person;
+  @tracked previousPerson;
   @tracked isPersonInForm;
 
   emptySelectorOptions = [];
@@ -112,6 +113,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
       newPerson = await this.findMandatarisPersonByQuery(mandatarisNode.value);
     }
     await this.clearFractieIfDifferentPerson(newPerson);
+    this.previousPerson = newPerson;
     this.person = newPerson;
   });
 
@@ -119,7 +121,10 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     if (!this.selectedFractie) {
       return;
     }
-    if (!newPerson || this.person !== newPerson) {
+    if (
+      !newPerson ||
+      (this.previousPerson && this.previousPerson !== newPerson)
+    ) {
       this.initialized = false;
       await this.onSelectFractie(null);
       // hack to have the fractie selector reinitialize and recompute the possible fractions

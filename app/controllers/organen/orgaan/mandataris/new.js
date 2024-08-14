@@ -17,6 +17,8 @@ export default class OrganenMandatarisNewController extends Controller {
   queryParams = ['person'];
 
   @tracked person = null;
+  @tracked createdMandataris = false;
+  @tracked newestMandatarisId = null;
 
   @action
   cancel() {
@@ -29,6 +31,12 @@ export default class OrganenMandatarisNewController extends Controller {
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
+    this.newestMandatarisId = instanceId;
+    this.createdMandataris = true;
+  }
+
+  @action
+  callbackAfterCreate() {
     this.router.transitionTo('organen.orgaan.mandatarissen');
   }
 

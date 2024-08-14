@@ -21,3 +21,9 @@
     >Annuleer</Form::CancelWithConfirm>
   </Group>
 </AuToolbar>
+
+<Mandatarissen::Linked::UpdateModal
+  @recentUpdate={{this.createdMandataris}}
+  @mandataris={{this.newestMandatarisId}}
+  @callback={{this.callbackAfterCreate}}
+/>

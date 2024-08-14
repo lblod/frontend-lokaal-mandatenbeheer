@@ -11,7 +11,9 @@ import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandata
 export default class OrganenMandatarissenController extends Controller {
   @service router;
   @service store;
+
   @service fractieApi;
+  @service toaster;
   @service('mandataris') mandatarisService;
 
   queryParams = ['activeOnly'];
@@ -19,11 +21,14 @@ export default class OrganenMandatarissenController extends Controller {
   @tracked filter = '';
   @tracked page = 0;
   @tracked isCreatingMandataris = false;
+  @tracked createdMandataris = false;
   @tracked activeOnly = false;
   sort = 'is-bestuurlijke-alias-van.achternaam';
   // we are folding the mandataris instances, so just pick a very high number here and hope our government is reasonable about the
   // number of mandatarisses that can exist
   size = 900000;
+
+  @tracked newestMandatarisId = null;
 
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
@@ -41,8 +46,10 @@ export default class OrganenMandatarissenController extends Controller {
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
-    setTimeout(() => this.router.refresh(), 1000);
     this.isCreatingMandataris = false;
+    this.newestMandatarisId = instanceId;
+    this.createdMandataris = true;
+    this.router.refresh();
   }
 
   @action
