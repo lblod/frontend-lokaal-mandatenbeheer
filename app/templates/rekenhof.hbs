@@ -62,18 +62,12 @@
 }
 
 .manual-input {
-  display: none;
+  display: block;
 }
 
 </style>
 
-<div class="au-o-grid__item au-u-1-1">
-  <div class="rekenhof-container au-c-toolbar__group--row">
-    <h1 class="au-c-description-label">Current Bestuursorgaan URI</h1>
-    <p class="au-c-description-value">{{this.currentSession.group.uri}}</p>
-    <button class="query-button au-c-button au-c-button--toggle" {{on "click" this.queryApi}}>Query API</button>
-  </div>
-</div>
+
 
 {{#if this.apiResults}}
   <div class="au-o-grid__item au-u-1-1">
@@ -89,7 +83,7 @@
           <th>Status Label</th>
           <th>Startdatum</th>
           <th>Einddatum</th>
-          <th>Vork brutosalaris na aftrek sociale bijdragen</th>
+          <th>Vork bruto jaarsalaris na aftrek sociale bijdragen</th>
         </tr>
       </thead>
       <tbody>
@@ -105,19 +99,23 @@
             <td>{{result.startdatum}}</td>
             <td>{{result.einddatum}}</td>
             <td>
-              <select class="salary-dropdown" {{on "change" this.handleSalaryChange}}>
-                <option value="option1">niet vergoed</option>
-                <option value="option2">tussen 1 en 5393 eur/jaar</option>
-                <option value="option3">tussen 5340 en 11880 eur/jaar</option>
-                <option value="option4">tussen 11881 en 59399 eur/jaar</option>
-                <option value="option5">59400 en 118798 eur/jaar</option>
-                <option value="manual">Manual Input</option>
+               <select class="salary-dropdown" {{on "change" (fn this.handleSalaryChange this @index)}}>
+                <option value="option1">Niet vergoed</option>
+                <option value="option2">Tussen 1 en 5393 EUR</option>
+                <option value="option3">Tussen 5340 en 11.880 EUR</option>
+                <option value="option4">Tussen 11.881 en 59.399 EUR</option>
+                <option value="option5">Tussen 59.400 en 118.798 EUR</option>
+                <option value="manual">Manuele ingave (afronden op het dichtste honderdduizendtal)</option>
               </select>
-              <input type="number" class="manual-input" {{on "input" this.handleManualInput}} placeholder="Enter amount" />
+              {{#if (eq (get this.salaryValues @index "selectedValue") "manual")}}
+                <input type="number" class="manual-input" data-index="{{@index}}" {{on "input" (fn this.handleManualInput this @index)}} placeholder="Enter amount" />
+              {{/if}}
             </td>
           </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
+
+  <button class="query-button" {{on "click" this.exportToCSV}}>Export to CSV</button>
 {{/if}}
