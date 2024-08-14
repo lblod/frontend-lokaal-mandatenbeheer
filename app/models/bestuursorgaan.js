@@ -167,10 +167,13 @@ export default class BestuursorgaanModel extends Model {
     });
 
     const mandaten = currentOrgaan ? await currentOrgaan.bevat : [];
-    // TODO not entirely correct, can contain inactive mandatarissen...
     const mandatenAmounts = await Promise.all(
       mandaten.map(async (mandaat) => {
-        return (await mandaat.bekleedDoor).meta.count;
+        const response = await fetch(
+          `/mandataris-api/mandaten/nbMembers/${mandaat.id}`
+        );
+        const result = await response.json();
+        return result.count;
       })
     );
     const amount = mandatenAmounts.reduce((acc, curr) => acc + curr, 0);

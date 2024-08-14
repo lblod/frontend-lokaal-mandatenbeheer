@@ -76,6 +76,7 @@ export default class MandatarisModel extends Model {
         uri == 'http://mu.semte.ch/vocabularies/ext/mandatenExtractorService'
     );
   }
+
   get isActive() {
     if (!this.einde) {
       return true;
