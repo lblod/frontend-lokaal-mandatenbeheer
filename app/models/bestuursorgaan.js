@@ -164,6 +164,7 @@ export default class BestuursorgaanModel extends Model {
     const currentOrgaan = await queryRecord(this.store, 'bestuursorgaan', {
       'filter[is-tijdsspecialisatie-van][:id:]': this.id,
       'filter[heeft-bestuursperiode][:id:]': tijdsperiode.id,
+      include: 'bevat',
     });
 
     const mandaten = currentOrgaan ? await currentOrgaan.bevat : [];
