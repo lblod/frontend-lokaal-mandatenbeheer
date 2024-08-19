@@ -98,6 +98,13 @@ export default class RekenhofController extends Controller {
   @action
   exportToCSV() {
     console.log('Exporting to CSV');
+
+    if (!this.apiResults) {
+      console.error('apiResults is null or undefined');
+      return;
+    }
+
+    
     const rows = [
       ["Voornaam", "Achternaam", "Geboortedatum", "Geslacht", "RRN", "Bestuursorgaan", "Status Label", "Startdatum", "Einddatum", "Vork bruto jaarsalaris na aftrek sociale bijdragen"],
       ...this.apiResults.map((result, index) => {

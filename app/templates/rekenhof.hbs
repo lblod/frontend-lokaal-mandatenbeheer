@@ -58,10 +58,12 @@
     </AuTable>
 
 
-  <AuButton @onClick={{fn this.exportToCSV}}>
+<div onclick={{fn this.exportToCSV}}>
+  <AuButton
+    @icon="download">
     Exporteer naar CSV
   </AuButton>
-
+</div>
   
 {{/if}}
 
