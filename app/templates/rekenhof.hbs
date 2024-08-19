@@ -1,121 +1,71 @@
-<!-- app/templates/rekenhof.hbs -->
-
-<style>
-/* Existing styles */
-.rekenhof-container {
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.query-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.query-button:hover {
-  background-color: #0056b3;
-}
-
-.styled-table {
-  width: 100%;
-  margin: 25px 0;
-  font-size: 10px;
-  text-align: left;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  table-layout: auto; /* Allow table to adjust column widths based on content */
-}
-
-.styled-table thead tr {
-  background-color: #007bff;
-  color: #ffffff;
-  text-align: left;
-}
-
-.styled-table th,
-.styled-table td {
-  padding: 12px 15px;
-  word-wrap: break-word; /* Handle long text */
-}
-
-.styled-table tbody tr {
-  border-bottom: 1px solid #dddddd;
-}
-
-.styled-table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
-}
-
-.styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #007bff;
-}
-
-.styled-table tbody tr.active-row {
-  font-weight: bold;
-  color: #007bff;
-}
-
-.manual-input {
-  display: block;
-}
-
-</style>
-
-
+<div class="au-c-body-container au-c-body-container--scroll">
 
 {{#if this.apiResults}}
-  <div class="au-o-grid__item au-u-1-1">
-    <table class="styled-table au-c-data-table">
-      <thead>
-        <tr>
+
+
+  <AuTable>
+     <:title>Gevonden mandaten binnen uw Bestuurseenheid</:title>
+     <:header>
+       <tr>
           <th>Voornaam</th>
           <th>Achternaam</th>
           <th>Geboortedatum</th>
           <th>Geslacht</th>
           <th>RRN</th>
-          <th>Bestuurseenheid</th>
+          <th>Bestuursorgaan</th>
           <th>Status Label</th>
           <th>Startdatum</th>
           <th>Einddatum</th>
           <th>Vork bruto jaarsalaris na aftrek sociale bijdragen</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each this.apiResults as |result|}}
-          <tr>
-            <td>{{result.voornaam}}</td>
-            <td>{{result.achternaam}}</td>
-            <td>{{result.geboortedatum}}</td>
-            <td>{{result.geslacht}}</td>
-            <td>{{result.rrn}}</td>
-            <td>{{result.bestuursorgaanTijdsspecialisatieLabel}}</td>
-            <td>{{result.statusLabel}}</td>
-            <td>{{result.startdatum}}</td>
-            <td>{{result.einddatum}}</td>
-            <td>
-               <select class="salary-dropdown" {{on "change" (fn this.handleSalaryChange this @index)}}>
-                <option value="option1">Niet vergoed</option>
-                <option value="option2">Tussen 1 en 5393 EUR</option>
-                <option value="option3">Tussen 5340 en 11.880 EUR</option>
-                <option value="option4">Tussen 11.881 en 59.399 EUR</option>
-                <option value="option5">Tussen 59.400 en 118.798 EUR</option>
-                <option value="manual">Manuele ingave (afronden op het dichtste honderdduizendtal)</option>
-              </select>
-              {{#if (eq (get this.salaryValues @index "selectedValue") "manual")}}
-                <input type="number" class="manual-input" data-index="{{@index}}" {{on "input" (fn this.handleManualInput this @index)}} placeholder="Enter amount" />
-              {{/if}}
-            </td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  </div>
+       </tr>
+    </:header>
+     <:body>
+      {{#each this.apiResults as |result|}}
+        <tr>
+          <td>{{result.voornaam}}</td>
+          <td>{{result.achternaam}}</td>
+          <td>{{result.geboortedatum}}</td>
+          <td>{{result.geslacht}}</td>
+          <td>{{result.rrn}}</td>
+          <td>{{result.bestuursorgaanTijdsspecialisatieLabel}}</td>
+          <td>{{result.statusLabel}}</td>
+          <td>{{result.startdatum}}</td>
+          <td>{{result.einddatum}}</td>
+          <td>
+            <PowerSelect
+              @options={{this.salaryOptions}} 
+              @selected={{result.selectedSalary}}
+              @onChange={{fn this.handleSalaryChange result}} 
+              as |option|>
+              {{option.label}}
 
-  <button class="query-button" {{on "click" this.exportToCSV}}>Export to CSV</button>
+            </PowerSelect>
+            {{#if (eq result.selectedSalary.value "manual")}}
+              <input
+                id="manualInput"
+                type="number"
+                value={{result.manualInputValue}}
+                placeholder="Geef een bedrag in"
+                {{on "input" (fn this.updateManualInput result)}}
+              />
+            {{/if}}
+          </td>
+        </tr>
+      {{/each}}
+
+      </:body>
+
+    </AuTable>
+
+
+  <AuButton @onClick={{fn this.exportToCSV}}>
+    Exporteer naar CSV
+  </AuButton>
+
+  
 {{/if}}
+
+ </div>
+
+
+ 
