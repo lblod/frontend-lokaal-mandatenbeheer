@@ -22,6 +22,8 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @tracked periodeHasLegislatuur;
   @tracked behandeldeVergaderingen;
 
+  @tracked correctedMandataris = false;
+
   @tracked formInitialized;
 
   get bestuursorganenTitle() {
@@ -72,6 +74,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     });
     await this.fractieApi.updateCurrentFractie(this.model.mandataris.id);
 
+    this.correctedMandataris = true;
     setTimeout(() => this.router.refresh(), 1000);
     this.closeModals();
   }
