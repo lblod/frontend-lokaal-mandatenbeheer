@@ -78,7 +78,6 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
       this.personen = [];
       return;
     }
-    console.log(`search | searchElected`, this.args.searchElected);
 
     let queryParams = {
       sort: 'achternaam',
@@ -104,11 +103,22 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
   });
 
   getPersoon = task(async (queryParams) => {
+    let personen = null;
     try {
-      return await this.store.query('persoon', queryParams);
+      personen = await this.store.query('persoon', queryParams);
     } catch (e) {
       this.error = true;
     }
+    if (this.args.searchElected) {
+      const elected = await this.store.query('persoon', {
+        include: ['verkiezingsresultaten'],
+        'filter[verkiezingsresultaten][persoon][:id:]': personen
+          .map((p) => p.id)
+          .join(','),
+      });
+      return elected;
+    }
+    return personen;
   });
 
   resetAfterError() {
