@@ -11,6 +11,7 @@ import { restartableTask } from 'ember-concurrency';
 
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { ORG } from 'frontend-lmb/rdf/namespaces';
+import { queryRecord } from 'frontend-lmb/utils/query-record';
 
 export default class PersonSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -19,6 +20,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
 
   @tracked initialized = false;
   @tracked isMandaatInForm = false;
+  @tracked searchElected = true;
 
   constructor() {
     super(...arguments);
@@ -78,5 +80,9 @@ export default class PersonSelectorComponent extends InputFieldComponent {
       return;
     }
     this.isMandaatInForm = true;
+    const mandaatModel = await queryRecord(this.store, 'mandaat', {
+      'filter[:uri:]': mandaatNode.value,
+    });
+    this.searchElected = !(await mandaatModel.isInBCSD());
   });
 }

@@ -78,6 +78,7 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
       this.personen = [];
       return;
     }
+    console.log(`search | searchElected`, this.args.searchElected);
 
     let queryParams = {
       sort: 'achternaam',
@@ -149,5 +150,9 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
         rijksregisternummer: this.rijksregisternummer,
       });
     }
+  }
+
+  get searchElectedPerson() {
+    return this.args.searchElected;
   }
 }
