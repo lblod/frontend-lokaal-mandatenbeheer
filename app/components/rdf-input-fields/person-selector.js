@@ -83,6 +83,12 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     const mandaatModel = await queryRecord(this.store, 'mandaat', {
       'filter[:uri:]': mandaatNode.value,
     });
+
+    if (mandaatModel.isBurgemeester) {
+      this.searchElected = false;
+      return;
+    }
+
     this.searchElected = !(await mandaatModel.isInBCSD());
   });
 }
