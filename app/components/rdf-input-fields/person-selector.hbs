@@ -5,16 +5,20 @@
   @required={{this.isRequired}}
 >{{this.title}}</AuLabel>
 {{#if this.initialized}}
-  <div class={{if this.hasErrors "ember-power-select--error"}}>
-    <Person::Selector @person={{this.person}} @onUpdate={{this.onUpdate}} />
-  </div>
-  {{#each this.errors as |error|}}
-    <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
-  {{/each}}
+  {{#if this.isMandaatInForm}}
+    <div class={{if this.hasErrors "ember-power-select--error"}}>
+      <Person::Selector @person={{this.person}} @onUpdate={{this.onUpdate}} />
+    </div>
+    {{#each this.errors as |error|}}
+      <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+    {{/each}}
 
-  {{#each this.warnings as |warning|}}
-    <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
-  {{/each}}
+    {{#each this.warnings as |warning|}}
+      <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+    {{/each}}
+  {{else}}
+    <p>Selecteer eerst een mandaat</p>
+  {{/if}}
 {{else}}
   <p class="skeleton-input-full au-u-margin-top"></p>
 {{/if}}

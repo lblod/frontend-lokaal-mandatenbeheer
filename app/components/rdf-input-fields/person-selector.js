@@ -7,7 +7,10 @@ import { action } from '@ember/object';
 
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { NamedNode } from 'rdflib';
+import { restartableTask } from 'ember-concurrency';
+
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
+import { ORG } from 'frontend-lmb/rdf/namespaces';
 
 export default class PersonSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -15,10 +18,14 @@ export default class PersonSelectorComponent extends InputFieldComponent {
   @service store;
 
   @tracked initialized = false;
+  @tracked isMandaatInForm = false;
 
   constructor() {
     super(...arguments);
     this.load();
+    this.storeOptions.store.registerObserver(async () => {
+      await this.findMandaatInForm.perform();
+    });
   }
 
   get title() {
@@ -27,6 +34,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
 
   async load() {
     await this.loadProvidedValue();
+    await this.findMandaatInForm.perform();
     this.initialized = true;
   }
 
@@ -57,4 +65,18 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     super.updateValidations();
     this.person = person;
   }
+
+  findMandaatInForm = restartableTask(async () => {
+    const mandaatNode = this.storeOptions.store.any(
+      this.storeOptions.sourceNode,
+      ORG('holds'),
+      undefined,
+      this.storeOptions.sourceGraph
+    );
+    if (!mandaatNode) {
+      this.isMandaatInForm = false;
+      return;
+    }
+    this.isMandaatInForm = true;
+  });
 }
