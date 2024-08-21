@@ -109,9 +109,17 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
     } catch (e) {
       this.error = true;
     }
-    if (this.args.searchElected) {
+    if (this.args.searchElected && this.args.bestuursperiode) {
       const elected = await this.store.query('persoon', {
-        include: ['verkiezingsresultaten'],
+        include: [
+          'verkiezingsresultaten',
+          'verkiezingsresultaten.kandidatenlijst',
+          'verkiezingsresultaten.kandidatenlijst.verkiezing',
+          'verkiezingsresultaten.kandidatenlijst.verkiezing.bestuursorgaan-in-tijd',
+          'verkiezingsresultaten.kandidatenlijst.verkiezing.bestuursorgaan-in-tijd.heeft-bestuursperiode',
+        ].join(','),
+        'filter[verkiezingsresultaten][kandidatenlijst][verkiezing][bestuursorgaan-in-tijd][heeft-bestuursperiode][:id:]':
+          this.args.bestuursperiode.id,
         'filter[verkiezingsresultaten][persoon][:id:]': personen
           .map((p) => p.id)
           .join(','),

@@ -21,6 +21,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
   @tracked initialized = false;
   @tracked isMandaatInForm = false;
   @tracked searchElected = true;
+  @tracked currentBestuursperiode = null;
 
   constructor() {
     super(...arguments);
@@ -90,5 +91,11 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     }
 
     this.searchElected = !(await mandaatModel.isInBCSD());
+
+    if (this.searchElected) {
+      this.currentBestuursperiode = await (
+        await mandaatModel.bevatIn
+      )[0].heeftBestuursperiode;
+    }
   });
 }
