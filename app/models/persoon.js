@@ -45,6 +45,12 @@ export default class PersoonModel extends Model {
   })
   isAangesteldAls;
 
+  @hasMany('verkiezingsresultaat', {
+    async: true,
+    inverse: 'persoon',
+  })
+  verkiezingsresultaten;
+
   get naam() {
     return `${this.gebruikteVoornaam} ${this.achternaam}`;
   }
