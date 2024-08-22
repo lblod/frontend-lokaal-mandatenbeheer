@@ -9,7 +9,7 @@ import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { NamedNode } from 'rdflib';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
-import { MANDAAT, RDF } from 'frontend-lmb/rdf/namespaces';
+import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
 import { restartableTask, timeout } from 'ember-concurrency';
 
 /**
