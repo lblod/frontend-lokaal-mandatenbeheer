@@ -6,6 +6,8 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 import { NamedNode } from 'rdflib';
+import { restartableTask } from 'ember-concurrency';
+
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
@@ -25,14 +27,14 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   constructor() {
     super(...arguments);
     this.load();
+    this.storeOptions.store.registerObserver(async () => {
+      await this.findPerson.perform();
+    });
   }
 
   async load() {
-    await Promise.all([
-      this.findPersonOnInit(),
-      this.loadProvidedValue(),
-      this.loadBestuursorganen(),
-    ]);
+    this.person = await this.findPersonInForm();
+    await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
     this.initialized = true;
   }
 
@@ -73,7 +75,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     super.updateValidations();
   }
 
-  async findPersonOnInit() {
+  async findPersonInForm() {
     const possiblePersonNode = this.storeOptions.store.any(
       this.storeOptions.sourceNode,
       MANDAAT('isBestuurlijkeAliasVan'),
@@ -85,11 +87,22 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
         'filter[:uri:]': possiblePersonNode.value,
       });
       if (personMatches.length === 0) {
-        this.person = null;
+        return null;
       } else {
-        this.person = personMatches.at(0);
+        return personMatches.at(0);
       }
     }
-    console.log(`found person in triplestore`, this.person);
   }
+
+  findPerson = restartableTask(async () => {
+    const currentPerson = await this.findPersonInForm();
+    if (
+      (this.person && !currentPerson) ||
+      (this.person && currentPerson && this.person.id !== currentPerson.id)
+    ) {
+      this.initialized = false;
+      await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
+      this.initialized = true;
+    }
+  });
 }

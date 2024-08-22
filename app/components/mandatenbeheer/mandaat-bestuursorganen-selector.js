@@ -11,6 +11,7 @@ export default class MandaatBestuursorganenSelector extends Component {
   @tracked mandaatOptions = null;
   @tracked bestuursorganen = [];
   @tracked initialized = false;
+  @tracked alertMessage;
 
   constructor() {
     super(...arguments);
@@ -32,7 +33,6 @@ export default class MandaatBestuursorganenSelector extends Component {
       this.args.bestuursorganen.length === 1 &&
       !(await this.args.bestuursorganen.at(0).isBCSD)
     ) {
-      console.log(`bestuursorgaan is not BCSD`);
       const isPersonElected =
         (await this.store.query('persoon', {
           include: [
@@ -46,9 +46,7 @@ export default class MandaatBestuursorganenSelector extends Component {
             await this.args.bestuursorganen.at(0).heeftBestuursperiode.id,
           'filter[verkiezingsresultaten][persoon][:id:]': this.args.person.id,
         }).length) === 1;
-      console.log(`person is elected?`, isPersonElected);
       if (!isPersonElected) {
-        console.log(`Only show burgemeester mandaten`);
         const burgemeesterMandaten = await Promise.all(
           this.mandaatOptions.map(async (m) => {
             const isBurgemeester = await m.isBurgemeester;
@@ -58,6 +56,11 @@ export default class MandaatBestuursorganenSelector extends Component {
           })
         );
         this.mandaatOptions = burgemeesterMandaten.filter((m) => m);
+        if (this.mandaatOptions.length === 0) {
+          this.alertMessage = `De geselecteerde persoon is niet gevonden in de verkiezingslijst.`;
+        } else {
+          this.alertMessage = null;
+        }
       }
     }
 
