@@ -6,6 +6,7 @@ import { service } from '@ember/service';
 
 export default class MandaatBestuursorganenSelector extends Component {
   @service store;
+  @service('verkiezing') verkiezingService;
 
   @tracked mandaat = null;
   @tracked mandaatOptions = null;
@@ -33,20 +34,14 @@ export default class MandaatBestuursorganenSelector extends Component {
       this.args.bestuursorganen.length === 1 &&
       !(await this.args.bestuursorganen.at(0).isBCSD)
     ) {
-      const isPersonElected =
-        (await this.store.query('persoon', {
-          include: [
-            'verkiezingsresultaten',
-            'verkiezingsresultaten.kandidatenlijst',
-            'verkiezingsresultaten.kandidatenlijst.verkiezing',
-            'verkiezingsresultaten.kandidatenlijst.verkiezing.bestuursorgaan-in-tijd',
-            'verkiezingsresultaten.kandidatenlijst.verkiezing.bestuursorgaan-in-tijd.heeft-bestuursperiode',
-          ].join(','),
-          'filter[verkiezingsresultaten][kandidatenlijst][verkiezing][bestuursorgaan-in-tijd][heeft-bestuursperiode][:id:]':
-            await this.args.bestuursorganen.at(0).heeftBestuursperiode.id,
-          'filter[verkiezingsresultaten][persoon][:id:]': this.args.person.id,
-        }).length) === 1;
-      if (!isPersonElected) {
+      const bestuursperiode =
+        await this.args.bestuursorganen.at(0).heeftBestuursperiode;
+      const electedPeople =
+        await this.verkiezingService.getPeopleThatAreElected(
+          [this.args.person],
+          bestuursperiode
+        );
+      if (electedPeople.length === 0) {
         const burgemeesterMandaten = await Promise.all(
           this.mandaatOptions.map(async (m) => {
             const isBurgemeester = await m.isBurgemeester;

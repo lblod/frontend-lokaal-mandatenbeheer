@@ -9,6 +9,7 @@ import { task, timeout } from 'ember-concurrency';
 
 export default class SharedPersoonPersoonSearchFormComponent extends Component {
   @service store;
+  @service('verkiezing') verkiezingService;
 
   @tracked pageSize = 20;
   @tracked queryParams;
@@ -110,21 +111,10 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
       this.error = true;
     }
     if (this.args.searchElected && this.args.bestuursperiode) {
-      const elected = await this.store.query('persoon', {
-        include: [
-          'verkiezingsresultaten',
-          'verkiezingsresultaten.kandidatenlijst',
-          'verkiezingsresultaten.kandidatenlijst.verkiezing',
-          'verkiezingsresultaten.kandidatenlijst.verkiezing.bestuursorgaan-in-tijd',
-          'verkiezingsresultaten.kandidatenlijst.verkiezing.bestuursorgaan-in-tijd.heeft-bestuursperiode',
-        ].join(','),
-        'filter[verkiezingsresultaten][kandidatenlijst][verkiezing][bestuursorgaan-in-tijd][heeft-bestuursperiode][:id:]':
-          this.args.bestuursperiode.id,
-        'filter[verkiezingsresultaten][persoon][:id:]': personen
-          .map((p) => p.id)
-          .join(','),
-      });
-      return elected;
+      return this.verkiezingService.getPeopleThatAreElected(
+        personen,
+        this.args.bestuursperiode
+      );
     }
     return personen;
   });
