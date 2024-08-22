@@ -159,8 +159,4 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
       });
     }
   }
-
-  get searchElectedPerson() {
-    return this.args.searchElected;
-  }
 }
