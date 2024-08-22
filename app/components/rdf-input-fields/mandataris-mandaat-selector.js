@@ -9,6 +9,7 @@ import { NamedNode } from 'rdflib';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
 
 export default class MandatarisMandaatSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -19,6 +20,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   @tracked mandaat = null;
   @tracked initialized = false;
   @tracked bestuursorganen = [];
+  @tracked person;
 
   constructor() {
     super(...arguments);
@@ -26,7 +28,11 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   }
 
   async load() {
-    await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
+    await Promise.all([
+      this.findPersonOnInit(),
+      this.loadProvidedValue(),
+      this.loadBestuursorganen(),
+    ]);
     this.initialized = true;
   }
 
@@ -65,5 +71,25 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
     this.hasBeenFocused = true;
     super.updateValidations();
+  }
+
+  async findPersonOnInit() {
+    const possiblePersonNode = this.storeOptions.store.any(
+      this.storeOptions.sourceNode,
+      MANDAAT('isBestuurlijkeAliasVan'),
+      undefined,
+      this.storeOptions.sourceGraph
+    );
+    if (possiblePersonNode) {
+      const personMatches = await this.store.query('persoon', {
+        'filter[:uri:]': possiblePersonNode.value,
+      });
+      if (personMatches.length === 0) {
+        this.person = null;
+      } else {
+        this.person = personMatches.at(0);
+      }
+    }
+    console.log(`found person in triplestore`, this.person);
   }
 }

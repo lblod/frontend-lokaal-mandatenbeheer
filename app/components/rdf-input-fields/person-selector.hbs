@@ -5,7 +5,7 @@
   @required={{this.isRequired}}
 >{{this.title}}</AuLabel>
 {{#if this.initialized}}
-  {{#if this.isMandaatInForm}}
+  {{#if (or this.isMandaatInForm this.person)}}
     <div class={{if this.hasErrors "ember-power-select--error"}}>
       <Person::Selector
         @person={{this.person}}
