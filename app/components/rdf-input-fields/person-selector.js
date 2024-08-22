@@ -12,11 +12,14 @@ import { restartableTask } from 'ember-concurrency';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { ORG } from 'frontend-lmb/rdf/namespaces';
 import { queryRecord } from 'frontend-lmb/utils/query-record';
+import { showWarningToast } from 'frontend-lmb/utils/toasts';
 
 export default class PersonSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
   @tracked person = null;
   @service store;
+  @service toaster;
+  @service('verkiezing') verkiezingService;
 
   @tracked initialized = false;
   @tracked isMandaatInForm = false;
@@ -67,6 +70,21 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     this.hasBeenFocused = true;
     super.updateValidations();
     this.person = person;
+    if (this.person && this.searchElected) {
+      const isElected = await this.verkiezingService.getPeopleThatAreElected(
+        [this.person],
+        this.currentBestuursperiode
+      );
+
+      if (isElected.length === 0) {
+        this.person = null;
+        replaceSingleFormValue(this.storeOptions, null);
+        showWarningToast(
+          this.toaster,
+          'Selecteer een persoon dat verkozen in voor deze bestuursperiode.'
+        );
+      }
+    }
   }
 
   findMandaatInForm = restartableTask(async () => {
