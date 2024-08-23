@@ -65,6 +65,10 @@ export default class MandaatModel extends Model {
     ].includes(this.bestuursfunctie.get('uri'));
   }
 
+  get allowsNonElectedPersons() {
+    return this.isInBCSD();
+  }
+
   async isInBCSD() {
     const bestuursorganen = await this.bevatIn;
     const booleans = await Promise.all(

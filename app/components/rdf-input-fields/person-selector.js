@@ -25,6 +25,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
   @tracked isMandaatInForm = false;
   @tracked searchElected = true;
   @tracked currentBestuursperiode = null;
+  @tracked mandaatModel = null;
 
   constructor() {
     super(...arguments);
@@ -102,6 +103,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     const mandaatModel = await queryRecord(this.store, 'mandaat', {
       'filter[:uri:]': mandaatNode.value,
     });
+    this.mandaatModel = mandaatModel;
 
     if (mandaatModel.isBurgemeester) {
       this.searchElected = false;

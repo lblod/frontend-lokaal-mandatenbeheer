@@ -12,6 +12,7 @@
         @onUpdate={{this.onUpdate}}
         @searchElected={{this.searchElected}}
         @bestuursperiode={{this.currentBestuursperiode}}
+        @allowCreate={{await this.mandaatModel.allowsNonElectedPersons}}
       />
     </div>
     {{#each this.errors as |error|}}
