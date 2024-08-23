@@ -89,11 +89,11 @@ export default class MandatarissenSearchController extends Controller {
   }
 
   get selectedFracties() {
-    const fractieIds = [...new Set(this.model.selectedFracties?.split(','))];
-    if (fractieIds.length == this.model.fracties.length) {
+    if (!this.model.selectedFracties) {
       return [];
     }
 
+    const fractieIds = [...new Set(this.model.selectedFracties.split(','))];
     const fracties = fractieIds.map((id) =>
       this.model.fracties.find((fractie) => fractie.id == id)
     );
