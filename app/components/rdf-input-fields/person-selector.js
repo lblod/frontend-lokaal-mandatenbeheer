@@ -81,7 +81,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
         replaceSingleFormValue(this.storeOptions, null);
         showWarningToast(
           this.toaster,
-          'Selecteer een persoon dat verkozen in voor deze bestuursperiode.'
+          'Selecteer een persoon die verkozen is in deze bestuursperiode.'
         );
       }
     }
