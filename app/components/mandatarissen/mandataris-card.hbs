@@ -23,11 +23,32 @@
     <div class="au-o-grid__item au-u-1-2">
       <div class="au-c-description-label">Publicatie status</div>
       <div class="au-c-description-value au-u-margin-top-tiny">
-        <Mandaat::PublicatieStatusPill
-          @mandataris={{@mandataris}}
-          @showInfoText={{true}}
-          @showBekijkBewijs={{true}}
-        />
+        {{#if this.editingStatus}}
+          <Mandatarissen::Mandataris::PublicationStatusSelector
+            @mandataris={{@mandataris}}
+            @onUpdate={{this.stopEditingStatus}}
+          />
+        {{else}}
+          <div class="au-u-flex">
+            <Mandaat::PublicatieStatusPill
+              @mandataris={{@mandataris}}
+              @showInfoText={{true}}
+              @showBekijkBewijs={{true}}
+            />
+            {{#unless this.isBekrachtigd}}
+              <AuButton
+                {{on "click" this.editStatus}}
+                @icon="pencil"
+                @skin="link-secondary"
+                @size="small"
+                class="au-u-maring-left-tiny"
+                @hideText={{true}}
+              >
+                edit
+              </AuButton>
+            {{/unless}}
+          </div>
+        {{/if}}
       </div>
     </div>
     {{#if @mandataris.bekleedt.isSchepen}}

@@ -52,5 +52,8 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     }
     this.mandataris.publicationStatus = publicationStatus;
     await this.mandataris.save();
+    if (this.args.onUpdate) {
+      this.args.onUpdate();
+    }
   }
 }
