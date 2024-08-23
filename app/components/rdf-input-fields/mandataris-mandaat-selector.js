@@ -6,9 +6,12 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 import { NamedNode } from 'rdflib';
+import { restartableTask } from 'ember-concurrency';
+
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
 
 export default class MandatarisMandaatSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -19,13 +22,18 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   @tracked mandaat = null;
   @tracked initialized = false;
   @tracked bestuursorganen = [];
+  @tracked person;
 
   constructor() {
     super(...arguments);
     this.load();
+    this.storeOptions.store.registerObserver(async () => {
+      await this.findPerson.perform();
+    });
   }
 
   async load() {
+    this.person = await this.findPersonInForm();
     await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
     this.initialized = true;
   }
@@ -66,4 +74,35 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     this.hasBeenFocused = true;
     super.updateValidations();
   }
+
+  async findPersonInForm() {
+    const possiblePersonNode = this.storeOptions.store.any(
+      this.storeOptions.sourceNode,
+      MANDAAT('isBestuurlijkeAliasVan'),
+      undefined,
+      this.storeOptions.sourceGraph
+    );
+    if (possiblePersonNode) {
+      const personMatches = await this.store.query('persoon', {
+        'filter[:uri:]': possiblePersonNode.value,
+      });
+      if (personMatches.length === 0) {
+        return null;
+      } else {
+        return personMatches.at(0);
+      }
+    }
+  }
+
+  findPerson = restartableTask(async () => {
+    const currentPerson = await this.findPersonInForm();
+    if (
+      (this.person && !currentPerson) ||
+      (this.person && currentPerson && this.person.id !== currentPerson.id)
+    ) {
+      this.initialized = false;
+      await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
+      this.initialized = true;
+    }
+  });
 }

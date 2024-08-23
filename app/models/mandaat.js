@@ -64,4 +64,16 @@ export default class MandaatModel extends Model {
       MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE,
     ].includes(this.bestuursfunctie.get('uri'));
   }
+
+  get allowsNonElectedPersons() {
+    return this.isInBCSD();
+  }
+
+  async isInBCSD() {
+    const bestuursorganen = await this.bevatIn;
+    const booleans = await Promise.all(
+      bestuursorganen.map(async (bo) => await bo.isBCSD)
+    );
+    return booleans.includes(true);
+  }
 }

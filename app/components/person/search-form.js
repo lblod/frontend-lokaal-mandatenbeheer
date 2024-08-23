@@ -9,6 +9,7 @@ import { task, timeout } from 'ember-concurrency';
 
 export default class SharedPersoonPersoonSearchFormComponent extends Component {
   @service store;
+  @service('verkiezing') verkiezingService;
 
   @tracked pageSize = 20;
   @tracked queryParams;
@@ -103,11 +104,19 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
   });
 
   getPersoon = task(async (queryParams) => {
+    let personen = null;
     try {
-      return await this.store.query('persoon', queryParams);
+      personen = await this.store.query('persoon', queryParams);
     } catch (e) {
       this.error = true;
     }
+    if (this.args.searchElected && this.args.bestuursperiode) {
+      return this.verkiezingService.getPeopleThatAreElected(
+        personen,
+        this.args.bestuursperiode
+      );
+    }
+    return personen;
   });
 
   resetAfterError() {

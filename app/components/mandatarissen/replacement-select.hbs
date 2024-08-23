@@ -3,6 +3,7 @@
     @person={{@selected}}
     @onUpdate={{@onSelect}}
     @inline={{@inline}}
+    @allowCreate={{await @mandataris.bekleedt.allowsNonElectedPersons}}
   />
   {{#if this.overlappingMandate}}
     <AuAlert @skin="warning" @icon="alert-triangle" class="au-u-margin-top">
