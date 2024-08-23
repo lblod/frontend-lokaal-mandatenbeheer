@@ -32,6 +32,7 @@ export default class MandatarissenUpdateState extends Component {
   @service toaster;
   @service('mandataris') mandatarisService;
   @service fractieApi;
+  @service mandatarisApi;
 
   constructor() {
     super(...arguments);
@@ -139,7 +140,6 @@ export default class MandatarissenUpdateState extends Component {
 
   async changeMandatarisState() {
     await this.mandatarisService.updateOldLidmaatschap(this.args.mandataris);
-
     const endDate = this.args.mandataris.einde;
 
     const newMandatarisProps = await this.mandatarisService.createNewProps(
@@ -185,6 +185,11 @@ export default class MandatarissenUpdateState extends Component {
     );
     await this.fractieApi.updateCurrentFractie(newMandataris.id);
     await this.mandatarisService.removeDanglingFractiesInPeriod(
+      newMandataris.id
+    );
+
+    await this.mandatarisApi.copyOverNonDomainResourceProperties(
+      this.args.mandataris.id,
       newMandataris.id
     );
 
