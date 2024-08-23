@@ -23,6 +23,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @tracked behandeldeVergaderingen;
 
   @tracked correctedMandataris = false;
+  @tracked updatedStateMandataris = false;
 
   @tracked formInitialized;
 
@@ -58,6 +59,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     if (newMandataris != this.model.mandataris) {
       this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
     }
+    this.updatedStateMandataris = true;
     await this.closeModals();
   }
 

@@ -6,7 +6,7 @@ import { action } from '@ember/object';
 
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
-export default class MandatarissenLinkedCorrectModal extends Component {
+export default class MandatarissenLinkedUpdateStateModal extends Component {
   @service store;
   @service toaster;
 
@@ -52,17 +52,17 @@ export default class MandatarissenLinkedCorrectModal extends Component {
     this.isModalOpen = true;
     const currentMandate = jsonReponse.currentMandate;
     const duplicateMandate = jsonReponse.duplicateMandate;
-    this.doubleMandateTitle = `Corrigeer fouten mandaat ${duplicateMandate}`;
+    this.doubleMandateTitle = `Wijzig huidig mandaat ${duplicateMandate}`;
     this.doubleMandateText = `
-    U heeft zonet een mandataris met het mandaat ${currentMandate} gecorrigeerd.
+    U heeft zonet een mandataris met het mandaat ${currentMandate} gewijzigd.
     Deze mandataris heeft ook een corresponderend mandaat ${duplicateMandate}.
     Wenst u de wijzigingen ook door te voeren in dit mandaat?`;
   }
 
   @action
-  async correctDoubleMandataris() {
+  async updateStateDoubleMandataris() {
     const response = await fetch(
-      `/mandataris-api/mandatarissen/${this.args.mandataris}/correct-linked-mandataris`,
+      `/mandataris-api/mandatarissen/${this.args.mandataris}/update-state-linked-mandataris`,
       { method: 'PUT' }
     );
     const jsonReponse = await response.json();
@@ -71,7 +71,10 @@ export default class MandatarissenLinkedCorrectModal extends Component {
       console.error(jsonReponse.message);
       showErrorToast(this.toaster, jsonReponse.message);
     }
-    showSuccessToast(this.toaster, `Mandataris werd succesvol gecorrigeerd.`);
+    showSuccessToast(
+      this.toaster,
+      `Status mandataris werd succesvol gewijzigd.`
+    );
     this.isModalOpen = false;
 
     if (this.args.callback) {
