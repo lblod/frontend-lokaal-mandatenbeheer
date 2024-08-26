@@ -1,5 +1,23 @@
-<div class="au-c-body-container au-c-body-container--scroll">
+<style>
+  #outerDiv {
+    margin: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 
+  #exportbutton {
+    margin-left: 44vw;
+    width: 12vw;
+    padding: 5px;
+    margin-top: 4px;
+
+  }
+
+</style>
+
+
+
+<div class="au-c-body-container au-c-body-container--scroll" id="outerDiv">
 {{#if this.apiResults}}
 
 
@@ -13,6 +31,7 @@
           <th>Geslacht</th>
           <th>RRN</th>
           <th>Bestuursorgaan</th>
+          <th>Rol</th>
           <th>Status Label</th>
           <th>Startdatum</th>
           <th>Einddatum</th>
@@ -28,6 +47,7 @@
           <td>{{result.geslacht}}</td>
           <td>{{result.rrn}}</td>
           <td>{{result.bestuursorgaanTijdsspecialisatieLabel}}</td>
+          <td>{{result.rol}}</td>
           <td>{{result.statusLabel}}</td>
           <td>{{result.startdatum}}</td>
           <td>{{result.einddatum}}</td>
@@ -59,7 +79,7 @@
 
 
 <div onclick={{fn this.exportToCSV}}>
-  <AuButton
+  <AuButton id="exportbutton"
     @icon="download">
     Exporteer naar CSV
   </AuButton>
@@ -70,4 +90,3 @@
  </div>
 
 
- 

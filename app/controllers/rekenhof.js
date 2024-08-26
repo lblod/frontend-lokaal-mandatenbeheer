@@ -73,6 +73,8 @@ export default class RekenhofController extends Controller {
           return date.toLocaleDateString('nl-NL', options);
         };
 
+
+
         return {
           voornaam: binding.voornaam?.value,
           achternaam: binding.achternaam?.value,
@@ -80,6 +82,7 @@ export default class RekenhofController extends Controller {
           geslacht: geslacht,
           rrn: binding.rrn?.value,
           bestuursorgaanTijdsspecialisatieLabel: binding.bestuursorgaanTijdsspecialisatieLabel?.value,
+          rol: binding.rolLabel?.value,
           statusLabel: binding.statusLabel?.value,
           startdatum: formatDate(binding.startdatum?.value),
           einddatum: formatDate(binding.einddatum?.value),
@@ -118,6 +121,7 @@ export default class RekenhofController extends Controller {
           result.geslacht,
           result.rrn,
           result.bestuursorgaanTijdsspecialisatieLabel,
+//          result.rol,
           result.statusLabel,
           result.startdatum,
           result.einddatum,
