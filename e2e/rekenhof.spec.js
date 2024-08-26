@@ -371,3 +371,34 @@ test('test manual input', async ({ browser }) => {
     await context.close();
     });
 
+
+    // tests that the table does not show when logged out, even if it was loaded before
+    test('test logout and table visibility', async ({ browser }) => {
+      const context = await browser.newContext({
+        ignoreHTTPSErrors: true
+      });
+      const page = await context.newPage();
+    
+      // Log in
+      await page.goto('/mock-login');
+      await page.click('text=Gemeente Aalst');
+      await page.waitForNavigation();
+    
+      // Navigate to rekenhof route
+      await page.goto('/rekenhof');
+      await page.waitForLoadState('networkidle');
+    
+      // Verify the table is visible
+      await expect(page.locator('text=Gevonden mandaten binnen uw Bestuurseenheid')).toBeVisible();
+    
+      // Simulate logout by clearing session storage or cookies
+      await context.clearCookies();
+      await context.clearPermissions();
+      await page.goto('/rekenhof');
+    
+      // Verify the table is not visible anymore
+      await expect(page.locator('text=Gevonden mandaten binnen uw Bestuurseenheid')).not.toBeVisible();
+    
+      await context.close();
+    });
+    
