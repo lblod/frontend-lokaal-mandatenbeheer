@@ -5,7 +5,7 @@ export const buildNewMandatarisSourceTtl = async (
   instanceUri,
   personId
 ) => {
-  const draftTriple = `<${instanceUri}> <http://mu.semte.ch/vocabularies/ext/lmb/hasPublicationStatus> <${MANDATARIS_DRAFT_PUBLICATION_STATE}>.`;
+  const draftTriple = `<${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/hasPublicationStatus> <${MANDATARIS_DRAFT_PUBLICATION_STATE}>.`;
   if (!personId) {
     return draftTriple;
   }
