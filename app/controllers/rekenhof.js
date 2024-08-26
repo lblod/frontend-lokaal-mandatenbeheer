@@ -14,7 +14,7 @@ export default class RekenhofController extends Controller {
     { label: 'Tussen 5340 en 11.880 EUR', value: 'option3' },
     { label: 'Tussen 11.881 en 59.399 EUR', value: 'option4' },
     { label: 'Tussen 59.400 en 118.798 EUR', value: 'option5' },
-    { label: 'Manuele ingave (afronden op het dichtste honderdduizendtal)', value: 'manual' }
+    { label: 'Manuele ingave (wordt afgerond)', value: 'manual' }
   ];
 
   constructor() {
@@ -112,8 +112,10 @@ export default class RekenhofController extends Controller {
       ["Voornaam", "Achternaam", "Geboortedatum", "Geslacht", "RRN", "Bestuursorgaan", "Status Label", "Startdatum", "Einddatum", "Vork bruto jaarsalaris na aftrek sociale bijdragen"],
       ...this.apiResults.map((result, index) => {
         const salaryOutput = result.selectedSalary
-          ? (result.selectedSalary.value === 'manual' ? result.manualInputValue : result.selectedSalary.label)
-          : '';
+      ? (result.selectedSalary.value === 'manual'
+        ? Math.round(result.manualInputValue / 100000) * 100000 // Round to the nearest hundred thousand
+        : result.selectedSalary.label)
+      : '';
         return [
           result.voornaam,
           result.achternaam,
