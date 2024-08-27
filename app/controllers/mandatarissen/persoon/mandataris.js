@@ -24,6 +24,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
 
   @tracked correctedMandataris = false;
   @tracked updatedStateMandataris = false;
+  @tracked newMandataris;
 
   @tracked formInitialized;
 
@@ -56,11 +57,19 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @action
   async onUpdateState(newMandataris) {
     this.editMode = null;
-    if (newMandataris != this.model.mandataris) {
-      this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
-    }
+    this.closeModals();
+    this.newMandataris = newMandataris;
     this.updatedStateMandataris = true;
-    await this.closeModals();
+  }
+
+  @action
+  callbackAfterUpdate() {
+    if (this.newMandataris != this.model.mandataris) {
+      this.router.transitionTo(
+        'mandatarissen.mandataris',
+        this.newMandataris.id
+      );
+    }
   }
 
   @action

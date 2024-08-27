@@ -62,7 +62,7 @@ export default class MandatarissenLinkedUpdateStateModal extends Component {
   @action
   async updateStateDoubleMandataris() {
     const response = await fetch(
-      `/mandataris-api/mandatarissen/${this.args.mandataris}/update-state-linked-mandataris`,
+      `/mandataris-api/mandatarissen/${this.args.mandataris}/${this.args.newMandataris}/update-state-linked-mandataris`,
       { method: 'PUT' }
     );
     const jsonReponse = await response.json();
