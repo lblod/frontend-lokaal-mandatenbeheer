@@ -72,8 +72,8 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     super.updateValidations();
     this.person = person;
     if (this.person && this.searchElected) {
-      const isElected = await this.verkiezingService.getPeopleThatAreElected(
-        [this.person],
+      const isElected = await this.verkiezingService.checkIfPersonIsElected(
+        this.person.id,
         this.currentBestuursperiode
       );
 
