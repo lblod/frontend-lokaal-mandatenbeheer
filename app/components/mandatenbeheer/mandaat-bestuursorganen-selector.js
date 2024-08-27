@@ -36,12 +36,11 @@ export default class MandaatBestuursorganenSelector extends Component {
     ) {
       const bestuursperiode =
         await this.args.bestuursorganen.at(0).heeftBestuursperiode;
-      const electedPeople =
-        await this.verkiezingService.getPeopleThatAreElected(
-          [this.args.person],
-          bestuursperiode
-        );
-      if (electedPeople.length === 0) {
+      const isElected = await this.verkiezingService.checkIfPersonIsElected(
+        this.args.person.id,
+        bestuursperiode
+      );
+      if (!isElected) {
         const burgemeesterMandaten = await Promise.all(
           this.mandaatOptions.map(async (m) => {
             const isBurgemeester = await m.isBurgemeester;
