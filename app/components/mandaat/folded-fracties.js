@@ -66,7 +66,6 @@ export default class MandaatFoldedFractiesComponent extends Component {
     return await this.store.query('mandataris', options);
   }
 
-  // Using EmberData get returns undefined even if the relation is loaded
   async fractieOrNull(mandataris) {
     const lidmaatschap = await mandataris.heeftLidmaatschap;
     if (!lidmaatschap) {
