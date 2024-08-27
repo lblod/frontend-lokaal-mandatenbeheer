@@ -77,7 +77,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
         this.currentBestuursperiode
       );
 
-      if (isElected.length === 0) {
+      if (!isElected) {
         this.person = null;
         replaceSingleFormValue(this.storeOptions, null);
         showWarningToast(

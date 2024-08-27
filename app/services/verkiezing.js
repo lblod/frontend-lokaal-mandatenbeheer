@@ -6,7 +6,7 @@ export default class VerkiezingService extends Service {
   @service store;
 
   async checkIfPersonIsElected(personId, bestuursperiode) {
-    return await this.store.query('persoon', {
+    const matches = await this.store.query('persoon', {
       include: [
         'verkiezingsresultaten',
         'verkiezingsresultaten.kandidatenlijst',
@@ -18,5 +18,6 @@ export default class VerkiezingService extends Service {
         bestuursperiode.id,
       'filter[verkiezingsresultaten][persoon][:id:]': personId,
     });
+    return matches.length > 0;
   }
 }
