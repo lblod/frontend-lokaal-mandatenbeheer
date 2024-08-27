@@ -4,7 +4,7 @@ export default class VerkiezingsresultaatModel extends Model {
   @attr('number') aantalNaamstemmen;
   @attr('number') plaatsRangorde;
 
-  @belongsTo('persoon', { async: true, inverse: null })
+  @belongsTo('persoon', { async: true, inverse: 'verkiezingsresultaten' })
   persoon;
 
   @belongsTo('kandidatenlijst', { async: true, inverse: 'resultaten' })

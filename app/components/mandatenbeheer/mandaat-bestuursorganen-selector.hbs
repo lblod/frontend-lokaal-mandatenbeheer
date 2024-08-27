@@ -20,4 +20,16 @@
   {{else}}
     <p class="skeleton-input-full au-u-margin-top"></p>
   {{/if}}
+
+  {{#if this.alertMessage}}
+    <AuAlert
+      @title="Opgelet"
+      @skin="info"
+      @size="tiny"
+      @closable={{false}}
+      class="au-u-margin-top"
+    >
+      <p>{{this.alertMessage}}</p>
+    </AuAlert>
+  {{/if}}
 </div>

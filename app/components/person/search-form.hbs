@@ -86,15 +86,16 @@
             class="au-u-margin-top-small"
           >
             <p>
-              Kijk uw zoekopdracht na of
-              <AuButton
-                @skin="link"
-                {{on "click" this.handleCreatePersonClick}}
-                class="au-c-link"
-              >
-                <AuIcon @icon="add" @alignment="left" />
-                voeg een nieuwe persoon toe
-              </AuButton>.
+              Kijk uw zoekopdracht na{{#if @allowCreate}}<span>
+                  of
+                  <AuButton
+                    @skin="link"
+                    {{on "click" this.handleCreatePersonClick}}
+                    class="au-c-link"
+                  >
+                    <AuIcon @icon="add" @alignment="left" />
+                    voeg een nieuwe persoon toe
+                  </AuButton></span>{{/if}}.
             </p>
           </AuAlert>
         {{else}}
@@ -104,15 +105,16 @@
             @size="tiny"
           >
             <p>
-              Kijk uw zoekopdracht na of
-              <AuButton
-                @skin="link"
-                {{on "click" this.handleCreatePersonClick}}
-                class="au-c-link"
-              >
-                <AuIcon @icon="add" @alignment="left" />
-                voeg een nieuwe persoon toe
-              </AuButton>.
+              Kijk uw zoekopdracht na{{#if @allowCreate}}<span>
+                  of
+                  <AuButton
+                    @skin="link"
+                    {{on "click" this.handleCreatePersonClick}}
+                    class="au-c-link"
+                  >
+                    <AuIcon @icon="add" @alignment="left" />
+                    voeg een nieuwe persoon toe
+                  </AuButton></span>{{/if}}.
             </p>
           </AuAlert>
         {{/if}}
@@ -120,11 +122,14 @@
         <AuContent>
           <p class="au-c-text-info">
             Zoek een reeds gekende persoon in de databank van het loket op naam
-            of op rijksregisternummer,<br />of
-            <AuButton @skin="link" {{on "click" this.handleCreatePersonClick}}>
-              <AuIcon @icon="add" @alignment="left" />
-              voeg een nieuwe persoon toe
-            </AuButton>.
+            of op rijksregisternummer{{#if @allowCreate}}<span>,<br />of
+                <AuButton
+                  @skin="link"
+                  {{on "click" this.handleCreatePersonClick}}
+                >
+                  <AuIcon @icon="add" @alignment="left" />
+                  voeg een nieuwe persoon toe
+                </AuButton></span>{{/if}}.
           </p>
         </AuContent>
         <div class="mandate-new-info">

@@ -9,6 +9,7 @@ import { task, timeout } from 'ember-concurrency';
 
 export default class SharedPersoonPersoonSearchFormComponent extends Component {
   @service store;
+  @service('verkiezing') verkiezingService;
 
   @tracked pageSize = 20;
   @tracked queryParams;
@@ -79,6 +80,21 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
       return;
     }
 
+    const extraFilter = {};
+    if (this.args.searchElected && this.args.bestuursperiode) {
+      extraFilter.verkiezingsresultaten = {
+        kandidatenlijst: {
+          verkiezing: {
+            'bestuursorgaan-in-tijd': {
+              'heeft-bestuursperiode': {
+                ':id:': this.args.bestuursperiode.id,
+              },
+            },
+          },
+        },
+      };
+    }
+
     let queryParams = {
       sort: 'achternaam',
       include: ['geboorte', 'identificator'].join(','),
@@ -89,6 +105,7 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
           (this.rijksregisternummer &&
             this.rijksregisternummer.replace(/\D+/g, '')) ||
           undefined,
+        ...extraFilter,
       },
       page: {
         size: this.pageSize,
@@ -103,11 +120,13 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
   });
 
   getPersoon = task(async (queryParams) => {
+    let personen = null;
     try {
-      return await this.store.query('persoon', queryParams);
+      personen = await this.store.query('persoon', queryParams);
     } catch (e) {
       this.error = true;
     }
+    return personen;
   });
 
   resetAfterError() {
