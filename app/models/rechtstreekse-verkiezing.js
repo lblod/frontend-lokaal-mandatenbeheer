@@ -6,13 +6,13 @@ export default class RechtstreekseVerkiezingModel extends Model {
 
   @belongsTo('bestuursorgaan', {
     async: true,
-    inverse: 'rechtstreekseVerkiezing',
+    inverse: 'verkiezing',
   })
   bestuursorgaanInTijd;
 
   @hasMany('kandidatenlijst', {
     async: true,
-    inverse: 'rechtstreekseVerkiezing',
+    inverse: 'verkiezing',
   })
   kandidatenlijsten;
 }
