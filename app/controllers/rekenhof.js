@@ -7,6 +7,7 @@ import fetch from 'fetch';
 export default class RekenhofController extends Controller {
   @service('current-session') currentSession;
   @tracked apiResults = null;
+  @tracked filterAangifteplichtig = false;
 
   salaryOptions = [
     { label: 'Niet vergoed', value: 'option1' },
@@ -93,8 +94,8 @@ export default class RekenhofController extends Controller {
   }
 
   @action
-  toggleFilterAangifteplichtig(event) {
-    this.filterAangifteplichtig = event.target.checked;
+  toggleFilterAangifteplichtig(newCheckedValue) {
+    this.filterAangifteplichtig = newCheckedValue;
     this.queryApi(); // Resend the API call when the toggle is changed
   }
 

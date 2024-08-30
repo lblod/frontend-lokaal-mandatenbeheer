@@ -1,8 +1,13 @@
 <div class="au-c-body-container au-c-body-container--scroll rekenhof-outerDiv">
   <div class="rekenhof-toggle-container">
-    <label for="filterAangifteplichtigToggle">Toon enkel mandatarissen met minstens 1 aangifteplichtig mandaat:</label>
-    <input type="checkbox" id="filterAangifteplichtigToggle" checked={{this.filterAangifteplichtig}} {{on "change" this.toggleFilterAangifteplichtig}}>
+    <AuCheckbox
+      @checked={{this.filterAangifteplichtig}}
+      @onChange={{this.toggleFilterAangifteplichtig}}
+    >
+      Toon enkel mandatarissen met minstens één aangifteplichtig mandaat
+    </AuCheckbox>
   </div>
+
   {{#if this.apiResults}}
     <AuTable>
       <:title>Gevonden mandaten binnen uw Bestuurseenheid</:title>
