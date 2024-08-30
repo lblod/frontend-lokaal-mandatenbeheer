@@ -62,6 +62,10 @@ Router.map(function () {
     });
   });
 
+  this.route('rekenhof', function () {
+    
+  });
+
   this.route('under-construction');
 
   this.route('error/404', {

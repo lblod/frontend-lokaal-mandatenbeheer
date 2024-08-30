@@ -1,0 +1,73 @@
+<div class="au-c-body-container au-c-body-container--scroll">
+
+{{#if this.apiResults}}
+
+
+  <AuTable>
+     <:title>Gevonden mandaten binnen uw Bestuurseenheid</:title>
+     <:header>
+       <tr>
+          <th>Voornaam</th>
+          <th>Achternaam</th>
+          <th>Geboortedatum</th>
+          <th>Geslacht</th>
+          <th>RRN</th>
+          <th>Bestuursorgaan</th>
+          <th>Status Label</th>
+          <th>Startdatum</th>
+          <th>Einddatum</th>
+          <th>Vork bruto jaarsalaris na aftrek sociale bijdragen</th>
+       </tr>
+    </:header>
+     <:body>
+      {{#each this.apiResults as |result|}}
+        <tr>
+          <td>{{result.voornaam}}</td>
+          <td>{{result.achternaam}}</td>
+          <td>{{result.geboortedatum}}</td>
+          <td>{{result.geslacht}}</td>
+          <td>{{result.rrn}}</td>
+          <td>{{result.bestuursorgaanTijdsspecialisatieLabel}}</td>
+          <td>{{result.statusLabel}}</td>
+          <td>{{result.startdatum}}</td>
+          <td>{{result.einddatum}}</td>
+          <td>
+            <PowerSelect
+              @options={{this.salaryOptions}} 
+              @selected={{result.selectedSalary}}
+              @onChange={{fn this.handleSalaryChange result}} 
+              as |option|>
+              {{option.label}}
+
+            </PowerSelect>
+            {{#if (eq result.selectedSalary.value "manual")}}
+              <input
+                id="manualInput"
+                type="number"
+                value={{result.manualInputValue}}
+                placeholder="Geef een bedrag in"
+                {{on "input" (fn this.updateManualInput result)}}
+              />
+            {{/if}}
+          </td>
+        </tr>
+      {{/each}}
+
+      </:body>
+
+    </AuTable>
+
+
+<div onclick={{fn this.exportToCSV}}>
+  <AuButton
+    @icon="download">
+    Exporteer naar CSV
+  </AuButton>
+</div>
+  
+{{/if}}
+
+ </div>
+
+
+ 
