@@ -182,7 +182,7 @@ test('regular selects, download', async ({ browser }) => {
   const header = rows[0].split(',');
   const expectedHeader = [
     'Voornaam', 'Achternaam', 'Geboortedatum', 'Geslacht', 'RRN', 
-    'Bestuursorgaan', 'Status Label', 'Startdatum', 'Einddatum', 
+    'Bestuursorgaan', 'Status Label', 'Rol', 'Startdatum', 'Einddatum', 
     'Vork bruto jaarsalaris na aftrek sociale bijdragen'
   ];
   expect(header).toEqual(expectedHeader);

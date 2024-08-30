@@ -110,7 +110,7 @@ export default class RekenhofController extends Controller {
 
     
     const rows = [
-      ["Voornaam", "Achternaam", "Geboortedatum", "Geslacht", "RRN", "Bestuursorgaan", "Status Label", "Startdatum", "Einddatum", "Vork bruto jaarsalaris na aftrek sociale bijdragen"],
+      ["Voornaam", "Achternaam", "Geboortedatum", "Geslacht", "RRN", "Bestuursorgaan", "Rol", "Status Label", "Startdatum", "Einddatum", "Vork bruto jaarsalaris na aftrek sociale bijdragen"],
       ...this.apiResults.map((result, index) => {
         const salaryOutput = result.selectedSalary
       ? (result.selectedSalary.value === 'manual'
@@ -124,7 +124,7 @@ export default class RekenhofController extends Controller {
           result.geslacht,
           result.rrn,
           result.bestuursorgaanTijdsspecialisatieLabel,
-//          result.rol,
+          result.rol,
           result.statusLabel,
           result.startdatum,
           result.einddatum,
