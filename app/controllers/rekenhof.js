@@ -69,6 +69,12 @@ export default class RekenhofController extends Controller {
 
         const formatDate = (dateString) => {
           if (!dateString) return null;
+        
+          // Handle dates with time part
+          if (dateString.includes('T')) {
+            dateString = dateString.split('T')[0];
+          }
+        
           const date = new Date(dateString);
           const options = { day: 'numeric', month: 'long', year: 'numeric' };
           return date.toLocaleDateString('nl-NL', options);
@@ -77,7 +83,7 @@ export default class RekenhofController extends Controller {
         return {
           voornaam: binding.voornaam?.value,
           achternaam: binding.achternaam?.value,
-          geboortedatum: binding.geboortedatum?.value,
+          geboortedatum: formatDate(binding.geboortedatum?.value),
           geslacht: geslacht,
           rrn: binding.rrn?.value,
           bestuursorgaanTijdsspecialisatieLabel: binding.bestuursorgaanTijdsspecialisatieLabel?.value,
