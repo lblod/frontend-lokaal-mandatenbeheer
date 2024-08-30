@@ -294,3 +294,25 @@
 .ember-power-select-option[aria-disabled=true] {
   color: var(--au-gray-400);
 }
+
+
+// Rekenhof page styling
+
+.rekenhof-outerDiv {
+  margin: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.rekenhof-exportbutton {
+  margin-left: 44vw;
+  width: 12vw;
+  padding: 5px;
+  margin-top: 4px;
+}
+
+.rekenhof-au-input {
+  margin-top: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}

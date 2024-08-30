@@ -14,7 +14,7 @@ export default class RekenhofController extends Controller {
     { label: 'Tussen 5340 en 11.880 EUR', value: 'option3' },
     { label: 'Tussen 11.881 en 59.399 EUR', value: 'option4' },
     { label: 'Tussen 59.400 en 118.798 EUR', value: 'option5' },
-    { label: 'Manuele ingave (wordt afgerond)', value: 'manual' }
+    { label: 'Manuele ingave (wordt afgerond op het dichtste honderdduizendtal)', value: 'manual' }
   ];
 
   constructor() {
@@ -41,7 +41,7 @@ export default class RekenhofController extends Controller {
   async queryApi() {
     let uri = this.currentSession.group.uri;
     try {
-      let response = await fetch(`/rekenhof-api/bestuurseenheid-data?bestuurseenheid=${uri}`);
+      let response = await fetch(`/rekenhof-api/bestuurseenheid-data?bestuurseenheid=${uri}&filterAangifteplichtig=${this.filterAangifteplichtig}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -73,8 +73,6 @@ export default class RekenhofController extends Controller {
           return date.toLocaleDateString('nl-NL', options);
         };
 
-
-
         return {
           voornaam: binding.voornaam?.value,
           achternaam: binding.achternaam?.value,
@@ -86,17 +84,19 @@ export default class RekenhofController extends Controller {
           statusLabel: binding.statusLabel?.value,
           startdatum: formatDate(binding.startdatum?.value),
           einddatum: formatDate(binding.einddatum?.value),
-
         };
       });
-
-
     } catch (error) {
       console.error('Error querying API:', error);
       this.apiResults = null;
     }
   }
 
+  @action
+  toggleFilterAangifteplichtig(event) {
+    this.filterAangifteplichtig = event.target.checked;
+    this.queryApi(); // Resend the API call when the toggle is changed
+  }
 
   @action
   exportToCSV() {

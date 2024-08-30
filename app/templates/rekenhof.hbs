@@ -1,19 +1,8 @@
-<style>
-  #outerDiv {
-    margin: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-
-  #exportbutton {
-    margin-left: 44vw;
-    width: 12vw;
-    padding: 5px;
-    margin-top: 4px;
-  }
-</style>
-
-<div class="au-c-body-container au-c-body-container--scroll" id="outerDiv">
+<div class="au-c-body-container au-c-body-container--scroll rekenhof-outerDiv">
+  <div class="rekenhof-toggle-container">
+    <label for="filterAangifteplichtigToggle">Toon enkel mandatarissen met minstens 1 aangifteplichtig mandaat:</label>
+    <input type="checkbox" id="filterAangifteplichtigToggle" checked={{this.filterAangifteplichtig}} {{on "change" this.toggleFilterAangifteplichtig}}>
+  </div>
   {{#if this.apiResults}}
     <AuTable>
       <:title>Gevonden mandaten binnen uw Bestuurseenheid</:title>
@@ -56,6 +45,7 @@
               {{#if (eq result.selectedSalary.value "manual")}}
                 <AuInput
                   id="manualInput"
+                  class="rekenhof-au-input"
                   type="number"
                   @value={{result.manualInputValue}}
                   @placeholder="Geef een bedrag in"
@@ -69,7 +59,7 @@
     </AuTable>
 
     <div onclick={{fn this.exportToCSV}}>
-      <AuButton id="exportbutton" @icon="download">
+      <AuButton id="rekenhof-exportbutton" @icon="download">
         Exporteer naar CSV
       </AuButton>
     </div>
