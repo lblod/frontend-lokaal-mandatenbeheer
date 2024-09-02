@@ -20,6 +20,7 @@ import { getFormFrom } from 'frontend-lmb/utils/get-form';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
+  @service bcsd;
 
   @tracked persoon = null;
   @tracked mandataris = null;
@@ -167,6 +168,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       })
     );
     this.setup.perform();
+    this.bcsd.forceRecomputeBCSD();
   });
 
   @action
