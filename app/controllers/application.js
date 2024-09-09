@@ -89,8 +89,13 @@ export default class ApplicationController extends Controller {
 
   get environmentMessage() {
     const productieUrl = 'https://mandatenbeheer.lokaalbestuur.vlaanderen.be/';
+    const applicationName = 'Lokaal Mandatenbeheer';
 
-    return `Dit is de <strong>${this.environmentInfo.title}</strong> van het Lokaal Mandatenbeheer met fictieve en testgegevens. De productieomgeving met de echte data vind je op <a href="${productieUrl}" title="Lokaal Mandatenbeheer" rel="tag">${productieUrl}</a>.`;
+    if (this.environmentName === 'PROD') {
+      return `Dit is de <strong>${this.environmentInfo.title}</strong> van het ${applicationName} met fictieve en testgegevens. Deze data is nog niet effectief en zal dus op termijn verwijderd worden als de applicatie live gaat.`;
+    }
+
+    return `Dit is de <strong>${this.environmentInfo.title}</strong> van het ${applicationName} met fictieve en testgegevens. De productieomgeving met de echte data vind je op <a href="${productieUrl}" title="${applicationName}" rel="tag">${productieUrl}</a>.`;
   }
 
   get isLocalhost() {
@@ -129,6 +134,11 @@ export default class ApplicationController extends Controller {
       case 'local':
         return {
           title: 'lokale omgeving',
+          skin: 'error',
+        };
+      case 'PROD':
+        return {
+          title: 'Productie omgeving',
           skin: 'error',
         };
       default:
