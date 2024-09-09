@@ -1,10 +1,7 @@
 <div>
   <AuPill
     @skin={{if
-      (or
-        (not @mandataris.publicationStatus.label)
-        (eq @mandataris.publicationStatus.label "Bekrachtigd")
-      )
+      (eq @mandataris.publicationStatus.label "Bekrachtigd")
       "success"
       "default"
     }}
@@ -13,7 +10,7 @@
     @iconAlignment="left"
     @hideText={{false}}
   >
-    {{or @mandataris.publicationStatus.label "Bekrachtigd"}}
+    {{or @mandataris.publicationStatus.label "Niet beschikbaar"}}
   </AuPill>
   {{#if
     (and
