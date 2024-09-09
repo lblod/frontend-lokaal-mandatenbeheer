@@ -1,7 +1,15 @@
 {{page-title this.appTitle}}
 
-<AuApp>
+<AuApp class="{{if this.showEnvironment 'au-c-app--environment'}}">
   <GlobalSystemNotification />
+  {{#if this.showEnvironment}}
+    <EnvironmentBanner
+      @applicationName="Lokaal Mandatenbeheer"
+      @environmentName={{this.environmentName}}
+      @skin={{this.environmentInfo.skin}}
+      @message={{this.environmentMessage}}
+    />
+  {{/if}}
   <AuMainHeader
     @brandLink={{unless
       this.session.isAuthenticated
