@@ -45,14 +45,14 @@ export default class RdfInputFieldsMandatarisStatusSelectorComponent extends Rdf
 
       await this.loadMandaat();
     };
-    this.storeOptions.store.registerObserver((formChange) => {
+    this.storeOptions.store.registerObserver(async (formChange) => {
       const mustTrigger = isPredicateInObserverChange(
         formChange,
         MANDATARIS_PREDICATE.mandaat
       );
 
       if (mustTrigger) {
-        onFormUpdate();
+        await onFormUpdate();
       }
     });
     onFormUpdate();
