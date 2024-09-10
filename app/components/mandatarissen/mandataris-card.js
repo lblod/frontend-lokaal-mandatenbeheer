@@ -1,11 +1,19 @@
 import Component from '@glimmer/component';
+
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
+
 import { MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE } from 'frontend-lmb/utils/well-known-uris';
 
+import { task } from 'ember-concurrency';
+import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
+
 export default class MandatarisCardComponent extends Component {
-  @tracked
-  editingStatus = false;
+  @tracked editingStatus = false;
+
+  @service store;
+  @service('mandataris') mandatarisService;
 
   get status() {
     return this.args.mandataris.status.get('label');
@@ -51,4 +59,23 @@ export default class MandatarisCardComponent extends Component {
   stopEditingStatus() {
     this.editingStatus = false;
   }
+
+  addReplacement = task(async (replacement) => {
+    const newMandatarisProps = await this.mandatarisService.createNewProps(
+      this.args.mandataris,
+      {
+        start: new Date(),
+        publicationStatus: await getDraftPublicationStatus(this.store),
+      }
+    );
+    const lidmaatschap = await this.args.mandataris.heeftLidmaatschap;
+    const replacementMandataris =
+      await this.mandatarisService.getOrCreateReplacement(
+        this.args.mandataris,
+        replacement,
+        newMandatarisProps,
+        await lidmaatschap.binnenFractie
+      );
+    this.args.mandataris.tijdelijkeVervangingen = [replacementMandataris];
+  });
 }

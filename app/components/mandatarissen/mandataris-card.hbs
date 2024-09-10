@@ -104,13 +104,21 @@
       </div>
     {{/if}}
     {{#if (await @mandataris.status.isVerhinderd)}}
-      <div class="au-o-grid__item au-u-5-6">
+      <div class="au-o-grid__item au-u-1-2">
+        <div class="au-c-description-label"></div>
+        <div class="au-c-description-value au-u-margin-top-tiny">
+        </div>
+      </div>
+      <div class="au-o-grid__item au-u-1-2">
         <div class="au-c-description-label"><div>Vervangen door:</div></div>
         <div class="au-c-description-value">
           {{#if (not (await this.vervangersDoor))}}
-            <AuButton>
-              Voeg vervanger toe
-            </AuButton>
+            <Mandatarissen::ReplacementSelect
+              @showDelete={{false}}
+              @selected={{null}}
+              @onSelect={{perform this.addReplacement}}
+              @inline={{false}}
+            />
           {{else}}
             {{#each (await this.vervangersDoor) as |replacement index|}}
               <AuLink
