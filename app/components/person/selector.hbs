@@ -15,11 +15,24 @@
         @skin="secondary"
       >Annuleer</AuButton>
     {{else}}
-      <AuButton
-        {{on "click" this.startEdit}}
-        @icon="pencil"
-        @skin="secondary"
-      >Bewerk</AuButton>
+      {{#if this.showEditAsIcon}}
+        <AuButton
+          {{on "click" this.startEdit}}
+          @icon="pencil"
+          @skin="link-secondary"
+          @size="small"
+          class="au-u-maring-left-tiny"
+          @hideText={{true}}
+        >
+          Bewerk
+        </AuButton>
+      {{else}}
+        <AuButton
+          {{on "click" this.startEdit}}
+          @icon="pencil"
+          @skin="secondary"
+        >Bewerk</AuButton>
+      {{/if}}
     {{/if}}
     {{#if this.showTrashCan}}
       <AuButton

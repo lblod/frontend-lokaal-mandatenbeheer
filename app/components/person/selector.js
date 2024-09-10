@@ -91,4 +91,7 @@ export default class PersonSelectorComponent extends Component {
   get showTrashCan() {
     return this.args.showDelete ?? true;
   }
+  get showEditAsIcon() {
+    return this.args.showEditAsIcon ?? false;
+  }
 }
