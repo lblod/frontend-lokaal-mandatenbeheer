@@ -119,7 +119,7 @@
               @nothingSelectedText="Geen vervanger geselecteerd, voeg er een toe door op het potloodje te klikken."
               @selected={{null}}
               @onSelect={{perform this.addReplacement}}
-              @inline={{false}}
+              @inline={{true}}
             />
           {{else}}
             {{#each (await this.vervangersDoor) as |replacement index|}}
