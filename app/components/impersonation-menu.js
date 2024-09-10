@@ -1,7 +1,5 @@
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import PlayIcon from './shared/play-icon';
-import PauseIcon from './shared/pause-icon';
 
 export default class ImpersonationMenu extends Component {
   @service currentSession;
