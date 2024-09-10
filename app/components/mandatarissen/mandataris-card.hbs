@@ -111,10 +111,11 @@
       </div>
       <div class="au-o-grid__item au-u-1-2">
         <div class="au-c-description-label"><div>Vervangen door:</div></div>
-        <div class="au-c-description-value">
+        <div class="au-c-description-value replacement">
           {{#if (not (await this.vervangersDoor))}}
             <Mandatarissen::ReplacementSelect
               @showDelete={{false}}
+              @showEditAsIcon={{true}}
               @selected={{null}}
               @onSelect={{perform this.addReplacement}}
               @inline={{false}}
