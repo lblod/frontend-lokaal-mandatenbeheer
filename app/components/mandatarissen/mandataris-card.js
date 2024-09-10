@@ -77,5 +77,6 @@ export default class MandatarisCardComponent extends Component {
         await lidmaatschap.binnenFractie
       );
     this.args.mandataris.tijdelijkeVervangingen = [replacementMandataris];
+    await this.args.mandataris.save();
   });
 }
