@@ -12,6 +12,8 @@ import {
   triplesForPath,
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
+import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
+import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
 
 export default class RdfMandatarisRangorde extends InputFieldComponent {
   inputId = 'rangorde-' + guidFor(this);
@@ -42,7 +44,16 @@ export default class RdfMandatarisRangorde extends InputFieldComponent {
 
       this.checkIfShouldRender();
     };
-    this.storeOptions.store.registerObserver(onFormUpdate);
+    this.storeOptions.store.registerObserver((formChange) => {
+      const mustTrigger = isPredicateInObserverChange(
+        formChange,
+        MANDATARIS_PREDICATE.mandaat
+      );
+
+      if (mustTrigger) {
+        onFormUpdate();
+      }
+    });
     onFormUpdate();
   }
 
