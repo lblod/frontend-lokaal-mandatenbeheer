@@ -21,12 +21,14 @@
         @skin="secondary"
       >Bewerk</AuButton>
     {{/if}}
-    <AuButton
-      {{on "click" this.removePerson}}
-      @icon="trash"
-      @hideText={{true}}
-      @skin="secondary"
-    >Verwijder</AuButton>
+    {{#if this.showTrashCan}}
+      <AuButton
+        {{on "click" this.removePerson}}
+        @icon="trash"
+        @hideText={{true}}
+        @skin="secondary"
+      >Verwijder</AuButton>
+    {{/if}}
   {{/unless}}
 </div>
 {{#if (and this.selectNewPerson @inline)}}
