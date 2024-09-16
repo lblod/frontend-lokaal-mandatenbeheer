@@ -5,9 +5,11 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 export default class MandatarissenMandatarisPublicationStatusSelectorComponent extends Component {
+  @service store;
+
   @tracked options = [];
   @tracked isDisabled = false;
-  @service store;
+  @tracked showLinkToDecisionModal;
 
   get mandataris() {
     return this.args.mandataris;
@@ -43,9 +45,17 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
 
   @action
   async onUpdate(publicationStatus) {
+    console.log(`publicationStatus`, publicationStatus);
     if (publicationStatus.isBekrachtigd) {
+      this.showLinkToDecisionModal = true;
       this.isDisabled = true;
+    } else {
+      await this.setStatus(publicationStatus);
     }
+  }
+
+  @action
+  async setStatus(publicationStatus) {
     this.mandataris.publicationStatus = publicationStatus;
     await this.mandataris.save();
     if (this.args.onUpdate) {

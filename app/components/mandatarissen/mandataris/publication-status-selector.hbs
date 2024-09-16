@@ -23,4 +23,22 @@
     >technische dienst contacteren</AuLinkExternal>
   </span>
 
+  <AuModalContainer />
+  <AuModal
+    @title={{this.title}}
+    @modalOpen={{this.showLinkToDecisionModal}}
+    @closable={{true}}
+    @closeModal={{(fn (mut this.showLinkToDecisionModal) false)}}
+  >
+    <div>
+      <AuLabel for="decision-link">Link naar besluit</AuLabel>
+      <AuInput
+        @icon="search"
+        @iconAlignment="left"
+        value={{this.voornaam}}
+        id="decision-link"
+        placeholder="Link naar besluit"
+      />
+    </div>
+  </AuModal>
 </div>
