@@ -6,21 +6,6 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'history',
-    announce: {
-      maintenance: {
-        enabled: '{{ANNOUNCE_MAINTENANCE_ENABLED}}',
-        message: '{{ANNOUNCE_MAINTENANCE_MESSAGE}}',
-      },
-      newDeployment: {
-        enabled: '{{ANNOUNCE_NEW_DEPLOYMENT_ENABLED}}',
-        message: '{{ANNOUNCE_NEW_DEPLOYMENT_MESSAGE}}',
-      },
-      testing: {
-        enabled: '{{ANNOUNCE_TESTING_ENABLED}}',
-        message: '{{ANNOUNCE_TESTING_MESSAGE}}',
-      },
-    },
-    appName: 'Lokaal Mandatenbeheer',
     environmentName: '{{ENVIRONMENT_NAME}}',
     EmberENV: {
       // EXTEND_PROTOTYPES: false, // TODO: disable the prototypes and fix all the cases where we depended on this
