@@ -21,10 +21,6 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     return [...this.options].sort((a, b) => a.order - b.order);
   }
 
-  isBekrachtigd(publicationStatus) {
-    return !publicationStatus || publicationStatus.isBekrachtigd;
-  }
-
   async loadOptions() {
     await this.checkPublicationStatus();
 
@@ -42,7 +38,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   @action
   async checkPublicationStatus() {
     const publicationStatus = await this.mandataris.publicationStatus;
-    this.isDisabled = this.isBekrachtigd(publicationStatus);
+    this.isDisabled = publicationStatus.isBekrachtigd;
   }
 
   @action
