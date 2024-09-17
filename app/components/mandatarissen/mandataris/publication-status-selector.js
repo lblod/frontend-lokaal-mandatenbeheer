@@ -119,8 +119,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
       const searchModel = this.selectedType.id === 1 ? 'artikel' : 'besluit';
       const rechtsgrondenWithUri = await queryRecord(this.store, searchModel, {
         filter: {
-          ':uri:':
-            'http://data.lblod.info/id/besluiten/66E955D2FD74B81251EBA605',
+          ':uri:': this.linkToDecision,
         },
       });
       if (!rechtsgrondenWithUri) {
@@ -129,8 +128,16 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
           'Geen besluit of artikel gevonden voor deze uri',
           'Geen resultaat'
         );
+      } else {
+        const rechtsgrondPropertie =
+          this.selectedDecisionPredicate.id === 1
+            ? 'bekrachtigtAanstellingVan'
+            : 'bekrachtigtOntslagVan';
+        rechtsgrondenWithUri[rechtsgrondPropertie] = this.mandataris.uri;
+        await rechtsgrondenWithUri.save();
+        this.showLinkToDecisionModal = false;
+        await this.setStatus(this.selectedPublicationStatus);
       }
-      alert('We did nothing with the link to besluit/artikel');
     }
   });
 
