@@ -29,16 +29,77 @@
     @modalOpen={{this.showLinkToDecisionModal}}
     @closable={{true}}
     @closeModal={{(fn (mut this.showLinkToDecisionModal) false)}}
+    as |Modal|
   >
-    <div>
-      <AuLabel for="decision-link">Link naar besluit</AuLabel>
-      <AuInput
-        @icon="search"
-        @iconAlignment="left"
-        value={{this.voornaam}}
-        id="decision-link"
-        placeholder="Link naar besluit"
-      />
-    </div>
+    <Modal.Body>
+      <AuLabel for="decision-type">Type</AuLabel>
+      <PowerSelect
+        id="decision-type"
+        @allowClear={{false}}
+        @placeholder="Selecteer het type artikel/besluit"
+        @selected={{this.selectedType}}
+        @options={{this.typeOptions}}
+        @onChange={{this.setType}}
+        @searchEnabled={{true}}
+        @loadingMessage="Aan het laden..."
+        @noMatchesMessage="Geen resultaten"
+        as |type|
+      >
+        {{type.label}}
+      </PowerSelect>
+      {{#if this.selectedType}}
+        <span class="au-u-padding">
+          {{#if this.isLinkToPage}}
+            <AuLabel for="link-to-page">Link naar pagina</AuLabel>
+            <AuInput
+              @width="block"
+              @iconAlignment="left"
+              value={{this.linkToDecision}}
+              id="link-to-page"
+              placeholder="Link naar besluit pagina"
+            />
+          {{else}}
+            <AuButtonGroup>
+              <PowerSelect
+                @allowClear={{false}}
+                @placeholder="Bekrachtiging/ontslag"
+                @selected={{this.selectedDecisionPredicate}}
+                @options={{this.predicateOptions}}
+                @onChange={{this.setDecisionPredicate}}
+                @searchEnabled={{true}}
+                @loadingMessage="Aan het laden..."
+                @noMatchesMessage="Geen resultaten"
+                as |predicate|
+              >
+                {{predicate.label}}
+              </PowerSelect>
+              <AuInput
+                @iconAlignment="left"
+                value={{this.linkToDecision}}
+                id="link-to-decision"
+                placeholder="Link naar besluit"
+                {{on "keyup" (perform this.setLinkTodecision)}}
+              />
+            </AuButtonGroup>
+          {{/if}}
+        </span>
+      {{else}}
+        <div class="au-u-padding-large"></div>
+      {{/if}}
+      <span class="au-u-padding">
+
+        <AuButtonGroup>
+          <AuButton
+            @disabled={{not this.canSaveLinkToDecision}}
+            {{on "click" (perform this.addDecisionToMandataris)}}
+          >
+            Bewaar
+          </AuButton>
+          <AuButton @skin="secondary" {{on "click" this.cancelAddDecision}}>
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </span>
+    </Modal.Body>
   </AuModal>
 </div>
