@@ -144,3 +144,17 @@ export default class MandatarisModel extends Model {
     return result;
   }
 }
+
+export async function getLinkToDecision(mandataris) {
+  const aanstelling = await mandataris.aanstellingBekrachtigdDoor;
+  if (aanstelling) {
+    return aanstelling;
+  }
+
+  const ontslag = await mandataris.ontslagBekrachtigdDoor;
+  if (ontslag) {
+    return ontslag;
+  }
+
+  return mandataris.linkToBesluit;
+}
