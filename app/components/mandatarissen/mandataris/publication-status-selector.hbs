@@ -25,10 +25,10 @@
 
   <AuModalContainer />
   <AuModal
-    @title={{this.title}}
+    @title="Link naar besluit"
     @modalOpen={{this.showLinkToDecisionModal}}
     @closable={{true}}
-    @closeModal={{(fn (mut this.showLinkToDecisionModal) false)}}
+    @closeModal={{this.cancelAddDecision}}
     as |Modal|
   >
     <Modal.Body>
