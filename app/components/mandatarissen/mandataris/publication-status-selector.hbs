@@ -101,11 +101,16 @@
         <AuButtonGroup>
           <AuButton
             @disabled={{not this.canSaveLinkToDecision}}
+            @loading={{this.addDecisionToMandataris.isRunning}}
             {{on "click" (perform this.addDecisionToMandataris)}}
           >
             Bewaar
           </AuButton>
-          <AuButton @skin="secondary" {{on "click" this.cancelAddDecision}}>
+          <AuButton
+            @skin="secondary"
+            @disabled={{this.addDecisionToMandataris.isRunning}}
+            {{on "click" this.cancelAddDecision}}
+          >
             Annuleer
           </AuButton>
         </AuButtonGroup>

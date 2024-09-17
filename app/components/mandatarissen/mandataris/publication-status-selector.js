@@ -4,10 +4,14 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
-import { restartableTask, task } from 'ember-concurrency';
+import { restartableTask, task, timeout } from 'ember-concurrency';
+import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
+import { showWarningToast } from 'frontend-lmb/utils/toasts';
+import { queryRecord } from 'frontend-lmb/utils/query-record';
 
 export default class MandatarissenMandatarisPublicationStatusSelectorComponent extends Component {
   @service store;
+  @service toaster;
 
   @tracked options = [];
   @tracked isDisabled = false;
@@ -100,20 +104,44 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   }
 
   setLinkTodecision = restartableTask(async (event) => {
+    await timeout(INPUT_DEBOUNCE);
     this.linkToDecision = event.target?.value;
     this.isInputLinkValid = this.isValidUri(this.linkToDecision);
   });
 
   addDecisionToMandataris = task(async () => {
-    // Todo: look for decision URI if it exists and link it to the mandataris
+    if (this.selectedType.id === 3) {
+      this.mandataris.linkToBesluit = this.linkToDecision;
+      await this.mandataris.save();
+      this.showLinkToDecisionModal = false;
+      await this.setStatus(this.selectedPublicationStatus);
+    } else {
+      const rechtsgrondenWithUri = await queryRecord(
+        this.store,
+        'rechtsgrond',
+        {
+          filter: { ':uri:': this.linkToDecision },
+        }
+      );
+      if (!rechtsgrondenWithUri) {
+        showWarningToast(
+          this.toaster,
+          'Geen besluit of artikel gevonden voor deze uri',
+          'Geen resultaat'
+        );
+      }
+      alert('We did nothing with the link to besluit/artikel');
+    }
   });
 
   get canSaveLinkToDecision() {
-    return (
-      this.isInputLinkValid &&
-      this.selectedDecisionPredicate &&
-      this.selectedType
-    );
+    if (this.selectedType?.id !== 3) {
+      if (!this.selectedDecisionPredicate) {
+        return false;
+      }
+    }
+
+    return this.isInputLinkValid && this.selectedType;
   }
 
   get typeOptions() {
