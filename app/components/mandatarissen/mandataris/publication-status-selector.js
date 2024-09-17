@@ -116,13 +116,13 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
       this.showLinkToDecisionModal = false;
       await this.setStatus(this.selectedPublicationStatus);
     } else {
-      const rechtsgrondenWithUri = await queryRecord(
-        this.store,
-        'rechtsgrond',
-        {
-          filter: { ':uri:': this.linkToDecision },
-        }
-      );
+      const searchModel = this.selectedType.id === 1 ? 'artikel' : 'besluit';
+      const rechtsgrondenWithUri = await queryRecord(this.store, searchModel, {
+        filter: {
+          ':uri:':
+            'http://data.lblod.info/id/besluiten/66E955D2FD74B81251EBA605',
+        },
+      });
       if (!rechtsgrondenWithUri) {
         showWarningToast(
           this.toaster,
