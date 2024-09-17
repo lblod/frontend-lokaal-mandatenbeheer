@@ -17,6 +17,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   @tracked linkToDecision;
   @tracked isLinkToPage;
   @tracked selectedPublicationStatus;
+  @tracked isInputLinkValid;
 
   get mandataris() {
     return this.args.mandataris;
@@ -91,15 +92,16 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   }
 
   isValidUri(inputValue) {
-    if (!inputValue) {
-      return false;
-    }
-
-    return inputValue.trim() !== '';
+    // eslint-disable-next-line no-useless-escape, prettier/prettier
+    const uriRegex = new RegExp(
+      '^https?://[a-zA-Z0-9-]+(.[a-zA-Z0-9-]+)*(/.*)?$'
+    );
+    return uriRegex.test(inputValue);
   }
 
   setLinkTodecision = restartableTask(async (event) => {
     this.linkToDecision = event.target?.value;
+    this.isInputLinkValid = this.isValidUri(this.linkToDecision);
   });
 
   addDecisionToMandataris = task(async () => {
@@ -107,7 +109,11 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   });
 
   get canSaveLinkToDecision() {
-    return this.isValidUri(this.linkToDecision);
+    return (
+      this.isInputLinkValid &&
+      this.selectedDecisionPredicate &&
+      this.selectedType
+    );
   }
 
   get typeOptions() {

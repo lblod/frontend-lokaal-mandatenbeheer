@@ -52,11 +52,13 @@
           {{#if this.isLinkToPage}}
             <AuLabel for="link-to-page">Link naar pagina</AuLabel>
             <AuInput
+              @error={{(and (not this.isInputLinkValid) this.linkToDecision)}}
               @width="block"
               @iconAlignment="left"
               value={{this.linkToDecision}}
               id="link-to-page"
               placeholder="Link naar besluit pagina"
+              {{on "keyup" (perform this.setLinkTodecision)}}
             />
           {{else}}
             <AuButtonGroup>
@@ -74,6 +76,7 @@
                 {{predicate.label}}
               </PowerSelect>
               <AuInput
+                @error={{(and (not this.isInputLinkValid) this.linkToDecision)}}
                 @iconAlignment="left"
                 value={{this.linkToDecision}}
                 id="link-to-decision"
@@ -82,12 +85,19 @@
               />
             </AuButtonGroup>
           {{/if}}
+          <AuHelpText
+            @skin={{this.skin}}
+            @size={{this.size}}
+            @error={{this.error}}
+            @warning={{this.warning}}
+          >
+            Geef een correct uri in om te linken naar een besluit.
+          </AuHelpText>
         </span>
       {{else}}
         <div class="au-u-padding-large"></div>
       {{/if}}
       <span class="au-u-padding">
-
         <AuButtonGroup>
           <AuButton
             @disabled={{not this.canSaveLinkToDecision}}
