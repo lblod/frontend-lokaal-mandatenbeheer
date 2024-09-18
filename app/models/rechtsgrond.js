@@ -13,7 +13,7 @@ export default class RechtsgrondModel extends Model {
 
   @belongsTo('mandataris', {
     async: true,
-    inverse: 'aanstellingOntslagDoor',
+    inverse: 'ontslagBekrachtigdDoor',
     polymorphic: true,
     as: 'rechtsgrond',
   })
