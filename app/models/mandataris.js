@@ -70,9 +70,20 @@ export default class MandatarisModel extends Model {
   })
   contactPoints;
 
-  @belongsTo('rechtsgrond', { async: true, inverse: null, polymorphic: true })
+  @belongsTo('rechtsgrond', {
+    async: true,
+    inverse: 'bekrachtigtAanstellingVan',
+    polymorphic: true,
+    as: 'mandataris',
+  })
   aanstellingBekrachtigdDoor;
-  @belongsTo('rechtsgrond', { async: true, inverse: null, polymorphic: true })
+
+  @belongsTo('rechtsgrond', {
+    async: true,
+    inverse: 'bekrachtigtOntslagVan',
+    polymorphic: true,
+    as: 'mandataris',
+  })
   ontslagBekrachtigdDoor;
 
   get generatedFromGelinktNotuleren() {
@@ -146,12 +157,12 @@ export default class MandatarisModel extends Model {
 }
 
 export async function getLinkToDecision(mandataris) {
-  const aanstelling = await mandataris.aanstellingBekrachtigdDoor;
+  const aanstelling = (await mandataris.aanstellingBekrachtigdDoor).uri;
   if (aanstelling) {
     return aanstelling;
   }
 
-  const ontslag = await mandataris.ontslagBekrachtigdDoor;
+  const ontslag = (await mandataris.ontslagBekrachtigdDoor).uri;
   if (ontslag) {
     return ontslag;
   }
