@@ -133,7 +133,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
           this.selectedDecisionPredicate.id === 1
             ? 'bekrachtigtAanstellingVan'
             : 'bekrachtigtOntslagVan';
-        rechtsgrondenWithUri[rechtsgrondPropertie] = this.mandataris.uri;
+        rechtsgrondenWithUri[rechtsgrondPropertie] = this.mandataris;
         await rechtsgrondenWithUri.save();
         this.showLinkToDecisionModal = false;
         await this.setStatus(this.selectedPublicationStatus);
