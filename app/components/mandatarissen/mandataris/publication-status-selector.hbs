@@ -47,56 +47,52 @@
       >
         {{type.label}}
       </PowerSelect>
-      {{#if this.selectedType}}
-        <span class="au-u-padding">
-          {{#if this.isLinkToPage}}
-            <AuLabel for="link-to-page">Link naar pagina</AuLabel>
+      <span class="au-u-padding">
+        {{#if this.isLinkToPage}}
+          <AuLabel for="link-to-page">Link naar pagina</AuLabel>
+          <AuInput
+            @error={{(and (not this.isInputLinkValid) this.linkToDecision)}}
+            @width="block"
+            @iconAlignment="left"
+            value={{this.linkToDecision}}
+            id="link-to-page"
+            placeholder="Link naar besluit pagina"
+            {{on "keyup" (perform this.setLinkTodecision)}}
+          />
+        {{else}}
+          <AuButtonGroup>
+            <PowerSelect
+              @allowClear={{false}}
+              @placeholder="Bekrachtiging/ontslag"
+              @selected={{this.selectedDecisionPredicate}}
+              @options={{this.predicateOptions}}
+              @onChange={{this.setDecisionPredicate}}
+              @searchEnabled={{true}}
+              @loadingMessage="Aan het laden..."
+              @noMatchesMessage="Geen resultaten"
+              as |predicate|
+            >
+              {{predicate.label}}
+            </PowerSelect>
             <AuInput
               @error={{(and (not this.isInputLinkValid) this.linkToDecision)}}
-              @width="block"
               @iconAlignment="left"
               value={{this.linkToDecision}}
-              id="link-to-page"
-              placeholder="Link naar besluit pagina"
+              id="link-to-decision"
+              placeholder="Link naar besluit"
               {{on "keyup" (perform this.setLinkTodecision)}}
             />
-          {{else}}
-            <AuButtonGroup>
-              <PowerSelect
-                @allowClear={{false}}
-                @placeholder="Bekrachtiging/ontslag"
-                @selected={{this.selectedDecisionPredicate}}
-                @options={{this.predicateOptions}}
-                @onChange={{this.setDecisionPredicate}}
-                @searchEnabled={{true}}
-                @loadingMessage="Aan het laden..."
-                @noMatchesMessage="Geen resultaten"
-                as |predicate|
-              >
-                {{predicate.label}}
-              </PowerSelect>
-              <AuInput
-                @error={{(and (not this.isInputLinkValid) this.linkToDecision)}}
-                @iconAlignment="left"
-                value={{this.linkToDecision}}
-                id="link-to-decision"
-                placeholder="Link naar besluit"
-                {{on "keyup" (perform this.setLinkTodecision)}}
-              />
-            </AuButtonGroup>
-          {{/if}}
-          <AuHelpText
-            @skin={{this.skin}}
-            @size={{this.size}}
-            @error={{this.error}}
-            @warning={{this.warning}}
-          >
-            Geef een correct uri in om te linken naar een besluit.
-          </AuHelpText>
-        </span>
-      {{else}}
-        <div class="au-u-padding-large"></div>
-      {{/if}}
+          </AuButtonGroup>
+        {{/if}}
+        <AuHelpText
+          @skin={{this.skin}}
+          @size={{this.size}}
+          @error={{this.error}}
+          @warning={{this.warning}}
+        >
+          Geef een correct uri in om te linken naar een besluit.
+        </AuHelpText>
+      </span>
       <span class="au-u-padding">
         <AuButtonGroup>
           <AuButton
