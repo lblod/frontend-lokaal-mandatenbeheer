@@ -32,6 +32,17 @@
     as |Modal|
   >
     <Modal.Body>
+      <AuAlert
+        @title="Opgelet"
+        @skin="warning"
+        @icon="alert-triangle"
+        @size={{this.size}}
+        @closable={{false}}
+      >
+        <p>Na het toevoegen van een link naar een besluit kan deze niet meer
+          aangepast worden zonder de technische dienst te contacteren.
+        </p>
+      </AuAlert>
       <AuLabel for="decision-type">Type</AuLabel>
       <PowerSelect
         id="decision-type"
