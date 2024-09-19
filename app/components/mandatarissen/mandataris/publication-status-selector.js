@@ -3,7 +3,10 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { MANDATARIS_EFFECTIEF_PUBLICATION_STATE } from 'frontend-lmb/utils/well-known-uris';
+import {
+  MANDATARIS_DRAFT_PUBLICATION_STATE,
+  MANDATARIS_EFFECTIEF_PUBLICATION_STATE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenMandatarisPublicationStatusSelectorComponent extends Component {
   @tracked options = [];
@@ -54,7 +57,8 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     this.mandataris.publicationStatus = publicationStatus;
     if (publicationStatus?.uri === MANDATARIS_EFFECTIEF_PUBLICATION_STATE) {
       this.args.mandataris.effectiefAt = new Date();
-    } else {
+    }
+    if (publicationStatus?.uri === MANDATARIS_DRAFT_PUBLICATION_STATE) {
       this.args.mandataris.effectiefAt = null;
     }
 
