@@ -30,7 +30,17 @@ export default class ApplicationController extends Controller {
           'filter[gebruiker][:id:]': this.currentSession.user.id,
         }
       );
-      this.notificationCount = unreadNotifications.length;
+      const unreadGroupNotifications = await this.store.query(
+        'system-notification',
+        {
+          'filter[:has-no:read-at]': true,
+          'filter[:has-no:archived-at]': true,
+          'filter[:has-no:gebruiker]': true,
+        }
+      );
+
+      this.notificationCount =
+        unreadNotifications.meta.count + unreadGroupNotifications.meta.count;
     } else {
       await timeout(10);
       this.setNotificationCount.perform();

@@ -1,79 +1,83 @@
 {{page-title "Meldingen"}}
 
-<AuToolbar @size="large" as |Group|>
-  <Group>
-    <AuHeading @skin="2">Systeem meldingen</AuHeading>
-  </Group>
-</AuToolbar>
+<AuBodyContainer>
+  <AuBodyContainer @scroll={{true}} id="content">
+    <AuToolbar @size="large" as |Group|>
+      <Group>
+        <AuHeading @skin="2">Systeem meldingen</AuHeading>
+      </Group>
+    </AuToolbar>
 
-<div class="au-u-margin-bottom au-u-padding-left au-u-padding-right">
-  <AuTabs as |Tab|>
-    <Tab>
-      <AuLink
-        @skin="primary"
-        class={{this.getActiveClass "unread"}}
-        {{on "click" (perform this.getNotifications this.filterUnRead)}}
-      >
-        Ongelezen
-      </AuLink>
-    </Tab>
-    <Tab>
-      <AuLink
-        @skin="primary"
-        class={{this.getActiveClass "read"}}
-        {{on "click" (perform this.getNotifications this.filterRead)}}
-      >
-        Gelezen
-      </AuLink>
-    </Tab>
-    <Tab>
-      <AuLink
-        @skin="primary"
-        class={{this.getActiveClass "archived"}}
-        {{on "click" (perform this.getNotifications this.filterArchived)}}
-      >Gearchiveerd
-      </AuLink>
-    </Tab>
-  </AuTabs>
-</div>
+    <div class="au-u-margin-bottom au-u-padding-left au-u-padding-right">
+      <AuTabs as |Tab|>
+        <Tab>
+          <AuLink
+            @skin="primary"
+            class={{this.getActiveClass "unread"}}
+            {{on "click" (perform this.getNotifications this.filterUnRead)}}
+          >
+            Ongelezen
+          </AuLink>
+        </Tab>
+        <Tab>
+          <AuLink
+            @skin="primary"
+            class={{this.getActiveClass "read"}}
+            {{on "click" (perform this.getNotifications this.filterRead)}}
+          >
+            Gelezen
+          </AuLink>
+        </Tab>
+        <Tab>
+          <AuLink
+            @skin="primary"
+            class={{this.getActiveClass "archived"}}
+            {{on "click" (perform this.getNotifications this.filterArchived)}}
+          >Gearchiveerd
+          </AuLink>
+        </Tab>
+      </AuTabs>
+    </div>
 
-<div class="au-u-padding-left au-u-padding-right">
-  <AuDataTable
-    @content={{this.notifications}}
-    @sort={{@sort}}
-    @page={{this.page}}
-    @noDataMessage="Geen systeem meldingen gevonden."
-    as |t|
-  >
-    <t.content as |c|>
-      <c.header>
-        <AuDataTableThSortable
-          @field="subject"
-          @label="Onderwerp"
-          class="no-sorting"
-        />
-        <AuDataTableThSortable
-          @field="message"
-          @label="Bericht"
-          class="no-sorting"
-        />
-        <AuDataTableThSortable
-          @field="created-at"
-          @currentSorting={{this.sort}}
-          @label="Aangemaakt op"
-        />
-        <th>{{! Actions dropdown }}</th>
-      </c.header>
-      {{#if this.getNotifications.isRunning}}
-        <AuLoader />
-      {{else}}
-        <c.body as |notification|>
-          <SystemNotificationRow
-            @notification={{notification}}
-            @updateTable={{perform this.getNotifications this.activeFilter}}
-          />
-        </c.body>
-      {{/if}}
-    </t.content>
-  </AuDataTable>
-</div>
+    <div class="au-u-padding-left au-u-padding-right">
+      <AuDataTable
+        @content={{this.notifications}}
+        @sort={{@sort}}
+        @page={{this.page}}
+        @noDataMessage="Geen systeem meldingen gevonden."
+        as |t|
+      >
+        <t.content as |c|>
+          <c.header>
+            <AuDataTableThSortable
+              @field="subject"
+              @label="Onderwerp"
+              class="no-sorting"
+            />
+            <AuDataTableThSortable
+              @field="message"
+              @label="Bericht"
+              class="no-sorting"
+            />
+            <AuDataTableThSortable
+              @field="created-at"
+              @currentSorting={{this.sort}}
+              @label="Aangemaakt op"
+            />
+            <th>{{! Actions dropdown }}</th>
+          </c.header>
+          {{#if this.getNotifications.isRunning}}
+            <AuLoader />
+          {{else}}
+            <c.body as |notification|>
+              <SystemNotificationRow
+                @notification={{notification}}
+                @updateTable={{perform this.getNotifications this.activeFilter}}
+              />
+            </c.body>
+          {{/if}}
+        </t.content>
+      </AuDataTable>
+    </div>
+  </AuBodyContainer>
+</AuBodyContainer>

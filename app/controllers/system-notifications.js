@@ -16,6 +16,7 @@ export default class SystemNotificationsController extends Controller {
   @tracked isRead;
   @tracked isUnRead;
   @tracked isArchived;
+  @tracked page;
 
   @tracked activeFilter;
   @tracked notifications;
@@ -55,8 +56,10 @@ export default class SystemNotificationsController extends Controller {
     async ({ isRead, isUnRead, isArchived }) => {
       this.updateNotificationCountInHeader();
       const filter = {
-        'filter[gebruiker][:id:]': this.currentSession.user.id,
+        'filter[:or:][:has-no:gebruiker]': true,
+        'filter[:or:][gebruiker][:id:]': this.currentSession.user.id,
         sort: this.sort,
+        page: { size: 20, number: this.page },
       };
 
       if (isRead) {
