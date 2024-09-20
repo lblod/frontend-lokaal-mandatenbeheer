@@ -134,7 +134,7 @@ export default class ApplicationController extends Controller {
       case 'LOCAL':
         return {
           title: 'lokale omgeving',
-          skin: 'error',
+          skin: 'success',
         };
       case 'PROD':
         return {
