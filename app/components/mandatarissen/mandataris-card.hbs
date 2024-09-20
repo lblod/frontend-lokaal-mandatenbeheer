@@ -104,11 +104,15 @@
       </div>
     {{/if}}
     {{#if (await @mandataris.status.isVerhinderd)}}
-      <div class="au-o-grid__item au-u-1-2">
-        <div class="au-c-description-label"></div>
-        <div class="au-c-description-value au-u-margin-top-tiny">
+      {{#if
+        (not (or (await this.vervangersVan) @mandataris.bekleedt.isSchepen))
+      }}
+        <div class="au-o-grid__item au-u-1-2">
+          <div class="au-c-description-label"></div>
+          <div class="au-c-description-value au-u-margin-top-tiny">
+          </div>
         </div>
-      </div>
+      {{/if}}
       <div class="au-o-grid__item au-u-1-2">
         <div class="au-c-description-label"><div>Vervangen door:</div></div>
         <div class="au-c-description-value replacement">
