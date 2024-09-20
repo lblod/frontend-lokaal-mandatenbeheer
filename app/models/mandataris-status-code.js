@@ -1,10 +1,16 @@
 import Model, { attr } from '@ember-data/model';
+import {
+  MANDATARIS_TITELVOEREND_STATE,
+  MANDATARIS_VERHINDERD_STATE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisStatusCodeModel extends Model {
   @attr label;
   @attr uri;
 
   get isVerhinderd() {
-    return this.label && this.label.toLowerCase() === 'verhinderd';
+    const states = [MANDATARIS_VERHINDERD_STATE, MANDATARIS_TITELVOEREND_STATE];
+
+    return states.includes(this.uri);
   }
 }
