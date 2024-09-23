@@ -7,20 +7,14 @@ import { service } from '@ember/service';
 import { restartableTask, task, timeout } from 'ember-concurrency';
 
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
-import { showWarningToast } from 'frontend-lmb/utils/toasts';
-import { queryRecord } from 'frontend-lmb/utils/query-record';
 
 export default class MandatarissenMandatarisPublicationStatusSelectorComponent extends Component {
   @service store;
-  @service toaster;
 
   @tracked options = [];
   @tracked isDisabled = false;
   @tracked showLinkToDecisionModal;
-  @tracked selectedType;
-  @tracked selectedDecisionPredicate;
   @tracked linkToDecision;
-  @tracked isLinkToPage;
   @tracked selectedPublicationStatus;
   @tracked isInputLinkValid;
 
@@ -82,17 +76,6 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   }
 
   @action
-  setType(selectedType) {
-    this.selectedType = selectedType;
-    this.isLinkToPage = selectedType.id === 3;
-  }
-
-  @action
-  setDecisionPredicate(predicate) {
-    this.selectedDecisionPredicate = predicate;
-  }
-
-  @action
   async cancelAddDecision() {
     this.selectedPublicationStatus = await this.mandataris.publicationStatus;
     this.showLinkToDecisionModal = false;
@@ -114,59 +97,9 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   });
 
   addDecisionToMandataris = task(async () => {
-    if (this.selectedType.id === 3) {
-      this.mandataris.linkToBesluit = this.linkToDecision;
-      await this.mandataris.save();
-      this.showLinkToDecisionModal = false;
-      await this.setStatus(this.selectedPublicationStatus);
-    } else {
-      const searchModel = this.selectedType.id === 1 ? 'artikel' : 'besluit';
-      const rechtsgrondenWithUri = await queryRecord(this.store, searchModel, {
-        filter: {
-          ':uri:': this.linkToDecision,
-        },
-      });
-      if (!rechtsgrondenWithUri) {
-        showWarningToast(
-          this.toaster,
-          'Geen besluit of artikel gevonden voor deze uri',
-          'Geen resultaat'
-        );
-      } else {
-        const rechtsgrondPropertie =
-          this.selectedDecisionPredicate.id === 1
-            ? 'bekrachtigtAanstellingVan'
-            : 'bekrachtigtOntslagVan';
-        rechtsgrondenWithUri[rechtsgrondPropertie] = this.mandataris;
-        await rechtsgrondenWithUri.save();
-        this.showLinkToDecisionModal = false;
-        await this.setStatus(this.selectedPublicationStatus);
-      }
-    }
+    this.mandataris.linkToBesluit = this.linkToDecision;
+    await this.mandataris.save();
+    this.showLinkToDecisionModal = false;
+    await this.setStatus(this.selectedPublicationStatus);
   });
-
-  get canSaveLinkToDecision() {
-    if (this.selectedType?.id !== 3) {
-      if (!this.selectedDecisionPredicate) {
-        return false;
-      }
-    }
-
-    return this.isInputLinkValid && this.selectedType;
-  }
-
-  get typeOptions() {
-    return [
-      { id: 1, label: 'Artikel' },
-      { id: 2, label: 'Besluit' },
-      { id: 3, label: 'Link naar pagina' },
-    ];
-  }
-
-  get predicateOptions() {
-    return [
-      { id: 1, label: 'bekrachtigtAanstellingVan' },
-      { id: 2, label: 'bekrachtigtOntslagVan' },
-    ];
-  }
 }
