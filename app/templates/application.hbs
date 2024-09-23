@@ -19,10 +19,16 @@
         Help
       </AuLinkExternal>
     </li>
+    {{#if this.currentSession.isAdmin}}
+      <li class="au-c-list-horizontal__item">
+        <ImpersonationMenu />
+      </li>
+    {{/if}}
+
     <li class="au-c-list-horizontal__item">
       {{#if this.session.isAuthenticated}}
         <AuDropdown
-          @title="{{this.currentSession.user.voornaam}} {{this.currentSession.user.achternaam}} - {{this.currentSession.groupClassification.label}} {{this.currentSession.group.naam}}"
+          @title={{this.userInfo}}
           @buttonLabel="Account settings"
           @alignment="right"
           role="menu"

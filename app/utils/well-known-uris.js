@@ -12,6 +12,7 @@ export const MANDATARIS_TITELVOEREND_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/aacb3fed-b51d-4e0b-a411-f3fa641da1b3';
 export const MANDATARIS_EFFECTIEF_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/21063a5b-912c-4241-841c-cc7fb3c73e75';
+// This is a fake status that we use in the update state logic of a mandataris to easily (and clearly for the user end the mandate)
 export const MANDATARIS_BEEINDIGD_STATE =
   'http://data.vlaanderen.be/id/concept/MandatarisStatusCode/b8866fa2-d61c-4e3d-afaf-8a29eaaa7fb9';
 export const MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE =
@@ -60,6 +61,8 @@ export const MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/59a90e03-4f22-4bb9-8c91-132618db4b38';
 export const MANDAAT_DISTRICT_SCHEPEN_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001e';
+export const MANDAAT_GEDEPUTEERDE_CODE =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000020';
 
 export const burgemeesterOnlyStates = [MANDATARIS_TITELVOEREND_STATE];
 export const notBurgemeesterStates = [MANDATARIS_VERHINDERD_STATE];

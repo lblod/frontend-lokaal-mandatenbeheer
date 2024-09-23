@@ -14,9 +14,12 @@ export default class MandatarisStatusService extends Service {
   async loadStatusOptions() {
     if (this.statuses.length === 0) {
       this.statuses = await this.store.findAll('mandataris-status-code');
-      this.endedState = this.statuses.find((status) => {
-        return status.uri === MANDATARIS_BEEINDIGD_STATE;
+      const endedState = this.store.createRecord('mandataris-status-code', {
+        label: 'Beeindigd',
+        uri: MANDATARIS_BEEINDIGD_STATE,
       });
+      this.endedState = endedState;
+      this.statusses = [...this.statuses, endedState];
     }
   }
 }
