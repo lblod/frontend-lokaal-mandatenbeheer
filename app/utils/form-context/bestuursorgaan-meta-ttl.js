@@ -17,7 +17,7 @@ export const getBestuursorganenMetaTtl = (bestuursorgaan) => {
 
   return `
     @prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
-    @prefix lmb: <${LMB.value}> .
+    @prefix lmb: <http://lblod.data.gift/vocabularies/lmb/> .
 
     ext:applicationContext ext:currentBestuursorgaan ${bestuursorgaanUris} .
 
