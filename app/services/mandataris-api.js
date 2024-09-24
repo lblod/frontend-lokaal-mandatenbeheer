@@ -42,8 +42,6 @@ export default class MandatarisApiService extends Service {
       };
     }
 
-    await timeout(RESOURCE_CACHE_TIMEOUT);
-
     return jsonReponse.decisionUri;
   }
 }

@@ -38,9 +38,6 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     this.options = await this.store.findAll(
       'mandataris-publication-status-code'
     );
-
-    this.selectedType = this.typeOptions[1];
-    this.selectedDecisionPredicate = this.predicateOptions[0];
   }
 
   constructor() {
@@ -79,7 +76,9 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   async cancelAddDecision() {
     this.selectedPublicationStatus = await this.mandataris.publicationStatus;
     this.showLinkToDecisionModal = false;
-    this.args.onUpdate();
+    if (this.args.onUpdate) {
+      this.args.onUpdate();
+    }
   }
 
   isValidUri(inputValue) {
