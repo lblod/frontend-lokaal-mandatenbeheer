@@ -54,14 +54,12 @@
           placeholder="Link naar besluit pagina"
           {{on "keyup" (perform this.setLinkTodecision)}}
         />
-        <AuHelpText
-          @skin={{this.skin}}
-          @size={{this.size}}
-          @error={{this.error}}
-          @warning={{this.warning}}
-        >
-          Geef een correct uri in om te linken naar een besluit.
-        </AuHelpText>
+        {{#if (and (not this.isInputLinkValid) this.linkToDecision)}}
+          <AuHelpText @skin="secondary" @error={{true}}>
+            Start de url met http://, https:// of www. om te linken naar de
+            besluit pagina.
+          </AuHelpText>
+        {{/if}}
       </span>
       <span class="au-u-padding">
         <AuButtonGroup>
