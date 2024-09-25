@@ -65,7 +65,7 @@ export const loadBestuursorgaanPeriodFromContext = (storeOptions) => {
 };
 
 const getBestuursperiodeForBestuursorganen = (bestuursorganen) => {
-  if (bestuursorganen.length === 1) {
+  if (bestuursorganen.length >= 1) {
     const bestuursorgaan = bestuursorganen.at(0);
 
     return {
@@ -74,5 +74,5 @@ const getBestuursperiodeForBestuursorganen = (bestuursorganen) => {
     };
   }
 
-  return null;
+  throw new Error('Could not get bestuursorgaan to build up meta ttl');
 };
