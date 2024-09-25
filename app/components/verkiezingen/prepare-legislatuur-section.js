@@ -7,7 +7,7 @@ import { A } from '@ember/array';
 
 import { restartableTask, task } from 'ember-concurrency';
 
-import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 import {
@@ -280,6 +280,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
 
   @action
   buildMetaTtl() {
-    return getBestuursorganenMetaTtl([this.args.bestuursorgaan]);
+    return getApplicationContextMetaTtl([this.args.bestuursorgaan]);
   }
 }

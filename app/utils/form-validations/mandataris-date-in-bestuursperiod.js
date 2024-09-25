@@ -1,5 +1,5 @@
 import { NULL_DATE } from '../constants';
-import { loadBestuursorgaanPeriodFromContext } from '../form-context/bestuursorgaan-meta-ttl';
+import { loadBestuursorgaanPeriodFromContext } from '../form-context/application-context-meta-ttl';
 
 export const isValidMandatarisDate = ([dateLiteral], options) => {
   if (!dateLiteral) {

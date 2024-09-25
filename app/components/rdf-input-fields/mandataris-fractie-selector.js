@@ -8,7 +8,7 @@ import { action } from '@ember/object';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { NamedNode } from 'rdflib';
-import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';

@@ -2,18 +2,18 @@ import { EXT, LMB } from 'frontend-lmb/rdf/namespaces';
 import { NULL_DATE } from 'frontend-lmb/utils/constants';
 
 // Expects bestuursorgaan in de tijd
-export const getBestuursorganenMetaTtl = (bestuursorgaan) => {
-  if (!bestuursorgaan) {
+export const getApplicationContextMetaTtl = (bestuursorganen) => {
+  if (!bestuursorganen) {
     return;
   }
   let bestuursorgaanUris;
-  bestuursorgaanUris = bestuursorgaan
+  bestuursorgaanUris = bestuursorganen
     .map((orgaan) => {
       return `<${orgaan.uri}>`;
     })
     .join(', ');
 
-  const period = getBestuursperiodeForBestuursorganen(bestuursorgaan);
+  const period = getBestuursperiodeForBestuursorganen(bestuursorganen);
 
   return `
     @prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
