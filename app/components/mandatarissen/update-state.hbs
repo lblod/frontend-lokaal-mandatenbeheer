@@ -111,7 +111,7 @@
         <AuButton
           {{on "click" (perform this.updateState)}}
           @disabled={{this.disabled}}
-          @loading={{this.isSaving}}
+          @loading={{this.updateState.isRunning}}
         >
           {{if this.hasChanges "Pas aan" "Onveranderd"}}
         </AuButton>
