@@ -72,6 +72,7 @@ export default class MandatarisModel extends Model {
 
   @belongsTo('rechtsgrond', { async: true, inverse: null, polymorphic: true })
   aanstellingBekrachtigdDoor;
+
   @belongsTo('rechtsgrond', { async: true, inverse: null, polymorphic: true })
   ontslagBekrachtigdDoor;
 

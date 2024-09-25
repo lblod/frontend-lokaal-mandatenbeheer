@@ -14,11 +14,11 @@
   </AuPill>
   {{#if
     (and
-      @showBekijkBewijs @mandataris.linkToBesluit this.isMandatarisBekrachtigd
+      @showBekijkBewijs (await this.linkToDecision) this.isMandatarisBekrachtigd
     )
   }}
     <AuLinkExternal
-      href={{@mandataris.linkToBesluit}}
+      href={{await this.linkToDecision}}
       class="au-u-margin-left-tiny"
     >Bekijk besluit</AuLinkExternal>
   {{/if}}

@@ -27,4 +27,21 @@ export default class MandatarisApiService extends Service {
 
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
+
+  async findDecisionUri(mandatarisId) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/decision`
+    );
+    const jsonReponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonReponse.message);
+      throw {
+        status: response.status,
+        message: jsonReponse.message,
+      };
+    }
+
+    return jsonReponse.decisionUri;
+  }
 }
