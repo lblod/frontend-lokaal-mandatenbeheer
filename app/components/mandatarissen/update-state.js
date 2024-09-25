@@ -149,8 +149,18 @@ export default class MandatarissenUpdateState extends Component {
     return `De gekozen datum moet na de startdatum liggen van het huidige mandaat. (${formattedStartDate})`;
   }
 
+  get isInputDateTheSameAsMandatarisStart() {
+    const startDate = new Date(this.args.mandataris.start);
+    startDate.setHours(0, 0, 0, 0);
+    const inputDate = new Date(this.date);
+    inputDate.setHours(0, 0, 0, 0);
+
+    return startDate.getTime() === inputDate.getTime();
+  }
+
   get hasChanges() {
     return (
+      !this.isInputDateTheSameAsMandatarisStart ||
       this.newStatus?.id !== this.args.mandataris.status?.id ||
       this.selectedFractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
