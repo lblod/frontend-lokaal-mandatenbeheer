@@ -5,6 +5,8 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
+import moment from 'moment';
+
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import {
@@ -55,7 +57,16 @@ export default class MandatarissenUpdateState extends Component {
     this.bestuursperiode =
       await this.bestuursorganenOfMandaat[0]?.heeftBestuursperiode;
     this.statusOptions = await this.getStatusOptions();
+    await this.getBestuursorgaanEndDate();
   });
+
+  async getBestuursorgaanEndDate() {
+    const mandaat = await this.args.mandataris.bekleedt;
+    const bestuursorganen = await mandaat.bevatIn;
+    if (bestuursorganen.length >= 1) {
+      this.bestuursorgaanEndDate = bestuursorganen.at(0).bindingEinde;
+    }
+  }
 
   async getStatusOptions() {
     const isBurgemeester = (
@@ -101,14 +112,41 @@ export default class MandatarissenUpdateState extends Component {
     return this.newStatus === this.mandatarisStatus.endedState;
   }
 
-  get validDate() {
+  get isValidDate() {
     if (!this.date) {
       return false;
     }
     if (!this.args.mandataris.start) {
       return true;
     }
-    return this.date.getTime() >= this.args.mandataris.start.getTime();
+
+    if (
+      this.bestuursorgaanEndDate &&
+      this.date.getTime() > this.bestuursorgaanEndDate.getTime()
+    ) {
+      return false;
+    }
+
+    const referenceDate = new Date(this.args.mandataris.start);
+    referenceDate.setHours(0, 0, 0, 0);
+    return this.date.getTime() >= referenceDate.getTime();
+  }
+
+  get invalidDateErrorMessage() {
+    if (
+      this.bestuursorgaanEndDate &&
+      this.date.getTime() > this.bestuursorgaanEndDate.getTime()
+    ) {
+      const formattedEndDate = moment(this.bestuursorgaanEndDate).format(
+        'DD-MM-YYYY'
+      );
+      return `De gekozen datum moet voor het einde van de bestuursperiode liggen (${formattedEndDate})`;
+    }
+
+    const formattedStartDate = moment(this.args.mandataris.start).format(
+      'DD-MM-YYYY'
+    );
+    return `De gekozen datum moet na de startdatum liggen van het huidige mandaat. (${formattedStartDate})`;
   }
 
   get hasChanges() {
@@ -126,7 +164,7 @@ export default class MandatarissenUpdateState extends Component {
       this.load.isRunning ||
       !this.newStatus ||
       !this.date ||
-      !this.validDate ||
+      !this.isValidDate ||
       !this.hasChanges
     );
   }
