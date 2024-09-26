@@ -3,7 +3,7 @@ import { loadBestuursorgaanPeriodFromContext } from '../form-context/application
 
 export const isValidMandatarisDate = ([dateLiteral], options) => {
   if (!dateLiteral) {
-    return false;
+    return true;
   }
 
   const date = new Date(dateLiteral.value).getTime();
