@@ -4,6 +4,7 @@
 >
   <Person::ListItem
     @person={{this.person}}
+    @nothingSelectedText={{@nothingSelectedText}}
     class="au-u-flex--stretch flex-grow"
     {{on "click" this.startEdit}}
   />
@@ -15,18 +16,33 @@
         @skin="secondary"
       >Annuleer</AuButton>
     {{else}}
-      <AuButton
-        {{on "click" this.startEdit}}
-        @icon="pencil"
-        @skin="secondary"
-      >Bewerk</AuButton>
+      {{#if this.showEditAsIcon}}
+        <AuButton
+          {{on "click" this.startEdit}}
+          @icon="pencil"
+          @skin="link-secondary"
+          @size="small"
+          class="au-u-maring-left-tiny"
+          @hideText={{true}}
+        >
+          Bewerk
+        </AuButton>
+      {{else}}
+        <AuButton
+          {{on "click" this.startEdit}}
+          @icon="pencil"
+          @skin="secondary"
+        >Bewerk</AuButton>
+      {{/if}}
     {{/if}}
-    <AuButton
-      {{on "click" this.removePerson}}
-      @icon="trash"
-      @hideText={{true}}
-      @skin="secondary"
-    >Verwijder</AuButton>
+    {{#if this.showTrashCan}}
+      <AuButton
+        {{on "click" this.removePerson}}
+        @icon="trash"
+        @hideText={{true}}
+        @skin="secondary"
+      >Verwijder</AuButton>
+    {{/if}}
   {{/unless}}
 </div>
 {{#if (and this.selectNewPerson @inline)}}
@@ -49,7 +65,6 @@
     {{/if}}
   </div>
 {{else}}
-  <AuModalContainer />
   <AuModal
     @title={{"Selecteer een persoon"}}
     @modalOpen={{this.selectNewPerson}}
