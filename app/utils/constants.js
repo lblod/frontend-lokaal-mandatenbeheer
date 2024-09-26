@@ -30,3 +30,8 @@ export const placeholderOnafhankelijk = {
   id: 'ONAFHANKELIJK-ID',
   naam: 'Onafhankelijk',
 };
+
+export const MANDATARIS_PREDICATE = {
+  persoon: 'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan',
+  mandaat: 'http://www.w3.org/ns/org#holds',
+};

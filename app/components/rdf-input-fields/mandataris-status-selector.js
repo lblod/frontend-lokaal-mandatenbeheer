@@ -9,6 +9,8 @@ import {
   notBurgemeesterStates,
 } from 'frontend-lmb/utils/well-known-uris';
 import { ORG } from 'frontend-lmb/rdf/namespaces';
+import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
+import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
 
 export default class RdfInputFieldsMandatarisStatusSelectorComponent extends RdfInputFieldsConceptSchemeSelectorComponent {
   @service store;
@@ -43,7 +45,16 @@ export default class RdfInputFieldsMandatarisStatusSelectorComponent extends Rdf
 
       await this.loadMandaat();
     };
-    this.storeOptions.store.registerObserver(onFormUpdate);
+    this.storeOptions.store.registerObserver(async (formChange) => {
+      const mustTrigger = isPredicateInObserverChange(
+        formChange,
+        MANDATARIS_PREDICATE.mandaat
+      );
+
+      if (mustTrigger) {
+        await onFormUpdate();
+      }
+    });
     onFormUpdate();
   }
 

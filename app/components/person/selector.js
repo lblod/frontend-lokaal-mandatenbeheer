@@ -87,4 +87,11 @@ export default class PersonSelectorComponent extends Component {
     <${instanceUri}> <http://mu.semte.ch/vocabularies/ext/possibleDuplicate> "true" .
     `;
   }
+
+  get showTrashCan() {
+    return this.args.showDelete ?? true;
+  }
+  get showEditAsIcon() {
+    return this.args.showEditAsIcon ?? false;
+  }
 }
