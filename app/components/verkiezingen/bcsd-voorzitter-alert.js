@@ -12,8 +12,15 @@ import {
 
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
   @service store;
+  @service bcsd;
 
   @tracked errorMessage = '';
+  @tracked lastRecomputeTime = null;
+
+  constructor() {
+    super(...arguments);
+    this.bcsd.forceRecomputeBCSD();
+  }
 
   get bcsdBestuursorgaanInTijd() {
     return this.args.bcsdBestuursorgaanInTijd;
@@ -28,6 +35,17 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
     if (this.isDestroyed) {
       return;
     }
+    if (
+      this.lastRecomputeTime &&
+      this.lastRecomputeTime === this.bcsd.recomputeBCSDNeededTime
+    ) {
+      await timeout(10000);
+      // nothing for now let's try again later
+      this.handleErrorMessage.perform();
+      return;
+    }
+
+    this.lastRecomputeTime = this.bcsd.recomputeBCSDNeededTime;
 
     const voorzitter = await this.getVoorzitterBCSD();
     const isMemberOfRMW = await this.isMemberOfRMW(voorzitter);
