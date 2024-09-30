@@ -23,4 +23,62 @@
     >technische dienst contacteren</AuLinkExternal>
   </span>
 
+  <AuModalContainer />
+  <AuModal
+    @title="Link naar besluit"
+    @modalOpen={{this.showLinkToDecisionModal}}
+    @closable={{true}}
+    @closeModal={{this.cancelAddDecision}}
+    as |Modal|
+  >
+    <Modal.Body>
+      <AuAlert
+        @title="Opgelet"
+        @skin="warning"
+        @icon="alert-triangle"
+        @size={{this.size}}
+        @closable={{false}}
+      >
+        <p>Na het toevoegen van een link naar een besluit kan deze niet meer
+          aangepast worden zonder de technische dienst te contacteren.
+        </p>
+      </AuAlert>
+      <span class="au-u-padding">
+        <AuLabel for="link-to-page">Link naar pagina</AuLabel>
+        <AuInput
+          @error={{(and (not this.isInputLinkValid) this.linkToDecision)}}
+          @width="block"
+          @iconAlignment="left"
+          value={{this.linkToDecision}}
+          id="link-to-page"
+          placeholder="Link naar besluit pagina"
+          {{on "keyup" (perform this.setLinkTodecision)}}
+        />
+        {{#if (and (not this.isInputLinkValid) this.linkToDecision)}}
+          <AuHelpText @skin="secondary" @error={{true}}>
+            Start de url met http://, https:// of www. om te linken naar de
+            besluit pagina.
+          </AuHelpText>
+        {{/if}}
+      </span>
+      <span class="au-u-padding">
+        <AuButtonGroup>
+          <AuButton
+            @disabled={{not this.isInputLinkValid}}
+            @loading={{this.addDecisionToMandataris.isRunning}}
+            {{on "click" (perform this.addDecisionToMandataris)}}
+          >
+            Bewaar
+          </AuButton>
+          <AuButton
+            @skin="secondary"
+            @disabled={{this.addDecisionToMandataris.isRunning}}
+            {{on "click" this.cancelAddDecision}}
+          >
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </span>
+    </Modal.Body>
+  </AuModal>
 </div>
