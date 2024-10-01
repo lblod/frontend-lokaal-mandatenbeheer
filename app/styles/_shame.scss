@@ -311,13 +311,17 @@
   background-color: #687483;
   color: white;
   border-radius: 5px;
-  bottom: -5rem;
+  top: 100%;
   left: 50%;
+  transform: translateX(-50%);
+  white-space: normal;
   text-align: center;
-  transform: translate(-50%, 0);
-  text-wrap: nowrap;
   padding: 2px 7px;
   z-index: 10;
+  max-width: calc(100vw - 20px);
+  min-width: 200px;
+  overflow-wrap: break-word;
+  margin-top: 1.5rem;
 }
 
 .tooltip-container:hover .tooltip-text {
