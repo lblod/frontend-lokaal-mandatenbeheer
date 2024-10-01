@@ -70,4 +70,8 @@ export default class OrganenMandatarissenController extends Controller {
   toggleActiveOnly() {
     this.activeOnly = !this.activeOnly;
   }
+
+  get toolTipText() {
+    return 'Het is niet mogelijk mandatarissen toe te voegen aan een bestuursperiode terwijl de voorbereiding van de legislatuur actief is.';
+  }
 }
