@@ -26,7 +26,7 @@
       <AuButtonGroup>
         <AuButton
           {{on "click" (perform this.save)}}
-          @disabled={{this.save.isRunning}}
+          @loading={{this.save.isRunning}}
         >
           Bewaar
         </AuButton>
