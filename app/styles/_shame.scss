@@ -298,3 +298,39 @@
 .replacement .au-u-flex .au-u-flex--stretch.flex-grow {
   flex-grow: 0;
 }
+
+// Tooltips
+.tooltip-container {
+  position: relative;
+  display: inline;
+}
+
+.tooltip-container .tooltip-text {
+  display: none;
+  position: absolute;
+  background-color: #687483;
+  color: white;
+  border-radius: 5px;
+  bottom: -5rem;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, 0);
+  text-wrap: nowrap;
+  padding: 2px 7px;
+  z-index: 10;
+}
+
+.tooltip-container:hover .tooltip-text {
+  display: block;
+}
+
+.tooltip-container .tooltip-text::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #687483 transparent;
+}

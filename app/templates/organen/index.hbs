@@ -65,9 +65,11 @@
               (eq @model.bestuursorganen.length 0)
             )
           }}
-            <AuButton @disabled={{true}}>
-              Beheer fracties
-            </AuButton>
+            <Shared::Tooltip @showTooltip={{true}} @tooltipText="test">
+              <AuButton @disabled={{true}}>
+                Beheer fracties
+              </AuButton>
+            </Shared::Tooltip>
           {{else}}
             <AuLink
               @route="organen.fracties"
