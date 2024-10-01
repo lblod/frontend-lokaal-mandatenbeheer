@@ -108,13 +108,19 @@
   <AuToolbar class="au-u-margin-top" as |Group|>
     <Group>
       <AuButtonGroup>
-        <AuButton
-          {{on "click" (perform this.updateState)}}
-          @disabled={{this.disabled}}
-          @loading={{this.isSaving}}
+        <Shared::Tooltip
+          @showTooltip={{not this.disabled}}
+          @tooltipText={{this.toolTipText}}
+          @alignment="left"
         >
-          {{if this.hasChanges "Pas aan" "Onveranderd"}}
-        </AuButton>
+          <AuButton
+            {{on "click" (perform this.updateState)}}
+            @disabled={{this.disabled}}
+            @loading={{this.isSaving}}
+          >
+            {{if this.hasChanges "Pas aan" "Onveranderd"}}
+          </AuButton>
+        </Shared::Tooltip>
         <AuButton {{on "click" @onCancel}} @skin="secondary">
           Annuleer
         </AuButton>
