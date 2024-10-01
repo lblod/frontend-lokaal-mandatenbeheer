@@ -59,13 +59,11 @@
           <AuHeading @skin="2">Organen</AuHeading>
         </Group>
         <Group>
-          {{#if
-            (or
-              @model.legislatuurInBehandeling
-              (eq @model.bestuursorganen.length 0)
-            )
-          }}
-            <Shared::Tooltip @showTooltip={{true}} @tooltipText="test">
+          {{#if this.isDisabled}}
+            <Shared::Tooltip
+              @showTooltip={{true}}
+              @tooltipText={{this.toolTipText}}
+            >
               <AuButton @disabled={{true}}>
                 Beheer fracties
               </AuButton>
