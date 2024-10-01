@@ -83,7 +83,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
 
   isValidUri(inputValue) {
     // eslint-disable-next-line no-useless-escape, prettier/prettier
-    const regex = '^(https?://|www\.)[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(/.*)?$';
+    const regex = '^(https?://|www.)[a-zA-Z0-9-]+(.[a-zA-Z0-9-]+)*(/.*)?$';
     const uriRegex = new RegExp(regex);
     return uriRegex.test(inputValue);
   }
@@ -100,4 +100,8 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     this.showLinkToDecisionModal = false;
     await this.setStatus(this.selectedPublicationStatus);
   });
+
+  get toolTipText() {
+    return 'Voeg een geldige link toe om deze form te kunnen opslaan.';
+  }
 }

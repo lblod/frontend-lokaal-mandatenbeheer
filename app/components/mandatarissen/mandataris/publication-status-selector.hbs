@@ -63,13 +63,19 @@
       </span>
       <span class="au-u-padding">
         <AuButtonGroup>
-          <AuButton
-            @disabled={{not this.isInputLinkValid}}
-            @loading={{this.addDecisionToMandataris.isRunning}}
-            {{on "click" (perform this.addDecisionToMandataris)}}
+          <Shared::Tooltip
+            @showTooltip={{not this.isInputLinkValid}}
+            @tooltipText={{this.toolTipText}}
+            @alignment="left"
           >
-            Bewaar
-          </AuButton>
+            <AuButton
+              @disabled={{not this.isInputLinkValid}}
+              @loading={{this.addDecisionToMandataris.isRunning}}
+              {{on "click" (perform this.addDecisionToMandataris)}}
+            >
+              Bewaar
+            </AuButton>
+          </Shared::Tooltip>
           <AuButton
             @skin="secondary"
             @disabled={{this.addDecisionToMandataris.isRunning}}
