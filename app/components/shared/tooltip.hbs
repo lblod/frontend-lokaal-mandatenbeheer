@@ -1,7 +1,7 @@
 <div class="tooltip-container">
   {{yield}}
   {{#if @showTooltip}}
-    <div class="tooltip-text">
+    <div class="tooltip-text {{this.alignment}}">
       {{@tooltipText}}
     </div>
   {{/if}}
