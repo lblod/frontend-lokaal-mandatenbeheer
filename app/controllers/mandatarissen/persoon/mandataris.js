@@ -10,6 +10,7 @@ import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { task } from 'ember-concurrency';
 import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
+import { cell } from 'ember-resources';
 
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
@@ -23,6 +24,23 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @tracked behandeldeVergaderingen;
 
   @tracked formInitialized;
+  @tracked restoring = false;
+
+  initialFormTtl = cell('');
+
+  get title() {
+    // TODO this whole restore funcitonality is only for demo purposes
+    if (this.restoring) {
+      return (
+        'Terugzetten ' +
+        this.model.mandataris.get('bekleedt.bestuursfunctie.label')
+      );
+    }
+    return (
+      'Corrigeer fouten ' +
+      this.model.mandataris.get('bekleedt.bestuursfunctie.label')
+    );
+  }
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt
@@ -44,6 +62,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   async closeModals() {
     this.isChanging = false;
     this.isCorrecting = false;
+    this.restoring = false;
     this.formInitialized = false;
     await this.mandatarisService.removeDanglingFractiesInPeriod(
       this.model.mandataris.id
@@ -114,5 +133,12 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     }
 
     return false;
+  }
+
+  @action
+  onRestore(historicalInstance) {
+    this.initialFormTtl.current = historicalInstance.formInstanceTtl;
+    this.isCorrecting = true;
+    this.restoring = true;
   }
 }
