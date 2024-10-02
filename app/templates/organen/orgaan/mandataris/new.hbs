@@ -16,7 +16,7 @@
       de corresponderende mandataris moeten aanmaken in de gemeente.
     </AuAlert>
   {{/if}}
-  <Form::NewInstance
+  <SemanticForms::NewInstance
     @onCreate={{this.onCreate}}
     @form={{@model.mandatarisNewForm}}
     @buildSourceTtl={{this.buildSourceTtl}}

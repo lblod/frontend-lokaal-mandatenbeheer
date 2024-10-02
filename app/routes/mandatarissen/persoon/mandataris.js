@@ -12,6 +12,7 @@ import RSVP from 'rsvp';
 export default class MandatarissenPersoonMandatarisRoute extends Route {
   @service currentSession;
   @service store;
+  @service semanticFormRepository;
 
   async model(params) {
     const bestuurseenheid = this.currentSession.group;
@@ -22,7 +23,9 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const mandaat = await mandataris.bekleedt;
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);
 
-    const mandatarisEditForm = getFormFrom(this.store, MANDATARIS_EDIT_FORM_ID);
+    const mandatarisEditForm = this.semanticFormRepository.getFormDefinition(
+      MANDATARIS_EDIT_FORM_ID
+    );
     const mandatarisExtraInfoForm = getFormFrom(
       this.store,
       MANDATARIS_EXTRA_INFO_FORM_ID

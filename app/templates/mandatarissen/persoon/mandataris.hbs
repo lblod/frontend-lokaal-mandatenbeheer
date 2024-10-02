@@ -70,6 +70,12 @@
       Historiek
     </AuHeading>
 
+    <SemanticForms::History
+      @instanceId={{@model.mandataris.id}}
+      @form={{this.model.mandatarisEditForm}}
+      @onRestore={{this.onRestore}}
+    />
+
     <AuHr />
 
     <ul class="au-c-list-vertical">
@@ -114,9 +120,7 @@
 </Mandatarissen::UpdateState>
 
 <AuModal
-  @title={{(concat
-    "Corrigeer fouten " this.model.mandataris.bekleedt.bestuursfunctie.label
-  )}}
+  @title={{this.title}}
   @modalOpen={{this.isCorrecting}}
   @closable={{true}}
   @closeModal={{this.closeModals}}
@@ -153,6 +157,9 @@
       @onCancel={{this.closeModals}}
       @buildMetaTtl={{this.buildMetaTtl}}
       @formInitialized={{fn (mut this.formInitialized) true}}
+      @customHistoryMessage={{true}}
+      @initialFormTtl={{this.initialFormTtl}}
+      @saveTitle={{if this.restoring "Zet terug" "Pas aan"}}
     />
     {{#unless this.formInitialized}}
       <Skeleton::Forms::MandatarisCorrect />
