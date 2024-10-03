@@ -12,7 +12,7 @@ export default class SharedTooltipComponent extends Component {
     if (!this.args.showTooltip) {
       return false;
     }
-    if (!this.args.toolTipText || this.args.toolTipText.trim().length === 0) {
+    if (!this.args.tooltipText || this.args.tooltipText.trim().length === 0) {
       return false;
     }
     return true;
