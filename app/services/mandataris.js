@@ -85,41 +85,12 @@ export default class MandatarisService extends Service {
     if (!fractie) {
       return;
     }
-    const newTijdsinterval = this.store.createRecord('tijdsinterval', {
-      begin: newMandataris.start,
-      einde: newMandataris.einde,
-    });
-
-    await newTijdsinterval.save();
 
     const newLidmaatschap = this.store.createRecord('lidmaatschap', {
       binnenFractie: fractie,
       lid: newMandataris,
-      lidGedurende: newTijdsinterval,
     });
     await newLidmaatschap.save();
-  }
-
-  async updateOldLidmaatschap(mandataris) {
-    const oldLidmaatschap = await mandataris.heeftLidmaatschap;
-    if (!oldLidmaatschap) {
-      return;
-    }
-    let oldTijdsinterval = await oldLidmaatschap.lidGedurende;
-
-    if (!oldTijdsinterval) {
-      // old membership instances don't necessarily have a tijdsinterval
-      oldTijdsinterval = this.store.createRecord('tijdsinterval', {
-        begin: mandataris.start,
-        einde: moment(new Date()),
-      });
-      await oldTijdsinterval.save();
-      oldLidmaatschap.lidGedurende = oldTijdsinterval;
-      await oldLidmaatschap.save();
-    }
-    oldTijdsinterval.einde = this.date;
-
-    await oldTijdsinterval.save();
   }
 
   async createNewProps(mandataris, overwrites) {

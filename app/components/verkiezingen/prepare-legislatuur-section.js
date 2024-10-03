@@ -9,7 +9,6 @@ import { restartableTask, task } from 'ember-concurrency';
 
 import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
-import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 import {
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
@@ -186,7 +185,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       if (lidmaatschap) {
         newLidmaatschap = this.store.createRecord('lidmaatschap', {
           binnenFractie: await lidmaatschap.binnenFractie,
-          lidGedurende: await lidmaatschap.lidGedurende,
         });
       }
 
@@ -267,11 +265,10 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     this.isGeneratingRows = false;
   }
 
-  onCreate = restartableTask(async ({ instanceTtl, instanceId }) => {
+  onCreate = restartableTask(async ({ instanceId }) => {
     this.editMode = null;
     const mandataris = await this.store.findRecord('mandataris', instanceId);
     await this.getMandatarissen.perform({ added: [mandataris] });
-    await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
     this.bcsd.forceRecomputeBCSD();

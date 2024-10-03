@@ -16,6 +16,4 @@ export default class LidmaatschapModel extends Model {
     as: 'lidmaatschap',
   })
   lid;
-
-  @belongsTo('tijdsinterval', { async: true, inverse: null }) lidGedurende;
 }
