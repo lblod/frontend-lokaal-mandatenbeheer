@@ -83,7 +83,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
 
   isValidUri(inputValue) {
     // eslint-disable-next-line no-useless-escape, prettier/prettier
-    const regex = '^(https?://|www.)[a-zA-Z0-9-]+(.[a-zA-Z0-9-]+)*(/.*)?$';
+    const regex = '^(https?://|www.\)[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(/.*)?$';
     const uriRegex = new RegExp(regex);
     return uriRegex.test(inputValue);
   }
