@@ -302,7 +302,6 @@
 // Tooltips
 .tooltip-container {
   position: relative;
-  display: inline;
 }
 
 .tooltip-container .tooltip-text {
@@ -318,7 +317,7 @@
   max-width: calc(100vw - 20px);
   min-width: 200px;
   overflow-wrap: break-word;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .tooltip-container .tooltip-text.center {
