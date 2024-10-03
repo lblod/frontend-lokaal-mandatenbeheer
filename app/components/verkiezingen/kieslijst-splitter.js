@@ -36,11 +36,25 @@ export default class KieslijstSplitterComponent extends Component {
     return this.selectedFracties != null;
   }
 
+  get toolTipNoFractieSelected() {
+    return 'Er is geen fractie geselecteerd om terug te zetten. Selecteer een fractie in de rechter kolom om terug om te zetten naar de corresponderende kieslijst.';
+  }
+
   get kieslijstCanBeSplit() {
     if (!this.kieslijstSelected) {
       return false;
     }
     return !this.selectedKieslijst.splitted;
+  }
+
+  get toolTipCanNotBeSplit() {
+    if (!this.kieslijstSelected) {
+      return 'Selecteer een kieslijst in de linker kolom om om te zetten naar één of twee fracties.';
+    }
+    if (this.selectedKieslijst.splitted) {
+      return 'De geselecteerde kieslijst is al omgezet naar één of meerdere fracties.';
+    }
+    return '';
   }
 
   async load() {
