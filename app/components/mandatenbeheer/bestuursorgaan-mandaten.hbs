@@ -49,18 +49,22 @@
         </td>
         <td>
           {{#if (eq this.editMandaat.id mandaat.id)}}
-            <AuButton
-              {{on "click" this.saveMandaat}}
-              @disabled={{(or
-                (not this.aantalHouders)
-                (not (this.isPositiveNumber this.aantalHouders))
-              )}}
-            >
-              Bewaar
-            </AuButton>
-            <AuButton @skin="secondary" {{on "click" this.cancelEditMandaat}}>
-              Annuleer
-            </AuButton>
+            <AuButtonGroup>
+              <Shared::Tooltip
+                @showTooltip={{this.disabled}}
+                @tooltipText={{this.toolTipText}}
+              >
+                <AuButton
+                  {{on "click" this.saveMandaat}}
+                  @disabled={{this.disabled}}
+                >
+                  Bewaar
+                </AuButton>
+              </Shared::Tooltip>
+              <AuButton @skin="secondary" {{on "click" this.cancelEditMandaat}}>
+                Annuleer
+              </AuButton>
+            </AuButtonGroup>
           {{else}}
             <AuButton
               @skin="link"
