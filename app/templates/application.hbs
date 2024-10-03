@@ -1,7 +1,16 @@
 {{page-title this.appTitle}}
 
-<AuApp>
+<AuApp class="{{if this.showEnvironment 'au-c-app--environment'}}">
+  <AuModalContainer />
   <GlobalSystemNotification />
+  {{#if this.showEnvironment}}
+    <EnvironmentBanner
+      @applicationName="Lokaal Mandatenbeheer"
+      @environmentName={{this.environmentName}}
+      @skin={{this.environmentInfo.skin}}
+      @message={{this.environmentMessage}}
+    />
+  {{/if}}
   <AuMainHeader
     @brandLink={{unless
       this.session.isAuthenticated
@@ -19,10 +28,16 @@
         Help
       </AuLinkExternal>
     </li>
+    {{#if this.currentSession.isAdmin}}
+      <li class="au-c-list-horizontal__item">
+        <ImpersonationMenu />
+      </li>
+    {{/if}}
+
     <li class="au-c-list-horizontal__item">
       {{#if this.session.isAuthenticated}}
         <AuDropdown
-          @title="{{this.currentSession.user.voornaam}} {{this.currentSession.user.achternaam}} - {{this.currentSession.groupClassification.label}} {{this.currentSession.group.naam}}"
+          @title={{this.userInfo}}
           @buttonLabel="Account settings"
           @alignment="right"
           role="menu"
@@ -108,6 +123,5 @@
   {{/if}}
 </AuApp>
 
-<AuModalContainer />
 <EpmModalContainer />
 <AuToaster />

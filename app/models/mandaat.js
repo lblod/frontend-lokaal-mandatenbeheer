@@ -7,6 +7,7 @@ import {
   MANDAAT_DISTRICT_SCHEPEN_CODE,
   MANDAAT_SCHEPEN_CODE,
   MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE,
+  MANDAAT_GEDEPUTEERDE_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 const identity = Boolean;
@@ -62,6 +63,7 @@ export default class MandaatModel extends Model {
       MANDAAT_SCHEPEN_CODE,
       MANDAAT_DISTRICT_SCHEPEN_CODE,
       MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE,
+      MANDAAT_GEDEPUTEERDE_CODE,
     ].includes(this.bestuursfunctie.get('uri'));
   }
 

@@ -7,7 +7,7 @@ import { A } from '@ember/array';
 
 import { restartableTask, task } from 'ember-concurrency';
 
-import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 import {
@@ -32,6 +32,7 @@ const CREATE_MODE = 'create';
 
 export default class PrepareLegislatuurSectionComponent extends Component {
   @service toaster;
+  @service bcsd;
   @service store;
   @service router;
   @service fractieApi;
@@ -210,6 +211,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       added: newMandatarissen,
       removed: this.mandatarissen,
     });
+
+    this.bcsd.forceRecomputeBCSD();
   });
 
   async createMandatarisFromMandataris(mandataris, mandaat, lidmaatschap) {
@@ -271,6 +274,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
+    this.bcsd.forceRecomputeBCSD();
   });
 
   @action
@@ -280,6 +284,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
 
   @action
   buildMetaTtl() {
-    return getBestuursorganenMetaTtl([this.args.bestuursorgaan]);
+    return getApplicationContextMetaTtl([this.args.bestuursorgaan]);
   }
 }

@@ -10,9 +10,12 @@ const MODULE = {
   MANDATENBEHEER: 'LoketLB-mandaatGebruiker',
 };
 
+const ADMIN_ROLE = 'LoketLB-admin';
+
 export default class CurrentSessionService extends Service {
   @service session;
   @service store;
+  @service impersonation;
 
   @tracked account;
   @tracked user;
@@ -22,6 +25,8 @@ export default class CurrentSessionService extends Service {
 
   async load() {
     if (this.session.isAuthenticated) {
+      await this.impersonation.load();
+
       let accountId =
         this.session.data.authenticated.relationships.account.data.id;
       this.account = await this.store.findRecord('account', accountId, {
@@ -44,14 +49,34 @@ export default class CurrentSessionService extends Service {
 
   setupSentrySession() {
     if (SHOULD_ENABLE_SENTRY) {
+      let account;
+      let user;
+      let group;
+      let groupClassification;
+      let roles;
+
+      if (this.impersonation.isImpersonating) {
+        account = this.impersonation.originalAccount;
+        user = account.gebruiker;
+        group = this.impersonation.originalGroup;
+        groupClassification = group.belongsTo('classificatie').value();
+        roles = this.impersonation.originalRoles;
+      } else {
+        account = this.account;
+        user = this.user;
+        group = this.group;
+        groupClassification = this.groupClassification;
+        roles = this._roles;
+      }
+
       // eslint-disable-next-line camelcase
       setUser({ id: this.user.id, ip_address: null });
       setContext('session', {
-        account: this.account.id,
-        user: this.user.id,
-        group: this.group.uri,
-        groupClassification: this.groupClassification.uri,
-        roles: this.roles,
+        account: account.id,
+        user: user.id,
+        group: group.uri,
+        groupClassification: groupClassification.uri,
+        roles: roles,
       });
     }
   }
@@ -62,5 +87,13 @@ export default class CurrentSessionService extends Service {
 
   get canAccessMandaat() {
     return this.canAccess(MODULE.MANDATENBEHEER);
+  }
+
+  get isAdmin() {
+    let roles = this.roles;
+    if (this.impersonation.isImpersonating) {
+      roles = this.impersonation.originalRoles || [];
+    }
+    return roles.includes(ADMIN_ROLE);
   }
 }

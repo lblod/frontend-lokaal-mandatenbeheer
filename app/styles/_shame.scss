@@ -294,3 +294,7 @@
 .ember-power-select-option[aria-disabled=true] {
   color: var(--au-gray-400);
 }
+
+.replacement .au-u-flex .au-u-flex--stretch.flex-grow {
+  flex-grow: 0;
+}

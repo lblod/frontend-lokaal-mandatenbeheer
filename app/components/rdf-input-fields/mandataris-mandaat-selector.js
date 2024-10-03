@@ -10,8 +10,10 @@ import { restartableTask } from 'ember-concurrency';
 
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
+import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
+import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
 
 export default class MandatarisMandaatSelector extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
@@ -27,8 +29,15 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   constructor() {
     super(...arguments);
     this.load();
-    this.storeOptions.store.registerObserver(async () => {
-      await this.findPerson.perform();
+    this.storeOptions.store.registerObserver(async (formChange) => {
+      const mustTrigger = isPredicateInObserverChange(
+        formChange,
+        MANDATARIS_PREDICATE.persoon
+      );
+
+      if (mustTrigger) {
+        await this.findPerson.perform();
+      }
     });
   }
 
