@@ -25,19 +25,19 @@
     <AuLabel>
       Vanaf
     </AuLabel>
-    <AuDatePicker
+    <AuDateInput
       @value={{this.date}}
       @onChange={{this.updateDate}}
-      @error={{not this.validDate}}
-      @alignment="top"
+      @error={{not this.isValidDate}}
+      @alignment="default"
     />
-    {{#unless this.validDate}}
+    {{#unless this.isValidDate}}
       <AuAlert
         @size="small"
         @closable={{false}}
         @skin="error"
         class="au-u-margin-top"
-      >De gekozen datum moet na de startdatum liggen van het huidige mandaat.</AuAlert>
+      >{{this.invalidDateErrorMessage}}</AuAlert>
     {{/unless}}
   </div>
   <div>
@@ -111,7 +111,7 @@
         <AuButton
           {{on "click" (perform this.updateState)}}
           @disabled={{this.disabled}}
-          @loading={{this.isSaving}}
+          @loading={{this.updateState.isRunning}}
         >
           {{if this.hasChanges "Pas aan" "Onveranderd"}}
         </AuButton>

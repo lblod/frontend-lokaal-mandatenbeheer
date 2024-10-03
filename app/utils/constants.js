@@ -35,3 +35,5 @@ export const MANDATARIS_PREDICATE = {
   persoon: 'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan',
   mandaat: 'http://www.w3.org/ns/org#holds',
 };
+
+export const NULL_DATE = new Date(null);
