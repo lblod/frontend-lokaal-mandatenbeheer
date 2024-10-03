@@ -53,6 +53,7 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@lblod/ember-acmidm-login": "2.0.0-beta.1",
+    "@lblod/ember-environment-banner": "^0.5.0",
     "@lblod/ember-mock-login": "^0.7.0",
     "@lblod/ember-submission-form-fields": "~2.18.0",
     "@lblod/submission-form-helpers": "~2.10.1",

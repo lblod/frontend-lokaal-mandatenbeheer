@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 
+import { getOwner } from '@ember/application';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask, timeout } from 'ember-concurrency';
@@ -84,5 +85,74 @@ export default class ApplicationController extends Controller {
     }
 
     return userInfo;
+  }
+
+  get environmentMessage() {
+    const productieUrl = 'https://mandatenbeheer.lokaalbestuur.vlaanderen.be/';
+    const applicationName = 'Lokaal Mandatenbeheer';
+
+    if (this.environmentName === 'PROD') {
+      return `Dit is de <strong>${this.environmentInfo.title}</strong> van het ${applicationName} met fictieve en testgegevens. Deze data is nog niet effectief en zal dus op termijn verwijderd worden als de applicatie live gaat.`;
+    }
+
+    return `Dit is de <strong>${this.environmentInfo.title}</strong> van het ${applicationName} met fictieve en testgegevens. De productieomgeving met de echte data vind je op <a href="${productieUrl}" title="${applicationName}" rel="tag">${productieUrl}</a>.`;
+  }
+
+  get isLocalhost() {
+    if (
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '[::1]'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  get environmentName() {
+    const thisEnvironmentName = this.isLocalhost
+      ? 'LOCAL'
+      : getOwner(this).resolveRegistration('config:environment')
+          .environmentName;
+
+    return thisEnvironmentName;
+  }
+
+  get environmentInfo() {
+    let environment = this.environmentName;
+    switch (environment) {
+      case 'QA':
+        return {
+          title: 'testomgeving',
+          skin: 'warning',
+        };
+      case 'DEV':
+        return {
+          title: 'ontwikkelomgeving',
+          skin: 'success',
+        };
+      case 'LOCAL':
+        return {
+          title: 'lokale omgeving',
+          skin: 'success',
+        };
+      case 'PROD':
+        return {
+          title: 'Productie omgeving',
+          skin: 'error',
+        };
+      default:
+        return {
+          title: '',
+        };
+    }
+  }
+
+  get showEnvironment() {
+    return (
+      this.environmentName !== '' &&
+      this.environmentInfo.title !== '' &&
+      this.environmentName !== '{{ENVIRONMENT_NAME}}'
+    );
   }
 }
