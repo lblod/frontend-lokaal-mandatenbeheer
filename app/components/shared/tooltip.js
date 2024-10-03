@@ -7,4 +7,14 @@ export default class SharedTooltipComponent extends Component {
     }
     return 'center';
   }
+
+  get shouldRender() {
+    if (!this.args.showTooltip) {
+      return false;
+    }
+    if (!this.args.toolTipText || this.args.toolTipText.trim().length === 0) {
+      return false;
+    }
+    return true;
+  }
 }
