@@ -32,6 +32,7 @@ const CREATE_MODE = 'create';
 
 export default class PrepareLegislatuurSectionComponent extends Component {
   @service toaster;
+  @service bcsd;
   @service store;
   @service router;
   @service fractieApi;
@@ -210,6 +211,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       added: newMandatarissen,
       removed: this.mandatarissen,
     });
+
+    this.bcsd.forceRecomputeBCSD();
   });
 
   async createMandatarisFromMandataris(mandataris, mandaat, lidmaatschap) {
@@ -271,6 +274,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
+    this.bcsd.forceRecomputeBCSD();
   });
 
   @action
