@@ -198,4 +198,8 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     this.aangewezenBurgemeesters = [];
     await this.onUpdate.perform(this.persoon);
   }
+
+  get toolTipText() {
+    return 'Er is reeds een burgemeester geselecteerd.';
+  }
 }

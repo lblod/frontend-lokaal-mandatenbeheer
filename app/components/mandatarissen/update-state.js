@@ -308,4 +308,8 @@ export default class MandatarissenUpdateState extends Component {
     this.selectedReplacement = newReplacement;
     this.replacementUpdated = true;
   }
+
+  get toolTipText() {
+    return 'Er zijn geen wijzigingen om op te slaan.';
+  }
 }

@@ -111,4 +111,8 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     this.showLinkToDecisionModal = false;
     await this.setStatus(this.selectedPublicationStatus);
   });
+
+  get toolTipText() {
+    return 'Voeg een geldige link toe om deze form te kunnen opslaan.';
+  }
 }

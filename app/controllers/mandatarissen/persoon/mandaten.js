@@ -153,4 +153,8 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     this.activeOnly = false;
     this.router.refresh();
   });
+
+  get toolTipText() {
+    return 'Deze persoon is reeds onafhankelijk.';
+  }
 }

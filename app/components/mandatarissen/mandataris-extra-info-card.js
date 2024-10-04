@@ -20,6 +20,10 @@ export default class MandatarisExtraInfoCardComponent extends Component {
     });
   }
 
+  get hasBijkomendeInformatie() {
+    return this.hasBeleidsdomeinen;
+  }
+
   get hasBeleidsdomeinen() {
     if (
       this.args.mandataris.get('bekleedt').get('isBurgemeester') ||
@@ -44,5 +48,19 @@ export default class MandatarisExtraInfoCardComponent extends Component {
   onSave() {
     this.isModalActive = !this.isModalActive;
     setTimeout(() => this.router.refresh(), 1000);
+  }
+
+  get disabled() {
+    return !this.hasBijkomendeInformatie || !this.args.canEdit;
+  }
+
+  get toolTipText() {
+    if (!this.hasBijkomendeInformatie) {
+      return 'Dit type mandataris heeft geen bijkomende informatie om te bewerken.';
+    }
+    if (!this.args.canEdit) {
+      return 'Het is niet mogelijk een mandataris aan te passen tijdens het voorbereiden van de legislatuur.';
+    }
+    return '';
   }
 }

@@ -59,15 +59,15 @@
           <AuHeading @skin="2">Organen</AuHeading>
         </Group>
         <Group>
-          {{#if
-            (or
-              @model.legislatuurInBehandeling
-              (eq @model.bestuursorganen.length 0)
-            )
-          }}
-            <AuButton @disabled={{true}}>
-              Beheer fracties
-            </AuButton>
+          {{#if this.isDisabled}}
+            <Shared::Tooltip
+              @showTooltip={{true}}
+              @tooltipText={{this.toolTipText}}
+            >
+              <AuButton @disabled={{true}}>
+                Beheer fracties
+              </AuButton>
+            </Shared::Tooltip>
           {{else}}
             <AuLink
               @route="organen.fracties"

@@ -10,12 +10,17 @@
     </AuHeading>
   </Group>
   <Group>
-    <AuButton
-      {{on "click" (fn this.setIsCreatingMandataris true)}}
-      @disabled={{@model.legislatuurInBehandeling}}
+    <Shared::Tooltip
+      @showTooltip={{@model.legislatuurInBehandeling}}
+      @tooltipText={{this.toolTipText}}
     >
-      Voeg nieuwe mandataris toe
-    </AuButton>
+      <AuButton
+        {{on "click" (fn this.setIsCreatingMandataris true)}}
+        @disabled={{@model.legislatuurInBehandeling}}
+      >
+        Voeg nieuwe mandataris toe
+      </AuButton>
+    </Shared::Tooltip>
   </Group>
 </AuToolbar>
 <AuHeading @skin="3" class="au-u-regular au-u-padding-left">

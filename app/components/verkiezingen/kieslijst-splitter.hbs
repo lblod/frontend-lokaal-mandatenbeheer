@@ -33,24 +33,39 @@
 
     <div class="au-o-grid__item au-u-2-6@medium au-u-flex">
       <div class="vertical-btn-group">
-        <AuButton
-          {{on "click" this.openSplitKieslijstModal}}
-          @disabled={{not this.kieslijstCanBeSplit}}
+        <Shared::Tooltip
+          @showTooltip={{not this.kieslijstCanBeSplit}}
+          @tooltipText={{this.toolTipCanNotBeSplit}}
         >
-          Splitsen
-        </AuButton>
-        <AuButton
-          {{on "click" this.keepKieslijst}}
-          @disabled={{not this.kieslijstCanBeSplit}}
+          <AuButton
+            {{on "click" this.openSplitKieslijstModal}}
+            @disabled={{not this.kieslijstCanBeSplit}}
+          >
+            Splitsen
+          </AuButton>
+        </Shared::Tooltip>
+        <Shared::Tooltip
+          @showTooltip={{not this.kieslijstCanBeSplit}}
+          @tooltipText={{this.toolTipCanNotBeSplit}}
         >
-          Behouden
-        </AuButton>
-        <AuButton
-          {{on "click" this.toggleRevertKieslijstModal}}
-          @disabled={{not this.fractieSelected}}
+          <AuButton
+            {{on "click" this.keepKieslijst}}
+            @disabled={{not this.kieslijstCanBeSplit}}
+          >
+            Behouden
+          </AuButton>
+        </Shared::Tooltip>
+        <Shared::Tooltip
+          @showTooltip={{not this.fractieSelected}}
+          @tooltipText={{this.toolTipNoFractieSelected}}
         >
-          Terugzetten
-        </AuButton>
+          <AuButton
+            {{on "click" this.toggleRevertKieslijstModal}}
+            @disabled={{not this.fractieSelected}}
+          >
+            Terugzetten
+          </AuButton>
+        </Shared::Tooltip>
       </div>
     </div>
 

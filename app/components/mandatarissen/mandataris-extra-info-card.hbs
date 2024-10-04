@@ -6,10 +6,16 @@
     </AuHeading>
   </Group>
   <Group>
-    <AuButton
-      {{on "click" this.toggleModal}}
-      @disabled={{(or (not this.hasBeleidsdomeinen) (not @canEdit))}}
-    >Bewerk</AuButton>
+    <Shared::Tooltip
+      @showTooltip={{this.disabled}}
+      @tooltipText={{this.toolTipText}}
+      @alignment="right"
+    >
+      <AuButton
+        {{on "click" this.toggleModal}}
+        @disabled={{this.disabled}}
+      >Bewerk</AuButton>
+    </Shared::Tooltip>
   </Group>
 </AuToolbar>
 

@@ -14,7 +14,23 @@ export default class OrganenIndexController extends Controller {
   @tracked bestuursperiode;
 
   @tracked isModalActive = false;
-  @tracked isDisabledBecauseLegislatuur;
+
+  get isDisabled() {
+    return (
+      this.model.legislatuurInBehandeling ||
+      this.model.bestuursorganen.length == 0
+    );
+  }
+
+  get toolTipText() {
+    if (this.model.legislatuurInBehandeling) {
+      return 'Tijdens het voorbereiden van een legislatuur is het niet mogelijk fracties toe te voegen.';
+    }
+    if (this.model.bestuursorganen.length == 0) {
+      return 'Het is niet mogelijk fracties toe te voegen omdat er geen bestuursorganen bestaan voor deze bestuursperiode.';
+    }
+    return '';
+  }
 
   @action
   filterActiveOrgans() {

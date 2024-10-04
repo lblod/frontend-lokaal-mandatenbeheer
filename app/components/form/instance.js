@@ -187,4 +187,8 @@ export default class InstanceComponent extends Component {
     this.args.formInitialized ? this.args.formInitialized() : null;
     this.showEditButtons = true;
   }
+
+  get toolTipText() {
+    return 'Het is niet mogelijk een formulier op te slaan zonder wijzigingen.';
+  }
 }
