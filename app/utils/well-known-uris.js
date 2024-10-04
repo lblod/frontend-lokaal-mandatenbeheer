@@ -19,6 +19,8 @@ export const MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE =
   'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/9d8fd14d-95d0-4f5e-b3a5-a56a126227b6';
 export const MANDATARIS_DRAFT_PUBLICATION_STATE =
   'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/588ce330-4abb-4448-9776-a17d9305df07';
+export const MANDATARIS_EFFECTIEF_PUBLICATION_STATE =
+  'http://data.lblod.info/id/concept/MandatarisPublicationStatusCode/d3b12468-3720-4cb0-95b4-6aa2996ab188';
 export const BELEIDSDOMEIN_CODES_CONCEPT_SCHEME =
   'http://data.vlaanderen.be/id/conceptscheme/BeleidsdomeinCode';
 
