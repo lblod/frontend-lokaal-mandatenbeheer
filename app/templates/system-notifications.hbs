@@ -49,6 +49,12 @@
       >
         <t.content as |c|>
           <c.header>
+            <AuDataTableThSortable @field="code.label" @label="Type" />
+            <AuDataTableThSortable
+              @field="created-at"
+              @currentSorting={{this.sort}}
+              @label="Aangemaakt op"
+            />
             <AuDataTableThSortable
               @field="subject"
               @label="Onderwerp"
@@ -59,11 +65,9 @@
               @label="Bericht"
               class="no-sorting"
             />
-            <AuDataTableThSortable
-              @field="created-at"
-              @currentSorting={{this.sort}}
-              @label="Aangemaakt op"
-            />
+            <th class="no-sorting"><span
+                class="au-c-data-table__header-title au-c-data-table__header-title--sortable"
+              >Links</span></th>
             <th>{{! Actions dropdown }}</th>
           </c.header>
           {{#if this.getNotifications.isRunning}}
