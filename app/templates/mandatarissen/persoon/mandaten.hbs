@@ -90,6 +90,9 @@
             @label="Einde mandaat"
           />
           <th>
+            Status
+          </th>
+          <th>
             Publicatie Status
           </th>
         </c.header>
@@ -132,6 +135,9 @@
           </td>
           <td>
             {{moment-format row.foldedEnd "DD-MM-YYYY"}}
+          </td>
+          <td>
+            <Mandaat::MandatarisStatusPill @mandataris={{row.mandataris}} />
           </td>
           <td>
             <Mandaat::PublicatieStatusPill @mandataris={{row.mandataris}} />

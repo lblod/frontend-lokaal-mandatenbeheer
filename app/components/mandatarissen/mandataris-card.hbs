@@ -11,15 +11,7 @@
     <div class="au-o-grid__item au-u-1-2">
       <div class="au-c-description-label">Status</div>
       <div class="au-c-description-value au-u-margin-top-tiny">
-        {{#if this.status}}
-          <AuPill @skin={{this.skinForStatusPill}}>
-            {{this.status}}
-          </AuPill>
-        {{else}}
-          <AuPill>
-            Niet beschikbaar
-          </AuPill>
-        {{/if}}
+        <Mandaat::MandatarisStatusPill @mandataris={{@mandataris}} />
       </div>
     </div>
     <div class="au-o-grid__item au-u-1-2">
