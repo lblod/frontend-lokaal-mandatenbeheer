@@ -150,11 +150,8 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   get isInputDateTheSameAsMandatarisStart() {
-    const startDate = new Date(this.args.mandataris.start);
-    startDate.setHours(0, 0, 0, 0);
+    const startDate = new Date();
     const inputDate = new Date(this.date);
-    inputDate.setHours(0, 0, 0, 0);
-
     return startDate.getTime() === inputDate.getTime();
   }
 
