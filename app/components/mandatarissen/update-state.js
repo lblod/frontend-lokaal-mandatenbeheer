@@ -161,6 +161,8 @@ export default class MandatarissenUpdateState extends Component {
   get hasChanges() {
     return (
       !this.isInputDateTheSameAsMandatarisStart ||
+      // ended state is always a new state because if ended, you can't used change state
+      this.newStatus === this.mandatarisStatus.endedState ||
       this.newStatus?.id !== this.args.mandataris.status?.id ||
       this.selectedFractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
