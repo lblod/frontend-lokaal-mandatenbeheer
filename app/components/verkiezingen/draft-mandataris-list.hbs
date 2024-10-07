@@ -107,7 +107,7 @@
   <div class="au-o-box">
     {{#if this.mandatarisEdit}}
       <Form::Instance
-        @showHistoryDescription={{false}}
+        @hideDescriptionModalOnSave={{true}}
         @instanceId={{this.mandatarisEdit.id}}
         @form={{@form}}
         @onSave={{this.saveMandatarisChanges}}
