@@ -17,6 +17,7 @@ import {
 import { toUserReadableListing } from 'frontend-lmb/utils/to-user-readable-listing';
 import { restartableTask } from 'ember-concurrency';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
+import { CBS_BESTUURSORGAAN_URI } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
@@ -24,7 +25,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   @tracked persoon = null;
   @tracked mandataris = null;
-  @tracked errorMessages = [];
   @tracked aangewezenBurgemeesters;
   @tracked isPersonSelectOpen;
   @tracked isCreatingPerson;
@@ -95,19 +95,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     });
   }
 
-  async setMultipleBurgemeestersError(burgemeesters) {
-    const personen = await Promise.all(
-      burgemeesters.map((b) => b.isBestuurlijkeAliasVan)
-    );
-    const mandaatName = burgemeesters[0].get('bekleedt.bestuursfunctie.label');
-
-    this.errorMessages = [
-      ...this.errorMessages,
-      `Er zijn meerdere personen gevonden met het mandaat ${mandaatName}. Enkel de eerste zal aangepast worden:
-      ${toUserReadableListing(personen, (p) => `${p?.gebruikteVoornaam} ${p?.achternaam}`)}.`,
-    ];
-  }
-
   async createMandataris(burgemeesterMandaat) {
     const newMandataris = this.store.createRecord('mandataris', {
       rangorde: null,
@@ -134,10 +121,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       targetMandatarisses.push(
         await this.createMandataris(this.burgemeesterMandate)
       );
-    } else if (burgemeesters.length === 1) {
-      targetMandatarisses.push(burgemeesters[0]);
     } else {
-      await this.setMultipleBurgemeestersError(burgemeesters);
       targetMandatarisses.push(burgemeesters[0]);
     }
     if (voorzitterVastBureau.length === 0) {
@@ -145,9 +129,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
         await this.createMandataris(this.voorzitterVastBureauMandate)
       );
     } else if (voorzitterVastBureau.length === 1) {
-      targetMandatarisses.push(voorzitterVastBureau[0]);
-    } else {
-      await this.setMultipleBurgemeestersError(voorzitterVastBureau);
       targetMandatarisses.push(voorzitterVastBureau[0]);
     }
 
@@ -172,7 +153,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     if (this.args.onUpdateBurgemeester) {
       this.args.onUpdateBurgemeester();
     }
-    
   });
 
   @action

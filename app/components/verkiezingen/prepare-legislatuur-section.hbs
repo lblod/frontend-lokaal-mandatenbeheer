@@ -3,6 +3,7 @@
     @bestuursorgaanInTijd={{@bestuursorgaan}}
     @readOnly={{@isBehandeld}}
     @onUpdateBurgemeester={{@onUpdateBurgemeester}}
+    @bestuursorganen={{@bestuursorganen}}
   />
 {{else}}
   <div class="au-u-flex au-u-flex--between au-u-margin-left au-u-margin-right">
@@ -56,6 +57,11 @@
     <Verkiezingen::BcsdVoorzitterAlert
       @bcsdBestuursorgaanInTijd={{@bestuursorgaan}}
       @bestuursorganenInTijd={{@bestuursorganen}}
+    />
+  {{/if}}
+  {{#if (await @bestuursorgaan.isCBS)}}
+    <Verkiezingen::BurgemeesterAlert
+      @collegeBestuursorgaanInTijd={{@bestuursorgaan}}
     />
   {{/if}}
 
