@@ -24,12 +24,10 @@ export default class SettingsRoute extends Route {
     if (!contact) {
       const newContact = this.store.createRecord('bestuurseenheid-contact', {
         email: null,
+        bestuurseenheid: bestuurseenheid,
       });
       await newContact.save();
       contact = newContact;
-
-      bestuurseenheid.contact = newContact;
-      await bestuurseenheid.save();
     }
 
     return {
