@@ -29,11 +29,20 @@
           @tooltipText={{this.toolTipText}}
           @alignment="left"
         >
-          <AuButton
-            {{on "click" this.tryOpenHistoryModal}}
-            @loading={{or this.save.isRunning (not this.hasChanges)}}
-            @loadingMessage="Aan het oplaan"
-          >Pas aan</AuButton>
+          {{#if @hideDescriptionModalOnSave}}
+            <AuButton
+              {{on "click" (perform this.save)}}
+              @loading={{or this.save.isRunning}}
+              @loadingMessage="Aan het oplaan"
+              @disabled={{not this.hasChanges}}
+            >Pas aan</AuButton>
+          {{else}}
+            <AuButton
+              {{on "click" this.tryOpenHistoryModal}}
+              @loading={{or this.save.isRunning (not this.hasChanges)}}
+              @loadingMessage="Aan het oplaan"
+            >Pas aan</AuButton>
+          {{/if}}
         </Shared::Tooltip>
 
         <Form::SaveWithHistory
@@ -41,7 +50,6 @@
           @isSaving={{this.save.isRunning}}
           @updateValue={{this.updateHistoryMessage}}
           @isModalOpen={{this.isSaveHistoryModalOpen}}
-          @addDescription={{@showHistoryDescription}}
         />
         {{#if @onCancel}}
           <Form::CancelWithConfirm
