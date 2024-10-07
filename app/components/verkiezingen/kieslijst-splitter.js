@@ -11,7 +11,6 @@ import { showErrorToast } from 'frontend-lmb/utils/toasts';
 export default class KieslijstSplitterComponent extends Component {
   @service store;
   @service toaster;
-  @service router;
 
   @tracked samenwerkingsVerband;
 
