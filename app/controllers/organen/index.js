@@ -2,6 +2,10 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import {
+  MANDAAT_TYPE_LID_ID,
+  MANDAAT_TYPE_VOORZITER_ID,
+} from 'frontend-lmb/utils/well-known-ids';
 
 export default class OrganenIndexController extends Controller {
   queryParams = ['sort', 'activeOrgans', 'selectedTypes', 'bestuursperiode'];
@@ -75,7 +79,10 @@ export default class OrganenIndexController extends Controller {
       'bestuursorgaan',
       instanceId
     );
-    await this.createDefaultBestuursorgaanInTijd(createdBestuursorgaan);
+    const bestuursorgaanInTijd = await this.createDefaultBestuursorgaanInTijd(
+      createdBestuursorgaan
+    );
+    await this.createDefaultMandaten(bestuursorgaanInTijd);
 
     this.toggleModal();
     this.send('reloadModel');
@@ -93,5 +100,22 @@ export default class OrganenIndexController extends Controller {
       bindingEinde: similarBestuursorgaanInTijd?.bindingEinde,
     });
     await bestuursorgaanInTijd.save();
+    return bestuursorgaanInTijd;
+  }
+
+  async createDefaultMandaten(bestuursorgaanInTijd) {
+    const [lid, voorzitter] = await Promise.all([
+      this.store.findRecord('bestuursfunctie-code', MANDAAT_TYPE_LID_ID),
+      this.store.findRecord('bestuursfunctie-code', MANDAAT_TYPE_VOORZITER_ID),
+    ]);
+    const lidMandaat = this.store.createRecord('mandaat', {
+      bestuursfunctie: lid,
+      bevatIn: [bestuursorgaanInTijd],
+    });
+    const voorzitterMandaat = this.store.createRecord('mandaat', {
+      bestuursfunctie: voorzitter,
+      bevatIn: [bestuursorgaanInTijd],
+    });
+    await Promise.all([lidMandaat.save(), voorzitterMandaat.save()]);
   }
 }

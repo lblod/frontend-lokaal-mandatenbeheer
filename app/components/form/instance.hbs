@@ -31,9 +31,10 @@
         >
           <AuButton
             {{on "click" this.tryOpenHistoryModal}}
-            @disabled={{or this.save.isRunning (not this.hasChanges)}}
+            @loading={{or this.save.isRunning (not this.hasChanges)}}
           >Pas aan</AuButton>
         </Shared::Tooltip>
+
         <Form::SaveWithHistory
           @save={{perform this.save}}
           @isSaving={{this.save.isRunning}}
