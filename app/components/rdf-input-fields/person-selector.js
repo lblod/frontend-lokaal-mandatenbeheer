@@ -110,7 +110,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
       return;
     }
 
-    this.searchElected = !(await mandaatModel.isInBCSD());
+    this.searchElected = !(await mandaatModel.allowsNonElectedPersons);
 
     if (this.searchElected) {
       this.currentBestuursperiode = await (
