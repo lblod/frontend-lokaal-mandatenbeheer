@@ -40,6 +40,7 @@
           @isSaving={{this.save.isRunning}}
           @updateValue={{this.updateHistoryMessage}}
           @isModalOpen={{this.isSaveHistoryModalOpen}}
+          @addDescription={{@showHistoryDescription}}
         />
         {{#if @onCancel}}
           <Form::CancelWithConfirm
