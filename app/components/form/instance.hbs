@@ -32,6 +32,7 @@
           <AuButton
             {{on "click" this.tryOpenHistoryModal}}
             @loading={{or this.save.isRunning (not this.hasChanges)}}
+            @loadingMessage="Aan het oplaan"
           >Pas aan</AuButton>
         </Shared::Tooltip>
 
