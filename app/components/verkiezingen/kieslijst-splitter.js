@@ -6,9 +6,12 @@ import { action } from '@ember/object';
 import { A } from '@ember/array';
 
 import { FRACTIETYPE_SAMENWERKINGSVERBAND } from 'frontend-lmb/utils/well-known-uris';
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class KieslijstSplitterComponent extends Component {
   @service store;
+  @service toaster;
+  @service router;
 
   @tracked samenwerkingsVerband;
 
@@ -138,10 +141,18 @@ export default class KieslijstSplitterComponent extends Component {
   @action
   async confirmRevertSplitKieslijst() {
     const fracties = await this.selectedKieslijst.get('resulterendeFracties');
-    fracties.forEach(async (fractie) => {
-      await fracties.removeObject(fractie);
-      this.fracties.removeObject(fractie);
-      await fractie.destroyRecord();
+    await Promise.all(
+      fracties.map(async (fractie) => {
+        await fracties.removeObject(fractie);
+        await fractie.destroyRecord();
+        this.fracties.removeObject(fractie);
+      })
+    ).catch((e) => {
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het terugzetten van de fracties.'
+      );
+      console.error(e);
     });
     await this.selectedKieslijst.save();
     this.toggleRevertKieslijstModal();
