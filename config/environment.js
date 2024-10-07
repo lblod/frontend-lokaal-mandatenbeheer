@@ -34,6 +34,7 @@ module.exports = function (environment) {
     },
     features: {
       'show-forms-module': false,
+      'show-iv-module': false,
     },
     lpdcUrl: '{{LPDC_URL}}',
     worshipDecisionsDatabaseUrl: '{{WORSHIP_DECISIONS_DATABASE_URL}}',

@@ -79,9 +79,10 @@ Or in template files by using the `is-feature-enabled` helper:
 
 ### List of feature flags
 
-| Name                | Description                                                                                        |
-| ------------------- | -------------------------------------------------------------------------------------------------- |
-| `show-forms-module` | Show the forms module in overview and navigation, the route remains functional, defaults to false. |
+| Name                | Description                                                                                                               |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `show-forms-module` | Show the forms module in overview and navigation, the route remains functional, defaults to false.                        |
+| `show-iv-module`    | Show the `Opstart nieuwe legislatuur` module in overview and navigation, the route remains functional, defaults to false. |
 
 ## Environment variables
 
