@@ -1,36 +1,30 @@
-{{#if @isModalOpen}}
-  {{#if @addDescription}}
-    <AuModal
-      @id="form-history"
-      @closeModal={{fn (mut @isModalOpen) false}}
-      @modalOpen={{@isModalOpen}}
-      class="small"
-      @title="Beschrijving doorgevoerde wijzigingen."
-      as |Modal|
-    >
-      <Modal.Body>
-        <AuInput
-          @id="history-message"
-          @width="block"
-          placeholder="Beschrijving wijzigingen"
-          {{on "input" @updateValue}}
-        />
-      </Modal.Body>
-      <Modal.Footer>
-        <AuToolbar as |Group|>
-          <Group>
-            <AuButton
-              {{on "click" @save}}
-              @loading={{@isSaving}}
-              @loadingMessage="Aan het opslaan"
-            >
-              Bevestig
-            </AuButton>
-          </Group>
-        </AuToolbar>
-      </Modal.Footer>
-    </AuModal>
-  {{else}}
-    <code {{did-insert @save}} />
-  {{/if}}
-{{/if}}
+<AuModal
+  @id="form-history"
+  @closeModal={{fn (mut @isModalOpen) false}}
+  @modalOpen={{@isModalOpen}}
+  class="small"
+  @title="Beschrijving doorgevoerde wijzigingen."
+  as |Modal|
+>
+  <Modal.Body>
+    <AuInput
+      @id="history-message"
+      @width="block"
+      placeholder="Beschrijving wijzigingen"
+      {{on "input" @updateValue}}
+    />
+  </Modal.Body>
+  <Modal.Footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButton
+          {{on "click" @save}}
+          @loading={{@isSaving}}
+          @loadingMessage="Aan het opslaan"
+        >
+          Bevestig
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </Modal.Footer>
+</AuModal>
