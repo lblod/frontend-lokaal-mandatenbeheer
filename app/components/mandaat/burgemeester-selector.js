@@ -169,6 +169,10 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     );
     this.setup.perform();
     this.bcsd.forceRecomputeBCSD();
+    if (this.args.onUpdateBurgemeester) {
+      this.args.onUpdateBurgemeester();
+    }
+    
   });
 
   @action
