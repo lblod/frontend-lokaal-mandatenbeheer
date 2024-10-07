@@ -1,6 +1,17 @@
+<td><AuPill
+    @skin={{if
+      (eq @notification.code.label "Error")
+      "error"
+      (if (eq @notification.code.label "Warning") "warning" "info")
+    }}
+  >{{@notification.code.label}}</AuPill></td>
+<td>{{moment-format @notification.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
 <td>{{@notification.subject}}</td>
 <td>{{@notification.message}}</td>
-<td>{{moment-format @notification.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
+<td>{{#each @notification.linkedItems as |link|}}
+    <SystemNotificationLink @link={{link}} />
+  {{/each}}
+</td>
 <td>
   <AuDropdown
     @skin={{this.skin}}

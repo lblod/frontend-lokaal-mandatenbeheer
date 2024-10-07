@@ -1,4 +1,4 @@
-import Model, { attr, belongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class SystemNotificationModel extends Model {
   @attr('string') uri;
@@ -19,4 +19,16 @@ export default class SystemNotificationModel extends Model {
     inverse: 'systemNotifications',
   })
   gebruiker;
+
+  @belongsTo('system-notification-code', {
+    async: true,
+    inverse: null,
+  })
+  code;
+
+  @hasMany('system-notification-link', {
+    async: true,
+    inverse: null,
+  })
+  linkedItems;
 }
