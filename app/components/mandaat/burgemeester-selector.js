@@ -1,10 +1,11 @@
 import Component from '@glimmer/component';
 
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 
-import moment from 'moment';
+import { restartableTask } from 'ember-concurrency';
+import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import {
   getDraftPublicationStatus,
   getEffectiefStatus,
@@ -14,10 +15,7 @@ import {
   BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
   CREATE_PERSON_FORM_ID,
 } from 'frontend-lmb/utils/well-known-ids';
-import { toUserReadableListing } from 'frontend-lmb/utils/to-user-readable-listing';
-import { restartableTask } from 'ember-concurrency';
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
-import { CBS_BESTUURSORGAAN_URI } from 'frontend-lmb/utils/well-known-uris';
+import moment from 'moment';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
