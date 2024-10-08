@@ -7,7 +7,7 @@
     {{au-inputmask
       options=(hash alias="datetime" mask="99-99-9999" placeholder="_")
     }}
-    {{on "input" this.onChange}}
+    {{on "input" (perform this.onChange)}}
   />
 
   {{#if this.errorMessage}}
