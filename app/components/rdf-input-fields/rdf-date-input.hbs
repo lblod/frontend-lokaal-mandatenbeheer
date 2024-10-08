@@ -1,0 +1,16 @@
+<DateInput
+  @label={{this.title}}
+  @value={{this.date}}
+  {{!-- @from={{@mandataris.start}}
+  @to={{@mandataris.einde}} --}}
+  @onChange={{this.onUpdate}}
+  @showErrorAsAlert={{false}}
+/>
+
+{{#each this.errors as |error|}}
+  <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+{{/each}}
+
+{{#each this.warnings as |warning|}}
+  <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+{{/each}}
