@@ -34,7 +34,6 @@ module.exports = function (environment) {
     },
     features: {
       'show-forms-module': false,
-      'show-iv-module': false,
     },
     lpdcUrl: '{{LPDC_URL}}',
     worshipDecisionsDatabaseUrl: '{{WORSHIP_DECISIONS_DATABASE_URL}}',
@@ -83,6 +82,8 @@ module.exports = function (environment) {
   if (environment === 'production') {
     // here you can enable a production-specific feature
   }
+
+  ENV.features['show-iv-module'] = ENV.environmentName !== 'PROD';
 
   return ENV;
 };
