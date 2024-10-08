@@ -17,7 +17,7 @@ export default class DateInputComponent extends Component {
   constructor() {
     super(...arguments);
 
-    if (this.args.value && this.isValidDate(this.args.value)) {
+    if (this.args.value && isValidDate(this.args.value)) {
       this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
       this.processDate(this.args.value);
     }
@@ -35,10 +35,6 @@ export default class DateInputComponent extends Component {
 
     this.args.onChange?.(date);
   });
-
-  isValidDate(date) {
-    return date && date instanceof Date && !isNaN(date);
-  }
 
   isDateInRange(date, min, max) {
     if (!date) {
@@ -60,7 +56,7 @@ export default class DateInputComponent extends Component {
   }
 
   processDate(date) {
-    if (!this.isValidDate(date)) {
+    if (!isValidDate(date)) {
       this.errorMessage = `Datum is ongeldig.`;
       return date;
     }
@@ -78,10 +74,10 @@ export default class DateInputComponent extends Component {
     }
 
     if (!this.isDateInRange(date, minDateTime, maxDateTime)) {
-      const stringMinDate = this.isValidDate(minDateTime)
+      const stringMinDate = isValidDate(minDateTime)
         ? moment(minDateTime).format('DD-MM-YYYY')
         : null;
-      const stringMaxDate = this.isValidDate(maxDateTime)
+      const stringMaxDate = isValidDate(maxDateTime)
         ? moment(maxDateTime).format('DD-MM-YYYY')
         : null;
       this.errorMessage = `Kies een datum tussen ${stringMinDate || 'een moment in het verleden'} en ${stringMaxDate || 'een moment in de toekomst'}.`;
@@ -91,4 +87,8 @@ export default class DateInputComponent extends Component {
 
     return date;
   }
+}
+
+export function isValidDate(date) {
+  return date && date instanceof Date && !isNaN(date);
 }
