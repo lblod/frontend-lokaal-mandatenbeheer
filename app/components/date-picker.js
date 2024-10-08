@@ -25,7 +25,8 @@ export default class DatepickerComponent extends Component {
   onChange(event) {
     const inputValue = event.target?.value;
     this.dateInputString = inputValue;
-    this.processDate(new Date(this.dateInputString));
+    const result = this.processDate(new Date(this.dateInputString));
+    this.args.onChange?.(result.date, result.isValid);
   }
 
   isValidDate(date) {
@@ -33,6 +34,10 @@ export default class DatepickerComponent extends Component {
   }
 
   isDateInRange(date, min, max) {
+    if (!date) {
+      return false;
+    }
+
     date.setHours(0, 0, 0, 0);
     if (!min && !max) {
       return true;
@@ -49,14 +54,6 @@ export default class DatepickerComponent extends Component {
   }
 
   processDate(date) {
-    if (!this.isValidDate(date)) {
-      return;
-    }
-
-    if (this.args.onChange) {
-      this.args.onChange(date);
-    }
-
     let minDateTime = null;
     let maxDateTime = null;
     if (this.args.from) {
@@ -68,16 +65,23 @@ export default class DatepickerComponent extends Component {
       maxDateTime.setHours(0, 0, 0, 0);
     }
 
-    if (!this.isDateInRange(date, minDateTime, maxDateTime)) {
-      const stringMinDate = minDateTime
+    const isInRange = this.isDateInRange(date, minDateTime, maxDateTime);
+
+    if (!isInRange) {
+      const stringMinDate = this.isValidDate(minDateTime)
         ? moment(minDateTime).format('DD-MM-YYYY')
         : null;
-      const stringMaxDate = maxDateTime
+      const stringMaxDate = this.isValidDate(maxDateTime)
         ? moment(maxDateTime).format('DD-MM-YYYY')
         : null;
       this.errorMessage = `Kies een datum tussen ${stringMinDate || 'een moment in het verleden'} en ${stringMaxDate || 'een moment in de toekomst'}.`;
     } else {
       this.errorMessage = null;
     }
+
+    return {
+      isValid: isInRange && this.isValidDate(date),
+      date: date,
+    };
   }
 }
