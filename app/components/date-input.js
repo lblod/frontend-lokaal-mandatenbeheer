@@ -28,12 +28,14 @@ export default class DateInputComponent extends Component {
 
     const inputValue = event.target?.value;
     this.dateInputString = inputValue;
-    const result = this.processDate(new Date(this.dateInputString));
-    this.args.onChange?.(result.date, result.isValid);
+    const date = this.processDate(
+      new Date(moment(this.dateInputString).format('DD-MM-YYYY')) ?? null
+    );
+    this.args.onChange?.(date);
   });
 
   isValidDate(date) {
-    return date instanceof Date && !isNaN(date);
+    return date && date instanceof Date && !isNaN(date);
   }
 
   isDateInRange(date, min, max) {
@@ -45,7 +47,6 @@ export default class DateInputComponent extends Component {
     if (!min && !max) {
       return true;
     }
-
     if (min && date.getTime() < min.getTime()) {
       return false;
     }
@@ -59,10 +60,7 @@ export default class DateInputComponent extends Component {
   processDate(date) {
     if (!this.isValidDate(date)) {
       this.errorMessage = `Datum is ongeldig.`;
-      return {
-        isValid: false,
-        date: date,
-      };
+      return date;
     }
     this.errorMessage = null;
 
@@ -77,9 +75,7 @@ export default class DateInputComponent extends Component {
       maxDateTime.setHours(0, 0, 0, 0);
     }
 
-    const isInRange = this.isDateInRange(date, minDateTime, maxDateTime);
-
-    if (!isInRange) {
+    if (!this.isDateInRange(date, minDateTime, maxDateTime)) {
       const stringMinDate = this.isValidDate(minDateTime)
         ? moment(minDateTime).format('DD-MM-YYYY')
         : null;
@@ -91,9 +87,6 @@ export default class DateInputComponent extends Component {
       this.errorMessage = null;
     }
 
-    return {
-      isValid: isInRange && this.isValidDate(date),
-      date: date,
-    };
+    return date;
   }
 }

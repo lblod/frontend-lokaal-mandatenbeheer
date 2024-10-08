@@ -3,10 +3,8 @@
   <AuInput
     value={{this.dateInputString}}
     id={{this.elementId}}
-    placeholder="01-01-2024"
-    {{au-inputmask
-      options=(hash alias="datetime" mask="99-99-9999" placeholder="_")
-    }}
+    placeholder="dd-mm-yyyy"
+    {{au-inputmask options=(hash mask="99-99-9999" placeholder="_")}}
     {{on "input" (perform this.onChange)}}
   />
 
