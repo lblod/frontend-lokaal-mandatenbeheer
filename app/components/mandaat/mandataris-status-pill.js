@@ -37,7 +37,6 @@ export default class MandatarisStatusPillComponent extends Component {
   }
 
   get label() {
-    const beeindigd = this.isBeeindigd;
     const status = this.args.mandataris.get('status.label');
     const statusText = status || 'Niet beschikbaar';
     return statusText;
