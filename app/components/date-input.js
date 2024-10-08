@@ -28,9 +28,11 @@ export default class DateInputComponent extends Component {
 
     const inputValue = event.target?.value;
     this.dateInputString = inputValue;
-    const date = this.processDate(
-      new Date(moment(this.dateInputString).format('DD-MM-YYYY')) ?? null
-    );
+
+    let [day, month, year] = inputValue.split('-');
+    const formatForDateConstructor = `${month}-${day}-${year}`;
+    const date = this.processDate(new Date(formatForDateConstructor) ?? null);
+
     this.args.onChange?.(date);
   });
 
