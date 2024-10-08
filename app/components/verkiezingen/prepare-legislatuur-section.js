@@ -87,6 +87,9 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   get CBSClassification() {
     return CBS_BESTUURSORGAAN_URI;
   }
+  get gemeenteRaadClassification() {
+    return GEMEENTERAAD_BESTUURSORGAAN_URI;
+  }
 
   mirrorTable = restartableTask(async () => {
     this.skeletonRowsOfMirror = null;

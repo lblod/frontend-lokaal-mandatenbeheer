@@ -86,9 +86,15 @@
       @title=""
       @showFractie={{true}}
       @showFunctie={{true}}
-      @showRangorde={{eq
-        @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
-        this.CBSClassification
+      @showRangorde={{or
+        (eq
+          @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
+          this.CBSClassification
+        )
+        (eq
+          @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
+          this.gemeenteRaadClassification
+        )
       }}
       @showBevoegdheid={{eq
         @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
