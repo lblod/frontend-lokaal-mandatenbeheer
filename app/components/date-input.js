@@ -6,7 +6,7 @@ import { guidFor } from '@ember/object/internals';
 
 import moment from 'moment';
 
-export default class DatepickerComponent extends Component {
+export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
 
   @tracked dateInputString;
