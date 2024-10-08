@@ -6,7 +6,6 @@ import { tracked } from '@glimmer/tracking';
 
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
-import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
 import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { task } from 'ember-concurrency';
 import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
@@ -64,12 +63,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     this.editMode = null;
     const store = new ForkingStore();
     store.parse(instanceTtl, SOURCE_GRAPH, 'text/turtle');
-    const mandatarisUri = this.model.mandataris.uri;
 
-    await syncMandatarisMembership(mandatarisUri, this.store, {
-      store,
-      sourceGraph: SOURCE_GRAPH,
-    });
     await this.fractieApi.updateCurrentFractie(this.model.mandataris.id);
 
     setTimeout(() => this.router.refresh(), 1000);

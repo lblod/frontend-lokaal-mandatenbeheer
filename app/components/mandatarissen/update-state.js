@@ -186,7 +186,6 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   async changeMandatarisState() {
-    await this.mandatarisService.updateOldLidmaatschap(this.args.mandataris);
     const endDate = this.args.mandataris.einde;
 
     const newMandatarisProps = await this.mandatarisService.createNewProps(
