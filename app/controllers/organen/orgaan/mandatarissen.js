@@ -22,7 +22,7 @@ export default class OrganenMandatarissenController extends Controller {
   @tracked page = 0;
   @tracked isCreatingMandataris = false;
   @tracked createdMandataris = false;
-  @tracked activeOnly = false;
+  @tracked activeOnly = true;
   sort = 'is-bestuurlijke-alias-van.achternaam';
   // we are folding the mandataris instances, so just pick a very high number here and hope our government is reasonable about the
   // number of mandatarisses that can exist

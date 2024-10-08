@@ -1,4 +1,4 @@
-<div>
+<div class="au-u-flex">
   <AuPill
     @skin={{this.skin}}
     @draft={{false}}
@@ -8,4 +8,9 @@
   >
     {{this.label}}
   </AuPill>
+  {{#if this.extraText}}
+    <span
+      class="au-u-muted au-u-italic au-u-margin-left-small"
+    >{{this.extraText}}</span>
+  {{/if}}
 </div>
