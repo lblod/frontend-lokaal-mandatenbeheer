@@ -133,23 +133,6 @@ export default class MandatarissenUpdateState extends Component {
     return this.date.getTime() >= referenceDate.getTime();
   }
 
-  get invalidDateErrorMessage() {
-    if (
-      this.bestuursorgaanEndDate &&
-      this.date.getTime() > this.bestuursorgaanEndDate.getTime()
-    ) {
-      const formattedEndDate = moment(this.bestuursorgaanEndDate).format(
-        'DD-MM-YYYY'
-      );
-      return `De gekozen datum moet voor het einde van de bestuursperiode liggen (${formattedEndDate})`;
-    }
-
-    const formattedStartDate = moment(this.args.mandataris.start).format(
-      'DD-MM-YYYY'
-    );
-    return `De gekozen datum moet na de startdatum liggen van het huidige mandaat. (${formattedStartDate})`;
-  }
-
   get isInputDateTheSameAsMandatarisStart() {
     const startDate = new Date();
     const inputDate = new Date(this.date);
