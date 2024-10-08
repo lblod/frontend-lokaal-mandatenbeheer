@@ -1,10 +1,12 @@
 import Component from '@glimmer/component';
 
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 
+import { restartableTask, timeout } from 'ember-concurrency';
 import moment from 'moment';
+
+import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
@@ -15,19 +17,20 @@ export default class DateInputComponent extends Component {
   constructor() {
     super(...arguments);
 
-    if (this.args.value) {
+    if (this.args.value && this.isValidDate(this.args.value)) {
       this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
       this.processDate(this.args.value);
     }
   }
 
-  @action
-  onChange(event) {
+  onChange = restartableTask(async (event) => {
+    await timeout(INPUT_DEBOUNCE);
+
     const inputValue = event.target?.value;
     this.dateInputString = inputValue;
     const result = this.processDate(new Date(this.dateInputString));
     this.args.onChange?.(result.date, result.isValid);
-  }
+  });
 
   isValidDate(date) {
     return date instanceof Date && !isNaN(date);
@@ -54,6 +57,15 @@ export default class DateInputComponent extends Component {
   }
 
   processDate(date) {
+    if (!this.isValidDate(date)) {
+      this.errorMessage = `Datum is ongeldig.`;
+      return {
+        isValid: false,
+        date: date,
+      };
+    }
+    this.errorMessage = null;
+
     let minDateTime = null;
     let maxDateTime = null;
     if (this.args.from) {
