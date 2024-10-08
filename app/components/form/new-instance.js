@@ -59,7 +59,7 @@ export default class NewInstanceComponent extends Component {
     notifyFormSavedSuccessfully(this.toaster);
 
     if (this.args.onCreate) {
-      this.args.onCreate({
+      await this.args.onCreate({
         instanceTtl: ttlCode,
         instanceId: result.id,
       });

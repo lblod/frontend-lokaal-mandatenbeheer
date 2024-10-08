@@ -117,4 +117,18 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
   isPositiveNumber(value) {
     return value && Number(value) >= 0;
   }
+
+  get disabled() {
+    return !this.aantalHouders || !this.isPositiveNumber(this.aantalHouders);
+  }
+
+  get toolTipText() {
+    if (!this.aantalHouders) {
+      return 'Gelieve een aantal houders in te vullen alvorens op te slaan.';
+    }
+    if (!this.isPositiveNumber(this.aantalHouders)) {
+      return 'Gelieve een positief aantal in te vullen alvorens op te slaan.';
+    }
+    return '';
+  }
 }

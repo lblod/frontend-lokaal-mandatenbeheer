@@ -1,0 +1,8 @@
+<div class="tooltip-container">
+  {{yield}}
+  {{#if this.shouldRender}}
+    <div class="tooltip-text {{this.alignment}}">
+      {{@tooltipText}}
+    </div>
+  {{/if}}
+</div>

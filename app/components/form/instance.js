@@ -61,7 +61,7 @@ export default class InstanceComponent extends Component {
     notifyFormSavedSuccessfully(this.toaster);
 
     if (this.args.onSave) {
-      this.args.onSave({
+      await this.args.onSave({
         instanceId,
         instanceTtl: ttlCode,
         response: result.body,
@@ -186,5 +186,9 @@ export default class InstanceComponent extends Component {
     onFormUpdate();
     this.args.formInitialized ? this.args.formInitialized() : null;
     this.showEditButtons = true;
+  }
+
+  get toolTipText() {
+    return 'Het is niet mogelijk een formulier op te slaan zonder wijzigingen.';
   }
 }

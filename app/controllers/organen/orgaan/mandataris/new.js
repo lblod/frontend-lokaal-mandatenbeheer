@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
-import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 
@@ -42,7 +42,7 @@ export default class OrganenMandatarisNewController extends Controller {
 
   @action
   buildMetaTtl() {
-    return getBestuursorganenMetaTtl([this.model.currentBestuursorgaan]);
+    return getApplicationContextMetaTtl([this.model.currentBestuursorgaan]);
   }
 
   @action

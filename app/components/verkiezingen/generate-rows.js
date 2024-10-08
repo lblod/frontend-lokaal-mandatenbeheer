@@ -57,7 +57,7 @@ export default class GenerateRowsFormComponent extends Component {
       isBestuurlijkeAliasVan: null,
       beleidsdomein: [],
       status: this.effectiefStatus,
-      publicationStatus: this.publicationStatus,
+      publicationStatus: this.draftPublicationStatus,
     };
 
     for (let index = 0; index < rows; index++) {

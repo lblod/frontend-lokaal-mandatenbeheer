@@ -7,7 +7,7 @@ import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { syncMandatarisMembership } from 'frontend-lmb/utils/form-business-rules/mandataris-membership';
-import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { task } from 'ember-concurrency';
 import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
@@ -92,7 +92,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
 
   @action
   async buildMetaTtl() {
-    return getBestuursorganenMetaTtl(this.model.bestuursorganen);
+    return getApplicationContextMetaTtl(this.model.bestuursorganen);
   }
 
   checkLegislatuur = task(async () => {
@@ -128,5 +128,15 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     }
 
     return false;
+  }
+
+  get toolTipText() {
+    if (this.isDisabledBecauseLegislatuur) {
+      return 'Tijdens het voorbereiden van een legislatuur is het niet mogelijk mandatarissen van die legislatuur te bewerken.';
+    }
+    if (!this.model.mandataris.isActive) {
+      return 'Het is niet mogelijk de status van een mandataris aan te passen die niet actief is';
+    }
+    return '';
   }
 }

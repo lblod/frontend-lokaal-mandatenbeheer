@@ -4,15 +4,21 @@
   <AuHeading @skin="3" class="au-u-flex-self-start">Ambt Burgemeester</AuHeading>
   {{#unless @readOnly}}
     <AuContent @skin="small" class="au-u-flex-self-end">
-      <AuButton
-        @icon="add"
-        @loading={{(or this.setup.isRunning this.onUpdate.isRunning)}}
-        @loadingMessage="laden"
-        @disabled={{this.persoon}}
-        {{on "click" (fn (mut this.isPersonSelectOpen) true)}}
+      <Shared::Tooltip
+        @showTooltip={{not this.hasChanges}}
+        @tooltipText={{this.toolTipText}}
+        @alignment="right"
       >
-        Toevoegen
-      </AuButton>
+        <AuButton
+          @icon="add"
+          @loading={{(or this.setup.isRunning this.onUpdate.isRunning)}}
+          @loadingMessage="laden"
+          @disabled={{this.persoon}}
+          {{on "click" (fn (mut this.isPersonSelectOpen) true)}}
+        >
+          Toevoegen
+        </AuButton>
+      </Shared::Tooltip>
     </AuContent>
   {{/unless}}
 </div>
@@ -67,7 +73,6 @@
   {{/if}}
 </div>
 
-<AuModalContainer />
 <AuModal
   @title={{"Selecteer een persoon"}}
   @modalOpen={{this.isPersonSelectOpen}}

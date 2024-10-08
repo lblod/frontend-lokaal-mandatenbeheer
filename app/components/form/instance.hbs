@@ -24,16 +24,33 @@
   <AuToolbar as |Group|>
     <Group>
       <AuButtonGroup>
-        <AuButton
-          {{on "click" this.tryOpenHistoryModal}}
-          @disabled={{or this.save.isRunning (not this.hasChanges)}}
-        >Pas aan</AuButton>
+        <Shared::Tooltip
+          @showTooltip={{not this.hasChanges}}
+          @tooltipText={{this.toolTipText}}
+          @alignment="left"
+        >
+          {{#if @hideDescriptionModalOnSave}}
+            <AuButton
+              {{on "click" (perform this.save)}}
+              @loading={{or this.save.isRunning}}
+              @loadingMessage="Aan het oplaan"
+              @disabled={{not this.hasChanges}}
+            >Pas aan</AuButton>
+          {{else}}
+            <AuButton
+              {{on "click" this.tryOpenHistoryModal}}
+              @loading={{or this.save.isRunning (not this.hasChanges)}}
+              @loadingMessage="Aan het oplaan"
+            >Pas aan</AuButton>
+          {{/if}}
+        </Shared::Tooltip>
+
         <Form::SaveWithHistory
           @save={{perform this.save}}
           @isSaving={{this.save.isRunning}}
           @updateValue={{this.updateHistoryMessage}}
           @isModalOpen={{this.isSaveHistoryModalOpen}}
-        >Pas aan</Form::SaveWithHistory>
+        />
         {{#if @onCancel}}
           <Form::CancelWithConfirm
             @cancel={{@onCancel}}

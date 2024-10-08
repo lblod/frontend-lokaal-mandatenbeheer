@@ -17,17 +17,22 @@
     >
       Beeindig mandaten
     </AuButton>
-    <AuButton
-      skin="secondary"
-      @loading={{(or
-        this.checkFracties.isRunning this.becomeOnafhankelijk.isRunning
-      )}}
-      @loadingMessage="Onafhankelijk worden"
-      @disabled={{not this.canBecomeOnafhankelijk}}
-      {{on "click" (perform this.becomeOnafhankelijk)}}
+    <Shared::Tooltip
+      @showTooltip={{not this.canBecomeOnafhankelijk}}
+      @tooltipText={{this.toolTipText}}
     >
-      Onafhankelijk worden
-    </AuButton>
+      <AuButton
+        skin="secondary"
+        @loading={{(or
+          this.checkFracties.isRunning this.becomeOnafhankelijk.isRunning
+        )}}
+        @loadingMessage="Onafhankelijk worden"
+        @disabled={{not this.canBecomeOnafhankelijk}}
+        {{on "click" (perform this.becomeOnafhankelijk)}}
+      >
+        Onafhankelijk worden
+      </AuButton>
+    </Shared::Tooltip>
     <AuButton {{on "click" this.toggleModal}}>
       Voeg nieuw mandaat toe
     </AuButton>
@@ -137,7 +142,6 @@
   {{/if}}
 </div>
 
-<AuModalContainer />
 <AuModal
   @title="Selecteer bestuursorgaan"
   @modalOpen={{this.isModalOpen}}

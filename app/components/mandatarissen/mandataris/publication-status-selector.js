@@ -3,6 +3,10 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import {
+  MANDATARIS_DRAFT_PUBLICATION_STATE,
+  MANDATARIS_EFFECTIEF_PUBLICATION_STATE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 import { restartableTask, task, timeout } from 'ember-concurrency';
 
@@ -66,6 +70,13 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   @action
   async setStatus(publicationStatus) {
     this.mandataris.publicationStatus = publicationStatus;
+    if (publicationStatus?.uri === MANDATARIS_EFFECTIEF_PUBLICATION_STATE) {
+      this.args.mandataris.effectiefAt = new Date();
+    }
+    if (publicationStatus?.uri === MANDATARIS_DRAFT_PUBLICATION_STATE) {
+      this.args.mandataris.effectiefAt = null;
+    }
+
     await this.mandataris.save();
     if (this.args.onUpdate) {
       this.args.onUpdate();
@@ -100,4 +111,8 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     this.showLinkToDecisionModal = false;
     await this.setStatus(this.selectedPublicationStatus);
   });
+
+  get toolTipText() {
+    return 'Voeg een geldige link toe om deze form te kunnen opslaan.';
+  }
 }

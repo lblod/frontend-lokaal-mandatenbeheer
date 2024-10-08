@@ -6,6 +6,7 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'history',
+    environmentName: '{{ENVIRONMENT_NAME}}',
     EmberENV: {
       // EXTEND_PROTOTYPES: false, // TODO: disable the prototypes and fix all the cases where we depended on this
       FEATURES: {
@@ -33,6 +34,7 @@ module.exports = function (environment) {
     },
     features: {
       'show-forms-module': false,
+      'show-iv-module': false,
     },
     lpdcUrl: '{{LPDC_URL}}',
     worshipDecisionsDatabaseUrl: '{{WORSHIP_DECISIONS_DATABASE_URL}}',

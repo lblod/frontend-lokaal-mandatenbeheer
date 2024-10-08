@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
-import { getBestuursorganenMetaTtl } from 'frontend-lmb/utils/form-context/bestuursorgaan-meta-ttl';
+import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 
@@ -54,7 +54,7 @@ export default class OrganenMandatarissenController extends Controller {
 
   @action
   buildMetaTtl() {
-    return getBestuursorganenMetaTtl([this.model.currentBestuursorgaan]);
+    return getApplicationContextMetaTtl([this.model.currentBestuursorgaan]);
   }
 
   @action
@@ -69,5 +69,9 @@ export default class OrganenMandatarissenController extends Controller {
   @action
   toggleActiveOnly() {
     this.activeOnly = !this.activeOnly;
+  }
+
+  get toolTipText() {
+    return 'Het is niet mogelijk mandatarissen toe te voegen aan een bestuursperiode terwijl de voorbereiding van de legislatuur actief is.';
   }
 }
