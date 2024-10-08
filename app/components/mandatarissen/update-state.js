@@ -150,12 +150,9 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   get isInputDateTheSameAsMandatarisStart() {
-    const startDate = new Date(this.args.mandataris.start);
-    startDate.setHours(0, 0, 0, 0);
+    const startDate = new Date();
     const inputDate = new Date(this.date);
-    inputDate.setHours(0, 0, 0, 0);
-
-    return startDate.getTime() === inputDate.getTime();
+    return moment(startDate).isSame(moment(inputDate), 'day');
   }
 
   get hasChanges() {
@@ -189,7 +186,6 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   async changeMandatarisState() {
-    await this.mandatarisService.updateOldLidmaatschap(this.args.mandataris);
     const endDate = this.args.mandataris.einde;
 
     const newMandatarisProps = await this.mandatarisService.createNewProps(

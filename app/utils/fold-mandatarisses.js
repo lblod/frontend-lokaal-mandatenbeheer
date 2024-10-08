@@ -36,6 +36,7 @@ function sort(params, mandatarissen) {
   const needsResort = [
     'start',
     'einde',
+    'status.label',
     'heeft-lidmaatschap.binnen-fractie.naam',
   ].find((resortKey) => {
     return params?.sort?.includes(resortKey);
@@ -56,6 +57,12 @@ function sort(params, mandatarissen) {
     }
     if (key.indexOf('einde') >= 0) {
       return folded.foldedEnd && moment(folded.foldedEnd).format('YYYY-MM-DD');
+    }
+    if (key.indexOf('status.label') >= 0) {
+      if (folded.foldedEnd && moment(folded.foldedEnd).isBefore(moment())) {
+        return 'Beëindigd';
+      }
+      return folded.mandataris.get('status.label') || 'Niet beschikbaar';
     }
     return null;
   };

@@ -6,7 +6,6 @@ import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
-import { syncNewMandatarisMembership } from 'frontend-lmb/utils/sync-new-mandataris-membership';
 
 export default class OrganenMandatarissenController extends Controller {
   @service router;
@@ -22,7 +21,7 @@ export default class OrganenMandatarissenController extends Controller {
   @tracked page = 0;
   @tracked isCreatingMandataris = false;
   @tracked createdMandataris = false;
-  @tracked activeOnly = false;
+  @tracked activeOnly = true;
   sort = 'is-bestuurlijke-alias-van.achternaam';
   // we are folding the mandataris instances, so just pick a very high number here and hope our government is reasonable about the
   // number of mandatarisses that can exist
@@ -42,8 +41,7 @@ export default class OrganenMandatarissenController extends Controller {
   }
 
   @action
-  async onCreate({ instanceTtl, instanceId }) {
-    await syncNewMandatarisMembership(this.store, instanceTtl, instanceId);
+  async onCreate({ instanceId }) {
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
     this.isCreatingMandataris = false;

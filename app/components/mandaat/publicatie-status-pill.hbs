@@ -3,7 +3,11 @@
     @skin={{if
       (eq @mandataris.publicationStatus.label "Bekrachtigd")
       "success"
-      "default"
+      (if
+        (eq @mandataris.publicationStatus.label "Effectief")
+        "warning"
+        (if (eq @mandataris.publicationStatus.label "Draft") "border" "default")
+      )
     }}
     @draft={{false}}
     @size="regular"
