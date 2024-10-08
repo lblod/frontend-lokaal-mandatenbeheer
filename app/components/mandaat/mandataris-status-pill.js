@@ -8,6 +8,9 @@ export default class MandatarisStatusPillComponent extends Component {
   }
 
   get skin() {
+    if (this.isBeeindigd && !this.args.detailView) {
+      return 'border';
+    }
     const label = this.args.mandataris.get('status.label');
     if (!label) {
       return 'error';
@@ -37,6 +40,9 @@ export default class MandatarisStatusPillComponent extends Component {
   }
 
   get label() {
+    if (this.isBeeindigd && !this.args.detailView) {
+      return 'Beëindigd';
+    }
     const status = this.args.mandataris.get('status.label');
     const statusText = status || 'Niet beschikbaar';
     return statusText;

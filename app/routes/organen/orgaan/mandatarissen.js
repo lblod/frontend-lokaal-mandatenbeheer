@@ -82,11 +82,8 @@ export default class OrganenMandatarissenRoute extends Route {
   getFilteredMandatarissen(mandatarissen, params) {
     let filteredMandatarissen = mandatarissen;
     if (params.activeOnly) {
-      // actually always show mandataris instances with missing status
       filteredMandatarissen = mandatarissen.filter(
-        (mandataris) =>
-          mandataris.mandataris.isActive ||
-          !mandataris.mandataris.get('status.label')
+        (mandataris) => mandataris.mandataris.isActive
       );
     }
     return filteredMandatarissen;

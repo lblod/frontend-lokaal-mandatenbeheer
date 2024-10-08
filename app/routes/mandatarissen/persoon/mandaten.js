@@ -30,12 +30,9 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
     if (params.activeOnly) {
       filteredMandatarissen = foldedMandatarissen.filter((mandataris) => {
         const now = moment();
-        const statusLabel = mandataris.mandataris.get('status.label');
         return (
-          !statusLabel ||
-          (moment(mandataris.foldedStart).isBefore(now) &&
-            (!mandataris.foldedEnd ||
-              moment(mandataris.foldedEnd).isAfter(now)))
+          moment(mandataris.foldedStart).isBefore(now) &&
+          (!mandataris.foldedEnd || moment(mandataris.foldedEnd).isAfter(now))
         );
       });
     }
