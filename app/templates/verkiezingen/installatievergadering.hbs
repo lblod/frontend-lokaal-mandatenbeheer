@@ -54,15 +54,21 @@
       >Bekijk verkiezingsuitslag
         {{this.model.selectedPeriod.start}}
       </AuLink>
-      <AuButton
-        @disabled={{not this.nextStatus.status}}
-        @icon={{this.nextStatus.icon}}
-        @loading={{this.setNextStatus.isRunning}}
-        @loadingMessage="Volgende status ophalen"
-        {{on "click" this.openModal}}
+
+      <Shared::Tooltip
+        @showTooltip={{not this.nextStatus.status}}
+        @tooltipText="De installatievergadering is reeds afgerond."
       >
-        {{this.nextStatus.label}}
-      </AuButton>
+        <AuButton
+          @disabled={{not this.nextStatus.status}}
+          @icon={{this.nextStatus.icon}}
+          @loading={{this.setNextStatus.isRunning}}
+          @loadingMessage="Volgende status ophalen"
+          {{on "click" this.openModal}}
+        >
+          {{this.nextStatus.label}}
+        </AuButton>
+      </Shared::Tooltip>
     </Group>
   </AuToolbar>
   <div class="au-c-body-container au-c-body-container--scroll">
@@ -80,6 +86,7 @@
         @bestuursorgaan={{bestuursorgaan}}
         @bestuursorganen={{@model.bestuursorganenInTijd}}
         @form={{@model.mandatarisForm}}
+        @onUpdateBurgemeester={{this.onUpdateBurgemeester}}
       />
     {{/each}}
 
@@ -97,7 +104,6 @@
       </div>
     {{/unless}}
   </div>
-  <AuModalContainer />
   <AuModal
     @title="Volgende status"
     @modalOpen={{this.isModalOpen}}

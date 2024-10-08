@@ -78,6 +78,9 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
         },
       },
       sort: 'label',
+      page: {
+        size: 9999,
+      },
     };
     if (searchData) {
       queryParams['filter']['label'] = searchData;

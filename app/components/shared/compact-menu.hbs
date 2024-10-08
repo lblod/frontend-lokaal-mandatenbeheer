@@ -13,10 +13,12 @@
     <AuIcon @icon="user-fill" @alignment="left" />
     Mandatarissen
   </AuLink>
-  <AuLink @route="verkiezingen.installatievergadering" role="menuitem">
-    <AuIcon @icon="vote" @alignment="left" />
-    Opstart nieuwe legislatuur
-  </AuLink>
+  {{#if (is-feature-enabled "show-iv-module")}}
+    <AuLink @route="verkiezingen.installatievergadering" role="menuitem">
+      <AuIcon @icon="vote" @alignment="left" />
+      Opstart nieuwe legislatuur
+    </AuLink>
+  {{/if}}
   {{#if (is-feature-enabled "show-forms-module")}}
     <AuLink @route="forms" role="menuitem">
       <AuIcon @icon="draft" @alignment="left" />

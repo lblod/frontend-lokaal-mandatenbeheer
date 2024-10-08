@@ -15,12 +15,14 @@
         Mandatarissen
       </AuNavigationLink>
     </li>
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="verkiezingen.installatievergadering">
-        <AuIcon @icon="vote" @alignment="left" />
-        Opstart nieuwe legislatuur
-      </AuNavigationLink>
-    </li>
+    {{#if (is-feature-enabled "show-iv-module")}}
+      <li class="au-c-list-navigation__item">
+        <AuNavigationLink @route="verkiezingen.installatievergadering">
+          <AuIcon @icon="vote" @alignment="left" />
+          Opstart nieuwe legislatuur
+        </AuNavigationLink>
+      </li>
+    {{/if}}
     {{#if (is-feature-enabled "show-forms-module")}}
       <li class="au-c-list-navigation__item">
         <AuNavigationLink @route="forms">

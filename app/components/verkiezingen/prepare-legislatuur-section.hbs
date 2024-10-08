@@ -2,6 +2,8 @@
   <Mandaat::BurgemeesterSelector
     @bestuursorgaanInTijd={{@bestuursorgaan}}
     @readOnly={{@isBehandeld}}
+    @onUpdateBurgemeester={{@onUpdateBurgemeester}}
+    @bestuursorganen={{@bestuursorganen}}
   />
 {{else}}
   <div class="au-u-flex au-u-flex--between au-u-margin-left au-u-margin-right">
@@ -57,6 +59,11 @@
       @bestuursorganenInTijd={{@bestuursorganen}}
     />
   {{/if}}
+  {{#if (await @bestuursorgaan.isCBS)}}
+    <Verkiezingen::BurgemeesterAlert
+      @collegeBestuursorgaanInTijd={{@bestuursorgaan}}
+    />
+  {{/if}}
 
   {{#if
     (and
@@ -93,7 +100,6 @@
     />
   {{/if}}
 
-  <AuModalContainer />
   <AuModal
     @title={{(concat
       "Voeg mandataris toe aan " @bestuursorgaan.isTijdsspecialisatieVan.naam
@@ -112,7 +118,6 @@
     </div>
   </AuModal>
 
-  <AuModalContainer />
   <AuModal
     @title={{(concat
       "Genereer rijen voor " @bestuursorgaan.isTijdsspecialisatieVan.naam

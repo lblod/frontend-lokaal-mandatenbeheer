@@ -12,6 +12,7 @@ export default class MandatarisModel extends Model {
   @attr uri;
   @attr('string') linkToBesluit;
   @attr('datetime') modified;
+  @attr('datetime') effectiefAt;
 
   @belongsTo('mandaat', { async: true, inverse: 'bekleedDoor' })
   bekleedt;

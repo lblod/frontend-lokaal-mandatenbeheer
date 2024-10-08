@@ -298,3 +298,65 @@
 .replacement .au-u-flex .au-u-flex--stretch.flex-grow {
   flex-grow: 0;
 }
+
+// Tooltips
+.tooltip-container {
+  position: relative;
+}
+
+.tooltip-container .tooltip-text {
+  display: none;
+  position: absolute;
+  background-color: #687483;
+  color: white;
+  border-radius: 5px;
+  top: 100%;
+  white-space: normal;
+  padding: 2px 7px;
+  z-index: 10;
+  max-width: calc(100vw - 20px);
+  min-width: 200px;
+  overflow-wrap: break-word;
+  margin-top: 1rem;
+}
+
+.tooltip-container .tooltip-text.center {
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-container .tooltip-text.left {
+  text-align:left;
+}
+
+.tooltip-container .tooltip-text.right {
+  text-align:left;
+  right: 0;
+}
+
+.tooltip-container:hover .tooltip-text {
+  display: block;
+}
+
+.tooltip-container .tooltip-text::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #687483 transparent;
+}
+
+.tooltip-container .tooltip-text.center::after {
+  left: 50%;
+  margin-left: -5px;
+}
+
+.tooltip-container .tooltip-text.left::after {
+  left: 10%;
+}
+
+.tooltip-container .tooltip-text.right::after {
+  right: 10%;
+}

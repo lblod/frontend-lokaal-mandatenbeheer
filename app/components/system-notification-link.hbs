@@ -1,0 +1,8 @@
+{{#if (and @link this.route this.initialized)}}
+  <AuLink
+    @route={{this.route}}
+    @models={{this.linkModels}}
+    @icon="link"
+  >{{@link.kind}}</AuLink>
+{{/if}}
+{{yield}}

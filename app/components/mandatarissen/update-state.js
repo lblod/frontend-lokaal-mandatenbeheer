@@ -161,6 +161,8 @@ export default class MandatarissenUpdateState extends Component {
   get hasChanges() {
     return (
       !this.isInputDateTheSameAsMandatarisStart ||
+      // ended state is always a new state because if ended, you can't used change state
+      this.newStatus === this.mandatarisStatus.endedState ||
       this.newStatus?.id !== this.args.mandataris.status?.id ||
       this.selectedFractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
@@ -306,5 +308,9 @@ export default class MandatarissenUpdateState extends Component {
   @action updateReplacement(newReplacement) {
     this.selectedReplacement = newReplacement;
     this.replacementUpdated = true;
+  }
+
+  get toolTipText() {
+    return 'Er zijn geen wijzigingen om op te slaan.';
   }
 }

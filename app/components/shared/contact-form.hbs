@@ -18,6 +18,12 @@
   {{#if this.canSend}}
     <a href={{this.mailto}} class="au-c-button">Stel bericht op</a>
   {{else}}
-    <AuButton @disabled={{true}}>Stel bericht op</AuButton>
+    <Shared::Tooltip
+      @showTooltip={{true}}
+      @tooltipText="Geliever één van de opties hierboven te selecteren!"
+      @alignment="left"
+    >
+      <AuButton @disabled={{true}}>Stel bericht op</AuButton>
+    </Shared::Tooltip>
   {{/if}}
 </form>

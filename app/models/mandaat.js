@@ -68,7 +68,20 @@ export default class MandaatModel extends Model {
   }
 
   get allowsNonElectedPersons() {
-    return this.isInBCSD();
+    return new Promise((resolve) => {
+      this.isDecretaalHelper()
+        .then((decretaal) => {
+          if (!decretaal) {
+            resolve(true);
+          } else {
+            resolve(this.isInBCSD());
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+          resolve(false);
+        });
+    });
   }
 
   async isInBCSD() {

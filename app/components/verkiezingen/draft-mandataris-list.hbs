@@ -96,7 +96,6 @@
   </div>
 </div>
 
-<AuModalContainer />
 <AuModal
   @title={{(concat
     "Editeer mandataris" this.mandataris.bekleedt.bestuursfunctie.label
@@ -108,6 +107,7 @@
   <div class="au-o-box">
     {{#if this.mandatarisEdit}}
       <Form::Instance
+        @hideDescriptionModalOnSave={{true}}
         @instanceId={{this.mandatarisEdit.id}}
         @form={{@form}}
         @onSave={{this.saveMandatarisChanges}}
