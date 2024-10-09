@@ -86,9 +86,15 @@
       @title=""
       @showFractie={{true}}
       @showFunctie={{true}}
-      @showRangorde={{eq
-        @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
-        this.CBSClassification
+      @showRangorde={{or
+        (eq
+          @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
+          this.CBSClassification
+        )
+        (eq
+          @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
+          this.gemeenteRaadClassification
+        )
       }}
       @showBevoegdheid={{eq
         @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
@@ -110,7 +116,7 @@
   >
     <div class="au-o-box">
       <Form::NewInstance
-        @onCreate={{perform this.onCreate}}
+        @onCreate={{this.onCreate}}
         @form={{@form}}
         @buildSourceTtl={{this.buildSourceTtl}}
         @buildMetaTtl={{this.buildMetaTtl}}

@@ -82,7 +82,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   get isPlusDisabled() {
-    return this.rangordeInteger >= 20;
+    return this.rangordeInteger >= Object.keys(rangordeStringMapping).length;
   }
 
   getMandatarisWithRangorde(targetRangorde) {

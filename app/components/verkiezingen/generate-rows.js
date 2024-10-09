@@ -63,7 +63,11 @@ export default class GenerateRowsFormComponent extends Component {
     for (let index = 0; index < rows; index++) {
       if (mandaat.isSchepen) {
         const rangordeAsNumber = existingMandaten + index + 1;
-        mandatarisProps.rangorde = `${rangordeNumberMapping[rangordeAsNumber] ?? 'Eerste'} schepenen`;
+        mandatarisProps.rangorde = `${rangordeNumberMapping[rangordeAsNumber] ?? 'Eerste'} schepen`;
+      }
+      if (mandaat.isGemeenteraadslid) {
+        const rangordeAsNumber = existingMandaten + index + 1;
+        mandatarisProps.rangorde = `${rangordeNumberMapping[rangordeAsNumber] ?? 'Eerste'} lid`;
       }
 
       const mandataris = this.store.createRecord('mandataris', mandatarisProps);

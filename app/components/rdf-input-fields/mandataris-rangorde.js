@@ -71,7 +71,7 @@ export default class RdfMandatarisRangorde extends InputFieldComponent {
       mandaatUri[0]?.object?.value,
       { include: 'bestuursfunctie' }
     );
-    this.shouldRender = mandaat?.isSchepen;
+    this.shouldRender = mandaat?.hasRangorde;
 
     if (!this.shouldRender && this.rangorde != null) {
       // without timeout, the form ttl doesn't update immediately

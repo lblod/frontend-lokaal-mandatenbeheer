@@ -8,6 +8,8 @@ import {
   MANDAAT_SCHEPEN_CODE,
   MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE,
   MANDAAT_GEDEPUTEERDE_CODE,
+  MANDAAT_GEMEENTERAADSLID_CODE,
+  MANDAAT_VOORZITTER_GEMEENTERAAD_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 const identity = Boolean;
@@ -65,6 +67,17 @@ export default class MandaatModel extends Model {
       MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE,
       MANDAAT_GEDEPUTEERDE_CODE,
     ].includes(this.bestuursfunctie.get('uri'));
+  }
+
+  get isGemeenteraadslid() {
+    return [
+      MANDAAT_GEMEENTERAADSLID_CODE,
+      MANDAAT_VOORZITTER_GEMEENTERAAD_CODE,
+    ].includes(this.bestuursfunctie.get('uri'));
+  }
+
+  get hasRangorde() {
+    return this.isSchepen || this.isGemeenteraadslid;
   }
 
   get allowsNonElectedPersons() {

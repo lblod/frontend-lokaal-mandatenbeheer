@@ -87,6 +87,9 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   get CBSClassification() {
     return CBS_BESTUURSORGAAN_URI;
   }
+  get gemeenteRaadClassification() {
+    return GEMEENTERAAD_BESTUURSORGAAN_URI;
+  }
 
   mirrorTable = restartableTask(async () => {
     this.skeletonRowsOfMirror = null;
@@ -265,14 +268,15 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     this.isGeneratingRows = false;
   }
 
-  onCreate = restartableTask(async ({ instanceId }) => {
+  @action
+  async onCreate({ instanceId }) {
     this.editMode = null;
     const mandataris = await this.store.findRecord('mandataris', instanceId);
     await this.getMandatarissen.perform({ added: [mandataris] });
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
     this.bcsd.forceRecomputeBCSD();
-  });
+  }
 
   @action
   async buildSourceTtl(instanceUri) {
