@@ -68,4 +68,5 @@ Router.map(function () {
   this.route('error/404', {
     path: '/*wildcard',
   });
+  this.route('session-expired');
 });

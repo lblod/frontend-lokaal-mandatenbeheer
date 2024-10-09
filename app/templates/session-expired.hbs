@@ -1,0 +1,10 @@
+{{page-title "SessionExpired"}}
+<Error
+  @statusCode="401: Sessie Verlopen"
+  @statusMessage="Uw sessie is verlopen en u werd uitgelogd. Onze excuses voor het ongemak. Gelieve opnieuw aan te melden."
+>
+  <div class="au-o-box">
+    <AuLink @route="login" @skin="button">Aanmelden</AuLink>
+  </div>
+</Error>
+{{outlet}}
