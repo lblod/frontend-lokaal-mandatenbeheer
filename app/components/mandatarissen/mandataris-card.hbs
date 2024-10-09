@@ -52,8 +52,13 @@
       <div class="au-o-grid__item au-u-1-2">
         <div class="au-c-description-label">Rangorde</div>
         <div
-          class="au-c-description-value au-u-margin-top-tiny"
-        >{{@mandataris.rangorde}}</div>
+          class="au-c-description-value au-u-margin-top-tiny
+            {{unless @mandataris.rangorde 'au-u-muted'}}"
+        >{{if
+            @mandataris.rangorde
+            @mandataris.rangorde
+            "niet beschikbaar"
+          }}</div>
       </div>
     {{/if}}
     <div class="au-o-grid__item au-u-1-2">
