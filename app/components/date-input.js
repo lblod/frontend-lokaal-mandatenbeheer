@@ -40,19 +40,17 @@ export default class DateInputComponent extends Component {
     if (!date) {
       return false;
     }
-
-    date.setHours(0, 0, 0, 0);
     if (!min && !max) {
       return true;
     }
-    if (min && date.getTime() < min.getTime()) {
-      return false;
+    if (!min && max) {
+      return moment(date).isSameOrBefore(max);
     }
-    if (max && date.getTime() > max.getTime()) {
-      return false;
+    if (!max && min) {
+      return moment(date).isSameOrAfter(min);
     }
 
-    return true;
+    return moment(date).isBetween(moment(min), moment(max), 'day', '[]');
   }
 
   processDate(date) {
