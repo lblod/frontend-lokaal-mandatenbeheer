@@ -15,6 +15,7 @@
   {{mandaat.label}}
 </PowerSelect>
 <DateInput
+  class="au-u-margin-top"
   @label="Start mandaat"
   @value={{this.startDate}}
   @from={{@startDate}}
@@ -23,6 +24,7 @@
   @showErrorAsAlert={{false}}
 />
 <DateInput
+  class="au-u-margin-top"
   @label="Einde mandaat"
   @value={{this.endDate}}
   @from={{@startDate}}
@@ -30,7 +32,7 @@
   @onChange={{fn (mut this.endDate)}}
   @showErrorAsAlert={{false}}
 />
-<AuLabel for="input">Aantal rijen</AuLabel>
+<AuLabel class="au-u-margin-top" for="input">Aantal rijen</AuLabel>
 <AuInput
   @disabled={{not this.selectedMandaat}}
   value={{this.rowsToGenerate}}
