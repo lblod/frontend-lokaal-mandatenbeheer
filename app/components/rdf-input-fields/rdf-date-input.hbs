@@ -1,11 +1,23 @@
+<AuLabel
+  for={{this.inputId}}
+  @error={{this.hasErrors}}
+  @warning={{this.hasWarnings}}
+  @required={{this.isRequired}}
+>{{this.title}}</AuLabel>
 <DateInput
-  @label={{this.title}}
+  @id={{this.inputId}}
   @value={{this.date}}
   {{!-- @from={{@mandataris.start}}
   @to={{@mandataris.einde}} --}}
   @onChange={{this.onUpdate}}
   @showErrorAsAlert={{false}}
 />
+
+{{#unless @show}}
+  <AuHelpText @error={{this.hasErrors}}>
+    Datum formaat: DD-MM-JJJJ
+  </AuHelpText>
+{{/unless}}
 
 {{#each this.errors as |error|}}
   <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
