@@ -141,7 +141,7 @@ export default class KieslijstSplitterComponent extends Component {
   async confirmRevertSplitKieslijst() {
     const fracties = await this.selectedKieslijst.get('resulterendeFracties');
     await Promise.all(
-      fracties.map(async (fractie) => {
+      [...fracties].map(async (fractie) => {
         await fracties.removeObject(fractie);
         await fractie.destroyRecord();
         this.fracties.removeObject(fractie);
