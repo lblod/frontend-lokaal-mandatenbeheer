@@ -1,11 +1,17 @@
 /* ==================================
    # Digitaal loket
    ================================== */
+$mq-breakpoints: (
+  tiny: 300px,
+  xsmall: 500px,
+  small: 767px,
+  medium: 1380px,
+  large: 1600px,
+);
 
 @import "@appuniversum/ember-appuniversum/styles";
 @import "project/c-data-list";
 @import "project/c-document-status-pills";
-@import "project/c-sidebar-container";
 @import "project/c-status-label";
 @import "project/c-skeleton";
 
