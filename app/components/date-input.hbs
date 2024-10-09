@@ -1,8 +1,11 @@
-<div class="au-u-margin-top au-u-margin-bottom" ...attributes>
-  <AuLabel>{{@label}}</AuLabel>
+<div ...attributes>
+  {{#if @label}}
+    <AuLabel>{{@label}}</AuLabel>
+  {{/if}}
   <AuInput
+    @error={{this.errorMessage}}
     value={{this.dateInputString}}
-    id={{this.elementId}}
+    id={{(or @id this.elementId)}}
     placeholder="dd-mm-yyyy"
     {{au-inputmask options=(hash mask="99-99-9999" placeholder="_")}}
     {{on "input" (perform this.onChange)}}
