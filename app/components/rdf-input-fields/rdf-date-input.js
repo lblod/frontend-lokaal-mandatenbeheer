@@ -9,7 +9,6 @@ import moment from 'moment';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { isValidDate } from '../date-input';
 import { NULL_DATE } from 'frontend-lmb/utils/constants';
 
 export default class RdfDateInputComponent extends InputFieldComponent {
@@ -29,7 +28,7 @@ export default class RdfDateInputComponent extends InputFieldComponent {
     if (matches.values.length > 0) {
       const datestring = matches.values[0].value;
       const ttlDate = new Date(datestring);
-      if (moment(ttlDate).isSame(NULL_DATE)) {
+      if (moment(ttlDate).isSame(moment(NULL_DATE))) {
         this.date = null;
       } else {
         this.date = ttlDate;
@@ -39,11 +38,7 @@ export default class RdfDateInputComponent extends InputFieldComponent {
 
   @action
   onUpdate(date) {
-    let workDate = NULL_DATE;
-    if (isValidDate(date)) {
-      workDate = date;
-    }
-    replaceSingleFormValue(this.storeOptions, workDate);
+    replaceSingleFormValue(this.storeOptions, date);
 
     super.updateValidations();
   }
