@@ -25,7 +25,7 @@
     <DateInput
       @label="Vanaf"
       @value={{this.date}}
-      @from={{@mandataris.start}}
+      @from={{this.today}}
       @to={{@mandataris.einde}}
       @onChange={{fn (mut this.date)}}
       @showErrorAsAlert={{true}}
