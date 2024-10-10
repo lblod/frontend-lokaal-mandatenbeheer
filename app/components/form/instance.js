@@ -44,6 +44,14 @@ export default class InstanceComponent extends Component {
     const instanceId = this.formInfo.instanceId;
     this.errorMessage = null;
 
+    const isValid = isValidForm(this.formInfo);
+    this.forceShowErrors = !isValid;
+    if (!isValid) {
+      this.errorMessage =
+        'Niet alle velden zijn correct ingevuld. Gelieve deze eerst te corrigeren.';
+      this.save.cancelAll();
+    }
+
     const result = await this.formRepository.updateFormInstance(
       instanceId,
       this.formInfo.sourceNode.value,
