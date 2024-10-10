@@ -16,11 +16,11 @@ export default class MandatarissenLinkedUpdateStateModal extends Component {
   @tracked isModalOpen = false;
 
   @action
-  checkIfMandateAlreadyExists() {
-    if (this.currentSession.group.isOCMW) {
+  setupModal() {
+    if (!this.args.recentUpdate) {
       return;
     }
-    if (!this.args.recentUpdate) {
+    if (this.currentSession.group.isOCMW) {
       return;
     }
     this.checkDoubleMandataris();
