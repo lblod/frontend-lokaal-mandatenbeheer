@@ -11,8 +11,6 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
 
   queryParams = {
     activeOnly: { refreshModel: true },
-    page: { refreshModel: true },
-    size: { refreshModel: true },
     sort: { refreshModel: true },
   };
 
