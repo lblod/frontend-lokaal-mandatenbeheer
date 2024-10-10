@@ -18,6 +18,7 @@ import {
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
+  @tracked today;
   @tracked date = null;
   @tracked selectedFractie = null;
   @tracked bestuurseenheid = null;
@@ -43,6 +44,7 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   load = task({ drop: true }, async () => {
+    this.today = new Date();
     this.newStatus = this.args.mandataris.status;
     this.date = new Date();
     this.rangorde = this.args.mandataris.rangorde;
@@ -130,23 +132,6 @@ export default class MandatarissenUpdateState extends Component {
     const referenceDate = new Date(this.args.mandataris.start);
     referenceDate.setHours(0, 0, 0, 0);
     return this.date.getTime() >= referenceDate.getTime();
-  }
-
-  get invalidDateErrorMessage() {
-    if (
-      this.bestuursorgaanEndDate &&
-      this.date.getTime() > this.bestuursorgaanEndDate.getTime()
-    ) {
-      const formattedEndDate = moment(this.bestuursorgaanEndDate).format(
-        'DD-MM-YYYY'
-      );
-      return `De gekozen datum moet voor het einde van de bestuursperiode liggen (${formattedEndDate})`;
-    }
-
-    const formattedStartDate = moment(this.args.mandataris.start).format(
-      'DD-MM-YYYY'
-    );
-    return `De gekozen datum moet na de startdatum liggen van het huidige mandaat. (${formattedStartDate})`;
   }
 
   get isInputDateTheSameAsMandatarisStart() {

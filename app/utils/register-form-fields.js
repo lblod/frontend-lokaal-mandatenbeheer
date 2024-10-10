@@ -15,6 +15,7 @@ import RdfInputFieldsConceptSchemeMultiSelectorWithCreateComponent from 'fronten
 import RdfInputFieldsMandatarisStatusSelectorComponent from 'frontend-lmb/components/rdf-input-fields/mandataris-status-selector';
 import RdfBeleidsdomeinCodeSelector from 'frontend-lmb/components/rdf-input-fields/beleidsdomein-code-selector';
 import RdfMandatarisRangorde from 'frontend-lmb/components/rdf-input-fields/mandataris-rangorde';
+import RdfDateInputComponent from 'frontend-lmb/components/rdf-input-fields/rdf-date-input';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -93,6 +94,10 @@ export const registerCustomFormFields = () => {
     {
       displayType: 'http://lblod.data.gift/display-types/mandatarisRangorde',
       edit: RdfMandatarisRangorde,
+    },
+    {
+      displayType: 'http://lblod.data.gift/display-types/dateInput',
+      edit: RdfDateInputComponent,
     },
   ]);
 };
