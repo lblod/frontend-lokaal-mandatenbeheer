@@ -11,8 +11,10 @@ import RSVP from 'rsvp';
 
 export default class MandatarissenPersoonMandatarisRoute extends Route {
   @service store;
+  @service currentSession;
 
   async model(params) {
+    const bestuurseenheid = this.currentSession.group;
     const parentModel = await this.modelFor('mandatarissen.persoon');
     const persoon = parentModel.persoon;
 
@@ -31,6 +33,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       await bestuursorganen.firstObject.heeftBestuursperiode;
 
     return RSVP.hash({
+      bestuurseenheid,
       mandataris,
       mandatarissen,
       mandatarisEditForm,

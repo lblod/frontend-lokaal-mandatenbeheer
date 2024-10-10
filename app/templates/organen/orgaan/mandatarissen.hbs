@@ -60,6 +60,15 @@
   @closable={{true}}
   @closeModal={{(fn this.setIsCreatingMandataris false)}}
 >
+  {{#if @model.bestuurseenheid.isOCMW}}
+    <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
+      Mandatarissen in het OCMW hebben vaak een corresponderend mandaat in de
+      gemeente. Om deze automatisch aan te maken is het gemakkelijker dit te
+      doen vanuit de gemeente. Daar kan je beide aanmaken met een enkel
+      formulier. Als je beslist dit in het OCMW te doen zul je ook nog manueel
+      de corresponderende mandataris moeten aanmaken in de gemeente.
+    </AuAlert>
+  {{/if}}
   <div class="au-o-box">
     <Form::NewInstance
       @onCreate={{this.onCreate}}
