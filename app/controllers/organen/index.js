@@ -11,6 +11,7 @@ export default class OrganenIndexController extends Controller {
   queryParams = ['sort', 'activeOrgans', 'selectedTypes', 'bestuursperiode'];
   @service store;
   @service decretaleOrganen;
+  @service router;
 
   @tracked sort = 'naam';
   @tracked activeOrgans = false;
@@ -85,7 +86,7 @@ export default class OrganenIndexController extends Controller {
     await this.createDefaultMandaten(bestuursorgaanInTijd);
 
     this.toggleModal();
-    this.send('reloadModel');
+    this.router.transitionTo('organen.orgaan.index', instanceId);
   }
 
   async createDefaultBestuursorgaanInTijd(bestuursorgaan) {
