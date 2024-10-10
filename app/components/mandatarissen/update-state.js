@@ -18,6 +18,7 @@ import {
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
+  @tracked today;
   @tracked date = null;
   @tracked selectedFractie = null;
   @tracked bestuurseenheid = null;
@@ -44,6 +45,7 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   load = task({ drop: true }, async () => {
+    this.today = new Date();
     this.newStatus = this.args.mandataris.status;
     this.date = new Date();
     this.rangorde = this.args.mandataris.rangorde;
