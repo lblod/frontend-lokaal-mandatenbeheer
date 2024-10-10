@@ -8,12 +8,15 @@ import RSVP from 'rsvp';
 
 export default class OrganenMandatarisNewRoute extends Route {
   @service store;
+  @service currentSession;
 
   async model() {
     const { currentBestuursorgaan } = this.modelFor('organen.orgaan');
     const mandatarisNewForm = getFormFrom(this.store, MANDATARIS_NEW_FORM_ID);
+    const bestuurseenheid = this.currentSession.group;
 
     return RSVP.hash({
+      bestuurseenheid,
       currentBestuursorgaan,
       mandatarisNewForm,
     });

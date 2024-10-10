@@ -1,4 +1,8 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import {
+  BESTUURSEENHEID_CLASSIFICATIECODE_GEMEENTE,
+  BESTUURSEENHEID_CLASSIFICATIECODE_OCMW,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class Bestuurseenheid extends Model {
   @attr uri;
@@ -42,6 +46,19 @@ export default class Bestuurseenheid extends Model {
     inverse: 'orginalBestuurseenheid',
   })
   fakeBestuursorganen;
+
+  get isGemeente() {
+    return (
+      this.classificatie.get('uri') ===
+      BESTUURSEENHEID_CLASSIFICATIECODE_GEMEENTE
+    );
+  }
+
+  get isOCMW() {
+    return (
+      this.classificatie.get('uri') === BESTUURSEENHEID_CLASSIFICATIECODE_OCMW
+    );
+  }
 
   rdfaBindings = {
     naam: 'http://www.w3.org/2004/02/skos/core#prefLabel',

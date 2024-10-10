@@ -21,6 +21,10 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @tracked periodeHasLegislatuur;
   @tracked behandeldeVergaderingen;
 
+  @tracked correctedMandataris = false;
+  @tracked updatedStateMandataris = false;
+  @tracked newMandataris;
+
   @tracked formInitialized;
 
   get bestuursorganenTitle() {
@@ -52,10 +56,19 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @action
   async onUpdateState(newMandataris) {
     this.editMode = null;
-    if (newMandataris != this.model.mandataris) {
-      this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
+    this.closeModals();
+    this.newMandataris = newMandataris;
+    this.updatedStateMandataris = true;
+  }
+
+  @action
+  callbackAfterUpdate() {
+    if (this.newMandataris != this.model.mandataris) {
+      this.router.transitionTo(
+        'mandatarissen.mandataris',
+        this.newMandataris.id
+      );
     }
-    await this.closeModals();
   }
 
   @action
@@ -66,6 +79,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
 
     await this.fractieApi.updateCurrentFractie(this.model.mandataris.id);
 
+    this.correctedMandataris = true;
     setTimeout(() => this.router.refresh(), 1000);
     this.closeModals();
   }
