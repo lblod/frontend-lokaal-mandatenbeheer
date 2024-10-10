@@ -13,6 +13,7 @@ export default class DateInputComponent extends Component {
 
   @tracked dateInputString;
   @tracked errorMessage;
+  @tracked invalidErrorMessage;
 
   constructor() {
     super(...arguments);
@@ -32,6 +33,10 @@ export default class DateInputComponent extends Component {
     let [day, month, year] = inputValue.split('-');
     const formatForDateConstructor = `${month}-${day}-${year}`;
     const date = this.processDate(new Date(formatForDateConstructor) ?? null);
+
+    if (!this.args.isRequired && !isValidDate(date)) {
+      this.invalidErrorMessage = null;
+    }
 
     this.args.onChange?.(date);
   });
@@ -55,10 +60,12 @@ export default class DateInputComponent extends Component {
 
   processDate(date) {
     if (!isValidDate(date)) {
-      this.errorMessage = `Datum is ongeldig.`;
+      this.invalidErrorMessage = `Datum is ongeldig.`;
+      this.errorMessage = null;
+
       return date;
     }
-    this.errorMessage = null;
+    this.invalidErrorMessage = null;
 
     const minDate = isValidDate(this.args.from) ? this.args.from : null;
     const maxDate = isValidDate(this.args.to) ? this.args.to : null;
@@ -76,6 +83,10 @@ export default class DateInputComponent extends Component {
     }
 
     return date;
+  }
+
+  get errorMessages() {
+    return `${this.invalidErrorMessage ?? ''} ${this.invalidErrorMessage ? '\n' : ''} ${this.errorMessage ?? ''}`;
   }
 }
 
