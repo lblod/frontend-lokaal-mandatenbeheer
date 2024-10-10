@@ -21,6 +21,10 @@ export default class MandatarissenLinkedCorrectModal extends Component {
       return;
     }
     if (this.currentSession.group.isOCMW) {
+      fetch(
+        `/mandataris-api/mandatarissen/${this.args.mandataris}/remove-link-linked-mandataris`,
+        { method: 'DELETE' }
+      );
       return;
     }
     this.checkDoubleMandataris();
