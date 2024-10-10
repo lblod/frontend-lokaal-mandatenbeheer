@@ -21,8 +21,8 @@
           {{#if @showRangorde}}
             <th>Rangorde</th>
           {{/if}}
-          {{#if @showBevoegdheid}}
-            <th>Bevoegdheden</th>
+          {{#if @showBeleidsdomein}}
+            <th>Beleidsdomeinen</th>
           {{/if}}
           {{#if @showStartEndDate}}
             <th>Start mandaat</th>
@@ -64,7 +64,7 @@
               {{/if}}
             </td>
           {{/if}}
-          {{#if @showBevoegdheid}}
+          {{#if @showBeleidsdomein}}
             <td>
               <Beleidsdomeinen @mandataris={{row}} />
             </td>
