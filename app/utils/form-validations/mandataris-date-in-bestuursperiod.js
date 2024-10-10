@@ -10,7 +10,7 @@ export const isValidMandatarisDate = ([dateLiteral], options) => {
   const date = new Date(dateLiteral.value);
   const period = loadBestuursorgaanPeriodFromContext(options);
 
-  if (period.endDate.getTime() === NULL_DATE.getTime()) {
+  if (moment(period.endDate).isSame(NULL_DATE)) {
     if (moment(date).isSameOrAfter(period.startDate)) {
       return true;
     }
