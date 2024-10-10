@@ -118,7 +118,7 @@ export default class MandatarissenLinkedModal extends Component {
 
     const jsonReponse = await response.json();
 
-    if (response.status !== 201 || response.status !== 200) {
+    if (response.status !== 201 && response.status !== 200) {
       console.error(jsonReponse.message);
       showErrorToast(this.toaster, jsonReponse.message);
     }
