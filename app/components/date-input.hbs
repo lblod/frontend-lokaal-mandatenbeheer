@@ -2,12 +2,12 @@
   {{#if @label}}
     <AuLabel
       for={{(or @id this.elementId)}}
-      @error={{this.errorMessage}}
+      @error={{(or this.errorMessage this.invalidErrorMessage)}}
       @required={{@isRequired}}
     >{{@label}}</AuLabel>
   {{/if}}
   <AuInput
-    @error={{this.errorMessage}}
+    @error={{(or this.errorMessage this.invalidErrorMessage)}}
     value={{this.dateInputString}}
     id={{(or @id this.elementId)}}
     placeholder="dd-mm-yyyy"
@@ -15,16 +15,18 @@
     {{on "input" (perform this.onChange)}}
   />
 
-  {{#if this.errorMessage}}
+  {{#if (or this.errorMessage this.invalidErrorMessage)}}
     {{#if @showErrorAsAlert}}
       <AuAlert
         @size="small"
         @closable={{false}}
         @skin="error"
         class="au-u-margin-top"
-      >{{this.errorMessage}}</AuAlert>
+      >
+        {{this.errorMessages}}
+      </AuAlert>
     {{else}}
-      <AuHelpText @error={{true}}>{{this.errorMessage}}</AuHelpText>
+      <AuHelpText @error={{true}}>{{this.errorMessages}}</AuHelpText>
     {{/if}}
   {{/if}}
 </div>
