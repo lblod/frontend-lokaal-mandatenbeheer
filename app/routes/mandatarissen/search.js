@@ -3,7 +3,10 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
-import { placeholderOnafhankelijk } from 'frontend-lmb/utils/constants';
+import {
+  placeholderNietBeschikbaar,
+  placeholderOnafhankelijk,
+} from 'frontend-lmb/utils/constants';
 
 export default class MandatarissenSearchRoute extends Route {
   @service store;
@@ -17,6 +20,7 @@ export default class MandatarissenSearchRoute extends Route {
     bestuursfunctie: { refreshModel: true },
     binnenFractie: { refreshModel: true },
     onafhankelijkeFractie: { refreshModel: true },
+    fractieNietBeschikbaar: { refreshModel: true },
     activeMandatarissen: { refreshModel: true },
   };
 
@@ -67,7 +71,11 @@ export default class MandatarissenSearchRoute extends Route {
       selectedPeriod: { period: selectedPeriod, disabled: false },
       bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
       selectedBestuurfunctieIds: params.bestuursfunctie,
-      fracties: [...samenWerkendFracties, placeholderOnafhankelijk],
+      fracties: [
+        ...samenWerkendFracties,
+        placeholderOnafhankelijk,
+        placeholderNietBeschikbaar,
+      ],
       selectedFracties: params.binnenFractie,
     };
   }
@@ -99,8 +107,11 @@ export default class MandatarissenSearchRoute extends Route {
         params.bestuursfunctie;
     }
     if (params.binnenFractie !== null) {
-      queryParams['filter[heeft-lidmaatschap][binnen-fractie][:id:]'] =
+      queryParams['filter[:or:][heeft-lidmaatschap][binnen-fractie][:id:]'] =
         params.binnenFractie;
+    }
+    if (params.fractieNietBeschikbaar) {
+      queryParams['filter[:or:][:has-no:heeft-lidmaatschap]'] = true;
     }
     const mandatarissen = await this.store.query('mandataris', queryParams);
     const personen = (
