@@ -60,21 +60,15 @@ export default class DateInputComponent extends Component {
     }
     this.errorMessage = null;
 
-    let minDateTime = null;
-    let maxDateTime = null;
-    if (this.args.from) {
-      minDateTime = new Date(this.args.from);
-    }
-    if (this.args.to) {
-      maxDateTime = new Date(this.args.to);
-    }
+    const minDate = isValidDate(this.args.from) ? this.args.from : null;
+    const maxDate = isValidDate(this.args.to) ? this.args.to : null;
 
-    if (!this.isDateInRange(date, minDateTime, maxDateTime)) {
-      const stringMinDate = isValidDate(minDateTime)
-        ? moment(minDateTime).format('DD-MM-YYYY')
+    if (!this.isDateInRange(date, minDate, maxDate)) {
+      const stringMinDate = isValidDate(minDate)
+        ? moment(minDate).format('DD-MM-YYYY')
         : null;
-      const stringMaxDate = isValidDate(maxDateTime)
-        ? moment(maxDateTime).format('DD-MM-YYYY')
+      const stringMaxDate = isValidDate(maxDate)
+        ? moment(maxDate).format('DD-MM-YYYY')
         : null;
       this.errorMessage = `Kies een datum tussen ${stringMinDate || 'een moment in het verleden'} en ${stringMaxDate || 'een moment in de toekomst'}.`;
     } else {
