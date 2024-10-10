@@ -31,6 +31,12 @@ export const placeholderOnafhankelijk = {
   naam: 'Onafhankelijk',
 };
 
+export const placeholderNietBeschikbaar = {
+  uri: `http://placeholder-niet-beschikbaar`,
+  id: 'NIET-BESCHIKBAAR-ID',
+  naam: 'Niet Beschikbaar',
+};
+
 export const MANDATARIS_PREDICATE = {
   persoon: 'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan',
   mandaat: 'http://www.w3.org/ns/org#holds',
