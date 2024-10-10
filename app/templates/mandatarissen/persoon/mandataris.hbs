@@ -160,7 +160,7 @@
 <Mandatarissen::Linked::Modal
   @recentUpdate={{this.correctedMandataris}}
   @mandataris={{this.model.mandataris.id}}
-  @type="CORRECT"
+  @correct="true"
 />
 
 <Mandatarissen::Linked::Modal
@@ -168,5 +168,5 @@
   @mandataris={{this.model.mandataris.id}}
   @newMandataris={{this.newMandataris.id}}
   @callback={{this.callbackAfterUpdate}}
-  @type="UPDATE_STATE"
+  @updateState="true"
 />

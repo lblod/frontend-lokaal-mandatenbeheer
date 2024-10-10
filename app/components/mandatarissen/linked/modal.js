@@ -21,7 +21,7 @@ export default class MandatarissenLinkedModal extends Component {
       return;
     }
     if (this.currentSession.group.isOCMW) {
-      if (this.args.type != 'CREATE') {
+      if (!this.args.create) {
         fetch(
           `/mandataris-api/mandatarissen/${this.args.mandataris}/remove-link-linked-mandataris`,
           { method: 'DELETE' }
@@ -53,9 +53,9 @@ export default class MandatarissenLinkedModal extends Component {
     }
 
     if (
-      (this.args.type === 'CREATE' &&
+      (this.args.create &&
         (!jsonReponse.duplicateMandate || jsonReponse.hasDouble)) ||
-      ((this.args.type === 'CORRECT' || this.args.type === 'UPDATE_STATE') &&
+      ((this.args.correct || this.args.updateState) &&
         (!jsonReponse.duplicateMandate || !jsonReponse.hasDouble))
     ) {
       if (this.args.callback) {
@@ -69,19 +69,19 @@ export default class MandatarissenLinkedModal extends Component {
   }
 
   setText(currentMandate, duplicateMandate) {
-    if (this.args.type === 'CREATE') {
+    if (this.args.create) {
       this.doubleMandateTitle = `Aanmaken mandaat ${duplicateMandate}`;
       this.doubleMandateText = `
     U heeft zonet een mandataris met het mandaat ${currentMandate} aangemaakt.
     Normaliter heeft een mandataris met dit mandaat ook een corresponderend mandaat als ${duplicateMandate}.
     Wenst u dit mandaat aan te maken?`;
-    } else if (this.args.type === 'CORRECT') {
+    } else if (this.args.correct) {
       this.doubleMandateTitle = `Corrigeer fouten mandaat ${duplicateMandate}`;
       this.doubleMandateText = `
     U heeft zonet een mandataris met het mandaat ${currentMandate} gecorrigeerd.
     Deze mandataris heeft ook een corresponderend mandaat ${duplicateMandate}.
     Wenst u de wijzigingen ook door te voeren in dit mandaat?`;
-    } else if (this.args.type === 'UPDATE_STATE') {
+    } else if (this.args.updateState) {
       this.doubleMandateTitle = `Wijzig huidig mandaat ${duplicateMandate}`;
       this.doubleMandateText = `
     U heeft zonet de status van een mandataris met het mandaat ${currentMandate} gewijzigd.
@@ -92,11 +92,11 @@ export default class MandatarissenLinkedModal extends Component {
 
   @action
   async confirmAction() {
-    if (this.args.type === 'CREATE') {
+    if (this.args.create) {
       this.createDoubleMandataris();
-    } else if (this.args.type === 'CORRECT') {
+    } else if (this.args.correct) {
       this.correctDoubleMandataris();
-    } else if (this.args.type === 'UPDATE_STATE') {
+    } else if (this.args.updateState) {
       this.updateStateDoubleMandataris();
     }
     this.isModalOpen = false;
