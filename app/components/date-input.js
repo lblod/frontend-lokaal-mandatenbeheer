@@ -38,6 +38,10 @@ export default class DateInputComponent extends Component {
       this.invalidErrorMessage = null;
     }
 
+    if (!isValidDate(date)) {
+      this.args.onChange?.(null);
+      return;
+    }
     this.args.onChange?.(date);
   });
 
@@ -49,10 +53,10 @@ export default class DateInputComponent extends Component {
       return true;
     }
     if (!min && max) {
-      return moment(date).isSameOrBefore(max);
+      return moment(date).isSameOrBefore(moment(max));
     }
     if (!max && min) {
-      return moment(date).isSameOrAfter(min);
+      return moment(date).isSameOrAfter(moment(min));
     }
 
     return moment(date).isBetween(moment(min), moment(max), 'day', '[]');
@@ -92,4 +96,21 @@ export default class DateInputComponent extends Component {
 
 export function isValidDate(date) {
   return date && date instanceof Date && !isNaN(date);
+}
+
+export function isDateInRange(date, min, max) {
+  if (!date) {
+    return false;
+  }
+  if (!min && !max) {
+    return true;
+  }
+  if (!min && max) {
+    return moment(date).isSameOrBefore(moment(max));
+  }
+  if (!max && min) {
+    return moment(date).isSameOrAfter(moment(min));
+  }
+
+  return moment(date).isBetween(moment(min), moment(max), 'day', '[]');
 }
