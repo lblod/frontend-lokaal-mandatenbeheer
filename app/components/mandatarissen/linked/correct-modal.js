@@ -9,6 +9,7 @@ import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 export default class MandatarissenLinkedCorrectModal extends Component {
   @service store;
   @service toaster;
+  @service currentSession;
 
   @tracked doubleMandateTitle = '';
   @tracked doubleMandateText = '';
@@ -16,6 +17,9 @@ export default class MandatarissenLinkedCorrectModal extends Component {
 
   @action
   checkIfMandateAlreadyExists() {
+    if (this.currentSession.group.isOCMW) {
+      return;
+    }
     if (!this.args.recentUpdate) {
       return;
     }
