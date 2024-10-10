@@ -92,65 +92,41 @@ export default class MandatarissenLinkedModal extends Component {
 
   @action
   async confirmAction() {
+    let response;
+    let message;
     if (this.args.create) {
-      this.createDoubleMandataris();
+      response = await fetch(
+        `/mandataris-api/mandatarissen/${this.args.mandataris}/create-linked-mandataris`,
+        { method: 'POST' }
+      );
+      message = 'Corresponderend mandaat in de OCMW werd succesvol aangemaakt.';
     } else if (this.args.correct) {
-      this.correctDoubleMandataris();
+      response = await fetch(
+        `/mandataris-api/mandatarissen/${this.args.mandataris}/correct-linked-mandataris`,
+        { method: 'PUT' }
+      );
+      message =
+        'Corresponderend mandaat in de OCMW werd succesvol gecorrigeerd.';
     } else if (this.args.updateState) {
-      this.updateStateDoubleMandataris();
+      response = await fetch(
+        `/mandataris-api/mandatarissen/${this.args.mandataris}/${this.args.newMandataris}/update-state-linked-mandataris`,
+        { method: 'PUT' }
+      );
+      message =
+        'Status corresponderend mandaat in de OCMW werd succesvol aangepast.';
     }
+
+    const jsonReponse = await response.json();
+
+    if (response.status !== 201 || response.status !== 200) {
+      console.error(jsonReponse.message);
+      showErrorToast(this.toaster, jsonReponse.message);
+    }
+    showSuccessToast(this.toaster, message);
     this.isModalOpen = false;
 
     if (this.args.callback) {
       this.args.callback();
     }
-  }
-
-  @action
-  async createDoubleMandataris() {
-    const response = await fetch(
-      `/mandataris-api/mandatarissen/${this.args.mandataris}/create-linked-mandataris`,
-      { method: 'POST' }
-    );
-    const jsonReponse = await response.json();
-
-    if (response.status !== 201) {
-      console.error(jsonReponse.message);
-      showErrorToast(this.toaster, jsonReponse.message);
-    }
-    showSuccessToast(this.toaster, `Mandataris werd succesvol aangemaakt.`);
-  }
-
-  @action
-  async correctDoubleMandataris() {
-    const response = await fetch(
-      `/mandataris-api/mandatarissen/${this.args.mandataris}/correct-linked-mandataris`,
-      { method: 'PUT' }
-    );
-    const jsonReponse = await response.json();
-
-    if (response.status !== 200) {
-      console.error(jsonReponse.message);
-      showErrorToast(this.toaster, jsonReponse.message);
-    }
-    showSuccessToast(this.toaster, `Mandataris werd succesvol gecorrigeerd.`);
-  }
-
-  @action
-  async updateStateDoubleMandataris() {
-    const response = await fetch(
-      `/mandataris-api/mandatarissen/${this.args.mandataris}/${this.args.newMandataris}/update-state-linked-mandataris`,
-      { method: 'PUT' }
-    );
-    const jsonReponse = await response.json();
-
-    if (response.status !== 200) {
-      console.error(jsonReponse.message);
-      showErrorToast(this.toaster, jsonReponse.message);
-    }
-    showSuccessToast(
-      this.toaster,
-      `Status mandataris werd succesvol gewijzigd.`
-    );
   }
 }
