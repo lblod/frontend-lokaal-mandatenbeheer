@@ -89,18 +89,21 @@ export default class MandatarissenSearchController extends Controller {
   }
 
   get selectedFracties() {
-    if (!this.model.selectedFracties) {
-      return [];
-    }
-
-    const fractieIds = [...new Set(this.model.selectedFracties.split(','))];
-    const fracties = fractieIds.map((id) =>
-      this.model.fracties.find((fractie) => fractie.id == id)
-    );
-
+    let fracties = [];
     if (this.onafhankelijkeFractie) {
       fracties.push(placeholderOnafhankelijk);
     }
+
+    if (!this.model.selectedFracties) {
+      return fracties;
+    }
+
+    const fractieIds = [...new Set(this.model.selectedFracties.split(','))];
+    fracties = fracties.concat(
+      fractieIds.map((id) =>
+        this.model.fracties.find((fractie) => fractie.id == id)
+      )
+    );
 
     return fracties.filter((fractie) => fractie);
   }
