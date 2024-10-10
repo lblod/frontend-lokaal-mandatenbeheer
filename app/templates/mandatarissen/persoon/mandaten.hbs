@@ -67,7 +67,7 @@
           <AuDataTableThSortable
             @field="bekleedt.bevatIn.isTijdsspecialisatieVan.naam"
             @currentSorting={{this.sort}}
-            @label="Bestuursorgaan"
+            @label="Orgaan"
           />
           <AuDataTableThSortable
             @field="bekleedt.bestuursfunctie.label"
@@ -149,26 +149,26 @@
 </div>
 
 <AuModal
-  @title="Selecteer bestuursorgaan"
+  @title="Selecteer orgaan"
   @modalOpen={{this.isModalOpen}}
   @closeModal={{this.closeModal}}
   as |Modal|
 >
   <Modal.Body>
     <AuContent class="au-u-margin-bottom-small">
-      Selecteer een bestuursorgaan waaraan je een mandaat wilt toevoegen.
+      Selecteer een orgaan waaraan je een mandaat wilt toevoegen.
     </AuContent>
     <PowerSelect
       @allowClear={{false}}
       @renderInPlace={{false}}
       @searchEnabled={{true}}
       @noMatchesMessage={{"Geen resultaten gevonden"}}
-      @searchMessage={{"Typ om een bestuursorgaan te zoeken"}}
+      @searchMessage={{"Typ om een orgaan te zoeken"}}
       @options={{@model.bestuursorganen}}
       @selected={{this.selectedBestuursorgaan}}
       @onChange={{fn (mut this.selectedBestuursorgaan)}}
       @searchField="naam"
-      @placeholder="Selecteer een bestuursorgaan"
+      @placeholder="Selecteer een orgaan"
       as |select|
     >
       {{select.naam}}
