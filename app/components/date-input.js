@@ -64,11 +64,9 @@ export default class DateInputComponent extends Component {
     let maxDateTime = null;
     if (this.args.from) {
       minDateTime = new Date(this.args.from);
-      minDateTime.setHours(0, 0, 0, 0);
     }
     if (this.args.to) {
       maxDateTime = new Date(this.args.to);
-      maxDateTime.setHours(0, 0, 0, 0);
     }
 
     if (!this.isDateInRange(date, minDateTime, maxDateTime)) {
