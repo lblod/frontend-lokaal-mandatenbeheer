@@ -1,6 +1,10 @@
 <div ...attributes>
   {{#if @label}}
-    <AuLabel>{{@label}}</AuLabel>
+    <AuLabel
+      for={{(or @id this.elementId)}}
+      @error={{this.errorMessage}}
+      @required={{@isRequired}}
+    >{{@label}}</AuLabel>
   {{/if}}
   <AuInput
     @error={{this.errorMessage}}
