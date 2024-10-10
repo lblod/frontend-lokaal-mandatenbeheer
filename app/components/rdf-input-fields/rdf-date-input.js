@@ -8,6 +8,7 @@ import { guidFor } from '@ember/object/internals';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
+import { isValidDate } from '../date-input';
 
 export default class RdfDateInputComponent extends InputFieldComponent {
   inputId = 'date-' + guidFor(this);
@@ -31,7 +32,11 @@ export default class RdfDateInputComponent extends InputFieldComponent {
 
   @action
   onUpdate(date) {
-    replaceSingleFormValue(this.storeOptions, date);
+    let workDate = null;
+    if (isValidDate(date)) {
+      workDate = date;
+    }
+    replaceSingleFormValue(this.storeOptions, workDate);
 
     super.updateValidations();
   }
