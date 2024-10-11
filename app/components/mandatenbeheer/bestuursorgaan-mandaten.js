@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 import { task } from 'ember-concurrency';
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatenbeheerBestuursorgaanMandatenComponent extends Component {
   @service store;
@@ -63,11 +64,16 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
       );
       return;
     }
-    await mandaat.destroyRecord();
-    this.toaster.notify('Het mandaat werd verwijderd.', 'Success', {
-      type: 'success',
-      icon: 'circle-check',
-    });
+    try {
+      await mandaat.destroyRecord();
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Het mandaat kon niet verwijderd worden, probeer later opnieuw.'
+      );
+      return;
+    }
+    showSuccessToast(this.toaster, 'Het mandaat werd verwijderd.');
     this.router.refresh();
   });
 
