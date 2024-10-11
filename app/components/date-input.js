@@ -6,7 +6,7 @@ import { guidFor } from '@ember/object/internals';
 import { restartableTask, timeout } from 'ember-concurrency';
 import moment from 'moment';
 
-import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
+import { INPUT_DEBOUNCE, NULL_DATE } from 'frontend-lmb/utils/constants';
 
 export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
@@ -72,7 +72,11 @@ export default class DateInputComponent extends Component {
     this.invalidErrorMessage = null;
 
     const minDate = isValidDate(this.args.from) ? this.args.from : null;
-    const maxDate = isValidDate(this.args.to) ? this.args.to : null;
+    const maxDate =
+      isValidDate(this.args.to) &&
+      !moment(this.args.to).isSame(moment(NULL_DATE))
+        ? this.args.to
+        : null;
 
     if (!this.isDateInRange(date, minDate, maxDate)) {
       const stringMinDate = isValidDate(minDate)
