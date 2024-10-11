@@ -1,11 +1,5 @@
 <div>
   <div class="au-o-box no-pagination">
-    {{#unless (eq this.resortedMandatarissen.length 0)}}
-      <AuHelpText @skin="secondary" @size="large">
-        Aantal:
-        {{this.resortedMandatarissen.length}}
-      </AuHelpText>
-    {{/unless}}
     <h1 class="au-u-h2 au-u-margin-bottom-small">{{@title}}</h1>
     <AuDataTable
       @content={{this.resortedMandatarissen}}
@@ -99,6 +93,12 @@
         </c.body>
       </t.content>
     </AuDataTable>
+    {{#unless (eq this.resortedMandatarissen.length 0)}}
+      <AuHelpText @skin="secondary" @size="large">
+        Aantal:
+        {{this.resortedMandatarissen.length}}
+      </AuHelpText>
+    {{/unless}}
   </div>
 </div>
 
