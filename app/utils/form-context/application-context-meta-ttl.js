@@ -1,5 +1,6 @@
 import { EXT, LMB } from 'frontend-lmb/rdf/namespaces';
 import { NULL_DATE } from 'frontend-lmb/utils/constants';
+import moment from 'moment';
 
 // Expects bestuursorgaan in de tijd
 export const getApplicationContextMetaTtl = (bestuursorganen) => {
@@ -69,7 +70,9 @@ const getBestuursperiodeForBestuursorganen = (bestuursorganen) => {
     const bestuursorgaan = bestuursorganen.at(0);
 
     return {
-      startDate: bestuursorgaan.bindingStart,
+      startDate: new Date(
+        moment(bestuursorgaan.bindingStart).format('DD-MM-YYYY')
+      ),
       endDate: bestuursorgaan.bindingEinde ?? NULL_DATE,
     };
   }
