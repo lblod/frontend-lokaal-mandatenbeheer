@@ -14,7 +14,6 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
     const router = this.router;
     window.fetch = async function () {
       const response = await originalFetch.apply(this, arguments);
-      console.log('status', response.status);
       if (OFFENDING_STATUS_CODES.indexOf(response.status) > -1) {
         router.transitionTo('session-expired');
       }
