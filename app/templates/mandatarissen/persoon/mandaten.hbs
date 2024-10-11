@@ -57,6 +57,8 @@
     <AuDataTable
       @content={{@model.mandatarissen}}
       @noDataMessage="Geen mandaten gevonden"
+      @page={{this.page}}
+      @size={{this.size}}
       @sort={{this.sort}}
       as |t|
     >
