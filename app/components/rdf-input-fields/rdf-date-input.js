@@ -5,11 +5,9 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 
-import moment from 'moment';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { NULL_DATE } from 'frontend-lmb/utils/constants';
 
 export default class RdfDateInputComponent extends InputFieldComponent {
   inputId = 'date-' + guidFor(this);
@@ -27,12 +25,7 @@ export default class RdfDateInputComponent extends InputFieldComponent {
 
     if (matches.values.length > 0) {
       const datestring = matches.values[0].value;
-      const ttlDate = new Date(datestring);
-      if (moment(ttlDate).isSame(moment(NULL_DATE))) {
-        this.date = null;
-      } else {
-        this.date = ttlDate;
-      }
+      this.date = new Date(datestring);
     }
   }
 
