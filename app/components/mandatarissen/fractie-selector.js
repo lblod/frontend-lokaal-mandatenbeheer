@@ -55,9 +55,10 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     }
 
     if (!this.args.isUpdatingState && !this.args.isInCreatingForm) {
-      this.fractieOptions = await this.fractieApi.forBestuursperiode(
-        this.args.bestuursperiode.id
-      );
+      this.fractieOptions =
+        await this.fractieApi.samenwerkingForBestuursperiode(
+          this.args.bestuursperiode.id
+        );
     }
 
     if (!this.args.isUpdatingState && this.args.isInCreatingForm) {
@@ -69,9 +70,10 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         this.fractieOptions = [currentFractie];
         return;
       } else {
-        this.fractieOptions = await this.fractieApi.forBestuursperiode(
-          this.args.bestuursperiode.id
-        );
+        this.fractieOptions =
+          await this.fractieApi.samenwerkingForBestuursperiode(
+            this.args.bestuursperiode.id
+          );
       }
     }
 
