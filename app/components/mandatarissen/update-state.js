@@ -19,12 +19,13 @@ import { isDateInRange } from '../date-input';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
-  @tracked today;
   @tracked date = null;
   @tracked selectedFractie = null;
   @tracked bestuurseenheid = null;
   @tracked bestuursorganenOfMandaat = [];
   @tracked bestuursperiode;
+  @tracked bestuursorgaanStartDate;
+  @tracked bestuursorgaanEndDate;
   @tracked rangorde = null;
   @tracked selectedReplacement = null;
   @tracked inValidReplacement = false;
@@ -46,7 +47,6 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   load = task({ drop: true }, async () => {
-    this.today = new Date();
     this.newStatus = this.args.mandataris.status;
     this.date = new Date();
     this.rangorde = this.args.mandataris.rangorde;
@@ -61,7 +61,17 @@ export default class MandatarissenUpdateState extends Component {
     this.bestuursperiode =
       await this.bestuursorganenOfMandaat[0]?.heeftBestuursperiode;
     this.statusOptions = await this.getStatusOptions();
+    await this.getBestuursorgaanPeriod();
   });
+
+  async getBestuursorgaanPeriod() {
+    const mandaat = await this.args.mandataris.bekleedt;
+    const bestuursorganen = await mandaat.bevatIn;
+    if (bestuursorganen.length >= 1) {
+      this.bestuursorgaanStartDate = bestuursorganen.at(0).bindingStart;
+      this.bestuursorgaanEndDate = bestuursorganen.at(0).bindingEinde;
+    }
+  }
 
   async getStatusOptions() {
     const isBurgemeester = (
@@ -134,7 +144,11 @@ export default class MandatarissenUpdateState extends Component {
       !this.isValidDate ||
       this.inValidReplacement ||
       !this.hasChanges ||
-      !isDateInRange(this.date, this.today, this.args.mandataris.einde)
+      !isDateInRange(
+        this.date,
+        this.bestuursorgaanStartDate,
+        this.bestuursorgaanEndDate
+      )
     );
   }
 
