@@ -118,7 +118,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       this.behandeldeVergaderingen &&
       this.behandeldeVergaderingen.length === 0
     ) {
-      return true;
+      return this.model.isDistrictEenheid ? false : true;
     }
 
     return false;

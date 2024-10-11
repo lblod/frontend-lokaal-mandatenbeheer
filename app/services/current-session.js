@@ -87,14 +87,18 @@ export default class CurrentSessionService extends Service {
     return this.roles.includes(role);
   }
 
-  async showLegislatuurModule() {
+  async isDistrict() {
     const classificatie = await this.group?.classificatie;
 
-    const isDistrict = classificatie
+    return classificatie
       ? classificatie.uri === BESTUURSEENHEID_CLASSIFICATIECODE_DISTRICT
       : false;
+  }
 
-    return this.features.isEnabled('show-iv-module') && !isDistrict;
+  async showLegislatuurModule() {
+    return (
+      this.features.isEnabled('show-iv-module') && !(await this.isDistrict())
+    );
   }
 
   get canAccessMandaat() {
