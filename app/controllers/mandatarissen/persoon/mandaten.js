@@ -17,8 +17,10 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @service fractieApi;
   @service persoonApi;
 
-  queryParams = ['activeOnly'];
+  queryParams = ['activeOnly', 'page', 'size', 'sort'];
 
+  @tracked page = 0;
+  @tracked size = 20;
   @tracked canBecomeOnafhankelijk;
   @tracked currentNonOnafhankelijkeMandatarissen = [];
   @tracked isModalOpen = false;
