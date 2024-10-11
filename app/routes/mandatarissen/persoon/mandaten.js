@@ -22,7 +22,7 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
     const mandatarissen = await this.getMandatarissen(persoon, params);
 
     const bestuursorganen =
-      await this.bestuursorganen.getAllRealPoliticalBestuursorganen();
+      await this.bestuursorganen.getRealCurrentPoliticalBestuursorganen();
 
     const foldedMandatarissen = await foldMandatarisses(params, mandatarissen);
 

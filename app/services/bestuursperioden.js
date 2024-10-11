@@ -21,6 +21,13 @@ export default class BestuursperiodenService extends Service {
     return filtered;
   }
 
+  async getCurrentBestuursperiode() {
+    const periods = await this.store.query('bestuursperiode', {
+      sort: 'label',
+    });
+    return this.getClosestPeriod(periods);
+  }
+
   getRelevantPeriod(periods, bestuursperiodeId) {
     if (bestuursperiodeId) {
       return periods.find((period) => {
