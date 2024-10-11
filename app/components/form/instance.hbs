@@ -32,15 +32,16 @@
           {{#if @hideDescriptionModalOnSave}}
             <AuButton
               {{on "click" (perform this.save)}}
-              @loading={{or this.save.isRunning}}
-              @loadingMessage="Aan het oplaan"
+              @loading={{this.save.isRunning}}
+              @loadingMessage="Aan het opslaan"
               @disabled={{not this.hasChanges}}
             >Pas aan</AuButton>
           {{else}}
             <AuButton
               {{on "click" this.tryOpenHistoryModal}}
-              @loading={{or this.save.isRunning (not this.hasChanges)}}
-              @loadingMessage="Aan het oplaan"
+              @loading={{this.save.isRunning}}
+              @loadingMessage="Aan het opslaan"
+              @disabled={{not this.hasChanges}}
             >Pas aan</AuButton>
           {{/if}}
         </Shared::Tooltip>
