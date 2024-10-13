@@ -128,6 +128,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     });
     this.bcsd.forceRecomputeBCSD();
     this.getMandatarissen.perform({ updated: true });
+    this.router.refresh(); // not doing this breaks burgemeester selector synchronization
   });
 
   async getBestuursorgaanMandatarissen(bestuursorgaan) {
