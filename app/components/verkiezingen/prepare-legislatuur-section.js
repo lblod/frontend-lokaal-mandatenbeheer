@@ -25,7 +25,7 @@ import {
   getDraftPublicationStatus,
   getEffectiefStatus,
 } from 'frontend-lmb/utils/get-mandataris-status';
-import { showWarningToast } from 'frontend-lmb/utils/toasts';
+import { showErrorToast, showWarningToast } from 'frontend-lmb/utils/toasts';
 
 const CREATE_MODE = 'create';
 
@@ -118,129 +118,29 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       );
       return;
     }
-    const mandatarissenToSync = await this.getBestuursorgaanMandatarissen(
-      bestuursorgaanToSyncFrom
-    );
 
-    if (mandatarissenToSync.length == 0) {
-      showWarningToast(
+    await fetch(
+      '/mandataris-api/installatievergadering-api/copy-gemeente-to-ocmw-draft',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          gemeenteUri: bestuursorgaanToSyncFrom.id,
+          ocmwUri: this.args.bestuursorgaan.id,
+        }),
+      }
+    ).catch((e) => {
+      console.log(e);
+      showErrorToast(
         this.toaster,
-        'Geen mandatarissen gevonden om over te nemen.'
+        'Er ging iets mis bij het overzetten van de mandatarissen.'
       );
-      return;
-    }
-    this.skeletonRowsOfMirror = mandatarissenToSync.length;
-
-    for (const mandataris of this.mandatarissen) {
-      mandataris.destroyRecord();
-    }
-
-    const newMandatarissen = [];
-    for (const mandatarisToAdd of mandatarissenToSync) {
-      const mandaatOfMandataris = await mandatarisToAdd.bekleedt;
-      const bestuursfunctie = await mandaatOfMandataris.bestuursfunctie;
-
-      const bestuursfunctieCodeMapping = {
-        [MANDAAT_GEMEENTERAADSLID_CODE]: MANDAAT_LID_RMW_CODE,
-        [MANDAAT_VOORZITTER_GEMEENTERAAD_CODE]: MANDAAT_VOORZITTER_RMW_CODE,
-        [MANDAAT_SCHEPEN_CODE]: MANDAAT_LID_VAST_BUREAU_CODE,
-        [MANDAAT_BURGEMEESTER_CODE]: MANDAAT_VOORZITTER_VAST_BUREAU_CODE,
-      };
-
-      const bestuurfunctieCodes = await this.store.query(
-        'bestuursfunctie-code',
-        { filter: { ':uri:': bestuursfunctieCodeMapping[bestuursfunctie.uri] } }
-      );
-
-      if (bestuurfunctieCodes.length == 0) {
-        showWarningToast(
-          this.toaster,
-          'Geen bestuursfunctie gevonden om te synchroniseren.'
-        );
-        return;
-      }
-
-      const toBestuursfunctie = bestuurfunctieCodes[0];
-      const mandatenOpBestuursOrgaan = await this.args.bestuursorgaan.bevat;
-      let mandaat = null;
-
-      for (const existingMandaat of mandatenOpBestuursOrgaan) {
-        if (mandaat) {
-          continue;
-        }
-        const bestuursfunctie = await existingMandaat.bestuursfunctie;
-
-        if (bestuursfunctie.uri == toBestuursfunctie.uri) {
-          mandaat = existingMandaat;
-        }
-      }
-
-      if (!mandaat) {
-        mandaat = this.store.createRecord('mandaat', {
-          bestuursfunctie: toBestuursfunctie,
-          bevatIn: [this.args.bestuursorgaan],
-        });
-        await mandaat.save();
-      }
-
-      const lidmaatschap = await mandatarisToAdd.heeftLidmaatschap;
-      let newLidmaatschap = null;
-      if (lidmaatschap) {
-        newLidmaatschap = this.store.createRecord('lidmaatschap', {
-          binnenFractie: await lidmaatschap.binnenFractie,
-        });
-      }
-
-      const newMandataris = await this.createMandatarisFromMandataris(
-        mandatarisToAdd,
-        mandaat,
-        newLidmaatschap
-      );
-
-      if (newLidmaatschap) {
-        newLidmaatschap.lid = newMandataris;
-        await newLidmaatschap.save();
-      }
-
-      const mandatarissen = await mandaat.bekleedDoor;
-      mandatarissen.pushObject(newMandataris);
-      await mandatarissen.save();
-
-      await fetch(
-        `/mandataris-api/mandatarissen/${mandatarisToAdd.id}/${newMandataris.id}/add-link-linked-mandataris`,
-        { method: 'POST' }
-      );
-
-      newMandatarissen.push(newMandataris);
-    }
-    await this.getMandatarissen.perform({
-      added: newMandatarissen,
-      removed: this.mandatarissen,
     });
-
     this.bcsd.forceRecomputeBCSD();
+    this.getMandatarissen.perform({ updated: true });
   });
-
-  async createMandatarisFromMandataris(mandataris, mandaat, lidmaatschap) {
-    let propertiesForMandataris = {
-      rangorde: null,
-      start: mandataris.start,
-      einde: mandataris.einde,
-      bekleedt: mandaat,
-      isBestuurlijkeAliasVan: await mandataris.isBestuurlijkeAliasVan,
-      beleidsdomein: [],
-      status: await getEffectiefStatus(this.store),
-      publicationStatus: await getDraftPublicationStatus(this.store),
-      heeftLidmaatschap: lidmaatschap,
-    };
-
-    if (!(await this.isLidVanVB)) {
-      propertiesForMandataris.rangorde = mandataris.rangorde;
-      propertiesForMandataris.beleidsdomein = await mandataris.beleidsdomein;
-    }
-
-    return this.store.createRecord('mandataris', propertiesForMandataris);
-  }
 
   async getBestuursorgaanMandatarissen(bestuursorgaan) {
     const queryParams = {
