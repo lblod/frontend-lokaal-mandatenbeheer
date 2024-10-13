@@ -1,31 +1,19 @@
 import Component from '@glimmer/component';
 
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { service } from '@ember/service';
 import { A } from '@ember/array';
+import { action } from '@ember/object';
+import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 import { restartableTask, task } from 'ember-concurrency';
 
-import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
+import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
+import { showErrorToast, showWarningToast } from 'frontend-lmb/utils/toasts';
 import {
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
-  MANDAAT_LID_RMW_CODE,
-  MANDAAT_SCHEPEN_CODE,
-  MANDAAT_GEMEENTERAADSLID_CODE,
-  MANDAAT_VOORZITTER_GEMEENTERAAD_CODE,
-  MANDAAT_VOORZITTER_RMW_CODE,
-  MANDAAT_LID_VAST_BUREAU_CODE,
-  MANDAAT_VOORZITTER_VAST_BUREAU_CODE,
-  MANDAAT_BURGEMEESTER_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
-import {
-  getDraftPublicationStatus,
-  getEffectiefStatus,
-} from 'frontend-lmb/utils/get-mandataris-status';
-import { showErrorToast, showWarningToast } from 'frontend-lmb/utils/toasts';
 
 const CREATE_MODE = 'create';
 
