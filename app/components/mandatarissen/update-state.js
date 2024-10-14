@@ -25,6 +25,7 @@ export default class MandatarissenUpdateState extends Component {
   @tracked bestuursperiode;
   @tracked rangorde = null;
   @tracked selectedReplacement = null;
+  @tracked inValidReplacement = false;
   @tracked replacementUpdated;
   @tracked statusOptions = [];
 
@@ -174,6 +175,7 @@ export default class MandatarissenUpdateState extends Component {
       !this.newStatus ||
       !this.date ||
       !this.isValidDate ||
+      this.inValidReplacement ||
       !this.hasChanges
     );
   }
@@ -303,6 +305,11 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   @action updateReplacement(newReplacement) {
+    if (this.args.mandataris.isBestuurlijkeAliasVan.id === newReplacement?.id) {
+      this.inValidReplacement = true;
+    } else {
+      this.inValidReplacement = false;
+    }
     this.selectedReplacement = newReplacement;
     this.replacementUpdated = true;
   }
