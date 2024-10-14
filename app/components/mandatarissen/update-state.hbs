@@ -1,130 +1,136 @@
-{{yield}}
-<div class="au-o-box au-o-flow">
-  {{#unless @noTitle}}
-    <AuHeading>
-      Verander Status
-      {{@mandataris.bekleedt.bestuursfunctie.label}}
-    </AuHeading>
-  {{/unless}}
-  <div>
-    <AuLabel>
-      Huidige Status
-    </AuLabel>
-    <div>
-      {{@mandataris.bekleedt.bestuursfunctie.label}},
-      {{@mandataris.status.label}}
-      van
-      {{moment-format @mandataris.start "DD-MM-YYYY"}}
-      {{#if @mandataris.einde}}
-        tot
-        {{moment-format @mandataris.einde "DD-MM-YYYY"}}
-      {{/if}}
-    </div>
-  </div>
-  <div>
-    <AuLabel>
-      Vanaf
-    </AuLabel>
-    <AuDateInput
-      @value={{this.date}}
-      @onChange={{this.updateDate}}
-      @error={{not this.isValidDate}}
-      @alignment="default"
-    />
-    {{#unless this.isValidDate}}
-      <AuAlert
-        @size="small"
-        @closable={{false}}
-        @skin="error"
-        class="au-u-margin-top"
-      >{{this.invalidDateErrorMessage}}</AuAlert>
-    {{/unless}}
-  </div>
-  <div>
-    <AuLabel>
-      Nieuwe Status
-    </AuLabel>
-    <PowerSelect
-      @allowClear={{false}}
-      @selected={{this.newStatus}}
-      @options={{this.statusOptions}}
-      @onChange={{this.updateNewStatus}}
-      @searchEnabled={{true}}
-      @searchField="label"
-      @noMatchesMessage="Geen resultaten"
-      as |status|
-    >
-      {{status.label}}
-    </PowerSelect>
-  </div>
-  {{#unless this.isTerminatingMandate}}
-    {{#if this.showReplacement}}
-      <div>
-        <AuLabel>
-          Vervanger
-        </AuLabel>
-        <Mandatarissen::ReplacementSelect
-          @mandataris={{@mandataris}}
-          @selected={{this.selectedReplacement}}
-          @onSelect={{this.updateReplacement}}
-          @inline={{true}}
-        />
-      </div>
-    {{/if}}
+<AuModal
+  @title={{(concat
+    "Verander Status "
+    @mandataris.bekleedt.bestuursfunctie.label
+    " - "
+    @mandataris.isBestuurlijkeAliasVan.naam
+  )}}
+  @modalOpen={{@isChanging}}
+  @closable={{true}}
+  @closeModal={{@closeModals}}
+>
+  {{yield}}
+  <div class="au-o-box au-o-flow">
     <div>
       <AuLabel>
-        Fractie
+        Huidige Status
       </AuLabel>
-      {{#if this.load.isRunning}}
-        <AuLabel for="input" class="skeleton-label au-u-margin-top" />
-        <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
-      {{else}}
-        <Mandatarissen::FractieSelector
-          @fractie={{this.selectedFractie}}
-          @onSelect={{this.updateFractie}}
-          @allowClear={{false}}
-          @bestuurseenheid={{this.bestuurseenheid}}
-          @bestuursperiode={{this.bestuursperiode}}
-          @mandataris={{@mandataris}}
-          @isUpdatingState={{true}}
-        />
-      {{/if}}
+      <div>
+        {{@mandataris.bekleedt.bestuursfunctie.label}},
+        {{@mandataris.status.label}}
+        van
+        {{moment-format @mandataris.start "DD-MM-YYYY"}}
+        {{#if @mandataris.einde}}
+          tot
+          {{moment-format @mandataris.einde "DD-MM-YYYY"}}
+        {{/if}}
+      </div>
     </div>
-    {{#if @mandataris.bekleedt.isSchepen}}
+    <div>
+      <AuLabel>
+        Vanaf
+      </AuLabel>
+      <AuDateInput
+        @value={{this.date}}
+        @onChange={{this.updateDate}}
+        @error={{not this.isValidDate}}
+        @alignment="default"
+      />
+      {{#unless this.isValidDate}}
+        <AuAlert
+          @size="small"
+          @closable={{false}}
+          @skin="error"
+          class="au-u-margin-top"
+        >{{this.invalidDateErrorMessage}}</AuAlert>
+      {{/unless}}
+    </div>
+    <div>
+      <AuLabel>
+        Nieuwe Status
+      </AuLabel>
+      <PowerSelect
+        @allowClear={{false}}
+        @selected={{this.newStatus}}
+        @options={{this.statusOptions}}
+        @onChange={{this.updateNewStatus}}
+        @searchEnabled={{true}}
+        @searchField="label"
+        @noMatchesMessage="Geen resultaten"
+        as |status|
+      >
+        {{status.label}}
+      </PowerSelect>
+    </div>
+    {{#unless this.isTerminatingMandate}}
+      {{#if this.showReplacement}}
+        <div>
+          <AuLabel>
+            Vervanger
+          </AuLabel>
+          <Mandatarissen::ReplacementSelect
+            @mandataris={{@mandataris}}
+            @selected={{this.selectedReplacement}}
+            @onSelect={{this.updateReplacement}}
+            @inline={{true}}
+          />
+        </div>
+      {{/if}}
       <div>
         <AuLabel>
-          Rangorde
+          Fractie
         </AuLabel>
-        <AuInput
-          value={{this.rangorde}}
-          @width="block"
-          id="mandataris-rangorde"
-          placeholder={{this.rangordePlaceholder}}
-          {{on "input" this.updateRangorde}}
-        />
+        {{#if this.load.isRunning}}
+          <AuLabel for="input" class="skeleton-label au-u-margin-top" />
+          <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
+        {{else}}
+          <Mandatarissen::FractieSelector
+            @fractie={{this.selectedFractie}}
+            @onSelect={{this.updateFractie}}
+            @allowClear={{false}}
+            @bestuurseenheid={{this.bestuurseenheid}}
+            @bestuursperiode={{this.bestuursperiode}}
+            @mandataris={{@mandataris}}
+            @isUpdatingState={{true}}
+          />
+        {{/if}}
       </div>
-    {{/if}}
-  {{/unless}}
-  <AuToolbar class="au-u-margin-top" as |Group|>
-    <Group>
-      <AuButtonGroup>
-        <Shared::Tooltip
-          @showTooltip={{this.disabled}}
-          @tooltipText={{this.toolTipText}}
-          @alignment="left"
-        >
-          <AuButton
-            {{on "click" (perform this.updateState)}}
-            @disabled={{this.disabled}}
-            @loading={{this.updateState.isRunning}}
+      {{#if @mandataris.bekleedt.isSchepen}}
+        <div>
+          <AuLabel>
+            Rangorde
+          </AuLabel>
+          <AuInput
+            value={{this.rangorde}}
+            @width="block"
+            id="mandataris-rangorde"
+            placeholder={{this.rangordePlaceholder}}
+            {{on "input" this.updateRangorde}}
+          />
+        </div>
+      {{/if}}
+    {{/unless}}
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <Shared::Tooltip
+            @showTooltip={{this.disabled}}
+            @tooltipText={{this.toolTipText}}
+            @alignment="left"
           >
-            {{if this.hasChanges "Pas aan" "Onveranderd"}}
+            <AuButton
+              {{on "click" (perform this.updateState)}}
+              @disabled={{this.disabled}}
+              @loading={{this.updateState.isRunning}}
+            >
+              {{if this.hasChanges "Pas aan" "Onveranderd"}}
+            </AuButton>
+          </Shared::Tooltip>
+          <AuButton {{on "click" @onCancel}} @skin="secondary">
+            Annuleer
           </AuButton>
-        </Shared::Tooltip>
-        <AuButton {{on "click" @onCancel}} @skin="secondary">
-          Annuleer
-        </AuButton>
-      </AuButtonGroup>
-    </Group>
-  </AuToolbar>
-</div>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+</AuModal>

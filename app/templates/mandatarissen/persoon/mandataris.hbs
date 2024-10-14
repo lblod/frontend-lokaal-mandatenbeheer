@@ -98,21 +98,12 @@
   </div>
 </div>
 
-<AuModal
-  @title={{(concat
-    "Verander Status " this.model.mandataris.bekleedt.bestuursfunctie.label
-  )}}
-  @modalOpen={{this.isChanging}}
-  @closable={{true}}
-  @closeModal={{this.closeModals}}
->
-  <Mandatarissen::UpdateState
-    @noTitle={{true}}
-    @onCancel={{this.closeModals}}
-    @onStateChanged={{this.onUpdateState}}
-    @mandataris={{this.model.mandataris}}
-  />
-</AuModal>
+<Mandatarissen::UpdateState
+  @onCancel={{this.closeModals}}
+  @isChanging={{this.isChanging}}
+  @onStateChanged={{this.onUpdateState}}
+  @mandataris={{this.model.mandataris}}
+/>
 
 <AuModal
   @title={{(concat
