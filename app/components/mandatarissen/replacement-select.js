@@ -10,6 +10,7 @@ export default class MandatarissenReplacementComponent extends Component {
   @service mandataris;
 
   @tracked overlappingMandate;
+  @tracked sameMandate;
 
   checkMandate = task({ keepLatest: true }, async () => {
     const replacement = this.args.selected;
@@ -24,6 +25,15 @@ export default class MandatarissenReplacementComponent extends Component {
     if (!this.args.selected) {
       return;
     }
+    this.checkSameMandate();
+    if (this.sameMandate) {
+      return;
+    }
     this.checkMandate.perform();
+  }
+
+  checkSameMandate() {
+    this.sameMandate =
+      this.args.selected.id === this.args.mandataris.isBestuurlijkeAliasVan.id;
   }
 }

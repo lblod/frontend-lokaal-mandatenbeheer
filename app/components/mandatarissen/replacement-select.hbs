@@ -8,6 +8,12 @@
     @showEditAsIcon={{@showEditAsIcon}}
     @nothingSelectedText={{@nothingSelectedText}}
   />
+  {{#if this.sameMandate}}
+    <AuAlert @skin="error" @icon="alert-triangle" class="au-u-margin-top">
+      Dit is dezelfde persoon als de oorspronkelijke mandataris, het is niet
+      mogelijk een mandataris te laten vervangen door zichzelf.
+    </AuAlert>
+  {{/if}}
   {{#if this.overlappingMandate}}
     <AuAlert @skin="warning" @icon="alert-triangle" class="au-u-margin-top">
       Deze persoon heeft al een overlappend mandaat "{{this.overlappingMandate.bekleedt.bestuursfunctie.label}}"
