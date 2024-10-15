@@ -206,6 +206,11 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       mandatarissen.pushObject(newMandataris);
       await mandatarissen.save();
 
+      await fetch(
+        `/mandataris-api/mandatarissen/${mandatarisToAdd.id}/${newMandataris.id}/add-link-linked-mandataris`,
+        { method: 'POST' }
+      );
+
       newMandatarissen.push(newMandataris);
     }
     await this.getMandatarissen.perform({

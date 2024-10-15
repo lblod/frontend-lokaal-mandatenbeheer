@@ -5,12 +5,28 @@ import { service } from '@ember/service';
 export default class BestuursorganenService extends Service {
   @service store;
   @service decretaleOrganen;
+  @service bestuursperioden;
 
   async getAllRealPoliticalBestuursorganen() {
     return await this.store.query('bestuursorgaan', {
       'filter[:has-no:deactivated-at]': true,
       'filter[:has-no:is-tijdsspecialisatie-van]': true,
       'filter[:has-no:original-bestuurseenheid]': true,
+      'filter[classificatie][id]':
+        this.decretaleOrganen.classificatieIds.join(','), // only organs with a political mandate
+      include: 'classificatie,heeft-tijdsspecialisaties',
+    });
+  }
+
+  async getRealCurrentPoliticalBestuursorganen() {
+    const currentPeriod =
+      await this.bestuursperioden.getCurrentBestuursperiode();
+    return await this.store.query('bestuursorgaan', {
+      'filter[:has-no:deactivated-at]': true,
+      'filter[:has-no:is-tijdsspecialisatie-van]': true,
+      'filter[:has-no:original-bestuurseenheid]': true,
+      'filter[heeft-tijdsspecialisaties][heeft-bestuursperiode][:id:]':
+        currentPeriod.id,
       'filter[classificatie][id]':
         this.decretaleOrganen.classificatieIds.join(','), // only organs with a political mandate
       include: 'classificatie,heeft-tijdsspecialisaties',

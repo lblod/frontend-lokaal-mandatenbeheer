@@ -1,4 +1,4 @@
-<div {{did-update this.checkIfMandateAlreadyExists @recentUpdate}}>
+<div {{did-update this.setupModal @recentUpdate}}>
   <AuModal
     @title={{this.doubleMandateTitle}}
     @modalOpen={{this.isModalOpen}}
@@ -15,7 +15,7 @@
       <AuToolbar as |Group|>
         <Group>
           <AuButtonGroup>
-            <AuButton {{on "click" this.createDoubleMandataris}}>
+            <AuButton {{on "click" this.confirmAction}}>
               Ja
             </AuButton>
             <AuButton @skin="secondary" {{on "click" this.closeModal}}>

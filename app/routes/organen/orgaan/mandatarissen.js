@@ -9,6 +9,7 @@ import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
 export default class OrganenMandatarissenRoute extends Route {
   @service store;
   @service installatievergadering;
+  @service currentSession;
 
   queryParams = {
     activeOnly: { refreshModel: true },
@@ -21,6 +22,8 @@ export default class OrganenMandatarissenRoute extends Route {
   async model(params) {
     const parentModel = this.modelFor('organen.orgaan');
     const currentBestuursorgaan = await parentModel.currentBestuursorgaan;
+
+    const bestuurseenheid = this.currentSession.group;
 
     let mandatarissen;
     if (currentBestuursorgaan) {
@@ -40,6 +43,7 @@ export default class OrganenMandatarissenRoute extends Route {
       );
 
     return {
+      bestuurseenheid,
       mandatarissen: this.getFilteredMandatarissen(folded, params),
       bestuursorgaan: parentModel.bestuursorgaan,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,

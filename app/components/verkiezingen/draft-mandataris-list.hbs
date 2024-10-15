@@ -93,6 +93,14 @@
         </c.body>
       </t.content>
     </AuDataTable>
+    {{#unless (eq this.resortedMandatarissen.length 0)}}
+      <div class="au-u-flex au-u-flex--end">
+        <AuHelpText @skin="secondary" @size="large">
+          Aantal:
+          {{this.resortedMandatarissen.length}}
+        </AuHelpText>
+      </div>
+    {{/unless}}
   </div>
 </div>
 
