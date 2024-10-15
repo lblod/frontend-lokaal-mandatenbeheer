@@ -30,6 +30,22 @@ export default class FractieService extends Service {
     return onafhankelijke;
   }
 
+  async getOrCreateOnafhankelijkeFractie(
+    person,
+    bestuursorganen,
+    bestuurseenheid
+  ) {
+    let onafhankelijkeFractie =
+      await this.findOnafhankelijkeFractieForPerson(person);
+    if (!onafhankelijkeFractie) {
+      onafhankelijkeFractie = await this.createOnafhankelijkeFractie(
+        bestuursorganen,
+        bestuurseenheid
+      );
+    }
+    return onafhankelijkeFractie;
+  }
+
   async findOnafhankelijkeFractieForPerson(person) {
     const mandatarissen = await person.isAangesteldAls;
     for (const mandataris of mandatarissen) {

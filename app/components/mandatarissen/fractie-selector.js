@@ -72,14 +72,11 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         this.fractieOptions.at(0).isSamenwerkingsverband
       ) {
         let onafhankelijkeFractie =
-          await this.fractieService.findOnafhankelijkeFractieForPerson(person);
-        if (!onafhankelijkeFractie) {
-          onafhankelijkeFractie =
-            await this.fractieService.createOnafhankelijkeFractie(
-              this.bestuursorganen,
-              this.args.bestuurseenheid
-            );
-        }
+          this.fractieService.getOrCreateOnafhankelijkeFractie(
+            person,
+            this.bestuursorganen,
+            this.args.bestuurseenheid
+          );
         this.fractieOptions = [...this.fractieOptions, onafhankelijkeFractie];
       }
       return;
@@ -91,14 +88,11 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         this.args.bestuursperiode.id
       );
     let onafhankelijkeFractie =
-      await this.fractieService.findOnafhankelijkeFractieForPerson(person);
-    if (!onafhankelijkeFractie) {
-      onafhankelijkeFractie =
-        await this.fractieService.createOnafhankelijkeFractie(
-          this.bestuursorganen,
-          this.args.bestuurseenheid
-        );
-    }
+      this.fractieService.getOrCreateOnafhankelijkeFractie(
+        person,
+        this.bestuursorganen,
+        this.args.bestuurseenheid
+      );
     this.fractieOptions = [...samenwerkingsFracties, onafhankelijkeFractie];
   }
 
