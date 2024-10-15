@@ -29,6 +29,15 @@ export default class FractieModel extends Model {
   })
   origineleKandidatenlijst;
 
+  get isOnafhankelijk() {
+    return this.fractietype.get('isOnafhankelijk');
+  }
+
+  get isSamenwerkingsverband() {
+    console.log(this.fractietype);
+    return this.fractietype.get('isSamenwerkingsverband');
+  }
+
   get generatedFromGelinktNotuleren() {
     return (this.generatedFrom || []).some(
       (uri) =>
