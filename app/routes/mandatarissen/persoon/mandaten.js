@@ -53,6 +53,10 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
           id: persoon.id,
         },
       },
+      // We have to check the original-bestuurseenheid instead of the following, because we don't have access to the
+      // type of the original-bestuursorgaan (other graph) and mu-auth needs the type to be able to check the filter.
+      // 'filter[bekleedt][bevat-in][:has-no:original-bestuursorgaan]': true,
+      'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
       include: [
         'is-bestuurlijke-alias-van',
         'bekleedt.bestuursfunctie',

@@ -55,6 +55,7 @@ export default class MandatarissenSearchRoute extends Route {
     const allBestuurfunctieCodes = [];
     const mandatenVoorPeriode = await this.store.query('mandaat', {
       'filter[bevat-in][heeft-bestuursperiode][:id:]': selectedPeriod.id,
+      'filter[bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
       include: ['bevat-in', 'bevat-in.heeft-bestuursperiode'].join(','),
     });
     for (const mandaat of mandatenVoorPeriode) {
@@ -89,6 +90,7 @@ export default class MandatarissenSearchRoute extends Route {
       },
       'filter[bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
         bestuursperiode.id,
+      'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
       include: [
         'is-bestuurlijke-alias-van',
         'bekleedt',
