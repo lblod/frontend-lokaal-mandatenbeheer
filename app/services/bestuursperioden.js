@@ -39,7 +39,7 @@ export default class BestuursperiodenService extends Service {
   }
 
   getClosestPeriod(periods) {
-    const now = new Date().getFullYear();
+    const now = new Date().getFullYear() - 1;
 
     const currentPeriod = periods.find(
       (p) => p.start <= now && (now < p.einde || !p.einde)
