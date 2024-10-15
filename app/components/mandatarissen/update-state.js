@@ -141,7 +141,6 @@ export default class MandatarissenUpdateState extends Component {
       this.load.isRunning ||
       !this.newStatus ||
       !this.date ||
-      !this.isValidDate ||
       this.inValidReplacement ||
       !this.hasChanges ||
       !isDateInRange(
