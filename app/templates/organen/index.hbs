@@ -32,10 +32,8 @@
               @onChange={{this.filterOrganTypes}}
               as |Group|
             >
-              <Group.Checkbox @value="decretaleIds">Decretaal</Group.Checkbox>
-              <Group.Checkbox
-                @value="nietDecretaleIds"
-              >Niet-decretaal</Group.Checkbox>
+              <Group.Checkbox @value="decretaleIds">Standaard</Group.Checkbox>
+              <Group.Checkbox @value="nietDecretaleIds">Eigen</Group.Checkbox>
             </AuCheckboxGroup>
           </div>
           <div class="au-o-grid__item">

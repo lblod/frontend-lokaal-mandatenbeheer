@@ -15,6 +15,7 @@ import {
   burgemeesterOnlyStates,
   notBurgemeesterStates,
 } from 'frontend-lmb/utils/well-known-uris';
+import { isDateInRange } from '../date-input';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -23,8 +24,11 @@ export default class MandatarissenUpdateState extends Component {
   @tracked bestuurseenheid = null;
   @tracked bestuursorganenOfMandaat = [];
   @tracked bestuursperiode;
+  @tracked bestuursorgaanStartDate;
+  @tracked bestuursorgaanEndDate;
   @tracked rangorde = null;
   @tracked selectedReplacement = null;
+  @tracked inValidReplacement = false;
   @tracked replacementUpdated;
   @tracked statusOptions = [];
 
@@ -57,13 +61,14 @@ export default class MandatarissenUpdateState extends Component {
     this.bestuursperiode =
       await this.bestuursorganenOfMandaat[0]?.heeftBestuursperiode;
     this.statusOptions = await this.getStatusOptions();
-    await this.getBestuursorgaanEndDate();
+    await this.getBestuursorgaanPeriod();
   });
 
-  async getBestuursorgaanEndDate() {
+  async getBestuursorgaanPeriod() {
     const mandaat = await this.args.mandataris.bekleedt;
     const bestuursorganen = await mandaat.bevatIn;
     if (bestuursorganen.length >= 1) {
+      this.bestuursorgaanStartDate = bestuursorganen.at(0).bindingStart;
       this.bestuursorgaanEndDate = bestuursorganen.at(0).bindingEinde;
     }
   }
@@ -112,43 +117,6 @@ export default class MandatarissenUpdateState extends Component {
     return this.newStatus === this.mandatarisStatus.endedState;
   }
 
-  get isValidDate() {
-    if (!this.date) {
-      return false;
-    }
-    if (!this.args.mandataris.start) {
-      return true;
-    }
-
-    if (
-      this.bestuursorgaanEndDate &&
-      this.date.getTime() > this.bestuursorgaanEndDate.getTime()
-    ) {
-      return false;
-    }
-
-    const referenceDate = new Date(this.args.mandataris.start);
-    referenceDate.setHours(0, 0, 0, 0);
-    return this.date.getTime() >= referenceDate.getTime();
-  }
-
-  get invalidDateErrorMessage() {
-    if (
-      this.bestuursorgaanEndDate &&
-      this.date.getTime() > this.bestuursorgaanEndDate.getTime()
-    ) {
-      const formattedEndDate = moment(this.bestuursorgaanEndDate).format(
-        'DD-MM-YYYY'
-      );
-      return `De gekozen datum moet voor het einde van de bestuursperiode liggen (${formattedEndDate})`;
-    }
-
-    const formattedStartDate = moment(this.args.mandataris.start).format(
-      'DD-MM-YYYY'
-    );
-    return `De gekozen datum moet na de startdatum liggen van het huidige mandaat. (${formattedStartDate})`;
-  }
-
   get isInputDateTheSameAsMandatarisStart() {
     const startDate = new Date();
     const inputDate = new Date(this.date);
@@ -173,8 +141,13 @@ export default class MandatarissenUpdateState extends Component {
       this.load.isRunning ||
       !this.newStatus ||
       !this.date ||
-      !this.isValidDate ||
-      !this.hasChanges
+      this.inValidReplacement ||
+      !this.hasChanges ||
+      !isDateInRange(
+        this.date,
+        this.bestuursorgaanStartDate,
+        this.bestuursorgaanEndDate
+      )
     );
   }
 
@@ -303,6 +276,11 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   @action updateReplacement(newReplacement) {
+    if (this.args.mandataris.isBestuurlijkeAliasVan.id === newReplacement?.id) {
+      this.inValidReplacement = true;
+    } else {
+      this.inValidReplacement = false;
+    }
     this.selectedReplacement = newReplacement;
     this.replacementUpdated = true;
   }

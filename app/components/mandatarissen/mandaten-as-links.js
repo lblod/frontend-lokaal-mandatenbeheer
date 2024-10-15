@@ -16,6 +16,7 @@ export default class MandatarissenMandatenAsLinks extends Component {
       'filter[is-bestuurlijke-alias-van][:id:]': this.args.persoon.id,
       'filter[bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
         this.args.bestuursperiode.id,
+      'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
       include: ['bekleedt', 'bekleedt.bestuursfunctie'].join(','),
     });
 

@@ -8,6 +8,7 @@ import { A } from '@ember/array';
 import { task, restartableTask, timeout } from 'ember-concurrency';
 
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
+import { isValidDate } from '../date-input';
 
 export default class GenerateRowsFormComponent extends Component {
   @service store;
@@ -51,7 +52,7 @@ export default class GenerateRowsFormComponent extends Component {
       const minimumToCreate =
         this.selectedMandaat.parent.minAantalHouders -
         this.lengthExistingMandaten;
-      this.rowsToCreateHelpText = `Je moet nog minimum ${minimumToCreate} ${minimumToCreate <= 1 ? 'mandaat' : 'mandaten'} aanmaken voor dit bestuursorgaan.`;
+      this.rowsToCreateHelpText = `Je moet nog ${minimumToCreate} ${minimumToCreate <= 1 ? 'mandaat' : 'mandaten'} aanmaken voor dit orgaan.`;
     }
     this.addWarningWhenMandatenAreAtMax();
     if (this.selectedMandaat.parent.maxAantalHouders) {
@@ -90,10 +91,12 @@ export default class GenerateRowsFormComponent extends Component {
   });
 
   onConfigReady = task(async () => {
+    const notRequiredEndDate = isValidDate(this.endDate) ? this.endDate : null;
+
     this.args.onConfigReceived({
       mandaat: this.selectedMandaat.parent,
       startDate: this.startDate ?? this.args.startDate,
-      endDate: this.endDate,
+      endDate: notRequiredEndDate,
       rows: this.rowsToGenerate,
       existingMandaten: this.lengthExistingMandaten,
     });
@@ -116,6 +119,10 @@ export default class GenerateRowsFormComponent extends Component {
   }
 
   get isInvaldForGeneration() {
-    return !this.selectedMandaat || this.rowsToGenerate <= 0;
+    return (
+      !this.selectedMandaat ||
+      this.rowsToGenerate <= 0 ||
+      !isValidDate(this.startDate)
+    );
   }
 }
