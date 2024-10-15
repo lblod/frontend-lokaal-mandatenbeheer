@@ -109,9 +109,9 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   }
 
   async loadBurgemeesterPersoon() {
-    const burgemeesters = await this.burgemeesterMandate.bekleedDoor;
+    const burgemeesters = await this.burgemeesterMandate.bekleedDoor.reload();
     const voorzitterVastBureau =
-      await this.voorzitterVastBureauMandate.bekleedDoor;
+      await this.voorzitterVastBureauMandate.bekleedDoor.reload();
 
     const targetMandatarisses = [];
 
@@ -136,6 +136,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   }
 
   onUpdate = restartableTask(async (persoon) => {
+    await this.setup.perform();
     this.persoon = persoon;
     if (!this.targetMandatarisses) {
       return;
