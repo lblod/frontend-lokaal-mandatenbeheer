@@ -27,23 +27,15 @@
       </div>
     </div>
     <div>
-      <AuLabel>
-        Vanaf
-      </AuLabel>
-      <AuDateInput
+      <DateInput
+        @label="Vanaf"
         @value={{this.date}}
-        @onChange={{this.updateDate}}
-        @error={{not this.isValidDate}}
-        @alignment="default"
+        @from={{this.bestuursorgaanStartDate}}
+        @to={{this.bestuursorgaanEndDate}}
+        @onChange={{fn (mut this.date)}}
+        @showErrorAsAlert={{true}}
+        @isRequired={{true}}
       />
-      {{#unless this.isValidDate}}
-        <AuAlert
-          @size="small"
-          @closable={{false}}
-          @skin="error"
-          class="au-u-margin-top"
-        >{{this.invalidDateErrorMessage}}</AuAlert>
-      {{/unless}}
     </div>
     <div>
       <AuLabel>
