@@ -8,11 +8,14 @@ import { MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE } from 'frontend-lmb/utils/wel
 
 import { task } from 'ember-concurrency';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarisCardComponent extends Component {
   @tracked editingStatus = false;
+  @tracked selectedVervanger;
 
   @service store;
+  @service toaster;
   @service('mandataris') mandatarisService;
 
   get status() {
@@ -61,6 +64,14 @@ export default class MandatarisCardComponent extends Component {
   }
 
   addReplacement = task(async (replacement) => {
+    if (replacement.id === this.args.mandataris.isBestuurlijkeAliasVan.id) {
+      showErrorToast(
+        this.toaster,
+        'Je hebt dezelfde persoon geselecteerd als de oorspronkelijke mandataris, het is niet mogelijk een mandataris te laten vervangen door zichzelf.'
+      );
+      this.selectedVervanger = null;
+      return;
+    }
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {

@@ -13,6 +13,9 @@ export default class MandatarissenReplacementComponent extends Component {
 
   checkMandate = task({ keepLatest: true }, async () => {
     const replacement = this.args.selected;
+    if (replacement.id === this.args.mandataris.isBestuurlijkeAliasVan.id) {
+      return;
+    }
     this.overlappingMandate = await this.mandataris.getOverlappingMandate(
       this.args.mandataris,
       replacement
