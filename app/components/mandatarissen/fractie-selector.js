@@ -17,7 +17,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   @tracked _fractie;
   @tracked bestuursorganen = [];
-  @tracked bestuursorganenId;
   @tracked fractieOptions = [];
 
   constructor() {
@@ -39,7 +38,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         await this.bestuursperioden.getRelevantTijdsspecialisaties(
           this.args.bestuursperiode
         );
-      this.bestuursorganenId = this.bestuursorganen.map((o) => o.get('id'));
     }
   }
 
