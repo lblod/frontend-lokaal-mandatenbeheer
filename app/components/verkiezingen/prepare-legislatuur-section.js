@@ -107,6 +107,18 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       return;
     }
 
+    const mandatarissenToSync = await this.getBestuursorgaanMandatarissen(
+      bestuursorgaanToSyncFrom
+    );
+
+    if (mandatarissenToSync.length == 0) {
+      showWarningToast(
+        this.toaster,
+        'Geen mandatarissen gevonden om over te nemen.'
+      );
+      return;
+    }
+
     await fetch(
       '/mandataris-api/installatievergadering-api/copy-gemeente-to-ocmw-draft',
       {
