@@ -32,7 +32,7 @@ export default class OrganenIndexController extends Controller {
       return 'Tijdens het voorbereiden van een legislatuur is het niet mogelijk fracties toe te voegen.';
     }
     if (this.model.bestuursorganen.length == 0) {
-      return 'Het is niet mogelijk fracties toe te voegen omdat er geen bestuursorganen bestaan voor deze bestuursperiode.';
+      return 'Het is niet mogelijk fracties toe te voegen omdat er geen organen bestaan voor deze bestuursperiode.';
     }
     return '';
   }

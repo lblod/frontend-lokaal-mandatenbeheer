@@ -102,7 +102,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     if (!bestuursorgaanToSyncFrom) {
       showWarningToast(
         this.toaster,
-        'Kon niet synchroniseren. Geen bestuursorgaan gevonden.'
+        'Kon niet synchroniseren. Geen orgaan gevonden.'
       );
       return;
     }
