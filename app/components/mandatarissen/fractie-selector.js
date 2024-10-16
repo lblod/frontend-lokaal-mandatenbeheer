@@ -72,7 +72,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         this.fractieOptions.at(0).isSamenwerkingsverband
       ) {
         let onafhankelijkeFractie =
-          this.fractieService.getOrCreateOnafhankelijkeFractie(
+          await this.fractieService.getOrCreateOnafhankelijkeFractie(
             person,
             this.bestuursorganen,
             this.args.bestuurseenheid
@@ -88,7 +88,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         this.args.bestuursperiode.id
       );
     let onafhankelijkeFractie =
-      this.fractieService.getOrCreateOnafhankelijkeFractie(
+      await this.fractieService.getOrCreateOnafhankelijkeFractie(
         person,
         this.bestuursorganen,
         this.args.bestuurseenheid
