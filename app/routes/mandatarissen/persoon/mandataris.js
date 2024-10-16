@@ -12,7 +12,6 @@ import RSVP from 'rsvp';
 export default class MandatarissenPersoonMandatarisRoute extends Route {
   @service currentSession;
   @service store;
-  @service currentSession;
 
   async model(params) {
     const bestuurseenheid = this.currentSession.group;

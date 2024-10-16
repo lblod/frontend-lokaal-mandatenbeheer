@@ -10,7 +10,6 @@ export default class OrganenMandatarissenRoute extends Route {
   @service currentSession;
   @service store;
   @service installatievergadering;
-  @service currentSession;
 
   queryParams = {
     activeOnly: { refreshModel: true },
