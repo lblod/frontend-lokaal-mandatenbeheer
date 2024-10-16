@@ -9,10 +9,4 @@ export default class IndexRoute extends Route {
   async beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
   }
-
-  async model() {
-    return {
-      showLegislatuurModule: await this.currentSession.showLegislatuurModule(),
-    };
-  }
 }

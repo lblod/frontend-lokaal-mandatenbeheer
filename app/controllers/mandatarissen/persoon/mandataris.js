@@ -113,15 +113,12 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   });
 
   get isDisabledBecauseLegislatuur() {
-    if (
+    return (
       this.periodeHasLegislatuur &&
       this.behandeldeVergaderingen &&
-      this.behandeldeVergaderingen.length === 0
-    ) {
-      return this.model.isDistrictEenheid ? false : true;
-    }
-
-    return false;
+      this.behandeldeVergaderingen.length === 0 &&
+      !this.model.isDistrictEenheid
+    );
   }
 
   get toolTipText() {

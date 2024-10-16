@@ -23,6 +23,7 @@ export default class CurrentSessionService extends Service {
   @tracked user;
   @tracked group;
   @tracked groupClassification;
+  @tracked isDistrict;
   @tracked roles = [];
 
   async load() {
@@ -44,6 +45,7 @@ export default class CurrentSessionService extends Service {
         reload: true,
       });
       this.groupClassification = await this.group.classificatie;
+      this.isDistrict = await this.isDistrictBestuurseenheid();
 
       this.setupSentrySession();
     }
@@ -87,7 +89,7 @@ export default class CurrentSessionService extends Service {
     return this.roles.includes(role);
   }
 
-  async isDistrict() {
+  async isDistrictBestuurseenheid() {
     const classificatie = await this.group?.classificatie;
 
     return classificatie
@@ -95,10 +97,8 @@ export default class CurrentSessionService extends Service {
       : false;
   }
 
-  async showLegislatuurModule() {
-    return (
-      this.features.isEnabled('show-iv-module') && !(await this.isDistrict())
-    );
+  get showLegislatuurModule() {
+    return this.features.isEnabled('show-iv-module') && !this.isDistrict;
   }
 
   get canAccessMandaat() {

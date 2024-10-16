@@ -34,7 +34,7 @@ export default class MandatarissenSearchRoute extends Route {
       params.bestuursperiode
     );
 
-    const isDistrict = await this.currentSession.isDistrict();
+    const isDistrict = this.currentSession.isDistrict;
     // This map is made for disabling certain options in the powerselect
     const periodMap = await Promise.all(
       bestuursPeriods.map(async (period) => {

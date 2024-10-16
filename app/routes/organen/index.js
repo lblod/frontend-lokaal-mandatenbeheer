@@ -43,7 +43,7 @@ export default class OrganenIndexRoute extends Route {
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
     const legislatuurInBehandeling =
       await this.installatievergadering.activeOrNoLegislature(selectedPeriod);
-    const isDistrict = await this.currentSession.isDistrict();
+    const isDistrict = this.currentSession.isDistrict;
 
     return RSVP.hash({
       bestuurseenheid: parentModel.bestuurseenheid,

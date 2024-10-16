@@ -1,22 +1,12 @@
 import Component from '@glimmer/component';
 
 import { service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 
 export default class SharedMainMenuComponent extends Component {
   @service currentSession;
   @service features;
 
-  @tracked showLegislatuurModule;
-
-  constructor() {
-    super(...arguments);
-
-    this.showModules();
-  }
-
-  async showModules() {
-    this.showLegislatuurModule =
-      await this.currentSession.showLegislatuurModule();
+  get showLegislatuurModule() {
+    return this.currentSession.showLegislatuurModule;
   }
 }

@@ -42,7 +42,7 @@ export default class OrganenMandatarissenRoute extends Route {
       await this.installatievergadering.activeOrNoLegislature(
         parentModel.selectedBestuursperiode
       );
-    const isDistrict = await this.currentSession.isDistrict();
+    const isDistrict = this.currentSession.isDistrict;
 
     return {
       bestuurseenheid,
