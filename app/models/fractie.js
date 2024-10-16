@@ -34,7 +34,6 @@ export default class FractieModel extends Model {
   }
 
   get isSamenwerkingsverband() {
-    console.log(this.fractietype);
     return this.fractietype.get('isSamenwerkingsverband');
   }
 
