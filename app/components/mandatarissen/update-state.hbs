@@ -37,7 +37,7 @@
       />
     </div>
     <div>
-      <AuLabel>
+      <AuLabel @required={{true}}>
         Nieuwe Status
       </AuLabel>
       <PowerSelect
@@ -78,7 +78,7 @@
         </div>
       {{/if}}
       <div>
-        <AuLabel>
+        <AuLabel @required={{true}}>
           Fractie
         </AuLabel>
         {{#if this.load.isRunning}}
