@@ -43,11 +43,13 @@
         @currentSorting={{@sort}}
         @label="Einde mandaat"
       />
-      <AuDataTableThSortable
-        @field="publicationStatus"
-        @currentSorting={{@sort}}
-        @label="Publicatie Status"
-      />
+      {{#unless @hidePublicationStatus}}
+        <AuDataTableThSortable
+          @field="publicationStatus"
+          @currentSorting={{@sort}}
+          @label="Publicatie Status"
+        />
+      {{/unless}}
     </c.header>
 
     <c.body as |row|>
@@ -89,13 +91,14 @@
         {{moment-format row.foldedStart "DD-MM-YYYY"}}</td>
       <td class={{if (is-in-past row.foldedEnd) "au-u-muted"}}>
         {{moment-format row.foldedEnd "DD-MM-YYYY"}}</td>
-      <td>
-        <Mandaat::PublicatieStatusPill
-          @mandataris={{row.mandataris}}
-          @showBekijkBewijs={{false}}
-        />
-      </td>
-
+      {{#unless @hidePublicationStatus}}
+        <td>
+          <Mandaat::PublicatieStatusPill
+            @mandataris={{row.mandataris}}
+            @showBekijkBewijs={{false}}
+          />
+        </td>
+      {{/unless}}
     </c.body>
   </t.content>
 </AuDataTable>
