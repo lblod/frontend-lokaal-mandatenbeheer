@@ -1,5 +1,5 @@
 {{page-title "Upload"}}
-{{breadcrumb "Importeer csv-bestand" route="mandatarissen.upload"}}
+{{breadcrumb "Importeer historiek" route="mandatarissen.upload"}}
 <AuBodyContainer id="content">
   <AuToolbar
     class="au-u-flex au-u-flex--center au-u-margin-top"
@@ -9,7 +9,7 @@
   >
     <div>
       <Group>
-        <AuHeading @skin="2">Importeer mandatarissen</AuHeading>
+        <AuHeading @skin="2">Importeer historiek</AuHeading>
       </Group>
     </div>
   </AuToolbar>
@@ -19,17 +19,25 @@
   >
     <div class="au-u-margin-top au-u-3-5">
       <p class="au-u-text-center">
-        Aan de hand van het geuploaden csv bestand worden er personen en
-        mandatarissen aangemaakt. Als er een probleem met het csv bestand dan
-        zullen de fouten getoontd worden in een tabel onder de oplaadzone.
+        Hier kan je historieken van gegevens over mandatarissen importeren,
+        zodat deze beschikbaar worden in de overzichten. Deze functie is enkel
+        geschikt om historische gegevens te importeren.
       </p>
       <br />
       <p class="au-u-text-center">
-        Een voorbeeld van hoe je csv bestand er uit moet zien kan je hier
-        vinden. Let op de eerste lijn in de file wordt als header gezien en deze
-        namen worden gebruikt als variabele, geef je hier bijvoorbeeld
-        rijksregisternummer in, in plaats van rrn, dan zal dit fout gelinked
-        worden. De volgorde van de kolommen heeft echter geen belang.
+        Je kan mandatarissen importeren door een Excel-bestand op te slaan als
+        .csv bestand. Voor elke rij in het Excel-bestand worden er personen en
+        mandatarissen aangemaakt.
+      </p>
+      <br />
+      <p class="au-u-text-center">
+        Hieronder vind je een voorbeeld van hoe een CSV-bestand gestructureerd
+        moet zijn. Let op: de eerste lijn in het bestand wordt als header
+        gezien. De tekst moet exact overeenkomen. Geef je hier bijvoorbeeld
+        rijksregisternummer in, in plaats van rrn, dan zal dit een fout geven.
+        De volgorde van de kolommen heeft geen belang. Mochten er eventuele
+        fouten in het CSV-bestand worden gevonden vind je deze terug in een
+        tabel onder de oplaadzone.
       </p>
       <div
         class="au-u-background-gray-100 au-u-padding au-u-margin-top au-u-margin-bottom"
