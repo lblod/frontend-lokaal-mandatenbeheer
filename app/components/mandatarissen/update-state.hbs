@@ -33,12 +33,11 @@
         @from={{this.bestuursorgaanStartDate}}
         @to={{this.bestuursorgaanEndDate}}
         @onChange={{fn (mut this.date)}}
-        @showErrorAsAlert={{true}}
         @isRequired={{true}}
       />
     </div>
     <div>
-      <AuLabel>
+      <AuLabel @required={{true}}>
         Nieuwe Status
       </AuLabel>
       <PowerSelect
@@ -79,7 +78,7 @@
         </div>
       {{/if}}
       <div>
-        <AuLabel>
+        <AuLabel @required={{true}}>
           Fractie
         </AuLabel>
         {{#if this.load.isRunning}}

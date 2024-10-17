@@ -8,17 +8,11 @@
   @id={{this.inputId}}
   @value={{this.date}}
   @onChange={{this.onUpdate}}
-  @showErrorAsAlert={{false}}
   @isRequired={{this.isRequired}}
   @from={{this.from}}
   @to={{this.to}}
+  @showFormatHelpText={{@show}}
 />
-
-{{#unless @show}}
-  <AuHelpText @error={{this.hasErrors}}>
-    Datum formaat: DD-MM-JJJJ
-  </AuHelpText>
-{{/unless}}
 
 {{#each this.errors as |error|}}
   <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>

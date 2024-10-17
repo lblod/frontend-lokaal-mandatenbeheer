@@ -14,19 +14,13 @@
     {{au-inputmask options=(hash mask="99-99-9999" placeholder="_")}}
     {{on "input" (perform this.onChange)}}
   />
+  {{#unless @showFormatHelpText}}
+    <AuHelpText @error={{(or this.errorMessage this.invalidErrorMessage)}}>
+      Datum formaat: DD-MM-JJJJ
+    </AuHelpText>
+  {{/unless}}
 
   {{#if (or this.errorMessage this.invalidErrorMessage)}}
-    {{#if @showErrorAsAlert}}
-      <AuAlert
-        @size="small"
-        @closable={{false}}
-        @skin="error"
-        class="au-u-margin-top"
-      >
-        {{this.errorMessages}}
-      </AuAlert>
-    {{else}}
-      <AuHelpText @error={{true}}>{{this.errorMessages}}</AuHelpText>
-    {{/if}}
+    <AuHelpText @error={{true}}>{{this.errorMessages}}</AuHelpText>
   {{/if}}
 </div>
