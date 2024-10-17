@@ -15,7 +15,7 @@
         Mandatarissen
       </AuNavigationLink>
     </li>
-    {{#if (is-feature-enabled "show-iv-module")}}
+    {{#if this.showLegislatuurModule}}
       <li class="au-c-list-navigation__item">
         <AuNavigationLink @route="verkiezingen.installatievergadering">
           <AuIcon @icon="vote" @alignment="left" />

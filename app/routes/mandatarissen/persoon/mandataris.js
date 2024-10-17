@@ -10,8 +10,8 @@ import {
 import RSVP from 'rsvp';
 
 export default class MandatarissenPersoonMandatarisRoute extends Route {
-  @service store;
   @service currentSession;
+  @service store;
 
   async model(params) {
     const bestuurseenheid = this.currentSession.group;
@@ -31,6 +31,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const bestuursorganen = await (await mandataris.bekleedt).get('bevatIn');
     const selectedBestuursperiode =
       await bestuursorganen.firstObject.heeftBestuursperiode;
+    const isDistrict = this.currentSession.isDistrict;
 
     return RSVP.hash({
       bestuurseenheid,
@@ -40,6 +41,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       mandatarisExtraInfoForm,
       bestuursorganen,
       selectedBestuursperiode,
+      isDistrictEenheid: isDistrict,
     });
   }
 

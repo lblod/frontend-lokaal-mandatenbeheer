@@ -7,9 +7,9 @@ import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
 
 export default class OrganenMandatarissenRoute extends Route {
+  @service currentSession;
   @service store;
   @service installatievergadering;
-  @service currentSession;
 
   queryParams = {
     activeOnly: { refreshModel: true },
@@ -41,6 +41,7 @@ export default class OrganenMandatarissenRoute extends Route {
       await this.installatievergadering.activeOrNoLegislature(
         parentModel.selectedBestuursperiode
       );
+    const isDistrict = this.currentSession.isDistrict;
 
     return {
       bestuurseenheid,
@@ -49,7 +50,7 @@ export default class OrganenMandatarissenRoute extends Route {
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
       currentBestuursorgaan: currentBestuursorgaan,
-      legislatuurInBehandeling,
+      legislatuurInBehandeling: isDistrict ? false : legislatuurInBehandeling,
     };
   }
 

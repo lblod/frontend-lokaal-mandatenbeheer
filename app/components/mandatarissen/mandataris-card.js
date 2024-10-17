@@ -33,6 +33,10 @@ export default class MandatarisCardComponent extends Component {
       : '';
   }
 
+  get canEditPublicationStatus() {
+    return !this.isBekrachtigd && !this.args.disableEdits;
+  }
+
   get persoon() {
     return this.args.mandataris.isBestuurlijkeAliasVan;
   }

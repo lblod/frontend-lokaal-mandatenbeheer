@@ -9,6 +9,7 @@ import {
 } from 'frontend-lmb/utils/constants';
 
 export default class MandatarissenSearchRoute extends Route {
+  @service currentSession;
   @service store;
   @service bestuursperioden;
   @service fractieApi;
@@ -33,6 +34,7 @@ export default class MandatarissenSearchRoute extends Route {
       params.bestuursperiode
     );
 
+    const isDistrict = this.currentSession.isDistrict;
     // This map is made for disabling certain options in the powerselect
     const periodMap = await Promise.all(
       bestuursPeriods.map(async (period) => {
@@ -46,7 +48,7 @@ export default class MandatarissenSearchRoute extends Route {
         ) {
           return { period, disabled: false };
         }
-        return { period, disabled: true };
+        return { period, disabled: isDistrict ? false : true };
       })
     );
 
