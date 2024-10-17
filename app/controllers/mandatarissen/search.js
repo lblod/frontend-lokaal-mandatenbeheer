@@ -82,7 +82,7 @@ export default class MandatarissenSearchController extends Controller {
       : null;
     if (this.onafhankelijkeFractie) {
       const onafhankelijkeFracties =
-        await this.fractieApi.onafhankelijkeForBestuursperiode(
+        await this.fractieApi.onafhankelijkForBestuursperiode(
           this.model.selectedPeriod.period.id
         );
       fracties.push(...onafhankelijkeFracties);

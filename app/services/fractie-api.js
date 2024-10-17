@@ -8,43 +8,22 @@ import {
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
-import {
-  FRACTIETYPE_ONAFHANKELIJK,
-  FRACTIETYPE_SAMENWERKINGSVERBAND,
-} from 'frontend-lmb/utils/well-known-uris';
 
 export default class FractieApiService extends Service {
   @service store;
 
-  async forBestuursperiode(bestuursperiodeId) {
-    const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/fracties/${bestuursperiodeId}/bestuursperiode`
-    );
-    const jsonReponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
-      throw {
-        status: response.status,
-        message: jsonReponse.message,
-      };
-    }
-
-    if (jsonReponse.fracties.length === 0) {
-      return [];
-    }
-
-    const fracties = await this.store.query('fractie', {
-      'filter[:id:]': jsonReponse.fracties.join(','),
-      'filter[fractietype][:uri:]': FRACTIETYPE_SAMENWERKINGSVERBAND,
-    });
-
-    return fracties.filter((f) => f);
+  async samenwerkingForBestuursperiode(bestuursperiodeId) {
+    return await this.forBestuursperiode(bestuursperiodeId, false);
   }
 
-  async onafhankelijkeForBestuursperiode(bestuursperiodeId) {
+  async onafhankelijkForBestuursperiode(bestuursperiodeId) {
+    return await this.forBestuursperiode(bestuursperiodeId, true);
+  }
+
+  async forBestuursperiode(bestuursperiodeId, onafhankelijk) {
+    const type = onafhankelijk ? 'onafhankelijk' : 'samenwerking';
     const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/fracties/${bestuursperiodeId}/bestuursperiode`
+      `${API.MANDATARIS_SERVICE}/fracties/${type}/${bestuursperiodeId}/bestuursperiode`
     );
     const jsonReponse = await response.json();
 
@@ -62,7 +41,6 @@ export default class FractieApiService extends Service {
 
     const fracties = await this.store.query('fractie', {
       'filter[:id:]': jsonReponse.fracties.join(','),
-      'filter[fractietype][:uri:]': FRACTIETYPE_ONAFHANKELIJK,
     });
 
     return fracties.filter((f) => f);

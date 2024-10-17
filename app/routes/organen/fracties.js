@@ -65,7 +65,7 @@ export default class FractiesRoute extends Route {
       'filter[heeft-bestuursperiode][:id:]': selectedPeriod.id,
     });
 
-    const fracties = await this.fractieApi.forBestuursperiode(
+    const fracties = await this.fractieApi.samenwerkingForBestuursperiode(
       selectedPeriod.id
     );
 

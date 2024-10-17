@@ -1,5 +1,6 @@
 import Service from '@ember/service';
 
+import { service } from '@ember/service';
 import { timeout } from 'ember-concurrency';
 import {
   API,
@@ -8,6 +9,8 @@ import {
 } from 'frontend-lmb/utils/constants';
 
 export default class MandatarisApiService extends Service {
+  @service store;
+
   async copyOverNonDomainResourceProperties(oldMandatarisId, newMandatarisId) {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/mandatarissen/${oldMandatarisId}/copy/${newMandatarisId}`,
@@ -43,5 +46,29 @@ export default class MandatarisApiService extends Service {
     }
 
     return jsonReponse.decisionUri;
+  }
+
+  async getMandatarisFracties(mandatarisId) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/fracties`
+    );
+    const jsonReponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonReponse.message);
+      throw {
+        status: response.status,
+        message: jsonReponse.message,
+      };
+    }
+
+    if (jsonReponse.fracties.length === 0) {
+      return [];
+    }
+
+    return await this.store.query('fractie', {
+      'filter[:id:]': jsonReponse.fracties.join(','),
+      include: 'fractietype',
+    });
   }
 }
