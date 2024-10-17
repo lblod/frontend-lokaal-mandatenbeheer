@@ -38,7 +38,11 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
   }
 
   async load() {
-    await Promise.all([this.loadProvidedValue(), this.loadMandaat()]);
+    await Promise.all([
+      this.loadProvidedValue(),
+      this.loadMandaat(),
+      this.loadPerson(),
+    ]);
     this.initialized = true;
   }
 
@@ -100,6 +104,14 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
     )[0];
   }
 
+  async loadPerson() {
+    this.mandatarisPerson = (
+      await this.store.query('persoon', {
+        'filter[is-aangesteld-als][:uri:]': this.storeOptions.sourceNode.value,
+      })
+    )[0];
+  }
+
   async loadProvidedValue() {
     const replacementTriples = triplesForPath(this.storeOptions, false).values;
     if (!replacementTriples.length) {
@@ -118,15 +130,16 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
 
   search = task({ keepLatest: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
-    return this.store.query('mandataris', {
+    const result = await this.store.query('mandataris', {
       sort: 'is-bestuurlijke-alias-van.achternaam',
       include: 'is-bestuurlijke-alias-van',
-      filter: {
-        'is-bestuurlijke-alias-van': searchData,
-        bekleedt: {
-          id: this.mandaat.id,
-        },
-      },
+      'filter[is-bestuurlijke-alias-van]': searchData,
+      'filter[bekleedt][id]': this.mandaat.id,
+    });
+    return result.filter((mandataris) => {
+      return (
+        mandataris.get('isBestuurlijkeAliasVan.id') != this.mandatarisPerson.id
+      );
     });
   });
 
