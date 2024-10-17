@@ -94,9 +94,15 @@
           <AuHeading @skin="2">Mandatarissen</AuHeading>
         </Group>
         <Group>
-          <AuLink @route="mandatarissen.upload" @skin="button">
-            Importeer historiek
-          </AuLink>
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @tooltipText="Hier kan je historieken van gegevens over mandatarissen importeren.."
+            @alignment="right"
+          >
+            <AuLink @route="mandatarissen.upload" @skin="button">
+              Importeer historiek
+            </AuLink>
+          </Shared::Tooltip>
         </Group>
       </AuToolbar>
       <div class="au-c-body-container au-c-body-container--scroll">
