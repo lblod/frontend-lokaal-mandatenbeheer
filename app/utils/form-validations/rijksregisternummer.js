@@ -45,7 +45,7 @@ export function getBirthDate(nrn) {
   const month = getBirthMonth(parsedNrn.birthDate); // Eg. 8 from '860814'
   const day = getBirthDay(parsedNrn.birthDate); // Eg. 14 from '860814'
   if (month === '00' || day === '00') {
-    throw new Error('Birth date is unknown');
+    return null;
   }
   return `${year}-${month}-${day}`;
 }

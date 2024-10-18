@@ -1,4 +1,4 @@
-import { NamedNode } from 'rdflib';
+import { NamedNode, Namespace } from 'rdflib';
 
 export const FORM_GRAPH = new NamedNode('http://data.lblod.info/form');
 export const META_GRAPH = new NamedNode('http://data.lblod.info/metagraph');
@@ -40,6 +40,9 @@ export const placeholderNietBeschikbaar = {
 export const MANDATARIS_PREDICATE = {
   persoon: 'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan',
   mandaat: 'http://www.w3.org/ns/org#holds',
+};
+export const PERSON_PREDICATE = {
+  identifier: new Namespace('http://www.w3.org/ns/adms#')('identifier'),
 };
 
 export const NULL_DATE = new Date(null);
