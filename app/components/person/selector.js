@@ -49,7 +49,8 @@ export default class PersonSelectorComponent extends Component {
   }
 
   @action
-  async onCreateNewPerson() {
+  async onCreateNewPerson(input) {
+    this.searchFormInput = input;
     this.createPersonFormDefinition = await getFormFrom(
       this.store,
       CREATE_PERSON_FORM_ID
@@ -83,8 +84,12 @@ export default class PersonSelectorComponent extends Component {
 
   @action
   buildSourceTtl(instanceUri) {
+    const { voornaam, achternaam } = this.searchFormInput ?? {};
+
     return `
     <${instanceUri}> <http://mu.semte.ch/vocabularies/ext/possibleDuplicate> "true" .
+    ${voornaam ? `<${instanceUri}> <http://data.vlaanderen.be/ns/persoon#gebruikteVoornaam> "${voornaam}".` : ''}
+    ${achternaam ? `<${instanceUri}> <http://xmlns.com/foaf/0.1/familyName> "${achternaam}".` : ''}
     `;
   }
 
