@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 import { task } from 'ember-concurrency';
-import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
@@ -14,6 +13,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service('fractie') fractieService;
   @service fractieApi;
   @service persoonApi;
+  @service mandatarisApi;
 
   @tracked _fractie;
   @tracked bestuursorganen = [];
@@ -45,62 +45,55 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     this.fractieOptions = [];
     const person = await this.getPerson();
 
-    if (this.args.isUpdatingState) {
-      this.fractieOptions = await this.persoonApi.getMandatarisFracties(
-        person.id,
-        this.args.bestuursperiode.id
-      );
-    }
-
-    if (!this.args.isUpdatingState && !this.args.isInCreatingForm) {
-      this.fractieOptions = await this.fractieApi.forBestuursperiode(
-        this.args.bestuursperiode.id
-      );
-    }
-
-    if (!this.args.isUpdatingState && this.args.isInCreatingForm) {
+    if (this.args.isInCreatingForm) {
+      // The current fractie is always the only one you can select if it is set!
       const currentFractie = await this.persoonApi.getCurrentFractie(
         person.id,
         this.args.bestuursperiode.id
       );
       if (currentFractie) {
         this.fractieOptions = [currentFractie];
-        return;
       } else {
-        this.fractieOptions = await this.fractieApi.forBestuursperiode(
-          this.args.bestuursperiode.id
-        );
+        this.fractieOptions =
+          await this.fractieApi.samenwerkingForBestuursperiode(
+            this.args.bestuursperiode.id
+          );
       }
+      return;
     }
 
-    const onafhankelijkeFractie =
-      await this.fractieService.findOnafhankelijkeFractieForPerson(person);
-    if (!onafhankelijkeFractie) {
-      const onafhankelijkeTmpFractie =
-        await this.fractieService.createOnafhankelijkeFractie(
-          this.bestuursorganen,
-          this.args.bestuurseenheid
-        );
-      this.fractieOptions = [...this.fractieOptions, onafhankelijkeTmpFractie];
+    if (this.args.isUpdatingState) {
+      this.fractieOptions = await this.mandatarisApi.getMandatarisFracties(
+        this.args.mandataris.id
+      );
+
+      if (
+        this.fractieOptions.length <= 1 &&
+        this.fractieOptions.at(0).isSamenwerkingsverband
+      ) {
+        let onafhankelijkeFractie =
+          await this.fractieService.getOrCreateOnafhankelijkeFractie(
+            person,
+            this.bestuursorganen,
+            this.args.bestuurseenheid
+          );
+        this.fractieOptions = [...this.fractieOptions, onafhankelijkeFractie];
+      }
+      return;
     }
 
-    if (
-      !(await this.isFractiesIncludingOnafhankelijk(this.fractieOptions)) &&
-      !this.args.isInCreatingForm
-    ) {
-      this.fractieOptions = [...this.fractieOptions, onafhankelijkeFractie];
-    }
-  }
-
-  async isFractiesIncludingOnafhankelijk(fracties) {
-    const onafhankelijke = await Promise.all(
-      fracties.map(async (fractie) => {
-        const type = await fractie.fractietype;
-        return type.uri === FRACTIETYPE_ONAFHANKELIJK;
-      })
-    );
-
-    return onafhankelijke.includes(true);
+    // This is the correct mistakes, all fracties are possible, with onafhankelijk as well.
+    const samenwerkingsFracties =
+      await this.fractieApi.samenwerkingForBestuursperiode(
+        this.args.bestuursperiode.id
+      );
+    let onafhankelijkeFractie =
+      await this.fractieService.getOrCreateOnafhankelijkeFractie(
+        person,
+        this.bestuursorganen,
+        this.args.bestuurseenheid
+      );
+    this.fractieOptions = [...samenwerkingsFracties, onafhankelijkeFractie];
   }
 
   async getPerson() {

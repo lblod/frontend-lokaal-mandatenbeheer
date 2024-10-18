@@ -62,9 +62,8 @@ export default class MandatarissenSearchRoute extends Route {
       allBestuurfunctieCodes.push(await mandaat.bestuursfunctie);
     }
 
-    const samenWerkendFracties = await this.fractieApi.forBestuursperiode(
-      selectedPeriod.id
-    );
+    const samenWerkendFracties =
+      await this.fractieApi.samenwerkingForBestuursperiode(selectedPeriod.id);
 
     return {
       personen,
