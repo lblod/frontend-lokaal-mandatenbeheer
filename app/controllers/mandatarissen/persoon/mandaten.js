@@ -41,10 +41,11 @@ export default class MandatarissenPersoonMandatenController extends Controller {
 
   @action
   createMandataris() {
-    this.toggleModal();
+    const bestuursorgaan = this.selectedBestuursorgaan;
+    this.closeModal();
     this.router.transitionTo(
       'organen.orgaan.mandataris.new',
-      this.selectedBestuursorgaan.id,
+      bestuursorgaan.id,
       { queryParams: { person: this.model.persoon.id } }
     );
   }
