@@ -32,7 +32,7 @@
               @showInfoText={{true}}
               @showBekijkBewijs={{true}}
             />
-            {{#unless this.isBekrachtigd}}
+            {{#if this.canEditPublicationStatus}}
               <AuButton
                 {{on "click" this.editStatus}}
                 @icon="pencil"
@@ -43,7 +43,7 @@
               >
                 edit
               </AuButton>
-            {{/unless}}
+            {{/if}}
           </div>
         {{/if}}
       </div>

@@ -8,6 +8,7 @@ import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
 export default class OrganenIndexRoute extends Route {
+  @service currentSession;
   @service store;
   @service decretaleOrganen;
   @service bestuursperioden;
@@ -42,6 +43,7 @@ export default class OrganenIndexRoute extends Route {
     const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
     const legislatuurInBehandeling =
       await this.installatievergadering.activeOrNoLegislature(selectedPeriod);
+    const isDistrict = this.currentSession.isDistrict;
 
     return RSVP.hash({
       bestuurseenheid: parentModel.bestuurseenheid,
@@ -49,7 +51,7 @@ export default class OrganenIndexRoute extends Route {
       form,
       bestuursPeriods,
       selectedPeriod,
-      legislatuurInBehandeling,
+      legislatuurInBehandeling: isDistrict ? false : legislatuurInBehandeling,
     });
   }
 

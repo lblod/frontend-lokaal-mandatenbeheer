@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 
 import { setContext, setUser } from '@sentry/ember';
 import { SHOULD_ENABLE_SENTRY } from 'frontend-lmb/utils/sentry';
+import { BESTUURSEENHEID_CLASSIFICATIECODE_DISTRICT } from 'frontend-lmb/utils/well-known-uris';
 
 const MODULE = {
   MANDATENBEHEER: 'LoketLB-mandaatGebruiker',
@@ -16,11 +17,13 @@ export default class CurrentSessionService extends Service {
   @service session;
   @service store;
   @service impersonation;
+  @service features;
 
   @tracked account;
   @tracked user;
   @tracked group;
   @tracked groupClassification;
+  @tracked isDistrict;
   @tracked roles = [];
 
   async load() {
@@ -42,6 +45,7 @@ export default class CurrentSessionService extends Service {
         reload: true,
       });
       this.groupClassification = await this.group.classificatie;
+      this.isDistrict = await this.isDistrictBestuurseenheid();
 
       this.setupSentrySession();
     }
@@ -83,6 +87,18 @@ export default class CurrentSessionService extends Service {
 
   canAccess(role) {
     return this.roles.includes(role);
+  }
+
+  async isDistrictBestuurseenheid() {
+    const classificatie = await this.group?.classificatie;
+
+    return classificatie
+      ? classificatie.uri === BESTUURSEENHEID_CLASSIFICATIECODE_DISTRICT
+      : false;
+  }
+
+  get showLegislatuurModule() {
+    return this.features.isEnabled('show-iv-module') && !this.isDistrict;
   }
 
   get canAccessMandaat() {
