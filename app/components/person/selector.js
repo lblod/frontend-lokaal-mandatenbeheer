@@ -84,12 +84,14 @@ export default class PersonSelectorComponent extends Component {
 
   @action
   buildSourceTtl(instanceUri) {
-    const { voornaam, achternaam } = this.searchFormInput ?? {};
+    const { voornaam, achternaam, rijksregisternummer } =
+      this.searchFormInput ?? {};
 
     return `
     <${instanceUri}> <http://mu.semte.ch/vocabularies/ext/possibleDuplicate> "true" .
     ${voornaam ? `<${instanceUri}> <http://data.vlaanderen.be/ns/persoon#gebruikteVoornaam> "${voornaam}".` : ''}
     ${achternaam ? `<${instanceUri}> <http://xmlns.com/foaf/0.1/familyName> "${achternaam}".` : ''}
+    ${rijksregisternummer ? `<${instanceUri}> <http://www.w3.org/ns/adms#identifier> [ <http://www.w3.org/2004/02/skos/core#notation> "${rijksregisternummer}" ].` : ''}
     `;
   }
 
