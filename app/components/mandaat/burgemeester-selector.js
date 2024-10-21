@@ -183,6 +183,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   }
 
   get toolTipText() {
-    return 'Er is reeds een burgemeester geselecteerd.';
+    return this.persoon ? 'Er is reeds een burgemeester geselecteerd.' : '';
   }
 }

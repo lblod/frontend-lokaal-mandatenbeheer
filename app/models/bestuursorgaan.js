@@ -25,9 +25,9 @@ export default class BestuursorgaanModel extends Model {
 
   @attr uri;
   @attr naam;
-  @attr('date') bindingStart;
-  @attr('date') bindingEinde;
-  @attr('date') deactivatedAt;
+  @attr('datetime') bindingStart;
+  @attr('datetime') bindingEinde;
+  @attr('datetime') deactivatedAt;
 
   get isActive() {
     return !this.deactivatedAt;
