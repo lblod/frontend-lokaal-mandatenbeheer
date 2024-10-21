@@ -90,6 +90,6 @@ export default class RDFGeboorteInput extends InputFieldComponent {
   }
 
   get title() {
-    return this.args.field?.label || 'Datum';
+    return this.args.field?.label || 'Geboortedatum';
   }
 }
