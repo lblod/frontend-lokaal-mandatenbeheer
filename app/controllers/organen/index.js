@@ -6,6 +6,7 @@ import {
   MANDAAT_TYPE_LID_ID,
   MANDAAT_TYPE_VOORZITER_ID,
 } from 'frontend-lmb/utils/well-known-ids';
+import moment from 'moment';
 
 export default class OrganenIndexController extends Controller {
   queryParams = ['sort', 'activeOrgans', 'selectedTypes', 'bestuursperiode'];
