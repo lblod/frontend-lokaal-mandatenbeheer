@@ -41,6 +41,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @tracked person;
   @tracked previousPerson;
   @tracked isPersonInForm;
+  @tracked isRequiredForBestuursorgaan;
 
   emptySelectorOptions = [];
 
@@ -84,6 +85,22 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     )[0];
 
     this.bestuursperiode = await bestuursorgaan.heeftBestuursperiode;
+    await this.setIsRequiredForBestuursorgaan(bestuursorgaan);
+  }
+
+  async setIsRequiredForBestuursorgaan(bestuursorgaan) {
+    if (!bestuursorgaan) {
+      this.isRequiredForBestuursorgaan = this.isRequired;
+      return;
+    }
+
+    const requiredWhen = [
+      await bestuursorgaan.isGR,
+      await bestuursorgaan.isCBS,
+      await bestuursorgaan.isBurgemeester,
+    ];
+
+    this.isRequiredForBestuursorgaan = requiredWhen.some((is) => is === true);
   }
 
   async loadProvidedValue() {
