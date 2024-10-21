@@ -38,8 +38,10 @@ export const placeholderNietBeschikbaar = {
 };
 
 export const MANDATARIS_PREDICATE = {
-  persoon: 'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan',
-  mandaat: 'http://www.w3.org/ns/org#holds',
+  persoon: new Namespace('http://data.vlaanderen.be/ns/mandaat#')(
+    'isBestuurlijkeAliasVan'
+  ),
+  mandaat: new Namespace('http://www.w3.org/ns/org#')('holds'),
 };
 export const PERSON_PREDICATE = {
   identifier: new Namespace('http://www.w3.org/ns/adms#')('identifier'),
