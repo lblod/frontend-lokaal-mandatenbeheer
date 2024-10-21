@@ -16,6 +16,7 @@ import {
   notBurgemeesterStates,
 } from 'frontend-lmb/utils/well-known-uris';
 import { isDateInRange } from '../date-input';
+import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -31,6 +32,7 @@ export default class MandatarissenUpdateState extends Component {
   @tracked inValidReplacement = false;
   @tracked replacementUpdated;
   @tracked statusOptions = [];
+  @tracked isFractieSelectorRequired;
 
   @service mandatarisStatus;
   @service currentSession;
@@ -39,6 +41,8 @@ export default class MandatarissenUpdateState extends Component {
   @service('mandataris') mandatarisService;
   @service fractieApi;
   @service mandatarisApi;
+
+  currentBestuursorgaan;
 
   constructor() {
     super(...arguments);
@@ -62,14 +66,18 @@ export default class MandatarissenUpdateState extends Component {
       await this.bestuursorganenOfMandaat[0]?.heeftBestuursperiode;
     this.statusOptions = await this.getStatusOptions();
     await this.getBestuursorgaanPeriod();
+    this.isFractieSelectorRequired = await isRequiredForBestuursorgaan(
+      this.currentBestuursorgaan
+    );
   });
 
   async getBestuursorgaanPeriod() {
     const mandaat = await this.args.mandataris.bekleedt;
     const bestuursorganen = await mandaat.bevatIn;
     if (bestuursorganen.length >= 1) {
-      this.bestuursorgaanStartDate = bestuursorganen.at(0).bindingStart;
-      this.bestuursorgaanEndDate = bestuursorganen.at(0).bindingEinde;
+      this.currentBestuursorgaan = bestuursorganen.at(0);
+      this.bestuursorgaanStartDate = this.currentBestuursorgaan.bindingStart;
+      this.bestuursorgaanEndDate = this.currentBestuursorgaan.bindingEinde;
     }
   }
 
@@ -143,6 +151,7 @@ export default class MandatarissenUpdateState extends Component {
       !this.date ||
       this.inValidReplacement ||
       !this.hasChanges ||
+      (this.isFractieSelectorRequired && !this.selectedFractie) ||
       !isDateInRange(
         this.date,
         this.bestuursorgaanStartDate,
