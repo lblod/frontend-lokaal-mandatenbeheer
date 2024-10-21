@@ -2,6 +2,7 @@ import { registerCustomValidation } from '@lblod/submission-form-helpers';
 import { rijksregisternummerValidation } from './rijksregisternummer';
 import { isValidRangorde } from './mandataris-rangorde';
 import { isValidMandatarisDate } from './mandataris-date-in-bestuursperiod';
+import { isRequiredWhenBestuursorgaanInList } from './required-constraint-for-bestuursorganen';
 
 export const registerCustomValidations = () => {
   registerCustomValidation(
@@ -15,5 +16,9 @@ export const registerCustomValidations = () => {
   registerCustomValidation(
     'http://mu.semte.ch/vocabularies/ext/ValidMandatarisDate',
     isValidMandatarisDate
+  );
+  registerCustomValidation(
+    'http://mu.semte.ch/vocabularies/ext/RequiredForBestuursorganen',
+    isRequiredWhenBestuursorgaanInList
   );
 };
