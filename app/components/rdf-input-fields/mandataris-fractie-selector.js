@@ -13,6 +13,7 @@ import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
 import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
+import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
@@ -85,22 +86,8 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     )[0];
 
     this.bestuursperiode = await bestuursorgaan.heeftBestuursperiode;
-    await this.setIsRequiredForBestuursorgaan(bestuursorgaan);
-  }
-
-  async setIsRequiredForBestuursorgaan(bestuursorgaan) {
-    if (!bestuursorgaan) {
-      this.isRequiredForBestuursorgaan = this.isRequired;
-      return;
-    }
-
-    const requiredWhen = [
-      await bestuursorgaan.isGR,
-      await bestuursorgaan.isCBS,
-      await bestuursorgaan.isBurgemeester,
-    ];
-
-    this.isRequiredForBestuursorgaan = requiredWhen.some((is) => is === true);
+    this.isRequiredForBestuursorgaan =
+      await isRequiredForBestuursorgaan(bestuursorgaan);
   }
 
   async loadProvidedValue() {

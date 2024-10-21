@@ -109,4 +109,8 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     this._fractie = fractie;
     this.args.onSelect(this._fractie);
   }
+
+  get title() {
+    return this.args.title || 'Fractie';
+  }
 }

@@ -1,12 +1,15 @@
 {{#if this.load.isRunning}}
   <p class="skeleton-input-full au-u-margin-top"></p>
 {{else}}
+  <AuLabel @required={{@isRequired}} @error={{this.errors}}>
+    {{this.title}}
+  </AuLabel>
   <PowerSelect
     @loadingMessage="Aan het laden..."
     @noMatchesMessage="Geen resultaten"
     @searchMessage="Typ om te zoeken"
     @searchEnabled={{true}}
-    @allowClear={{@allowClear}}
+    @allowClear={{(not @isRequired)}}
     @disabled={{@disabled}}
     @placeholder="Zoek fractie"
     @searchField="naam"
