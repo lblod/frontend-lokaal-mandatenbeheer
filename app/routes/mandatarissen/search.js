@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 import {
   placeholderNietBeschikbaar,
   placeholderOnafhankelijk,
@@ -28,6 +27,10 @@ export default class MandatarissenSearchRoute extends Route {
   async model(params) {
     const bestuursPeriods = await this.store.query('bestuursperiode', {
       sort: 'label',
+      include: [
+        'installatievergaderingen',
+        'installatievergaderingen.status',
+      ].join(','),
     });
     let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
       bestuursPeriods,
@@ -42,10 +45,8 @@ export default class MandatarissenSearchRoute extends Route {
         if (ivs.length < 1) {
           return { period, disabled: false };
         }
-        if (
-          ivs.at(0).get('status').get('uri') ==
-          INSTALLATIEVERGADERING_BEHANDELD_STATUS
-        ) {
+        const isBehandeld = await ivs.at(0).isBehandeld;
+        if (isBehandeld) {
           return { period, disabled: false };
         }
         return { period, disabled: isDistrict ? false : true };
