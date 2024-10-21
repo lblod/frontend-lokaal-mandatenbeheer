@@ -7,7 +7,6 @@ import { guidFor } from '@ember/object/internals';
 
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { isBlankNode } from 'rdflib';
 
 export default class RDFRijksRegisterInput extends InputFieldComponent {
   inputId = 'rrn-' + guidFor(this);
@@ -25,7 +24,6 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
 
     if (matches.values.length > 0) {
       this.rijksregisternummer = matches.values[0].value;
-      this.removeEmptyBlankNodeFromPrefilledData();
       replaceSingleFormValue(this.storeOptions, this.rijksregisternummer);
     }
   }
@@ -46,14 +44,5 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     this.updateValidations();
 
     this.hasBeenFocused = true;
-  }
-
-  // This is done as in the selector component a blank node is added to pre-fill this rrn
-  removeEmptyBlankNodeFromPrefilledData() {
-    const matches = triplesForPath(this.storeOptions);
-    const toRemove = matches.triples.filter(
-      (st) => isBlankNode(st.subject) || isBlankNode(st.object)
-    );
-    this.storeOptions.store.removeStatements(toRemove);
   }
 }

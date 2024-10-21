@@ -8,6 +8,8 @@ import { action } from '@ember/object';
 import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { CREATE_PERSON_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
+import { v4 as uuid } from 'uuid';
+
 export default class PersonSelectorComponent extends Component {
   inputId = 'input-' + guidFor(this);
 
@@ -87,11 +89,23 @@ export default class PersonSelectorComponent extends Component {
     const { voornaam, achternaam, rijksregisternummer } =
       this.searchFormInput ?? {};
 
+    let identifierTriples = null;
+    if (rijksregisternummer) {
+      const id = uuid();
+      identifierTriples = `
+        <${instanceUri}> <http://www.w3.org/ns/adms#identifier> <http://data.lblod.info/id/identificatoren/${id}>.
+
+        <http://data.lblod.info/id/identificatoren/${id}> a <http://www.w3.org/ns/adms#Identifier>.
+        <http://data.lblod.info/id/identificatoren/${id}> <http://mu.semte.ch/vocabularies/core/uuid> "${id}".
+        <http://data.lblod.info/id/identificatoren/${id}> <http://www.w3.org/2004/02/skos/core#notation> "${rijksregisternummer}".
+      `;
+    }
+
     return `
     <${instanceUri}> <http://mu.semte.ch/vocabularies/ext/possibleDuplicate> "true" .
     ${voornaam ? `<${instanceUri}> <http://data.vlaanderen.be/ns/persoon#gebruikteVoornaam> "${voornaam}".` : ''}
     ${achternaam ? `<${instanceUri}> <http://xmlns.com/foaf/0.1/familyName> "${achternaam}".` : ''}
-    ${rijksregisternummer ? `<${instanceUri}> <http://www.w3.org/ns/adms#identifier> [ <http://www.w3.org/2004/02/skos/core#notation> "${rijksregisternummer}" ].` : ''}
+    ${identifierTriples ? identifierTriples : ''}
     `;
   }
 
