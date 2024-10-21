@@ -25,7 +25,7 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
 
     if (matches.values.length > 0) {
       this.rijksregisternummer = matches.values[0].value;
-      this.removeEmptyBlankNodeFromAutoFillin();
+      this.removeEmptyBlankNodeFromPrefilledData();
       replaceSingleFormValue(this.storeOptions, this.rijksregisternummer);
     }
   }
@@ -38,7 +38,6 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     const rijksregisternummer = event.target.value.trim();
     this.rijksregisternummer = rijksregisternummer;
 
-    this.removeEmptyBlankNodeFromAutoFillin();
     replaceSingleFormValue(
       this.storeOptions,
       rijksregisternummer ? rijksregisternummer : null
@@ -49,7 +48,8 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     this.hasBeenFocused = true;
   }
 
-  removeEmptyBlankNodeFromAutoFillin() {
+  // This is done as in the selector component a blank node is added to pre-fill this rrn
+  removeEmptyBlankNodeFromPrefilledData() {
     const matches = triplesForPath(this.storeOptions);
     const toRemove = matches.triples.filter(
       (st) => isBlankNode(st.subject) || isBlankNode(st.object)

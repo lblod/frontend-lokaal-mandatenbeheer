@@ -28,19 +28,15 @@ export default class RDFGeboorteInput extends InputFieldComponent {
     super(...arguments);
     this.loadProvidedValue();
 
-    this.storeOptions.store.registerObserver(
-      async (formChange) => await this.observerMethod(formChange)
-    );
-  }
-
-  async observerMethod(formChange) {
-    const mustTrigger = isPredicateInObserverChange(
-      formChange,
-      PERSON_PREDICATE.identifier.value
-    );
-    if (mustTrigger && !this.checkForAutomaticFillIn.isRunning) {
-      await this.checkForAutomaticFillIn.perform();
-    }
+    this.storeOptions.store.registerObserver(async (formChange) => {
+      const mustTrigger = isPredicateInObserverChange(
+        formChange,
+        PERSON_PREDICATE.identifier
+      );
+      if (mustTrigger && !this.checkForAutomaticFillIn.isRunning) {
+        await this.checkForAutomaticFillIn.perform();
+      }
+    });
   }
 
   checkForAutomaticFillIn = task(async () => {
