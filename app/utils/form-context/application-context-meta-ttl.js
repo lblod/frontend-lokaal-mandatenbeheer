@@ -1,8 +1,9 @@
 import { EXT, LMB } from 'frontend-lmb/rdf/namespaces';
 import { NULL_DATE } from 'frontend-lmb/utils/constants';
+import { Literal } from 'rdflib';
 
 // Expects bestuursorgaan in de tijd
-export const getApplicationContextMetaTtl = (bestuursorganen) => {
+export const getApplicationContextMetaTtl = async (bestuursorganen) => {
   if (!bestuursorganen) {
     return;
   }
@@ -20,6 +21,16 @@ export const getApplicationContextMetaTtl = (bestuursorganen) => {
     @prefix lmb: <http://lblod.data.gift/vocabularies/lmb/> .
 
     ext:applicationContext ext:currentBestuursorgaan ${bestuursorgaanUris} .
+
+    ${
+      bestuursorganen.length === 1
+        ? `
+    lmb:currentBestuursorgaan lmb:isGR ${(await bestuursorganen.at(0).isGR) ?? false}.
+    lmb:currentBestuursorgaan lmb:isCBS ${(await bestuursorganen.at(0).isCBS) ?? false}.
+    lmb:currentBestuursorgaan lmb:isBurgemeester ${(await bestuursorganen.at(0).isBurgemeester) ?? false}.
+      `
+        : ``
+    }
 
     ${
       period
@@ -75,4 +86,25 @@ const getBestuursperiodeForBestuursorganen = (bestuursorganen) => {
   }
 
   throw new Error('Could not get bestuursorgaan to build up meta ttl');
+};
+
+export const getBestuursorgaanClassificaties = (storeOptions) => {
+  const { store, metaGraph } = storeOptions;
+
+  return {
+    isGR: Literal.toJS(
+      store.any(LMB('currentBestuursorgaan'), LMB('isGR'), null, metaGraph)
+    ),
+    isCBS: Literal.toJS(
+      store.any(LMB('currentBestuursorgaan'), LMB('isCBS'), null, metaGraph)
+    ),
+    isBurgemeester: Literal.toJS(
+      store.any(
+        LMB('currentBestuursorgaan'),
+        LMB('isBurgemeester'),
+        null,
+        metaGraph
+      )
+    ),
+  };
 };
