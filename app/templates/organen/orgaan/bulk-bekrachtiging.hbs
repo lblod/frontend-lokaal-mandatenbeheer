@@ -12,6 +12,11 @@
       Bekrachtig Mandatarissen
     </AuHeading>
   </Group>
+  <Group>
+    <AuButton {{on "click" this.bekrachtig}} @disabled={{this.isDisabled}}>
+      Bekrachtig
+    </AuButton>
+  </Group>
 </AuToolbar>
 <AuHeading @skin="3" class="au-u-regular au-u-padding-left">
   {{this.model.bestuursorgaan.naam}}
