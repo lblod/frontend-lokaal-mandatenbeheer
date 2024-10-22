@@ -44,8 +44,7 @@ export default class MandatarisService extends Service {
   async getOrCreateReplacement(
     toReplace,
     replacementPerson,
-    newMandatarisState,
-    newFractie
+    newMandatarisState
   ) {
     const mandatarisStatus = await this.store.findRecord(
       'mandataris-status-code',
@@ -75,9 +74,6 @@ export default class MandatarisService extends Service {
       publicationStatus: await getDraftPublicationStatus(this.store),
     });
     await newMandataris.save();
-
-    await this.createNewLidmaatschap(newMandataris, newFractie);
-
     return newMandataris;
   }
 
