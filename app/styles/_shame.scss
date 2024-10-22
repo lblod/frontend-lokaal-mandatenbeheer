@@ -290,8 +290,8 @@
   padding: 0px !important;
 }
 
-.ember-power-select-group[aria-disabled=true] .ember-power-select-option,
-.ember-power-select-option[aria-disabled=true] {
+.ember-power-select-group[aria-disabled="true"] .ember-power-select-option,
+.ember-power-select-option[aria-disabled="true"] {
   color: var(--au-gray-400);
 }
 
@@ -327,11 +327,11 @@
 }
 
 .tooltip-container .tooltip-text.left {
-  text-align:left;
+  text-align: left;
 }
 
 .tooltip-container .tooltip-text.right {
-  text-align:left;
+  text-align: left;
   right: 0;
 }
 
@@ -359,4 +359,15 @@
 
 .tooltip-container .tooltip-text.right::after {
   right: 10%;
+}
+
+$au-region-breakpoint: medium !default;
+
+.au-u-flex--row-when-medium {
+  @include mq($au-region-breakpoint) {
+    display: flex;
+    flex-direction: row !important; // someone put important on the default column value :(
+    align-items: center;
+    justify-content: space-between;
+  }
 }
