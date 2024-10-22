@@ -52,7 +52,12 @@
     </c.header>
 
     <c.body as |row|>
-      <td></td>
+      <td>
+        <AuCheckbox
+          @checked={{false}}
+          @onChange={{@onCheck row.mandataris.id}}
+        />
+      </td>
       <td>
         {{row.mandataris.bekleedt.bestuursfunctie.label}}
       </td>
