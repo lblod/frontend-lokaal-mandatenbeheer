@@ -19,12 +19,23 @@ export function isValidRijksregisternummer(nrn) {
     return false;
   }
   const { birthDate, serial, checksum } = parse(nrn);
+
+  if (!serialOfRrnIsInRange(serial)) {
+    return false;
+  }
+
   const preNillies =
     parseInt(checksum) === parseInt(mod97(`${birthDate.join('')}${serial}`));
   const postNillies =
     parseInt(checksum) === parseInt(mod97(`2${birthDate.join('')}${serial}`));
 
   return preNillies || postNillies;
+}
+
+function serialOfRrnIsInRange(serial) {
+  // https://nl.wikipedia.org/wiki/Rijksregisternummer
+  const serialAsInt = parseInt(serial, 10);
+  return serialAsInt >= parseInt('001', 10) && serialAsInt <= 998;
 }
 
 export function getBirthDay(birthDate) {

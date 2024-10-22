@@ -45,12 +45,8 @@ module(
   function () {
     const rrn = '06020200080';
     const formattedRrn = '06.02.02-000.80';
-    test(`${formattedRrn} is a valid RRN`, function (assert) {
-      assert.true(isValidRijksregisternummer(rrn));
-    });
-    test(`${formattedRrn} should return date 2006-02-02`, function (assert) {
-      assert.notDeepEqual(getBirthDate(rrn), '1906-02-02');
-      assert.deepEqual(getBirthDate(rrn), '2006-02-02');
+    test(`${formattedRrn} is an invalid RRN, serial should be between 001 and 998`, function (assert) {
+      assert.false(isValidRijksregisternummer(rrn));
     });
   }
 );
