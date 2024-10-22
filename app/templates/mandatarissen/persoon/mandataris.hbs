@@ -27,41 +27,40 @@
           )}}
           @tooltipText={{this.toolTipText}}
         >
-          <AuButton
-            @disabled={{(or
-              (not this.model.mandataris.isActive)
-              this.isDisabledBecauseLegislatuur
-            )}}
-            {{on "click" (fn (mut this.isChanging) true)}}
-          >Wijzig huidig mandaat</AuButton>
+          <Shared::Tooltip
+            @showTooltip={{(not this.isDisabledBecauseLegislatuur)}}
+            @tooltipText="Dit zal een nieuw mandaat starten met de gewijzigde situatie"
+            @alignment="left"
+          >
+            <AuButton
+              @disabled={{(or
+                (not this.model.mandataris.isActive)
+                this.isDisabledBecauseLegislatuur
+              )}}
+              {{on "click" (fn (mut this.isChanging) true)}}
+            >Wijzig huidig mandaat</AuButton>
+          </Shared::Tooltip>
         </Shared::Tooltip>
         <Shared::Tooltip
           @showTooltip={{this.isDisabledBecauseLegislatuur}}
           @tooltipText={{this.toolTipText}}
           @alignment="right"
         >
-          <AuButton
-            @alert={{true}}
-            @skin="secondary"
-            @disabled={{this.isDisabledBecauseLegislatuur}}
-            {{on "click" (fn (mut this.isCorrecting) true)}}
-          >Corrigeer fouten</AuButton>
+          <Shared::Tooltip
+            @showTooltip={{(not this.isDisabledBecauseLegislatuur)}}
+            @tooltipText="Om fouten te corrigeren, bijvoorbeeld een typefout, ..."
+            @alignment="right"
+          >
+            <AuButton
+              @alert={{true}}
+              @skin="secondary"
+              @disabled={{this.isDisabledBecauseLegislatuur}}
+              {{on "click" (fn (mut this.isCorrecting) true)}}
+            >Corrigeer fouten</AuButton>
+          </Shared::Tooltip>
         </Shared::Tooltip>
       </AuButtonGroup>
     </div>
-    <AuAlert
-      @skin="info"
-      @icon="info-circle"
-      class="alert-grey-info-circle-icon"
-    >
-      Om een mandaat te bewerken, zoals een fractiewijziging, kies voor
-      <span class="au-u-medium">Wijzig huidig mandaat</span>. Dit zal een nieuw
-      mandaat starten met de gewijzigde situatie.
-      <br />
-      Om fouten te corrigeren, bijvoorbeeld een typefout of een foutieve
-      startdatum, kies voor
-      <span class="au-u-medium">Corrigeer fouten</span>.
-    </AuAlert>
   </div>
 </div>
 
@@ -114,7 +113,7 @@
   >
     <p><span class="au-u-medium">Wijzig mandataris</span>
       wordt gebruikt om bijvoorbeeld de fractie te wijzigen of de status van de
-      mandataris aan te passen.Dit zal een nieuw mandaat starten met de
+      mandataris aan te passen. Dit zal een nieuw mandaat starten met de
       gewijzigde situatie.</p>
   </AuAlert>
   {{#if @model.bestuurseenheid.isOCMW}}
