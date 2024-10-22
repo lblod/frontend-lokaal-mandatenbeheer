@@ -22,7 +22,6 @@ export default class RDFGeboorteInput extends InputFieldComponent {
 
   @service store;
   @tracked date;
-  @tracked isSetFromRrn;
 
   constructor() {
     super(...arguments);
@@ -58,11 +57,8 @@ export default class RDFGeboorteInput extends InputFieldComponent {
         const dateString = getBirthDate(rrnString);
         if (dateString) {
           this.date = new Date(dateString);
-          this.isSetFromRrn = true;
           this.onUpdate(this.date);
         }
-      } else {
-        this.isSetFromRrn = false;
       }
     }
   });
