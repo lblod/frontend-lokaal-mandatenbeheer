@@ -32,7 +32,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     this.storeOptions.store.registerObserver(async (formChange) => {
       const mustTrigger = isPredicateInObserverChange(
         formChange,
-        MANDATARIS_PREDICATE.persoon
+        new NamedNode(MANDATARIS_PREDICATE.persoon)
       );
 
       if (mustTrigger) {

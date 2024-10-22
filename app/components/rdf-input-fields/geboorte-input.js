@@ -7,6 +7,7 @@ import { guidFor } from '@ember/object/internals';
 
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { task, timeout } from 'ember-concurrency';
+import { NamedNode } from 'rdflib';
 
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
@@ -30,7 +31,7 @@ export default class RDFGeboorteInput extends InputFieldComponent {
     this.storeOptions.store.registerObserver(async (formChange) => {
       const mustTrigger = isPredicateInObserverChange(
         formChange,
-        PERSON_PREDICATE.identifier
+        new NamedNode(PERSON_PREDICATE.identifier)
       );
       if (mustTrigger && !this.checkForAutomaticFillIn.isRunning) {
         await this.checkForAutomaticFillIn.perform();

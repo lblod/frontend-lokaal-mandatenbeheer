@@ -5,13 +5,15 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 
-import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { ORG } from 'frontend-lmb/rdf/namespaces';
-import { getByUri } from 'frontend-lmb/utils/get-by-uri';
+import { NamedNode } from 'rdflib';
 import {
   triplesForPath,
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
+
+import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
+import { ORG } from 'frontend-lmb/rdf/namespaces';
+import { getByUri } from 'frontend-lmb/utils/get-by-uri';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
 import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
 
@@ -47,7 +49,7 @@ export default class RdfMandatarisRangorde extends InputFieldComponent {
     this.storeOptions.store.registerObserver((formChange) => {
       const mustTrigger = isPredicateInObserverChange(
         formChange,
-        MANDATARIS_PREDICATE.mandaat
+        new NamedNode(MANDATARIS_PREDICATE.mandaat)
       );
 
       if (mustTrigger) {

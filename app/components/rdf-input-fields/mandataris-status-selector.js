@@ -3,6 +3,8 @@ import RdfInputFieldsConceptSchemeSelectorComponent from './concept-scheme-selec
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
+import { NamedNode } from 'rdflib';
+
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
   burgemeesterOnlyStates,
@@ -48,7 +50,7 @@ export default class RdfInputFieldsMandatarisStatusSelectorComponent extends Rdf
     this.storeOptions.store.registerObserver(async (formChange) => {
       const mustTrigger = isPredicateInObserverChange(
         formChange,
-        MANDATARIS_PREDICATE.mandaat
+        new NamedNode(MANDATARIS_PREDICATE.mandaat)
       );
 
       if (mustTrigger) {
