@@ -9,7 +9,8 @@ export default class BulkBekrachtigingController extends Controller {
   @tracked page = 0;
   @tracked sort = 'is-bestuurlijke-alias-van.achternaam';
 
-  @action checkBox(mandataris) {
+  @action checkBox(mandataris, state) {
     console.log(mandataris);
+    console.log(state);
   }
 }
