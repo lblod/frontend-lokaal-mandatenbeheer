@@ -1,0 +1,24 @@
+{{breadcrumb
+  "Bekrachtigen mandatarissen"
+  route="organen.orgaan.bulk-bekrachtiging"
+}}
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom-none"
+  as |Group|
+>
+  <Group class="au-u-margin-bottom-none">
+    <AuHeading @skin="2">
+      Bekrachtig Mandatarissen
+    </AuHeading>
+  </Group>
+</AuToolbar>
+<AuHeading @skin="3" class="au-u-regular au-u-padding-left">
+  {{this.model.bestuursorgaan.naam}}
+</AuHeading>
+
+<div class="au-o-box">
+  test
+</div>
+
+{{outlet}}
