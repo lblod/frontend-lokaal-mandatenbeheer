@@ -6,16 +6,23 @@
     @bestuursorganen={{@bestuursorganen}}
   />
 {{else}}
-  <div class="au-u-flex au-u-flex--between au-u-margin-left au-u-margin-right">
-    <AuHeading @skin="3" class="au-u-flex-self-start">Samenstelling
-      {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
-    {{#unless @isBehandeld}}
-      <AuContent @skin="small" class="au-u-flex-self-end">
-        <div class="au-u-flex au-u-flex--spaced-tiny flex-grow">
+  <div class="au-u-flex au-u-flex--column au-u-flex--row-when-medium">
+    <div
+      class="au-u-flex au-u-flex--between au-u-margin-left au-u-margin-right"
+    >
+      <AuHeading
+        @skin="3"
+        class="au-u-flex-self-start au-u-margin-bottom-small"
+      >Samenstelling
+        {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
+    </div>
+    <div class="au-u-flex au-u-flex--end au-u-margin-left au-u-margin-right">
+      {{#unless @isBehandeld}}
+        <AuContent @skin="small" class="au-u-flex-self-end">
           {{! template-lint-disable no-inline-styles }}
           <AuButton
-            class="flex-grow"
             style="background-color: #007A37; border-color: #007A37;"
+            class="au-u-margin-top-none"
             @icon="table-row-end-add"
             @loadingMessage="Genereren"
             {{on "click" (fn (mut this.isGeneratingRows) true)}}
@@ -25,38 +32,50 @@
 
           <AuButton
             @icon="add"
-            class="flex-grow"
             @loading={{this.onCreate.isRunning}}
+            class="au-u-margin-top-none"
             @loadingMessage="Aan het toevoegen"
             {{on "click" this.createMandataris}}
           >
-            Toevoegen
+            Voeg toe
           </AuButton>
-        </div>
-        {{#if
-          (or
-            (await @bestuursorgaan.isRMW) (await @bestuursorgaan.isVastBureau)
-          )
-        }}
-          <AuButton
-            @skin="secondary"
-            class="flex-grow"
-            @icon="synchronize"
-            @loading={{this.mirrorTable.isRunning}}
-            @loadingMessage="Aan het synchroniseren"
-            {{on "click" (perform this.mirrorTable)}}
-          >
-            {{#if (await @bestuursorgaan.isRMW)}}
-              Neem over van Gemeenteraad
-            {{/if}}
-            {{#if (await @bestuursorgaan.isVastBureau)}}
-              Neem over van College van Burgemeester en Schepenen
-            {{/if}}
-          </AuButton>
-        {{/if}}
+          {{#if
+            (or
+              (await @bestuursorgaan.isRMW) (await @bestuursorgaan.isVastBureau)
+            )
+          }}
+            <div class="au-u-flex--inline">
+              <Shared::Tooltip
+                @showTooltip={{true}}
+                @tooltipText={{if
+                  (await @bestuursorgaan.isRMW)
+                  "Neem de mandatarissen over van de gemeenteraad"
+                  "Neem de mandatarissen over van het College van Burgemeester en Schepenen"
+                }}
+                @alignment="left"
+              >
+                <AuButton
+                  @skin="secondary"
+                  @icon="synchronize"
+                  class="au-u-margin-top-none"
+                  @loading={{this.mirrorTable.isRunning}}
+                  @loadingMessage="Aan het synchroniseren"
+                  {{on "click" (perform this.mirrorTable)}}
+                >
+                  {{#if (await @bestuursorgaan.isRMW)}}
+                    Neem over van Gemeenteraad
+                  {{/if}}
+                  {{#if (await @bestuursorgaan.isVastBureau)}}
+                    Neem over van CBS
+                  {{/if}}
+                </AuButton>
+              </Shared::Tooltip>
+            </div>
+          {{/if}}
 
-      </AuContent>
-    {{/unless}}
+        </AuContent>
+      {{/unless}}
+    </div>
   </div>
   {{#if (await @bestuursorgaan.isBCSD)}}
     <Verkiezingen::BcsdVoorzitterAlert
@@ -80,7 +99,7 @@
       this.skeletonRowsOfMirror
     )
   }}
-    <div class="au-o-box">
+    <div class="au-o-box au-u-padding-top-small">
       <Skeleton::Table @columns={{5}} @rows={{this.skeletonRowsOfMirror}} />
     </div>
   {{else}}
