@@ -56,10 +56,10 @@ export default class MandatarisExtraInfoCardComponent extends Component {
 
   get toolTipText() {
     if (!this.hasBijkomendeInformatie) {
-      return 'Dit type mandataris heeft geen bijkomende informatie om te bewerken.';
+      return 'Dit type mandaat heeft geen bijkomende informatie om te bewerken.';
     }
     if (!this.args.canEdit) {
-      return 'Het is niet mogelijk een mandataris aan te passen tijdens het voorbereiden van de legislatuur.';
+      return 'Het is niet mogelijk een mandaat aan te passen tijdens het voorbereiden van de legislatuur.';
     }
     return '';
   }

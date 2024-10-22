@@ -30,6 +30,21 @@ export default class KieslijstSplitterComponent extends Component {
     this.load();
   }
 
+  get zalOfZullen() {
+    if (this.selectedFracties.length == 2) {
+      return 'zullen';
+    }
+    return 'zal';
+  }
+
+  @action
+  fractieText(extra) {
+    if (this.selectedFracties.length == 2) {
+      return 'fracties';
+    }
+    return extra ? `${extra} fractie` : 'fractie';
+  }
+
   get kieslijstSelected() {
     return this.selectedKieslijst != null;
   }
