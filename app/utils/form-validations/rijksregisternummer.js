@@ -19,6 +19,11 @@ export function isValidRijksregisternummer(nrn) {
     return false;
   }
   const { birthDate, serial, checksum } = parse(nrn);
+
+  if (!serialOfRrnIsInRange(serial)) {
+    return false;
+  }
+
   const preNillies =
     parseInt(checksum) === parseInt(mod97(`${birthDate.join('')}${serial}`));
   const postNillies =
@@ -27,7 +32,13 @@ export function isValidRijksregisternummer(nrn) {
   return preNillies || postNillies;
 }
 
-export function getBirthDay(birthDate) {
+function serialOfRrnIsInRange(serial) {
+  // https://nl.wikipedia.org/wiki/Rijksregisternummer
+  const serialAsInt = parseInt(serial, 10);
+  return serialAsInt >= parseInt('001', 10) && serialAsInt <= 998;
+}
+
+function getBirthDay(birthDate) {
   return birthDate[2];
 }
 
