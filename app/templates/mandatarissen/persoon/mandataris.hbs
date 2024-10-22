@@ -105,6 +105,18 @@
   @onStateChanged={{this.onUpdateState}}
   @mandataris={{this.model.mandataris}}
 >
+  <AuAlert
+    @skin="info"
+    @icon="info-circle"
+    @size="small"
+    @closable={{false}}
+    class="au-u-margin-small"
+  >
+    <p><span class="au-u-medium">Wijzig mandataris</span>
+      wordt gebruikt om bijvoorbeeld de fractie te wijzigen of de status van de
+      mandataris aan te passen.Dit zal een nieuw mandaat starten met de
+      gewijzigde situatie.</p>
+  </AuAlert>
   {{#if @model.bestuurseenheid.isOCMW}}
     <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
       Mandatarissen in het OCMW hebben vaak een corresponderend mandaat in de
@@ -126,6 +138,18 @@
   @closable={{true}}
   @closeModal={{this.closeModals}}
 >
+  <AuAlert
+    @skin="info"
+    @icon="info-circle"
+    @size="small"
+    @closable={{false}}
+    class="center-alert-icon au-u-margin-small"
+  >
+    <p><span class="au-u-medium">Corrigeer fouten</span>
+      wordt gebruikt om bijvoorbeeld typfouten of een foutieve startdatum aan te
+      passen. Voor alle andere mandaatwijzigingen, zoals fractiewijzigingen,
+      gebruik Wijzig huidige mandaat.</p>
+  </AuAlert>
   {{#if @model.bestuurseenheid.isOCMW}}
     <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
       Mandatarissen in het OCMW hebben vaak een corresponderend mandaat in de
