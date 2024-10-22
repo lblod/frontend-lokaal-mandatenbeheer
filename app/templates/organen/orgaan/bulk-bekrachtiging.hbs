@@ -17,8 +17,12 @@
   {{this.model.bestuursorgaan.naam}}
 </AuHeading>
 
-<div class="au-o-box">
-  test
-</div>
+<Organen::BekrachtigMandatarisTable
+  @content={{@model.mandatarissen}}
+  @bestuursperiode={{@model.selectedBestuursperiode}}
+  @sort={{this.sort}}
+  @page={{this.page}}
+  @size={{this.size}}
+/>
 
 {{outlet}}

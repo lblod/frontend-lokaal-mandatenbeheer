@@ -1,0 +1,87 @@
+<AuDataTable
+  @content={{@content}}
+  @noDataMessage="Geen mandatarissen gevonden"
+  @sort={{@sort}}
+  @page={{@page}}
+  @size={{@size}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <th></th>
+      <AuDataTableThSortable
+        @field="bekleedt.bestuursfunctie.label"
+        @currentSorting={{@sort}}
+        @label="Mandaat"
+      />
+      <AuDataTableThSortable
+        @field="isBestuurlijkeAliasVan.gebruikteVoornaam"
+        @currentSorting={{@sort}}
+        @label="Voornaam"
+      />
+      <AuDataTableThSortable
+        @field="isBestuurlijkeAliasVan.achternaam"
+        @currentSorting={{@sort}}
+        @label="Familienaam"
+      />
+      <AuDataTableThSortable
+        @field="heeftLidmaatschap.binnenFractie.naam"
+        @currentSorting={{@sort}}
+        @label="Fractie"
+      />
+      <AuDataTableThSortable
+        @field="status.label"
+        @currentSorting={{@sort}}
+        @label="Status"
+      />
+      <AuDataTableThSortable
+        @field="start"
+        @currentSorting={{@sort}}
+        @label="Start mandaat"
+      />
+      <AuDataTableThSortable
+        @field="einde"
+        @currentSorting={{@sort}}
+        @label="Einde mandaat"
+      />
+      <AuDataTableThSortable
+        @field="publicationStatus"
+        @currentSorting={{@sort}}
+        @label="Publicatie Status"
+      />
+    </c.header>
+
+    <c.body as |row|>
+      <td></td>
+      <td>
+        {{row.mandataris.bekleedt.bestuursfunctie.label}}
+      </td>
+      <td>
+        {{row.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+      </td>
+      <td>
+        {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
+      </td>
+      <td>
+        <Mandaat::FoldedFracties
+          @persoon={{row.mandataris.isBestuurlijkeAliasVan}}
+          @bestuursperiode={{@bestuursperiode}}
+          @mandaat={{row.mandataris.bekleedt}}
+        />
+      </td>
+      <td>
+        <Mandaat::MandatarisStatusPill @mandataris={{row.mandataris}} />
+      </td>
+      <td class={{if (is-in-past row.foldedEnd) "au-u-muted"}}>
+        {{moment-format row.foldedStart "DD-MM-YYYY"}}</td>
+      <td class={{if (is-in-past row.foldedEnd) "au-u-muted"}}>
+        {{moment-format row.foldedEnd "DD-MM-YYYY"}}</td>
+      <td>
+        <Mandaat::PublicatieStatusPill
+          @mandataris={{row.mandataris}}
+          @showBekijkBewijs={{false}}
+        />
+      </td>
+    </c.body>
+  </t.content>
+</AuDataTable>
