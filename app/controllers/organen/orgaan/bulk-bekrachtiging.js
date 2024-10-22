@@ -9,8 +9,13 @@ export default class BulkBekrachtigingController extends Controller {
   @tracked page = 0;
   @tracked sort = 'is-bestuurlijke-alias-van.achternaam';
 
+  checked = new Set();
+
   @action checkBox(mandataris, state) {
-    console.log(mandataris);
-    console.log(state);
+    if (state) {
+      this.checked.add(mandataris);
+    } else {
+      this.checked.delete(mandataris);
+    }
   }
 }
