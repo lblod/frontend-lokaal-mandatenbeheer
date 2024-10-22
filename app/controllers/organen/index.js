@@ -8,8 +8,6 @@ import {
 } from 'frontend-lmb/utils/well-known-ids';
 import moment from 'moment';
 
-import moment from 'moment';
-
 export default class OrganenIndexController extends Controller {
   queryParams = ['sort', 'activeOrgans', 'selectedTypes', 'bestuursperiode'];
   @service store;
