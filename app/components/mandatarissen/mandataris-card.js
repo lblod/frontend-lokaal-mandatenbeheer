@@ -83,13 +83,11 @@ export default class MandatarisCardComponent extends Component {
         publicationStatus: await getDraftPublicationStatus(this.store),
       }
     );
-    const lidmaatschap = await this.args.mandataris.heeftLidmaatschap;
     const replacementMandataris =
       await this.mandatarisService.getOrCreateReplacement(
         this.args.mandataris,
         replacement,
-        newMandatarisProps,
-        await lidmaatschap.binnenFractie
+        newMandatarisProps
       );
     this.args.mandataris.tijdelijkeVervangingen = [replacementMandataris];
     await this.args.mandataris.save();

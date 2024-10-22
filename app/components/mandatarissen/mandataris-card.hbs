@@ -70,8 +70,11 @@
     <div class="au-o-grid__item au-u-1-2">
       <div class="au-c-description-label">Fractie</div>
       <div
-        class="au-c-description-value au-u-margin-top-tiny"
-      >{{this.fractie}}</div>
+        class="au-c-description-value au-u-margin-top-tiny
+          {{unless this.fractie 'au-u-muted'}}"
+      >
+        {{if this.fractie this.fractie "Niet beschikbaar"}}
+      </div>
     </div>
     <div class="au-o-grid__item au-u-1-2">
       <div class="au-c-description-label">Einde periode</div>

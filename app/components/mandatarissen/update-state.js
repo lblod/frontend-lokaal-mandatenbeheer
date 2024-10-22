@@ -184,8 +184,7 @@ export default class MandatarissenUpdateState extends Component {
           this.selectedReplacement,
           // passing these along because if we pass the model, relations will be
           // evaluated as of right now and we haven't saved yet
-          newMandatarisProps,
-          this.selectedFractie
+          newMandatarisProps
         );
       newMandataris.tijdelijkeVervangingen = [replacementMandataris];
     } else {
