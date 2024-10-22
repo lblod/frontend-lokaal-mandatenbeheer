@@ -118,14 +118,16 @@
       gewijzigde situatie.</p>
   </AuAlert>
   {{#if @model.bestuurseenheid.isOCMW}}
-    <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
-      Mandatarissen in het OCMW hebben vaak een corresponderend mandaat in de
-      gemeente. Indien aan deze mandataris een corresponderend mandaat gekoppeld
-      is in de gemeente zal je de koppeling breken door hier wijzigingen uit te
-      voeren, in dat geval moet je wijzigingen aan beide mandaten manueel
-      doorvoeren. Zijn ze gekoppeld en voeg je de wijzigingen uit in de
-      gemeente, dan zullen de wijzigingen ook uitgevoerd worden in het OCMW
-      (indien gewenst).
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @closable={{false}}
+      @size="small"
+      class="au-u-margin-left-small au-u-margin-right-small au-u-margin-bottom-small"
+    >
+      Let op! Gegevens die hier gewijzigd worden zullen niet doorgevoerd worden
+      in het gekoppelde gemeente mandaat. Om een wijziging aan beide mandaten te
+      maken, gelieve dit te doen bij de Gemeente.
     </AuAlert>
   {{/if}}
 </Mandatarissen::UpdateState>
@@ -143,7 +145,7 @@
     @icon="info-circle"
     @size="small"
     @closable={{false}}
-    class="center-alert-icon au-u-margin-small"
+    class="au-u-margin-small"
   >
     <p><span class="au-u-medium">Corrigeer fouten</span>
       wordt gebruikt om bijvoorbeeld typfouten of een foutieve startdatum aan te
@@ -151,14 +153,16 @@
       gebruik Wijzig huidige mandaat.</p>
   </AuAlert>
   {{#if @model.bestuurseenheid.isOCMW}}
-    <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
-      Mandatarissen in het OCMW hebben vaak een corresponderend mandaat in de
-      gemeente. Indien aan deze mandataris een corresponderend mandaat gekoppeld
-      is in de gemeente zal je de koppeling breken door hier wijzigingen uit te
-      voeren, in dat geval moet je wijzigingen aan beide mandaten manueel
-      doorvoeren. Zijn ze gekoppeld en voeg je de wijzigingen uit in de
-      gemeente, dan zullen de wijzigingen ook uitgevoerd worden in het OCMW
-      (indien gewenst).
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @closable={{false}}
+      @size="small"
+      class="au-u-margin-left-small au-u-margin-right-small au-u-margin-bottom-small"
+    >
+      Let op! Gegevens die hier gewijzigd worden zullen niet doorgevoerd worden
+      in het gekoppelde gemeente mandaat. Om een wijziging aan beide mandaten te
+      maken, gelieve dit te doen bij de Gemeente.
     </AuAlert>
   {{/if}}
   <div class="au-o-box">
