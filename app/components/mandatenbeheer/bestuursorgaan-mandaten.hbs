@@ -110,7 +110,7 @@
   @id="create-mandaat"
   @modalOpen={{this.creatingNewMandaat}}
   @closeModal={{this.cancelCreateMandaat}}
-  @title="Nieuw Mandaat Aanmaken"
+  @title="Voeg mandaat toe"
   as |Modal|
 >
   <Modal.Body>
@@ -139,7 +139,7 @@
             {{on "click" this.createMandaat.perform}}
             @loading={{this.createMandaat.isRunning}}
           >
-            Creëer Mandaat
+            Voeg toe
           </AuButton>
           <AuButton @skin="secondary" {{on "click" this.cancelCreateMandaat}}>
             Annuleer
