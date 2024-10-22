@@ -52,7 +52,7 @@ export default class GenerateRowsFormComponent extends Component {
       const minimumToCreate =
         this.selectedMandaat.parent.minAantalHouders -
         this.lengthExistingMandaten;
-      this.rowsToCreateHelpText = `Je moet nog ${minimumToCreate} ${minimumToCreate <= 1 ? 'mandaat' : 'mandaten'} aanmaken voor dit orgaan.`;
+      this.rowsToCreateHelpText = `Je moet nog ${minimumToCreate} ${minimumToCreate <= 1 ? 'mandataris' : 'mandatarissen'} aanmaken voor dit orgaan.`;
     }
     this.addWarningWhenMandatenAreAtMax();
     if (this.selectedMandaat.parent.maxAantalHouders) {
@@ -83,7 +83,7 @@ export default class GenerateRowsFormComponent extends Component {
         this.selectedMandaat.parent.maxAantalHouders +
         this.lengthExistingMandaten;
       this.rowWarnings.pushObject(
-        `Je gaat meer mandaten aanmaken dan er gewenst is. ${toMuch} teveel.`
+        `Je gaat meer mandatarissen aanmaken dan gewenst. ${toMuch} te veel.`
       );
     }
 

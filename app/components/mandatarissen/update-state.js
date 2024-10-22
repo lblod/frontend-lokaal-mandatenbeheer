@@ -238,7 +238,7 @@ export default class MandatarissenUpdateState extends Component {
       .then((newMandataris) => {
         showSuccessToast(
           this.toaster,
-          'Mandataris status werd succesvol aangepast.'
+          'Status van mandaat werd succesvol aangepast.'
         );
         this.onStateChanged(newMandataris);
       })
@@ -246,7 +246,7 @@ export default class MandatarissenUpdateState extends Component {
         console.log(e);
         showErrorToast(
           this.toaster,
-          'Er ging iets mis bij het aanpassen van de mandataris status.'
+          'Er ging iets mis bij het aanpassen van de status van het mandaat.'
         );
         this.onStateChanged(this.args.mandataris);
       });
