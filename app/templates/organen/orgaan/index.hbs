@@ -12,16 +12,7 @@
   <Group>
     <AuButtonGroup>
       {{#unless (await @model.bestuursorgaan.isDecretaal)}}
-        <Shared::Tooltip
-          @showTooltip={{@model.isDisabledBecauseLegislatuur}}
-          @tooltipText="Het is niet mogelijk een orgaan aan te passen tijdens de voorbereiding van een legislatuur."
-          @alignment="center"
-        >
-          <AuButton
-            @disabled={{@model.isDisabledBecauseLegislatuur}}
-            {{on "click" this.toggleModal}}
-          >Bewerk</AuButton>
-        </Shared::Tooltip>
+        <AuButton {{on "click" this.toggleModal}}>Bewerk</AuButton>
         {{#if @model.bestuursorgaan.isActive}}
           <AuButton
             @icon="archive"

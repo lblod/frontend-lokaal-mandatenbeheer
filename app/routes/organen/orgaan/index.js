@@ -8,7 +8,6 @@ import RSVP from 'rsvp';
 
 export default class OrganenOrgaanIndexRoute extends Route {
   @service store;
-  @service installatievergadering;
 
   async model() {
     const parentModel = this.modelFor('organen.orgaan');
@@ -25,11 +24,7 @@ export default class OrganenOrgaanIndexRoute extends Route {
       BESTUURSORGAAN_FORM_ID
     );
 
-    const bestuursperiode = await currentBestuursorgaan.heeftBestuursperiode;
-
     return RSVP.hash({
-      isDisabledBecauseLegislatuur:
-        this.installatievergadering.activeOrNoLegislature(bestuursperiode),
       bestuursorgaanFormDefinition,
       mandaten,
       orderedMandaten,
