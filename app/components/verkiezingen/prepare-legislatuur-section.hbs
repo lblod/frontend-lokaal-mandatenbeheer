@@ -11,9 +11,9 @@
       {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
     {{#unless @isBehandeld}}
       <AuContent @skin="small" class="au-u-flex-self-end">
-        {{#if (or (await @bestuursorgaan.isGR) (await @bestuursorgaan.isCBS))}}
-          {{! template-lint-disable no-inline-styles }}
+        <div class="au-u-flex au-u-flex--spaced-tiny flex-grow">
           <AuButton
+            class="flex-grow"
             style="background-color: #007A37; border-color: #007A37;"
             @icon="table-row-end-add"
             @loadingMessage="Genereren"
@@ -21,7 +21,17 @@
           >
             Genereer rijen
           </AuButton>
-        {{/if}}
+
+          <AuButton
+            @icon="add"
+            class="flex-grow"
+            @loading={{this.onCreate.isRunning}}
+            @loadingMessage="Aan het toevoegen"
+            {{on "click" this.createMandataris}}
+          >
+            Toevoegen
+          </AuButton>
+        </div>
         {{#if
           (or
             (await @bestuursorgaan.isRMW) (await @bestuursorgaan.isVastBureau)
@@ -29,6 +39,7 @@
         }}
           <AuButton
             @skin="secondary"
+            class="flex-grow"
             @icon="synchronize"
             @loading={{this.mirrorTable.isRunning}}
             @loadingMessage="Aan het synchroniseren"
@@ -42,14 +53,7 @@
             {{/if}}
           </AuButton>
         {{/if}}
-        <AuButton
-          @icon="add"
-          @loading={{this.onCreate.isRunning}}
-          @loadingMessage="Aan het toevoegen"
-          {{on "click" this.createMandataris}}
-        >
-          Toevoegen
-        </AuButton>
+
       </AuContent>
     {{/unless}}
   </div>
