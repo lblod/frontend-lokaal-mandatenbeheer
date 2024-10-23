@@ -110,6 +110,8 @@ export default class MandatarisApiService extends Service {
     bestuursperiodeId,
     bestuursorgaanId,
     bestuursfunctieCode,
+    fractieId,
+    persoonId,
     activeOnly,
   }) {
     const response = await fetch(
@@ -123,6 +125,8 @@ export default class MandatarisApiService extends Service {
           bestuursperiodeId: bestuursperiodeId,
           bestuursorgaanId: bestuursorgaanId,
           bestuursfunctieCodeUri: bestuursfunctieCode,
+          fractieId: fractieId,
+          persoonId: persoonId,
           onlyShowActive: activeOnly,
         }),
       }

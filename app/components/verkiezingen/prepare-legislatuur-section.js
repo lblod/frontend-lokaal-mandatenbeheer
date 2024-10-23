@@ -91,6 +91,9 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       // bestuursorgaanId:
       //   '5f05da0d28da533e97b64043caa9c30e325123a6be45a832de86e8f05ff7e1db',
       bestuursfunctieCode: null,
+      fractieId: null,
+      persoonId:
+        '98b78a301578b6969d0ed8343bc5a801fc359bd1d95a5e7deb45af4ffd7a8567',
       onlyShowActive: false,
     });
     return;
