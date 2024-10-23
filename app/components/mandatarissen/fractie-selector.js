@@ -84,7 +84,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
             );
         }
       } else if (
-        this.fractieOptions.length == 1 &&
+        this.fractieOptions.length > 1 ||
         this.fractieOptions.at(0).isOnafhankelijk
       ) {
         return;
