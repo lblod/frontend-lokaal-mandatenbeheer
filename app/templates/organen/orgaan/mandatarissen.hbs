@@ -58,8 +58,10 @@
     @onChange={{this.toggleActiveOnly}}
   >Verberg niet actieve mandatarissen</AuToggleSwitch>
 </div>
+<p>{{this.activeOnly}}</p>
 <DownloadMandatarissenFromTable
   @bestuursperiode={{@model.selectedBestuursperiode}}
+  @activeOnly={{this.activeOnly}}
 />
 <Organen::MandatarisTable
   @content={{@model.mandatarissen}}
