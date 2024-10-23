@@ -143,7 +143,6 @@ export default class MandatarisApiService extends Service {
         message: jsonReponse.message,
       };
     }
-    console.log({ csv: atob(jsonReponse.data ?? '') });
 
     downloadTextAsFile(
       {
