@@ -24,6 +24,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service router;
   @service fractieApi;
   @service('mandataris') mandatarisService;
+  @service('mandataris-api') mandatarisApi;
 
   @tracked editMode = null;
   @tracked isGeneratingRows;
@@ -80,6 +81,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   }
 
   mirrorTable = restartableTask(async () => {
+    await this.mandatarisApi.downloadAsCsv();
+    return;
     this.skeletonRowsOfMirror = null;
     let syncId = null;
     if (await this.args.bestuursorgaan.isRMW) {

@@ -4,6 +4,7 @@ import { service } from '@ember/service';
 import { timeout } from 'ember-concurrency';
 import {
   API,
+  JSON_API_TYPE,
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
@@ -70,5 +71,33 @@ export default class MandatarisApiService extends Service {
       'filter[:id:]': jsonReponse.fracties.join(','),
       include: 'fractietype',
     });
+  }
+
+  async downloadAsCsv(bestuursperiodeId) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/mandatarissen/download`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          bestuursperiodeId: 'a2b977a3-ce68-4e42-80a6-4397f66fc5ca',
+        }),
+      }
+    );
+
+    const jsonReponse = await response.json();
+    console.log({ jsonReponse });
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonReponse.message);
+      throw {
+        status: response.status,
+        message: jsonReponse.message,
+      };
+    }
+
+    return null;
   }
 }
