@@ -74,7 +74,12 @@ export default class MandatarisApiService extends Service {
     });
   }
 
-  async downloadAsCsv(bestuursperiodeId) {
+  async downloadAsCsv({
+    bestuursperiodeId,
+    bestuursorgaanId,
+    bestuursfunctieCode,
+    activeOnly,
+  }) {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/mandatarissen/download`,
       {
@@ -84,6 +89,9 @@ export default class MandatarisApiService extends Service {
         },
         body: JSON.stringify({
           bestuursperiodeId: bestuursperiodeId,
+          bestuursorgaanId: bestuursorgaanId,
+          bestuursfunctieCodeUri: bestuursfunctieCode,
+          onlyShowActive: activeOnly,
         }),
       }
     );
@@ -91,12 +99,14 @@ export default class MandatarisApiService extends Service {
     const jsonReponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
+      console.error(jsonReponse);
       throw {
         status: response.status,
         message: jsonReponse.message,
       };
     }
+    console.log({ csv: atob(jsonReponse.data ?? '') });
+    return;
 
     downloadTextAsFile(
       {
