@@ -8,6 +8,7 @@ import {
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
+import { downloadTextAsFile } from 'frontend-lmb/utils/download-text-as-file';
 
 export default class MandatarisApiService extends Service {
   @service store;
@@ -82,13 +83,12 @@ export default class MandatarisApiService extends Service {
           'Content-Type': JSON_API_TYPE,
         },
         body: JSON.stringify({
-          bestuursperiodeId: 'a2b977a3-ce68-4e42-80a6-4397f66fc5ca',
+          bestuursperiodeId: bestuursperiodeId,
         }),
       }
     );
 
     const jsonReponse = await response.json();
-    console.log({ jsonReponse });
 
     if (response.status !== STATUS_CODE.OK) {
       console.error(jsonReponse.message);
@@ -98,6 +98,13 @@ export default class MandatarisApiService extends Service {
       };
     }
 
-    return null;
+    downloadTextAsFile(
+      {
+        filename: 'mandataris_export.csv',
+        contentAsText: atob(jsonReponse.data ?? ''),
+      },
+      document,
+      window
+    );
   }
 }
