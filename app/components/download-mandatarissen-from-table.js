@@ -10,6 +10,7 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
   download = task(async () => {
     await this.mandatarisApi.downloadAsCsv({
       bestuursperiodeId: this.args.bestuursperiode?.id,
+      activeOnly: this.args.activeOnly,
     });
   });
 }
