@@ -113,6 +113,7 @@ export default class MandatarisApiService extends Service {
     fractieId = null,
     persoonId = null,
     activeOnly = false,
+    sort = null,
   }) {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/mandatarissen/download`,
@@ -128,6 +129,7 @@ export default class MandatarisApiService extends Service {
           fractieId: fractieId,
           persoonId: persoonId,
           onlyShowActive: activeOnly,
+          sort,
         }),
       }
     );
@@ -142,7 +144,6 @@ export default class MandatarisApiService extends Service {
       };
     }
     console.log({ csv: atob(jsonReponse.data ?? '') });
-    return;
 
     downloadTextAsFile(
       {

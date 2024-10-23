@@ -14,6 +14,7 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
       bestuursperiodeId: this.args.bestuursperiode?.id,
       activeOnly: this.args.activeOnly,
       bestuursorgaanId: boiId,
+      sort: this.args.sort,
     });
   });
 
