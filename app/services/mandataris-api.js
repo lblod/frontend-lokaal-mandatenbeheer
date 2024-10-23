@@ -4,9 +4,11 @@ import { service } from '@ember/service';
 import { timeout } from 'ember-concurrency';
 import {
   API,
+  JSON_API_TYPE,
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
+import { downloadTextAsFile } from 'frontend-lmb/utils/download-text-as-file';
 
 export default class MandatarisApiService extends Service {
   @service store;
@@ -70,5 +72,53 @@ export default class MandatarisApiService extends Service {
       'filter[:id:]': jsonReponse.fracties.join(','),
       include: 'fractietype',
     });
+  }
+
+  async downloadAsCsv({
+    bestuursperiodeId,
+    bestuursorgaanId = null,
+    bestuursfunctieCode = null,
+    fractieId = null,
+    persoonId = null,
+    activeOnly = false,
+    sort = null,
+  }) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/mandatarissen/download`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          bestuursperiodeId: bestuursperiodeId,
+          bestuursorgaanId: bestuursorgaanId,
+          bestuursfunctieCodeUri: bestuursfunctieCode,
+          fractieId: fractieId,
+          persoonId: persoonId,
+          onlyShowActive: activeOnly,
+          sort,
+        }),
+      }
+    );
+
+    const jsonReponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonReponse);
+      throw {
+        status: response.status,
+        message: jsonReponse.message,
+      };
+    }
+
+    downloadTextAsFile(
+      {
+        filename: 'mandataris_export.csv',
+        contentAsText: atob(jsonReponse.data ?? ''),
+      },
+      document,
+      window
+    );
   }
 }

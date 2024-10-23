@@ -1,0 +1,14 @@
+<div class="au-u-margin-top au-u-flex au-u-flex--end">
+  <AuButton
+    @skin="naked"
+    @icon="download"
+    @iconAlignment="left"
+    @hideText={{this.hideText}}
+    @loading={{this.download.isRunning}}
+    @loadingMessage="Downloading"
+    @disabled={{(or (not @bestuursperiode) this.download.isRunning)}}
+    {{on "click" (perform this.download)}}
+  >
+    Download tabel content
+  </AuButton>
+</div>
