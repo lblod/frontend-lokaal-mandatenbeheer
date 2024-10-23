@@ -13,8 +13,6 @@ import { showErrorToast, showWarningToast } from 'frontend-lmb/utils/toasts';
 import {
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
-  MANDAAT_GEMEENTERAADSLID_CODE,
-  MANDAAT_SCHEPEN_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 const CREATE_MODE = 'create';
@@ -85,10 +83,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   }
 
   mirrorTable = restartableTask(async () => {
-    await this.mandatarisApi.downloadAsCsv({
-      bestuursperiodeId: 'a2b977a3-ce68-4e42-80a6-4397f66fc5ca',
-    });
-    return;
     this.skeletonRowsOfMirror = null;
     let syncId = null;
     if (await this.args.bestuursorgaan.isRMW) {
