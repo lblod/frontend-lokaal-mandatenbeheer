@@ -108,11 +108,11 @@ export default class MandatarisApiService extends Service {
 
   async downloadAsCsv({
     bestuursperiodeId,
-    bestuursorgaanId,
-    bestuursfunctieCode,
-    fractieId,
-    persoonId,
-    activeOnly,
+    bestuursorgaanId = null,
+    bestuursfunctieCode = null,
+    fractieId = null,
+    persoonId = null,
+    activeOnly = false,
   }) {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/mandatarissen/download`,
