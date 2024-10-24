@@ -30,7 +30,6 @@
           <Shared::Tooltip
             @showTooltip={{(not this.isDisabledBecauseLegislatuur)}}
             @tooltipText="Dit zal een nieuw mandaat starten met de gewijzigde situatie"
-            @alignment="left"
           >
             <AuButton
               @disabled={{(or
@@ -44,12 +43,10 @@
         <Shared::Tooltip
           @showTooltip={{this.isDisabledBecauseLegislatuur}}
           @tooltipText={{this.toolTipText}}
-          @alignment="right"
         >
           <Shared::Tooltip
             @showTooltip={{(not this.isDisabledBecauseLegislatuur)}}
             @tooltipText="Om fouten te corrigeren, bijvoorbeeld een typefout, ..."
-            @alignment="right"
           >
             <AuButton
               @alert={{true}}
