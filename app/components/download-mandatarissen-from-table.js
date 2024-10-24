@@ -8,7 +8,10 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
   @service('mandataris-api') mandatarisApi;
 
   download = task(async () => {
-    const boiId = await this.getBestuursorgaanInTijdForPeriod();
+    let boiId = null;
+    if (this.args.bestuursorgaan) {
+      boiId = await this.getBestuursorgaanInTijdForPeriod();
+    }
 
     await this.mandatarisApi.downloadAsCsv({
       bestuursperiodeId: this.args.bestuursperiode?.id,
