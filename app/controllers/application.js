@@ -151,6 +151,7 @@ export default class ApplicationController extends Controller {
   get showEnvironment() {
     return (
       this.environmentName !== '' &&
+      this.environmentName !== 'PROD' &&
       this.environmentInfo.title !== '' &&
       this.environmentName !== '{{ENVIRONMENT_NAME}}'
     );
