@@ -21,7 +21,7 @@ export default class BulkBekrachtigingController extends Controller {
   @tracked modalOpen = false;
 
   @tracked status;
-  @tracked statusOptions = ['effectief', 'bekrachtigd'];
+  @tracked statusOptions = ['Effectief', 'Bekrachtigd'];
 
   @tracked linkToBesluit;
   @tracked invalidLink = false;
@@ -84,20 +84,11 @@ export default class BulkBekrachtigingController extends Controller {
     }
   }
 
-  @action setEffectief() {
+  @action bulkEdit() {
     this.mandatarisApi.bulkSetPublicationStatus(
       Array.from(this.checked),
-      'effectief'
-    );
-    this.closeModal();
-    setTimeout(() => this.router.refresh(), 1000);
-  }
-
-  @action bekrachtig() {
-    this.mandatarisApi.bulkSetPublicationStatus(
-      Array.from(this.checked),
-      'bekrachtigd',
-      'www.example.com'
+      this.status,
+      this.linkToBesluit
     );
     this.closeModal();
     setTimeout(() => this.router.refresh(), 1000);

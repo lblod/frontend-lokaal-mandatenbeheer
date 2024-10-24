@@ -84,11 +84,8 @@
     <AuToolbar class="au-u-margin-top" as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton {{on "click" this.setEffectief}}>
-            Maak effectief
-          </AuButton>
-          <AuButton {{on "click" this.bekrachtig}}>
-            Bekrachtig
+          <AuButton {{on "click" this.bulkEdit}}>
+            Pas aan
           </AuButton>
           <AuButton {{on "click" this.closeModal}} @skin="secondary">
             Annuleer
