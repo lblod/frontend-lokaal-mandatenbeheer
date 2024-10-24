@@ -94,9 +94,13 @@ export default class BulkBekrachtigingController extends Controller {
   @action checkAll(state) {
     if (state) {
       this.allChecked = true;
+      this.model.mandatarissen.forEach((mandataris) => {
+        this.checked.add(mandataris.id);
+      });
       this.setSize = this.model.mandatarissen.length;
     } else {
       this.allChecked = false;
+      this.checked.clear();
       this.setSize = 0;
     }
   }
