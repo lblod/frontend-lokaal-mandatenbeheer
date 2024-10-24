@@ -77,9 +77,6 @@ export default class MandatarisApiService extends Service {
   async downloadAsCsv({
     bestuursperiodeId,
     bestuursorgaanId = null,
-    bestuursfunctieCode = null,
-    fractieId = null,
-    persoonId = null,
     activeOnly = false,
     sort = null,
   }) {
@@ -93,9 +90,6 @@ export default class MandatarisApiService extends Service {
         body: JSON.stringify({
           bestuursperiodeId: bestuursperiodeId,
           bestuursorgaanId: bestuursorgaanId,
-          bestuursfunctieCodeUri: bestuursfunctieCode,
-          fractieId: fractieId,
-          persoonId: persoonId,
           onlyShowActive: activeOnly,
           sort,
         }),
