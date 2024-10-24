@@ -64,23 +64,25 @@
         {{status}}
       </PowerSelect>
     </div>
-    <div>
-      <AuLabel for="link-to-page">Link naar besluit</AuLabel>
-      <AuInput
-        @error={{this.invalidLink}}
-        @width="block"
-        @iconAlignment="left"
-        value={{this.linkToBesluit}}
-        id="link-to-page"
-        placeholder="Link naar de besluitpagina"
-        {{on "input" this.updateLink}}
-      />
-      {{#if this.invalidLink}}
-        <AuHelpText @skin="secondary" @error={{true}}>
-          Vul een geldige url in, een url start met http://, https:// of www.
-        </AuHelpText>
-      {{/if}}
-    </div>
+    {{#if this.showLinkField}}
+      <div>
+        <AuLabel for="link-to-page">Link naar besluit</AuLabel>
+        <AuInput
+          @error={{this.invalidLink}}
+          @width="block"
+          @iconAlignment="left"
+          value={{this.linkToBesluit}}
+          id="link-to-page"
+          placeholder="Link naar de besluitpagina"
+          {{on "input" this.updateLink}}
+        />
+        {{#if this.invalidLink}}
+          <AuHelpText @skin="secondary" @error={{true}}>
+            Vul een geldige url in, een url start met http://, https:// of www.
+          </AuHelpText>
+        {{/if}}
+      </div>
+    {{/if}}
     <AuToolbar class="au-u-margin-top" as |Group|>
       <Group>
         <AuButtonGroup>

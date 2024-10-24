@@ -48,6 +48,10 @@ export default class BulkBekrachtigingController extends Controller {
     this.status = status;
   }
 
+  get showLinkField() {
+    return this.status == 'Bekrachtigd' ? true : false;
+  }
+
   @action
   updateLink(event) {
     if (event && typeof event.preventDefault === 'function') {
