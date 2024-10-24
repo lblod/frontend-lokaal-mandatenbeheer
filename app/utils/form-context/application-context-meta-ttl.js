@@ -27,7 +27,7 @@ export const getApplicationContextMetaTtl = async (bestuursorganen) => {
     ${
       bestuursorganen.length === 1
         ? `
-        lmb:component lmb:isFractieRequired ${await isRequiredForBestuursorgaan(bestuursorganen.at(0))}.
+        <http://lblod.data.gift/vocabularies/lmb/component> <http://lblod.data.gift/vocabularies/lmb/isFractieRequired> ${await isRequiredForBestuursorgaan(bestuursorganen.at(0))}.
       `
         : ``
     }
