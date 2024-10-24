@@ -1,8 +1,11 @@
 import { EXT, LMB } from 'frontend-lmb/rdf/namespaces';
 import { NULL_DATE } from 'frontend-lmb/utils/constants';
+import { isRequiredForBestuursorgaan } from '../is-fractie-selector-required';
+
+import { Literal } from 'rdflib';
 
 // Expects bestuursorgaan in de tijd
-export const getApplicationContextMetaTtl = (bestuursorganen) => {
+export const getApplicationContextMetaTtl = async (bestuursorganen) => {
   if (!bestuursorganen) {
     return;
   }
@@ -20,6 +23,14 @@ export const getApplicationContextMetaTtl = (bestuursorganen) => {
     @prefix lmb: <http://lblod.data.gift/vocabularies/lmb/> .
 
     ext:applicationContext ext:currentBestuursorgaan ${bestuursorgaanUris} .
+
+    ${
+      bestuursorganen.length === 1
+        ? `
+        <http://lblod.data.gift/vocabularies/lmb/component> <http://lblod.data.gift/vocabularies/lmb/isFractieRequired> ${await isRequiredForBestuursorgaan(bestuursorganen.at(0))}.
+      `
+        : ``
+    }
 
     ${
       period
@@ -75,4 +86,12 @@ const getBestuursperiodeForBestuursorganen = (bestuursorganen) => {
   }
 
   throw new Error('Could not get bestuursorgaan to build up meta ttl');
+};
+
+export const loadIsFractieRequiredFromContext = (storeOptions) => {
+  const { store, metaGraph } = storeOptions;
+
+  return Literal.toJS(
+    store.any(LMB('component'), LMB('isFractieRequired'), null, metaGraph)
+  );
 };

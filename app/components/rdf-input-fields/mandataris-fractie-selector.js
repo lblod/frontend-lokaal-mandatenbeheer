@@ -11,6 +11,7 @@ import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-conte
 import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
 import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
+import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 
 import { NamedNode } from 'rdflib';
 import { restartableTask, timeout } from 'ember-concurrency';
@@ -42,6 +43,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @tracked person;
   @tracked previousPerson;
   @tracked isPersonInForm;
+  @tracked isRequiredForBestuursorgaan;
 
   emptySelectorOptions = [];
 
@@ -85,6 +87,8 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     )[0];
 
     this.bestuursperiode = await bestuursorgaan.heeftBestuursperiode;
+    this.isRequiredForBestuursorgaan =
+      await isRequiredForBestuursorgaan(bestuursorgaan);
   }
 
   async loadProvidedValue() {

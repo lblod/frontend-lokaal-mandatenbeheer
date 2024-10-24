@@ -78,17 +78,14 @@
         </div>
       {{/if}}
       <div>
-        <AuLabel @required={{true}}>
-          Fractie
-        </AuLabel>
         {{#if this.load.isRunning}}
           <AuLabel for="input" class="skeleton-label au-u-margin-top" />
           <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
         {{else}}
           <Mandatarissen::FractieSelector
             @fractie={{this.selectedFractie}}
+            @isRequired={{this.isFractieSelectorRequired}}
             @onSelect={{this.updateFractie}}
-            @allowClear={{false}}
             @bestuurseenheid={{this.bestuurseenheid}}
             @bestuursperiode={{this.bestuursperiode}}
             @mandataris={{@mandataris}}

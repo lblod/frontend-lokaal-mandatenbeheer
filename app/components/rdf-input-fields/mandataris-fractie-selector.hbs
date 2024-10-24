@@ -1,9 +1,3 @@
-<AuLabel
-  for="fractie"
-  @error={{this.hasErrors}}
-  @warning={{this.hasWarnings}}
-  @required={{this.isRequired}}
->{{this.title}}</AuLabel>
 {{#if this.initialized}}
   {{#if this.person}}
     <div class={{if this.hasErrors "ember-power-select--error"}}>
@@ -15,6 +9,8 @@
         @onClose={{fn (mut this.hasBeenFocused) true}}
         @person={{this.person}}
         @isInCreatingForm={{this.isPersonInForm}}
+        @isRequired={{this.isRequiredForBestuursorgaan}}
+        @hasErrors={{this.hasErrors}}
       />
     </div>
     {{#each this.errors as |error|}}
