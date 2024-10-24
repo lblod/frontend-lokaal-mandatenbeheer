@@ -49,15 +49,41 @@ export default class MandatarisApiService extends Service {
     return jsonReponse.decisionUri;
   }
 
-  async bulkBekrachtig(mandatarissen, decision) {
+  async bulkEffectief(mandatarissen) {
     const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/mandatarissen/bulk-bekrachtig`,
+      `${API.MANDATARIS_SERVICE}/mandatarissen/bulk-set-publication-status`,
       {
         method: 'POST',
         headers: {
           'Content-Type': JSON_API_TYPE,
         },
         body: JSON.stringify({
+          status: 'effectief',
+          mandatarissen: mandatarissen,
+        }),
+      }
+    );
+    const jsonReponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonReponse.message);
+      throw {
+        status: response.status,
+        message: jsonReponse.message,
+      };
+    }
+  }
+
+  async bulkBekrachtig(mandatarissen, decision) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/mandatarissen/bulk-set-publication-status`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          status: 'bekrachtig',
           decision: decision,
           mandatarissen: mandatarissen,
         }),

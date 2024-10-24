@@ -13,8 +13,8 @@
     </AuHeading>
   </Group>
   <Group>
-    <AuButton {{on "click" this.bekrachtig}} @disabled={{this.isDisabled}}>
-      Bekrachtig
+    <AuButton {{on "click" this.openModal}} @disabled={{this.isDisabled}}>
+      Pas publicatiestatus aan
     </AuButton>
   </Group>
 </AuToolbar>
@@ -34,3 +34,30 @@
 />
 
 {{outlet}}
+
+<AuModal
+  @title="Pas publicatiestatus aan"
+  @modalOpen={{this.modalOpen}}
+  @closable={{true}}
+  @closeModal={{this.closeModal}}
+>
+  <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
+    Indien je mandatarissen geselecteerd hebt die bekrachtigd zijn, deze kun je
+    niet terug aanpassen naar effectief.
+  </AuAlert>
+  <AuToolbar class="au-u-margin-top" as |Group|>
+    <Group>
+      <AuButtonGroup>
+        <AuButton {{on "click" this.setEffectief}}>
+          Maak effectief
+        </AuButton>
+        <AuButton {{on "click" this.bekrachtig}}>
+          Bekrachtig
+        </AuButton>
+        <AuButton {{on "click" this.closeModal}} @skin="secondary">
+          Annuleer
+        </AuButton>
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
+</AuModal>

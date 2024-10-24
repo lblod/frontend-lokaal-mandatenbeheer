@@ -16,6 +16,18 @@ export default class BulkBekrachtigingController extends Controller {
   @tracked setSize = 0;
   @tracked allChecked = false;
 
+  @tracked modalOpen = false;
+
+  @action
+  openModal() {
+    this.modalOpen = true;
+  }
+
+  @action
+  closeModal() {
+    this.modalOpen = false;
+  }
+
   get isDisabled() {
     if (this.setSize == 0) {
       return true;
@@ -43,10 +55,16 @@ export default class BulkBekrachtigingController extends Controller {
     }
   }
 
+  @action setEffectief() {
+    this.mandatarisApi.bulkEffectief(Array.from(this.checked));
+    this.closeModal();
+  }
+
   @action bekrachtig() {
     this.mandatarisApi.bulkBekrachtig(
       Array.from(this.checked),
       'www.example.com'
     );
+    this.closeModal();
   }
 }
