@@ -41,23 +41,28 @@
   @closable={{true}}
   @closeModal={{this.closeModal}}
 >
-  <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
-    Indien je mandatarissen geselecteerd hebt die bekrachtigd zijn, deze kun je
-    niet terug aanpassen naar effectief.
-  </AuAlert>
-  <AuToolbar class="au-u-margin-top" as |Group|>
-    <Group>
-      <AuButtonGroup>
-        <AuButton {{on "click" this.setEffectief}}>
-          Maak effectief
-        </AuButton>
-        <AuButton {{on "click" this.bekrachtig}}>
-          Bekrachtig
-        </AuButton>
-        <AuButton {{on "click" this.closeModal}} @skin="secondary">
-          Annuleer
-        </AuButton>
-      </AuButtonGroup>
-    </Group>
-  </AuToolbar>
+  <div class="au-o-box au-o-flow">
+    <AuAlert @icon="info-circle" @closable={{false}}>
+      De publicatiestatus
+      <strong>bekrachtigd</strong>
+      is definitief. Indien je mandatarissen hebt geselecteerd met deze
+      publicatiestatus, het is niet mogelijk deze terug naar effectief te
+      zetten.
+    </AuAlert>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton {{on "click" this.setEffectief}}>
+            Maak effectief
+          </AuButton>
+          <AuButton {{on "click" this.bekrachtig}}>
+            Bekrachtig
+          </AuButton>
+          <AuButton {{on "click" this.closeModal}} @skin="secondary">
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
 </AuModal>
