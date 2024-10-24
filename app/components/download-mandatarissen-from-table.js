@@ -22,6 +22,7 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
       bestuursorgaanId: boiId,
       persoonIds: this.persoonIds,
       fractieIds: this.fractieIds,
+      bestuursFunctieCodeIds: this.bestuursFunctieCodeIds ?? [],
       sort: this.args.sort,
     });
     this.isDownloadModalOpen = false;
@@ -49,6 +50,10 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
 
   get fractieIds() {
     return this.args.fracties?.map((fractie) => fractie.id);
+  }
+
+  get bestuursFunctieCodeIds() {
+    return this.args.bestuursFunctieCodes?.map((code) => code.id);
   }
 
   get activefilters() {
