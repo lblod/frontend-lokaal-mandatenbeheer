@@ -3,12 +3,48 @@
     @skin="naked"
     @icon="download"
     @iconAlignment="left"
-    @hideText={{this.hideText}}
-    @loading={{this.download.isRunning}}
-    @loadingMessage="Downloading"
     @disabled={{(or (not @bestuursperiode) this.download.isRunning)}}
-    {{on "click" (perform this.download)}}
+    {{on "click" (fn (mut this.isDownloadModalOpen) true)}}
   >
     Download tabel content
   </AuButton>
 </div>
+
+<AuModal
+  @title="Download mandatarissen"
+  @modalOpen={{this.isDownloadModalOpen}}
+  @closable={{true}}
+  @closeModal={{(fn (mut this.isDownloadModalOpen) false)}}
+>
+  <div class="au-o-box">
+    <p>
+      Door hieronder op download te klikken zal er een csv-bestand gecreerd
+      worden voor de huidige data van de mandataris tabel.
+    </p>
+
+    <div class="au-u-margin-top">
+      Bij het ophalen van de mandatarissen worden deze filters toegepast:
+      <br />
+      <div class="au-u-margin-top-small">
+        {{#each this.activefilters as |filter|}}
+          {{#if filter.isActive}}
+            <AuPill>{{filter.label}}</AuPill>
+          {{/if}}
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="au-u-flex au-u-flex--center au-u-margin-top">
+      <AuButton
+        @skin="primary"
+        @icon="download"
+        @iconAlignment="left"
+        @loading={{this.download.isRunning}}
+        @loadingMessage="Downloading"
+        {{on "click" (perform this.download)}}
+      >
+        Download csv
+      </AuButton>
+    </div>
+  </div>
+</AuModal>
