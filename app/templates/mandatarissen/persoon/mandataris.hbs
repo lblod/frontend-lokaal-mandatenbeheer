@@ -21,43 +21,27 @@
     >
       <AuButtonGroup class="au-u-flex--spaced-small">
         <Shared::Tooltip
-          @showTooltip={{(or
-            (not this.model.mandataris.isActive)
-            this.isDisabledBecauseLegislatuur
-          )}}
+          @showTooltip={{true}}
           @tooltipText={{this.toolTipText}}
         >
-          <Shared::Tooltip
-            @showTooltip={{(or
-              (not this.isDisabledBecauseLegislatuur)
-              this.model.mandataris.isActive
+          <AuButton
+            @disabled={{(or
+              (not this.model.mandataris.isActive)
+              this.isDisabledBecauseLegislatuur
             )}}
-            @tooltipText="Dit zal een nieuw mandaat starten met de gewijzigde situatie"
-          >
-            <AuButton
-              @disabled={{(or
-                (not this.model.mandataris.isActive)
-                this.isDisabledBecauseLegislatuur
-              )}}
-              {{on "click" (fn (mut this.isChanging) true)}}
-            >Wijzig huidig mandaat</AuButton>
-          </Shared::Tooltip>
+            {{on "click" (fn (mut this.isChanging) true)}}
+          >Wijzig huidig mandaat</AuButton>
         </Shared::Tooltip>
         <Shared::Tooltip
-          @showTooltip={{this.isDisabledBecauseLegislatuur}}
-          @tooltipText={{this.toolTipText}}
+          @showTooltip={{true}}
+          @tooltipText={{this.toolTipTextCorrecting}}
         >
-          <Shared::Tooltip
-            @showTooltip={{(not this.isDisabledBecauseLegislatuur)}}
-            @tooltipText="Om fouten te corrigeren, bijvoorbeeld een typefout"
-          >
-            <AuButton
-              @alert={{true}}
-              @skin="secondary"
-              @disabled={{this.isDisabledBecauseLegislatuur}}
-              {{on "click" (fn (mut this.isCorrecting) true)}}
-            >Corrigeer fouten</AuButton>
-          </Shared::Tooltip>
+          <AuButton
+            @alert={{true}}
+            @skin="secondary"
+            @disabled={{this.isDisabledBecauseLegislatuur}}
+            {{on "click" (fn (mut this.isCorrecting) true)}}
+          >Corrigeer fouten</AuButton>
         </Shared::Tooltip>
       </AuButtonGroup>
     </div>

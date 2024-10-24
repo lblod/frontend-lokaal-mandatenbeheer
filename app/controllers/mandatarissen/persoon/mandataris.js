@@ -128,7 +128,16 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     if (!this.model.mandataris.isActive) {
       return 'Het is niet mogelijk de status van een afgelopen mandaat aan te passen.';
     }
-    return '';
+
+    return 'Dit zal een nieuw mandaat starten met de gewijzigde situatie';
+  }
+
+  get toolTipTextCorrecting() {
+    if (this.isDisabledBecauseLegislatuur) {
+      return 'Tijdens het voorbereiden van een legislatuur is het niet mogelijk een mandaat in die legislatuur te bewerken.';
+    }
+
+    return 'Om fouten te corrigeren, bijvoorbeeld een typefout';
   }
 
   get warningTextOCMWLinkToGemeente() {
