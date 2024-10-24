@@ -56,13 +56,17 @@ export default class BulkBekrachtigingController extends Controller {
   }
 
   @action setEffectief() {
-    this.mandatarisApi.bulkEffectief(Array.from(this.checked));
+    this.mandatarisApi.bulkSetPublicationStatus(
+      Array.from(this.checked),
+      'effectief'
+    );
     this.closeModal();
   }
 
   @action bekrachtig() {
-    this.mandatarisApi.bulkBekrachtig(
+    this.mandatarisApi.bulkSetPublicationStatus(
       Array.from(this.checked),
+      'bekrachtig',
       'www.example.com'
     );
     this.closeModal();
