@@ -5,6 +5,7 @@ import { service } from '@ember/service';
 
 export default class BulkBekrachtigingController extends Controller {
   @service mandatarisApi;
+  @service router;
 
   queryParams = ['size', 'page', 'sort'];
 
@@ -61,6 +62,7 @@ export default class BulkBekrachtigingController extends Controller {
       'effectief'
     );
     this.closeModal();
+    setTimeout(() => this.router.refresh(), 1000);
   }
 
   @action bekrachtig() {
@@ -70,5 +72,6 @@ export default class BulkBekrachtigingController extends Controller {
       'www.example.com'
     );
     this.closeModal();
+    setTimeout(() => this.router.refresh(), 1000);
   }
 }
