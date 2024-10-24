@@ -8,9 +8,11 @@ import {
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarisApiService extends Service {
   @service store;
+  @service toaster;
 
   async copyOverNonDomainResourceProperties(oldMandatarisId, newMandatarisId) {
     const response = await fetch(
@@ -68,11 +70,15 @@ export default class MandatarisApiService extends Service {
 
     if (response.status !== STATUS_CODE.OK) {
       console.error(jsonReponse.message);
-      throw {
-        status: response.status,
-        message: jsonReponse.message,
-      };
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het updaten van de publicatiestatussen'
+      );
     }
+    showSuccessToast(
+      this.toaster,
+      `De publicatiestatussen werden succesvol geüpdatet naar ${status}`
+    );
   }
 
   async getMandatarisFracties(mandatarisId) {
