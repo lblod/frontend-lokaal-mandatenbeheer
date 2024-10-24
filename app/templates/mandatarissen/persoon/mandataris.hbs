@@ -111,10 +111,10 @@
     @closable={{false}}
     class="au-u-margin-small"
   >
-    <p><span class="au-u-medium">Wijzig mandataris</span>
-      wordt gebruikt om bijvoorbeeld de fractie te wijzigen of de status van de
-      mandataris aan te passen. Dit zal een nieuw mandaat starten met de
-      gewijzigde situatie.</p>
+    <p><span class="au-u-medium">Wijzig huidig mandaat</span>
+      wordt gebruikt om bijvoorbeeld de fractie te wijzigen of de status van het
+      mandaat aan te passen. Dit zal een nieuw mandaat starten met de gewijzigde
+      situatie.</p>
   </AuAlert>
   {{#if @model.bestuurseenheid.isOCMW}}
     <AuAlert
@@ -124,9 +124,7 @@
       @size="small"
       class="au-u-margin-left-small au-u-margin-right-small au-u-margin-bottom-small"
     >
-      Let op! Gegevens die hier gewijzigd worden zullen niet doorgevoerd worden
-      in het gekoppelde gemeente mandaat. Om een wijziging aan beide mandaten te
-      maken, gelieve dit te doen bij de Gemeente.
+      {{this.warningTextOCMWLinkToGemeente}}
     </AuAlert>
   {{/if}}
 </Mandatarissen::UpdateState>
@@ -149,7 +147,8 @@
     <p><span class="au-u-medium">Corrigeer fouten</span>
       wordt gebruikt om bijvoorbeeld typfouten of een foutieve startdatum aan te
       passen. Voor alle andere mandaatwijzigingen, zoals fractiewijzigingen,
-      gebruik Wijzig huidige mandaat.</p>
+      gebruik
+      <span class="au-u-medium">Wijzig huidig mandaat</span>.</p>
   </AuAlert>
   {{#if @model.bestuurseenheid.isOCMW}}
     <AuAlert
@@ -159,9 +158,7 @@
       @size="small"
       class="au-u-margin-left-small au-u-margin-right-small au-u-margin-bottom-small"
     >
-      Let op! Gegevens die hier gewijzigd worden zullen niet doorgevoerd worden
-      in het gekoppelde gemeente mandaat. Om een wijziging aan beide mandaten te
-      maken, gelieve dit te doen bij de Gemeente.
+      {{this.warningTextOCMWLinkToGemeente}}
     </AuAlert>
   {{/if}}
   <div class="au-o-box">

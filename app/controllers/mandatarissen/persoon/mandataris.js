@@ -130,4 +130,11 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     }
     return '';
   }
+
+  get warningTextOCMWLinkToGemeente() {
+    return `Let op! Bij het wijzigen van deze gegevens worden mogelijke koppelingen
+      verbroken. Het doorstromen van gegevens van de gemeente naar OCMW zal
+      hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
+      maken, gelieve dit te doen bij de Gemeente.`;
+  }
 }
