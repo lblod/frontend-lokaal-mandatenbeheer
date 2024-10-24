@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { isValidUri } from 'frontend-lmb/utils/is-valid-uri';
 
 export default class BulkBekrachtigingController extends Controller {
   @service mandatarisApi;
@@ -19,6 +20,12 @@ export default class BulkBekrachtigingController extends Controller {
 
   @tracked modalOpen = false;
 
+  @tracked status;
+  @tracked statusOptions = ['effectief', 'bekrachtigd'];
+
+  @tracked linkToBesluit;
+  @tracked invalidLink = false;
+
   @action
   openModal() {
     this.modalOpen = true;
@@ -34,6 +41,27 @@ export default class BulkBekrachtigingController extends Controller {
       return true;
     }
     return false;
+  }
+
+  @action
+  updateStatus(status) {
+    this.status = status;
+  }
+
+  @action
+  updateLink(event) {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+    }
+    const link = event.target.value;
+
+    if (!isValidUri(link)) {
+      this.invalidLink = true;
+    } else {
+      this.invalidLink = false;
+    }
+
+    this.linkToBesluit = link;
   }
 
   @action checkBox(mandataris, state) {
