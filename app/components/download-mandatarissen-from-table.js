@@ -20,6 +20,7 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
       bestuursperiodeId: this.args.bestuursperiode?.id,
       activeOnly: this.args.activeOnly,
       bestuursorgaanId: boiId,
+      persoonIds: this.persoonIds,
       sort: this.args.sort,
     });
     this.isDownloadModalOpen = false;
@@ -39,6 +40,10 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
     }
 
     return null;
+  }
+
+  get persoonIds() {
+    return this.args.personen?.map((persoon) => persoon.id);
   }
 
   get activefilters() {
