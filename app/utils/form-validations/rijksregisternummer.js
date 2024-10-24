@@ -27,11 +27,11 @@ export function isValidRijksregisternummer(nrn) {
   return preNillies || postNillies;
 }
 
-function getBirthDay(birthDate) {
+export function getBirthDay(birthDate) {
   return birthDate[2];
 }
 
-function getBirthMonth(birthDate) {
+export function getBirthMonth(birthDate) {
   let birthMonth = birthDate[1];
   while (birthMonth >= BIS_MONTH_INCREMENT_GENDER_UNKNOWN) {
     birthMonth -= BIS_MONTH_INCREMENT_GENDER_UNKNOWN;
@@ -45,12 +45,12 @@ export function getBirthDate(nrn) {
   const month = getBirthMonth(parsedNrn.birthDate); // Eg. 8 from '860814'
   const day = getBirthDay(parsedNrn.birthDate); // Eg. 14 from '860814'
   if (month === '00' || day === '00') {
-    throw new Error('Birth date is unknown');
+    return null;
   }
   return `${year}-${month}-${day}`;
 }
 
-function getBirthYear(nrn) {
+export function getBirthYear(nrn) {
   const { birthDate, serial, checksum } = parse(nrn);
   const partialYear = birthDate[0]; // Eg. '86' from '860814'
   let year;
@@ -109,7 +109,7 @@ function normalize(nrn) {
   throw new Error('Could not normalize nrn of invalid type');
 }
 
-function parse(nrn) {
+export function parse(nrn) {
   if (typeof nrn === 'string') {
     const normalizedNrn = normalize(nrn);
     const birthDateString = normalizedNrn.slice(0, 6); // Eg. '860814' from '86081441359'

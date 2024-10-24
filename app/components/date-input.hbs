@@ -6,14 +6,24 @@
       @required={{@isRequired}}
     >{{@label}}</AuLabel>
   {{/if}}
-  <AuInput
-    @error={{(or this.errorMessage this.invalidErrorMessage)}}
-    value={{this.dateInputString}}
-    id={{(or @id this.elementId)}}
-    placeholder="dd-mm-yyyy"
-    {{au-inputmask options=(hash mask="99-99-9999" placeholder="_")}}
-    {{on "input" (perform this.onChange)}}
-  />
+  {{#if @isLoading}}
+    <AuInput
+      value={{this.dateInputString}}
+      @disabled={{true}}
+      placeholder="dd-mm-yyyy"
+    />
+  {{else}}
+    <AuInput
+      {{did-insert this.setupDateValue}}
+      @error={{(or this.errorMessage this.invalidErrorMessage)}}
+      value={{this.dateInputString}}
+      id={{(or @id this.elementId)}}
+      placeholder="dd-mm-yyyy"
+      {{au-inputmask options=(hash mask="99-99-9999" placeholder="_")}}
+      {{on "input" (perform this.onChange)}}
+      @disabled={{@disabled}}
+    />
+  {{/if}}
   {{#unless @showFormatHelpText}}
     <AuHelpText @error={{(or this.errorMessage this.invalidErrorMessage)}}>
       Datum formaat: DD-MM-JJJJ

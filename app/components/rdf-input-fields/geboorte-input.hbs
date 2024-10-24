@@ -1,0 +1,23 @@
+<AuLabel
+  for={{this.inputId}}
+  @error={{this.hasErrors}}
+  @warning={{this.hasWarnings}}
+  @required={{this.isRequired}}
+>{{this.title}}</AuLabel>
+<DateInput
+  @id={{this.inputId}}
+  @value={{this.date}}
+  @onChange={{this.onUpdate}}
+  @isRequired={{this.isRequired}}
+  @showFormatHelpText={{@show}}
+  @isLoading={{this.checkForAutomaticFillIn.isRunning}}
+  @disabled={{@disabled}}
+/>
+
+{{#each this.errors as |error|}}
+  <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+{{/each}}
+
+{{#each this.warnings as |warning|}}
+  <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+{{/each}}

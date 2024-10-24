@@ -7,6 +7,7 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import moment from 'moment';
 
 import { INPUT_DEBOUNCE, NULL_DATE } from 'frontend-lmb/utils/constants';
+import { action } from '@ember/object';
 
 export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
@@ -14,15 +15,6 @@ export default class DateInputComponent extends Component {
   @tracked dateInputString;
   @tracked errorMessage;
   @tracked invalidErrorMessage;
-
-  constructor() {
-    super(...arguments);
-
-    if (this.args.value && isValidDate(this.args.value)) {
-      this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
-      this.processDate(this.args.value);
-    }
-  }
 
   onChange = restartableTask(async (event) => {
     await timeout(INPUT_DEBOUNCE);
@@ -91,6 +83,14 @@ export default class DateInputComponent extends Component {
     }
 
     return date;
+  }
+
+  @action
+  setupDateValue() {
+    if (this.args.value && isValidDate(this.args.value)) {
+      this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
+      this.processDate(this.args.value);
+    }
   }
 
   get errorMessages() {

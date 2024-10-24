@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupTest } from 'frontend-loket/tests/helpers';
+import { setupTest } from 'frontend-lmb/tests/helpers';
 
 module('Unit | Controller | form/new', function (hooks) {
   setupTest(hooks);

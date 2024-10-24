@@ -7,12 +7,13 @@ import { action } from '@ember/object';
 
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { NamedNode } from 'rdflib';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
-import { restartableTask, timeout } from 'ember-concurrency';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
 import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
+
+import { NamedNode } from 'rdflib';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
@@ -50,7 +51,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     this.storeOptions.store.registerObserver(async (formChange) => {
       const mustTrigger = isPredicateInObserverChange(
         formChange,
-        MANDATARIS_PREDICATE.persoon
+        new NamedNode(MANDATARIS_PREDICATE.persoon)
       );
 
       if (mustTrigger) {
