@@ -21,10 +21,7 @@
     >
       <AuButtonGroup class="au-u-flex--spaced-small">
         <Shared::Tooltip
-          @showTooltip={{(or
-            (not this.model.mandataris.isActive)
-            this.isDisabledBecauseLegislatuur
-          )}}
+          @showTooltip={{true}}
           @tooltipText={{this.toolTipText}}
         >
           <AuButton
@@ -36,9 +33,8 @@
           >Wijzig huidig mandaat</AuButton>
         </Shared::Tooltip>
         <Shared::Tooltip
-          @showTooltip={{this.isDisabledBecauseLegislatuur}}
-          @tooltipText={{this.toolTipText}}
-          @alignment="right"
+          @showTooltip={{true}}
+          @tooltipText={{this.toolTipTextCorrecting}}
         >
           <AuButton
             @alert={{true}}
@@ -49,19 +45,6 @@
         </Shared::Tooltip>
       </AuButtonGroup>
     </div>
-    <AuAlert
-      @skin="info"
-      @icon="info-circle"
-      class="alert-grey-info-circle-icon"
-    >
-      Om een mandaat te bewerken, zoals een fractiewijziging, kies voor
-      <span class="au-u-medium">Wijzig huidig mandaat</span>. Dit zal een nieuw
-      mandaat starten met de gewijzigde situatie.
-      <br />
-      Om fouten te corrigeren, bijvoorbeeld een typefout of een foutieve
-      startdatum, kies voor
-      <span class="au-u-medium">Corrigeer fouten</span>.
-    </AuAlert>
   </div>
 </div>
 
@@ -105,15 +88,27 @@
   @onStateChanged={{this.onUpdateState}}
   @mandataris={{this.model.mandataris}}
 >
+  <AuAlert
+    @skin="info"
+    @icon="info-circle"
+    @size="small"
+    @closable={{false}}
+    class="au-u-margin-small"
+  >
+    <p><span class="au-u-medium">Wijzig huidig mandaat</span>
+      wordt gebruikt om bijvoorbeeld de fractie te wijzigen of de status van het
+      mandaat aan te passen. Dit zal een nieuw mandaat starten met de gewijzigde
+      situatie.</p>
+  </AuAlert>
   {{#if @model.bestuurseenheid.isOCMW}}
-    <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
-      Mandatarissen in het OCMW hebben vaak een corresponderend mandaat in de
-      gemeente. Indien aan deze mandataris een corresponderend mandaat gekoppeld
-      is in de gemeente zal je de koppeling breken door hier wijzigingen uit te
-      voeren, in dat geval moet je wijzigingen aan beide mandaten manueel
-      doorvoeren. Zijn ze gekoppeld en voeg je de wijzigingen uit in de
-      gemeente, dan zullen de wijzigingen ook uitgevoerd worden in het OCMW
-      (indien gewenst).
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @closable={{false}}
+      @size="small"
+      class="au-u-margin-left-small au-u-margin-right-small au-u-margin-bottom-small"
+    >
+      {{this.warningTextOCMWLinkToGemeente}}
     </AuAlert>
   {{/if}}
 </Mandatarissen::UpdateState>
@@ -126,15 +121,28 @@
   @closable={{true}}
   @closeModal={{this.closeModals}}
 >
+  <AuAlert
+    @skin="info"
+    @icon="info-circle"
+    @size="small"
+    @closable={{false}}
+    class="au-u-margin-small"
+  >
+    <p><span class="au-u-medium">Corrigeer fouten</span>
+      wordt gebruikt om bijvoorbeeld typefouten of een foutieve startdatum aan
+      te passen. Voor alle andere mandaatwijzigingen, zoals fractiewijzigingen,
+      gebruik
+      <span class="au-u-medium">Wijzig huidig mandaat</span>.</p>
+  </AuAlert>
   {{#if @model.bestuurseenheid.isOCMW}}
-    <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
-      Mandatarissen in het OCMW hebben vaak een corresponderend mandaat in de
-      gemeente. Indien aan deze mandataris een corresponderend mandaat gekoppeld
-      is in de gemeente zal je de koppeling breken door hier wijzigingen uit te
-      voeren, in dat geval moet je wijzigingen aan beide mandaten manueel
-      doorvoeren. Zijn ze gekoppeld en voeg je de wijzigingen uit in de
-      gemeente, dan zullen de wijzigingen ook uitgevoerd worden in het OCMW
-      (indien gewenst).
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @closable={{false}}
+      @size="small"
+      class="au-u-margin-left-small au-u-margin-right-small au-u-margin-bottom-small"
+    >
+      {{this.warningTextOCMWLinkToGemeente}}
     </AuAlert>
   {{/if}}
   <div class="au-o-box">
