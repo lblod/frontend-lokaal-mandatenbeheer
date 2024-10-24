@@ -36,7 +36,7 @@ export default class BulkBekrachtigingController extends Controller {
     this.modalOpen = false;
   }
 
-  get isDisabled() {
+  get openModalDisabled() {
     if (this.setSize == 0) {
       return true;
     }
@@ -68,7 +68,7 @@ export default class BulkBekrachtigingController extends Controller {
     this.linkToBesluit = link;
   }
 
-  get disabled() {
+  get executeDisabled() {
     if (!this.status) {
       return true;
     }

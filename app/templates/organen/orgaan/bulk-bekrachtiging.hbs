@@ -13,7 +13,10 @@
     </AuHeading>
   </Group>
   <Group>
-    <AuButton {{on "click" this.openModal}} @disabled={{this.isDisabled}}>
+    <AuButton
+      {{on "click" this.openModal}}
+      @disabled={{this.openModalDisabled}}
+    >
       Pas publicatiestatus aan
     </AuButton>
   </Group>
@@ -86,7 +89,10 @@
     <AuToolbar class="au-u-margin-top" as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton {{on "click" this.bulkEdit}} @disabled={{this.disabled}}>
+          <AuButton
+            {{on "click" this.bulkEdit}}
+            @disabled={{this.executeDisabled}}
+          >
             Pas aan
           </AuButton>
           <AuButton {{on "click" this.closeModal}} @skin="secondary">
