@@ -68,6 +68,19 @@ export default class BulkBekrachtigingController extends Controller {
     this.linkToBesluit = link;
   }
 
+  get disabled() {
+    if (!this.status) {
+      return true;
+    }
+    if (
+      this.status == 'Bekrachtigd' &&
+      (!this.linkToBesluit || this.invalidLink)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   @action checkBox(mandataris, state) {
     if (state) {
       this.checked.add(mandataris);

@@ -86,7 +86,7 @@
     <AuToolbar class="au-u-margin-top" as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton {{on "click" this.bulkEdit}}>
+          <AuButton {{on "click" this.bulkEdit}} @disabled={{this.disabled}}>
             Pas aan
           </AuButton>
           <AuButton {{on "click" this.closeModal}} @skin="secondary">
