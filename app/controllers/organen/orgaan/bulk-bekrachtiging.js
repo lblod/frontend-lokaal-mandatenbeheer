@@ -112,6 +112,7 @@ export default class BulkBekrachtigingController extends Controller {
       this.linkToBesluit
     );
     this.closeModal();
+    this.checked.clear();
     setTimeout(() => this.router.refresh(), 1000);
   }
 }
