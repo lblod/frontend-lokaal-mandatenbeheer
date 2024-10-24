@@ -44,7 +44,7 @@ export default class RDFGeboorteInput extends InputFieldComponent {
     if (this.getFieldSubject()) {
       const identifier = this.storeOptions.store.any(
         this.getFieldSubject(),
-        PERSON_PREDICATE.identifier,
+        new NamedNode(PERSON_PREDICATE.identifier),
         undefined,
         this.storeOptions.sourceGraph
       );
