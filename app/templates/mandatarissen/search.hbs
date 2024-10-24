@@ -103,14 +103,14 @@
               Importeer historiek
             </AuLink>
           </Shared::Tooltip>
+          <DownloadMandatarissenFromTable
+            @bestuursperiode={{@model.selectedPeriod.period}}
+            @activeOnly={{this.activeMandatarissen}}
+            @sort={{this.sort}}
+          />
         </Group>
       </AuToolbar>
       <div class="au-c-body-container au-c-body-container--scroll">
-        <DownloadMandatarissenFromTable
-          @bestuursperiode={{@model.selectedPeriod.period}}
-          @activeOnly={{this.activeMandatarissen}}
-          @sort={{this.sort}}
-        />
         <Mandatarissen::PersoonTable
           @content={{@model.personen}}
           @bestuursperiode={{@model.selectedPeriod.period}}

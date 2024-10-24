@@ -37,6 +37,12 @@
         Voeg nieuwe mandataris toe
       </AuButton>
     </Shared::Tooltip>
+    <DownloadMandatarissenFromTable
+      @bestuursperiode={{@model.selectedBestuursperiode}}
+      @activeOnly={{this.activeOnly}}
+      @bestuursorgaan={{this.model.bestuursorgaan}}
+      @sort={{this.sort}}
+    />
   </Group>
 </AuToolbar>
 <AuHeading @skin="3" class="au-u-regular au-u-padding-left">
@@ -59,12 +65,6 @@
   >Verberg niet actieve mandatarissen</AuToggleSwitch>
 </div>
 
-<DownloadMandatarissenFromTable
-  @bestuursperiode={{@model.selectedBestuursperiode}}
-  @activeOnly={{this.activeOnly}}
-  @bestuursorgaan={{this.model.bestuursorgaan}}
-  @sort={{this.sort}}
-/>
 <Organen::MandatarisTable
   @content={{@model.mandatarissen}}
   @bestuursperiode={{@model.selectedBestuursperiode}}

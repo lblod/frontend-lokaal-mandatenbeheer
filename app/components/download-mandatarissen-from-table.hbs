@@ -1,14 +1,10 @@
-<div class="au-u-margin-top au-u-flex au-u-flex--end">
-  <AuButton
-    @skin="naked"
-    @icon="download"
-    @iconAlignment="left"
-    @disabled={{(or (not @bestuursperiode) this.download.isRunning)}}
-    {{on "click" (fn (mut this.isDownloadModalOpen) true)}}
-  >
-    Download tabel content
-  </AuButton>
-</div>
+<AuButton
+  @skin="secondary"
+  @disabled={{(or (not @bestuursperiode) this.download.isRunning)}}
+  {{on "click" (fn (mut this.isDownloadModalOpen) true)}}
+>
+  Download
+</AuButton>
 
 <AuModal
   @title="Download mandatarissen"
