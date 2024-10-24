@@ -76,6 +76,17 @@ export default class PrepareInstallatievergaderingController extends Controller 
     this.statusPillLabel = uriLabelMap[status.uri].label;
   });
 
+  get modalTitle() {
+    if (
+      this.model.installatievergadering.get('status.uri') ===
+      INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS
+    ) {
+      return 'Klaarzetten in notuleringspakket';
+    } else {
+      return 'Voorbereiding afronden';
+    }
+  }
+
   setNextStatus = task(async () => {
     const currentStatus = await this.model.installatievergadering.status;
     const findStatusForUri = (uri) => {
