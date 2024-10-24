@@ -14,6 +14,7 @@ export default class BulkBekrachtigingController extends Controller {
 
   checked = new Set();
   @tracked setSize = 0;
+  @tracked allChecked = false;
 
   get isDisabled() {
     if (this.setSize == 0) {
@@ -29,6 +30,16 @@ export default class BulkBekrachtigingController extends Controller {
     } else {
       this.checked.delete(mandataris);
       this.setSize -= 1;
+    }
+  }
+
+  @action checkAll(state) {
+    if (state) {
+      this.allChecked = true;
+      this.setSize = this.model.mandatarissen.length;
+    } else {
+      this.allChecked = false;
+      this.setSize = 0;
     }
   }
 

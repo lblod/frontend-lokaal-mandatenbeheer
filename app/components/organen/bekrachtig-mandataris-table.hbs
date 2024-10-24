@@ -8,7 +8,9 @@
 >
   <t.content as |c|>
     <c.header>
-      <th></th>
+      <th>
+        <AuCheckbox @checked={{false}} @onChange={{@checkAll}} />
+      </th>
       <AuDataTableThSortable
         @field="bekleedt.bestuursfunctie.label"
         @currentSorting={{@sort}}
@@ -54,7 +56,7 @@
     <c.body as |row|>
       <td>
         <AuCheckbox
-          @checked={{false}}
+          @checked={{@checkedByDefault}}
           @onChange={{fn @onCheck row.mandataris.id}}
         />
       </td>
