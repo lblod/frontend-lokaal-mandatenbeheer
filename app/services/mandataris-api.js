@@ -4,12 +4,15 @@ import { service } from '@ember/service';
 import { timeout } from 'ember-concurrency';
 import {
   API,
+  JSON_API_TYPE,
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarisApiService extends Service {
   @service store;
+  @service toaster;
 
   async copyOverNonDomainResourceProperties(oldMandatarisId, newMandatarisId) {
     const response = await fetch(
@@ -46,6 +49,36 @@ export default class MandatarisApiService extends Service {
     }
 
     return jsonReponse.decisionUri;
+  }
+
+  async bulkSetPublicationStatus(mandatarissen, status, decision) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/mandatarissen/bulk-set-publication-status`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          status: status,
+          decision: decision,
+          mandatarissen: mandatarissen,
+        }),
+      }
+    );
+    const jsonReponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonReponse.message);
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het updaten van de publicatiestatussen'
+      );
+    }
+    showSuccessToast(
+      this.toaster,
+      `De publicatiestatussen werden succesvol geüpdatet naar ${status}`
+    );
   }
 
   async getMandatarisFracties(mandatarisId) {

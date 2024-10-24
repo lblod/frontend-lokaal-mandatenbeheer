@@ -10,13 +10,29 @@
     </AuHeading>
   </Group>
   <Group>
+    {{#if this.isDisabled}}
+      <Shared::Tooltip
+        @showTooltip={{true}}
+        @tooltipText="Het is niet mogelijk mandatarissen te bekrachtingen in een bestuursperiode waarvan de voorbereiding van de legislatuur nog actief is."
+      >
+        <AuButton @disabled={{true}}>
+          Bekrachtig mandatarissen
+        </AuButton>
+      </Shared::Tooltip>
+    {{else}}
+      <AuLink
+        @route="organen.orgaan.bulk-bekrachtiging"
+        @skin="button-secondary"
+      >Bekrachtig mandatarissen
+      </AuLink>
+    {{/if}}
     <Shared::Tooltip
-      @showTooltip={{@model.legislatuurInBehandeling}}
-      @tooltipText={{this.toolTipText}}
+      @showTooltip={{this.isDisabled}}
+      @tooltipText="Het is niet mogelijk mandatarissen toe te voegen aan een bestuursperiode terwijl de voorbereiding van de legislatuur actief is."
     >
       <AuButton
         {{on "click" (fn this.setIsCreatingMandataris true)}}
-        @disabled={{@model.legislatuurInBehandeling}}
+        @disabled={{this.isDisabled}}
       >
         Voeg nieuwe mandataris toe
       </AuButton>

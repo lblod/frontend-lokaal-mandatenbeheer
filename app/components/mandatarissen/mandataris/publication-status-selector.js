@@ -11,6 +11,7 @@ import {
 import { restartableTask, task, timeout } from 'ember-concurrency';
 
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
+import { isValidUri } from 'frontend-lmb/utils/is-valid-uri';
 
 export default class MandatarissenMandatarisPublicationStatusSelectorComponent extends Component {
   @service store;
@@ -92,17 +93,10 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     }
   }
 
-  isValidUri(inputValue) {
-    // eslint-disable-next-line no-useless-escape, prettier/prettier
-    const regex = '^(https?://|www\.)[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(/.*)?$';
-    const uriRegex = new RegExp(regex);
-    return uriRegex.test(inputValue);
-  }
-
   setLinkTodecision = restartableTask(async (event) => {
     await timeout(INPUT_DEBOUNCE);
     this.linkToDecision = event.target?.value;
-    this.isInputLinkValid = this.isValidUri(this.linkToDecision);
+    this.isInputLinkValid = isValidUri(this.linkToDecision);
   });
 
   addDecisionToMandataris = task(async () => {
