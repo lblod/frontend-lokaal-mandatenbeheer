@@ -1,5 +1,7 @@
 import { EXT, LMB } from 'frontend-lmb/rdf/namespaces';
 import { NULL_DATE } from 'frontend-lmb/utils/constants';
+import { isRequiredForBestuursorgaan } from '../is-fractie-selector-required';
+
 import { Literal } from 'rdflib';
 
 // Expects bestuursorgaan in de tijd
@@ -25,9 +27,7 @@ export const getApplicationContextMetaTtl = async (bestuursorganen) => {
     ${
       bestuursorganen.length === 1
         ? `
-    lmb:currentBestuursorgaan lmb:isGR ${(await bestuursorganen.at(0).isGR) ?? false}.
-    lmb:currentBestuursorgaan lmb:isCBS ${(await bestuursorganen.at(0).isCBS) ?? false}.
-    lmb:currentBestuursorgaan lmb:isBurgemeester ${(await bestuursorganen.at(0).isBurgemeester) ?? false}.
+        lmb:component lmb:isFractieRequired ${await isRequiredForBestuursorgaan(bestuursorganen.at(0))}.
       `
         : ``
     }
@@ -88,23 +88,10 @@ const getBestuursperiodeForBestuursorganen = (bestuursorganen) => {
   throw new Error('Could not get bestuursorgaan to build up meta ttl');
 };
 
-export const getBestuursorgaanClassificaties = (storeOptions) => {
+export const loadIsFractieRequiredFromContext = (storeOptions) => {
   const { store, metaGraph } = storeOptions;
 
-  return {
-    isGR: Literal.toJS(
-      store.any(LMB('currentBestuursorgaan'), LMB('isGR'), null, metaGraph)
-    ),
-    isCBS: Literal.toJS(
-      store.any(LMB('currentBestuursorgaan'), LMB('isCBS'), null, metaGraph)
-    ),
-    isBurgemeester: Literal.toJS(
-      store.any(
-        LMB('currentBestuursorgaan'),
-        LMB('isBurgemeester'),
-        null,
-        metaGraph
-      )
-    ),
-  };
+  return Literal.toJS(
+    store.any(LMB('component'), LMB('isFractieRequired'), null, metaGraph)
+  );
 };
