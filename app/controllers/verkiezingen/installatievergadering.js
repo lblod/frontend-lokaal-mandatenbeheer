@@ -114,7 +114,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
         label: 'Voorbereiding afronden',
         icon: 'circle-step-4',
         modalMessage:
-          'Door naar de volgende status te gaan wordt de voorbereiding afgesloten en zal je de deze niet meer kunnen bewerken.',
+          'Door naar de volgende status te gaan wordt de voorbereiding afgesloten en zal je de deze niet meer kunnen bewerken. Doe dit dus enkel wanneer de installatievergadering voorbij is.',
         statusPillLabel:
           uriLabelMap[INSTALLATIEVERGADERING_BEHANDELD_STATUS].label,
         statusPillSkin:
