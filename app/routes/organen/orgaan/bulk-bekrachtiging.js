@@ -2,8 +2,6 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
-import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
-
 export default class BulkBekrachtigingRoute extends Route {
   @service store;
   @service installatievergadering;
@@ -24,10 +22,8 @@ export default class BulkBekrachtigingRoute extends Route {
 
       mandatarissen = await this.store.query('mandataris', options);
     }
-    const folded = await foldMandatarisses(params, mandatarissen);
-
     return {
-      mandatarissen: folded,
+      mandatarissen,
       bestuursorgaan: parentModel.bestuursorgaan,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       currentBestuursorgaan: currentBestuursorgaan,
@@ -52,6 +48,7 @@ export default class BulkBekrachtigingRoute extends Route {
       include: [
         'is-bestuurlijke-alias-van',
         'bekleedt.bestuursfunctie',
+        'heeft-lidmaatschap',
         'heeft-lidmaatschap.binnen-fractie',
         'status',
         'publication-status',
