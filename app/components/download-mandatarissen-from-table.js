@@ -49,7 +49,7 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
       },
       {
         isActive: this.args.bestuursorgaan && this.args.bestuursorgaan.naam,
-        label: this.args.bestuursorgaan.naam,
+        label: this.args.bestuursorgaan?.naam ?? '',
       },
       {
         isActive: this.args.activeOnly,
@@ -57,7 +57,7 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
       },
       {
         isActive: this.args.sort,
-        label: 'Column sorting',
+        label: 'Gesorteerd op kolom',
       },
     ];
   }
