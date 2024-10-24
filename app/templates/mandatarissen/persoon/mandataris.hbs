@@ -28,7 +28,10 @@
           @tooltipText={{this.toolTipText}}
         >
           <Shared::Tooltip
-            @showTooltip={{(not this.isDisabledBecauseLegislatuur)}}
+            @showTooltip={{(or
+              (not this.isDisabledBecauseLegislatuur)
+              this.model.mandataris.isActive
+            )}}
             @tooltipText="Dit zal een nieuw mandaat starten met de gewijzigde situatie"
           >
             <AuButton
