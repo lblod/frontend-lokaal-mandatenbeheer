@@ -9,9 +9,11 @@ import {
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
 import { downloadTextAsFile } from 'frontend-lmb/utils/download-text-as-file';
+import { showWarningToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarisApiService extends Service {
   @service store;
+  @service toaster;
 
   async copyOverNonDomainResourceProperties(oldMandatarisId, newMandatarisId) {
     const response = await fetch(
@@ -105,11 +107,21 @@ export default class MandatarisApiService extends Service {
         message: jsonReponse.message,
       };
     }
+    const decondedCsvString = atob(jsonReponse.data ?? '');
+
+    if (decondedCsvString.trim() === '') {
+      showWarningToast(
+        this.toaster,
+        'Er werden geen mandatarissen gevonden.',
+        'Download'
+      );
+      return;
+    }
 
     downloadTextAsFile(
       {
         filename: 'mandataris_export.csv',
-        contentAsText: atob(jsonReponse.data ?? ''),
+        contentAsText: decondedCsvString,
       },
       document,
       window
