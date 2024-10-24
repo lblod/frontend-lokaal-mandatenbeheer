@@ -10,6 +10,7 @@ import {
 } from 'frontend-lmb/utils/constants';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { downloadTextAsFile } from 'frontend-lmb/utils/download-text-as-file';
+import { showWarningToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarisApiService extends Service {
   @service store;
@@ -137,11 +138,21 @@ export default class MandatarisApiService extends Service {
         message: jsonReponse.message,
       };
     }
+    const decondedCsvString = atob(jsonReponse.data ?? '');
+
+    if (decondedCsvString.trim() === '') {
+      showWarningToast(
+        this.toaster,
+        'Er werden geen mandatarissen gevonden.',
+        'Download'
+      );
+      return;
+    }
 
     downloadTextAsFile(
       {
         filename: 'mandataris_export.csv',
-        contentAsText: atob(jsonReponse.data ?? ''),
+        contentAsText: decondedCsvString,
       },
       document,
       window
