@@ -76,6 +76,17 @@ export default class PrepareInstallatievergaderingController extends Controller 
     this.statusPillLabel = uriLabelMap[status.uri].label;
   });
 
+  get modalTitle() {
+    if (
+      this.model.installatievergadering.get('status.uri') ===
+      INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS
+    ) {
+      return 'Klaarzetten in notuleringspakket';
+    } else {
+      return 'Voorbereiding afronden';
+    }
+  }
+
   setNextStatus = task(async () => {
     const currentStatus = await this.model.installatievergadering.status;
     const findStatusForUri = (uri) => {
@@ -103,7 +114,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
         label: 'Voorbereiding afronden',
         icon: 'circle-step-4',
         modalMessage:
-          'Door naar de volgende status te gaan wordt de voorbereiding afgesloten en zal je de deze niet meer kunnen bewerken.',
+          'Door naar de volgende status te gaan wordt de voorbereiding afgesloten en zal je de deze niet meer kunnen bewerken. Doe dit dus enkel wanneer de installatievergadering voorbij is en ingegeven is in het notuleringspakket.',
         statusPillLabel:
           uriLabelMap[INSTALLATIEVERGADERING_BEHANDELD_STATUS].label,
         statusPillSkin:
