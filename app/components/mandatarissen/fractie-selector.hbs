@@ -1,7 +1,7 @@
 {{#if this.load.isRunning}}
   <p class="skeleton-input-full au-u-margin-top"></p>
 {{else}}
-  <AuLabel @required={{@isRequired}} @error={{this.errors}}>
+  <AuLabel for="fractie" @error={{@hasErrors}} @required={{@isRequired}}>
     {{this.title}}
   </AuLabel>
   <PowerSelect
