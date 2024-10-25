@@ -23,6 +23,8 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @tracked aangewezenBurgemeester;
   @tracked isModalOpen;
   @tracked selectedFractie = null;
+  @tracked selectedBeleidsdomeinen = [];
+  @tracked possibleBeleidsdomeinen = null;
 
   // no need to track these
   burgemeesterMandate = null;
@@ -42,6 +44,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     await this.loadBurgemeesterMandates();
     await this.loadBurgemeesterMandatarissen();
     await this.loadBurgemeesterPerson();
+    await this.getBeleidsdomeinen();
   }
 
   async loadBurgemeesterMandates() {
@@ -126,6 +129,11 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     }
   }
 
+  async getBeleidsdomeinen() {
+    this.possibleBeleidsdomeinen =
+      await this.store.findAll('beleidsdomein-code');
+  }
+
   @action
   async updateBurgemeester() {
     await this.loadBurgemeesterMandatarissen();
@@ -142,6 +150,9 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
           );
         } else {
           await this.mandatarisService.destroyLidmaatschap(target);
+        }
+        if (await target.bekleedt.get('isBurgemeester')) {
+          target.beleidsdomein = this.selectedBeleidsdomeinen;
         }
         return target.save();
       })
@@ -173,10 +184,15 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     this.selectedFractie = newFractie;
   }
 
+  @action selectBeleidsdomeinen(domeinen) {
+    this.selectedBeleidsdomeinen = domeinen;
+  }
+
   @action
   async removeBurgemeester() {
     this.persoon = null;
     this.selectedFractie = null;
+    this.selectedBeleidsdomeinen = [];
     this.aangewezenBurgemeesters = [];
     await this.updateBurgemeester();
   }

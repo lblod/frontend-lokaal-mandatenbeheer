@@ -109,6 +109,24 @@
         @person={{this.persoon}}
         @limitPersonFractionsToCurrent={{true}}
       />
+      <div>
+        <AuLabel>
+          Beleidsdomeinen
+        </AuLabel>
+        <PowerSelectMultiple
+          @allowClear={{true}}
+          @placeholder="Selecteer beleidsdomeinen"
+          @noMatchesMessage="Geen resultaten"
+          @selected={{this.selectedBeleidsdomeinen}}
+          @options={{this.possibleBeleidsdomeinen}}
+          @onChange={{this.selectBeleidsdomeinen}}
+          @searchEnabled={{true}}
+          @searchField="label"
+          as |beleidsdomein|
+        >
+          {{beleidsdomein.label}}
+        </PowerSelectMultiple>
+      </div>
     {{/if}}
 
     <AuToolbar class="au-u-margin-top" as |Group|>
