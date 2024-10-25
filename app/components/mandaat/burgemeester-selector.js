@@ -22,9 +22,10 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service toaster;
 
   @tracked persoon = null;
-  @tracked mandataris = null;
   @tracked aangewezenBurgemeesters;
   @tracked isPersonSelectOpen;
+  @tracked selectedFractie = null;
+
   // no need to track these
   burgemeesterMandate = null;
   voorzitterVastBureauMandate = null;
@@ -59,13 +60,11 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   }
 
   async loadBurgemeesterMandates() {
-    const bestuursperiode =
-      await this.args.bestuursorgaanInTijd.heeftBestuursperiode;
     const mandates = await this.store.query('mandaat', {
       filter: {
         'bevat-in': {
           'heeft-bestuursperiode': {
-            id: bestuursperiode.id,
+            id: this.args.bestuursperiode.id,
           },
         },
         bestuursfunctie: {
@@ -133,6 +132,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     return burgemeesters[0]?.isBestuurlijkeAliasVan || null;
   }
 
+  // This needs to happen on save instead.
   onUpdate = restartableTask(async (persoon) => {
     await this.setup.perform();
     this.persoon = persoon;
@@ -169,6 +169,10 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   async onSelectNewPerson({ instanceId }) {
     this.persoon = await this.store.findRecord('persoon', instanceId);
     await this.onUpdate.perform(this.persoon);
+  }
+
+  @action updateFractie(newFractie) {
+    this.selectedFractie = newFractie;
   }
 
   @action
