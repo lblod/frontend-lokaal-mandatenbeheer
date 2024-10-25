@@ -1,9 +1,14 @@
-<AuButton
-  @skin="secondary"
-  @loading={{this.download.isRunning}}
-  @loadingMessage="Downloading"
-  @disabled={{(or (not @bestuursperiode) this.download.isRunning)}}
-  {{on "click" (perform this.download)}}
+<Shared::Tooltip
+  @showTooltip={{true}}
+  @tooltipText="Exporteer mandatarissen naar CSV formaat"
 >
-  Download
-</AuButton>
+  <AuButton
+    @skin="secondary"
+    @loading={{this.download.isRunning}}
+    @loadingMessage="Downloading"
+    @disabled={{(or (not @bestuursperiode) this.download.isRunning)}}
+    {{on "click" (perform this.download)}}
+  >
+    Download
+  </AuButton>
+</Shared::Tooltip>

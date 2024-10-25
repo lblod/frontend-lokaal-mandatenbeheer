@@ -26,6 +26,12 @@
       >Bekrachtig mandatarissen
       </AuLink>
     {{/if}}
+    <DownloadMandatarissenFromTable
+      @bestuursperiode={{@model.selectedBestuursperiode}}
+      @activeOnly={{this.activeOnly}}
+      @bestuursorgaan={{this.model.bestuursorgaan}}
+      @sort={{this.sort}}
+    />
     <Shared::Tooltip
       @showTooltip={{this.isDisabled}}
       @tooltipText="Het is niet mogelijk mandatarissen toe te voegen aan een bestuursperiode terwijl de voorbereiding van de legislatuur actief is."
@@ -37,12 +43,6 @@
         Voeg nieuwe mandataris toe
       </AuButton>
     </Shared::Tooltip>
-    <DownloadMandatarissenFromTable
-      @bestuursperiode={{@model.selectedBestuursperiode}}
-      @activeOnly={{this.activeOnly}}
-      @bestuursorgaan={{this.model.bestuursorgaan}}
-      @sort={{this.sort}}
-    />
   </Group>
 </AuToolbar>
 <AuHeading @skin="3" class="au-u-regular au-u-padding-left">
