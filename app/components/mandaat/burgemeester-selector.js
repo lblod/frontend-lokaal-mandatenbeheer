@@ -130,8 +130,15 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   }
 
   async getBeleidsdomeinen() {
-    this.possibleBeleidsdomeinen =
-      await this.store.findAll('beleidsdomein-code');
+    this.possibleBeleidsdomeinen = await this.store.query(
+      'beleidsdomein-code',
+      {
+        page: {
+          size: 500,
+        },
+        sort: 'label',
+      }
+    );
   }
 
   @action
