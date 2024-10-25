@@ -57,6 +57,23 @@ export default class PrepareInstallatievergaderingController extends Controller 
     this.router.refresh();
   }
 
+  get statusTooltip() {
+    if (!this.nextStatus) {
+      return 'De installatievergadering is reeds afgerond.';
+    }
+    return 'De installatievergadering kan pas afgerond worden wanneer ze heeft plaatsgevonden. Deze functionaliteit wordt vanaf december opengesteld.';
+  }
+
+  get statusIsDisabled() {
+    if (
+      this.model.installatievergadering.get('status.uri') ===
+      INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS
+    ) {
+      return true;
+    }
+    return !this.nextStatus.status;
+  }
+
   @action
   selectPeriod(period) {
     this.bestuursperiode = period.id;

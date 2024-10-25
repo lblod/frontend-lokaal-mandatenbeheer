@@ -56,11 +56,11 @@
       </AuLink>
 
       <Shared::Tooltip
-        @showTooltip={{not this.nextStatus.status}}
-        @tooltipText="De installatievergadering is reeds afgerond."
+        @showTooltip={{this.statusIsDisabled}}
+        @tooltipText={{this.statusTooltip}}
       >
         <AuButton
-          @disabled={{not this.nextStatus.status}}
+          @disabled={{this.statusIsDisabled}}
           @icon={{this.nextStatus.icon}}
           @loading={{this.setNextStatus.isRunning}}
           @loadingMessage="Volgende status ophalen"
