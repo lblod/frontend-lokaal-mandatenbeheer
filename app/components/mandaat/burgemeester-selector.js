@@ -14,7 +14,6 @@ import {
   BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 import moment from 'moment';
-import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
@@ -158,17 +157,8 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   }
 
   @action
-  async onCreateNewPerson() {
-    showErrorToast(
-      this.toaster,
-      'Bij het toevoegen van een burgemeester is het niet mogelijk een persoon aan te maken die niet uit de kieslijst komt'
-    );
-  }
-
-  @action
-  async onSelectNewPerson({ instanceId }) {
-    this.persoon = await this.store.findRecord('persoon', instanceId);
-    await this.onUpdate.perform(this.persoon);
+  async selectPerson(newPerson) {
+    this.persoon = newPerson;
   }
 
   @action updateFractie(newFractie) {

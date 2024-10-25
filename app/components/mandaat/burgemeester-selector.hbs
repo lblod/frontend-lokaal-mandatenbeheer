@@ -80,14 +80,20 @@
   @closable={{true}}
 >
   <div class="au-o-box">
-    {{! TODO This should be in a component }}
-    <Person::SearchForm
-      @showDefaultHead={{false}}
-      @onSelect={{perform this.onUpdate}}
-      @onCreateNewPerson={{this.onCreateNewPerson}}
-      @onCancel={{this.closeModal}}
-      @allowCreate={{false}}
-    />
+    <div>
+      <AuLabel>
+        Persoon
+      </AuLabel>
+      <div>
+        <Person::Selector
+          @person={{this.person}}
+          @onUpdate={{this.selectPerson}}
+          @searchElected={{true}}
+          @bestuursperiode={{@bestuursperiode}}
+          @allowCreate={{false}}
+        />
+      </div>
+    </div>
 
     {{#if this.persoon}}
       <Mandatarissen::FractieSelector
@@ -96,7 +102,7 @@
         @onSelect={{this.updateFractie}}
         @bestuurseenheid={{@bestuurseenheid}}
         @bestuursperiode={{@bestuursperiode}}
-        @person={{this.person}}
+        @person={{this.persoon}}
         @limitPersonFractionsToCurrent={{true}}
       />
     {{/if}}
