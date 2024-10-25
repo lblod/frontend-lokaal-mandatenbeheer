@@ -11,10 +11,10 @@
       >
         <AuButton
           @icon="add"
-          @loading={{(or this.setup.isRunning this.onUpdate.isRunning)}}
+          @loading={{this.onUpdate.isRunning}}
           @loadingMessage="laden"
           @disabled={{this.persoon}}
-          {{on "click" (fn (mut this.isPersonSelectOpen) true)}}
+          {{on "click" (fn (mut this.isModalOpen) true)}}
         >
           Toevoegen
         </AuButton>
@@ -24,7 +24,7 @@
 </div>
 
 <div class="no-pagination au-u-margin-left au-u-margin-right">
-  {{#if (or this.setup.isRunning this.onUpdate.isRunning)}}
+  {{#if this.onUpdate.isRunning}}
     <Skeleton::Table @columns={{3}} @rows={{1}} />
   {{else}}
     <AuDataTable
@@ -75,7 +75,7 @@
 
 <AuModal
   @title={{"Selecteer een persoon"}}
-  @modalOpen={{this.isPersonSelectOpen}}
+  @modalOpen={{this.isModalOpen}}
   @closeModal={{this.closeModal}}
   @closable={{true}}
 >

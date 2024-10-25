@@ -22,7 +22,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   @tracked persoon = null;
   @tracked aangewezenBurgemeesters;
-  @tracked isPersonSelectOpen;
+  @tracked isModalOpen;
   @tracked selectedFractie = null;
 
   // no need to track these
@@ -44,17 +44,13 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.setup.perform();
+    this.setup();
   }
 
-  setup = restartableTask(async () => {
+  @action async setup() {
     await this.loadBurgemeesterMandates();
-
-    if (this.burgemeesterMandate && this.voorzitterVastBureauMandate) {
-      this.persoon = await this.loadBurgemeesterPersoon();
-      this.aangewezenBurgemeesters = this.persoon ? [this.persoon] : null;
-    }
-  });
+    await this.loadBurgemeesterMandatarissen();
+  }
 
   formatToDateString(dateTime) {
     return dateTime ? moment(dateTime).format('YYYY-MM-DD') : undefined;
@@ -106,7 +102,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     return newMandataris;
   }
 
-  async loadBurgemeesterPersoon() {
+  async loadBurgemeesterMandatarissen() {
     const burgemeesters = await this.burgemeesterMandate.bekleedDoor.reload();
     const voorzitterVastBureau =
       await this.voorzitterVastBureauMandate.bekleedDoor.reload();
@@ -130,14 +126,14 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
     this.targetMandatarisses = targetMandatarisses;
 
-    return burgemeesters[0]?.isBestuurlijkeAliasVan || null;
+    // TODO should become mandataris instead of person...
+    this.aangewezenBurgemeesters = burgemeesters[0]?.isBestuurlijkeAliasVan
+      ? [burgemeesters[0]?.isBestuurlijkeAliasVan]
+      : [];
   }
 
   updateBurgemeester = restartableTask(async () => {
-    const tmpPerson = this.persoon;
-    // TODO Setup overwrites person, why do we need this?
-    await this.setup.perform();
-    this.persoon = tmpPerson;
+    await this.loadBurgemeesterMandatarissen();
     if (!this.targetMandatarisses) {
       return;
     }
@@ -155,7 +151,10 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
         return target.save();
       })
     );
-    this.setup.perform();
+
+    // TODO should become mandataris
+    this.aangewezenBurgemeesters.push(this.persoon);
+
     this.bcsd.forceRecomputeBCSD();
     if (this.args.onUpdateBurgemeester) {
       this.args.onUpdateBurgemeester();
@@ -166,9 +165,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   @action
   closeModal() {
-    this.persoon = null;
-    this.selectedFractie = null;
-    this.isPersonSelectOpen = false;
+    this.isModalOpen = false;
   }
 
   @action
@@ -186,7 +183,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     this.selectedFractie = null;
     this.aangewezenBurgemeesters = [];
     await this.updateBurgemeester.perform();
-    // TODO Fractie needs to be removed here as well from the mandatees ...
   }
 
   get toolTipText() {
