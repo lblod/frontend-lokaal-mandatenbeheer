@@ -167,12 +167,15 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       this.args.onUpdateBurgemeester();
     }
 
-    this.closeModal();
+    this.isModalOpen = false;
   }
 
   @action
   closeModal() {
     this.isModalOpen = false;
+    this.persoon = null;
+    this.selectedFractie = null;
+    this.selectedBeleidsdomeinen = [];
   }
 
   @action
