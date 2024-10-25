@@ -77,12 +77,32 @@ export default class DateInputComponent extends Component {
       const stringMaxDate = isValidDate(maxDate)
         ? moment(maxDate).format('DD-MM-YYYY')
         : null;
-      this.errorMessage = `Kies een datum tussen ${stringMinDate || 'een moment in het verleden'} en ${stringMaxDate || 'een moment in de toekomst'}.`;
+
+      this.errorMessage = this.getErrorMessageForDateRange(
+        stringMinDate,
+        stringMaxDate
+      );
     } else {
       this.errorMessage = null;
     }
 
     return date;
+  }
+
+  getErrorMessageForDateRange(minDate, maxDate) {
+    if (minDate && maxDate) {
+      return `Kies een datum tussen ${minDate} en ${maxDate}.`;
+    }
+
+    if (minDate && !maxDate) {
+      return `Kies een datum vanaf ${minDate}`;
+    }
+
+    if (!minDate && maxDate) {
+      return `Kies een datum tot ${maxDate}`;
+    }
+
+    return null;
   }
 
   @action
