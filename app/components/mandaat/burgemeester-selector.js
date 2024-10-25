@@ -13,7 +13,6 @@ import {
   BESTUURSFUNCTIE_AANGEWEZEN_BURGEMEESTER_ID,
   BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
 } from 'frontend-lmb/utils/well-known-ids';
-import moment from 'moment';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
@@ -50,10 +49,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @action async setup() {
     await this.loadBurgemeesterMandates();
     await this.loadBurgemeesterMandatarissen();
-  }
-
-  formatToDateString(dateTime) {
-    return dateTime ? moment(dateTime).format('YYYY-MM-DD') : undefined;
   }
 
   async loadBurgemeesterMandates() {
