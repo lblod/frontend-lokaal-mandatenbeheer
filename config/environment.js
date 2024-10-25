@@ -83,7 +83,7 @@ module.exports = function (environment) {
     // here you can enable a production-specific feature
   }
 
-  ENV.features['show-iv-module'] = ENV.environmentName !== 'PROD';
+  ENV.features['show-iv-module'] = true;
 
   return ENV;
 };
