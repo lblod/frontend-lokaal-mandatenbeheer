@@ -177,7 +177,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     this.persoon = null;
     this.selectedFractie = null;
     this.aangewezenBurgemeesters = [];
-    await this.onUpdate.perform(this.persoon);
+    await this.updateBurgemeester.perform();
   }
 
   get toolTipText() {
