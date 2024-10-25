@@ -5,7 +5,6 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { restartableTask } from 'ember-concurrency';
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import {
   getDraftPublicationStatus,
   getEffectiefStatus,
@@ -13,20 +12,19 @@ import {
 import {
   BESTUURSFUNCTIE_AANGEWEZEN_BURGEMEESTER_ID,
   BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
-  CREATE_PERSON_FORM_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 import moment from 'moment';
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
   @service bcsd;
+  @service toaster;
 
   @tracked persoon = null;
   @tracked mandataris = null;
   @tracked aangewezenBurgemeesters;
   @tracked isPersonSelectOpen;
-  @tracked isCreatingPerson;
-  @tracked createPersonFormDefinition;
   // no need to track these
   burgemeesterMandate = null;
   voorzitterVastBureauMandate = null;
@@ -156,17 +154,15 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   @action
   closeModal() {
-    this.isCreatingPerson = false;
     this.isPersonSelectOpen = false;
   }
 
   @action
   async onCreateNewPerson() {
-    this.createPersonFormDefinition = await getFormFrom(
-      this.store,
-      CREATE_PERSON_FORM_ID
+    showErrorToast(
+      this.toaster,
+      'Bij het toevoegen van een burgemeester is het niet mogelijk een persoon aan te maken die niet uit de kieslijst komt'
     );
-    this.isCreatingPerson = true;
   }
 
   @action

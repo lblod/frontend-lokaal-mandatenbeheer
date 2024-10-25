@@ -80,21 +80,12 @@
   @closable={{true}}
 >
   <div class="au-o-box">
-
-    {{#if this.isCreatingPerson}}
-      <Form::NewInstance
-        @onCreate={{this.onSelectNewPerson}}
-        @form={{this.createPersonFormDefinition}}
-        @onCancel={{this.closeModal}}
-        @buildSourceTtl={{this.buildSourceTtl}}
-      />
-    {{else}}
-      <Person::SearchForm
-        @showDefaultHead={{false}}
-        @onSelect={{perform this.onUpdate}}
-        @onCreateNewPerson={{this.onCreateNewPerson}}
-        @onCancel={{this.closeModal}}
-      />
-    {{/if}}
+    <Person::SearchForm
+      @showDefaultHead={{false}}
+      @onSelect={{perform this.onUpdate}}
+      @onCreateNewPerson={{this.onCreateNewPerson}}
+      @onCancel={{this.closeModal}}
+      @allowCreate={{false}}
+    />
   </div>
 </AuModal>
