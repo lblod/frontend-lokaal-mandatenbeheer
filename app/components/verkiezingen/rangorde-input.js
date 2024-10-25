@@ -1,6 +1,8 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+
 import { keepLatestTask, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import {
@@ -9,8 +11,16 @@ import {
   rangordeStringMapping,
   rangordeStringToNumber,
 } from 'frontend-lmb/utils/rangorde';
+import { MANDAAT_GEMEENTERAADSLID_CODE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class VerkiezingenRangordeInputComponent extends Component {
+  @tracked rangordePlaceholder;
+
+  constructor() {
+    super(...arguments);
+    this.setPlaceholder();
+  }
+
   get inputWarningMessage() {
     const order = this.rangordeInteger;
     if (order == null) {
@@ -26,6 +36,20 @@ export default class VerkiezingenRangordeInputComponent extends Component {
 
   get rangorde() {
     return this.args.mandataris.rangorde;
+  }
+
+  async setPlaceholder() {
+    const mandaat = await this.args.mandataris.bekleedt;
+    const bestuursfunctieCode = await mandaat?.bestuursfunctie;
+    if (
+      bestuursfunctieCode &&
+      bestuursfunctieCode.uri === MANDAAT_GEMEENTERAADSLID_CODE
+    ) {
+      this.rangordePlaceholder = 'Vul de rangorde in, bv. “Eerste lid';
+      return;
+    }
+
+    this.rangordePlaceholder = 'Vul de rangorde in, bv. “Eerste schepen”';
   }
 
   updateMandatarisRangorde = keepLatestTask(async (value) => {
@@ -125,7 +149,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   async rangordeUp() {
     const currentNumber = this.rangordeInteger || 0;
     const newOrder = rangordeNumberMapping[currentNumber + 1];
-    console.log(`label`, await this.getMandaatLabel());
+
     if (this.rangordeInteger == null) {
       this.setRangorde(
         `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`
