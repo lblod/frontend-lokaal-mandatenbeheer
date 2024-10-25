@@ -29,7 +29,6 @@
   {{else}}
     <AuDataTable
       @content={{this.aangewezenBurgemeesters}}
-      @fields="gebruikteVoornaam achternaam actions"
       @noDataMessage="Geen burgemeester aangewezen"
       as |t|
     >
@@ -37,15 +36,19 @@
         <c.header>
           <th class="au-u-padding-small">Voornaam</th>
           <th>Familienaam</th>
+          <th>Fractie</th>
+          <th>Beleidsomeinen</th>
           {{#unless @readOnly}}
             <th>
               {{! actions }}
             </th>
           {{/unless}}
         </c.header>
-        <c.body as |persoon|>
-          <td>{{persoon.gebruikteVoornaam}}</td>
-          <td>{{persoon.achternaam}}</td>
+        <c.body as |row|>
+          <td>{{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}</td>
+          <td>{{row.isBestuurlijkeAliasVan.achternaam}}</td>
+          <td>{{row.heeftLidmaatschap.binnenFractie.naam}}</td>
+          <td><Beleidsdomeinen @mandataris={{row}} /></td>
           {{#unless @readOnly}}
             <td class="au-u-text-right">
               {{#if this.persoon}}

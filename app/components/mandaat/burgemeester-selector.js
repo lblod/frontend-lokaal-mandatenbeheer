@@ -20,6 +20,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   @tracked persoon = null;
   @tracked aangewezenBurgemeesters;
+  @tracked aangewezenBurgemeester;
   @tracked isModalOpen;
   @tracked selectedFractie = null;
 
@@ -40,6 +41,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @action async setup() {
     await this.loadBurgemeesterMandates();
     await this.loadBurgemeesterMandatarissen();
+    await this.loadBurgemeesterPerson();
   }
 
   async loadBurgemeesterMandates() {
@@ -89,17 +91,19 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   }
 
   async loadBurgemeesterMandatarissen() {
-    const burgemeesters = await this.burgemeesterMandate.bekleedDoor.reload();
+    const burgemeesters = await this.burgemeesterMandate.bekleedDoor;
     const voorzitterVastBureau =
-      await this.voorzitterVastBureauMandate.bekleedDoor.reload();
+      await this.voorzitterVastBureauMandate.bekleedDoor;
 
     const targetMandatarisses = [];
 
     if (burgemeesters.length === 0) {
-      targetMandatarisses.push(
-        await this.createMandataris(this.burgemeesterMandate)
+      this.aangewezenBurgemeester = await this.createMandataris(
+        this.burgemeesterMandate
       );
+      targetMandatarisses.push(this.aangewezenBurgemeester);
     } else {
+      this.aangewezenBurgemeester = burgemeesters[0];
       targetMandatarisses.push(burgemeesters[0]);
     }
     if (voorzitterVastBureau.length === 0) {
@@ -111,11 +115,15 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     }
 
     this.targetMandatarisses = targetMandatarisses;
+  }
 
-    // TODO should become mandataris instead of person...
-    this.aangewezenBurgemeesters = burgemeesters[0]?.isBestuurlijkeAliasVan
-      ? [burgemeesters[0]?.isBestuurlijkeAliasVan]
-      : [];
+  async loadBurgemeesterPerson() {
+    if (await this.aangewezenBurgemeester.isBestuurlijkeAliasVan) {
+      this.aangewezenBurgemeesters = [this.aangewezenBurgemeester];
+      this.persoon = this.aangewezenBurgemeester.isBestuurlijkeAliasVan;
+    } else {
+      this.aangewezenBurgemeesters = [];
+    }
   }
 
   @action
@@ -139,8 +147,9 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       })
     );
 
-    // TODO should become mandataris
-    this.aangewezenBurgemeesters.push(this.persoon);
+    this.aangewezenBurgemeesters = this.persoon
+      ? [this.aangewezenBurgemeester]
+      : [];
 
     this.bcsd.forceRecomputeBCSD();
     if (this.args.onUpdateBurgemeester) {
