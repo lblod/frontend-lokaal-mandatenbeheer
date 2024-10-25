@@ -29,14 +29,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   voorzitterVastBureauMandate = null;
   targetMandatarisses = null;
 
-  get bindingStart() {
-    return this.args.bestuursorgaanInTijd.bindingStart;
-  }
-
-  get bindingEinde() {
-    return this.args.bestuursorgaanInTijd.bindingEinde;
-  }
-
   get disabled() {
     return !this.persoon || !this.selectedFractie;
   }
@@ -85,8 +77,8 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   async createMandataris(burgemeesterMandaat) {
     const newMandataris = this.store.createRecord('mandataris', {
       rangorde: null,
-      start: this.bindingStart,
-      einde: this.bindingEinde,
+      start: this.args.bestuursorgaanInTijd.bindingStart,
+      einde: this.args.bestuursorgaanInTijd.bindingEinde,
       bekleedt: burgemeesterMandaat,
       isBestuurlijkeAliasVan: null,
       beleidsdomein: [],
