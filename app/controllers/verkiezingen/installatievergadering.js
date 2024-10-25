@@ -71,7 +71,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
     ) {
       return true;
     }
-    return !this.nextStatus.status;
+    return !this.get('nextStatus.status');
   }
 
   @action
