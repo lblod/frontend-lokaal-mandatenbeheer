@@ -102,7 +102,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       return;
     }
 
-    // This is the correct mistakes, all fracties are possible, with onafhankelijk as well.
+    // This is the correct mistakes, all fracties are possible. onafhankdelijke is only possible if not creating
     const samenwerkingsFracties =
       await this.fractieApi.samenwerkingForBestuursperiode(
         this.args.bestuursperiode.id
@@ -113,7 +113,11 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         this.bestuursorganen,
         this.args.bestuurseenheid
       );
-    this.fractieOptions = [...samenwerkingsFracties, onafhankelijkeFractie];
+    const availableFractions = [...samenwerkingsFracties];
+    if (!this.args.isCreating) {
+      availableFractions.push(onafhankelijkeFractie);
+    }
+    this.fractieOptions = availableFractions;
   }
 
   async getPerson() {
