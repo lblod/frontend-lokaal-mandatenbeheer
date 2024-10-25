@@ -48,11 +48,23 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     this.updateMandatarisRangorde.perform(value);
   }
 
+  bestuursfunctieLabelMapping(bestuursfunctieLabel) {
+    const mapping = {
+      gemeenteraadslid: 'lid',
+    };
+
+    if (Object.keys(mapping).includes(bestuursfunctieLabel)) {
+      return bestuursfunctieLabel;
+    }
+
+    return mapping[bestuursfunctieLabel];
+  }
+
   async getMandaatLabel() {
     const label = await this.args.mandataris.get(
       'bekleedt.bestuursfunctie.label'
     );
-    return label.toLowerCase();
+    return this.bestuursfunctieLabelMapping(label.toLowerCase());
   }
 
   findOrderInString(possibleString) {
@@ -113,7 +125,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   async rangordeUp() {
     const currentNumber = this.rangordeInteger || 0;
     const newOrder = rangordeNumberMapping[currentNumber + 1];
-
+    console.log(`label`, await this.getMandaatLabel());
     if (this.rangordeInteger == null) {
       this.setRangorde(
         `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`
