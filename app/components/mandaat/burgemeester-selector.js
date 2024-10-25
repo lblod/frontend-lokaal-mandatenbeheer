@@ -144,10 +144,14 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     await Promise.all(
       this.targetMandatarisses.map(async (target) => {
         target.isBestuurlijkeAliasVan = this.persoon;
-        await this.mandatarisService.createNewLidmaatschap(
-          target,
-          this.selectedFractie
-        );
+        if (this.selectedFractie) {
+          await this.mandatarisService.createNewLidmaatschap(
+            target,
+            this.selectedFractie
+          );
+        } else {
+          await this.mandatarisService.destroyLidmaatschap(target);
+        }
         return target.save();
       })
     );

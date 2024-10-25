@@ -89,6 +89,13 @@ export default class MandatarisService extends Service {
     await newLidmaatschap.save();
   }
 
+  async destroyLidmaatschap(mandataris) {
+    const lidmaatschap = await mandataris.heeftLidmaatschap;
+    lidmaatschap.destroyRecord();
+    mandataris.heeftLidmaatschap = null;
+    await mandataris.save();
+  }
+
   async createNewProps(mandataris, overwrites) {
     return {
       rangorde: overwrites.rangorde ?? mandataris.rangorde,
