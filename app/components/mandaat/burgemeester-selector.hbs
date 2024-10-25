@@ -81,16 +81,17 @@
 >
   <div class="au-o-box">
     <div>
-      <AuLabel>
+      <AuLabel @required={{true}}>
         Persoon
       </AuLabel>
       <div>
         <Person::Selector
-          @person={{this.person}}
+          @person={{this.persoon}}
           @onUpdate={{this.selectPerson}}
           @searchElected={{true}}
           @bestuursperiode={{@bestuursperiode}}
           @allowCreate={{false}}
+          @inline={{true}}
         />
       </div>
     </div>

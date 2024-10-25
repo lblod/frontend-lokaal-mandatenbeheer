@@ -38,6 +38,10 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     return this.args.bestuursorgaanInTijd.bindingEinde;
   }
 
+  get disabled() {
+    return !this.persoon || !this.selectedFractie;
+  }
+
   constructor() {
     super(...arguments);
     this.setup.perform();
@@ -178,6 +182,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     this.selectedFractie = null;
     this.aangewezenBurgemeesters = [];
     await this.updateBurgemeester.perform();
+    // TODO Fractie needs to be removed here as well from the mandatees ...
   }
 
   get toolTipText() {
