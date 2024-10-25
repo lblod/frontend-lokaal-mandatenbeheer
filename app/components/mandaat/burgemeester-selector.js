@@ -18,7 +18,7 @@ import moment from 'moment';
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
   @service bcsd;
-  @service toaster;
+  @service('mandataris') mandatarisService;
 
   @tracked persoon = null;
   @tracked aangewezenBurgemeesters;
@@ -50,8 +50,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       this.persoon = await this.loadBurgemeesterPersoon();
       this.aangewezenBurgemeesters = this.persoon ? [this.persoon] : null;
     }
-
-    this.closeModal();
   });
 
   formatToDateString(dateTime) {
@@ -131,16 +129,21 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     return burgemeesters[0]?.isBestuurlijkeAliasVan || null;
   }
 
-  // This needs to happen on save instead.
-  onUpdate = restartableTask(async (persoon) => {
+  updateBurgemeester = restartableTask(async () => {
+    const tmpPerson = this.persoon;
+    // TODO Setup overwrites person, why do we need this?
     await this.setup.perform();
-    this.persoon = persoon;
+    this.persoon = tmpPerson;
     if (!this.targetMandatarisses) {
       return;
     }
     await Promise.all(
-      this.targetMandatarisses.map((target) => {
-        target.isBestuurlijkeAliasVan = persoon;
+      this.targetMandatarisses.map(async (target) => {
+        target.isBestuurlijkeAliasVan = this.persoon;
+        await this.mandatarisService.createNewLidmaatschap(
+          target,
+          this.selectedFractie
+        );
         return target.save();
       })
     );
@@ -149,10 +152,14 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     if (this.args.onUpdateBurgemeester) {
       this.args.onUpdateBurgemeester();
     }
+
+    this.closeModal();
   });
 
   @action
   closeModal() {
+    this.persoon = null;
+    this.selectedFractie = null;
     this.isPersonSelectOpen = false;
   }
 
@@ -168,6 +175,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @action
   async removeBurgemeester() {
     this.persoon = null;
+    this.selectedFractie = null;
     this.aangewezenBurgemeesters = [];
     await this.onUpdate.perform(this.persoon);
   }

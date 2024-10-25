@@ -107,6 +107,27 @@
       />
     {{/if}}
 
-    {{! TODO Add saving here }}
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <Shared::Tooltip
+            @showTooltip={{this.disabled}}
+            @tooltipText="Het is nodig zowel een persoon als een fractie te selecteren vooraleer het mogelijk is op te slaan."
+            @alignment="left"
+          >
+            <AuButton
+              {{on "click" (perform this.updateBurgemeester)}}
+              @disabled={{this.disabled}}
+              @loading={{this.updateBurgemeester.isRunning}}
+            >
+              Sla op
+            </AuButton>
+          </Shared::Tooltip>
+          <AuButton {{on "click" this.closeModal}} @skin="secondary">
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
   </div>
 </AuModal>
