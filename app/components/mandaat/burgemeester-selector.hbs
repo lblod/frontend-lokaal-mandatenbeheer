@@ -117,9 +117,8 @@
             @alignment="left"
           >
             <AuButton
-              {{on "click" (perform this.updateBurgemeester)}}
+              {{on "click" this.updateBurgemeester}}
               @disabled={{this.disabled}}
-              @loading={{this.updateBurgemeester.isRunning}}
             >
               Sla op
             </AuButton>

@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { restartableTask } from 'ember-concurrency';
 import {
   getDraftPublicationStatus,
   getEffectiefStatus,
@@ -119,7 +118,8 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       : [];
   }
 
-  updateBurgemeester = restartableTask(async () => {
+  @action
+  async updateBurgemeester() {
     await this.loadBurgemeesterMandatarissen();
     if (!this.targetMandatarisses) {
       return;
@@ -148,7 +148,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     }
 
     this.closeModal();
-  });
+  }
 
   @action
   closeModal() {
@@ -169,7 +169,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     this.persoon = null;
     this.selectedFractie = null;
     this.aangewezenBurgemeesters = [];
-    await this.updateBurgemeester.perform();
+    await this.updateBurgemeester();
   }
 
   get toolTipText() {
