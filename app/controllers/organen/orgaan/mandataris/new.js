@@ -39,8 +39,13 @@ export default class OrganenMandatarisNewController extends Controller {
   }
 
   @action
-  buildMetaTtl() {
-    return getApplicationContextMetaTtl([this.model.currentBestuursorgaan]);
+  async buildMetaTtl() {
+    const metaTtl = await getApplicationContextMetaTtl([
+      this.model.currentBestuursorgaan,
+    ]);
+    return `${metaTtl}
+    <http://mu.semte.ch/vocabularies/ext/applicationContext> <http://mu.semte.ch/vocabularies/ext/limitPersonFractions> true .
+    `;
   }
 
   @action
