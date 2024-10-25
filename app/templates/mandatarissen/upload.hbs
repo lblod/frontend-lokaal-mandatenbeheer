@@ -35,9 +35,7 @@
         moet zijn. Let op: de eerste lijn in het bestand wordt als header
         gezien. De tekst moet exact overeenkomen. Geef je hier bijvoorbeeld
         rijksregisternummer in, in plaats van rrn, dan zal dit een fout geven.
-        De volgorde van de kolommen heeft geen belang. Mochten er eventuele
-        fouten in het CSV-bestand worden gevonden vind je deze terug in een
-        tabel onder de oplaadzone.
+        De volgorde van de kolommen heeft geen belang.
       </p>
       <div
         class="au-u-background-gray-100 au-u-padding au-u-margin-top au-u-margin-bottom"
@@ -47,6 +45,11 @@
         VLD,Eerste schepen,Cultuur|Sport en jeugd|Geitestoet
         00000000196,Maria,Janssens,Gemeenteraadslid,2025-01-01T12:00:12.038Z,2030-05-13T11:32:12.038Z,Groen,,
       </div>
+      <p class="au-u-text-center">
+        Eventuele fouten in het CSV-bestand worden in een tabel onder de
+        oplaadzone getoond.
+      </p>
+      <br />
       {{#let
         (file-queue name="mandatarisCsv" onFileAdded=this.uploadFile.perform)
         as |queue|
