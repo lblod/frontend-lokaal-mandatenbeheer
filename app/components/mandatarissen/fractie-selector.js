@@ -45,7 +45,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     this.fractieOptions = [];
     const person = await this.getPerson();
 
-    if (this.args.isInCreatingForm) {
+    if (this.args.limitPersonFractionsToCurrent) {
       // The current fractie is always the only one you can select if it is set!
       const currentFractie = await this.persoonApi.getCurrentFractie(
         person.id,

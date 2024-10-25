@@ -42,7 +42,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @tracked bestuursperiode;
   @tracked person;
   @tracked previousPerson;
-  @tracked isPersonInForm;
+  @tracked limitPersonFractionsToCurrent = false;
   @tracked isRequiredForBestuursorgaan;
 
   emptySelectorOptions = [];
@@ -68,11 +68,21 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
   async load() {
     await Promise.all([
+      this.checkIfShouldLimitFractions(),
       this.findPersonInForm.perform(),
       this.loadBestuursorganen(),
       this.loadProvidedValue(),
     ]);
     this.initialized = true;
+  }
+
+  async checkIfShouldLimitFractions() {
+    this.limitPersonFractionsToCurrent = !!this.storeOptions.store.any(
+      new NamedNode('http://mu.semte.ch/vocabularies/ext/applicationContext'),
+      new NamedNode('http://mu.semte.ch/vocabularies/ext/limitPersonFractions'),
+      null,
+      this.storeOptions.metaGraph
+    );
   }
 
   async loadBestuursorganen() {
@@ -115,7 +125,6 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   findPersonInForm = restartableTask(async () => {
-    this.isPersonInForm = false;
     let newPerson = await this.findMandatarisPersonInStore(
       this.storeOptions.sourceNode
     );
@@ -161,7 +170,6 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
         if (personMatches.length === 0) {
           return null;
         } else {
-          this.isPersonInForm = true;
           return personMatches.at(0);
         }
       }
