@@ -24,7 +24,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @tracked isModalOpen;
   @tracked selectedFractie = null;
   @tracked selectedBeleidsdomeinen = [];
-  @tracked possibleBeleidsdomeinen = null;
 
   // no need to track these
   burgemeesterMandate = null;
@@ -44,7 +43,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     await this.loadBurgemeesterMandates();
     await this.loadBurgemeesterMandatarissen();
     await this.loadBurgemeesterPerson();
-    await this.getBeleidsdomeinen();
   }
 
   async loadBurgemeesterMandates() {
@@ -127,18 +125,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     } else {
       this.aangewezenBurgemeesters = [];
     }
-  }
-
-  async getBeleidsdomeinen() {
-    this.possibleBeleidsdomeinen = await this.store.query(
-      'beleidsdomein-code',
-      {
-        page: {
-          size: 500,
-        },
-        sort: 'label',
-      }
-    );
   }
 
   @action
