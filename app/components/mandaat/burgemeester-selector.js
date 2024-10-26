@@ -4,8 +4,6 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { restartableTask } from 'ember-concurrency';
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import {
   getDraftPublicationStatus,
   getEffectiefStatus,
@@ -13,61 +11,46 @@ import {
 import {
   BESTUURSFUNCTIE_AANGEWEZEN_BURGEMEESTER_ID,
   BESTUURSFUNCTIE_VOORZITTER_VAST_BUREAU_ID,
-  CREATE_PERSON_FORM_ID,
 } from 'frontend-lmb/utils/well-known-ids';
-import moment from 'moment';
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
   @service bcsd;
+  @service('mandataris') mandatarisService;
 
   @tracked persoon = null;
-  @tracked mandataris = null;
   @tracked aangewezenBurgemeesters;
-  @tracked isPersonSelectOpen;
-  @tracked isCreatingPerson;
-  @tracked createPersonFormDefinition;
+  @tracked aangewezenBurgemeester;
+  @tracked isModalOpen;
+  @tracked selectedFractie = null;
+  @tracked selectedBeleidsdomeinen = [];
+
   // no need to track these
   burgemeesterMandate = null;
   voorzitterVastBureauMandate = null;
   targetMandatarisses = null;
 
-  get bindingStart() {
-    return this.args.bestuursorgaanInTijd.bindingStart;
-  }
-
-  get bindingEinde() {
-    return this.args.bestuursorgaanInTijd.bindingEinde;
+  get disabled() {
+    return !this.persoon || !this.selectedFractie;
   }
 
   constructor() {
     super(...arguments);
-    this.setup.perform();
+    this.setup();
   }
 
-  setup = restartableTask(async () => {
+  @action async setup() {
     await this.loadBurgemeesterMandates();
-
-    if (this.burgemeesterMandate && this.voorzitterVastBureauMandate) {
-      this.persoon = await this.loadBurgemeesterPersoon();
-      this.aangewezenBurgemeesters = this.persoon ? [this.persoon] : null;
-    }
-
-    this.closeModal();
-  });
-
-  formatToDateString(dateTime) {
-    return dateTime ? moment(dateTime).format('YYYY-MM-DD') : undefined;
+    await this.loadBurgemeesterMandatarissen();
+    await this.loadBurgemeesterPerson();
   }
 
   async loadBurgemeesterMandates() {
-    const bestuursperiode =
-      await this.args.bestuursorgaanInTijd.heeftBestuursperiode;
     const mandates = await this.store.query('mandaat', {
       filter: {
         'bevat-in': {
           'heeft-bestuursperiode': {
-            id: bestuursperiode.id,
+            id: this.args.bestuursperiode.id,
           },
         },
         bestuursfunctie: {
@@ -96,8 +79,8 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   async createMandataris(burgemeesterMandaat) {
     const newMandataris = this.store.createRecord('mandataris', {
       rangorde: null,
-      start: this.bindingStart,
-      einde: this.bindingEinde,
+      start: this.args.bestuursorgaanInTijd.bindingStart,
+      einde: this.args.bestuursorgaanInTijd.bindingEinde,
       bekleedt: burgemeesterMandaat,
       isBestuurlijkeAliasVan: null,
       beleidsdomein: [],
@@ -108,18 +91,20 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     return newMandataris;
   }
 
-  async loadBurgemeesterPersoon() {
-    const burgemeesters = await this.burgemeesterMandate.bekleedDoor.reload();
+  async loadBurgemeesterMandatarissen() {
+    const burgemeesters = await this.burgemeesterMandate.bekleedDoor;
     const voorzitterVastBureau =
-      await this.voorzitterVastBureauMandate.bekleedDoor.reload();
+      await this.voorzitterVastBureauMandate.bekleedDoor;
 
     const targetMandatarisses = [];
 
     if (burgemeesters.length === 0) {
-      targetMandatarisses.push(
-        await this.createMandataris(this.burgemeesterMandate)
+      this.aangewezenBurgemeester = await this.createMandataris(
+        this.burgemeesterMandate
       );
+      targetMandatarisses.push(this.aangewezenBurgemeester);
     } else {
+      this.aangewezenBurgemeester = burgemeesters[0];
       targetMandatarisses.push(burgemeesters[0]);
     }
     if (voorzitterVastBureau.length === 0) {
@@ -131,55 +116,81 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     }
 
     this.targetMandatarisses = targetMandatarisses;
-
-    return burgemeesters[0]?.isBestuurlijkeAliasVan || null;
   }
 
-  onUpdate = restartableTask(async (persoon) => {
-    await this.setup.perform();
-    this.persoon = persoon;
+  async loadBurgemeesterPerson() {
+    if (await this.aangewezenBurgemeester.isBestuurlijkeAliasVan) {
+      this.aangewezenBurgemeesters = [this.aangewezenBurgemeester];
+      this.persoon = this.aangewezenBurgemeester.isBestuurlijkeAliasVan;
+    } else {
+      this.aangewezenBurgemeesters = [];
+    }
+  }
+
+  @action
+  async updateBurgemeester() {
+    await this.loadBurgemeesterMandatarissen();
     if (!this.targetMandatarisses) {
       return;
     }
     await Promise.all(
-      this.targetMandatarisses.map((target) => {
-        target.isBestuurlijkeAliasVan = persoon;
+      this.targetMandatarisses.map(async (target) => {
+        target.isBestuurlijkeAliasVan = this.persoon;
+        if (this.selectedFractie) {
+          await this.mandatarisService.createNewLidmaatschap(
+            target,
+            this.selectedFractie
+          );
+        } else {
+          await this.mandatarisService.destroyLidmaatschap(target);
+        }
+        if (await target.bekleedt.get('isBurgemeester')) {
+          target.beleidsdomein = this.selectedBeleidsdomeinen;
+        }
         return target.save();
       })
     );
-    this.setup.perform();
+
+    this.aangewezenBurgemeesters = this.persoon
+      ? [this.aangewezenBurgemeester]
+      : [];
+
     this.bcsd.forceRecomputeBCSD();
     if (this.args.onUpdateBurgemeester) {
       this.args.onUpdateBurgemeester();
     }
-  });
+
+    this.isModalOpen = false;
+  }
 
   @action
   closeModal() {
-    this.isCreatingPerson = false;
-    this.isPersonSelectOpen = false;
+    this.isModalOpen = false;
+    this.persoon = null;
+    this.selectedFractie = null;
+    this.selectedBeleidsdomeinen = [];
   }
 
   @action
-  async onCreateNewPerson() {
-    this.createPersonFormDefinition = await getFormFrom(
-      this.store,
-      CREATE_PERSON_FORM_ID
-    );
-    this.isCreatingPerson = true;
+  async selectPerson(newPerson) {
+    this.persoon = newPerson;
   }
 
-  @action
-  async onSelectNewPerson({ instanceId }) {
-    this.persoon = await this.store.findRecord('persoon', instanceId);
-    await this.onUpdate.perform(this.persoon);
+  @action updateFractie(newFractie) {
+    this.selectedFractie = newFractie;
+  }
+
+  @action selectBeleidsdomeinen(domeinen) {
+    this.selectedBeleidsdomeinen = domeinen;
   }
 
   @action
   async removeBurgemeester() {
     this.persoon = null;
+    this.selectedFractie = null;
+    this.selectedBeleidsdomeinen = [];
     this.aangewezenBurgemeesters = [];
-    await this.onUpdate.perform(this.persoon);
+    await this.updateBurgemeester();
   }
 
   get toolTipText() {
