@@ -10,9 +10,8 @@
       <Person::Selector
         @person={{this.person}}
         @onUpdate={{this.onUpdate}}
-        @searchElected={{this.searchElected}}
+        @onlyElected={{this.onlyElected}}
         @bestuursperiode={{this.currentBestuursperiode}}
-        @allowCreate={{await this.mandaatModel.allowsNonElectedPersons}}
       />
     </div>
     {{#each this.errors as |error|}}

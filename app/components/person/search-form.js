@@ -21,6 +21,10 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
   @tracked voornaam;
   @tracked rijksregisternummer;
 
+  get allowCreate() {
+    return !this.args.onlyElected;
+  }
+
   get searchTerms() {
     return [this.voornaam, this.achternaam, this.rijksregisternummer]
       .filter((t) => t)
@@ -81,7 +85,7 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
     }
 
     const extraFilter = {};
-    if (this.args.searchElected && this.args.bestuursperiode) {
+    if (this.args.onlyElected && this.args.bestuursperiode) {
       extraFilter.verkiezingsresultaten = {
         kandidatenlijst: {
           verkiezing: {

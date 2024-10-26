@@ -3,8 +3,7 @@
     @person={{@selected}}
     @onUpdate={{@onSelect}}
     @inline={{@inline}}
-    @allowCreate={{await @mandataris.bekleedt.allowsNonElectedPersons}}
-    @searchElected={{not (await @mandataris.bekleedt.allowsNonElectedPersons)}}
+    @onlyElected={{not (await @mandataris.bekleedt.allowsNonElectedPersons)}}
     @showDelete={{@showDelete}}
     @showEditAsIcon={{@showEditAsIcon}}
     @nothingSelectedText={{@nothingSelectedText}}

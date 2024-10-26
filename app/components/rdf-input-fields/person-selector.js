@@ -23,7 +23,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
 
   @tracked initialized = false;
   @tracked isMandaatInForm = false;
-  @tracked searchElected = true;
+  @tracked onlyElected = true;
   @tracked currentBestuursperiode = null;
   @tracked mandaatModel = null;
 
@@ -71,7 +71,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     this.hasBeenFocused = true;
     super.updateValidations();
     this.person = person;
-    if (this.person && this.searchElected) {
+    if (this.person && this.onlyElected) {
       const isElected = await this.verkiezingService.checkIfPersonIsElected(
         this.person.id,
         this.currentBestuursperiode
@@ -106,13 +106,13 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     this.mandaatModel = mandaatModel;
 
     if (mandaatModel.isBurgemeester) {
-      this.searchElected = false;
+      this.onlyElected = false;
       return;
     }
 
-    this.searchElected = !(await mandaatModel.allowsNonElectedPersons);
+    this.onlyElected = !(await mandaatModel.allowsNonElectedPersons);
 
-    if (this.searchElected) {
+    if (this.onlyElected) {
       this.currentBestuursperiode = await (
         await mandaatModel.bevatIn
       )[0].heeftBestuursperiode;
