@@ -44,6 +44,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @tracked previousPerson;
   @tracked limitPersonFractionsToCurrent = false;
   @tracked isRequiredForBestuursorgaan;
+  @tracked isCreating = false;
 
   emptySelectorOptions = [];
 
@@ -125,6 +126,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   findPersonInForm = restartableTask(async () => {
+    this.isCreating = false;
     let newPerson = await this.findMandatarisPersonInStore(
       this.storeOptions.sourceNode
     );
@@ -170,6 +172,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
         if (personMatches.length === 0) {
           return null;
         } else {
+          this.isCreating = true;
           return personMatches.at(0);
         }
       }
