@@ -26,13 +26,35 @@ export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent exte
   }
 
   async fetchOptions(searchData) {
-    let queryParams = {
+    // let queryParams = {
+    //   page: {
+    //     size: 500,
+    //   },
+    //   sort: 'label',
+    // };
+    // if (searchData) {
+    //   queryParams['filter[label]'] = searchData;
+    // }
+    // return await this.store.query('beleidsdomein-code', queryParams);
+
+    // This returns different results...
+    const queryParams = {
+      filter: {
+        label: searchData,
+        'concept-schemes': {
+          ':uri:':
+            'http://data.vlaanderen.be/id/conceptscheme/BeleidsdomeinCode',
+        },
+      },
       sort: 'label',
+      page: {
+        size: 9999,
+      },
     };
     if (searchData) {
-      queryParams['filter[label]'] = searchData;
+      queryParams['filter']['label'] = searchData;
     }
-    return await this.store.query('beleidsdomein-code', queryParams);
+    return await this.store.query('concept', queryParams);
   }
 
   search = task({ restartable: true }, async (searchData) => {
