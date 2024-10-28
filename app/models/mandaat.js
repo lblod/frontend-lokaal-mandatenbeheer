@@ -70,10 +70,9 @@ export default class MandaatModel extends Model {
   }
 
   get isGemeenteraadslid() {
-    return [
-      MANDAAT_GEMEENTERAADSLID_CODE,
-      MANDAAT_VOORZITTER_GEMEENTERAAD_CODE,
-    ].includes(this.bestuursfunctie.get('uri'));
+    return [MANDAAT_GEMEENTERAADSLID_CODE].includes(
+      this.bestuursfunctie.get('uri')
+    );
   }
 
   get hasRangorde() {
