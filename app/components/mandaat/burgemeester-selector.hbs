@@ -11,10 +11,9 @@
       >
         <AuButton
           @icon="add"
-          @loading={{(or this.setup.isRunning this.onUpdate.isRunning)}}
           @loadingMessage="laden"
           @disabled={{this.persoon}}
-          {{on "click" (fn (mut this.isPersonSelectOpen) true)}}
+          {{on "click" (fn (mut this.isModalOpen) true)}}
         >
           Toevoegen
         </AuButton>
@@ -24,43 +23,42 @@
 </div>
 
 <div class="no-pagination au-u-margin-left au-u-margin-right">
-  {{#if (or this.setup.isRunning this.onUpdate.isRunning)}}
-    <Skeleton::Table @columns={{3}} @rows={{1}} />
-  {{else}}
-    <AuDataTable
-      @content={{this.aangewezenBurgemeesters}}
-      @fields="gebruikteVoornaam achternaam actions"
-      @noDataMessage="Geen burgemeester aangewezen"
-      as |t|
-    >
-      <t.content as |c|>
-        <c.header>
-          <th class="au-u-padding-small">Voornaam</th>
-          <th>Familienaam</th>
-          {{#unless @readOnly}}
-            <th>
-              {{! actions }}
-            </th>
-          {{/unless}}
-        </c.header>
-        <c.body as |persoon|>
-          <td>{{persoon.gebruikteVoornaam}}</td>
-          <td>{{persoon.achternaam}}</td>
-          {{#unless @readOnly}}
-            <td class="au-u-text-right">
-              {{#if this.persoon}}
-                <AuButton
-                  @skin="link"
-                  @alert={{true}}
-                  {{on "click" this.removeBurgemeester}}
-                >Verwijder</AuButton>
-              {{/if}}
-            </td>
-          {{/unless}}
-        </c.body>
-      </t.content>
-    </AuDataTable>
-  {{/if}}
+  <AuDataTable
+    @content={{this.aangewezenBurgemeesters}}
+    @noDataMessage="Geen burgemeester aangewezen"
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        <th class="au-u-padding-small">Voornaam</th>
+        <th>Familienaam</th>
+        <th>Fractie</th>
+        <th>Beleidsomeinen</th>
+        {{#unless @readOnly}}
+          <th>
+            {{! actions }}
+          </th>
+        {{/unless}}
+      </c.header>
+      <c.body as |row|>
+        <td>{{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}</td>
+        <td>{{row.isBestuurlijkeAliasVan.achternaam}}</td>
+        <td>{{row.heeftLidmaatschap.binnenFractie.naam}}</td>
+        <td><Beleidsdomeinen @mandataris={{row}} /></td>
+        {{#unless @readOnly}}
+          <td class="au-u-text-right">
+            {{#if this.persoon}}
+              <AuButton
+                @skin="link"
+                @alert={{true}}
+                {{on "click" this.removeBurgemeester}}
+              >Verwijder</AuButton>
+            {{/if}}
+          </td>
+        {{/unless}}
+      </c.body>
+    </t.content>
+  </AuDataTable>
 </div>
 
 <div class="au-o-box">
@@ -74,27 +72,69 @@
 </div>
 
 <AuModal
-  @title={{"Selecteer een persoon"}}
-  @modalOpen={{this.isPersonSelectOpen}}
+  @title={{"Voeg een burgemeester toe"}}
+  @modalOpen={{this.isModalOpen}}
   @closeModal={{this.closeModal}}
   @closable={{true}}
 >
-  <div class="au-o-box">
+  <div class="au-o-box au-o-flow">
+    <div>
+      <AuLabel @required={{true}}>
+        Persoon
+      </AuLabel>
+      <div>
+        <Person::Selector
+          @person={{this.persoon}}
+          @onUpdate={{this.selectPerson}}
+          @searchElected={{true}}
+          @bestuursperiode={{@bestuursperiode}}
+          @allowCreate={{false}}
+          @inline={{true}}
+        />
+      </div>
+    </div>
 
-    {{#if this.isCreatingPerson}}
-      <Form::NewInstance
-        @onCreate={{this.onSelectNewPerson}}
-        @form={{this.createPersonFormDefinition}}
-        @onCancel={{this.closeModal}}
-        @buildSourceTtl={{this.buildSourceTtl}}
+    {{#if this.persoon}}
+      <Mandatarissen::FractieSelector
+        @fractie={{this.selectedFractie}}
+        @isRequired={{true}}
+        @onSelect={{this.updateFractie}}
+        @bestuurseenheid={{@bestuurseenheid}}
+        @bestuursperiode={{@bestuursperiode}}
+        @person={{this.persoon}}
+        @limitPersonFractionsToCurrent={{true}}
       />
-    {{else}}
-      <Person::SearchForm
-        @showDefaultHead={{false}}
-        @onSelect={{perform this.onUpdate}}
-        @onCreateNewPerson={{this.onCreateNewPerson}}
-        @onCancel={{this.closeModal}}
-      />
+      <div>
+        <AuLabel>
+          Beleidsdomeinen
+        </AuLabel>
+        <Mandatarissen::BeleidsdomeinSelectorWithCreate
+          @onSelect={{this.selectBeleidsomeinen}}
+          @beleidsdomeinen={{this.selectedBeleidsdomeinen}}
+        />
+      </div>
     {{/if}}
+
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <Shared::Tooltip
+            @showTooltip={{this.disabled}}
+            @tooltipText="Het is nodig zowel een persoon als een fractie te selecteren vooraleer het mogelijk is op te slaan."
+            @alignment="left"
+          >
+            <AuButton
+              {{on "click" this.updateBurgemeester}}
+              @disabled={{this.disabled}}
+            >
+              Sla op
+            </AuButton>
+          </Shared::Tooltip>
+          <AuButton {{on "click" this.closeModal}} @skin="secondary">
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
   </div>
 </AuModal>
