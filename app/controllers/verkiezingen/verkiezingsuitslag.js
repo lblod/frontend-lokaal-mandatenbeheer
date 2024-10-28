@@ -17,6 +17,10 @@ export default class VerkiezingenVerkiezingsuitslagController extends Controller
 
   @tracked searchData;
 
+  get downloadLink() {
+    return `/election-results-api/${this.model.verkiezing.id}/download`;
+  }
+
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
     this.page = 0;

@@ -24,8 +24,13 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
       params.id
     );
 
+    const verkiezing = await (
+      await verkiezingsresultaten[0]?.kandidatenlijst
+    )?.verkiezing;
+
     return {
       selectedPeriod,
+      verkiezing,
       verkiezingsresultaten,
     };
   }
@@ -40,7 +45,11 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
       'filter[kandidatenlijst][verkiezing][bestuursorgaan-in-tijd][heeft-bestuursperiode][:id:]':
         params.id,
       'filter[:has:persoon]': 'true',
-      include: ['kandidatenlijst', 'persoon'].join(','),
+      include: [
+        'kandidatenlijst',
+        'kandidatenlijst.verkiezing',
+        'persoon',
+      ].join(','),
     };
     if (params.filter && params.filter.length > 0) {
       options['filter[persoon]'] = params.filter;
