@@ -106,9 +106,13 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     }
 
     for (const mandataris of this.currentNonOnafhankelijkeMandatarissen) {
+      const mandaat = await mandataris.bekleedt;
+      const bestuursorgaan = (await mandaat.bevatIn)[0];
       const person = await mandataris.isBestuurlijkeAliasVan;
       let onafhankelijkeFractie =
-        await this.fractieService.findOnafhankelijkeFractieForPerson(person);
+        await this.fractieService.findOnafhankelijkeFractieForPerson(person, [
+          bestuursorgaan,
+        ]);
 
       if (!onafhankelijkeFractie) {
         onafhankelijkeFractie =

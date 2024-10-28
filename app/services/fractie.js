@@ -35,8 +35,10 @@ export default class FractieService extends Service {
     bestuursorganen,
     bestuurseenheid
   ) {
-    let onafhankelijkeFractie =
-      await this.findOnafhankelijkeFractieForPerson(person);
+    let onafhankelijkeFractie = await this.findOnafhankelijkeFractieForPerson(
+      person,
+      bestuursorganen
+    );
     if (!onafhankelijkeFractie) {
       onafhankelijkeFractie = await this.createOnafhankelijkeFractie(
         bestuursorganen,
@@ -46,24 +48,20 @@ export default class FractieService extends Service {
     return onafhankelijkeFractie;
   }
 
-  async findOnafhankelijkeFractieForPerson(person) {
-    const mandatarissen = await person.isAangesteldAls;
-    for (const mandataris of mandatarissen) {
-      const lid = await mandataris.heeftLidmaatschap;
-      if (!lid) {
-        continue;
-      }
-      const fractie = await lid.binnenFractie;
-      if (!fractie) {
-        continue;
-      }
-      const type = await fractie.fractietype;
-      if (type.isOnafhankelijk) {
-        return fractie;
-      }
+  async findOnafhankelijkeFractieForPerson(person, bestuursorganenInTijd) {
+    const onafhankelijkeMembership = await this.store.query('lidmaatschap', {
+      'filter[binnen-fractie][fractietype][:uri:]': FRACTIETYPE_ONAFHANKELIJK,
+      'filter[lid][is-bestuurlijke-alias-van][:id:]': person.id,
+      'filter[lid][bekleedt][bevat-in][:id:]': bestuursorganenInTijd
+        .map((b) => b.id)
+        .join(','),
+    });
+    if (!onafhankelijkeMembership.length > 0) {
+      return null;
     }
-
-    return null;
+    const onafhankelijkeFractie =
+      await onafhankelijkeMembership[0].binnenFractie;
+    return onafhankelijkeFractie;
   }
 
   async isMandatarisFractieOnafhankelijk(mandataris) {
