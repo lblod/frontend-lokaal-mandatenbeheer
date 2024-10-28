@@ -106,8 +106,9 @@ export default class MandatarisModel extends Model {
 
   async getUnique(people) {
     const vervangers = new Map();
+    const allPeople = (await people).slice();
 
-    for (let vervanger of people.slice()) {
+    for (let vervanger of allPeople) {
       const persoon = await vervanger.isBestuurlijkeAliasVan;
       if (!vervangers.has(persoon.id)) {
         vervangers.set(persoon.id, vervanger);
