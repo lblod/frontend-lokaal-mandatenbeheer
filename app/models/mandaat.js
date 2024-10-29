@@ -95,6 +95,16 @@ export default class MandaatModel extends Model {
     });
   }
 
+  get rangordeLabel() {
+    if (this.isGemeenteraadslid) {
+      return 'lid';
+    }
+    if (this.isSchepen) {
+      return 'schepen';
+    }
+    return this.bestuursfunctie.get('label')?.toLowerCase();
+  }
+
   async isInBCSD() {
     const bestuursorganen = await this.bevatIn;
     const booleans = await Promise.all(

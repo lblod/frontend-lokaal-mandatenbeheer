@@ -72,23 +72,9 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     this.updateMandatarisRangorde.perform(value);
   }
 
-  bestuursfunctieLabelMapping(bestuursfunctieLabel) {
-    const mapping = {
-      gemeenteraadslid: 'lid',
-    };
-
-    if (!Object.keys(mapping).includes(bestuursfunctieLabel)) {
-      return bestuursfunctieLabel;
-    }
-
-    return mapping[bestuursfunctieLabel];
-  }
-
   async getMandaatLabel() {
-    const label = await this.args.mandataris.get(
-      'bekleedt.bestuursfunctie.label'
-    );
-    return this.bestuursfunctieLabelMapping(label.toLowerCase());
+    const mandaat = await this.args.mandataris.get('bekleedt');
+    return mandaat?.rangordeLabel;
   }
 
   findOrderInString(possibleString) {

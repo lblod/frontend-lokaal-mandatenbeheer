@@ -23,6 +23,7 @@ export default class RdfMandatarisRangorde extends InputFieldComponent {
   @service store;
   @tracked rangorde;
   @tracked shouldRender;
+  @tracked placeholderText = 'Vul de rangorde in, bvb “Eerste schepen”';
 
   constructor() {
     super(...arguments);
@@ -74,6 +75,7 @@ export default class RdfMandatarisRangorde extends InputFieldComponent {
       { include: 'bestuursfunctie' }
     );
     this.shouldRender = mandaat?.hasRangorde;
+    this.placeholderText = `Vul de rangorde in, bvb “Eerste ${mandaat?.rangordeLabel}”`;
 
     if (!this.shouldRender && this.rangorde != null) {
       // without timeout, the form ttl doesn't update immediately
