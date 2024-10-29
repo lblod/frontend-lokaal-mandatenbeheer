@@ -47,6 +47,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
 
   getMandatarissen = restartableTask(async (state) => {
     const { added, removed, updated } = state;
+    this.installatievergadering.removeMandatarissen(this.mandatarissen);
 
     if (removed && removed.length >= 1) {
       this.mandatarissen.removeObjects(removed);
@@ -61,6 +62,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     if (updated) {
       await this.initialLoad.perform();
     }
+    this.installatievergadering.addMandatarissen(this.mandatarissen);
   });
 
   @action

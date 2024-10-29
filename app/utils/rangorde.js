@@ -115,8 +115,34 @@ export const rangordeStringToNumber = (rangordeString) => {
   return rangordeStringMapping[firstWord];
 };
 
-export const orderMandatarissenByRangorde = (mandatarissen) => {
+export const orderMandatarissenByRangorde = (
+  mandatarissen,
+  allMandatarissenInIv
+) => {
   return mandatarissen.sort((a, b) => {
+    const classRankA = a.bekleedt.get('bestuursfunctie.rankForSorting');
+    const classRankB = b.bekleedt.get('bestuursfunctie.rankForSorting');
+    if (classRankA < classRankB) {
+      return 1;
+    } else if (classRankA > classRankB) {
+      return -1;
+    }
+
+    const noRangorde = !a.rangorde && !b.rangorde;
+    if (noRangorde && allMandatarissenInIv) {
+      const fallbackRankA = allMandatarissenInIv.findIndex(
+        (i) => i.isBestuurlijkeAliasVan.id == a.isBestuurlijkeAliasVan.id
+      );
+      const fallbackRankB = allMandatarissenInIv.findIndex(
+        (i) => i.isBestuurlijkeAliasVan.id === b.isBestuurlijkeAliasVan.id
+      );
+      if (fallbackRankA < fallbackRankB) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+
     const aNumber = rangordeStringToNumber(a.rangorde);
     const bNumber = rangordeStringToNumber(b.rangorde);
     if (aNumber == null) {

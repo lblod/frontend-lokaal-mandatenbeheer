@@ -25,7 +25,10 @@ export default class DraftMandatarisListComponent extends Component {
   }
 
   get resortedMandatarissen() {
-    return orderMandatarissenByRangorde([...this.mandatarissen]);
+    return orderMandatarissenByRangorde(
+      [...this.mandatarissen],
+      this.installatievergadering.sortedMandatarissen
+    );
   }
 
   @action
