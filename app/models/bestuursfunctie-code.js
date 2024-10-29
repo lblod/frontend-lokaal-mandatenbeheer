@@ -41,6 +41,15 @@ export default class BestuursfunctieCodeModel extends Model {
     return mandateRankForSorting[this.uri] || 0;
   }
 
+  get correspondingMandateCodesIV() {
+    if (this.uri === MANDAAT_LID_RMW_CODE) {
+      return [MANDAAT_GEMEENTERAADSLID_CODE];
+    }
+    if (this.uri === MANDAAT_LID_VAST_BUREAU_CODE) {
+      return [MANDAAT_SCHEPEN_CODE, MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE];
+    }
+  }
+
   get isBurgemeester() {
     return (
       this.uri === MANDAAT_BURGEMEESTER_CODE ||

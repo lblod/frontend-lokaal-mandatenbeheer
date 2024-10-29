@@ -130,17 +130,7 @@ export const orderMandatarissenByRangorde = (
 
     const noRangorde = !a.rangorde && !b.rangorde;
     if (noRangorde && allMandatarissenInIv) {
-      const fallbackRankA = allMandatarissenInIv.findIndex(
-        (i) => i.isBestuurlijkeAliasVan.id == a.isBestuurlijkeAliasVan.id
-      );
-      const fallbackRankB = allMandatarissenInIv.findIndex(
-        (i) => i.isBestuurlijkeAliasVan.id === b.isBestuurlijkeAliasVan.id
-      );
-      if (fallbackRankA < fallbackRankB) {
-        return -1;
-      } else {
-        return 1;
-      }
+      return fallbackSortByOtherIVOrgans(a, b, allMandatarissenInIv);
     }
 
     const aNumber = rangordeStringToNumber(a.rangorde);
@@ -153,4 +143,45 @@ export const orderMandatarissenByRangorde = (
     }
     return aNumber - bNumber;
   });
+};
+
+const findCorrespondingMandatarisIndex = (mandataris, allMandatarissenInIv) => {
+  const correspondingMandateUris = mandataris.bekleedt.get(
+    'bestuursfunctie.correspondingMandateCodesIV'
+  );
+  if (!correspondingMandateUris) {
+    // no corresponding mandate found, just return the first index based on absolute authority of all mandatarissen, e.g. useful for bcsd
+    return allMandatarissenInIv.findIndex((i) => {
+      return (
+        i.isBestuurlijkeAliasVan.id == mandataris.isBestuurlijkeAliasVan.id
+      );
+    });
+  }
+  // if there are corresponding mandates, find the highest ranking mandataris with such a mandate that has the same person
+  return allMandatarissenInIv.findIndex((i) => {
+    return (
+      correspondingMandateUris.indexOf(i.get('bekleedt.bestuursfunctie.uri')) >=
+        0 && i.isBestuurlijkeAliasVan.id == mandataris.isBestuurlijkeAliasVan.id
+    );
+  });
+};
+
+const fallbackSortByOtherIVOrgans = (a, b, allMandatarissenInIv) => {
+  // if no person, don't bother, put them at the bottom
+  if (!a.isBestuurlijkeAliasVan?.id) {
+    return 1;
+  }
+  if (!b.isBestuurlijkeAliasVan?.id) {
+    return -1;
+  }
+
+  const rankA = findCorrespondingMandatarisIndex(a, allMandatarissenInIv);
+  const rankB = findCorrespondingMandatarisIndex(b, allMandatarissenInIv);
+  if (rankA < 0) {
+    return 1;
+  }
+  if (rankB < 0) {
+    return -1;
+  }
+  return rankA - rankB;
 };
