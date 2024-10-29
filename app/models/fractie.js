@@ -26,6 +26,7 @@ export default class FractieModel extends Model {
 
   @belongsTo('kandidatenlijst', {
     async: true,
+    inverse: 'resulterendeFracties',
   })
   origineleKandidatenlijst;
 
