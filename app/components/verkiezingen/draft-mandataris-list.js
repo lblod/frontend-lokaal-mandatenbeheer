@@ -10,7 +10,7 @@ export default class DraftMandatarisListComponent extends Component {
   @service toaster;
   @service store;
   @service fractieApi;
-  @service bcsd;
+  @service installatievergadering;
 
   @tracked isEditing;
   @tracked isEditFormInitialized;
@@ -36,7 +36,7 @@ export default class DraftMandatarisListComponent extends Component {
       .then(() => {
         const succesMessage = 'Mandataris succesvol verwijderd.';
         this.toaster.success(succesMessage, 'Succes', { timeOut: 5000 });
-        this.bcsd.forceRecomputeBCSD();
+        this.installatievergadering.forceRecomputeBCSD();
       })
       .catch(() => {
         const errorMessage =
@@ -67,6 +67,6 @@ export default class DraftMandatarisListComponent extends Component {
     );
     this.args.updateMandatarissen({ updated: updatedMandataris });
     this.closeEditMandataris();
-    this.bcsd.forceRecomputeBCSD();
+    this.installatievergadering.forceRecomputeBCSD();
   }
 }

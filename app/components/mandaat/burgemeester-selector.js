@@ -15,7 +15,7 @@ import {
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
-  @service bcsd;
+  @service installatievergadering;
   @service('mandataris') mandatarisService;
 
   @tracked persoon = null;
@@ -155,7 +155,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       ? [this.aangewezenBurgemeester]
       : [];
 
-    this.bcsd.forceRecomputeBCSD();
+    this.installatievergadering.forceRecomputeBCSD();
     if (this.args.onUpdateBurgemeester) {
       this.args.onUpdateBurgemeester();
     }
