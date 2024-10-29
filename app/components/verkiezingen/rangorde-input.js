@@ -77,7 +77,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
       gemeenteraadslid: 'lid',
     };
 
-    if (Object.keys(mapping).includes(bestuursfunctieLabel)) {
+    if (!Object.keys(mapping).includes(bestuursfunctieLabel)) {
       return bestuursfunctieLabel;
     }
 
