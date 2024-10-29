@@ -48,6 +48,7 @@ export default class BestuursfunctieCodeModel extends Model {
     if (this.uri === MANDAAT_LID_VAST_BUREAU_CODE) {
       return [MANDAAT_SCHEPEN_CODE, MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE];
     }
+    return null;
   }
 
   get isBurgemeester() {
