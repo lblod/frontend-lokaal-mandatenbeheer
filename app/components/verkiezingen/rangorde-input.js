@@ -1,6 +1,8 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+
 import { keepLatestTask, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import {
@@ -11,6 +13,13 @@ import {
 } from 'frontend-lmb/utils/rangorde';
 
 export default class VerkiezingenRangordeInputComponent extends Component {
+  @tracked rangordePlaceholder;
+
+  constructor() {
+    super(...arguments);
+    this.setPlaceholder();
+  }
+
   get inputWarningMessage() {
     const order = this.rangordeInteger;
     if (order == null) {
@@ -26,6 +35,11 @@ export default class VerkiezingenRangordeInputComponent extends Component {
 
   get rangorde() {
     return this.args.mandataris.rangorde;
+  }
+
+  async setPlaceholder() {
+    const mandaat = await this.args.mandataris.bekleedt;
+    this.rangordePlaceholder = `Vul de rangorde in, bv. “Eerste ${mandaat.rangordeLabel}”`;
   }
 
   updateMandatarisRangorde = keepLatestTask(async (value) => {
@@ -49,10 +63,8 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   async getMandaatLabel() {
-    const label = await this.args.mandataris.get(
-      'bekleedt.bestuursfunctie.label'
-    );
-    return label.toLowerCase();
+    const mandaat = await this.args.mandataris.get('bekleedt');
+    return mandaat?.rangordeLabel;
   }
 
   findOrderInString(possibleString) {
