@@ -43,7 +43,7 @@
   @closeModal={{this.closeModal}}
 >
   <div class="au-o-box">
-    <Form::NewInstance
+    <SemanticForms::NewInstance
       @onCreate={{this.saveModal}}
       @form={{@model.form}}
       @buildSourceTtl={{this.buildSourceTtlCreateFractie}}
@@ -59,7 +59,7 @@
   @closeModal={{this.closeModal}}
 >
   <div class="au-o-box">
-    <Form::Instance
+    <SemanticForms::Instance
       @instanceId={{this.instanceId}}
       @form={{this.model.form}}
       @onSave={{this.saveModal}}

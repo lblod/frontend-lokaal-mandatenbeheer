@@ -70,14 +70,6 @@
       Historiek
     </AuHeading>
 
-    <SemanticForms::History
-      @instanceId={{@model.mandataris.id}}
-      @form={{this.model.mandatarisEditForm}}
-      @onRestore={{this.onRestore}}
-    />
-
-    <AuHr />
-
     <ul class="au-c-list-vertical">
       <Mandatarissen::History
         @mandataris={{@model.mandataris}}
