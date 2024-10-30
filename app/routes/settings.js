@@ -1,12 +1,12 @@
 import Route from '@ember/routing/route';
 
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSEENHEID_CONTACT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { service } from '@ember/service';
 
 export default class SettingsRoute extends Route {
   @service session;
   @service currentSession;
+  @service semanticFormRepository;
   @service store;
 
   beforeModel(transition) {
@@ -15,8 +15,7 @@ export default class SettingsRoute extends Route {
 
   async model() {
     const bestuurseenheid = this.currentSession.group;
-    const contactForm = await getFormFrom(
-      this.store,
+    const contactForm = await this.semanticFormRepository.getFormDefinition(
       BESTUURSEENHEID_CONTACT_FORM_ID
     );
 

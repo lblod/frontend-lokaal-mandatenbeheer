@@ -3,7 +3,6 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
@@ -14,6 +13,7 @@ export default class OrganenIndexRoute extends Route {
   @service bestuursperioden;
   @service bestuursorganen;
   @service installatievergadering;
+  @service semanticFormRepository;
 
   // can't use pagination as we are filtering frontend side on optional properties, which seems to have limited support
   pageSize = 20000;
@@ -40,7 +40,9 @@ export default class OrganenIndexRoute extends Route {
         params,
         selectedPeriod
       );
-    const form = await getFormFrom(this.store, BESTUURSORGAAN_FORM_ID);
+    const form = await this.semanticFormRepository.getFormDefinition(
+      BESTUURSORGAAN_FORM_ID
+    );
     const legislatuurInBehandeling =
       await this.installatievergadering.activeOrNoLegislature(selectedPeriod);
     const isDistrict = this.currentSession.isDistrict;

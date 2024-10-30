@@ -2,12 +2,12 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
 export default class OrganenOrgaanIndexRoute extends Route {
   @service store;
+  @service semanticFormRepository;
 
   async model() {
     const parentModel = this.modelFor('organen.orgaan');
@@ -19,10 +19,10 @@ export default class OrganenOrgaanIndexRoute extends Route {
       this.computeBestuursfuncties(mandaten),
     ]);
 
-    const bestuursorgaanFormDefinition = getFormFrom(
-      this.store,
-      BESTUURSORGAAN_FORM_ID
-    );
+    const bestuursorgaanFormDefinition =
+      await this.semanticFormRepository.getFormDefinition(
+        BESTUURSORGAAN_FORM_ID
+      );
 
     return RSVP.hash({
       bestuursorgaanFormDefinition,

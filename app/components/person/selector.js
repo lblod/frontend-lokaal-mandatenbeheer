@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { CREATE_PERSON_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 import { v4 as uuid } from 'uuid';
@@ -15,6 +14,7 @@ export default class PersonSelectorComponent extends Component {
 
   @service store;
   @service persoonApi;
+  @service semanticFormRepository;
 
   @tracked person = null;
   @tracked selectNewPerson = false;
@@ -58,10 +58,10 @@ export default class PersonSelectorComponent extends Component {
   @action
   async onCreateNewPerson(input) {
     this.searchFormInput = input;
-    this.createPersonFormDefinition = await getFormFrom(
-      this.store,
-      CREATE_PERSON_FORM_ID
-    );
+    this.createPersonFormDefinition =
+      await this.semanticFormRepository.getFormDefinition(
+        CREATE_PERSON_FORM_ID
+      );
     this.creatingPerson = true;
   }
 

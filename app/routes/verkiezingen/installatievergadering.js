@@ -2,8 +2,6 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
-import RSVP from 'rsvp';
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { MANDATARIS_EXTENDED_FORM } from 'frontend-lmb/utils/well-known-ids';
 import {
   BCSD_BESTUURSORGAAN_URI,
@@ -15,11 +13,13 @@ import {
   RMW_BESTUURSORGAAN_URI,
   VAST_BUREAU_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
+import RSVP from 'rsvp';
 
 export default class PrepareInstallatievergaderingRoute extends Route {
   @service store;
   @service bestuursperioden;
   @service bestuursorganen;
+  @service semanticFormRepository;
 
   queryParams = {
     bestuursperiode: { refreshModel: true },
@@ -63,7 +63,9 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     const verkiezingen = await this.getVerkiezingen(selectedPeriod);
     const kandidatenlijsten = await this.getKandidatenLijsten(selectedPeriod);
 
-    const mandatarisForm = getFormFrom(this.store, MANDATARIS_EXTENDED_FORM);
+    const mandatarisForm = await this.semanticFormRepository.getFormDefinition(
+      MANDATARIS_EXTENDED_FORM
+    );
 
     return RSVP.hash({
       ivStatuses,
