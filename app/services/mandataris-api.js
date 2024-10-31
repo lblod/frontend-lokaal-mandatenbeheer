@@ -113,6 +113,8 @@ export default class MandatarisApiService extends Service {
     activeOnly = false,
     persoonIds = [],
     fractieIds = [],
+    hasFilterOnOnafhankelijkeFractie = false,
+    hasFilterOnNietBeschikbareFractie = false,
     bestuursFunctieCodeIds = [],
     sort = null,
   }) {
@@ -129,6 +131,8 @@ export default class MandatarisApiService extends Service {
           onlyShowActive: activeOnly,
           persoonIds,
           fractieIds,
+          hasFilterOnOnafhankelijkeFractie,
+          hasFilterOnNietBeschikbareFractie,
           bestuursFunctieCodeIds,
           sort,
         }),

@@ -3,6 +3,10 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 
 import { task } from 'ember-concurrency';
+import {
+  placeholderNietBeschikbaar,
+  placeholderOnafhankelijk,
+} from 'frontend-lmb/utils/constants';
 
 export default class DownloadMandatarissenFromTableComponent extends Component {
   @service('mandataris-api') mandatarisApi;
@@ -19,6 +23,8 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
       bestuursorgaanId: boiId,
       persoonIds: this.persoonIds,
       fractieIds: this.fractieIds,
+      hasFilterOnOnafhankelijkeFractie: this.filterOnOnafhankelijkeFractie,
+      hasFilterOnNietBeschikbareFractie: this.filterOnNietBeschikbaarFractie,
       bestuursFunctieCodeIds: this.bestuursFunctieCodeIds ?? [],
       sort: this.args.sort,
     });
@@ -45,7 +51,23 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
   }
 
   get fractieIds() {
-    return this.args.fracties?.map((fractie) => fractie.id);
+    const unknownIds = [
+      placeholderNietBeschikbaar.id,
+      placeholderOnafhankelijk.id,
+    ];
+    return this.args.fracties
+      ?.map((fractie) => fractie.id)
+      .filter((fractieId) => !unknownIds.includes(fractieId));
+  }
+
+  get filterOnOnafhankelijkeFractie() {
+    const allIds = this.args.fracties?.map((fractie) => fractie.id);
+    return allIds?.includes(placeholderOnafhankelijk.id);
+  }
+
+  get filterOnNietBeschikbaarFractie() {
+    const allIds = this.args.fracties?.map((fractie) => fractie.id);
+    return allIds?.includes(placeholderNietBeschikbaar.id);
   }
 
   get bestuursFunctieCodeIds() {
