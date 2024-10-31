@@ -105,7 +105,7 @@ export default class OrganenIndexController extends Controller {
           .toDate(),
       bindingEinde:
         similarBestuursorgaanInTijd?.bindingEinde &&
-        moment(similarBestuursorgaanInTijd.bindingStart)
+        moment(similarBestuursorgaanInTijd.bindingEinde)
           .startOf('day')
           .toDate(),
     });
