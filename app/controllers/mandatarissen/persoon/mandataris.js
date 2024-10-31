@@ -9,7 +9,6 @@ import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { task } from 'ember-concurrency';
 import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
-import { cell } from 'ember-resources';
 
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
@@ -27,23 +26,6 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @tracked newMandataris;
 
   @tracked formInitialized;
-  @tracked restoring = false;
-
-  initialFormTtl = cell('');
-
-  get title() {
-    // TODO this whole restore funcitonality is only for demo purposes
-    if (this.restoring) {
-      return (
-        'Terugzetten ' +
-        this.model.mandataris.get('bekleedt.bestuursfunctie.label')
-      );
-    }
-    return (
-      'Corrigeer fouten ' +
-      this.model.mandataris.get('bekleedt.bestuursfunctie.label')
-    );
-  }
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt
@@ -65,7 +47,6 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   async closeModals() {
     this.isChanging = false;
     this.isCorrecting = false;
-    this.restoring = false;
     this.formInitialized = false;
     await this.mandatarisService.removeDanglingFractiesInPeriod(
       this.model.mandataris.id
@@ -165,12 +146,5 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       Het doorstromen van gegevens van de gemeente naar OCMW zal
       hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
       maken, gelieve dit te doen in de gemeente.`;
-  }
-
-  @action
-  onRestore(historicalInstance) {
-    this.initialFormTtl.current = historicalInstance.formInstanceTtl;
-    this.isCorrecting = true;
-    this.restoring = true;
   }
 }

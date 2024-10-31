@@ -150,8 +150,7 @@
       @buildMetaTtl={{this.buildMetaTtl}}
       @formInitialized={{fn (mut this.formInitialized) true}}
       @customHistoryMessage={{true}}
-      @initialFormTtl={{this.initialFormTtl}}
-      @saveTitle={{if this.restoring "Zet terug" "Pas aan"}}
+      @saveTitle={{"Pas aan"}}
     />
     {{#unless this.formInitialized}}
       <Skeleton::Forms::MandatarisCorrect />
