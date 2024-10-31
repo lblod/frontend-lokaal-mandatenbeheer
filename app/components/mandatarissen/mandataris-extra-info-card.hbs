@@ -48,6 +48,7 @@
       @onCancel={{this.toggleModal}}
       @onSave={{this.onSave}}
       @formInitialized={{fn (mut this.formInitialized) true}}
+      @customHistoryMessage={{true}}
     />
     {{#unless this.formInitialized}}
       <Skeleton::Forms::MandatarisExtraInfo />

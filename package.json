@@ -129,7 +129,7 @@
     "webpack": "^5.78.0"
   },
   "dependencies": {
-    "semantic-forms": "file:.yalc/semantic-forms"
+    "@lblod/ember-semantic-forms": "0.0.2"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"

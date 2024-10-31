@@ -64,6 +64,7 @@
       @form={{this.model.form}}
       @onSave={{this.saveModal}}
       @onCancel={{this.closeModal}}
+      @customHistoryMessage={{true}}
       @formInitialized={{fn (mut this.formInitialized) true}}
     />
     {{#unless this.formInitialized}}
