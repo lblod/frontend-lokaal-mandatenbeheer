@@ -1,34 +1,20 @@
 import Component from '@glimmer/component';
 
 import { service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 
 import {
   placeholderNietBeschikbaar,
   placeholderOnafhankelijk,
 } from 'frontend-lmb/utils/constants';
 
-import { task } from 'ember-concurrency';
-
 export default class DownloadMandatarissenFromTableComponent extends Component {
   @service('mandataris-api') mandatarisApi;
-  @tracked downloadLink;
 
-  constructor() {
-    super(...arguments);
-    this.prepareDownloadLink.perform();
-  }
-
-  prepareDownloadLink = task(async () => {
-    let boiId = null;
-    if (this.args.bestuursorgaan) {
-      boiId = await this.getBestuursorgaanInTijdForPeriod();
-    }
-    this.downloadLink = this.mandatarisApi.getDownLoadUrl({
+  get downloadLink() {
+    return this.mandatarisApi.getDownLoadUrl({
       bestuursperiodeId: this.args.bestuursperiode?.id,
       activeOnly: this.args.activeOnly,
-      bestuursorgaanId: boiId,
+      bestuursorgaanId: this.args.bestuursorgaanInTijdId ?? null,
       persoonIds: this.persoonIds,
       fractieIds: this.fractieIds,
       hasFilterOnOnafhankelijkeFractie: this.filterOnOnafhankelijkeFractie,
@@ -36,22 +22,6 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
       bestuursFunctieCodeIds: this.bestuursFunctieCodeIds ?? [],
       sort: this.args.sort,
     });
-  });
-
-  async getBestuursorgaanInTijdForPeriod() {
-    const bestuursorganenInTijdFromPeriod =
-      (await this.args.bestuursperiode.heeftBestuursorganenInTijd) ?? [];
-    const bestuursorganenInTijd =
-      (await this.args.bestuursorgaan?.heeftTijdsspecialisaties) ?? [];
-
-    const fromPeriodIds = bestuursorganenInTijdFromPeriod.map((boi) => boi.id);
-    const boiIds = bestuursorganenInTijd.map((boi) => boi.id);
-    const boiInPeriod = boiIds.filter((id) => fromPeriodIds.includes(id));
-    if (boiInPeriod.length >= 1) {
-      return boiInPeriod.at(0);
-    }
-
-    return null;
   }
 
   get persoonIds() {
@@ -80,10 +50,5 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
 
   get bestuursFunctieCodeIds() {
     return this.args.bestuursFunctieCodes?.map((code) => code.id);
-  }
-
-  @action
-  async onArgChange() {
-    await this.prepareDownloadLink.perform();
   }
 }

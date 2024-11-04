@@ -47,11 +47,30 @@ export default class OrganenMandatarissenRoute extends Route {
       bestuurseenheid,
       mandatarissen: this.getFilteredMandatarissen(folded, params),
       bestuursorgaan: parentModel.bestuursorgaan,
+      bestuursorgaanInTijdId: await this.getBestuursorgaanInTijdId(
+        parentModel.selectedBestuursperiode,
+        parentModel.bestuursorgaan
+      ),
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
       currentBestuursorgaan: currentBestuursorgaan,
       legislatuurInBehandeling: isDistrict ? false : legislatuurInBehandeling,
     };
+  }
+
+  async getBestuursorgaanInTijdId(selectedBestuursperiode, bestuursorgaan) {
+    const bestuursorganenInTijdFromPeriod =
+      (await selectedBestuursperiode.heeftBestuursorganenInTijd) ?? [];
+    const bestuursorganenInTijd =
+      (await bestuursorgaan?.heeftTijdsspecialisaties) ?? [];
+    const fromPeriodIds = bestuursorganenInTijdFromPeriod.map((boi) => boi.id);
+    const boiIds = bestuursorganenInTijd.map((boi) => boi.id);
+    const boiInPeriod = boiIds.filter((id) => fromPeriodIds.includes(id));
+
+    if (boiInPeriod.length >= 1) {
+      return boiInPeriod.at(0);
+    }
+    return null;
   }
 
   getOptions(params, bestuursOrgaan) {
