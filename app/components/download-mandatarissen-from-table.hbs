@@ -3,6 +3,16 @@
   @tooltipText="Exporteer mandatarissen naar CSV formaat"
 >
   <AuLinkExternal
+    {{did-update
+      this.onArgChange
+      @fracties
+      @personen
+      @activeOnly
+      @bestuursorgaan
+      @bestuursperiode
+      @sort
+      @bestuursFunctieCodes
+    }}
     href={{this.downloadLink}}
     @disabled={{(or (not @bestuursperiode) this.prepareDownloadLink.isRunning)}}
     download="mandatarissen"

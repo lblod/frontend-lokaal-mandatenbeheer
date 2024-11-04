@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
 import { task } from 'ember-concurrency';
 import {
@@ -34,7 +35,6 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
       bestuursFunctieCodeIds: this.bestuursFunctieCodeIds ?? [],
       sort: this.args.sort,
     });
-    return this.downloadLink;
   });
 
   async getBestuursorgaanInTijdForPeriod() {
@@ -79,5 +79,10 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
 
   get bestuursFunctieCodeIds() {
     return this.args.bestuursFunctieCodes?.map((code) => code.id);
+  }
+
+  @action
+  async onArgChange() {
+    await this.prepareDownloadLink.perform();
   }
 }
