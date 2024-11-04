@@ -9,8 +9,6 @@ import {
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
-import { downloadTextAsFile } from 'frontend-lmb/utils/download-text-as-file';
-import { showWarningToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarisApiService extends Service {
   @service store;
