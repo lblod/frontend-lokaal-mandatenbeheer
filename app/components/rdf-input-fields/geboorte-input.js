@@ -41,35 +41,26 @@ export default class RDFGeboorteInput extends InputFieldComponent {
 
   checkForAutomaticFillIn = task(async () => {
     await timeout(INPUT_DEBOUNCE);
-    if (this.getFieldSubject()) {
-      const identifier = this.storeOptions.store.any(
-        this.getFieldSubject(),
-        new NamedNode(PERSON_PREDICATE.identifier),
-        undefined,
-        this.storeOptions.sourceGraph
-      );
-      const rrnString = this.storeOptions.store.any(
-        identifier,
-        SKOS('notation'),
-        undefined,
-        this.storeOptions.sourceGraph
-      )?.value;
-      if (isValidRijksregisternummer(rrnString)) {
-        const dateString = getBirthDate(rrnString);
-        if (dateString) {
-          this.date = new Date(dateString);
-          this.onUpdate(this.date);
-        }
+    const identifier = this.storeOptions.store.any(
+      this.storeOptions.sourceNode,
+      new NamedNode(PERSON_PREDICATE.identifier),
+      undefined,
+      this.storeOptions.sourceGraph
+    );
+    const rrnString = this.storeOptions.store.any(
+      identifier,
+      SKOS('notation'),
+      undefined,
+      this.storeOptions.sourceGraph
+    )?.value;
+    if (isValidRijksregisternummer(rrnString)) {
+      const dateString = getBirthDate(rrnString);
+      if (dateString) {
+        this.date = new Date(dateString);
+        this.onUpdate(this.date);
       }
     }
   });
-
-  getFieldSubject() {
-    const matches = triplesForPath(this.storeOptions);
-    if (matches.triples.length > 0) {
-      return matches.triples.at(0).subject;
-    }
-  }
 
   async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
