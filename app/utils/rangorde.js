@@ -115,8 +115,24 @@ export const rangordeStringToNumber = (rangordeString) => {
   return rangordeStringMapping[firstWord];
 };
 
-export const orderMandatarissenByRangorde = (mandatarissen) => {
+export const orderMandatarissenByRangorde = (
+  mandatarissen,
+  allMandatarissenInIv
+) => {
   return mandatarissen.sort((a, b) => {
+    const classRankA = a.bekleedt.get('bestuursfunctie.rankForSorting');
+    const classRankB = b.bekleedt.get('bestuursfunctie.rankForSorting');
+    if (classRankA < classRankB) {
+      return 1;
+    } else if (classRankA > classRankB) {
+      return -1;
+    }
+
+    const noRangorde = !a.rangorde && !b.rangorde;
+    if (noRangorde && allMandatarissenInIv) {
+      return fallbackSortByOtherIVOrgans(a, b, allMandatarissenInIv);
+    }
+
     const aNumber = rangordeStringToNumber(a.rangorde);
     const bNumber = rangordeStringToNumber(b.rangorde);
     if (aNumber == null) {
@@ -127,4 +143,45 @@ export const orderMandatarissenByRangorde = (mandatarissen) => {
     }
     return aNumber - bNumber;
   });
+};
+
+const findCorrespondingMandatarisIndex = (mandataris, allMandatarissenInIv) => {
+  const correspondingMandateUris = mandataris.bekleedt.get(
+    'bestuursfunctie.correspondingMandateCodesIV'
+  );
+  if (!correspondingMandateUris) {
+    // no corresponding mandate found, just return the first index based on absolute authority of all mandatarissen, e.g. useful for bcsd
+    return allMandatarissenInIv.findIndex((i) => {
+      return (
+        i.isBestuurlijkeAliasVan.id == mandataris.isBestuurlijkeAliasVan.id
+      );
+    });
+  }
+  // if there are corresponding mandates, find the highest ranking mandataris with such a mandate that has the same person
+  return allMandatarissenInIv.findIndex((i) => {
+    return (
+      correspondingMandateUris.indexOf(i.get('bekleedt.bestuursfunctie.uri')) >=
+        0 && i.isBestuurlijkeAliasVan.id == mandataris.isBestuurlijkeAliasVan.id
+    );
+  });
+};
+
+const fallbackSortByOtherIVOrgans = (a, b, allMandatarissenInIv) => {
+  // if no person, don't bother, put them at the bottom
+  if (!a.isBestuurlijkeAliasVan?.id) {
+    return 1;
+  }
+  if (!b.isBestuurlijkeAliasVan?.id) {
+    return -1;
+  }
+
+  const rankA = findCorrespondingMandatarisIndex(a, allMandatarissenInIv);
+  const rankB = findCorrespondingMandatarisIndex(b, allMandatarissenInIv);
+  if (rankA < 0) {
+    return 1;
+  }
+  if (rankB < 0) {
+    return -1;
+  }
+  return rankA - rankB;
 };

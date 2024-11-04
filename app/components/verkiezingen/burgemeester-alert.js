@@ -9,14 +9,14 @@ import {
 
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
   @service store;
-  @service bcsd;
+  @service installatievergadering;
 
   @tracked errorMessage = '';
   @tracked lastRecomputeTime = null;
 
   constructor() {
     super(...arguments);
-    this.bcsd.forceRecomputeBCSD();
+    this.installatievergadering.forceRecomputeBCSD();
   }
 
   get collegeOrgaanInTijd() {
@@ -30,7 +30,8 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
     }
     if (
       this.lastRecomputeTime &&
-      this.lastRecomputeTime === this.bcsd.recomputeBCSDNeededTime
+      this.lastRecomputeTime ===
+        this.installatievergadering.recomputeBCSDNeededTime
     ) {
       await timeout(5000);
       // nothing for now let's try again later
@@ -38,7 +39,8 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
       return;
     }
 
-    this.lastRecomputeTime = this.bcsd.recomputeBCSDNeededTime;
+    this.lastRecomputeTime =
+      this.installatievergadering.recomputeBCSDNeededTime;
 
     const burgemeesters = await this.getBurgemeesters();
     const aangewezenBurgemeesters = await this.getAangewezenBurgemeesters();

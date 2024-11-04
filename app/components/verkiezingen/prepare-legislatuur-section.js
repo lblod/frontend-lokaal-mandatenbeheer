@@ -19,7 +19,7 @@ const CREATE_MODE = 'create';
 
 export default class PrepareLegislatuurSectionComponent extends Component {
   @service toaster;
-  @service bcsd;
+  @service installatievergadering;
   @service store;
   @service router;
   @service fractieApi;
@@ -47,6 +47,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
 
   getMandatarissen = restartableTask(async (state) => {
     const { added, removed, updated } = state;
+    this.installatievergadering.removeMandatarissen(this.mandatarissen);
 
     if (removed && removed.length >= 1) {
       this.mandatarissen.removeObjects(removed);
@@ -61,6 +62,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     if (updated) {
       await this.initialLoad.perform();
     }
+    this.installatievergadering.addMandatarissen(this.mandatarissen);
   });
 
   @action
@@ -138,7 +140,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
         'Er ging iets mis bij het overzetten van de mandatarissen.'
       );
     });
-    this.bcsd.forceRecomputeBCSD();
+    this.installatievergadering.forceRecomputeBCSD();
     this.getMandatarissen.perform({ updated: true });
     this.router.refresh(); // not doing this breaks burgemeester selector synchronization
   });
@@ -181,7 +183,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     await this.getMandatarissen.perform({ added: [mandataris] });
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
-    this.bcsd.forceRecomputeBCSD();
+    this.installatievergadering.forceRecomputeBCSD();
   }
 
   @action
