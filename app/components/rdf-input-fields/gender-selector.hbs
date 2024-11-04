@@ -1,0 +1,18 @@
+<AuLabel for={{this.inputId}}>{{this.title}}</AuLabel>
+<PowerSelect
+  @triggerId={{this.inputId}}
+  @allowClear={{false}}
+  @disabled={{false}}
+  @onChange={{this.updateSelection}}
+  @loadingMessage="Aan het laden..."
+  @noMatchesMessage="Geen resultaten"
+  @searchMessage="Typ om te zoeken"
+  @search={{perform this.search}}
+  @searchField="label"
+  @searchEnabled={{this.searchEnabled}}
+  @selected={{this.selected}}
+  @options={{this.options}}
+  as |concept|
+>
+  {{concept.label}}
+</PowerSelect>
