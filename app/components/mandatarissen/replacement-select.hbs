@@ -3,10 +3,11 @@
     @person={{@selected}}
     @onUpdate={{@onSelect}}
     @inline={{@inline}}
-    @allowCreate={{await @mandataris.bekleedt.allowsNonElectedPersons}}
+    @onlyElected={{not (await @mandataris.bekleedt.allowsNonElectedPersons)}}
     @showDelete={{@showDelete}}
     @showEditAsIcon={{@showEditAsIcon}}
     @nothingSelectedText={{@nothingSelectedText}}
+    @bestuursperiode={{@bestuursperiode}}
   />
   {{#if this.overlappingMandate}}
     <AuAlert @skin="warning" @icon="alert-triangle" class="au-u-margin-top">

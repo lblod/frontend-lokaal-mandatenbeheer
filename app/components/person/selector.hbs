@@ -58,9 +58,8 @@
         @showDefaultHead={{false}}
         @onSelect={{this.onSelectPerson}}
         @onCreateNewPerson={{this.onCreateNewPerson}}
-        @searchElected={{@searchElected}}
         @bestuursperiode={{@bestuursperiode}}
-        @allowCreate={{@allowCreate}}
+        @onlyElected={{@onlyElected}}
       />
     {{/if}}
   </div>
@@ -86,9 +85,8 @@
           @onSelect={{this.onSelectPerson}}
           @onCreateNewPerson={{this.onCreateNewPerson}}
           @onCancel={{this.cancelEdit}}
-          @searchElected={{@searchElected}}
           @bestuursperiode={{@bestuursperiode}}
-          @allowCreate={{@allowCreate}}
+          @onlyElected={{@onlyElected}}
         />
       {{/if}}
     </div>

@@ -86,7 +86,7 @@
             class="au-u-margin-top-small"
           >
             <p>
-              Kijk uw zoekopdracht na{{#if @allowCreate}}<span>
+              Kijk uw zoekopdracht na{{#if this.allowCreate}}<span>
                   of
                   <AuButton
                     @skin="link"
@@ -105,7 +105,7 @@
             @size="tiny"
           >
             <p>
-              Kijk uw zoekopdracht na{{#if @allowCreate}}<span>
+              Kijk uw zoekopdracht na{{#if this.allowCreate}}<span>
                   of
                   <AuButton
                     @skin="link"
@@ -122,7 +122,7 @@
         <AuContent>
           <p class="au-c-text-info">
             Zoek een reeds gekende persoon in de databank van het loket op naam
-            of op rijksregisternummer{{#if @allowCreate}}<span>,<br />of
+            of op rijksregisternummer{{#if this.allowCreate}}<span>,<br />of
                 <AuButton
                   @skin="link"
                   {{on "click" this.handleCreatePersonClick}}
