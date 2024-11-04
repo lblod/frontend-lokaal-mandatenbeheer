@@ -1,6 +1,7 @@
+import RdfInputFieldsConceptSchemeSelectorComponent from './concept-scheme-selector';
+
 import { service } from '@ember/service';
 
-import { triplesForPath } from '@lblod/submission-form-helpers';
 import { task, timeout } from 'ember-concurrency';
 import { NamedNode } from 'rdflib';
 
@@ -12,7 +13,6 @@ import {
   isValidRijksregisternummer,
 } from 'frontend-lmb/utils/form-validations/rijksregisternummer';
 import { SKOS } from 'frontend-lmb/rdf/namespaces';
-import RdfInputFieldsConceptSchemeSelectorComponent from './concept-scheme-selector';
 
 export default class RDFGenderSelector extends RdfInputFieldsConceptSchemeSelectorComponent {
   @service store;
