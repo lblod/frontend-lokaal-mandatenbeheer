@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 
 import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 import { task } from 'ember-concurrency';
 import {
@@ -10,14 +11,19 @@ import {
 
 export default class DownloadMandatarissenFromTableComponent extends Component {
   @service('mandataris-api') mandatarisApi;
+  @tracked downloadLink;
 
-  download = task(async () => {
+  constructor() {
+    super(...arguments);
+    this.prepareDownloadLink.perform();
+  }
+
+  prepareDownloadLink = task(async () => {
     let boiId = null;
     if (this.args.bestuursorgaan) {
       boiId = await this.getBestuursorgaanInTijdForPeriod();
     }
-
-    await this.mandatarisApi.downloadAsCsv({
+    this.downloadLink = this.mandatarisApi.getDownLoadUrl({
       bestuursperiodeId: this.args.bestuursperiode?.id,
       activeOnly: this.args.activeOnly,
       bestuursorgaanId: boiId,
@@ -28,6 +34,7 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
       bestuursFunctieCodeIds: this.bestuursFunctieCodeIds ?? [],
       sort: this.args.sort,
     });
+    return this.downloadLink;
   });
 
   async getBestuursorgaanInTijdForPeriod() {

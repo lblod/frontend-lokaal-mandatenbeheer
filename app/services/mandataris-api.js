@@ -107,65 +107,29 @@ export default class MandatarisApiService extends Service {
     });
   }
 
-  async downloadAsCsv({
+  getDownLoadUrl({
     bestuursperiodeId,
     bestuursorgaanId = null,
     activeOnly = false,
-    persoonIds = [],
-    fractieIds = [],
+    persoonIds = null,
+    fractieIds = null,
     hasFilterOnOnafhankelijkeFractie = false,
     hasFilterOnNietBeschikbareFractie = false,
-    bestuursFunctieCodeIds = [],
+    bestuursFunctieCodeIds = null,
     sort = null,
   }) {
-    const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/mandatarissen/download`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': JSON_API_TYPE,
-        },
-        body: JSON.stringify({
-          bestuursperiodeId: bestuursperiodeId,
-          bestuursorgaanId: bestuursorgaanId,
-          onlyShowActive: activeOnly,
-          persoonIds,
-          fractieIds,
-          hasFilterOnOnafhankelijkeFractie,
-          hasFilterOnNietBeschikbareFractie,
-          bestuursFunctieCodeIds,
-          sort,
-        }),
-      }
-    );
+    const queryParams = [
+      `bestuursperiodeId=${bestuursperiodeId ?? ''}`,
+      `bestuursorgaanId=${bestuursorgaanId ?? ''}`,
+      `activeOnly=${activeOnly}`,
+      `hasFilterOnOnafhankelijkeFractie=${hasFilterOnOnafhankelijkeFractie}`,
+      `hasFilterOnNietBeschikbareFractie=${hasFilterOnNietBeschikbareFractie}`,
+      `sort=${sort}`,
+      `persoonIds=${persoonIds ? persoonIds.join(',') : ''}`,
+      `fractieIds=${fractieIds ? fractieIds.join(',') : ''}`,
+      `bestuursFunctieCodeIds=${bestuursFunctieCodeIds ? bestuursFunctieCodeIds.join(',') : ''}`,
+    ];
 
-    const jsonReponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse);
-      throw {
-        status: response.status,
-        message: jsonReponse.message,
-      };
-    }
-    const decondedCsvString = atob(jsonReponse.data ?? '');
-
-    if (decondedCsvString.trim() === '') {
-      showWarningToast(
-        this.toaster,
-        'Er werden geen mandatarissen gevonden.',
-        'Download'
-      );
-      return;
-    }
-
-    downloadTextAsFile(
-      {
-        filename: 'mandataris_export.csv',
-        contentAsText: decondedCsvString,
-      },
-      document,
-      window
-    );
+    return `${API.MANDATARIS_SERVICE}/mandatarissen/download?${queryParams.join('&')}`;
   }
 }
