@@ -4,11 +4,12 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-import { task } from 'ember-concurrency';
 import {
   placeholderNietBeschikbaar,
   placeholderOnafhankelijk,
 } from 'frontend-lmb/utils/constants';
+
+import { task } from 'ember-concurrency';
 
 export default class DownloadMandatarissenFromTableComponent extends Component {
   @service('mandataris-api') mandatarisApi;

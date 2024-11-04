@@ -14,9 +14,7 @@
       @bestuursFunctieCodes
     }}
     href={{this.downloadLink}}
-    @disabled={{(or (not @bestuursperiode) this.prepareDownloadLink.isRunning)}}
     download="mandatarissen"
     @skin="button-secondary"
-    @loading={{this.prepareDownloadLink.isRunning}}
   >Download</AuLinkExternal>
 </Shared::Tooltip>
