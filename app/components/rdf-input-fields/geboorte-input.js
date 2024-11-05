@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 
 import { triplesForPath } from '@lblod/submission-form-helpers';
-import { task, timeout } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { NamedNode } from 'rdflib';
 
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
@@ -33,13 +33,13 @@ export default class RDFGeboorteInput extends InputFieldComponent {
         formChange,
         new NamedNode(PERSON_PREDICATE.identifier)
       );
-      if (mustTrigger && !this.checkForAutomaticFillIn.isRunning) {
+      if (mustTrigger) {
         await this.checkForAutomaticFillIn.perform();
       }
     });
   }
 
-  checkForAutomaticFillIn = task(async () => {
+  checkForAutomaticFillIn = restartableTask(async () => {
     await timeout(INPUT_DEBOUNCE);
     const identifier = this.storeOptions.store.any(
       this.storeOptions.sourceNode,
