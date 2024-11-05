@@ -8,6 +8,11 @@ import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 export default class FractieService extends Service {
   @service store;
 
+  // ---------------------  WARNING ---------------------
+  // if an onafhankelijke fractie is created, is it not saved yet.
+  // save it before use!
+  // this is to avoid too many tombstones being created for unused fracties
+  // ---------------------  WARNING ----------------
   async createOnafhankelijkeFractie(bestuursorganen, bestuurseenheid) {
     if (!bestuurseenheid) {
       throw `Could not create onafhankelijke fractie`;
@@ -25,11 +30,15 @@ export default class FractieService extends Service {
       bestuursorganenInTijd: bestuursorganen,
       bestuurseenheid: bestuurseenheid,
     });
-    await onafhankelijke.save();
 
     return onafhankelijke;
   }
 
+  // ---------------------  WARNING ---------------------
+  // if an onafhankelijke fractie is created, is it not saved yet.
+  // save it before use!
+  // this is to avoid too many tombstones being created for unused fracties
+  // ---------------------  WARNING ----------------
   async getOrCreateOnafhankelijkeFractie(
     person,
     bestuursorganen,

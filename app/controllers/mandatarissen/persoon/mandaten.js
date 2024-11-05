@@ -94,10 +94,12 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       'filter[heeft-bestuursperiode][:id:]': activePeriod.id,
     });
 
-    return await this.fractieService.createOnafhankelijkeFractie(
+    const fractie = await this.fractieService.createOnafhankelijkeFractie(
       bestuursOrganenInTijd,
       bestuurseenheid
     );
+    await fractie.save();
+    return fractie;
   }
 
   becomeOnafhankelijk = task(async () => {
