@@ -17,6 +17,7 @@ import RdfBeleidsdomeinCodeSelector from 'frontend-lmb/components/rdf-input-fiel
 import RdfMandatarisRangorde from 'frontend-lmb/components/rdf-input-fields/mandataris-rangorde';
 import RdfDateInputComponent from 'frontend-lmb/components/rdf-input-fields/rdf-date-input';
 import RDFGeboorteInput from 'frontend-lmb/components/rdf-input-fields/geboorte-input';
+import RDFGenderSelector from 'frontend-lmb/components/rdf-input-fields/gender-selector';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -103,6 +104,10 @@ export const registerCustomFormFields = () => {
     {
       displayType: 'http://lblod.data.gift/display-types/birthDateInput',
       edit: RDFGeboorteInput,
+    },
+    {
+      displayType: 'http://lblod.data.gift/display-types/genderSelector',
+      edit: RDFGenderSelector,
     },
   ]);
 };
