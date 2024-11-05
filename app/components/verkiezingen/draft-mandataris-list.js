@@ -26,7 +26,9 @@ export default class DraftMandatarisListComponent extends Component {
 
   get mandatarisPersonCount() {
     return new Set(
-      this.args.mandatarissen.map((item) => item.isBestuurlijkeAliasVan?.id)
+      this.args.mandatarissen
+        .map((item) => item.isBestuurlijkeAliasVan?.id)
+        .filter((value) => value !== null && value !== undefined)
     ).size;
   }
 
