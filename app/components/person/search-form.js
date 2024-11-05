@@ -101,7 +101,7 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
 
     let queryParams = {
       sort: 'achternaam',
-      include: ['geboorte', 'identificator'].join(','),
+      include: ['geboorte', 'identificator', 'geslacht'].join(','),
       filter: {
         achternaam: this.achternaam || undefined,
         'gebruikte-voornaam': this.voornaam || undefined,
