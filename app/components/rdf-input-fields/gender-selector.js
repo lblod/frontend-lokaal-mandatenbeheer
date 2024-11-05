@@ -2,7 +2,7 @@ import RdfInputFieldsConceptSchemeSelectorComponent from './concept-scheme-selec
 
 import { service } from '@ember/service';
 
-import { task, timeout } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { NamedNode } from 'rdflib';
 
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
@@ -25,13 +25,13 @@ export default class RDFGenderSelector extends RdfInputFieldsConceptSchemeSelect
         formChange,
         new NamedNode(PERSON_PREDICATE.identifier)
       );
-      if (mustTrigger && !this.checkForAutomaticFillIn.isRunning) {
+      if (mustTrigger) {
         await this.checkForAutomaticFillIn.perform();
       }
     });
   }
 
-  checkForAutomaticFillIn = task(async () => {
+  checkForAutomaticFillIn = restartableTask(async () => {
     await timeout(INPUT_DEBOUNCE);
     const identifier = this.storeOptions.store.any(
       this.storeOptions.sourceNode,
