@@ -116,18 +116,23 @@ export default class MandatarisApiService extends Service {
     bestuursFunctieCodeIds = null,
     sort = null,
   }) {
-    const queryParams = [
-      `bestuursperiodeId=${bestuursperiodeId ?? ''}`,
-      `bestuursorgaanId=${bestuursorgaanId ?? ''}`,
-      `activeOnly=${activeOnly}`,
-      `hasFilterOnOnafhankelijkeFractie=${hasFilterOnOnafhankelijkeFractie}`,
-      `hasFilterOnNietBeschikbareFractie=${hasFilterOnNietBeschikbareFractie}`,
-      `sort=${sort}`,
-      `persoonIds=${persoonIds ? persoonIds.join(',') : ''}`,
-      `fractieIds=${fractieIds ? fractieIds.join(',') : ''}`,
-      `bestuursFunctieCodeIds=${bestuursFunctieCodeIds ? bestuursFunctieCodeIds.join(',') : ''}`,
-    ];
+    const queryParams = {
+      bestuursperiodeId: bestuursperiodeId ?? null,
+      bestuursorgaanId: bestuursorgaanId ?? null,
+      activeOnly: activeOnly,
+      hasFilterOnOnafhankelijkeFractie: hasFilterOnOnafhankelijkeFractie,
+      hasFilterOnNietBeschikbareFractie: hasFilterOnNietBeschikbareFractie,
+      sort: sort,
+      persoonIds: persoonIds ? persoonIds.join(',') : null,
+      fractieIds: fractieIds ? fractieIds.join(',') : null,
+      bestuursFunctieCodeIds: bestuursFunctieCodeIds
+        ? bestuursFunctieCodeIds.join(',')
+        : null,
+    };
+    const createQueryParamsAsString = Object.keys(queryParams)
+      .filter((key) => queryParams[key])
+      .map((key) => `${key}=${queryParams[key]}`);
 
-    return `${API.MANDATARIS_SERVICE}/mandatarissen/download?${queryParams.join('&')}`;
+    return `${API.MANDATARIS_SERVICE}/mandatarissen/download?${createQueryParamsAsString.join('&')}`;
   }
 }
