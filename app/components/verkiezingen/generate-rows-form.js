@@ -97,8 +97,8 @@ export default class GenerateRowsFormComponent extends Component {
       mandaat: this.selectedMandaat.parent,
       startDate: this.startDate ?? this.args.startDate,
       endDate: notRequiredEndDate,
-      rows: this.rowsToGenerate,
-      existingMandaten: this.lengthExistingMandaten,
+      count: this.rowsToGenerate,
+      existingMandatenLength: this.lengthExistingMandaten,
     });
   });
 
