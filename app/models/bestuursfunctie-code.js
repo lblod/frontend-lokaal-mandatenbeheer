@@ -58,4 +58,13 @@ export default class BestuursfunctieCodeModel extends Model {
       this.uri === MANDAAT_DISTRICT_BURGEMEESTER_CODE
     );
   }
+
+  get isVoorzitter() {
+    return (
+      this.uri === MANDAAT_VOORZITTER_GEMEENTERAAD_CODE ||
+      this.uri === MANDAAT_VOORZITTER_RMW_CODE ||
+      this.uri === MANDAAT_VOORZITTER_VAST_BUREAU_CODE ||
+      this.uri === MANDAAT_VOORZITTER_BCSD_CODE
+    );
+  }
 }
