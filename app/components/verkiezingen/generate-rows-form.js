@@ -9,6 +9,7 @@ import { task, restartableTask, timeout } from 'ember-concurrency';
 
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 import { isValidDate } from '../date-input';
+import { rangordeStringToNumber } from 'frontend-lmb/utils/rangorde';
 
 export default class GenerateRowsFormComponent extends Component {
   @service store;
@@ -18,8 +19,9 @@ export default class GenerateRowsFormComponent extends Component {
   @tracked endDate;
   @tracked rowsToGenerate;
   @tracked rowWarnings = A([]);
-  @tracked lengthExistingMandaten = 0;
   @tracked rowsToCreateHelpText;
+
+  existingMandatarissen = [];
 
   constructor() {
     super(...arguments);
@@ -31,19 +33,18 @@ export default class GenerateRowsFormComponent extends Component {
   async selectMandaat(mandaatOption) {
     this.selectedMandaat = mandaatOption;
     await this.checkPossibleMandatenToGenerate.perform();
+    console.log(this.getHighestRangordeAsNumber());
   }
 
   checkPossibleMandatenToGenerate = restartableTask(async () => {
     this.rowWarnings.clear();
-    this.lengthExistingMandaten = (
-      await this.store.query('mandataris', {
-        page: {
-          size: 9999,
-        },
-        'filter[bekleedt][:id:]': this.selectedMandaat.parent.id,
-        'filter[bekleedt][bevat-in][:id:]': this.args.bestuursorgaan.id,
-      })
-    ).length;
+    this.existingMandatarissen = await this.store.query('mandataris', {
+      page: {
+        size: 9999,
+      },
+      'filter[bekleedt][:id:]': this.selectedMandaat.parent.id,
+      'filter[bekleedt][bevat-in][:id:]': this.args.bestuursorgaan.id,
+    });
 
     if (
       this.selectedMandaat.parent.minAantalHouders &&
@@ -98,9 +99,21 @@ export default class GenerateRowsFormComponent extends Component {
       startDate: this.startDate ?? this.args.startDate,
       endDate: notRequiredEndDate,
       count: this.rowsToGenerate,
-      existingMandatenLength: this.lengthExistingMandaten,
+      startRangordeCount: this.getHighestRangordeAsNumber + 1,
     });
   });
+
+  getHighestRangordeAsNumber() {
+    return Math.max(
+      ...this.existingMandatarissen.map((mandataris) => {
+        if (mandataris.rangorde) {
+          return rangordeStringToNumber(mandataris.rangorde);
+        } else {
+          return 0;
+        }
+      })
+    );
+  }
 
   addWarningWhenMandatenAreAtMax() {
     if (
@@ -124,5 +137,9 @@ export default class GenerateRowsFormComponent extends Component {
       this.rowsToGenerate <= 0 ||
       !isValidDate(this.startDate)
     );
+  }
+
+  get lengthExistingMandaten() {
+    return this.existingMandatarissen.length;
   }
 }
