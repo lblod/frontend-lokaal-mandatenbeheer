@@ -150,6 +150,10 @@ export default class BestuursorgaanModel extends Model {
     return this.hasBestuursorgaanClassificatie(BURGEMEESTER_BESTUURSORGAAN_URI);
   }
 
+  get hasVoorzitter() {
+    return this.isGR || this.isRMW || this.isVastBureau || this.isBCSD;
+  }
+
   async getNbMembers() {
     const queryParam = this.router.currentRoute.queryParams.bestuursperiode;
     // TODO look if we can prevent these queries.
