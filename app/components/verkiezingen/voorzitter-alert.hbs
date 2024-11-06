@@ -1,4 +1,4 @@
-{{#if (and (await @bestuursorgaanIT.hasVoorzitter) this.errorMessage)}}
+{{#if (and @bestuursorgaanIT.hasVoorzitter this.errorMessage)}}
   <div class="au-o-box">
     <AuAlert @skin="warning" @icon="alert-triangle" @closable={{true}}>
       <p>{{this.errorMessage}}</p>
