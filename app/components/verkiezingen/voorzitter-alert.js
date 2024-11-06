@@ -5,7 +5,13 @@ export default class VerkiezingenVoorzitterAlertComponent extends Component {
   @service store;
 
   get errorMessage() {
-    if (this.args.mandatarissen.length == 0) {
+    if (this.args.mandatarissen.length === 0) {
+      return '';
+    }
+    if (
+      this.args.mandatarissen.length === 1 &&
+      this.args.mandatarissen.at(0).isVoorzitter
+    ) {
       return '';
     }
     const hasVoorzitter = this.args.mandatarissen.some(
