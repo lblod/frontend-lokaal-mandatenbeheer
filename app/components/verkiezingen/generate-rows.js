@@ -51,4 +51,12 @@ export default class GenerateRowsFormComponent extends Component {
     });
     this.args.onCancel();
   });
+
+  get loadingMessage() {
+    if (this.generateMandatarissen.isRunning) {
+      return 'Genereren';
+    }
+
+    return null;
+  }
 }

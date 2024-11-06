@@ -33,7 +33,6 @@ export default class GenerateRowsFormComponent extends Component {
   async selectMandaat(mandaatOption) {
     this.selectedMandaat = mandaatOption;
     await this.checkPossibleMandatenToGenerate.perform();
-    console.log(this.getHighestRangordeAsNumber());
   }
 
   checkPossibleMandatenToGenerate = restartableTask(async () => {
@@ -95,15 +94,32 @@ export default class GenerateRowsFormComponent extends Component {
     const notRequiredEndDate = isValidDate(this.endDate) ? this.endDate : null;
 
     this.args.onConfigReceived({
-      mandaat: this.selectedMandaat.parent,
+      mandaatUri: this.selectedMandaat.parent.uri,
       startDate: this.startDate ?? this.args.startDate,
       endDate: notRequiredEndDate,
       count: this.rowsToGenerate,
-      rangordeStartsAt: this.getHighestRangordeAsNumber + 1,
+      rangordeStartsAt: this.getHighestRangordeAsNumber() + 1,
+      rangordeLabel: this.rangordeMandaatLabel,
     });
   });
 
+  get rangordeMandaatLabel() {
+    if (this.selectedMandaat.parent.isSchepen) {
+      return 'schepenen';
+    }
+
+    if (this.selectedMandaat.parent.isGemeenteraadslid) {
+      return 'lid';
+    }
+
+    return '';
+  }
+
   getHighestRangordeAsNumber() {
+    if (this.existingMandatarissen.length === 0) {
+      return 0;
+    }
+
     return Math.max(
       ...this.existingMandatarissen.map((mandataris) => {
         if (mandataris.rangorde) {
