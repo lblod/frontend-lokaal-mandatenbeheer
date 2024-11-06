@@ -99,7 +99,7 @@ export default class GenerateRowsFormComponent extends Component {
       startDate: this.startDate ?? this.args.startDate,
       endDate: notRequiredEndDate,
       count: this.rowsToGenerate,
-      startRangordeCount: this.getHighestRangordeAsNumber + 1,
+      rangordeStartsAt: this.getHighestRangordeAsNumber + 1,
     });
   });
 

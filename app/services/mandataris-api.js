@@ -137,7 +137,7 @@ export default class MandatarisApiService extends Service {
   }
 
   async generate(config) {
-    const { count, mandaat, startDate, endDate } = config;
+    const { count, mandaat, startDate, endDate, rangordeStartsAt } = config;
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/mandatarissen/generate`,
       {
@@ -146,10 +146,11 @@ export default class MandatarisApiService extends Service {
           'Content-Type': JSON_API_TYPE,
         },
         body: JSON.stringify({
-          count: count,
-          start: startDate,
-          einde: endDate,
-          bekleedt: mandaat,
+          count,
+          rangordeStartsAt,
+          startDate,
+          endDate,
+          mandaat,
         }),
       }
     );
