@@ -13,7 +13,7 @@ export default class VerkiezingenVoorzitterAlertComponent extends Component {
         mandataris.isVoorzitter && mandataris.isBestuurlijkeAliasVan?.id
     );
     if (!hasVoorzitter) {
-      return 'Je hebt nog geen voorzitter voor dit orgaan aangeduid. Voeg hiervoor een nieuwe mandataris met het mandaat voorzitter toe.';
+      return `Je hebt nog geen voorzitter voor het orgaan ${this.args.bestuursorgaanIT.get('isTijdsspecialisatieVan').get('naam')} aangeduid. Voeg hiervoor een nieuwe mandataris met het mandaat voorzitter toe.`;
     }
     return '';
   }
