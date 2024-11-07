@@ -2,7 +2,7 @@
   <div class="order-input-as-string">
     <AuButton
       hideText={{true}}
-      @icon="chevron-up"
+      @icon="plus"
       @skin="secondary"
       class="order-input-as-string--minus"
       @disabled={{this.isMinusDisabled}}
@@ -18,7 +18,7 @@
     <AuButton
       hideText={{true}}
       @skin="secondary"
-      @icon="chevron-down"
+      @icon="remove"
       class="order-input-as-string--plus"
       @disabled={{this.isPlusDisabled}}
       {{on "click" this.rangordeUp}}
