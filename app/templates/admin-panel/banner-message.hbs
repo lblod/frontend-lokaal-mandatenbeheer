@@ -18,7 +18,7 @@
     </span>
     <AuToggleSwitch
       @checked={{this.isActive}}
-      @onChange={{this.toggleIsActive}}
+      @onChange={{await this.toggleIsActive}}
       @disabled={{this.isDisabled}}
     >Active</AuToggleSwitch>
   </div>

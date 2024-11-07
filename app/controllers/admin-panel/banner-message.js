@@ -14,13 +14,33 @@ export default class AdminPanelBannerMessageController extends Controller {
   @tracked message;
   @tracked isActive;
 
+  @tracked systemMessageModel;
+
   get isDisabled() {
     return !this.message || this.message.trim === '';
   }
 
   @action
-  toggleIsActive() {
+  async toggleIsActive() {
     this.isActive = !this.isActive;
+
+    if (!this.isActive && this.systemMessageModel) {
+      await this.systemMessageModel.destroyRecord();
+    }
+
+    if (this.isActive && !this.systemMessageModel) {
+      const newMessage = this.store.createRecord('global-system-message', {
+        message: this.message,
+      });
+      await newMessage.save();
+      this.systemMessageModel = newMessage;
+    }
+  }
+
+  setMessageFromModel(systemMessage) {
+    this.systemMessageModel = systemMessage;
+    this.message = this.systemMessageModel?.message;
+    this.isActive = this.message ? true : false;
   }
 
   onInputChange = restartableTask(async (event) => {
