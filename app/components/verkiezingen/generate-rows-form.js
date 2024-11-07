@@ -7,9 +7,9 @@ import { A } from '@ember/array';
 
 import { task, restartableTask, timeout } from 'ember-concurrency';
 
+import { rangordeStringToNumber } from 'frontend-lmb/utils/rangorde';
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 import { isValidDate } from '../date-input';
-import { rangordeStringToNumber } from 'frontend-lmb/utils/rangorde';
 
 export default class GenerateRowsFormComponent extends Component {
   @service store;
@@ -99,21 +99,9 @@ export default class GenerateRowsFormComponent extends Component {
       endDate: notRequiredEndDate,
       count: this.rowsToGenerate,
       rangordeStartsAt: this.getHighestRangordeAsNumber() + 1,
-      rangordeLabel: this.rangordeMandaatLabel,
+      rangordeLabel: this.selectedMandaat.parent.rangordeLabel,
     });
   });
-
-  get rangordeMandaatLabel() {
-    if (this.selectedMandaat.parent.isSchepen) {
-      return 'schepenen';
-    }
-
-    if (this.selectedMandaat.parent.isGemeenteraadslid) {
-      return 'lid';
-    }
-
-    return '';
-  }
 
   getHighestRangordeAsNumber() {
     if (this.existingMandatarissen.length === 0) {
