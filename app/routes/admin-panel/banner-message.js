@@ -1,3 +1,16 @@
 import Route from '@ember/routing/route';
 
-export default class AdminPanelBannerMessageRoute extends Route {}
+import { service } from '@ember/service';
+
+export default class AdminPanelBannerMessageRoute extends Route {
+  @service currentSession;
+  @service session;
+
+  beforeModel(transition) {
+    this.session.requireAuthentication(transition, 'login');
+
+    if (!this.currentSession.isAdmin) {
+      this.router.replaceWith('index');
+    }
+  }
+}
