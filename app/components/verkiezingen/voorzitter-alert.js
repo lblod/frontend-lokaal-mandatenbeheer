@@ -1,9 +1,6 @@
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
 
 export default class VerkiezingenVoorzitterAlertComponent extends Component {
-  @service store;
-
   get errorMessage() {
     if (this.args.mandatarissen.length === 0) {
       return '';
