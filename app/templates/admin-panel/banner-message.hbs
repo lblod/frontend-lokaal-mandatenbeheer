@@ -4,5 +4,22 @@
   </Group>
 </AuToolbar>
 <div class="au-c-body-container au-c-body-container--scroll">
-  <p>Banner message content</p>
+  <div class="au-o-box au-u-flex au-u-flex--column">
+    <span class="au-u-margin-bottom">
+      <AuLabel for="banner-message-input">
+        Message
+      </AuLabel>
+      <AuInput
+        id="banner-message-input"
+        value={{this.message}}
+        @disabled={{this.isActive}}
+        {{on "keyup" (perform this.onInputChange)}}
+      />
+    </span>
+    <AuToggleSwitch
+      @checked={{this.isActive}}
+      @onChange={{this.toggleIsActive}}
+      @disabled={{this.isDisabled}}
+    >Active</AuToggleSwitch>
+  </div>
 </div>
