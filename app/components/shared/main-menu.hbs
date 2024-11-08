@@ -31,5 +31,15 @@
         </AuNavigationLink>
       </li>
     {{/if}}
+    {{#if
+      (and this.currentSession.isAdmin (not this.impersonation.isImpersonating))
+    }}
+      <li class="au-c-list-navigation__item">
+        <AuNavigationLink @route="admin-panel.index">
+          <AuIcon @icon="settings" @alignment="left" />
+          Admin panel
+        </AuNavigationLink>
+      </li>
+    {{/if}}
   </ul>
 </nav>
