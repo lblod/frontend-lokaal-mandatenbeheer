@@ -67,7 +67,7 @@ export default class BestuursorgaanModel extends Model {
 
   @belongsTo('rechtstreekse-verkiezing', {
     async: true,
-    inverse: 'bestuursorgaanInTijd',
+    inverse: 'bestuursorganenInTijd',
   })
   verkiezing;
 
