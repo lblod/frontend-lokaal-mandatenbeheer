@@ -89,7 +89,7 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
       extraFilter.verkiezingsresultaten = {
         kandidatenlijst: {
           verkiezing: {
-            'bestuursorgaan-in-tijd': {
+            'bestuursorganen-in-tijd': {
               ':id:': this.args.bestuursorgaanIT.id,
             },
           },
