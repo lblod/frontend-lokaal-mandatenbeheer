@@ -13,19 +13,23 @@ import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValu
 import { ORG } from 'frontend-lmb/rdf/namespaces';
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import { showWarningToast } from 'frontend-lmb/utils/toasts';
+import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 
 export default class PersonSelectorComponent extends InputFieldComponent {
   inputId = 'input-' + guidFor(this);
-  @tracked person = null;
+
   @service store;
   @service toaster;
   @service('verkiezing') verkiezingService;
+  @service multiUriFetcher;
+
+  @tracked person = null;
 
   @tracked initialized = false;
   @tracked isMandaatInForm = false;
   @tracked onlyElected = true;
-  @tracked currentBestuursperiode = null;
   @tracked mandaatModel = null;
+  @tracked bestuursorgaanIT = null;
 
   constructor() {
     super(...arguments);
@@ -40,7 +44,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
   }
 
   async load() {
-    await this.loadProvidedValue();
+    await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
     await this.findMandaatInForm.perform();
     this.initialized = true;
   }
@@ -56,6 +60,21 @@ export default class PersonSelectorComponent extends InputFieldComponent {
       'filter[:uri:]': personUri,
     });
     this.person = matches.at(0);
+  }
+
+  async loadBestuursorganen() {
+    const bestuursorgaanUris = loadBestuursorgaanUrisFromContext(
+      this.storeOptions
+    );
+
+    if (!bestuursorgaanUris) {
+      return;
+    }
+
+    this.bestuursorgaanIT = await this.multiUriFetcher.fetchUri(
+      'bestuursorgaan',
+      bestuursorgaanUris.at(0)
+    );
   }
 
   @action
@@ -111,11 +130,5 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     }
 
     this.onlyElected = !(await mandaatModel.allowsNonElectedPersons);
-
-    if (this.onlyElected) {
-      this.currentBestuursperiode = await (
-        await mandaatModel.bevatIn
-      )[0].heeftBestuursperiode;
-    }
   });
 }
