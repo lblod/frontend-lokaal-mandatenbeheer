@@ -10,6 +10,7 @@ import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class AdminPanelBannerMessageController extends Controller {
   @service store;
+  @service globalSystemMessage;
 
   @tracked message;
   @tracked isActive;
@@ -29,11 +30,9 @@ export default class AdminPanelBannerMessageController extends Controller {
     }
 
     if (this.isActive && !this.systemMessageModel) {
-      const newMessage = this.store.createRecord('global-system-message', {
-        message: this.message,
-      });
-      await newMessage.save();
-      this.systemMessageModel = newMessage;
+      this.systemMessageModel = await this.globalSystemMessage.createMessage(
+        this.message
+      );
     }
   }
 

@@ -7,6 +7,7 @@ export default class AdminPanelBannerMessageRoute extends Route {
   @service session;
   @service store;
   @service router;
+  @service globalSystemMessage;
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
@@ -17,11 +18,7 @@ export default class AdminPanelBannerMessageRoute extends Route {
   }
 
   async model() {
-    const globalSystemMessages = await this.store.findAll(
-      'global-system-message'
-    );
-
-    return globalSystemMessages.length >= 1 ? globalSystemMessages.at(0) : null;
+    return await this.globalSystemMessage.findMessage();
   }
 
   setupController(controller, model) {
