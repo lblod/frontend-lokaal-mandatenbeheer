@@ -3,6 +3,16 @@
 </div>
 <nav>
   <ul class="au-c-list-navigation">
+    {{#if
+      (and this.currentSession.isAdmin (not this.impersonation.isImpersonating))
+    }}
+      <li class="au-c-list-navigation__item">
+        <AuNavigationLink @route="admin-panel.index">
+          <AuIcon @icon="settings" @alignment="left" />
+          Admin panel
+        </AuNavigationLink>
+      </li>
+    {{/if}}
     <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="organen">
         <AuIcon @icon="users" @alignment="left" />
@@ -28,16 +38,6 @@
         <AuNavigationLink @route="forms">
           <AuIcon @icon="draft" @alignment="left" />
           Forms
-        </AuNavigationLink>
-      </li>
-    {{/if}}
-    {{#if
-      (and this.currentSession.isAdmin (not this.impersonation.isImpersonating))
-    }}
-      <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="admin-panel.index">
-          <AuIcon @icon="settings" @alignment="left" />
-          Admin panel
         </AuNavigationLink>
       </li>
     {{/if}}
