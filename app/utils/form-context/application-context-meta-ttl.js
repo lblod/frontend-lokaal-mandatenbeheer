@@ -80,7 +80,7 @@ const getBestuursperiodeForBestuursorganen = (bestuursorganen) => {
     const bestuursorgaan = bestuursorganen.at(0);
 
     return {
-      startDate: bestuursorgaan.bindingStart,
+      startDate: bestuursorgaan.bindingStart ?? NULL_DATE,
       endDate: bestuursorgaan.bindingEinde ?? NULL_DATE,
     };
   }

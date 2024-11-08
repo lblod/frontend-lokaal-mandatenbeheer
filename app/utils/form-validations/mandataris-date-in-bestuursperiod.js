@@ -11,10 +11,14 @@ export const isValidMandatarisDate = ([dateLiteral], options) => {
   const date = new Date(dateLiteral.value);
   const period = loadBestuursorgaanPeriodFromContext(options);
   let maxDate = period.endDate;
+  let startDate = period.startDate;
 
   if (moment(period.endDate).isSame(moment(NULL_DATE))) {
     maxDate = null;
   }
+  if (moment(period.startDate).isSame(moment(NULL_DATE))) {
+    startDate = null;
+  }
 
-  return isDateInRange(date, period.startDate, maxDate);
+  return isDateInRange(date, startDate, maxDate);
 };
