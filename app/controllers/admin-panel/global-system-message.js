@@ -26,6 +26,7 @@ export default class AdminPanelGlobalSystemMessageController extends Controller 
 
     if (!this.isActive && this.systemMessageModel) {
       await this.systemMessageModel.destroyRecord();
+      this.systemMessageModel = null;
     }
 
     if (this.isActive && !this.systemMessageModel) {
