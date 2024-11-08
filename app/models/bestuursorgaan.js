@@ -150,6 +150,15 @@ export default class BestuursorgaanModel extends Model {
     return this.hasBestuursorgaanClassificatie(BURGEMEESTER_BESTUURSORGAAN_URI);
   }
 
+  get hasVoorzitter() {
+    return [
+      GEMEENTERAAD_BESTUURSORGAAN_URI,
+      RMW_BESTUURSORGAAN_URI,
+      VAST_BUREAU_BESTUURSORGAAN_URI,
+      BCSD_BESTUURSORGAAN_URI,
+    ].includes(this.isTijdsspecialisatieVan.get('classificatie').get('uri'));
+  }
+
   async getNbMembers() {
     const queryParam = this.router.currentRoute.queryParams.bestuursperiode;
     // TODO look if we can prevent these queries.

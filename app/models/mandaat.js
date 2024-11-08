@@ -74,6 +74,10 @@ export default class MandaatModel extends Model {
     );
   }
 
+  get isVoorzitter() {
+    return this.bestuursfunctie.get('isVoorzitter');
+  }
+
   get hasRangorde() {
     return this.isSchepen || this.isGemeenteraadslid;
   }

@@ -79,6 +79,10 @@
       {{/unless}}
     </div>
   </div>
+  <Verkiezingen::VoorzitterAlert
+    @bestuursorgaanIT={{@bestuursorgaan}}
+    @mandatarissen={{this.mandatarissen}}
+  />
   {{#if (await @bestuursorgaan.isBCSD)}}
     <Verkiezingen::BcsdVoorzitterAlert
       @bcsdBestuursorgaanInTijd={{@bestuursorgaan}}

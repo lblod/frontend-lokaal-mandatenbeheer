@@ -104,6 +104,10 @@ export default class MandatarisModel extends Model {
     return this.getUnique(this.vervangerVan);
   }
 
+  get isVoorzitter() {
+    return this.bekleedt.get('isVoorzitter');
+  }
+
   async getUnique(people) {
     const vervangers = new Map();
     const allPeople = (await people).slice();
