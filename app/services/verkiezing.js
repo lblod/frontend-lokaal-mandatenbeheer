@@ -5,7 +5,7 @@ import { service } from '@ember/service';
 export default class VerkiezingService extends Service {
   @service store;
 
-  async checkIfPersonIsElected(personId, bestuursperiode) {
+  async checkIfPersonIsElected(personId, bestuursorgaan) {
     const matches = await this.store.query('persoon', {
       include: [
         'verkiezingsresultaten',
@@ -14,8 +14,8 @@ export default class VerkiezingService extends Service {
         'verkiezingsresultaten.kandidatenlijst.verkiezing.bestuursorgaan-in-tijd',
         'verkiezingsresultaten.kandidatenlijst.verkiezing.bestuursorgaan-in-tijd.heeft-bestuursperiode',
       ].join(','),
-      'filter[verkiezingsresultaten][kandidatenlijst][verkiezing][bestuursorgaan-in-tijd][heeft-bestuursperiode][:id:]':
-        bestuursperiode.id,
+      'filter[verkiezingsresultaten][kandidatenlijst][verkiezing][bestuursorgaan-in-tijd][:id:]':
+        bestuursorgaan.id,
       'filter[verkiezingsresultaten][persoon][:id:]': personId,
     });
     return matches.length > 0;

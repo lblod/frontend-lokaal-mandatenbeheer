@@ -93,9 +93,8 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     if (this.person && this.onlyElected) {
       const isElected = await this.verkiezingService.checkIfPersonIsElected(
         this.person.id,
-        this.currentBestuursperiode
+        this.bestuursorgaanIT
       );
-
       if (!isElected) {
         this.person = null;
         replaceSingleFormValue(this.storeOptions, null);
