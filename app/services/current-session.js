@@ -5,7 +5,11 @@ import { tracked } from '@glimmer/tracking';
 
 import { setContext, setUser } from '@sentry/ember';
 import { SHOULD_ENABLE_SENTRY } from 'frontend-lmb/utils/sentry';
-import { BESTUURSEENHEID_CLASSIFICATIECODE_DISTRICT } from 'frontend-lmb/utils/well-known-uris';
+import {
+  BESTUURSEENHEID_CLASSIFICATIECODE_DISTRICT,
+  BESTUURSEENHEID_CLASSIFICATIECODE_POLITIEZONE,
+  BESTUURSEENHEID_CLASSIFICATIECODE_PROVINCIE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 const MODULE = {
   MANDATENBEHEER: 'LoketLB-mandaatGebruiker',
@@ -24,6 +28,8 @@ export default class CurrentSessionService extends Service {
   @tracked group;
   @tracked groupClassification;
   @tracked isDistrict;
+  @tracked isProvincie;
+  @tracked isPolitiezone;
   @tracked roles = [];
 
   async load() {
@@ -45,7 +51,15 @@ export default class CurrentSessionService extends Service {
         reload: true,
       });
       this.groupClassification = await this.group.classificatie;
-      this.isDistrict = await this.isDistrictBestuurseenheid();
+      this.isDistrict = await this.isBestuurseenheidOfClassificatie(
+        BESTUURSEENHEID_CLASSIFICATIECODE_DISTRICT
+      );
+      this.isPolitiezone = await this.isBestuurseenheidOfClassificatie(
+        BESTUURSEENHEID_CLASSIFICATIECODE_POLITIEZONE
+      );
+      this.isProvincie = await this.isBestuurseenheidOfClassificatie(
+        BESTUURSEENHEID_CLASSIFICATIECODE_PROVINCIE
+      );
 
       this.setupSentrySession();
     }
@@ -89,16 +103,20 @@ export default class CurrentSessionService extends Service {
     return this.roles.includes(role);
   }
 
-  async isDistrictBestuurseenheid() {
+  async isBestuurseenheidOfClassificatie(classificatieUri) {
     const classificatie = await this.group?.classificatie;
+    console.log(classificatie.uri);
 
-    return classificatie
-      ? classificatie.uri === BESTUURSEENHEID_CLASSIFICATIECODE_DISTRICT
-      : false;
+    return classificatie ? classificatie.uri === classificatieUri : false;
   }
 
   get showLegislatuurModule() {
-    return this.features.isEnabled('show-iv-module') && !this.isDistrict;
+    return (
+      this.features.isEnabled('show-iv-module') &&
+      !this.isDistrict &&
+      !this.isProvincie &&
+      !this.isPolitiezone
+    );
   }
 
   get canAccessMandaat() {
