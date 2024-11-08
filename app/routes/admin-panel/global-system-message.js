@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
-export default class AdminPanelBannerMessageRoute extends Route {
+export default class AdminPanelGlobalSystemMessageRoute extends Route {
   @service currentSession;
   @service session;
   @service store;

@@ -8,13 +8,12 @@ import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 import { restartableTask, timeout } from 'ember-concurrency';
 
-export default class AdminPanelBannerMessageController extends Controller {
+export default class AdminPanelGlobalSystemMessageController extends Controller {
   @service store;
-  @service globalSystemMessage;
+  @service('globalSystemMessage') messageService;
 
   @tracked message;
   @tracked isActive;
-
   @tracked systemMessageModel;
 
   get isDisabled() {
@@ -30,7 +29,7 @@ export default class AdminPanelBannerMessageController extends Controller {
     }
 
     if (this.isActive && !this.systemMessageModel) {
-      this.systemMessageModel = await this.globalSystemMessage.createMessage(
+      this.systemMessageModel = await this.messageService.createMessage(
         this.message
       );
     }

@@ -1,16 +1,16 @@
 <AuToolbar @size="large" @nowrap="true" as |Group|>
   <Group>
-    <AuHeading @skin="2">Banner message</AuHeading>
+    <AuHeading @skin="2">System message</AuHeading>
   </Group>
 </AuToolbar>
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box au-u-flex au-u-flex--column">
     <span class="au-u-margin-bottom">
-      <AuLabel for="banner-message-input">
+      <AuLabel for="global-system-message-input">
         Message
       </AuLabel>
       <AuInput
-        id="banner-message-input"
+        id="global-system-message-input"
         value={{this.message}}
         @disabled={{this.isActive}}
         {{on "keyup" (perform this.onInputChange)}}
