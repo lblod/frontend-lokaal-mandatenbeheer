@@ -12,12 +12,12 @@
       <AuInput
         id="global-system-message-input"
         value={{this.message}}
-        @disabled={{this.isActive}}
+        @disabled={{this.messageService.isActive}}
         {{on "keyup" (perform this.onInputChange)}}
       />
     </span>
     <AuToggleSwitch
-      @checked={{this.isActive}}
+      @checked={{this.messageService.isActive}}
       @onChange={{await this.toggleIsActive}}
       @disabled={{this.isDisabled}}
     >Active</AuToggleSwitch>

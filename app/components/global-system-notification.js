@@ -11,16 +11,6 @@ export default class GlobalSystemNotification extends Component {
 
   constructor() {
     super(...arguments);
-    this.setMessage();
-  }
-
-  get show() {
-    return this.message;
-  }
-
-  async setMessage() {
-    const systemMessage = await this.globalSystemMessage.findMessage();
-
-    this.message = systemMessage?.message;
+    this.globalSystemMessage.findMessage();
   }
 }

@@ -13,8 +13,6 @@ export default class AdminPanelGlobalSystemMessageController extends Controller 
   @service('globalSystemMessage') messageService;
 
   @tracked message;
-  @tracked isActive;
-  @tracked systemMessageModel;
 
   get isDisabled() {
     return !this.message || this.message.trim === '';
@@ -22,24 +20,21 @@ export default class AdminPanelGlobalSystemMessageController extends Controller 
 
   @action
   async toggleIsActive() {
-    this.isActive = !this.isActive;
-
-    if (!this.isActive && this.systemMessageModel) {
-      await this.systemMessageModel.destroyRecord();
-      this.systemMessageModel = null;
+    const isActive = !this.messageService.isActive;
+    if (!isActive && this.messageService.messageModel) {
+      await this.messageService.removeMessage();
     }
 
-    if (this.isActive && !this.systemMessageModel) {
+    if (isActive && !this.messageService.messageModel) {
       this.systemMessageModel = await this.messageService.createMessage(
         this.message
       );
     }
   }
 
-  setMessageFromModel(systemMessage) {
-    this.systemMessageModel = systemMessage;
+  async setMessageFromModel() {
+    this.systemMessageModel = await this.messageService.findMessage();
     this.message = this.systemMessageModel?.message;
-    this.isActive = this.message ? true : false;
   }
 
   onInputChange = restartableTask(async (event) => {

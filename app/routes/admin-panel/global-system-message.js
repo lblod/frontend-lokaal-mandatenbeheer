@@ -7,7 +7,6 @@ export default class AdminPanelGlobalSystemMessageRoute extends Route {
   @service session;
   @service store;
   @service router;
-  @service globalSystemMessage;
   @service impersonation;
 
   beforeModel(transition) {
@@ -18,12 +17,8 @@ export default class AdminPanelGlobalSystemMessageRoute extends Route {
     }
   }
 
-  async model() {
-    return await this.globalSystemMessage.findMessage();
-  }
-
-  setupController(controller, model) {
-    super.setupController(controller, model);
-    controller.setMessageFromModel(model);
+  async setupController(controller) {
+    super.setupController(controller);
+    await controller.setMessageFromModel();
   }
 }
