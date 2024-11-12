@@ -6,6 +6,11 @@ export default class GlobalSystemMessageService extends Service {
 
   @tracked currentMessage = null;
 
+  constructor() {
+    super(...arguments);
+    this.periodicallyCheckMessage();
+  }
+
   async findMessage() {
     const globalSystemMessages = await this.store.findAll(
       'global-system-message'
