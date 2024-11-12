@@ -11,6 +11,7 @@ import {
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
   INSTALLATIEVERGADERING_BEHANDELD_STATUS,
+  KANDIDATENLIJST_OCMW,
   RMW_BESTUURSORGAAN_URI,
   VAST_BUREAU_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
@@ -133,9 +134,20 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     const queryParams = {
       'filter[verkiezing][bestuursorganen-in-tijd][heeft-bestuursperiode][:id:]':
         bestuursperiode.id,
-      include: 'resulterende-fracties',
+      include: ['resulterende-fracties', 'lijsttype'].join(','),
     };
-
-    return await this.store.query('kandidatenlijst', queryParams);
+    const results = await this.store.query('kandidatenlijst', queryParams);
+    return (
+      await Promise.all(
+        results.map(async (lijst) => {
+          if (
+            (await lijst.get('lijsttype')).get('uri') !== KANDIDATENLIJST_OCMW
+          ) {
+            return lijst;
+          }
+          return null;
+        })
+      )
+    ).filter(Boolean);
   }
 }
