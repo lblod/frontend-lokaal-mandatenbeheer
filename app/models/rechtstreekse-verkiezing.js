@@ -15,4 +15,8 @@ export default class RechtstreekseVerkiezingModel extends Model {
     inverse: 'verkiezing',
   })
   kandidatenlijsten;
+
+  get getLijsttype() {
+    return this.kandidatenlijsten.slice().at(0).get('lijsttype').get('label');
+  }
 }

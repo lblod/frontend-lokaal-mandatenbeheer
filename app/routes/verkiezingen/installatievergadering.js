@@ -121,6 +121,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
         bestuursperiode.id,
       include: [
         'kandidatenlijsten',
+        'kandidatenlijsten.lijsttype',
         'kandidatenlijsten.resulterende-fracties',
       ].join(','),
     };
