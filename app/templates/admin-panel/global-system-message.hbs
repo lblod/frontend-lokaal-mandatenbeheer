@@ -9,8 +9,10 @@
       <AuLabel for="global-system-message-input">
         Message
       </AuLabel>
-      <AuInput
+      <AuTextarea
         id="global-system-message-input"
+        @width="block"
+        rows={{2}}
         value={{this.message}}
         @disabled={{this.messageService.isActive}}
         {{on "keyup" (perform this.onInputChange)}}
