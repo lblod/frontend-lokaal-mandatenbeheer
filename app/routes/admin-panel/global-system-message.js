@@ -17,6 +17,6 @@ export default class AdminPanelGlobalSystemMessageRoute extends Route {
 
   async setupController(controller) {
     super.setupController(controller);
-    await controller.setMessageFromModel();
+    await controller.setCurrentMessage();
   }
 }

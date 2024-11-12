@@ -32,7 +32,7 @@ export default class AdminPanelGlobalSystemMessageController extends Controller 
     }
   }
 
-  async setMessageFromModel() {
+  async setCurrentMessage() {
     this.currentMessage = await this.messageService.findMessage();
     this.message = this.currentMessage?.message;
   }
