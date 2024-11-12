@@ -13,9 +13,9 @@
         id="global-system-message-input"
         @width="block"
         rows={{2}}
-        value={{this.message}}
+        value={{this.messageService.message}}
         @disabled={{this.messageService.isActive}}
-        {{on "keyup" (perform this.onInputChange)}}
+        {{on "blur" (perform this.onInputBlur)}}
       />
     </span>
     <AuToggleSwitch

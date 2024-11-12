@@ -31,10 +31,11 @@ export default class GlobalSystemMessageService extends Service {
     return newMessage;
   }
 
-  async removeMessage() {
+  async updateCurrentMessage(message, isActive) {
     if (this.currentMessage?.id) {
-      await this.currentMessage.destroyRecord();
-      this.currentMessage = null;
+      this.currentMessage.message = message;
+      this.currentMessage.isActive = isActive;
+      await this.currentMessage.save();
     }
   }
 
@@ -43,7 +44,7 @@ export default class GlobalSystemMessageService extends Service {
   }
 
   get isActive() {
-    return this.currentMessage ? true : false;
+    return this.currentMessage?.isActive;
   }
 
   #periodicallyCheckMessage() {

@@ -6,6 +6,7 @@ export default class AdminPanelGlobalSystemMessageRoute extends Route {
   @service currentSession;
   @service session;
   @service router;
+  @service('globalSystemMessage') messageService;
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
@@ -15,8 +16,8 @@ export default class AdminPanelGlobalSystemMessageRoute extends Route {
     }
   }
 
-  async setupController(controller) {
-    super.setupController(controller);
-    await controller.setCurrentMessage();
+  async setupController() {
+    super.setupController();
+    await await this.messageService.findMessage();
   }
 }
