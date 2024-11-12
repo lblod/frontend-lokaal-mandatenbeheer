@@ -137,13 +137,8 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       include: ['resulterende-fracties', 'lijsttype'].join(','),
     };
     const results = await this.store.query('kandidatenlijst', queryParams);
-    return results
-      .map((lijst) => {
-        if (lijst.get('lijsttype').get('uri') !== KANDIDATENLIJST_OCMW) {
-          return lijst;
-        }
-        return null;
-      })
-      .filter(Boolean);
+    return results.filter((lijst) => {
+      return lijst.get('lijsttype').get('uri') !== KANDIDATENLIJST_OCMW;
+    });
   }
 }
