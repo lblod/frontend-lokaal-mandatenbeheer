@@ -5,7 +5,6 @@ import { service } from '@ember/service';
 export default class AdminPanelGlobalSystemMessageRoute extends Route {
   @service currentSession;
   @service session;
-  @service store;
   @service router;
 
   beforeModel(transition) {
