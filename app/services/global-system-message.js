@@ -40,4 +40,12 @@ export default class GlobalSystemMessageService extends Service {
   get isActive() {
     return this.currentMessage ? true : false;
   }
+
+  periodicallyCheckMessage() {
+    this.findMessage();
+
+    setInterval(async () => {
+      await this.findMessage();
+    }, 300000); // every 5 minutes
+  }
 }
