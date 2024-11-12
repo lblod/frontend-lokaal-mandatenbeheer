@@ -59,6 +59,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     const bestuursorganenInTijd =
       await this.getBestuursorganenInTijd(selectedPeriod);
 
+    const verkiezingen = await this.getVerkiezingen(selectedPeriod);
     const kandidatenlijsten = await this.getKandidatenLijsten(selectedPeriod);
 
     const mandatarisForm = getFormFrom(this.store, MANDATARIS_EXTENDED_FORM);
@@ -69,6 +70,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       bestuurseenheid,
       bestuursorganenInTijd,
       mandatarisForm,
+      verkiezing: verkiezingen.at(0),
       kandidatenlijsten,
       bestuursPeriods,
       selectedPeriod,
@@ -111,6 +113,19 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     });
 
     return sortedBestuursorganenInTijd;
+  }
+
+  async getVerkiezingen(bestuursperiode) {
+    const queryParams = {
+      'filter[bestuursorganen-in-tijd][heeft-bestuursperiode][:id:]':
+        bestuursperiode.id,
+      include: [
+        'kandidatenlijsten',
+        'kandidatenlijsten.resulterende-fracties',
+      ].join(','),
+    };
+
+    return await this.store.query('rechtstreekse-verkiezing', queryParams);
   }
 
   async getKandidatenLijsten(bestuursperiode) {

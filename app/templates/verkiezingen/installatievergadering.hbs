@@ -49,10 +49,9 @@
     <Group>
       <AuLink
         @route="verkiezingen.verkiezingsuitslag"
-        @model={{@model.selectedPeriod.id}}
+        @model={{@model.verkiezing.id}}
         @skin="button-secondary"
       >Bekijk verkiezingsuitslag
-        {{this.model.selectedPeriod.start}}
       </AuLink>
 
       <Shared::Tooltip
