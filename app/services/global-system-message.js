@@ -8,7 +8,7 @@ export default class GlobalSystemMessageService extends Service {
 
   constructor() {
     super(...arguments);
-    this.periodicallyCheckMessage();
+    this.#periodicallyCheckMessage();
   }
 
   async findMessage() {
@@ -46,7 +46,7 @@ export default class GlobalSystemMessageService extends Service {
     return this.currentMessage ? true : false;
   }
 
-  periodicallyCheckMessage() {
+  #periodicallyCheckMessage() {
     this.findMessage();
 
     setInterval(async () => {
