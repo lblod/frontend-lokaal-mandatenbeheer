@@ -36,6 +36,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
   @tracked statusPillLabel = 'info';
   @tracked nextStatus;
   @tracked isModalOpen = false;
+  @tracked VerkiezingsUitslagModal = false;
 
   @action
   async selectStatus(status) {

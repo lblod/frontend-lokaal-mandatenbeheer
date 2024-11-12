@@ -55,7 +55,10 @@
         >Bekijk verkiezingsuitslag
         </AuLink>
       {{else}}
-        <AuButton @skin="button-secondary">Bekijk verkiezingsuitslag
+        <AuButton
+          @skin="secondary"
+          {{on "click" (fn (mut this.verkiezingsUitslagModal) true)}}
+        >Bekijk verkiezingsuitslag
         </AuButton>
       {{/if}}
 
@@ -110,6 +113,36 @@
       </div>
     {{/unless}}
   </div>
+
+  <AuModal
+    @title="Selecteer type verkiezingsuitslag"
+    @modalOpen={{this.verkiezingsUitslagModal}}
+    @closable={{true}}
+    @closeModal={{fn (mut this.verkiezingsUitslagModal) false}}
+  >
+    <div class="au-o-box">
+      Deze installatievergadering bevat de uitslag van meerdere verkiezingen.
+      Selecteer welke uitslag je wilt bekijken.
+      <li class="au-c-list-horizontal__item au-u-margin-top-small">
+        <AuDropdown
+          @title="Selecteer verkiezingsuitslag"
+          @alignment="left"
+          @skin="secondary"
+          role="menu"
+        >
+          {{#each @model.verkiezingen as |verkiezing|}}
+            <AuLink
+              @route="verkiezingen.verkiezingsuitslag"
+              @model={{verkiezing.id}}
+              role="menuitem"
+            >Bekijk verkiezingsuitslag
+            </AuLink>
+          {{/each}}
+        </AuDropdown>
+      </li>
+    </div>
+  </AuModal>
+
   <AuModal
     @title={{this.modalTitle}}
     @modalOpen={{this.isModalOpen}}
