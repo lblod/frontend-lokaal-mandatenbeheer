@@ -135,7 +135,8 @@
               @route="verkiezingen.verkiezingsuitslag"
               @model={{verkiezing.id}}
               role="menuitem"
-            >{{verkiezing.getLijsttype}}
+            >Verkiezingsuitslag
+              {{verkiezing.getType}}
             </AuLink>
           {{/each}}
         </AuDropdown>

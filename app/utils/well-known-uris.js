@@ -77,3 +77,18 @@ export const INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS =
   'http://data.lblod.info/id/concept/InstallatievergaderingStatus/b54dbe98-d618-4af7-9f01-791aa90774e4';
 export const INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS =
   'http://data.lblod.info/id/concept/InstallatievergaderingStatus/a40b8f8a-8de2-4710-8d9b-3fc43a4b740e';
+
+export const KANDIDATENLIJST_GEMEENTERAAD =
+  'http://data.vlaanderen.be/id/concept/KandidatenlijstLijsttype/95de36e5-8c7a-4308-af7b-75afbd943dd2';
+export const KANDIDATENLIJST_OCMW =
+  'http://data.vlaanderen.be/id/concept/KandidatenlijstLijsttype/967a4dd2-53d7-48e8-becd-16a354580623';
+export const KANDIDATENLIJST_DISTRICTSRAAD =
+  'http://data.vlaanderen.be/id/concept/KandidatenlijstLijsttype/44aa08d2-fa02-42a3-8ae2-7dbfb23afdcc';
+export const KANDIDATENLIJST_PROVINCIERAAD =
+  'http://data.vlaanderen.be/id/concept/KandidatenlijstLijsttype/90e3b7d0-2fae-43a1-957e-6daa8d072be1';
+export const KANDIDATENLIJST_VLAAMS_PARLEMENT =
+  'http://data.vlaanderen.be/id/concept/KandidatenlijstLijsttype/33c0d12e-3588-41b9-90f1-05690ea7d8f6';
+export const KANDIDATENLIJST_SENAAT =
+  'http://data.vlaanderen.be/id/concept/KandidatenlijstLijsttype/af845873-f8fa-4c7e-b67c-10e44957c40e';
+export const KANDIDATENLIJST_KAMER_VOLKSVERTEGENWOORDIGING =
+  'http://data.vlaanderen.be/id/concept/KandidatenlijstLijsttype/83b89937-84e1-4e6c-a070-83b0fda51871';
