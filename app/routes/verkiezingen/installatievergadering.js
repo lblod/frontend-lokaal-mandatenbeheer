@@ -137,17 +137,13 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       include: ['resulterende-fracties', 'lijsttype'].join(','),
     };
     const results = await this.store.query('kandidatenlijst', queryParams);
-    return (
-      await Promise.all(
-        results.map(async (lijst) => {
-          if (
-            (await lijst.get('lijsttype')).get('uri') !== KANDIDATENLIJST_OCMW
-          ) {
-            return lijst;
-          }
-          return null;
-        })
-      )
-    ).filter(Boolean);
+    return results
+      .map((lijst) => {
+        if (lijst.get('lijsttype').get('uri') !== KANDIDATENLIJST_OCMW) {
+          return lijst;
+        }
+        return null;
+      })
+      .filter(Boolean);
   }
 }
