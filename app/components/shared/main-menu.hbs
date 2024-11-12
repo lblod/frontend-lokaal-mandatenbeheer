@@ -3,9 +3,7 @@
 </div>
 <nav>
   <ul class="au-c-list-navigation">
-    {{#if
-      (and this.currentSession.isAdmin (not this.impersonation.isImpersonating))
-    }}
+    {{#if this.currentSession.showAdminFeatures}}
       <li class="au-c-list-navigation__item">
         <AuNavigationLink @route="admin-panel.index">
           <AuIcon @icon="settings" @alignment="left" />

@@ -46,7 +46,7 @@
             Wissel van bestuurseenheid
           </AuLink>
 
-          {{#unless this.currentSession.isAdmin}}
+          {{#unless this.currentSession.showAdminFeatures}}
             <AuLink @route="settings" @icon="settings" role="menuitem">
               Instellingen
             </AuLink>

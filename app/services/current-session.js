@@ -112,4 +112,8 @@ export default class CurrentSessionService extends Service {
     }
     return roles.includes(ADMIN_ROLE);
   }
+
+  get showAdminFeatures() {
+    return this.isAdmin && !this.impersonation.isImpersonating;
+  }
 }
