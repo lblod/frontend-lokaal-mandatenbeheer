@@ -10,7 +10,9 @@
   <div
     class="au-u-flex au-u-flex--between au-u-padding au-u-padding-bottom-none"
   >
-    <AuHeading @skin="2">Verkiezingsuitslag {{this.getYear}}</AuHeading>
+    <AuHeading @skin="2">Verkiezingsuitslag
+      {{this.model.verkiezing.getType}}
+      {{this.getYear}}</AuHeading>
     <AuLinkExternal
       href={{this.downloadLink}}
       download="verkiezingsresultaten"
