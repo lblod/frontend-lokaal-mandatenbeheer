@@ -136,7 +136,7 @@ export default class MandatarisApiService extends Service {
     return `${API.MANDATARIS_SERVICE}/mandatarissen/download?${createQueryParamsAsString.join('&')}`;
   }
 
-  async generate(config) {
+  async generateRows(config) {
     const {
       count,
       mandaatUri,
@@ -146,7 +146,7 @@ export default class MandatarisApiService extends Service {
       rangordeLabel,
     } = config;
     const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/mandatarissen/generate`,
+      `${API.MANDATARIS_SERVICE}/mandatarissen/generate-rows`,
       {
         method: 'POST',
         headers: {
@@ -171,7 +171,5 @@ export default class MandatarisApiService extends Service {
         message: jsonReponse.message,
       };
     }
-
-    return jsonReponse.ids;
   }
 }

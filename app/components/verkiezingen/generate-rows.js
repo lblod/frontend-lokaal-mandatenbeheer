@@ -46,12 +46,9 @@ export default class GenerateRowsFormComponent extends Component {
   });
 
   generateMandatarissen = task(async (config) => {
-    const createdIds = await this.mandatarisApi.generate(config);
-    const models = await this.store.query('mandataris', {
-      'filter[:id:]': createdIds.join(','),
-    });
+    await this.mandatarisApi.generateRows(config);
     this.args.onCreated({
-      added: models,
+      updated: true,
     });
     this.args.onCancel();
   });
