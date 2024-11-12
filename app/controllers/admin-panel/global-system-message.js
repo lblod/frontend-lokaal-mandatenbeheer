@@ -21,20 +21,20 @@ export default class AdminPanelGlobalSystemMessageController extends Controller 
   @action
   async toggleIsActive() {
     const isActive = !this.messageService.isActive;
-    if (!isActive && this.messageService.messageModel) {
+    if (!isActive && this.messageService.currentMessage) {
       await this.messageService.removeMessage();
     }
 
-    if (isActive && !this.messageService.messageModel) {
-      this.systemMessageModel = await this.messageService.createMessage(
+    if (isActive && !this.messageService.currentMessage) {
+      this.currentMessage = await this.messageService.createMessage(
         this.message
       );
     }
   }
 
   async setMessageFromModel() {
-    this.systemMessageModel = await this.messageService.findMessage();
-    this.message = this.systemMessageModel?.message;
+    this.currentMessage = await this.messageService.findMessage();
+    this.message = this.currentMessage?.message;
   }
 
   onInputChange = restartableTask(async (event) => {

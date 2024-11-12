@@ -4,16 +4,16 @@ import { tracked } from '@glimmer/tracking';
 export default class GlobalSystemMessageService extends Service {
   @service store;
 
-  @tracked messageModel = null;
+  @tracked currentMessage = null;
 
   async findMessage() {
     const globalSystemMessages = await this.store.findAll(
       'global-system-message'
     );
-    this.messageModel =
+    this.currentMessage =
       globalSystemMessages.length >= 1 ? globalSystemMessages.at(0) : null;
 
-    return this.messageModel;
+    return this.currentMessage;
   }
 
   async createMessage(message) {
@@ -21,23 +21,23 @@ export default class GlobalSystemMessageService extends Service {
       message,
     });
     await newMessage.save();
-    this.messageModel = newMessage;
+    this.currentMessage = newMessage;
 
     return newMessage;
   }
 
   async removeMessage() {
-    if (this.messageModel?.id) {
-      await this.messageModel.destroyRecord();
-      this.messageModel = null;
+    if (this.currentMessage?.id) {
+      await this.currentMessage.destroyRecord();
+      this.currentMessage = null;
     }
   }
 
   get message() {
-    return this.messageModel?.message;
+    return this.currentMessage?.message;
   }
 
   get isActive() {
-    return this.messageModel ? true : false;
+    return this.currentMessage ? true : false;
   }
 }
