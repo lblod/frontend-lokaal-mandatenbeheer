@@ -47,12 +47,17 @@
       </div>
     </Group>
     <Group>
-      <AuLink
-        @route="verkiezingen.verkiezingsuitslag"
-        @model={{@model.verkiezing.id}}
-        @skin="button-secondary"
-      >Bekijk verkiezingsuitslag
-      </AuLink>
+      {{#if (eq @model.verkiezingen.length 1)}}
+        <AuLink
+          @route="verkiezingen.verkiezingsuitslag"
+          @model={{get (get @model.verkiezingen 0) "id"}}
+          @skin="button-secondary"
+        >Bekijk verkiezingsuitslag
+        </AuLink>
+      {{else}}
+        <AuButton @skin="button-secondary">Bekijk verkiezingsuitslag
+        </AuButton>
+      {{/if}}
 
       <Shared::Tooltip
         @showTooltip={{this.statusIsDisabled}}

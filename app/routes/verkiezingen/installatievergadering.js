@@ -70,7 +70,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       bestuurseenheid,
       bestuursorganenInTijd,
       mandatarisForm,
-      verkiezing: verkiezingen.at(0),
+      verkiezingen,
       kandidatenlijsten,
       bestuursPeriods,
       selectedPeriod,
