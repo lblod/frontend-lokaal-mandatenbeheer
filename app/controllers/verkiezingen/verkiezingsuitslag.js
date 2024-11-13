@@ -17,6 +17,10 @@ export default class VerkiezingenVerkiezingsuitslagController extends Controller
 
   @tracked searchData;
 
+  get getYear() {
+    return this.model.verkiezing.datum.getFullYear();
+  }
+
   get downloadLink() {
     return `/election-results-api/${this.model.verkiezing.id}/download`;
   }

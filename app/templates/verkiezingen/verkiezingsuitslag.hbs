@@ -1,16 +1,18 @@
 {{page-title "Verkiezingsuitslag"}}
 {{breadcrumb
   "Verkiezingsuitslag "
-  this.model.selectedPeriod.start
+  this.getYear
   route="verkiezingen.verkiezingsuitslag"
-  model=this.model.selectedPeriod.id
+  model=this.model.verkiezing.id
 }}
 
 <div class="au-c-body-container">
   <div
     class="au-u-flex au-u-flex--between au-u-padding au-u-padding-bottom-none"
   >
-    <AuHeading @skin="2">Verkiezingsuitslag</AuHeading>
+    <AuHeading @skin="2">Verkiezingsuitslag
+      {{this.model.verkiezing.getType}}
+      {{this.getYear}}</AuHeading>
     <AuLinkExternal
       href={{this.downloadLink}}
       download="verkiezingsresultaten"

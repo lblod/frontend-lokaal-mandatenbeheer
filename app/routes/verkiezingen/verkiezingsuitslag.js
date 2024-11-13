@@ -15,21 +15,16 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
 
   async model(params) {
     const options = this.getOptions(params);
+    const verkiezing = await this.store.findRecord(
+      'rechtstreekse-verkiezing',
+      params.id
+    );
     const verkiezingsresultaten = await this.store.query(
       'verkiezingsresultaat',
       options
     );
-    const selectedPeriod = await this.store.findRecord(
-      'bestuursperiode',
-      params.id
-    );
-
-    const verkiezing = await (
-      await verkiezingsresultaten[0]?.kandidatenlijst
-    )?.verkiezing;
 
     return {
-      selectedPeriod,
       verkiezing,
       verkiezingsresultaten,
     };
@@ -42,14 +37,9 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      'filter[kandidatenlijst][verkiezing][bestuursorganen-in-tijd][heeft-bestuursperiode][:id:]':
-        params.id,
+      'filter[kandidatenlijst][verkiezing][:id:]': params.id,
       'filter[:has:persoon]': 'true',
-      include: [
-        'kandidatenlijst',
-        'kandidatenlijst.verkiezing',
-        'persoon',
-      ].join(','),
+      include: ['kandidatenlijst', 'persoon'].join(','),
     };
     if (params.filter && params.filter.length > 0) {
       options['filter[persoon]'] = params.filter;
