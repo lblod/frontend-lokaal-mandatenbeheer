@@ -85,14 +85,12 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
     }
 
     const extraFilter = {};
-    if (this.args.onlyElected && this.args.bestuursperiode) {
+    if (this.args.onlyElected && this.args.bestuursorgaanIT) {
       extraFilter.verkiezingsresultaten = {
         kandidatenlijst: {
           verkiezing: {
-            'bestuursorgaan-in-tijd': {
-              'heeft-bestuursperiode': {
-                ':id:': this.args.bestuursperiode.id,
-              },
+            'bestuursorganen-in-tijd': {
+              ':id:': this.args.bestuursorgaanIT.id,
             },
           },
         },

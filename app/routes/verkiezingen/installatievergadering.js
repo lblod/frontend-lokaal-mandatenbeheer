@@ -115,7 +115,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
 
   async getKandidatenLijsten(bestuursperiode) {
     const queryParams = {
-      'filter[verkiezing][bestuursorgaan-in-tijd][heeft-bestuursperiode][:id:]':
+      'filter[verkiezing][bestuursorganen-in-tijd][heeft-bestuursperiode][:id:]':
         bestuursperiode.id,
       include: 'resulterende-fracties',
     };

@@ -42,7 +42,7 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      'filter[kandidatenlijst][verkiezing][bestuursorgaan-in-tijd][heeft-bestuursperiode][:id:]':
+      'filter[kandidatenlijst][verkiezing][bestuursorganen-in-tijd][heeft-bestuursperiode][:id:]':
         params.id,
       'filter[:has:persoon]': 'true',
       include: [

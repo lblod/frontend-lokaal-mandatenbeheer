@@ -1,14 +1,14 @@
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class RechtstreekseVerkiezingModel extends Model {
   @attr('date') datum;
   @attr('date') geldigheid;
 
-  @belongsTo('bestuursorgaan', {
+  @hasMany('bestuursorgaan', {
     async: true,
     inverse: 'verkiezing',
   })
-  bestuursorgaanInTijd;
+  bestuursorganenInTijd;
 
   @hasMany('kandidatenlijst', {
     async: true,

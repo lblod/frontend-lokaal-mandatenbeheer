@@ -42,7 +42,7 @@ export default class MandatarissenUpdateState extends Component {
   @service fractieApi;
   @service mandatarisApi;
 
-  currentBestuursorgaan;
+  @tracked currentBestuursorgaan;
 
   constructor() {
     super(...arguments);
