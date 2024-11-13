@@ -138,4 +138,10 @@ export default class PrepareInstallatievergaderingRoute extends Route {
 
     return await this.store.query('kandidatenlijst', queryParams);
   }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.set('verkiezingsUitslagModal', false);
+    }
+  }
 }
