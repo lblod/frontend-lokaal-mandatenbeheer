@@ -9,10 +9,10 @@ import {
   getDraftPublicationStatus,
   getEffectiefStatus,
 } from 'frontend-lmb/utils/get-mandataris-status';
-import { rangordeNumberMapping } from 'frontend-lmb/utils/rangorde';
 
 export default class GenerateRowsFormComponent extends Component {
   @service store;
+  @service('mandataris-api') mandatarisApi;
 
   effectiefStatus;
   draftPublicationStatus;
@@ -20,7 +20,6 @@ export default class GenerateRowsFormComponent extends Component {
   @tracked startDate;
   @tracked endDate;
   @tracked mandaatOptions;
-  @tracked loadingMessageOfGeneration;
 
   constructor() {
     super(...arguments);
@@ -47,38 +46,18 @@ export default class GenerateRowsFormComponent extends Component {
   });
 
   generateMandatarissen = task(async (config) => {
-    const addedMandatarissen = [];
-    const { rows, mandaat, startDate, endDate, existingMandaten } = config;
-    const mandatarisProps = {
-      rangorde: null,
-      start: startDate,
-      einde: endDate,
-      bekleedt: mandaat,
-      isBestuurlijkeAliasVan: null,
-      beleidsdomein: [],
-      status: this.effectiefStatus,
-      publicationStatus: this.draftPublicationStatus,
-    };
-
-    for (let index = 0; index < rows; index++) {
-      if (mandaat.isSchepen) {
-        const rangordeAsNumber = existingMandaten + index + 1;
-        mandatarisProps.rangorde = `${rangordeNumberMapping[rangordeAsNumber] ?? 'Eerste'} schepen`;
-      }
-      if (mandaat.isGemeenteraadslid) {
-        const rangordeAsNumber = existingMandaten + index + 1;
-        mandatarisProps.rangorde = `${rangordeNumberMapping[rangordeAsNumber] ?? 'Eerste'} lid`;
-      }
-
-      const mandataris = this.store.createRecord('mandataris', mandatarisProps);
-      await mandataris.save();
-      addedMandatarissen.push(mandataris);
-      this.loadingMessageOfGeneration = `Generating ${index + 1} of ${rows}`;
-    }
-    this.loadingMessageOfGeneration = null;
+    await this.mandatarisApi.generateRows(config);
     this.args.onCreated({
-      added: addedMandatarissen,
+      updated: true,
     });
     this.args.onCancel();
   });
+
+  get loadingMessage() {
+    if (this.generateMandatarissen.isRunning) {
+      return 'Genereren';
+    }
+
+    return null;
+  }
 }

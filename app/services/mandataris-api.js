@@ -135,4 +135,41 @@ export default class MandatarisApiService extends Service {
 
     return `${API.MANDATARIS_SERVICE}/mandatarissen/download?${createQueryParamsAsString.join('&')}`;
   }
+
+  async generateRows(config) {
+    const {
+      count,
+      mandaatUri,
+      startDate,
+      endDate,
+      rangordeStartsAt,
+      rangordeLabel,
+    } = config;
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/mandatarissen/generate-rows`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          count,
+          rangordeStartsAt,
+          rangordeLabel,
+          startDate,
+          endDate,
+          mandaatUri,
+        }),
+      }
+    );
+    const jsonReponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonReponse.message);
+      throw {
+        status: response.status,
+        message: jsonReponse.message,
+      };
+    }
+  }
 }

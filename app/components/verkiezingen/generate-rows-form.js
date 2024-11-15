@@ -7,6 +7,7 @@ import { A } from '@ember/array';
 
 import { task, restartableTask, timeout } from 'ember-concurrency';
 
+import { rangordeStringToNumber } from 'frontend-lmb/utils/rangorde';
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 import { isValidDate } from '../date-input';
 
@@ -18,8 +19,9 @@ export default class GenerateRowsFormComponent extends Component {
   @tracked endDate;
   @tracked rowsToGenerate;
   @tracked rowWarnings = A([]);
-  @tracked lengthExistingMandaten = 0;
   @tracked rowsToCreateHelpText;
+
+  existingMandatarissen = [];
 
   constructor() {
     super(...arguments);
@@ -35,15 +37,13 @@ export default class GenerateRowsFormComponent extends Component {
 
   checkPossibleMandatenToGenerate = restartableTask(async () => {
     this.rowWarnings.clear();
-    this.lengthExistingMandaten = (
-      await this.store.query('mandataris', {
-        page: {
-          size: 9999,
-        },
-        'filter[bekleedt][:id:]': this.selectedMandaat.parent.id,
-        'filter[bekleedt][bevat-in][:id:]': this.args.bestuursorgaan.id,
-      })
-    ).length;
+    this.existingMandatarissen = await this.store.query('mandataris', {
+      page: {
+        size: 9999,
+      },
+      'filter[bekleedt][:id:]': this.selectedMandaat.parent.id,
+      'filter[bekleedt][bevat-in][:id:]': this.args.bestuursorgaan.id,
+    });
 
     if (
       this.selectedMandaat.parent.minAantalHouders &&
@@ -94,13 +94,30 @@ export default class GenerateRowsFormComponent extends Component {
     const notRequiredEndDate = isValidDate(this.endDate) ? this.endDate : null;
 
     this.args.onConfigReceived({
-      mandaat: this.selectedMandaat.parent,
+      mandaatUri: this.selectedMandaat.parent.uri,
       startDate: this.startDate ?? this.args.startDate,
       endDate: notRequiredEndDate,
-      rows: this.rowsToGenerate,
-      existingMandaten: this.lengthExistingMandaten,
+      count: this.rowsToGenerate,
+      rangordeStartsAt: this.getHighestRangordeAsNumber() + 1,
+      rangordeLabel: this.selectedMandaat.parent.rangordeLabel,
     });
   });
+
+  getHighestRangordeAsNumber() {
+    if (this.existingMandatarissen.length === 0) {
+      return 0;
+    }
+
+    return Math.max(
+      ...this.existingMandatarissen.map((mandataris) => {
+        if (mandataris.rangorde) {
+          return rangordeStringToNumber(mandataris.rangorde);
+        } else {
+          return 0;
+        }
+      })
+    );
+  }
 
   addWarningWhenMandatenAreAtMax() {
     if (
@@ -124,5 +141,9 @@ export default class GenerateRowsFormComponent extends Component {
       this.rowsToGenerate <= 0 ||
       !isValidDate(this.startDate)
     );
+  }
+
+  get lengthExistingMandaten() {
+    return this.existingMandatarissen.length;
   }
 }
