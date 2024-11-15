@@ -1,0 +1,10 @@
+<Shared::Tooltip
+  @showTooltip={{true}}
+  @tooltipText="Exporteer mandatarissen naar CSV formaat"
+>
+  <AuLinkExternal
+    href={{await this.downloadLink}}
+    download="mandatarissen"
+    @skin="button-secondary"
+  >Download</AuLinkExternal>
+</Shared::Tooltip>
