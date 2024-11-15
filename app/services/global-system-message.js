@@ -32,11 +32,12 @@ export default class GlobalSystemMessageService extends Service {
   }
 
   async updateCurrentMessage(message, isActive) {
-    if (this.currentMessage?.id) {
-      this.currentMessage.message = message;
-      this.currentMessage.isActive = isActive;
-      await this.currentMessage.save();
+    if (!this.currentMessage) {
+      this.currentMessage = await this.createMessage(message);
     }
+    this.currentMessage.message = message;
+    this.currentMessage.isActive = isActive;
+    await this.currentMessage.save();
   }
 
   get message() {
