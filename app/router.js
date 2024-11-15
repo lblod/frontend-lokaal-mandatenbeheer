@@ -66,6 +66,10 @@ Router.map(function () {
 
   this.route('under-construction');
 
+  this.route('admin-panel', function () {
+    this.route('global-system-message');
+  });
+
   this.route('error/404', {
     path: '/*wildcard',
   });

@@ -1,0 +1,29 @@
+{{page-title "Admin Panel"}}
+<AuMainContainer as |main|>
+  <main.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__content">
+        <div class="au-c-sidebar__header">
+          <AuHeading @level="6" @skin="6">Admin panel</AuHeading>
+        </div>
+        <nav>
+          <ul class="au-c-list-navigation">
+            <li class="au-c-list-navigation__item">
+              <AuNavigationLink @route="admin-panel.global-system-message">
+                <AuIcon @icon="comment" @alignment="left" />
+                Global system message
+              </AuNavigationLink>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </main.sidebar>
+  <main.content>
+    <AuBodyContainer id="content">
+      {{#unless this.isIndex}}
+        {{outlet}}
+      {{/unless}}
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>

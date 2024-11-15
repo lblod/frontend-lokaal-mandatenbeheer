@@ -1,0 +1,27 @@
+<AuToolbar @size="large" @nowrap="true" as |Group|>
+  <Group>
+    <AuHeading @skin="2">System message</AuHeading>
+  </Group>
+</AuToolbar>
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box au-u-flex au-u-flex--column">
+    <span class="au-u-margin-bottom">
+      <AuLabel for="global-system-message-input">
+        Message
+      </AuLabel>
+      <AuTextarea
+        id="global-system-message-input"
+        @width="block"
+        rows={{2}}
+        value={{this.messageService.message}}
+        @disabled={{this.messageService.isActive}}
+        {{on "blur" (perform this.onInputBlur)}}
+      />
+    </span>
+    <AuToggleSwitch
+      @checked={{this.messageService.isActive}}
+      @onChange={{await this.toggleIsActive}}
+      @disabled={{this.isDisabled}}
+    >Active</AuToggleSwitch>
+  </div>
+</div>

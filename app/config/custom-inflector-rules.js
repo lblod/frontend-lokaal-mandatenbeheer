@@ -66,6 +66,7 @@ inflector.irregular('application-form-entry', 'application-form-entries');
 inflector.irregular('nationality', 'nationalities');
 
 inflector.irregular('system-notification', 'system-notifications');
+inflector.irregular('global-system-message', 'global-system-messages');
 
 inflector.irregular('werkingsgebied', 'werkingsgebieden');
 

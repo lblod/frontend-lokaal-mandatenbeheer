@@ -46,9 +46,11 @@
             Wissel van bestuurseenheid
           </AuLink>
 
-          <AuLink @route="settings" @icon="settings" role="menuitem">
-            Instellingen
-          </AuLink>
+          {{#unless this.currentSession.showAdminFeatures}}
+            <AuLink @route="settings" @icon="settings" role="menuitem">
+              Instellingen
+            </AuLink>
+          {{/unless}}
 
           <AuLink @route="auth.logout" @icon="logout" role="menuitem">
             Afmelden

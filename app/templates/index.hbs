@@ -17,6 +17,18 @@
       modules</AuHeading>
 
     <ul class="au-o-grid au-o-grid--small">
+      {{#if this.currentSession.showAdminFeatures}}
+        <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+          <LoketModuleCard @icon="settings">
+            <:title>Admin panel</:title>
+            <:description>Configuratie voor Lokaal Mandatenbeheer</:description>
+            <:link>
+              <AuLink @route="admin-panel.index" @skin="button">Ga naar het
+                admin panel</AuLink>
+            </:link>
+          </LoketModuleCard>
+        </li>
+      {{/if}}
       <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
         <LoketModuleCard @icon="users">
           <:title>Organen</:title>
