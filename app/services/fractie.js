@@ -78,7 +78,7 @@ export default class FractieService extends Service {
     const foldedMandataris = (await fold([mandataris])).at(0);
     const lid = await foldedMandataris.mandataris.heeftLidmaatschap;
     if (!lid) {
-      return true;
+      return false;
     }
 
     const fractie = await lid.binnenFractie;
