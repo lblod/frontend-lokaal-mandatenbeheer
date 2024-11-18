@@ -67,7 +67,7 @@ export default class FractieService extends Service {
       'filter[binnen-fractie][fractietype][:uri:]': FRACTIETYPE_ONAFHANKELIJK,
       'filter[lid][is-bestuurlijke-alias-van][:id:]': person.id,
       'filter[lid][bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
-        bestuursperiode,
+        bestuursperiode.id,
     });
     if (!onafhankelijkeMembership.length > 0) {
       return null;
