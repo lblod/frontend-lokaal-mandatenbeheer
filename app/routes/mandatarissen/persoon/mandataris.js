@@ -33,7 +33,10 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       .heeftBestuursperiode;
     const isDistrict = this.currentSession.isDistrict;
     const showOCMWLinkedMandatarisWarning =
-      await this.showOCMWLinkedMandatarisWarning(bestuurseenheid, mandataris);
+      await this.showOCMWLinkedMandatarisWarning(
+        bestuurseenheid,
+        params.mandataris_id
+      );
 
     return RSVP.hash({
       bestuurseenheid,
@@ -88,6 +91,24 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
   }
 
   async showOCMWLinkedMandatarisWarning(bestuurseenheid, mandataris) {
-    return bestuurseenheid.isOCMW;
+    const isOCMW = bestuurseenheid.isOCMW;
+    if (!isOCMW) {
+      return false;
+    }
+
+    const response = await fetch(
+      `/mandataris-api/mandatarissen/${mandataris}/check-possible-double`
+    );
+    const jsonReponse = await response.json();
+
+    if (response.status !== 200) {
+      console.error(jsonReponse.message);
+      throw jsonReponse.message;
+    }
+
+    if (jsonReponse.duplicateMandate && jsonReponse.hasDouble) {
+      return true;
+    }
+    return false;
   }
 }
