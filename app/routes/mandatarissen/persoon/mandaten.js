@@ -8,6 +8,7 @@ import moment from 'moment';
 export default class MandatarissenPersoonMandatenRoute extends Route {
   @service store;
   @service bestuursorganen;
+  @service currentSession;
 
   queryParams = {
     activeOnly: { refreshModel: true },
@@ -21,6 +22,7 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
     const persoon = parentModel.persoon;
     const mandatarissen = await this.getMandatarissen(persoon, params);
 
+    const bestuurseenheid = this.currentSession.group;
     const bestuursorganen =
       await this.bestuursorganen.getRealCurrentPoliticalBestuursorganen();
 
@@ -41,6 +43,7 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
       persoon,
       foldedMandatarissen,
       mandatarissen: filteredMandatarissen,
+      bestuurseenheid,
       bestuursorganen,
     };
   }
