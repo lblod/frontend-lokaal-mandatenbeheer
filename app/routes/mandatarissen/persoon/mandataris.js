@@ -32,6 +32,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const selectedBestuursperiode = (await bestuursorganen)[0]
       .heeftBestuursperiode;
     const isDistrict = this.currentSession.isDistrict;
+    const showOCMWLinkedMandatarisWarning =
+      await this.showOCMWLinkedMandatarisWarning(bestuurseenheid, mandataris);
 
     return RSVP.hash({
       bestuurseenheid,
@@ -42,6 +44,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       bestuursorganen,
       selectedBestuursperiode,
       isDistrictEenheid: isDistrict,
+      showOCMWLinkedMandatarisWarning,
     });
   }
 
@@ -82,5 +85,9 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     };
 
     return await this.store.query('mandataris', queryParams);
+  }
+
+  async showOCMWLinkedMandatarisWarning(bestuurseenheid, mandataris) {
+    return bestuurseenheid.isOCMW;
   }
 }

@@ -100,7 +100,7 @@
       mandaat aan te passen. Dit zal een nieuw mandaat starten met de gewijzigde
       situatie.</p>
   </AuAlert>
-  {{#if @model.bestuurseenheid.isOCMW}}
+  {{#if @model.showOCMWLinkedMandatarisWarning}}
     <AuAlert
       @skin="warning"
       @icon="alert-triangle"
@@ -134,7 +134,7 @@
       gebruik
       <span class="au-u-medium">Wijzig huidig mandaat</span>.</p>
   </AuAlert>
-  {{#if @model.bestuurseenheid.isOCMW}}
+  {{#if @model.showOCMWLinkedMandatarisWarning}}
     <AuAlert
       @skin="warning"
       @icon="alert-triangle"
