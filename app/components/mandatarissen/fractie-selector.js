@@ -9,7 +9,6 @@ import { task } from 'ember-concurrency';
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
   @service currentSession;
-  @service bestuursperioden;
   @service('fractie') fractieService;
   @service fractieApi;
   @service persoonApi;
