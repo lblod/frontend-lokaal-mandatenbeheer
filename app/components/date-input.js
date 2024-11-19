@@ -22,9 +22,7 @@ export default class DateInputComponent extends Component {
     const inputValue = event.target?.value;
     this.dateInputString = inputValue;
 
-    let [day, month, year] = inputValue.split('-');
-    const formatForDateConstructor = `${month}-${day}-${year}`;
-    const date = this.processDate(new Date(formatForDateConstructor) ?? null);
+    const date = this.processDate(moment(inputValue, 'DD-MM-YYYY').toDate());
 
     if (!this.args.isRequired && !isValidDate(date)) {
       this.invalidErrorMessage = null;
