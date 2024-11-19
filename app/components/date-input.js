@@ -22,7 +22,9 @@ export default class DateInputComponent extends Component {
     const inputValue = event.target?.value;
     this.dateInputString = inputValue;
 
-    const date = this.processDate(moment(inputValue, 'DD-MM-YYYY').toDate());
+    const date = this.processDate(
+      moment(inputValue, 'DD-MM-YYYY', true).toDate()
+    );
 
     if (!this.args.isRequired && !isValidDate(date)) {
       this.invalidErrorMessage = null;
