@@ -50,7 +50,7 @@ export default class PersonSelectorComponent extends Component {
     this.closeModal();
     this.persoonApi.putPersonInRightGraph(
       instanceId,
-      this.args.bestuursorgaanIT
+      this.args.bestuursorgaanIT.id
     );
     this.args.onUpdate(this.person);
   }
