@@ -57,4 +57,22 @@ export default class PersoonApiService extends Service {
 
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
+
+  async putPersonInRightGraph(persoonId, bestuursorgaanID) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/personen/${persoonId}/put-person-in-right-graph/${bestuursorgaanID}`,
+      {
+        method: 'POST',
+      }
+    );
+    const jsonReponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonReponse.message);
+      throw {
+        status: response.status,
+        message: jsonReponse.message,
+      };
+    }
+  }
 }

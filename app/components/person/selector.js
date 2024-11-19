@@ -14,6 +14,7 @@ export default class PersonSelectorComponent extends Component {
   inputId = 'input-' + guidFor(this);
 
   @service store;
+  @service persoonApi;
 
   @tracked person = null;
   @tracked selectNewPerson = false;
@@ -47,6 +48,10 @@ export default class PersonSelectorComponent extends Component {
     const persoon = await this.store.findRecord('persoon', instanceId);
     this.person = persoon;
     this.closeModal();
+    this.persoonApi.putPersonInRightGraph(
+      instanceId,
+      this.args.bestuursorgaanIT
+    );
     this.args.onUpdate(this.person);
   }
 
