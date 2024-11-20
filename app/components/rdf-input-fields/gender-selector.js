@@ -48,17 +48,20 @@ export default class RDFGenderSelector extends RdfInputFieldsConceptSchemeSelect
     if (isValidRijksregisternummer(rrnString) && isGenderKnown(rrnString)) {
       const male = {
         subject: new NamedNode(
-          'http://publications.europa.eu/resource/authority/human-sex/FEMALE'
+          'http://publications.europa.eu/resource/authority/human-sex/MALE'
         ),
         label: 'Mannelijk',
       };
       const woman = {
         subject: new NamedNode(
-          'http://publications.europa.eu/resource/authority/human-sex/MALE'
+          'http://publications.europa.eu/resource/authority/human-sex/FEMALE'
         ),
         label: 'Vrouwelijk',
       };
       this.selected = isBiologicalMale(rrnString) ? male : woman;
+      if (this.selected) {
+        this.updateSelection(this.selected);
+      }
     }
   });
 
