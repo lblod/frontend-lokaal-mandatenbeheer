@@ -65,14 +65,12 @@ export default class PersoonApiService extends Service {
         method: 'POST',
       }
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
-      throw {
-        status: response.status,
-        message: jsonReponse.message,
-      };
+      let error = new Error(jsonResponse.message);
+      error.status = response.status;
+      throw error;
     }
   }
 }
