@@ -48,11 +48,11 @@ export default class PersonSelectorComponent extends Component {
     const persoon = await this.store.findRecord('persoon', instanceId);
     this.person = persoon;
     this.closeModal();
-    this.persoonApi.putPersonInRightGraph(
+    await this.persoonApi.putPersonInRightGraph(
       instanceId,
       this.args.bestuursorgaanIT.id
     );
-    this.args.onUpdate(this.person);
+    await this.args.onUpdate(this.person);
   }
 
   @action
