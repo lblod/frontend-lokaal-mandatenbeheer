@@ -9,14 +9,12 @@ import { task } from 'ember-concurrency';
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
   @service currentSession;
-  @service bestuursperioden;
   @service('fractie') fractieService;
   @service fractieApi;
   @service persoonApi;
   @service mandatarisApi;
 
   @tracked _fractie;
-  @tracked bestuursorganen = [];
   @tracked fractieOptions = [];
 
   constructor() {
@@ -28,18 +26,8 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   }
 
   load = task(async () => {
-    await this.loadBestuursorganen();
     await this.loadFracties();
   });
-
-  async loadBestuursorganen() {
-    if (this.args.bestuursperiode) {
-      this.bestuursorganen =
-        await this.bestuursperioden.getRelevantTijdsspecialisaties(
-          this.args.bestuursperiode
-        );
-    }
-  }
 
   async loadFracties() {
     this.fractieOptions = [];
@@ -95,7 +83,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       let onafhankelijkeFractie =
         await this.fractieService.getOrCreateOnafhankelijkeFractie(
           person,
-          this.bestuursorganen,
+          this.args.bestuursperiode,
           this.args.bestuurseenheid
         );
       this.fractieOptions = [...this.fractieOptions, onafhankelijkeFractie];
@@ -110,7 +98,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     let onafhankelijkeFractie =
       await this.fractieService.getOrCreateOnafhankelijkeFractie(
         person,
-        this.bestuursorganen,
+        this.args.bestuursperiode,
         this.args.bestuurseenheid
       );
     const availableFractions = [...samenwerkingsFracties];

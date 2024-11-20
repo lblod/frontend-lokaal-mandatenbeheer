@@ -7,16 +7,21 @@ import { FRACTIETYPE_ONAFHANKELIJK } from 'frontend-lmb/utils/well-known-uris';
 
 export default class FractieService extends Service {
   @service store;
+  @service bestuursperioden;
 
   // ---------------------  WARNING ---------------------
   // if an onafhankelijke fractie is created, is it not saved yet.
   // save it before use!
   // this is to avoid too many tombstones being created for unused fracties
   // ---------------------  WARNING ----------------
-  async createOnafhankelijkeFractie(bestuursorganen, bestuurseenheid) {
+  async createOnafhankelijkeFractie(bestuursperiode, bestuurseenheid) {
     if (!bestuurseenheid) {
       throw `Could not create onafhankelijke fractie`;
     }
+    const bestuursorganen =
+      await this.bestuursperioden.getRelevantTijdsspecialisaties(
+        bestuursperiode
+      );
 
     const onafhankelijkeFractieType = (
       await this.store.query('fractietype', {
@@ -41,29 +46,28 @@ export default class FractieService extends Service {
   // ---------------------  WARNING ----------------
   async getOrCreateOnafhankelijkeFractie(
     person,
-    bestuursorganen,
+    bestuursperiode,
     bestuurseenheid
   ) {
     let onafhankelijkeFractie = await this.findOnafhankelijkeFractieForPerson(
       person,
-      bestuursorganen
+      bestuursperiode
     );
     if (!onafhankelijkeFractie) {
       onafhankelijkeFractie = await this.createOnafhankelijkeFractie(
-        bestuursorganen,
+        bestuursperiode,
         bestuurseenheid
       );
     }
     return onafhankelijkeFractie;
   }
 
-  async findOnafhankelijkeFractieForPerson(person, bestuursorganenInTijd) {
+  async findOnafhankelijkeFractieForPerson(person, bestuursperiode) {
     const onafhankelijkeMembership = await this.store.query('lidmaatschap', {
       'filter[binnen-fractie][fractietype][:uri:]': FRACTIETYPE_ONAFHANKELIJK,
       'filter[lid][is-bestuurlijke-alias-van][:id:]': person.id,
-      'filter[lid][bekleedt][bevat-in][:id:]': bestuursorganenInTijd
-        .map((b) => b.id)
-        .join(','),
+      'filter[lid][bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
+        bestuursperiode.id,
     });
     if (!onafhankelijkeMembership.length > 0) {
       return null;
@@ -78,7 +82,7 @@ export default class FractieService extends Service {
     const foldedMandataris = (await fold([mandataris])).at(0);
     const lid = await foldedMandataris.mandataris.heeftLidmaatschap;
     if (!lid) {
-      return true;
+      return false;
     }
 
     const fractie = await lid.binnenFractie;

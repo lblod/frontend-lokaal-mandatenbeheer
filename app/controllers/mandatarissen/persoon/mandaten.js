@@ -80,28 +80,6 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       this.currentNonOnafhankelijkeMandatarissen.length >= 1;
   });
 
-  async createOnafhankelijkeFractie(mandataris) {
-    const mandaat = await mandataris.bekleedt;
-    const mandaatBestuursorganenInTijd = await mandaat.bevatIn;
-    const activePeriod =
-      await mandaatBestuursorganenInTijd[0].heeftBestuursperiode;
-    const bestuursorgaan =
-      await mandaatBestuursorganenInTijd[0].isTijdsspecialisatieVan;
-    const bestuurseenheid = await bestuursorgaan.bestuurseenheid;
-    const bestuursOrganenInTijd = await this.store.query('bestuursorgaan', {
-      'filter[is-tijdsspecialisatie-van][bestuurseenheid][:id:]':
-        bestuurseenheid.id,
-      'filter[heeft-bestuursperiode][:id:]': activePeriod.id,
-    });
-
-    const fractie = await this.fractieService.createOnafhankelijkeFractie(
-      bestuursOrganenInTijd,
-      bestuurseenheid
-    );
-    await fractie.save();
-    return fractie;
-  }
-
   becomeOnafhankelijk = task(async () => {
     if (!this.canBecomeOnafhankelijk) {
       return;
@@ -110,16 +88,16 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     for (const mandataris of this.currentNonOnafhankelijkeMandatarissen) {
       const mandaat = await mandataris.bekleedt;
       const bestuursorgaan = (await mandaat.bevatIn)[0];
+      const bestuursperiode = await bestuursorgaan.heeftBestuursperiode;
       const person = await mandataris.isBestuurlijkeAliasVan;
-      let onafhankelijkeFractie =
-        await this.fractieService.findOnafhankelijkeFractieForPerson(person, [
-          bestuursorgaan,
-        ]);
 
-      if (!onafhankelijkeFractie) {
-        onafhankelijkeFractie =
-          await this.createOnafhankelijkeFractie(mandataris);
-      }
+      const onafhankelijkeFractie =
+        await this.fractieService.getOrCreateOnafhankelijkeFractie(
+          person,
+          bestuursperiode,
+          this.model.bestuurseenheid
+        );
+      await onafhankelijkeFractie.save();
 
       const dateNow = new Date();
       const newMandatarisProps = await this.mandatarisService.createNewProps(
