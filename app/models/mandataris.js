@@ -108,6 +108,16 @@ export default class MandatarisModel extends Model {
     return this.bekleedt.get('isVoorzitter');
   }
 
+  get besluitUri() {
+    if (this.ontslagBekrachtigdDoor) {
+      return this.ontslagBekrachtigdDoor.get('uri');
+    }
+    if (this.aanstellingBekrachtigdDoor) {
+      return this.aanstellingBekrachtigdDoor.get('uri');
+    }
+    return null;
+  }
+
   async getUnique(people) {
     const vervangers = new Map();
     const allPeople = (await people).slice();
