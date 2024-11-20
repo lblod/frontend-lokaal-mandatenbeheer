@@ -71,10 +71,18 @@ export default class MandatarisModel extends Model {
   })
   contactPoints;
 
-  @belongsTo('rechtsgrond', { async: true, inverse: null, polymorphic: true })
+  @belongsTo('rechtsgrond', {
+    async: true,
+    inverse: 'bekrachtigtAanstellingVan',
+    polymorphic: true,
+  })
   aanstellingBekrachtigdDoor;
 
-  @belongsTo('rechtsgrond', { async: true, inverse: null, polymorphic: true })
+  @belongsTo('rechtsgrond', {
+    async: true,
+    inverse: 'bekrachtigtOntslagVan',
+    polymorphic: true,
+  })
   ontslagBekrachtigdDoor;
 
   get generatedFromGelinktNotuleren() {
@@ -106,6 +114,16 @@ export default class MandatarisModel extends Model {
 
   get isVoorzitter() {
     return this.bekleedt.get('isVoorzitter');
+  }
+
+  get besluitUri() {
+    if (this.ontslagBekrachtigdDoor) {
+      return this.ontslagBekrachtigdDoor.get('uri');
+    }
+    if (this.aanstellingBekrachtigdDoor) {
+      return this.aanstellingBekrachtigdDoor.get('uri');
+    }
+    return null;
   }
 
   async getUnique(people) {

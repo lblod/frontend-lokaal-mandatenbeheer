@@ -1,10 +1,6 @@
 import Component from '@glimmer/component';
 
-import { service } from '@ember/service';
-
 export default class MandaatPublicatieStatusPillComponent extends Component {
-  @service('mandataris-api') mandatarisApi;
-
   get isMandatarisBekrachtigd() {
     return this.args.mandataris.get('publicationStatus')
       ? this.args.mandataris.get('publicationStatus').get('isBekrachtigd')
@@ -16,10 +12,7 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
   }
 
   async getLink() {
-    const link = await this.mandatarisApi.findDecisionUri(
-      this.args.mandataris.id
-    );
-
+    const link = this.args.mandataris.besluitUri;
     return link ?? this.args.mandataris.linkToBesluit;
   }
 }
