@@ -35,7 +35,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     super(...arguments);
     this.load();
     this.storeOptions.store.registerObserver(async () => {
-      await this.findMandaatInForm.perform();
+      this.findMandaatInForm.perform();
     });
   }
 
@@ -45,7 +45,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
 
   async load() {
     await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
-    await this.findMandaatInForm.perform();
+    this.findMandaatInForm.perform();
     this.initialized = true;
   }
 
