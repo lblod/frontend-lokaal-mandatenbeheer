@@ -71,10 +71,18 @@ export default class MandatarisModel extends Model {
   })
   contactPoints;
 
-  @belongsTo('rechtsgrond', { async: true, inverse: null, polymorphic: true })
+  @belongsTo('rechtsgrond', {
+    async: true,
+    inverse: 'bekrachtigtAanstellingVan',
+    polymorphic: true,
+  })
   aanstellingBekrachtigdDoor;
 
-  @belongsTo('rechtsgrond', { async: true, inverse: null, polymorphic: true })
+  @belongsTo('rechtsgrond', {
+    async: true,
+    inverse: 'bekrachtigtOntslagVan',
+    polymorphic: true,
+  })
   ontslagBekrachtigdDoor;
 
   get generatedFromGelinktNotuleren() {
