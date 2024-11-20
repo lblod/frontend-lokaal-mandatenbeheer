@@ -141,9 +141,10 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   }
 
   get warningTextOCMWLinkToGemeente() {
-    return `Let op! Bij het wijzigen van deze gegevens worden mogelijke koppelingen
-      verbroken. Het doorstromen van gegevens van de gemeente naar OCMW zal
+    return `Let op! Deze mandataris heeft een gelinkte mandataris in de gemeente.
+      Bij het aanpassen van deze gegevens wordt deze koppeling verbroken.
+      Het doorstromen van gegevens van de gemeente naar OCMW zal
       hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
-      maken, gelieve dit te doen bij de Gemeente.`;
+      maken, gelieve dit te doen in de gemeente.`;
   }
 }
