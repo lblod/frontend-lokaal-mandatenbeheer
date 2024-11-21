@@ -80,6 +80,10 @@ export default class MandatarissenSearchRoute extends Route {
         placeholderNietBeschikbaar,
       ],
       selectedFracties: params.binnenFractie,
+      page: {
+        number: 0,
+        size: personen.length,
+      },
     };
   }
 

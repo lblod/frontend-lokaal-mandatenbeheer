@@ -117,8 +117,8 @@
           @content={{@model.personen}}
           @bestuursperiode={{@model.selectedPeriod.period}}
           @sort={{this.sort}}
-          @page={{this.page}}
-          @size={{this.size}}
+          @page={{@model.page.number}}
+          @size={{@model.page.size}}
           @detailRoute="mandatarissen.persoon.mandaten"
         />
       </div>
