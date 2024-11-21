@@ -81,7 +81,9 @@
       </li>
     {{/if}}
   </AuMainHeader>
-
+  {{#unless this.isIndex}}
+    <Shared::NavigationBar />
+  {{/unless}}
   {{#if this.session.isAuthenticated}}
     <AuMainContainer as |main|>
       {{#if this.isIndex}}
@@ -111,12 +113,7 @@
       {{/if}}
       <main.content>
         <AuBodyContainer>
-          {{#unless this.isIndex}}
-            <Shared::NavigationBar />
-          {{/unless}}
-          <AuBodyContainer id="content">
-            {{outlet}}
-          </AuBodyContainer>
+          {{outlet}}
         </AuBodyContainer>
       </main.content>
     </AuMainContainer>
