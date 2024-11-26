@@ -12,12 +12,15 @@ export default class InstallatievergaderingService extends Service {
   @tracked
   recomputeBCSDNeededTime = null;
 
-  @tracked
-  allMandatarissen = [];
+  @tracked allMandatarissen = [];
   @tracked iv;
+  @tracked statusOptions;
 
   async setup(period) {
     this.selectedIv = await this.getIvForPeriod(period);
+    this.statusOptions = await this.store.findAll(
+      'installatievergadering-status'
+    );
   }
 
   async getIvForPeriod(period) {
@@ -32,6 +35,8 @@ export default class InstallatievergaderingService extends Service {
     });
     if (ivs.length >= 1) {
       this.iv = ivs.at(0);
+    } else {
+      this.iv = null;
     }
   }
 

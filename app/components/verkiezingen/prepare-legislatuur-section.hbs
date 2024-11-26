@@ -1,7 +1,7 @@
 {{#if (await @bestuursorgaan.isBurgemeester)}}
   <Mandaat::BurgemeesterSelector
     @bestuursorgaanInTijd={{@bestuursorgaan}}
-    @readOnly={{@isBehandeld}}
+    @readOnly={{this.ivService.isBehandeld}}
     @onUpdateBurgemeester={{@onUpdateBurgemeester}}
     @bestuursperiode={{@bestuursperiode}}
     @bestuurseenheid={{@bestuurseenheid}}
@@ -18,7 +18,7 @@
         {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
     </div>
     <div class="au-u-flex au-u-flex--end au-u-margin-left au-u-margin-right">
-      {{#unless @isBehandeld}}
+      {{#unless this.ivService.isBehandeld}}
         <AuContent @skin="small" class="au-u-flex-self-end">
           {{! template-lint-disable no-inline-styles }}
           <AuButton
@@ -109,7 +109,7 @@
     </div>
   {{else}}
     <Verkiezingen::DraftMandatarisList
-      @readOnly={{@isBehandeld}}
+      @readOnly={{this.ivService.isBehandeld}}
       @mandatarissen={{this.mandatarissen}}
       @updateMandatarissen={{perform this.getMandatarissen}}
       @title=""

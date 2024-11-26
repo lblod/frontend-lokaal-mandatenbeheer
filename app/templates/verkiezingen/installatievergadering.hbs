@@ -79,7 +79,7 @@
     </Group>
   </AuToolbar>
   <div class="au-c-body-container au-c-body-container--scroll">
-    {{#unless @model.isBehandeld}}
+    {{#unless this.ivService.isBehandeld}}
       <Verkiezingen::KieslijstSplitter
         @kandidatenlijst={{@model.kandidatenlijsten}}
         @bestuursorgaan={{@model.bestuursorganenInTijd}}
@@ -89,7 +89,6 @@
 
     {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
       <Verkiezingen::PrepareLegislatuurSection
-        @isBehandeld={{@model.isBehandeld}}
         @bestuurseenheid={{@model.bestuurseenheid}}
         @bestuursperiode={{@model.selectedPeriod}}
         @bestuursorgaan={{bestuursorgaan}}
@@ -105,7 +104,7 @@
         <Tmp::Todo>
           <p>Change installatievergadering status:</p>
           <Shared::InstallatievergaderingStatusSelector
-            @options={{@model.ivStatuses}}
+            @options={{this.ivService.statusOptions}}
             @selectedStatus={{@model.installatievergadering.status}}
             @onSelect={{this.selectStatus}}
           />

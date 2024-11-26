@@ -25,6 +25,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @service fractieApi;
   @service('mandataris') mandatarisService;
   @service('mandataris-api') mandatarisApi;
+  @service('installatievergadering') ivService;
 
   @tracked editMode = null;
   @tracked isGeneratingRows;
