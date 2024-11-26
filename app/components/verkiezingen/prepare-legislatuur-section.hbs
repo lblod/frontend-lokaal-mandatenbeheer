@@ -85,7 +85,7 @@
   {{#if (await @bestuursorgaan.isBCSD)}}
     <Verkiezingen::BcsdVoorzitterAlert
       @bcsdBestuursorgaanInTijd={{@bestuursorgaan}}
-      @bestuursorganenInTijd={{@bestuursorganen}}
+      @bestuursorganenInTijd={{this.ivService.bestuursorganenInTijd}}
     />
   {{/if}}
   {{#if (await @bestuursorgaan.isCBS)}}
