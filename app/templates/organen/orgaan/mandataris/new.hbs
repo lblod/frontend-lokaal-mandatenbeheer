@@ -16,7 +16,7 @@
       de corresponderende mandataris moeten aanmaken in de gemeente.
     </AuAlert>
   {{/if}}
-  <Form::NewInstance
+  <SemanticForms::NewInstance
     @onCreate={{this.onCreate}}
     @form={{@model.mandatarisNewForm}}
     @buildSourceTtl={{this.buildSourceTtl}}
@@ -26,9 +26,9 @@
 
 <AuToolbar @border="top" @size="large" as |Group|>
   <Group>
-    <Form::CancelWithConfirm
+    <SemanticForms::CancelWithConfirm
       @cancel={{this.cancel}}
-    >Annuleer</Form::CancelWithConfirm>
+    >Annuleer</SemanticForms::CancelWithConfirm>
   </Group>
 </AuToolbar>
 

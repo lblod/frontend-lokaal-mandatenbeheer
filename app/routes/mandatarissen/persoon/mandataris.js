@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import {
   MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_EXTRA_INFO_FORM_ID,
@@ -12,6 +11,7 @@ import RSVP from 'rsvp';
 export default class MandatarissenPersoonMandatarisRoute extends Route {
   @service currentSession;
   @service store;
+  @service semanticFormRepository;
 
   async model(params) {
     const bestuurseenheid = this.currentSession.group;
@@ -22,11 +22,13 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const mandaat = await mandataris.bekleedt;
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);
 
-    const mandatarisEditForm = getFormFrom(this.store, MANDATARIS_EDIT_FORM_ID);
-    const mandatarisExtraInfoForm = getFormFrom(
-      this.store,
-      MANDATARIS_EXTRA_INFO_FORM_ID
+    const mandatarisEditForm = this.semanticFormRepository.getFormDefinition(
+      MANDATARIS_EDIT_FORM_ID
     );
+    const mandatarisExtraInfoForm =
+      await this.semanticFormRepository.getFormDefinition(
+        MANDATARIS_EXTRA_INFO_FORM_ID
+      );
 
     const bestuursorganen = await (await mandataris.bekleedt).get('bevatIn');
     const selectedBestuursperiode = (await bestuursorganen)[0]

@@ -99,6 +99,7 @@
     "ember-promise-modals": "^4.0.0",
     "ember-qunit": "^6.2.0",
     "ember-resolver": "^10.0.0",
+    "ember-resources": "^7.0.2",
     "ember-simple-auth": "^4.2.1",
     "ember-source": "~4.12.0",
     "ember-template-lint": "^5.7.2",
@@ -126,6 +127,9 @@
     "tracked-toolbox": "^1.2.3",
     "uuid": "^9.0.0",
     "webpack": "^5.78.0"
+  },
+  "dependencies": {
+    "@lblod/ember-semantic-forms": "0.0.2"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"

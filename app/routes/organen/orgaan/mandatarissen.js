@@ -2,14 +2,14 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
-import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
+import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class OrganenMandatarissenRoute extends Route {
   @service currentSession;
   @service store;
   @service installatievergadering;
+  @service semanticFormRepository;
 
   queryParams = {
     activeOnly: { refreshModel: true },
@@ -32,10 +32,10 @@ export default class OrganenMandatarissenRoute extends Route {
       mandatarissen = await this.store.query('mandataris', options);
     }
     const folded = await foldMandatarisses(params, mandatarissen);
-    const mandatarisNewForm = await getFormFrom(
-      this.store,
-      MANDATARIS_NEW_FORM_ID
-    );
+    const mandatarisNewForm =
+      await this.semanticFormRepository.getFormDefinition(
+        MANDATARIS_NEW_FORM_ID
+      );
 
     const legislatuurInBehandeling =
       await this.installatievergadering.activeOrNoLegislature(

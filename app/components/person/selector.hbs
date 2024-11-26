@@ -48,7 +48,7 @@
 {{#if (and this.selectNewPerson @inline)}}
   <div class="au-o-nested-form">
     {{#if this.creatingPerson}}
-      <Form::NewInstance
+      <SemanticForms::NewInstance
         @onCreate={{this.onSelectNewPerson}}
         @form={{this.createPersonFormDefinition}}
         @buildSourceTtl={{this.buildSourceTtl}}
@@ -73,7 +73,7 @@
     <div class="au-o-box">
 
       {{#if this.creatingPerson}}
-        <Form::NewInstance
+        <SemanticForms::NewInstance
           @onCreate={{this.onSelectNewPerson}}
           @form={{this.createPersonFormDefinition}}
           @onCancel={{this.cancelCreate}}

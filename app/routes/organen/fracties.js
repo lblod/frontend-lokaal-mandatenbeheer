@@ -1,9 +1,8 @@
 import Route from '@ember/routing/route';
 
-import { service } from '@ember/service';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 
-import { getFormFrom } from 'frontend-lmb/utils/get-form';
 import { FRACTIE_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import {
   FRACTIETYPE_SAMENWERKINGSVERBAND,
@@ -15,6 +14,7 @@ export default class FractiesRoute extends Route {
   @service store;
   @service fractieApi;
   @service bestuursperioden;
+  @service semanticFormRepository;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -69,7 +69,8 @@ export default class FractiesRoute extends Route {
       selectedPeriod.id
     );
 
-    const form = await getFormFrom(this.store, FRACTIE_FORM_ID);
+    const form =
+      await this.semanticFormRepository.getFormDefinition(FRACTIE_FORM_ID);
     const defaultFractieType = (
       await this.store.query('fractietype', {
         page: { size: 1 },

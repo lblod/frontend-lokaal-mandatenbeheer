@@ -63,9 +63,10 @@
   @closeModal={{this.toggleModal}}
 >
   <div class="au-o-box">
-    <Form::Instance
+    <SemanticForms::Instance
       @instanceId={{this.model.bestuursorgaan.id}}
       @form={{this.model.bestuursorgaanFormDefinition}}
+      @customHistoryMessage={{true}}
       @onCancel={{this.toggleModal}}
       @onSave={{this.onSave}}
     />
