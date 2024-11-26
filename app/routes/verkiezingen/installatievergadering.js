@@ -47,10 +47,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
 
     await this.ivService.setup(selectedPeriod);
 
-    const ivStatuses = await this.store.findAll(
-      'installatievergadering-status'
-    );
-
     const bestuursorganenInTijd =
       await this.getBestuursorganenInTijd(selectedPeriod);
 
@@ -62,7 +58,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     );
 
     return RSVP.hash({
-      ivStatuses,
       installatievergadering: this.ivService.iv,
       bestuurseenheid,
       bestuursorganenInTijd,
@@ -72,7 +67,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       bestuursPeriods,
       selectedPeriod,
       isRelevant: parentModel.isRelevant,
-      isBehandeld: this.ivService.isBehandeld,
     });
   }
 

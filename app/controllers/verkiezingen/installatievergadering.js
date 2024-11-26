@@ -30,6 +30,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
   queryParams = ['bestuursperiode'];
   @service store;
   @service router;
+  @service('installatievergadering') ivService;
 
   @tracked bestuursperiode;
   @tracked statusPillSkin = 'info';
@@ -108,7 +109,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
   setNextStatus = task(async () => {
     const currentStatus = await this.model.installatievergadering.status;
     const findStatusForUri = (uri) => {
-      return this.model.ivStatuses.find((s) => s.uri === uri);
+      return this.ivService.statusOptions.find((s) => s.uri === uri);
     };
 
     const nextStatusFor = {
