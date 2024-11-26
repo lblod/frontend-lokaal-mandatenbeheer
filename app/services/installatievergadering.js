@@ -1,18 +1,18 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import { A } from '@ember/array';
 
 import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
-import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
 
 export default class InstallatievergaderingService extends Service {
   @service store;
   @service currentSession;
+  @service mandataris;
 
   @tracked
   recomputeBCSDNeededTime = null;
 
-  @tracked allMandatarissen = [];
   @tracked iv;
   @tracked statusOptions;
   @tracked bestuursorganenInTijdMap;
@@ -45,17 +45,28 @@ export default class InstallatievergaderingService extends Service {
   async createBestuursorganenInTijdMap(bois) {
     this.bestuursorganenInTijdMap = new Map();
     for (const boi of bois) {
-      this.bestuursorganenInTijdMap.set(boi.id, { model: boi });
+      this.bestuursorganenInTijdMap.set(boi.id, {
+        id: boi.id,
+        model: boi,
+        mandatarissen:
+          (await this.mandataris.getBestuursorgaanMandatarissen(boi)) ?? [],
+      });
     }
-    console.log(`created map`, this.bestuursorganenInTijdMap);
-    console.log(`created return val`, this.bestuursorganenInTijd);
+  }
+
+  get bestuursorganenInTijdMapping() {
+    return Array.from(
+      this.bestuursorganenInTijdMap ?? [],
+      // eslint-disable-next-line no-unused-vars
+      ([key, value]) => value
+    );
   }
 
   get bestuursorganenInTijd() {
     return Array.from(
       this.bestuursorganenInTijdMap ?? [],
       // eslint-disable-next-line no-unused-vars
-      ([key, value]) => value
+      ([key, value]) => value.model
     );
   }
 
@@ -67,10 +78,6 @@ export default class InstallatievergaderingService extends Service {
     return (
       this.iv.get('status.uri') === INSTALLATIEVERGADERING_BEHANDELD_STATUS
     );
-  }
-
-  get sortedMandatarissen() {
-    return orderMandatarissenByRangorde([...this.allMandatarissen]);
   }
 
   forceRecomputeBCSD() {
@@ -90,11 +97,32 @@ export default class InstallatievergaderingService extends Service {
     return periodeHasLegislatuur && behandeldeVergaderingen.length === 0;
   }
 
-  removeMandatarissen(mandatarissen) {
-    this.allMandatarissen.removeObjects(mandatarissen);
+  addMandatarissen(boi, mandatarissen) {
+    const boiData = this.bestuursorganenInTijdMap?.get(boi?.id);
+    const currentMandatarissen = boiData.mandatarissen;
+    delete boiData.mandatarissen;
+    this.bestuursorganenInTijdMap.set(boi.id, {
+      ...boiData,
+      mandatarissen: [...currentMandatarissen, ...mandatarissen],
+    });
   }
 
-  addMandatarissen(mandatarissen) {
-    this.allMandatarissen.pushObjects(mandatarissen);
+  getMandatarissenForBoi(boi) {
+    if (!boi || !this.bestuursorganenInTijdMap) {
+      return [];
+    }
+    return this.bestuursorganenInTijdMap?.get(boi?.id)?.mandatarissen;
+  }
+
+  async fetchMandatarissenForBoi(boi) {
+    const boiData = this.bestuursorganenInTijdMap?.get(boi?.id);
+    const latestMandatarissen =
+      await this.mandataris.getBestuursorgaanMandatarissen(boi);
+
+    delete boiData.mandatarissen;
+    this.bestuursorganenInTijdMap.set(boi?.id, {
+      ...boiData,
+      mandatarissen: latestMandatarissen.toArray(),
+    });
   }
 }

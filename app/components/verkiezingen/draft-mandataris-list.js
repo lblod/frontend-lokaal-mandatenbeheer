@@ -10,7 +10,7 @@ export default class DraftMandatarisListComponent extends Component {
   @service toaster;
   @service store;
   @service fractieApi;
-  @service installatievergadering;
+  @service('installatievergadering') ivService;
 
   @tracked isEditing;
   @tracked isEditFormInitialized;
@@ -33,10 +33,8 @@ export default class DraftMandatarisListComponent extends Component {
   }
 
   get resortedMandatarissen() {
-    return orderMandatarissenByRangorde(
-      [...this.mandatarissen],
-      this.installatievergadering.sortedMandatarissen
-    );
+    const m = [...this.args.mandatarissen];
+    return orderMandatarissenByRangorde(m, []);
   }
 
   @action
@@ -47,7 +45,7 @@ export default class DraftMandatarisListComponent extends Component {
       .then(() => {
         const succesMessage = 'Mandataris succesvol verwijderd.';
         this.toaster.success(succesMessage, 'Succes', { timeOut: 5000 });
-        this.installatievergadering.forceRecomputeBCSD();
+        this.ivService.forceRecomputeBCSD();
       })
       .catch(() => {
         const errorMessage =
@@ -78,6 +76,6 @@ export default class DraftMandatarisListComponent extends Component {
     );
     this.args.updateMandatarissen({ updated: updatedMandataris });
     this.closeEditMandataris();
-    this.installatievergadering.forceRecomputeBCSD();
+    this.ivService.forceRecomputeBCSD();
   }
 }
