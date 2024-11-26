@@ -8,7 +8,6 @@ import {
   BURGEMEESTER_BESTUURSORGAAN_URI,
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
-  INSTALLATIEVERGADERING_BEHANDELD_STATUS,
   KANDIDATENLIJST_OCMW,
   RMW_BESTUURSORGAAN_URI,
   VAST_BUREAU_BESTUURSORGAAN_URI,
@@ -20,6 +19,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
   @service bestuursperioden;
   @service bestuursorganen;
   @service semanticFormRepository;
+  @service('installatievergadering') ivService;
 
   queryParams = {
     bestuursperiode: { refreshModel: true },
@@ -45,17 +45,11 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       params.bestuursperiode
     );
 
+    await this.ivService.setup(selectedPeriod);
+
     const ivStatuses = await this.store.findAll(
       'installatievergadering-status'
     );
-
-    const installatievergadering = (
-      await this.store.query('installatievergadering', {
-        'filter[bestuurseenheid][id]': bestuurseenheid.id,
-        'filter[bestuursperiode][:id:]': selectedPeriod.id,
-        include: ['status'].join(','),
-      })
-    )[0];
 
     const bestuursorganenInTijd =
       await this.getBestuursorganenInTijd(selectedPeriod);
@@ -69,7 +63,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
 
     return RSVP.hash({
       ivStatuses,
-      installatievergadering,
+      installatievergadering: this.ivService.iv,
       bestuurseenheid,
       bestuursorganenInTijd,
       mandatarisForm,
@@ -78,9 +72,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       bestuursPeriods,
       selectedPeriod,
       isRelevant: parentModel.isRelevant,
-      isBehandeld:
-        installatievergadering.get('status.uri') ===
-        INSTALLATIEVERGADERING_BEHANDELD_STATUS,
+      isBehandeld: this.ivService.isBehandeld,
     });
   }
 
