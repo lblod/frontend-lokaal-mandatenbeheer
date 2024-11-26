@@ -15,12 +15,14 @@ export default class InstallatievergaderingService extends Service {
   @tracked allMandatarissen = [];
   @tracked iv;
   @tracked statusOptions;
+  @tracked bestuursorganenInTijdMap;
 
   async setup(period) {
     this.selectedIv = await this.getIvForPeriod(period);
     this.statusOptions = await this.store.findAll(
       'installatievergadering-status'
     );
+    this.bestuursorganenInTijdMap = new Map();
   }
 
   async getIvForPeriod(period) {
@@ -38,6 +40,23 @@ export default class InstallatievergaderingService extends Service {
     } else {
       this.iv = null;
     }
+  }
+
+  async createBestuursorganenInTijdMap(bois) {
+    this.bestuursorganenInTijdMap = new Map();
+    for (const boi of bois) {
+      this.bestuursorganenInTijdMap.set(boi.id, { model: boi });
+    }
+    console.log(`created map`, this.bestuursorganenInTijdMap);
+    console.log(`created return val`, this.bestuursorganenInTijd);
+  }
+
+  get bestuursorganenInTijd() {
+    return Array.from(
+      this.bestuursorganenInTijdMap ?? [],
+      // eslint-disable-next-line no-unused-vars
+      ([key, value]) => value
+    );
   }
 
   get isBehandeld() {
