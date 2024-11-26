@@ -96,11 +96,7 @@
 
   {{#if
     (and
-      (or
-        this.initialLoad.isRunning
-        this.mirrorTable.isRunning
-        this.getMandatarissen.isRunning
-      )
+      (or this.mirrorTable.isRunning this.getMandatarissen.isRunning)
       this.skeletonRowsOfMirror
     )
   }}
@@ -109,6 +105,7 @@
     </div>
   {{else}}
     <Verkiezingen::DraftMandatarisList
+      @bestuursorgaanInTijd={{@bestuursorgaan}}
       @readOnly={{this.ivService.isBehandeld}}
       @mandatarissen={{this.mandatarissen}}
       @updateMandatarissen={{perform this.getMandatarissen}}

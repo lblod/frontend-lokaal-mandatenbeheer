@@ -140,4 +140,29 @@ export default class MandatarisService extends Service {
       await this.fractieApi.removeFractieWhenNoLidmaatschap(periode.id);
     }
   }
+
+  async getBestuursorgaanMandatarissen(bestuursorgaan) {
+    const queryParams = {
+      page: {
+        number: 0,
+        size: 9999,
+      },
+      filter: {
+        bekleedt: {
+          'bevat-in': {
+            id: bestuursorgaan.id,
+          },
+        },
+      },
+      include: [
+        'is-bestuurlijke-alias-van',
+        'bekleedt.bestuursfunctie',
+        'heeft-lidmaatschap.binnen-fractie',
+        'status',
+        'beleidsdomein',
+      ].join(','),
+    };
+
+    return await this.store.query('mandataris', queryParams);
+  }
 }
