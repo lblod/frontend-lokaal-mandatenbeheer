@@ -87,12 +87,11 @@
       />
     {{/unless}}
 
-    {{#each @model.bestuursorganenInTijd as |bestuursorgaan|}}
+    {{#each this.ivService.bestuursorganenInTijd as |bestuursorgaan|}}
       <Verkiezingen::PrepareLegislatuurSection
         @bestuurseenheid={{@model.bestuurseenheid}}
         @bestuursperiode={{@model.selectedPeriod}}
-        @bestuursorgaan={{bestuursorgaan}}
-        @bestuursorganen={{@model.bestuursorganenInTijd}}
+        @bestuursorgaan={{bestuursorgaan.model}}
         @form={{@model.mandatarisForm}}
         @onUpdateBurgemeester={{this.onUpdateBurgemeester}}
       />

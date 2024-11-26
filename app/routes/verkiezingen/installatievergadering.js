@@ -45,10 +45,15 @@ export default class PrepareInstallatievergaderingRoute extends Route {
       params.bestuursperiode
     );
 
-    await this.ivService.setup(selectedPeriod);
-
     const bestuursorganenInTijd =
       await this.getBestuursorganenInTijd(selectedPeriod);
+
+    await this.ivService.setup(selectedPeriod);
+    if (this.ivService.iv) {
+      await this.ivService.createBestuursorganenInTijdMap(
+        bestuursorganenInTijd
+      );
+    }
 
     const verkiezingen = await this.getVerkiezingen(selectedPeriod);
     const kandidatenlijsten = await this.getKandidatenLijsten(selectedPeriod);
