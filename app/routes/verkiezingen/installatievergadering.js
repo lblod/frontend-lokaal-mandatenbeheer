@@ -63,7 +63,6 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     );
 
     return RSVP.hash({
-      installatievergadering: this.ivService.iv,
       bestuurseenheid,
       bestuursorganenInTijd,
       mandatarisForm,
