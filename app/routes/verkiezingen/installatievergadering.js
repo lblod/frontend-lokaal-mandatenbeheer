@@ -48,12 +48,7 @@ export default class PrepareInstallatievergaderingRoute extends Route {
     const bestuursorganenInTijd =
       await this.getBestuursorganenInTijd(selectedPeriod);
 
-    await this.ivService.setup(selectedPeriod);
-    if (this.ivService.iv) {
-      await this.ivService.createBestuursorganenInTijdMap(
-        bestuursorganenInTijd
-      );
-    }
+    await this.ivService.setup(selectedPeriod, bestuursorganenInTijd);
 
     const verkiezingen = await this.getVerkiezingen(selectedPeriod);
     const kandidatenlijsten = await this.getKandidatenLijsten(selectedPeriod);
@@ -64,12 +59,10 @@ export default class PrepareInstallatievergaderingRoute extends Route {
 
     return RSVP.hash({
       bestuurseenheid,
-      bestuursorganenInTijd,
       mandatarisForm,
       verkiezingen,
       kandidatenlijsten,
       bestuursPeriods,
-      selectedPeriod,
       isRelevant: parentModel.isRelevant,
     });
   }

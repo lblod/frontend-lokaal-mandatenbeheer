@@ -81,7 +81,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
     this.setInstallatievergaderingStatusPill.perform();
     this.setNextStatus.perform();
 
-    return this.model.selectedPeriod.label;
+    return this.ivService.currentPeriod?.label;
   }
 
   setInstallatievergaderingStatusPill = task(async () => {
