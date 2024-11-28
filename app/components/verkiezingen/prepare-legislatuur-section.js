@@ -85,7 +85,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     }
 
     let bestuursorgaanToSyncFrom = null;
-    for (const bestuursorgaan of this.args.bestuursorganen) {
+    for (const bestuursorgaan of this.ivService.bestuursorganenInTijd) {
       const classificatie = await bestuursorgaan.get(
         'isTijdsspecialisatieVan.classificatie'
       );

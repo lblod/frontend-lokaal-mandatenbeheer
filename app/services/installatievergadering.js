@@ -29,11 +29,11 @@ export default class InstallatievergaderingService extends Service {
     behandeld: false,
   };
 
-  async setup(period, bois = null) {
+  async setup(period, bestuursorganenInTijd = null) {
     await this.setIvForPeriod(period);
-    if (bois) {
+    if (bestuursorganenInTijd) {
       this.bestuursorganenInTijdMap = new Map();
-      await this.createBestuursorganenInTijdMap(bois);
+      await this.createBestuursorganenInTijdMap(bestuursorganenInTijd);
     }
     await this.setStatus(await this.iv?.status);
     this.statusOptions = await this.store.findAll(
@@ -58,9 +58,9 @@ export default class InstallatievergaderingService extends Service {
     }
   }
 
-  async createBestuursorganenInTijdMap(bois) {
+  async createBestuursorganenInTijdMap(bestuursorganenInTijd) {
     this.bestuursorganenInTijdMap = new Map();
-    for (const boi of bois) {
+    for (const boi of bestuursorganenInTijd) {
       this.bestuursorganenInTijdMap.set(boi.id, {
         id: boi.id,
         model: boi,
@@ -115,41 +115,50 @@ export default class InstallatievergaderingService extends Service {
     return periodeHasLegislatuur && behandeldeVergaderingen.length === 0;
   }
 
-  addMandatarissen(boi, mandatarissen) {
-    const boiData = this.bestuursorganenInTijdMap?.get(boi?.id);
+  addMandatarissen(bestuursorgaanInTijd, mandatarissen) {
+    const boiData = this.bestuursorganenInTijdMap?.get(
+      bestuursorgaanInTijd?.id
+    );
     const currentMandatarissen = boiData.mandatarissen;
     delete boiData.mandatarissen;
-    this.bestuursorganenInTijdMap.set(boi.id, {
+    this.bestuursorganenInTijdMap.set(bestuursorgaanInTijd.id, {
       ...boiData,
       mandatarissen: [...currentMandatarissen, ...mandatarissen],
     });
   }
 
-  removeMandatarissen(boi, mandatarissen) {
-    const boiData = this.bestuursorganenInTijdMap?.get(boi?.id);
+  removeMandatarissen(bestuursorgaanInTijd, mandatarissen) {
+    const boiData = this.bestuursorganenInTijdMap?.get(
+      bestuursorgaanInTijd?.id
+    );
     const currentMandatarissen = boiData.mandatarissen;
     const editArray = A(currentMandatarissen);
     editArray.removeObjects(mandatarissen);
-    this.bestuursorganenInTijdMap.set(boi.id, {
+    this.bestuursorganenInTijdMap.set(bestuursorgaanInTijd.id, {
       ...boiData,
       mandatarissen: editArray.toArray(),
     });
   }
 
-  getMandatarissenForBoi(boi) {
-    if (!boi || !this.bestuursorganenInTijdMap) {
+  getMandatarissenForBoi(bestuursorgaanInTijd) {
+    if (!bestuursorgaanInTijd || !this.bestuursorganenInTijdMap) {
       return [];
     }
-    return this.bestuursorganenInTijdMap?.get(boi?.id)?.mandatarissen;
+    return this.bestuursorganenInTijdMap?.get(bestuursorgaanInTijd?.id)
+      ?.mandatarissen;
   }
 
-  async fetchMandatarissenForBoi(boi) {
-    const boiData = this.bestuursorganenInTijdMap?.get(boi?.id);
+  async fetchMandatarissenForBoi(bestuursorgaanInTijd) {
+    const boiData = this.bestuursorganenInTijdMap?.get(
+      bestuursorgaanInTijd?.id
+    );
     const latestMandatarissen =
-      await this.mandataris.getBestuursorgaanMandatarissen(boi);
+      await this.mandataris.getBestuursorgaanMandatarissen(
+        bestuursorgaanInTijd
+      );
 
     delete boiData.mandatarissen;
-    this.bestuursorganenInTijdMap.set(boi?.id, {
+    this.bestuursorganenInTijdMap.set(bestuursorgaanInTijd?.id, {
       ...boiData,
       mandatarissen: latestMandatarissen.toArray(),
     });
