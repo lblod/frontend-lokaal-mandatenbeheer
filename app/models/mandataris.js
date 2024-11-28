@@ -113,7 +113,8 @@ export default class MandatarisModel extends Model {
   }
 
   get isVoorzitter() {
-    return this.bekleedt.get('isVoorzitter');
+    // eslint-disable-next-line ember/no-get, ember/classic-decorator-no-classic-methods
+    return this.get('bekleedt.isVoorzitter');
   }
 
   get besluitUri() {

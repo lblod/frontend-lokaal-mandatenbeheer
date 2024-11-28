@@ -156,6 +156,7 @@ export default class MandatarisService extends Service {
       },
       include: [
         'is-bestuurlijke-alias-van',
+        'bekleedt',
         'bekleedt.bestuursfunctie',
         'heeft-lidmaatschap.binnen-fractie',
         'status',
