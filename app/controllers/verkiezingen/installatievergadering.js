@@ -42,21 +42,19 @@ export default class PrepareInstallatievergaderingController extends Controller 
   @action
   async selectStatus(status) {
     this.isModalOpen = false;
-    const installatievergadering = this.model.installatievergadering;
-    installatievergadering.status = status;
-    await installatievergadering.save();
+    await this.ivService.setStatus(status);
 
-    if (
-      installatievergadering.get('status.uri') ===
-      INSTALLATIEVERGADERING_BEHANDELD_STATUS
-    ) {
+    if (this.ivService.isStatus.behandeld) {
       await fetch(
-        `/installatievergadering-api/${installatievergadering.id}/move-ocmw-organs`,
+        `/installatievergadering-api/${this.ivService.iv.id}/move-ocmw-organs`,
         { method: 'POST' }
       );
     }
 
-    this.router.refresh();
+    await this.ivService.setup(this.bestuursperiode);
+    await this.ivService.createBestuursorganenInTijdMap(
+      this.model.bestuursorganenInTijd
+    );
   }
 
   get statusTooltip() {
@@ -67,18 +65,16 @@ export default class PrepareInstallatievergaderingController extends Controller 
   }
 
   get statusIsDisabled() {
-    if (
-      this.model.installatievergadering.get('status.uri') ===
-      INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS
-    ) {
+    if (this.ivService.isStatus.klaarVoorVergadering) {
       return true;
     }
     return !this.nextStatus?.status;
   }
 
   @action
-  selectPeriod(period) {
+  async selectPeriod(period) {
     this.bestuursperiode = period.id;
+    await this.ivService.setup(this.bestuursperiode);
   }
 
   get title() {
@@ -89,17 +85,12 @@ export default class PrepareInstallatievergaderingController extends Controller 
   }
 
   setInstallatievergaderingStatusPill = task(async () => {
-    const status = await this.model.installatievergadering.status;
-
-    this.statusPillSkin = uriLabelMap[status.uri].skin;
-    this.statusPillLabel = uriLabelMap[status.uri].label;
+    this.statusPillSkin = uriLabelMap[this.ivService.currentStatus.uri].skin;
+    this.statusPillLabel = uriLabelMap[this.ivService.currentStatus.uri].label;
   });
 
   get modalTitle() {
-    if (
-      this.model.installatievergadering.get('status.uri') ===
-      INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS
-    ) {
+    if (this.ivService.isStatus.teBehandelen) {
       return 'Klaarzetten in notuleringspakket';
     } else {
       return 'Voorbereiding afronden';
@@ -107,7 +98,6 @@ export default class PrepareInstallatievergaderingController extends Controller 
   }
 
   setNextStatus = task(async () => {
-    const currentStatus = await this.model.installatievergadering.status;
     const findStatusForUri = (uri) => {
       return this.ivService.statusOptions.find((s) => s.uri === uri);
     };
@@ -146,7 +136,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
       },
     };
 
-    this.nextStatus = nextStatusFor[currentStatus.uri];
+    this.nextStatus = nextStatusFor[this.ivService.currentStatus.uri];
   });
   @action
   openModal() {

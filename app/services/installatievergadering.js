@@ -1,9 +1,12 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { A } from '@ember/array';
 
-import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
+import {
+  INSTALLATIEVERGADERING_BEHANDELD_STATUS,
+  INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS,
+  INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class InstallatievergaderingService extends Service {
   @service store;
@@ -14,18 +17,26 @@ export default class InstallatievergaderingService extends Service {
   recomputeBCSDNeededTime = null;
 
   @tracked iv;
+  @tracked currentStatus;
   @tracked statusOptions;
   @tracked bestuursorganenInTijdMap;
+  @tracked bestuursorganenInTijd;
+  @tracked isStatus = {
+    teBehandelen: false,
+    klaarVoorVergadering: false,
+    behandeld: false,
+  };
 
   async setup(period) {
-    this.selectedIv = await this.getIvForPeriod(period);
+    await this.setIvForPeriod(period);
+    await this.setStatus(await this.iv?.status);
     this.statusOptions = await this.store.findAll(
       'installatievergadering-status'
     );
     this.bestuursorganenInTijdMap = new Map();
   }
 
-  async getIvForPeriod(period) {
+  async setIvForPeriod(period) {
     if (!period) {
       return null;
     }
@@ -52,32 +63,34 @@ export default class InstallatievergaderingService extends Service {
           (await this.mandataris.getBestuursorgaanMandatarissen(boi)) ?? [],
       });
     }
-  }
-
-  get bestuursorganenInTijdMapping() {
-    return Array.from(
-      this.bestuursorganenInTijdMap ?? [],
-      // eslint-disable-next-line no-unused-vars
-      ([key, value]) => value
-    );
-  }
-
-  get bestuursorganenInTijd() {
-    return Array.from(
+    this.bestuursorganenInTijd = Array.from(
       this.bestuursorganenInTijdMap ?? [],
       // eslint-disable-next-line no-unused-vars
       ([key, value]) => value.model
     );
   }
 
-  get isBehandeld() {
-    if (!this.iv) {
-      return false;
+  setIsStatusStates() {
+    const isCurrent = (statusUri) => this.currentStatus.uri === statusUri;
+
+    this.isStatus = {
+      teBehandelen: isCurrent(INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS),
+      klaarVoorVergadering: isCurrent(
+        INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS
+      ),
+      behandeld: isCurrent(INSTALLATIEVERGADERING_BEHANDELD_STATUS),
+    };
+  }
+
+  async setStatus(status) {
+    if (!status || !this.iv) {
+      return;
     }
 
-    return (
-      this.iv.get('status.uri') === INSTALLATIEVERGADERING_BEHANDELD_STATUS
-    );
+    this.iv.status = status;
+    await this.iv.save();
+    this.currentStatus = status;
+    this.setIsStatusStates();
   }
 
   forceRecomputeBCSD() {

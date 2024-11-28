@@ -3,7 +3,7 @@
   this.model.selectedPeriod.label
   route="verkiezingen.installatievergadering"
 }}
-{{#if (or (not @model.isRelevant) (not @model.installatievergadering))}}
+{{#if (or (not @model.isRelevant) (not this.ivService.iv))}}
   <div class="au-o-box">
     <div class="au-o-flow">
       <AuHeading @skin="2">Voorbereiding legislatuur</AuHeading>
@@ -40,7 +40,7 @@
           <Mandatenbeheer::BestuursperiodenSelector
             @options={{@model.bestuursPeriods}}
             @selected={{@model.selectedPeriod}}
-            @onSelect={{this.selectPeriod}}
+            @onSelect={{await this.selectPeriod}}
             @prefix="Bestuursperiode"
           />
         </div>
@@ -79,7 +79,7 @@
     </Group>
   </AuToolbar>
   <div class="au-c-body-container au-c-body-container--scroll">
-    {{#unless this.ivService.isBehandeld}}
+    {{#unless this.ivService.isStatus.behandeld}}
       <Verkiezingen::KieslijstSplitter
         @kandidatenlijst={{@model.kandidatenlijsten}}
         @bestuursorgaan={{@model.bestuursorganenInTijd}}
@@ -98,13 +98,13 @@
     {{/each}}
 
     {{! Keeping the selector for development purposes }}
-    {{#unless true}}
+    {{#unless false}}
       <div class="au-o-box">
         <Tmp::Todo>
           <p>Change installatievergadering status:</p>
           <Shared::InstallatievergaderingStatusSelector
             @options={{this.ivService.statusOptions}}
-            @selectedStatus={{@model.installatievergadering.status}}
+            @selectedStatus={{this.ivService.currentStatus}}
             @onSelect={{this.selectStatus}}
           />
         </Tmp::Todo>
