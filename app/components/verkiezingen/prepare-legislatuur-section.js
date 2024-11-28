@@ -45,8 +45,11 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     if (added) {
       this.ivService.addMandatarissen(this.args.bestuursorgaan, added);
     }
+    if (removed) {
+      this.ivService.removeMandatarissen(this.args.bestuursorgaan, removed);
+    }
 
-    if (updated || removed) {
+    if (updated) {
       await this.ivService.fetchMandatarissenForBoi(this.args.bestuursorgaan);
     }
     this.mandatarissen = A(

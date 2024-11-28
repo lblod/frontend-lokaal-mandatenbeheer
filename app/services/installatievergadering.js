@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import { A } from '@ember/array';
 
 import {
   INSTALLATIEVERGADERING_BEHANDELD_STATUS,
@@ -121,6 +122,17 @@ export default class InstallatievergaderingService extends Service {
     this.bestuursorganenInTijdMap.set(boi.id, {
       ...boiData,
       mandatarissen: [...currentMandatarissen, ...mandatarissen],
+    });
+  }
+
+  removeMandatarissen(boi, mandatarissen) {
+    const boiData = this.bestuursorganenInTijdMap?.get(boi?.id);
+    const currentMandatarissen = boiData.mandatarissen;
+    const editArray = A(currentMandatarissen);
+    editArray.removeObjects(mandatarissen);
+    this.bestuursorganenInTijdMap.set(boi.id, {
+      ...boiData,
+      mandatarissen: editArray.toArray(),
     });
   }
 

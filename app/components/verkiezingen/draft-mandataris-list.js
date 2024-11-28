@@ -15,6 +15,7 @@ export default class DraftMandatarisListComponent extends Component {
   @tracked isEditing;
   @tracked isEditFormInitialized;
   @tracked mandatarisEdit;
+  @tracked mandatarisBeingDeleted;
 
   constructor() {
     super(...arguments);
@@ -39,11 +40,13 @@ export default class DraftMandatarisListComponent extends Component {
 
   @action
   async removeMandataris(mandataris) {
+    this.mandatarisBeingDeleted = mandataris.id;
     mandataris
       .destroyRecord()
       .then(() => {
         const succesMessage = 'Mandataris succesvol verwijderd.';
         this.toaster.success(succesMessage, 'Succes', { timeOut: 5000 });
+        this.mandatarisBeingDeleted = null;
         this.ivService.forceRecomputeBCSD();
         this.args.updateMandatarissen({ removed: [mandataris] });
       })
