@@ -3,7 +3,7 @@
     @bestuursorgaanInTijd={{@bestuursorgaan}}
     @readOnly={{this.ivService.isStatus.behandeld}}
     @onUpdateBurgemeester={{@onUpdateBurgemeester}}
-    @bestuursperiode={{@bestuursperiode}}
+    @bestuursperiode={{this.ivService.currentPeriod}}
     @bestuurseenheid={{@bestuurseenheid}}
   />
 {{else}}

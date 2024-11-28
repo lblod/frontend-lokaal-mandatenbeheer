@@ -39,7 +39,7 @@
         <div class="au-o-grid au-o-grid__item au-u-light">
           <Mandatenbeheer::BestuursperiodenSelector
             @options={{@model.bestuursPeriods}}
-            @selected={{@model.selectedPeriod}}
+            @selected={{this.ivService.currentPeriod}}
             @onSelect={{await this.selectPeriod}}
             @prefix="Bestuursperiode"
           />
@@ -82,7 +82,7 @@
     {{#unless this.ivService.isStatus.behandeld}}
       <Verkiezingen::KieslijstSplitter
         @kandidatenlijst={{@model.kandidatenlijsten}}
-        @bestuursorgaan={{@model.bestuursorganenInTijd}}
+        @bestuursorgaan={{this.ivService.bestuursorganenInTijd}}
         @bestuurseenheid={{@model.bestuurseenheid}}
       />
     {{/unless}}
@@ -90,7 +90,6 @@
     {{#each this.ivService.bestuursorganenInTijd as |bestuursorgaan|}}
       <Verkiezingen::PrepareLegislatuurSection
         @bestuurseenheid={{@model.bestuurseenheid}}
-        @bestuursperiode={{@model.selectedPeriod}}
         @bestuursorgaan={{bestuursorgaan}}
         @form={{@model.mandatarisForm}}
         @onUpdateBurgemeester={{this.onUpdateBurgemeester}}
@@ -102,11 +101,7 @@
       <div class="au-o-box">
         <Tmp::Todo>
           <p>Change installatievergadering status:</p>
-          <Shared::InstallatievergaderingStatusSelector
-            @options={{this.ivService.statusOptions}}
-            @selectedStatus={{this.ivService.currentStatus}}
-            @onSelect={{this.selectStatus}}
-          />
+          <Shared::InstallatievergaderingStatusSelector />
         </Tmp::Todo>
       </div>
     {{/unless}}

@@ -17,6 +17,7 @@ export default class InstallatievergaderingService extends Service {
   recomputeBCSDNeededTime = null;
 
   @tracked iv;
+  @tracked currentPeriod;
   @tracked currentStatus;
   @tracked statusOptions;
   @tracked bestuursorganenInTijdMap;
@@ -27,20 +28,22 @@ export default class InstallatievergaderingService extends Service {
     behandeld: false,
   };
 
-  async setup(period) {
+  async setup(period, bois = null) {
     await this.setIvForPeriod(period);
+    if (bois) {
+      this.bestuursorganenInTijdMap = new Map();
+      await this.createBestuursorganenInTijdMap(bois);
+    }
     await this.setStatus(await this.iv?.status);
     this.statusOptions = await this.store.findAll(
       'installatievergadering-status'
     );
-    this.bestuursorganenInTijdMap = new Map();
   }
 
   async setIvForPeriod(period) {
     if (!period) {
       return null;
     }
-
     const ivs = await this.store.query('installatievergadering', {
       'filter[bestuurseenheid][id]': this.currentSession.group.id,
       'filter[bestuursperiode][:id:]': period.id,
@@ -48,6 +51,7 @@ export default class InstallatievergaderingService extends Service {
     });
     if (ivs.length >= 1) {
       this.iv = ivs.at(0);
+      this.currentPeriod = period;
     } else {
       this.iv = null;
     }
