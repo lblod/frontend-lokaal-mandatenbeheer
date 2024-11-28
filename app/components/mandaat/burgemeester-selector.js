@@ -15,8 +15,8 @@ import {
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
-  @service('installatievergadering') ivService;
   @service('mandataris') mandatarisService;
+  @service('installatievergadering') ivService;
 
   @tracked persoon = null;
   @tracked aangewezenBurgemeesters;
@@ -157,9 +157,9 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       : [];
 
     this.ivService.forceRecomputeBCSD();
-    if (this.args.onUpdateBurgemeester) {
-      this.args.onUpdateBurgemeester();
-    }
+    await this.ivService.refreshMandatarissenForConnectedOrganen(
+      this.args.bestuursorgaanInTijd
+    );
 
     this.isModalOpen = false;
   }

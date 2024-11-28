@@ -147,9 +147,4 @@ export default class PrepareInstallatievergaderingController extends Controller 
   closeModal() {
     this.isModalOpen = false;
   }
-
-  @action
-  onUpdateBurgemeester() {
-    this.router.refresh();
-  }
 }

@@ -9,7 +9,6 @@ import {
   INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS,
   BURGEMEESTER_BESTUURSORGAAN_URI,
   CBS_BESTUURSORGAAN_URI,
-  BCSD_BESTUURSORGAAN_URI,
   VAST_BUREAU_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
 
@@ -139,6 +138,9 @@ export default class InstallatievergaderingService extends Service {
     };
 
     if (await bestuursorgaanInTijd.isCBS) {
+      return getBoisForClassificatie(BURGEMEESTER_BESTUURSORGAAN_URI);
+    }
+    if (await bestuursorgaanInTijd.isVastBureau) {
       return getBoisForClassificatie(BURGEMEESTER_BESTUURSORGAAN_URI);
     }
     if (await bestuursorgaanInTijd.isBurgemeester) {
