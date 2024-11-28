@@ -40,13 +40,13 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   }
 
   getMandatarissen = restartableTask(async (state) => {
-    const { added, updated } = state;
+    const { added, updated, removed } = state;
 
     if (added) {
       this.ivService.addMandatarissen(this.args.bestuursorgaan, added);
     }
 
-    if (updated) {
+    if (updated || removed) {
       await this.ivService.fetchMandatarissenForBoi(this.args.bestuursorgaan);
     }
     this.mandatarissen = A(

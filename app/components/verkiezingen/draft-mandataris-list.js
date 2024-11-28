@@ -39,13 +39,13 @@ export default class DraftMandatarisListComponent extends Component {
 
   @action
   async removeMandataris(mandataris) {
-    this.args.updateMandatarissen({ removed: [mandataris] });
     mandataris
       .destroyRecord()
       .then(() => {
         const succesMessage = 'Mandataris succesvol verwijderd.';
         this.toaster.success(succesMessage, 'Succes', { timeOut: 5000 });
         this.ivService.forceRecomputeBCSD();
+        this.args.updateMandatarissen({ removed: [mandataris] });
       })
       .catch(() => {
         const errorMessage =
