@@ -120,8 +120,8 @@ export const orderMandatarissenByRangorde = (
   allMandatarissenInIv
 ) => {
   return mandatarissen.sort((a, b) => {
-    const classRankA = a.bekleedt.get('bestuursfunctie.rankForSorting');
-    const classRankB = b.bekleedt.get('bestuursfunctie.rankForSorting');
+    const classRankA = a.get('bekleedt.bestuursfunctie.rankForSorting');
+    const classRankB = b.get('bekleedt.bestuursfunctie.rankForSorting');
     if (classRankA < classRankB) {
       return 1;
     } else if (classRankA > classRankB) {
