@@ -43,14 +43,20 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     const { added, updated, removed } = state;
 
     if (added) {
-      this.ivService.addMandatarissen(this.args.bestuursorgaan, added);
+      await this.ivService.addMandatarissen(this.args.bestuursorgaan, added);
     }
     if (removed) {
-      this.ivService.removeMandatarissen(this.args.bestuursorgaan, removed);
+      await this.ivService.removeMandatarissen(
+        this.args.bestuursorgaan,
+        removed
+      );
     }
 
     if (updated) {
       await this.ivService.fetchMandatarissenForBoi(this.args.bestuursorgaan);
+      await this.ivService.refreshMandatarissenForConnectedOrganen(
+        this.args.bestuursorgaan
+      );
     }
     this.mandatarissen = A(
       this.ivService.bestuursorganenInTijdMap?.get(this.args.bestuursorgaan?.id)

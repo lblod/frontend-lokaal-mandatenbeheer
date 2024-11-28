@@ -7,6 +7,10 @@ import {
   INSTALLATIEVERGADERING_BEHANDELD_STATUS,
   INSTALLATIEVERGADERING_TE_BEHANDELEN_STATUS,
   INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS,
+  BURGEMEESTER_BESTUURSORGAAN_URI,
+  CBS_BESTUURSORGAAN_URI,
+  BCSD_BESTUURSORGAAN_URI,
+  VAST_BUREAU_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class InstallatievergaderingService extends Service {
@@ -64,6 +68,7 @@ export default class InstallatievergaderingService extends Service {
       this.bestuursorganenInTijdMap.set(boi.id, {
         id: boi.id,
         model: boi,
+        classificatieUri: await boi.classificatieUri(),
         mandatarissen:
           (await this.mandataris.getBestuursorgaanMandatarissen(boi)) ?? [],
       });
@@ -115,7 +120,38 @@ export default class InstallatievergaderingService extends Service {
     return periodeHasLegislatuur && behandeldeVergaderingen.length === 0;
   }
 
-  addMandatarissen(bestuursorgaanInTijd, mandatarissen) {
+  async hasToSyncWith(bestuursorgaanInTijd) {
+    if (!bestuursorgaanInTijd) {
+      return [];
+    }
+
+    const getBoisForClassificatie = (classificatieCodeUris) => {
+      return (
+        Array.from(this.bestuursorganenInTijdMap.entries())
+          .filter(
+            // eslint-disable-next-line no-unused-vars
+            ([key, value]) =>
+              classificatieCodeUris.includes(value.classificatieUri)
+          )
+          // eslint-disable-next-line no-unused-vars
+          .map(([key, value]) => value.model)
+      );
+    };
+
+    if (await bestuursorgaanInTijd.isCBS) {
+      return getBoisForClassificatie(BURGEMEESTER_BESTUURSORGAAN_URI);
+    }
+    if (await bestuursorgaanInTijd.isBurgemeester) {
+      return getBoisForClassificatie(
+        CBS_BESTUURSORGAAN_URI,
+        VAST_BUREAU_BESTUURSORGAAN_URI
+      );
+    }
+
+    return [];
+  }
+
+  async addMandatarissen(bestuursorgaanInTijd, mandatarissen) {
     const boiData = this.bestuursorganenInTijdMap?.get(
       bestuursorgaanInTijd?.id
     );
@@ -125,9 +161,10 @@ export default class InstallatievergaderingService extends Service {
       ...boiData,
       mandatarissen: [...currentMandatarissen, ...mandatarissen],
     });
+    await this.refreshMandatarissenForConnectedOrganen(bestuursorgaanInTijd);
   }
 
-  removeMandatarissen(bestuursorgaanInTijd, mandatarissen) {
+  async removeMandatarissen(bestuursorgaanInTijd, mandatarissen) {
     const boiData = this.bestuursorganenInTijdMap?.get(
       bestuursorgaanInTijd?.id
     );
@@ -138,6 +175,14 @@ export default class InstallatievergaderingService extends Service {
       ...boiData,
       mandatarissen: editArray.toArray(),
     });
+    await this.refreshMandatarissenForConnectedOrganen(bestuursorgaanInTijd);
+  }
+
+  async refreshMandatarissenForConnectedOrganen(bestuursorgaanInTijd) {
+    const connectedBois = await this.hasToSyncWith(bestuursorgaanInTijd);
+    for (const boi of connectedBois) {
+      await this.fetchMandatarissenForBoi(boi);
+    }
   }
 
   getMandatarissenForBoi(bestuursorgaanInTijd) {
