@@ -41,6 +41,10 @@ export default class DraftMandatarisListComponent extends Component {
   @action
   async removeMandataris(mandataris) {
     this.mandatarisBeingDeleted = mandataris.id;
+    if (mandataris.isDestroyed) {
+      this.args.updateMandatarissen({ removed: [mandataris] });
+      return;
+    }
     mandataris
       .destroyRecord()
       .then(() => {
