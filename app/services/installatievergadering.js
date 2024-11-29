@@ -119,7 +119,7 @@ export default class InstallatievergaderingService extends Service {
     const boiData = this.bestuursorganenInTijdMap?.get(
       bestuursorgaanInTijd?.id
     );
-    const currentMandatarissen = boiData.mandatarissen;
+    const currentMandatarissen = boiData.mandatarissen ?? [];
     delete boiData.mandatarissen;
     this.bestuursorganenInTijdMap.set(bestuursorgaanInTijd.id, {
       ...boiData,
@@ -162,5 +162,12 @@ export default class InstallatievergaderingService extends Service {
       ...boiData,
       mandatarissen: latestMandatarissen.toArray(),
     });
+  }
+
+  clearMandatarissenForBoi(bestuursorgaanInTijd) {
+    const boiData = this.bestuursorganenInTijdMap?.get(
+      bestuursorgaanInTijd?.id
+    );
+    delete boiData.mandatarissen;
   }
 }
