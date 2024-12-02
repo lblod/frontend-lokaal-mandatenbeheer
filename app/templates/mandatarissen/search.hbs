@@ -112,16 +112,14 @@
           </Shared::Tooltip>
         </Group>
       </AuToolbar>
-      <div class="au-c-body-container au-c-body-container--scroll">
-        <Mandatarissen::PersoonTable
-          @content={{@model.personen}}
-          @bestuursperiode={{@model.selectedPeriod.period}}
-          @sort={{this.sort}}
-          @page={{this.page}}
-          @size={{this.size}}
-          @detailRoute="mandatarissen.persoon.mandaten"
-        />
-      </div>
+      <Mandatarissen::PersoonTable
+        @content={{@model.personen}}
+        @bestuursperiode={{@model.selectedPeriod.period}}
+        @sort={{this.sort}}
+        @page={{@model.page.number}}
+        @size={{@model.page.size}}
+        @detailRoute="mandatarissen.persoon.mandaten"
+      />
     </AuBodyContainer>
   </main.content>
 </AuMainContainer>
