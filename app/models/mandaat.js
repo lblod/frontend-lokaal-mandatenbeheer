@@ -7,6 +7,7 @@ import {
   MANDAAT_DISTRICT_SCHEPEN_CODE,
   MANDAAT_GEDEPUTEERDE_CODE,
   MANDAAT_GEMEENTERAADSLID_CODE,
+  MANDAAT_GOUVERNEUR_CODE,
   MANDAAT_SCHEPEN_CODE,
   MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
@@ -78,12 +79,19 @@ export default class MandaatModel extends Model {
     return this.bestuursfunctie.get('isVoorzitter');
   }
 
+  get isGouverneur() {
+    return this.bestuursfunctie.get('uri') == MANDAAT_GOUVERNEUR_CODE;
+  }
+
   get hasRangorde() {
     return this.isSchepen || this.isGemeenteraadslid;
   }
 
   get allowsNonElectedPersons() {
     return new Promise((resolve) => {
+      if (this.isGouverneur) {
+        resolve(true);
+      }
       this.isDecretaalHelper()
         .then((decretaal) => {
           if (!decretaal) {
