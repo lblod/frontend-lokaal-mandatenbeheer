@@ -66,12 +66,6 @@ export default class PrepareInstallatievergaderingController extends Controller 
   }
 
   get statusIsDisabled() {
-    if (
-      this.model.installatievergadering.get('status.uri') ===
-      INSTALLATIEVERGADERING_KLAAR_VOOR_VERGADERING_STATUS
-    ) {
-      return true;
-    }
     return !this.nextStatus?.status;
   }
 
