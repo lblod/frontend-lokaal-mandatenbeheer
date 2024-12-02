@@ -71,6 +71,8 @@ export const MANDAAT_DISTRICT_SCHEPEN_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e00001e';
 export const MANDAAT_GEDEPUTEERDE_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000020';
+export const MANDAAT_GOUVERNEUR =
+  'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/d7c00cd1-baf1-4346-83c0-6796c0bedd85';
 
 export const burgemeesterOnlyStates = [MANDATARIS_TITELVOEREND_STATE];
 export const notBurgemeesterStates = [MANDATARIS_VERHINDERD_STATE];
