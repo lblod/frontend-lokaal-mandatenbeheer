@@ -262,11 +262,6 @@ export default class MandatarissenUpdateState extends Component {
   });
 
   @action
-  updateDate(date) {
-    this.date = new Date(date);
-  }
-
-  @action
   updateNewStatus(status) {
     this.newStatus = status;
   }
