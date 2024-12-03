@@ -2,7 +2,9 @@
 <AuToolbar @border="bottom" @size="large" as |Group|>
   <Group>
     <AuHeading @skin="2">Voeg mandataris toe aan
-      {{@model.currentBestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
+      {{@model.currentBestuursorgaan.isTijdsspecialisatieVan.naam}}
+      {{this.model.selectedBestuursperiode.label}}
+    </AuHeading>
   </Group>
 </AuToolbar>
 
