@@ -291,4 +291,17 @@ export default class MandatarissenUpdateState extends Component {
   get toolTipText() {
     return 'Er zijn geen wijzigingen om op te slaan.';
   }
+
+  @action
+  cancel() {
+    this.date = new Date();
+    this.newStatus = this.args.mandataris.status;
+    this.rangorde = this.args.mandataris.rangorde;
+    this.selectedFractie = this.args.mandataris.get(
+      'heeftLidmaatschap.binnenFractie'
+    );
+    this.selectedReplacement = null;
+    this.replacementUpdated = false;
+    this.args.onCancel();
+  }
 }
