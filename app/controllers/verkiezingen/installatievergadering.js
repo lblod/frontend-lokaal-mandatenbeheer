@@ -37,23 +37,23 @@ export default class PrepareInstallatievergaderingController extends Controller 
   @tracked nextStatus;
   @tracked isModalOpen = false;
   @tracked verkiezingsUitslagModal = false;
+  @tracked nextStatusSetting = false;
 
   @action
   async selectStatus(status) {
-    this.isModalOpen = false;
+    this.nextStatusSetting = true;
     const installatievergadering = this.model.installatievergadering;
-    installatievergadering.status = status;
-    await installatievergadering.save();
 
-    if (
-      installatievergadering.get('status.uri') ===
-      INSTALLATIEVERGADERING_BEHANDELD_STATUS
-    ) {
+    if (status.uri === INSTALLATIEVERGADERING_BEHANDELD_STATUS) {
       await fetch(
         `/installatievergadering-api/${installatievergadering.id}/move-ocmw-organs`,
         { method: 'POST' }
       );
     }
+    this.isModalOpen = false;
+    installatievergadering.status = status;
+    await installatievergadering.save();
+    this.nextStatusSetting = false;
 
     this.router.refresh();
   }

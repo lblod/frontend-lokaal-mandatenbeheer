@@ -173,6 +173,8 @@
               Annuleer
             </AuButton>
             <AuButton
+              @loading={{this.nextStatusSetting}}
+              @loadingMessage="Status wijzigen"
               {{on "click" (fn this.selectStatus this.nextStatus.status)}}
             >
               Bevestigen
