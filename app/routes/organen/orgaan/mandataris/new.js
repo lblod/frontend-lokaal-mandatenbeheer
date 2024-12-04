@@ -11,7 +11,7 @@ export default class OrganenMandatarisNewRoute extends Route {
   @service semanticFormRepository;
 
   async model() {
-    const { currentBestuursorgaan } = this.modelFor('organen.orgaan');
+    const parentModel = this.modelFor('organen.orgaan');
     const mandatarisNewForm =
       await this.semanticFormRepository.getFormDefinition(
         MANDATARIS_NEW_FORM_ID
@@ -20,8 +20,9 @@ export default class OrganenMandatarisNewRoute extends Route {
 
     return RSVP.hash({
       bestuurseenheid,
-      currentBestuursorgaan,
+      currentBestuursorgaan: parentModel.currentBestuursorgaan,
       mandatarisNewForm,
+      selectedBestuursperiode: parentModel.selectedBestuursperiode,
     });
   }
 }
