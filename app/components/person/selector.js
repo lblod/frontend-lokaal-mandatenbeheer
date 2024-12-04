@@ -120,4 +120,8 @@ export default class PersonSelectorComponent extends Component {
   get showEditAsIcon() {
     return this.args.showEditAsIcon ?? false;
   }
+
+  get personModalTitle() {
+    return this.creatingPerson ? 'Voeg persoon toe' : 'Selecteer een persoon';
+  }
 }
