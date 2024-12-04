@@ -7,7 +7,7 @@
   )}}
   @modalOpen={{@isChanging}}
   @closable={{true}}
-  @closeModal={{@onCancel}}
+  @closeModal={{this.cancel}}
 >
   {{yield}}
   <div class="au-o-box au-o-flow">
@@ -125,7 +125,7 @@
               {{if this.hasChanges "Pas aan" "Onveranderd"}}
             </AuButton>
           </Shared::Tooltip>
-          <AuButton {{on "click" @onCancel}} @skin="secondary">
+          <AuButton {{on "click" this.cancel}} @skin="secondary">
             Annuleer
           </AuButton>
         </AuButtonGroup>

@@ -118,7 +118,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   @action
   async select(fractie) {
-    if (fractie.isNew) {
+    if (fractie?.isNew) {
       await fractie.save();
     }
     this._fractie = fractie;
