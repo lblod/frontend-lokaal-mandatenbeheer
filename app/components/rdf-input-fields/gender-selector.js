@@ -58,9 +58,9 @@ export default class RDFGenderSelector extends RdfInputFieldsConceptSchemeSelect
         ),
         label: 'Vrouwelijk',
       };
-      this.selected = isBiologicalMale(rrnString) ? male : woman;
-      if (this.selected) {
-        this.updateSelection(this.selected);
+      const selected = isBiologicalMale(rrnString) ? male : woman;
+      if (selected) {
+        this.updateSelection(selected);
       }
     }
   });

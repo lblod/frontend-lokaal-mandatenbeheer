@@ -1,4 +1,11 @@
-<AuLabel for={{this.inputId}}>{{this.title}}</AuLabel>
+<AuLabel
+  @error={{this.hasErrors}}
+  @required={{this.isRequired}}
+  @warning={{this.hasWarnings}}
+  for={{this.inputId}}
+>
+  {{this.title}}
+</AuLabel>
 <PowerSelect
   @triggerId={{this.inputId}}
   @allowClear={{true}}
@@ -15,3 +22,11 @@
 >
   {{concept.label}}
 </PowerSelect>
+
+{{#each this.errors as |error|}}
+  <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+{{/each}}
+
+{{#each this.warnings as |warning|}}
+  <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+{{/each}}
