@@ -145,6 +145,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     await Promise.all(
       this.targetMandatarisses.map(async (target) => {
         target.isBestuurlijkeAliasVan = this.persoon;
+        target.start = this.date;
         if (this.selectedFractie) {
           await this.mandatarisService.createNewLidmaatschap(
             target,
