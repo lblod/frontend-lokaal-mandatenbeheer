@@ -117,13 +117,17 @@ export default class MandatarisModel extends Model {
   }
 
   get besluitUri() {
-    if (this.ontslagBekrachtigdDoor) {
-      return this.ontslagBekrachtigdDoor.get('uri');
-    }
-    if (this.aanstellingBekrachtigdDoor) {
-      return this.aanstellingBekrachtigdDoor.get('uri');
-    }
-    return null;
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async (resolve) => {
+      if (await this.ontslagBekrachtigdDoor) {
+        resolve(this.ontslagBekrachtigdDoor.get('uri'));
+      }
+      if (await this.aanstellingBekrachtigdDoor) {
+        resolve(this.aanstellingBekrachtigdDoor.get('uri'));
+      }
+
+      resolve(null);
+    });
   }
 
   async getUnique(people) {
