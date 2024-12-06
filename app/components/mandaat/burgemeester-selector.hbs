@@ -33,6 +33,7 @@
         <th class="au-u-padding-small">Voornaam</th>
         <th>Familienaam</th>
         <th>Fractie</th>
+        <th>Start</th>
         <th>Beleidsomeinen</th>
         {{#unless @readOnly}}
           <th>
@@ -44,6 +45,7 @@
         <td>{{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}</td>
         <td>{{row.isBestuurlijkeAliasVan.achternaam}}</td>
         <td>{{row.heeftLidmaatschap.binnenFractie.naam}}</td>
+        <td>{{moment-format row.start "DD-MM-YYYY"}}</td>
         <td><Beleidsdomeinen @mandataris={{row}} /></td>
         {{#unless @readOnly}}
           <td class="au-u-text-right">
