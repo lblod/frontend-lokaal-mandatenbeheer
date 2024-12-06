@@ -117,6 +117,7 @@ export default class MandatarisModel extends Model {
   }
 
   get besluitUri() {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve) => {
       if (await this.ontslagBekrachtigdDoor) {
         resolve(this.ontslagBekrachtigdDoor.get('uri'));
