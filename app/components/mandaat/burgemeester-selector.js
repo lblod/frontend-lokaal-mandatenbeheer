@@ -24,6 +24,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @tracked isModalOpen;
   @tracked selectedFractie = null;
   @tracked selectedBeleidsdomeinen = [];
+  @tracked date;
 
   // no need to track these
   burgemeesterMandate = null;
@@ -33,6 +34,13 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   get disabled() {
     return !this.persoon || !this.selectedFractie;
   }
+  get bestuursorgaanStart() {
+    return this.args.bestuursorgaanInTijd.bindingStart;
+  }
+
+  get bestuursorgaanEinde() {
+    return this.args.bestuursorgaanInTijd.bindingEinde;
+  }
 
   constructor() {
     super(...arguments);
@@ -40,6 +48,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   }
 
   @action async setup() {
+    this.date = this.args.bestuursorgaanInTijd.bindingStart;
     await this.loadBurgemeesterMandates();
     await this.loadBurgemeesterMandatarissen();
     await this.loadBurgemeesterPerson();
@@ -79,7 +88,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   async createMandataris(burgemeesterMandaat) {
     const newMandataris = this.store.createRecord('mandataris', {
       rangorde: null,
-      start: this.args.bestuursorgaanInTijd.bindingStart,
+      start: this.date,
       einde: this.args.bestuursorgaanInTijd.bindingEinde,
       bekleedt: burgemeesterMandaat,
       isBestuurlijkeAliasVan: null,

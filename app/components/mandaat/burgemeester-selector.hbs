@@ -94,6 +94,16 @@
     </div>
 
     {{#if this.persoon}}
+      <div>
+        <DateInput
+          @label="Start"
+          @value={{this.date}}
+          @from={{this.bestuursorgaanStart}}
+          @to={{this.bestuursorgaanEinde}}
+          @onChange={{fn (mut this.date)}}
+          @isRequired={{true}}
+        />
+      </div>
       <Mandatarissen::FractieSelector
         @fractie={{this.selectedFractie}}
         @isRequired={{true}}
