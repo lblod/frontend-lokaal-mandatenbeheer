@@ -32,63 +32,86 @@
             <th>{{! Delete }}</th>
           {{/unless}}
         </c.header>
-
-        <c.body as |row|>
-          <td>
-            {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-          </td>
-          <td>
-            {{row.isBestuurlijkeAliasVan.achternaam}}
-          </td>
-          {{#if @showFractie}}
-            <td>
-              {{row.heeftLidmaatschap.binnenFractie.naam}}
-            </td>
-          {{/if}}
-          {{#if @showFunctie}}
-            <td>
-              {{row.bekleedt.bestuursfunctie.label}}
-            </td>
-          {{/if}}
-          {{#if @showRangorde}}
-            <td>
-              {{#if row.bekleedt.hasRangorde}}
-                {{#if @readOnly}}
-                  {{row.rangorde}}
-                {{else}}
-                  <Verkiezingen::RangordeInput
-                    @mandataris={{row}}
-                    @mandatarissen={{this.mandatarissen}}
-                  />
-                {{/if}}
+        <c.body as |mandataris|>
+          {{#unless mandataris.isDestroyed}}
+            {{#if (eq this.mandatarisBeingDeleted mandataris.id)}}
+              <td><p class="skeleton-text au-u-padding-small"></p></td>
+              <td><p class="skeleton-text au-u-padding-small"></p></td>
+              {{#if @showFractie}}
+                <td><p class="skeleton-text au-u-padding-small"></p></td>
               {{/if}}
-            </td>
-          {{/if}}
-          {{#if @showBeleidsdomein}}
-            <td>
-              <Beleidsdomeinen @mandataris={{row}} />
-            </td>
-          {{/if}}
-          {{#if @showStartEndDate}}
-            <td>
-              {{moment-format row.start "DD-MM-YYYY"}}
-            </td>
-            <td>
-              {{moment-format row.einde "DD-MM-YYYY"}}
-            </td>
-          {{/if}}
-          {{#unless @readOnly}}
-            <td class="au-u-text-right">
-              <AuButton
-                @skin="link"
-                {{on "click" (fn this.openEditMandataris row)}}
-              >Bewerk</AuButton>
-              <AuButton
-                @skin="link"
-                @alert={{true}}
-                {{on "click" (fn this.removeMandataris row)}}
-              >Verwijder</AuButton>
-            </td>
+              {{#if @showFunctie}}
+                <td><p class="skeleton-text au-u-padding-small"></p></td>
+              {{/if}}
+              {{#if @showRangorde}}
+                <td><p class="skeleton-text au-u-padding-small"></p></td>
+              {{/if}}
+              {{#if @showBeleidsdomein}}
+                <td><p class="skeleton-text au-u-padding-small"></p></td>
+              {{/if}}
+              {{#if @showStartEndDate}}
+                <td><p class="skeleton-text au-u-padding-small"></p></td>
+                <td><p class="skeleton-text au-u-padding-small"></p></td>
+              {{/if}}
+              <td><p class="skeleton-text au-u-padding-small"></p></td>
+            {{else}}
+              <td>
+                {{mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+              </td>
+              <td>
+                {{mandataris.isBestuurlijkeAliasVan.achternaam}}
+              </td>
+              {{#if @showFractie}}
+                <td>
+                  {{mandataris.heeftLidmaatschap.binnenFractie.naam}}
+                </td>
+              {{/if}}
+              {{#if @showFunctie}}
+                <td>
+                  {{mandataris.bekleedt.bestuursfunctie.label}}
+                </td>
+              {{/if}}
+              {{#if @showRangorde}}
+                <td>
+                  {{#if mandataris.bekleedt.hasRangorde}}
+                    {{#if @readOnly}}
+                      {{mandataris.rangorde}}
+                    {{else}}
+                      <Verkiezingen::RangordeInput
+                        @mandataris={{mandataris}}
+                        @mandatarissen={{this.mandatarissen}}
+                      />
+                    {{/if}}
+                  {{/if}}
+                </td>
+              {{/if}}
+              {{#if @showBeleidsdomein}}
+                <td>
+                  <Beleidsdomeinen @mandataris={{mandataris}} />
+                </td>
+              {{/if}}
+              {{#if @showStartEndDate}}
+                <td>
+                  {{moment-format mandataris.start "DD-MM-YYYY"}}
+                </td>
+                <td>
+                  {{moment-format mandataris.einde "DD-MM-YYYY"}}
+                </td>
+              {{/if}}
+              {{#unless @readOnly}}
+                <td class="au-u-text-right">
+                  <AuButton
+                    @skin="link"
+                    {{on "click" (fn this.openEditMandataris mandataris)}}
+                  >Bewerk</AuButton>
+                  <AuButton
+                    @skin="link"
+                    @alert={{true}}
+                    {{on "click" (fn this.removeMandataris mandataris)}}
+                  >Verwijder</AuButton>
+                </td>
+              {{/unless}}
+            {{/if}}
           {{/unless}}
         </c.body>
       </t.content>

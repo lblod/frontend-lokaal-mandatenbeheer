@@ -15,7 +15,7 @@ import {
 
 export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
-  @service installatievergadering;
+  @service('installatievergadering') ivService;
   @service('mandataris') mandatarisService;
 
   @tracked persoon = null;
@@ -43,6 +43,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     await this.loadBurgemeesterMandates();
     await this.loadBurgemeesterMandatarissen();
     await this.loadBurgemeesterPerson();
+    await this.clearAndAddMandatarissenToIv();
   }
 
   async loadBurgemeesterMandates() {
@@ -155,7 +156,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       ? [this.aangewezenBurgemeester]
       : [];
 
-    this.installatievergadering.forceRecomputeBCSD();
+    this.ivService.forceRecomputeBCSD();
     if (this.args.onUpdateBurgemeester) {
       this.args.onUpdateBurgemeester();
     }
@@ -190,7 +191,16 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     this.selectedFractie = null;
     this.selectedBeleidsdomeinen = [];
     this.aangewezenBurgemeesters = [];
+    await this.clearAndAddMandatarissenToIv();
     await this.updateBurgemeester();
+  }
+
+  async clearAndAddMandatarissenToIv() {
+    this.ivService.clearMandatarissenForBoi(this.args.bestuursorgaanInTijd);
+    await this.ivService.addMandatarissen(
+      this.args.bestuursorgaanInTijd,
+      this.aangewezenBurgemeesters
+    );
   }
 
   get toolTipText() {

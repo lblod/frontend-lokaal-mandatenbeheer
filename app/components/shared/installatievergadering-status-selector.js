@@ -1,18 +1,13 @@
 import Component from '@glimmer/component';
 
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 
 export default class SharedInstallatievergaderingStatusSelectorComponent extends Component {
-  @tracked _options;
-
-  constructor() {
-    super(...arguments);
-    this._options = this.args.options?.sortBy('label') || [];
-  }
+  @service('installatievergadering') ivService;
 
   @action
   async selectStatus(status) {
-    await this.args.onSelect(status);
+    await this.ivService.setStatus(status);
   }
 }

@@ -154,5 +154,7 @@ export default class MandatarisApiService extends Service {
         message: jsonReponse.message,
       };
     }
+
+    await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 }

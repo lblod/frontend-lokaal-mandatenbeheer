@@ -1,9 +1,9 @@
 {{#if (await @bestuursorgaan.isBurgemeester)}}
   <Mandaat::BurgemeesterSelector
     @bestuursorgaanInTijd={{@bestuursorgaan}}
-    @readOnly={{@isBehandeld}}
+    @readOnly={{this.ivService.isStatus.behandeld}}
     @onUpdateBurgemeester={{@onUpdateBurgemeester}}
-    @bestuursperiode={{@bestuursperiode}}
+    @bestuursperiode={{this.ivService.currentPeriod}}
     @bestuurseenheid={{@bestuurseenheid}}
   />
 {{else}}
@@ -18,7 +18,7 @@
         {{@bestuursorgaan.isTijdsspecialisatieVan.naam}}</AuHeading>
     </div>
     <div class="au-u-flex au-u-flex--end au-u-margin-left au-u-margin-right">
-      {{#unless @isBehandeld}}
+      {{#unless this.ivService.isStatus.behandeld}}
         <AuContent @skin="small" class="au-u-flex-self-end">
           {{! template-lint-disable no-inline-styles }}
           <AuButton
@@ -85,7 +85,7 @@
   {{#if (await @bestuursorgaan.isBCSD)}}
     <Verkiezingen::BcsdVoorzitterAlert
       @bcsdBestuursorgaanInTijd={{@bestuursorgaan}}
-      @bestuursorganenInTijd={{@bestuursorganen}}
+      @bestuursorganenInTijd={{this.ivService.bestuursorganenInTijd}}
     />
   {{/if}}
   {{#if (await @bestuursorgaan.isCBS)}}
@@ -96,11 +96,7 @@
 
   {{#if
     (and
-      (or
-        this.initialLoad.isRunning
-        this.mirrorTable.isRunning
-        this.getMandatarissen.isRunning
-      )
+      (or this.mirrorTable.isRunning this.getMandatarissen.isRunning)
       this.skeletonRowsOfMirror
     )
   }}
@@ -109,7 +105,8 @@
     </div>
   {{else}}
     <Verkiezingen::DraftMandatarisList
-      @readOnly={{@isBehandeld}}
+      @bestuursorgaanInTijd={{@bestuursorgaan}}
+      @readOnly={{this.ivService.isStatus.behandeld}}
       @mandatarissen={{this.mandatarissen}}
       @updateMandatarissen={{perform this.getMandatarissen}}
       @title=""

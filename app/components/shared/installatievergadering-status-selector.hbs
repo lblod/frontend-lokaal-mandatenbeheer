@@ -1,13 +1,13 @@
 <PowerSelect
-  @selected={{@selectedStatus}}
-  @options={{@options}}
+  @selected={{this.ivService.currentStatus}}
+  @options={{this.ivService.statusOptions}}
   class="is-optional"
   @onChange={{this.selectStatus}}
   @searchEnabled={{false}}
   @noMatchesMessage="Geen statussen"
   as |status|
 >
-  {{#if @options}}
+  {{#if this.ivService.statusOptions}}
     {{status.label}}
   {{else}}
     Geen statussen
