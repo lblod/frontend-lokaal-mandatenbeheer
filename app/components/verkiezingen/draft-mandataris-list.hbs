@@ -18,6 +18,9 @@
           {{#if @showFunctie}}
             <th>Mandaat</th>
           {{/if}}
+          {{#if @showStart}}
+            <th>Start</th>
+          {{/if}}
           {{#if @showRangorde}}
             <th>Rangorde</th>
           {{/if}}
@@ -49,6 +52,9 @@
             <td>
               {{row.bekleedt.bestuursfunctie.label}}
             </td>
+          {{/if}}
+          {{#if @showStart}}
+            <td>{{moment-format row.start "DD-MM-YYYY"}}</td>
           {{/if}}
           {{#if @showRangorde}}
             <td>
