@@ -5,8 +5,18 @@
       <div class="au-u-flex">
         {{#if this.hasMoreThanOneMessage}}
           <div class="au-u-flex au-u-flex--column">
-            <AuButton hideText={{true}} @icon="chevron-up" @skin="naked" />
-            <AuButton hideText={{true}} @icon="chevron-down" @skin="naked" />
+            <AuButton
+              hideText={{true}}
+              @icon="chevron-up"
+              @skin="naked"
+              {{on "click" this.previous}}
+            />
+            <AuButton
+              hideText={{true}}
+              @icon="chevron-down"
+              @skin="naked"
+              {{on "click" this.next}}
+            />
           </div>
         {{/if}}
         <p class="au-u-flex-self-center">
