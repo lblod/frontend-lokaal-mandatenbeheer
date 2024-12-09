@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 
-import { restartableTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
@@ -17,7 +17,7 @@ export default class VerkiezingenBcsdVoorzitterNotSchepenAlertComponent extends 
 
   @tracked warningMessage;
 
-  isVoorzitterAlsoSchepen = restartableTask(async () => {
+  isVoorzitterAlsoSchepen = task(async () => {
     const bcsdMandatarissen = this.args.mandatarissen;
     const mapping = await Promise.all(
       bcsdMandatarissen.map(async (mandataris) => {
@@ -47,11 +47,15 @@ export default class VerkiezingenBcsdVoorzitterNotSchepenAlertComponent extends 
       } else {
         this.warningMessage = null;
       }
+    } else {
+      this.warningMessage = null;
     }
   });
 
   @action
   async mandatarissenUpdated() {
-    await this.isVoorzitterAlsoSchepen.perform();
+    if (!this.isVoorzitterAlsoSchepen.isRunning) {
+      await this.isVoorzitterAlsoSchepen.perform();
+    }
   }
 }
