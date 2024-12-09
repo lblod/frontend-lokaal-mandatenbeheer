@@ -17,6 +17,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
   @service installatievergadering;
   @service('mandataris') mandatarisService;
+  @service fractieApi;
 
   @tracked persoon = null;
   @tracked aangewezenBurgemeesters;
@@ -25,6 +26,9 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @tracked selectedFractie = null;
   @tracked selectedBeleidsdomeinen = [];
   @tracked date;
+
+  @tracked editBurgemeester = false;
+  @tracked isEditFormInitialized;
 
   // no need to track these
   burgemeesterMandate = null;
@@ -205,5 +209,20 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   get toolTipText() {
     return this.persoon ? 'Er is reeds een burgemeester geselecteerd.' : '';
+  }
+
+  @action
+  closeEditBurgemeesterModal() {
+    this.editBurgemeester = false;
+    this.isEditFormInitialized = false;
+  }
+
+  @action
+  async saveBurgemeesterChanges({ instanceId }) {
+    await this.fractieApi.updateCurrentFractie(instanceId);
+    this.closeEditBurgemeesterModal();
+    if (this.args.onUpdateBurgemeester) {
+      setTimeout(() => this.args.onUpdateBurgemeester(), 1000);
+    }
   }
 }

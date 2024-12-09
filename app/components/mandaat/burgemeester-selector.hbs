@@ -52,6 +52,10 @@
             {{#if this.persoon}}
               <AuButton
                 @skin="link"
+                {{on "click" (fn (mut this.editBurgemeester) true)}}
+              >Bewerk</AuButton>
+              <AuButton
+                @skin="link"
                 @alert={{true}}
                 {{on "click" this.removeBurgemeester}}
               >Verwijder</AuButton>
@@ -147,5 +151,33 @@
         </AuButtonGroup>
       </Group>
     </AuToolbar>
+  </div>
+</AuModal>
+
+<AuModal
+  @title={{(concat "Bewerk Burgemeester")}}
+  @modalOpen={{this.editBurgemeester}}
+  @closable={{true}}
+  @closeModal={{this.closeEditBurgemeesterModal}}
+>
+
+  <div class="au-o-box">
+    <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
+      Bij het aanpassen van de burgemeester zal de voorzitter van het vast
+      bureau niet aangepast worden, indien u de wijzigingen daar ook wenst door
+      te voeren dient u dit manueel te doen.
+    </AuAlert>
+    <SemanticForms::Instance
+      @hideDescriptionModalOnSave={{true}}
+      @instanceId={{this.aangewezenBurgemeester.id}}
+      @form={{@form}}
+      @onSave={{this.saveBurgemeesterChanges}}
+      @onCancel={{this.closeEditBurgemeesterModal}}
+      @buildMetaTtl={{@buildMetaTtl}}
+      @formInitialized={{fn (mut this.isEditFormInitialized) true}}
+    />
+    {{#unless this.isEditFormInitialized}}
+      <Skeleton::Forms::MandatarisCorrect />
+    {{/unless}}
   </div>
 </AuModal>
