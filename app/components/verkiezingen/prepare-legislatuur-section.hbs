@@ -96,6 +96,12 @@
     />
   {{/if}}
 
+  <Verkiezingen::BcsdVoorzitterNotSchepenAlert
+    @bestuursorgaanInTijd={{@bestuursorgaan}}
+    @bestuursperiode={{@bestuursperiode}}
+    @mandatarissen={{this.mandatarissen}}
+  />
+
   {{#if
     (and
       (or
