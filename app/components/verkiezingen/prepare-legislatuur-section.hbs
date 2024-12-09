@@ -94,6 +94,10 @@
   <Verkiezingen::BcsdVoorzitterAlert
     @bestuursorgaanInTijd={{@bestuursorgaan}}
     @bestuursperiode={{@bestuursperiode}}
+  />
+
+  <Verkiezingen::WarningAmountMandatarissenForOrgaanAlert
+    @bestuursorgaanInTijd={{@bestuursorgaan}}
     @mandatarissen={{this.mandatarissen}}
     @trigger={{this.installatievergadering.recomputeBCSDNeededTime}}
   />
