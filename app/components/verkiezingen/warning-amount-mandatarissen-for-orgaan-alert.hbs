@@ -20,21 +20,20 @@
               />
             </div>
           {{/if}}
-          {{#if this.hasMoreThanOneMessage}}
-
-            <p class="au-u-flex-self-center au-u-padding-left">
-              {{this.currentShownWarning.message}}
-            </p>
-          {{/if}}
+          <p class="au-u-flex-self-center au-u-padding-left">
+            {{this.currentShownWarning.message}}
+          </p>
         </div>
+        {{#if this.hasMoreThanOneMessage}}
+          <p
+            class="au-u-flex-self-center au-u-flex-end au-u-medium au-u-margin-right-small"
+          >
+            {{this.currentShownWarning.position}}
+            van
+            {{this.warningMessages.length}}
+          </p>
+        {{/if}}
 
-        <p
-          class="au-u-flex-self-center au-u-flex-end au-u-medium au-u-margin-right-small"
-        >
-          {{this.currentShownWarning.position}}
-          van
-          {{this.warningMessages.length}}
-        </p>
       </div>
     </AuAlert>
   </div>

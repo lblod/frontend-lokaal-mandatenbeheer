@@ -70,12 +70,12 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
           }
 
           this.setMessageForMandaat(key, message, messagePositionInArray);
-          message
-            ? this.warningMessages.pushObject({
-                message: message,
-                position: messagePositionInArray,
-              })
-            : null;
+          if (message) {
+            this.warningMessages.pushObject({
+              message: message,
+              position: messagePositionInArray,
+            });
+          }
         }
       )
     );
@@ -97,6 +97,7 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
   @action
   next() {
     const current = this.warningMessages.shiftObject();
+    console.log({ current });
     this.warningMessages.pushObject(current);
   }
 
