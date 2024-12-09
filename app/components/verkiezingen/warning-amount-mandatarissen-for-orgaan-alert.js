@@ -63,19 +63,26 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
             return m.get('bekleedt.id') === key;
           }).length;
           let message = null;
+          let messagePositionInArray = null;
           if (totalForMandaat > value.max) {
-            message = `Teveel mandatarissen gevonden voor mandaat "${value.label}" (${totalForMandaat} van ${value.max})`;
+            message = `${totalForMandaat} van maximum ${value.max} mandataris(sen) gevonden voor mandaat "${value.label}".`;
+            messagePositionInArray = this.warningMessages.length + 1;
           }
 
-          this.setMessageForMandaat(key, message);
-          message ? this.warningMessages.pushObject(message) : null;
+          this.setMessageForMandaat(key, message, messagePositionInArray);
+          message
+            ? this.warningMessages.pushObject({
+                message: message,
+                position: messagePositionInArray,
+              })
+            : null;
         }
       )
     );
   }
 
-  setMessageForMandaat(mandaatId, message) {
-    if (!mandaatId) {
+  setMessageForMandaat(mandaatId, message, messagePositionInArray) {
+    if (!mandaatId || !messagePositionInArray) {
       return;
     }
 
