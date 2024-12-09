@@ -85,6 +85,18 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
     });
   }
 
+  @action
+  next() {
+    const current = this.warningMessages.shiftObject();
+    this.warningMessages.pushObject(current);
+  }
+
+  @action
+  previous() {
+    const current = this.warningMessages.popObject();
+    this.warningMessages.unshiftObject(current);
+  }
+
   get currentShownWarning() {
     return this.warningMessages.at(0) ?? null;
   }
