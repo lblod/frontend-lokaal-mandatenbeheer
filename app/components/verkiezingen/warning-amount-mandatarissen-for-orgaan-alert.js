@@ -5,7 +5,7 @@ import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 
 export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertComponent extends Component {
   @service store;
@@ -20,7 +20,7 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
 
   getMaxAnMinNumberForMandaten = task(async () => {
     if (!this.args.bestuursorgaanInTijd) {
-      return;
+      throw new Error('Geen bestuursorgaan meegegeven aan component.');
     }
 
     const mandaten = await this.store.query('mandaat', {
@@ -40,9 +40,20 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
 
   @action
   async updateMappingWithMessages() {
+    if (
+      !this.mandaatValueMapping &&
+      this.getMaxAnMinNumberForMandaten.isRunning
+    ) {
+      // This could be better
+      await timeout(250);
+      await this.updateMappingWithMessages();
+    }
+
+    this.warningMessages.clear();
+
     await Promise.all(
       Array.from(
-        this.mandaatValueMapping ?? [],
+        this.mandaatValueMapping,
         // eslint-disable-next-line no-unused-vars
         async ([key, value]) => {
           if (!value.max) {
@@ -51,24 +62,15 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
           const totalForMandaat = this.args.mandatarissen.filter((m) => {
             return m.get('bekleedt.id') === key;
           }).length;
+          let message = null;
           if (totalForMandaat > value.max) {
-            this.setMessageForMandaat(
-              key,
-              `Teveel mandatarissen gevonden voor mandaat ${value.label} (${totalForMandaat} van ${value.max})`
-            );
-          } else {
-            this.setMessageForMandaat(key, null);
+            message = `Teveel mandatarissen gevonden voor mandaat "${value.label}" (${totalForMandaat} van ${value.max})`;
           }
+
+          this.setMessageForMandaat(key, message);
+          message ? this.warningMessages.pushObject(message) : null;
         }
       )
-    );
-    this.warningMessages.clear();
-    this.warningMessages.pushObjects(
-      Array.from(
-        this.mandaatValueMapping ?? [],
-        // eslint-disable-next-line no-unused-vars
-        ([key, value]) => value.message
-      ).filter((m) => m)
     );
   }
 
