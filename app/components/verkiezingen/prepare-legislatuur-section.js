@@ -64,6 +64,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
       await this.initialLoad.perform();
     }
     this.installatievergadering.addMandatarissen(this.mandatarissen);
+    this.installatievergadering.forceRecomputeBCSD();
   });
 
   @action
