@@ -33,6 +33,7 @@
         <th class="au-u-padding-small">Voornaam</th>
         <th>Familienaam</th>
         <th>Fractie</th>
+        <th>Start</th>
         <th>Beleidsomeinen</th>
         {{#unless @readOnly}}
           <th>
@@ -44,10 +45,15 @@
         <td>{{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}</td>
         <td>{{row.isBestuurlijkeAliasVan.achternaam}}</td>
         <td>{{row.heeftLidmaatschap.binnenFractie.naam}}</td>
+        <td>{{moment-format row.start "DD-MM-YYYY"}}</td>
         <td><Beleidsdomeinen @mandataris={{row}} /></td>
         {{#unless @readOnly}}
           <td class="au-u-text-right">
             {{#if this.persoon}}
+              <AuButton
+                @skin="link"
+                {{on "click" (fn (mut this.editBurgemeester) true)}}
+              >Bewerk</AuButton>
               <AuButton
                 @skin="link"
                 @alert={{true}}
@@ -94,6 +100,16 @@
     </div>
 
     {{#if this.persoon}}
+      <div>
+        <DateInput
+          @label="Start"
+          @value={{this.date}}
+          @from={{this.bestuursorgaanStart}}
+          @to={{this.bestuursorgaanEinde}}
+          @onChange={{fn (mut this.date)}}
+          @isRequired={{true}}
+        />
+      </div>
       <Mandatarissen::FractieSelector
         @fractie={{this.selectedFractie}}
         @isRequired={{true}}
@@ -135,5 +151,33 @@
         </AuButtonGroup>
       </Group>
     </AuToolbar>
+  </div>
+</AuModal>
+
+<AuModal
+  @title={{(concat "Bewerk Burgemeester")}}
+  @modalOpen={{this.editBurgemeester}}
+  @closable={{true}}
+  @closeModal={{this.closeEditBurgemeesterModal}}
+>
+
+  <div class="au-o-box">
+    <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>
+      Bij het aanpassen van de burgemeester zal de voorzitter van het vast
+      bureau niet aangepast worden, indien u de wijzigingen daar ook wenst door
+      te voeren dient u dit manueel te doen.
+    </AuAlert>
+    <SemanticForms::Instance
+      @hideDescriptionModalOnSave={{true}}
+      @instanceId={{this.aangewezenBurgemeester.id}}
+      @form={{@form}}
+      @onSave={{this.saveBurgemeesterChanges}}
+      @onCancel={{this.closeEditBurgemeesterModal}}
+      @buildMetaTtl={{@buildMetaTtl}}
+      @formInitialized={{fn (mut this.isEditFormInitialized) true}}
+    />
+    {{#unless this.isEditFormInitialized}}
+      <Skeleton::Forms::MandatarisCorrect />
+    {{/unless}}
   </div>
 </AuModal>

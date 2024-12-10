@@ -5,6 +5,8 @@
     @onUpdateBurgemeester={{@onUpdateBurgemeester}}
     @bestuursperiode={{@bestuursperiode}}
     @bestuurseenheid={{@bestuurseenheid}}
+    @form={{@form}}
+    @buildMetaTtl={{this.buildMetaTtl}}
   />
 {{else}}
   <div class="au-u-flex au-u-flex--column au-u-flex--row-when-medium">
@@ -115,6 +117,7 @@
       @title=""
       @showFractie={{true}}
       @showFunctie={{true}}
+      @showStart={{true}}
       @showRangorde={{or
         (eq
           @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri

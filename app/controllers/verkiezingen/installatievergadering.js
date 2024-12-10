@@ -30,6 +30,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
   queryParams = ['bestuursperiode'];
   @service store;
   @service router;
+  @service installatievergadering;
 
   @tracked bestuursperiode;
   @tracked statusPillSkin = 'info';
@@ -153,6 +154,7 @@ export default class PrepareInstallatievergaderingController extends Controller 
 
   @action
   onUpdateBurgemeester() {
+    this.installatievergadering.forceRecomputeBCSD();
     this.router.refresh();
   }
 }

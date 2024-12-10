@@ -17,6 +17,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @service store;
   @service installatievergadering;
   @service('mandataris') mandatarisService;
+  @service fractieApi;
 
   @tracked persoon = null;
   @tracked aangewezenBurgemeesters;
@@ -24,6 +25,10 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   @tracked isModalOpen;
   @tracked selectedFractie = null;
   @tracked selectedBeleidsdomeinen = [];
+  @tracked date;
+
+  @tracked editBurgemeester = false;
+  @tracked isEditFormInitialized;
 
   // no need to track these
   burgemeesterMandate = null;
@@ -33,6 +38,13 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   get disabled() {
     return !this.persoon || !this.selectedFractie;
   }
+  get bestuursorgaanStart() {
+    return this.args.bestuursorgaanInTijd.bindingStart;
+  }
+
+  get bestuursorgaanEinde() {
+    return this.args.bestuursorgaanInTijd.bindingEinde;
+  }
 
   constructor() {
     super(...arguments);
@@ -40,6 +52,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   }
 
   @action async setup() {
+    this.date = this.args.bestuursorgaanInTijd.bindingStart;
     await this.loadBurgemeesterMandates();
     await this.loadBurgemeesterMandatarissen();
     await this.loadBurgemeesterPerson();
@@ -79,7 +92,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   async createMandataris(burgemeesterMandaat) {
     const newMandataris = this.store.createRecord('mandataris', {
       rangorde: null,
-      start: this.args.bestuursorgaanInTijd.bindingStart,
+      start: this.date,
       einde: this.args.bestuursorgaanInTijd.bindingEinde,
       bekleedt: burgemeesterMandaat,
       isBestuurlijkeAliasVan: null,
@@ -136,6 +149,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
     await Promise.all(
       this.targetMandatarisses.map(async (target) => {
         target.isBestuurlijkeAliasVan = this.persoon;
+        target.start = this.date;
         if (this.selectedFractie) {
           await this.mandatarisService.createNewLidmaatschap(
             target,
@@ -195,5 +209,20 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
   get toolTipText() {
     return this.persoon ? 'Er is reeds een burgemeester geselecteerd.' : '';
+  }
+
+  @action
+  closeEditBurgemeesterModal() {
+    this.editBurgemeester = false;
+    this.isEditFormInitialized = false;
+  }
+
+  @action
+  async saveBurgemeesterChanges({ instanceId }) {
+    await this.fractieApi.updateCurrentFractie(instanceId);
+    this.closeEditBurgemeesterModal();
+    if (this.args.onUpdateBurgemeester) {
+      setTimeout(() => this.args.onUpdateBurgemeester(), 1000);
+    }
   }
 }
