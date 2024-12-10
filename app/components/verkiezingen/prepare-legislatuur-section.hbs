@@ -94,6 +94,12 @@
     />
   {{/if}}
 
+  <Verkiezingen::WarningAmountMandatarissenForOrgaanAlert
+    @bestuursorgaanInTijd={{@bestuursorgaan}}
+    @mandatarissen={{this.mandatarissen}}
+    @trigger={{this.installatievergadering.recomputeBCSDNeededTime}}
+  />
+
   {{#if
     (and
       (or
