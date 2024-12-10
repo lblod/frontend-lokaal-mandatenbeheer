@@ -65,7 +65,11 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
           let message = null;
           let messagePositionInArray = null;
           if (totalForMandaat > value.max) {
-            message = `${totalForMandaat} van maximum ${value.max} mandataris(sen) gevonden voor mandaat "${value.label}".`;
+            message = `Teveel mandaten gevonden voor "${value.label}". ${totalForMandaat} van maximum ${value.max}`;
+            messagePositionInArray = this.warningMessages.length + 1;
+          }
+          if (totalForMandaat < value.min) {
+            message = `Te weinig mandaten gevonden voor "${value.label}". (${totalForMandaat}/${value.min})`;
             messagePositionInArray = this.warningMessages.length + 1;
           }
 
