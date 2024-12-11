@@ -1,0 +1,10 @@
+<ContextProvider @key="shared-key" @value={{this.alerts}}>
+  <h1>length:{{this.alerts.length}}</h1>
+  {{yield}}
+  {{!-- <AuButton
+    hideText={{true}}
+    @icon="chevron-right"
+    @skin="naked"
+    {{on "click" this.next}}
+  /> --}}
+</ContextProvider>
