@@ -9,10 +9,10 @@ import { task } from 'ember-concurrency';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
-  MANDAAT_LID_RMW_ID,
-  MANDAAT_LID_VAST_BUREAU_ID,
-  MANDAAT_SCHEPEN_ID,
-  MANDAAT_TOEGEVOEGDE_SCHEPEN_ID,
+  MANDAAT_LID_RMW_CODE_ID,
+  MANDAAT_LID_VAST_BUREAU_CODE_ID,
+  MANDAAT_SCHEPEN_CODE_ID,
+  MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
@@ -37,7 +37,7 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
     if (hasVoorzitter) {
       const schepen = await this.findMandatarisForOneOfBestuursfunctieCodes(
         hasVoorzitter.persoon,
-        [MANDAAT_SCHEPEN_ID, MANDAAT_TOEGEVOEGDE_SCHEPEN_ID]
+        [MANDAAT_SCHEPEN_CODE_ID, MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID]
       );
       if (!schepen) {
         if (!this.messages.findBy('id', 1)) {
@@ -59,7 +59,7 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
       const isLidRMWOrVastBureau =
         await this.findMandatarisForOneOfBestuursfunctieCodes(
           hasVoorzitter.persoon,
-          [MANDAAT_LID_RMW_ID, MANDAAT_LID_VAST_BUREAU_ID]
+          [MANDAAT_LID_RMW_CODE_ID, MANDAAT_LID_VAST_BUREAU_CODE_ID]
         );
       if (!isLidRMWOrVastBureau) {
         if (!this.messages.findBy('id', 2)) {
