@@ -15,7 +15,7 @@ import {
   MANDAAT_TOEGEVOEGDE_SCHEPEN_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 
-export default class VerkiezingenBcsdVoorzitterNotSchepenAlertComponent extends Component {
+export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
   @service store;
 
   @tracked messages = A();
