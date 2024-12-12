@@ -35,3 +35,5 @@ export const MANDAAT_TYPE_LID_ID = '28d0ed76-e1a3-4c90-89df-4d11587390b3';
 export const MANDAAT_SCHEPEN_ID = '5ab0e9b8a3b2ca7c5e000014';
 export const MANDAAT_TOEGEVOEGDE_SCHEPEN_ID =
   '59a90e03-4f22-4bb9-8c91-132618db4b38';
+export const MANDAAT_LID_RMW_ID = '5ab0e9b8a3b2ca7c5e000015';
+export const MANDAAT_LID_VAST_BUREAU_ID = '5ab0e9b8a3b2ca7c5e000017';
