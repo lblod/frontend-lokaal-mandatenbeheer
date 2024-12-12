@@ -120,10 +120,10 @@ export default class MandatarisModel extends Model {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve) => {
       if (await this.ontslagBekrachtigdDoor) {
-        resolve(this.ontslagBekrachtigdDoor.get('uri'));
+        resolve(this.ontslagBekrachtigdDoor.get('gepubliceerdVanuit'));
       }
       if (await this.aanstellingBekrachtigdDoor) {
-        resolve(this.aanstellingBekrachtigdDoor.get('uri'));
+        resolve(this.aanstellingBekrachtigdDoor.get('gepubliceerdVanuit'));
       }
 
       resolve(null);
