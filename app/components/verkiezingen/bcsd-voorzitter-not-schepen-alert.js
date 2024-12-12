@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
+import { A } from '@ember/array';
 
 import { task } from 'ember-concurrency';
 
@@ -15,7 +16,7 @@ import {
 export default class VerkiezingenBcsdVoorzitterNotSchepenAlertComponent extends Component {
   @service store;
 
-  @tracked warningMessage;
+  @tracked messages = A();
 
   isVoorzitterAlsoSchepen = task(async () => {
     const bcsdMandatarissen = this.args.mandatarissen;
@@ -42,10 +43,16 @@ export default class VerkiezingenBcsdVoorzitterNotSchepenAlertComponent extends 
         ].join(','),
       });
       if (!schepen) {
-        this.warningMessage =
-          'Kon geen schepen mandataris vinden voor aangeduide voorzitter.';
+        this.messages.pushObject({
+          id: 1,
+          message:
+            'Kon geen schepen mandataris vinden voor aangeduide voorzitter.',
+        });
       } else {
-        this.warningMessage = null;
+        const toRemove = this.messages.findBy('id', 1);
+        if (toRemove) {
+          this.messages.removeObject(toRemove);
+        }
       }
     } else {
       this.warningMessage = null;
