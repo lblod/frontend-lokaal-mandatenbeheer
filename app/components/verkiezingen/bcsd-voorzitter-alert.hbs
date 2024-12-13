@@ -1,11 +1,9 @@
 {{#if (await @bestuursorgaanInTijd.isBCSD)}}
   <div {{did-update this.mandatarissenUpdated @trigger}}>
-    {{#if this.messages}}
+    {{#if this.errorMessage}}
       <div class="au-o-box">
         <AuAlert @skin="warning" @icon="alert-triangle" @closable={{true}}>
-          {{#each this.messages as |warning|}}
-            <p>{{warning.message}}</p>
-          {{/each}}
+          <p>{{this.errorMessage}}</p>
         </AuAlert>
       </div>
     {{/if}}

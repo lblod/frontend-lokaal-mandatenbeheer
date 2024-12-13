@@ -3,12 +3,13 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import { A } from '@ember/array';
 
 import { task } from 'ember-concurrency';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
+  BESTUURSFUNCTIE_AANGEWEZEN_BURGEMEESTER_ID,
+  BESTUURSFUNCTIE_BURGEMEESTER_ID,
   MANDAAT_SCHEPEN_CODE_ID,
   MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
@@ -16,7 +17,7 @@ import {
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
   @service store;
 
-  @tracked messages = A();
+  @tracked errorMessage;
 
   isVoorzitterAlsoSchepen = task(async () => {
     const bcsdMandatarissen = this.args.mandatarissen;
@@ -35,21 +36,18 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
     if (hasVoorzitter) {
       const schepen = await this.findMandatarisForOneOfBestuursfunctieCodes(
         hasVoorzitter.persoon,
-        [MANDAAT_SCHEPEN_CODE_ID, MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID]
+        [
+          MANDAAT_SCHEPEN_CODE_ID,
+          MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID,
+          BESTUURSFUNCTIE_BURGEMEESTER_ID,
+          BESTUURSFUNCTIE_AANGEWEZEN_BURGEMEESTER_ID,
+        ]
       );
       if (!schepen) {
-        if (!this.messages.findBy('id', 1)) {
-          this.messages.pushObject({
-            id: 1,
-            message:
-              'Kon geen schepen mandataris vinden voor aangeduide voorzitter.',
-          });
-        }
+        this.errorMessage =
+          'Kon geen burgemeester of schepen mandataris vinden voor aangeduide voorzitter.';
       } else {
-        const toRemove = this.messages.findBy('id', 1);
-        if (toRemove) {
-          this.messages.removeObject(toRemove);
-        }
+        this.errorMessage = null;
       }
     }
   });
