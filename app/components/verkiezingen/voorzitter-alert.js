@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
+
 import { inject as context } from '@alexlafroscia/ember-context';
 
 export default class VerkiezingenVoorzitterAlertComponent extends Component {
@@ -40,9 +41,15 @@ export default class VerkiezingenVoorzitterAlertComponent extends Component {
       return;
     }
 
+    let isVisible = false;
+    if (!this.alerts.findBy('isVisible', true)) {
+      isVisible = true;
+    }
+
     this.alerts.pushObject({
       id: this.errorMessageId,
       message: this.errorMessage,
+      isVisible,
     });
   }
 }

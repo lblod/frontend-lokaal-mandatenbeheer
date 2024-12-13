@@ -85,23 +85,19 @@
       @bestuursorgaanIT={{@bestuursorgaan}}
       @mandatarissen={{this.mandatarissen}}
     />
-    <Verkiezingen::VoorzitterAlert
-      @bestuursorgaanIT={{@bestuursorgaan}}
-      @mandatarissen={{this.mandatarissen}}
-    />
+    {{#if (await @bestuursorgaan.isBCSD)}}
+      <Verkiezingen::BcsdVoorzitterAlert
+        @bcsdBestuursorgaanInTijd={{@bestuursorgaan}}
+        @bestuursorganenInTijd={{@bestuursorganen}}
+      />
+    {{/if}}
   </Shared::AlertGroup>
 
-  {{!-- {{#if (await @bestuursorgaan.isBCSD)}}
-    <Verkiezingen::BcsdVoorzitterAlert
-      @bcsdBestuursorgaanInTijd={{@bestuursorgaan}}
-      @bestuursorganenInTijd={{@bestuursorganen}}
-    />
-  {{/if}}
-  {{#if (await @bestuursorgaan.isCBS)}}
-    <Verkiezingen::BurgemeesterAlert
-      @collegeBestuursorgaanInTijd={{@bestuursorgaan}}
-    />
-  {{/if}} --}}
+  {{!-- {{#if (await @bestuursorgaan.isCBS)}} --}}
+  {{! <Verkiezingen::BurgemeesterAlert }}
+  {{!-- @collegeBestuursorgaanInTijd={{@bestuursorgaan}} --}}
+  {{! /> }}
+  {{!-- {{/if}} --}}
   {{#if
     (and
       (or

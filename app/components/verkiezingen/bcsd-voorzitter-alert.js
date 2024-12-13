@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
+
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
+import { action } from '@ember/object';
+
 import { findFirst } from 'frontend-lmb/utils/async-array-functions';
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
@@ -10,12 +12,20 @@ import {
   MANDAAT_VOORZITTER_BCSD_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 
+import { task, timeout } from 'ember-concurrency';
+import { inject as context } from '@alexlafroscia/ember-context';
+
+
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
+  @context('shared-key') alerts;
+
   @service store;
   @service installatievergadering;
 
   @tracked errorMessage = '';
   @tracked lastRecomputeTime = null;
+
+  errorMessageId = '8259202d-b800-47bd-a659-6b234d854025';
 
   constructor() {
     super(...arguments);
@@ -126,5 +136,28 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
       MANDAAT_LID_VAST_BUREAU_CODE,
       async (bestuursorgaanInTijd) => await bestuursorgaanInTijd.isVastBureau
     );
+  }
+
+  @action
+  onUpdate() {
+    const exists = this.alerts.findBy('id', this.errorMessageId);
+    if (exists) {
+      this.alerts.removeObject(exists);
+    }
+
+    if (!this.errorMessage) {
+      return;
+    }
+
+    let isVisible = false;
+    if (!this.alerts.findBy('isVisible', true)) {
+      isVisible = true;
+    }
+
+    this.alerts.pushObject({
+      id: this.errorMessageId,
+      message: this.errorMessage,
+      isVisible,
+    });
   }
 }

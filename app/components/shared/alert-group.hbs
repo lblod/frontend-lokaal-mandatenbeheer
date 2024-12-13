@@ -1,10 +1,22 @@
 <ContextProvider @key="shared-key" @value={{this.alerts}}>
-  <h1>length:{{this.alerts.length}}</h1>
-  {{yield}}
-  {{!-- <AuButton
-    hideText={{true}}
-    @icon="chevron-right"
-    @skin="naked"
-    {{on "click" this.next}}
-  /> --}}
+  <div
+    class="au-u-flex au-u-flex--vertical-center au-u-margin-top"
+    {{did-update this.test this.alerts}}
+  >
+    <AuButton
+      class="au-u-margin-bottom"
+      hideText={{true}}
+      @icon="chevron-left"
+      @skin="naked"
+      {{on "click" this.previous}}
+    />
+    {{yield}}
+    <AuButton
+      class="au-u-margin-bottom"
+      hideText={{true}}
+      @icon="chevron-right"
+      @skin="naked"
+      {{on "click" this.next}}
+    />
+  </div>
 </ContextProvider>

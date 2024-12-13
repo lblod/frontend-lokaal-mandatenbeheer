@@ -1,10 +1,14 @@
 {{#if (and @bestuursorgaanIT.hasVoorzitter this.errorMessage)}}
   <div
-    class="au-o-box"
     {{did-insert this.onUpdate this.errorMessage}}
     {{did-update this.onUpdate this.errorMessage}}
   >
-    <AuAlert @skin="warning" @icon="alert-triangle" @closable={{true}}>
+    <AuAlert
+      id={{this.errorMessageId}}
+      @skin="warning"
+      @icon="alert-triangle"
+      @closable={{true}}
+    >
       <p>{{this.errorMessage}}</p>
     </AuAlert>
   </div>
