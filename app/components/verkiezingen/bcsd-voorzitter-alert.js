@@ -1,130 +1,73 @@
 import Component from '@glimmer/component';
+
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
-import { findFirst } from 'frontend-lmb/utils/async-array-functions';
+import { action } from '@ember/object';
+
+import { task } from 'ember-concurrency';
+
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
-  MANDAAT_LID_VAST_BUREAU_CODE,
-  MANDAAT_LID_RMW_CODE,
-  MANDAAT_VOORZITTER_BCSD_CODE,
-} from 'frontend-lmb/utils/well-known-uris';
+  BESTUURSFUNCTIE_AANGEWEZEN_BURGEMEESTER_ID,
+  BESTUURSFUNCTIE_BURGEMEESTER_ID,
+  MANDAAT_SCHEPEN_CODE_ID,
+  MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID,
+} from 'frontend-lmb/utils/well-known-ids';
 
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
   @service store;
-  @service installatievergadering;
 
-  @tracked errorMessage = '';
-  @tracked lastRecomputeTime = null;
+  @tracked errorMessage;
 
-  constructor() {
-    super(...arguments);
-    this.installatievergadering.forceRecomputeBCSD();
-  }
-
-  get bcsdBestuursorgaanInTijd() {
-    return this.args.bcsdBestuursorgaanInTijd;
-  }
-
-  get bestuursorganenInTijd() {
-    return this.args.bestuursorganenInTijd;
-  }
-
-  // Polling because otherwise changes in the installatievergadering data are not picked up
-  handleErrorMessage = task({ restartable: true }, async () => {
-    if (this.isDestroyed) {
-      return;
+  isVoorzitterAlsoSchepen = task(async () => {
+    const bcsdMandatarissen = this.args.mandatarissen;
+    const mapping = await Promise.all(
+      bcsdMandatarissen.map(async (mandataris) => {
+        return {
+          mandataris,
+          persoon: await mandataris.isBestuurlijkeAliasVan,
+          isVoorzitter: await (await mandataris.bekleedt).isVoorzitter,
+        };
+      })
+    );
+    const hasVoorzitter = mapping.find(
+      (mapping) => mapping.persoon && mapping.isVoorzitter
+    );
+    if (hasVoorzitter) {
+      const schepen = await this.findMandatarisForOneOfBestuursfunctieCodes(
+        hasVoorzitter.persoon,
+        [
+          MANDAAT_SCHEPEN_CODE_ID,
+          MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID,
+          BESTUURSFUNCTIE_BURGEMEESTER_ID,
+          BESTUURSFUNCTIE_AANGEWEZEN_BURGEMEESTER_ID,
+        ]
+      );
+      if (!schepen) {
+        this.errorMessage =
+          'Kon geen burgemeester of schepen mandataris vinden voor aangeduide voorzitter.';
+      } else {
+        this.errorMessage = null;
+      }
     }
-    if (
-      this.lastRecomputeTime &&
-      this.lastRecomputeTime ===
-        this.installatievergadering.recomputeBCSDNeededTime
-    ) {
-      await timeout(10000);
-      // nothing for now let's try again later
-      this.handleErrorMessage.perform();
-      return;
-    }
-
-    this.lastRecomputeTime =
-      this.installatievergadering.recomputeBCSDNeededTime;
-
-    const voorzitter = await this.getVoorzitterBCSD();
-    const isMemberOfRMW = await this.isMemberOfRMW(voorzitter);
-    const isMemberOfVastBureau = await this.isMemberOfVastBureau(voorzitter);
-
-    this.errorMessage =
-      !voorzitter || isMemberOfRMW || isMemberOfVastBureau
-        ? ''
-        : 'De voorzitter van het BCSD moet lid zijn van de RMW of het Vast Bureau.';
-    await timeout(10000);
-    this.handleErrorMessage.perform();
   });
 
-  async getVoorzitterBCSD() {
-    return await queryRecord(this.store, 'persoon', {
-      filter: {
-        'is-aangesteld-als': {
-          bekleedt: {
-            bestuursfunctie: {
-              ':uri:': MANDAAT_VOORZITTER_BCSD_CODE,
-            },
-            'bevat-in': {
-              ':uri:': this.bcsdBestuursorgaanInTijd.uri,
-            },
-          },
-        },
-      },
+  async findMandatarisForOneOfBestuursfunctieCodes(
+    voorzitter,
+    bestuursfunctieCodes
+  ) {
+    return await queryRecord(this.store, 'mandataris', {
+      'filter[bekleedt][bevat-in][heeft-bestuursperiode][:uri:]':
+        this.args.bestuursperiode.uri,
+      'filter[is-bestuurlijke-alias-van][:uri:]': voorzitter.uri,
+      'filter[bekleedt][bestuursfunctie][:id:]': bestuursfunctieCodes.join(','),
     });
   }
 
-  async isMember(persoon, bestuursfunctieCode, hasClassificationFunc) {
-    if (!persoon) {
-      return false;
+  @action
+  async mandatarissenUpdated() {
+    if (!this.isVoorzitterAlsoSchepen.isRunning) {
+      await this.isVoorzitterAlsoSchepen.perform();
     }
-
-    const bestuursorgaanInTijd = await findFirst(
-      this.bestuursorganenInTijd,
-      async (bestInTijd) => {
-        return await hasClassificationFunc(bestInTijd);
-      }
-    );
-
-    if (!bestuursorgaanInTijd) {
-      return false;
-    }
-
-    const mandataris = await queryRecord(this.store, 'mandataris', {
-      filter: {
-        'is-bestuurlijke-alias-van': {
-          ':uri:': persoon.uri,
-        },
-        bekleedt: {
-          bestuursfunctie: {
-            ':uri:': bestuursfunctieCode,
-          },
-          'bevat-in': {
-            ':uri:': bestuursorgaanInTijd.uri,
-          },
-        },
-      },
-    });
-    return Boolean(mandataris);
-  }
-
-  async isMemberOfRMW(persoon) {
-    return await this.isMember(
-      persoon,
-      MANDAAT_LID_RMW_CODE,
-      async (bestuursorgaanInTijd) => await bestuursorgaanInTijd.isRMW
-    );
-  }
-
-  async isMemberOfVastBureau(persoon) {
-    return await this.isMember(
-      persoon,
-      MANDAAT_LID_VAST_BUREAU_CODE,
-      async (bestuursorgaanInTijd) => await bestuursorgaanInTijd.isVastBureau
-    );
   }
 }
