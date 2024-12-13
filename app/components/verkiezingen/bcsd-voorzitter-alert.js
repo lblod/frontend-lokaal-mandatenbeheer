@@ -9,8 +9,6 @@ import { task } from 'ember-concurrency';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
-  MANDAAT_LID_RMW_CODE_ID,
-  MANDAAT_LID_VAST_BUREAU_CODE_ID,
   MANDAAT_SCHEPEN_CODE_ID,
   MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
@@ -49,28 +47,6 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
         }
       } else {
         const toRemove = this.messages.findBy('id', 1);
-        if (toRemove) {
-          this.messages.removeObject(toRemove);
-        }
-      }
-    }
-
-    if (hasVoorzitter) {
-      const isLidRMWOrVastBureau =
-        await this.findMandatarisForOneOfBestuursfunctieCodes(
-          hasVoorzitter.persoon,
-          [MANDAAT_LID_RMW_CODE_ID, MANDAAT_LID_VAST_BUREAU_CODE_ID]
-        );
-      if (!isLidRMWOrVastBureau) {
-        if (!this.messages.findBy('id', 2)) {
-          this.messages.pushObject({
-            id: 2,
-            message:
-              'De voorzitter van het BCSD moet lid zijn van de RMW of het Vast Bureau.',
-          });
-        }
-      } else {
-        const toRemove = this.messages.findBy('id', 2);
         if (toRemove) {
           this.messages.removeObject(toRemove);
         }
