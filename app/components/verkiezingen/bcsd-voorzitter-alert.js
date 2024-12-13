@@ -13,11 +13,10 @@ import {
 } from 'frontend-lmb/utils/well-known-uris';
 
 import { task, timeout } from 'ember-concurrency';
-import { inject as context } from '@alexlafroscia/ember-context';
-
+import { consume } from 'ember-provide-consume-context';
 
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
-  @context('shared-key') alerts;
+  @consume('alert-group') alerts;
 
   @service store;
   @service installatievergadering;
@@ -25,7 +24,7 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
   @tracked errorMessage = '';
   @tracked lastRecomputeTime = null;
 
-  errorMessageId = '8259202d-b800-47bd-a659-6b234d854025';
+  errorMessageId = 'bcsd-voorzitter-alert';
 
   constructor() {
     super(...arguments);
@@ -67,6 +66,7 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
       !voorzitter || isMemberOfRMW || isMemberOfVastBureau
         ? ''
         : 'De voorzitter van het BCSD moet lid zijn van de RMW of het Vast Bureau.';
+    this.updateErrorMessage();
     await timeout(10000);
     this.handleErrorMessage.perform();
   });
@@ -138,8 +138,7 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
     );
   }
 
-  @action
-  onUpdate() {
+  updateErrorMessage() {
     const exists = this.alerts.findBy('id', this.errorMessageId);
     if (exists) {
       this.alerts.removeObject(exists);
@@ -149,15 +148,9 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
       return;
     }
 
-    let isVisible = false;
-    if (!this.alerts.findBy('isVisible', true)) {
-      isVisible = true;
-    }
-
     this.alerts.pushObject({
       id: this.errorMessageId,
       message: this.errorMessage,
-      isVisible,
     });
   }
 }

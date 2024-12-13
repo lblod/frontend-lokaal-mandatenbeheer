@@ -2,12 +2,12 @@ import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
 
-import { inject as context } from '@alexlafroscia/ember-context';
+import { consume } from 'ember-provide-consume-context';
 
 export default class VerkiezingenVoorzitterAlertComponent extends Component {
-  @context('shared-key') alerts;
+  @consume('alert-group') alerts;
 
-  errorMessageId = 'e5d452ed-a22e-41e7-8856-dbcebb3abd75';
+  errorMessageId = 'voorzitter-alert';
 
   get errorMessage() {
     if (this.args.mandatarissen.length === 0) {
@@ -23,7 +23,7 @@ export default class VerkiezingenVoorzitterAlertComponent extends Component {
       (mandataris) =>
         mandataris.isVoorzitter && mandataris.isBestuurlijkeAliasVan?.id
     );
-    if (hasVoorzitter) {
+    if (!hasVoorzitter) {
       return `Je hebt nog geen voorzitter voor het orgaan ${this.args.bestuursorgaanIT.get('isTijdsspecialisatieVan').get('naam')} aangeduid. Voeg hiervoor een nieuwe mandataris met het mandaat voorzitter toe.`;
     }
 
@@ -41,15 +41,9 @@ export default class VerkiezingenVoorzitterAlertComponent extends Component {
       return;
     }
 
-    let isVisible = false;
-    if (!this.alerts.findBy('isVisible', true)) {
-      isVisible = true;
-    }
-
     this.alerts.pushObject({
       id: this.errorMessageId,
       message: this.errorMessage,
-      isVisible,
     });
   }
 }

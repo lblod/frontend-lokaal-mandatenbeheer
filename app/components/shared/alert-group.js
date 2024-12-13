@@ -3,81 +3,37 @@ import Component from '@glimmer/component';
 import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { provide } from 'ember-provide-consume-context';
 
 export default class SharedAlertGroupComponent extends Component {
   @tracked alerts = A();
+  @tracked index = 0;
 
-  @action
-  test() {
-    console.log(`set`);
-    for (const alert of this.alerts) {
-      const element = document.getElementById(alert.id);
-      element.style.display = alert.isVisible ? 'block' : 'none';
-      console.log(`\t ele`, document.getElementById(alert.id));
-    }
-    console.log(`done`);
+  @provide('alert-group')
+  get alertsState() {
+    return this.alerts;
+  }
+
+  get currentAlert() {
+    return this.alerts.objectAt(this.index);
+  }
+
+  get hasMultipleAlerts() {
+    return this.alerts.length > 1;
   }
 
   @action
   previous() {
-    const current = this.alerts.findBy('isVisible', true);
-    const indexOfCurrent = this.alerts.indexOf(current);
-    console.log(`current: index = ${indexOfCurrent}, id = ${current.id}`);
-    const savedInfoOfCurrent = current;
-    delete savedInfoOfCurrent.isVisible;
-    this.alerts.removeObject(current);
-    this.alerts.pushObject({
-      ...savedInfoOfCurrent,
-      isVisible: false,
-    });
-
-    let objectToShow = null;
-    if (indexOfCurrent === 0) {
-      objectToShow = this.alerts.lastObject;
-    } else {
-      objectToShow = this.alerts.objectAt(indexOfCurrent - 1);
-    }
-
-    if (objectToShow) {
-      const savedInfoOfObjectToShow = objectToShow;
-      delete savedInfoOfObjectToShow.isVisible;
-      this.alerts.removeObject(objectToShow);
-      this.alerts.pushObject({
-        ...savedInfoOfObjectToShow,
-        isVisible: true,
-      });
-      console.log(this.alerts);
+    this.index = this.index - 1;
+    if (this.index < 0) {
+      this.index = this.alerts.length - 1;
     }
   }
   @action
   next() {
-    const current = this.alerts.findBy('isVisible', true);
-    const indexOfCurrent = this.alerts.indexOf(current);
-    console.log(`current: index = ${indexOfCurrent}, id = ${current.id}`);
-    const savedInfoOfCurrent = current;
-    delete savedInfoOfCurrent.isVisible;
-    this.alerts.removeObject(current);
-    this.alerts.pushObject({
-      ...savedInfoOfCurrent,
-      isVisible: false,
-    });
-
-    let objectToShow = null;
-    if (indexOfCurrent + 1 === this.alerts.length) {
-      objectToShow = this.alerts.firstObject;
-    } else {
-      objectToShow = this.alerts.objectAt(indexOfCurrent + 1);
-    }
-
-    if (objectToShow) {
-      const savedInfoOfObjectToShow = objectToShow;
-      delete savedInfoOfObjectToShow.isVisible;
-      this.alerts.removeObject(objectToShow);
-      this.alerts.pushObject({
-        ...savedInfoOfObjectToShow,
-        isVisible: true,
-      });
-      console.log(this.alerts);
+    this.index = this.index + 1;
+    if (this.index >= this.alerts.length) {
+      this.index = 0;
     }
   }
 }

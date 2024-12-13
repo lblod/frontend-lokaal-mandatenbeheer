@@ -1,22 +1,43 @@
-<ContextProvider @key="shared-key" @value={{this.alerts}}>
-  <div
-    class="au-u-flex au-u-flex--vertical-center au-u-margin-top"
-    {{did-update this.test this.alerts}}
-  >
-    <AuButton
-      class="au-u-margin-bottom"
-      hideText={{true}}
-      @icon="chevron-left"
-      @skin="naked"
-      {{on "click" this.previous}}
-    />
-    {{yield}}
-    <AuButton
-      class="au-u-margin-bottom"
-      hideText={{true}}
-      @icon="chevron-right"
-      @skin="naked"
-      {{on "click" this.next}}
-    />
+{{#if this.alerts}}
+  <div class="au-u-flex au-u-flex--vertical-center au-u-margin-top">
+    <AuAlert
+      id={{this.errorMessageId}}
+      @skin="warning"
+      @icon="alert-triangle"
+      @closable={{false}}
+      class="au-u-1-1"
+    >
+      {{#if this.hasMultipleAlerts}}
+        <div class="au-u-flex au-u-flex-vertical-center">
+          <AuButton
+            hideText={{true}}
+            @size="large"
+            class="au-u-bold"
+            @icon="chevron-left"
+            @skin="naked"
+            {{on "click" this.previous}}
+          />
+          <div>
+            <strong>Waarschuwing
+              {{add this.index 1}}
+              van
+              {{this.alerts.length}}</strong>
+            <p class="flex-grow">{{this.currentAlert.message}}</p>
+          </div>
+          <AuButton
+            hideText={{true}}
+            @size="large"
+            @icon="chevron-right"
+            class="au-u-bold"
+            @skin="naked"
+            {{on "click" this.next}}
+          />
+        </div>
+      {{else}}
+        {{this.currentAlert.message}}
+      {{/if}}
+    </AuAlert>
+
   </div>
-</ContextProvider>
+{{/if}}
+{{yield}}
