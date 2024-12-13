@@ -4,7 +4,7 @@
       <div class="au-o-box">
         <AuAlert @skin="warning" @icon="alert-triangle" @closable={{true}}>
           {{#each this.messages as |warning|}}
-            <p> - {{warning.message}}</p>
+            <p>{{warning.message}}</p>
           {{/each}}
         </AuAlert>
       </div>
