@@ -21,6 +21,9 @@ export default class MandatarisHistoryRowComponent extends Component {
       window.document
         .getElementsByClassName('notification-count-circle')[0]
         .scrollIntoView({ block: 'center' });
+      window.document
+        .getElementById('details-mandaat')
+        .scrollIntoView({ block: 'center' });
     }, 100);
   }
 }
