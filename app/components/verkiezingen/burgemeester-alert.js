@@ -12,7 +12,7 @@ import {
   MANDAAT_BURGEMEESTER_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 
-export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
+export default class VerkiezingenBurgemeesterAlertComponent extends Component {
   @consume('alert-group') alerts;
   @service store;
   @service installatievergadering;
