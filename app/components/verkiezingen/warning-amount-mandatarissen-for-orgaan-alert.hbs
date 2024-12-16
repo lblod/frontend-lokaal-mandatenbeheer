@@ -1,40 +1,5 @@
-<span {{did-update this.updateMappingWithMessages @trigger}}></span>
-{{#if (and this.warningMessages this.currentShownWarning)}}
-  <div class="au-o-box">
-    <AuAlert @skin="warning" @icon="alert-triangle" @closable={{true}}>
-      <div class="au-u-flex au-u-flex--between">
-        <div class="au-u-flex au-u-flex-start">
-          {{#if this.hasMoreThanOneMessage}}
-            <div class="au-u-flex au-u-flex--column">
-              <AuButton
-                hideText={{true}}
-                @icon="chevron-up"
-                @skin="naked"
-                {{on "click" this.previous}}
-              />
-              <AuButton
-                hideText={{true}}
-                @icon="chevron-down"
-                @skin="naked"
-                {{on "click" this.next}}
-              />
-            </div>
-          {{/if}}
-          <p class="au-u-flex-self-center au-u-padding-left">
-            {{this.currentShownWarning.message}}
-          </p>
-        </div>
-        {{#if this.hasMoreThanOneMessage}}
-          <p
-            class="au-u-flex-self-center au-u-flex-end au-u-medium au-u-margin-right-small"
-          >
-            {{this.currentShownWarning.position}}
-            van
-            {{this.warningMessages.length}}
-          </p>
-        {{/if}}
-
-      </div>
-    </AuAlert>
-  </div>
-{{/if}}
+<div
+  {{did-insert this.onUpdate}}
+  {{did-update this.updateMappingWithMessages @trigger}}
+>
+</div>

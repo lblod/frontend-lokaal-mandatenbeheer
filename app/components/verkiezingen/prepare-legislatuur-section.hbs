@@ -96,11 +96,13 @@
     @bestuursperiode={{@bestuursperiode}}
   />
 
-  <Verkiezingen::WarningAmountMandatarissenForOrgaanAlert
-    @bestuursorgaanInTijd={{@bestuursorgaan}}
-    @mandatarissen={{this.mandatarissen}}
-    @trigger={{this.installatievergadering.recomputeBCSDNeededTime}}
-  />
+  <Shared::AlertGroup>
+    <Verkiezingen::WarningAmountMandatarissenForOrgaanAlert
+      @bestuursorgaanInTijd={{@bestuursorgaan}}
+      @mandatarissen={{this.mandatarissen}}
+      @trigger={{this.installatievergadering.recomputeBCSDNeededTime}}
+    />
+  </Shared::AlertGroup>
 
   {{#if
     (and

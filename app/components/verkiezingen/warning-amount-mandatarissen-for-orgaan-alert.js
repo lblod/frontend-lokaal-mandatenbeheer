@@ -6,8 +6,10 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { task, timeout } from 'ember-concurrency';
+import { consume } from 'ember-provide-consume-context';
 
 export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertComponent extends Component {
+  @consume('alert-group') alerts;
   @service store;
 
   @tracked mandaatValueMapping;
@@ -32,16 +34,14 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
         label: (await mandaat.bestuursfunctie).label,
         min: mandaat.minAantalHouders,
         max: mandaat.maxAantalHouders,
-        warning: null,
       });
     }
-    await this.updateMappingWithMessages();
   });
 
   @action
   async updateMappingWithMessages() {
     if (
-      !this.mandaatValueMapping &&
+      !this.mandaatValueMapping ||
       this.getMaxAnMinNumberForMandaten.isRunning
     ) {
       // This could be better
@@ -62,60 +62,50 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
           const totalForMandaat = this.args.mandatarissen.filter((m) => {
             return m.get('bekleedt.id') === key;
           }).length;
-          let message = null;
-          let messagePositionInArray = null;
           if (totalForMandaat > value.max) {
-            message = `Teveel mandaten gevonden voor "${value.label}". ${totalForMandaat} van maximum ${value.max}`;
-            messagePositionInArray = this.warningMessages.length + 1;
-          }
-          if (totalForMandaat < value.min) {
-            message = `Te weinig mandaten gevonden voor "${value.label}". (${totalForMandaat}/${value.min})`;
-            messagePositionInArray = this.warningMessages.length + 1;
-          }
-
-          this.setMessageForMandaat(key, message, messagePositionInArray);
-          if (message) {
+            const message = `Teveel mandaten gevonden voor "${value.label}". ${totalForMandaat} van maximum ${value.max}`;
             this.warningMessages.pushObject({
               message: message,
-              position: messagePositionInArray,
+              id: this.errorMessageIdMax,
+            });
+          }
+          if (totalForMandaat < value.min) {
+            const message = `Te weinig mandaten gevonden voor "${value.label}". (${totalForMandaat}/${value.min})`;
+            this.warningMessages.pushObject({
+              message: message,
+              id: this.errorMessageIdMin,
             });
           }
         }
       )
     );
+    await this.onUpdate();
   }
 
-  setMessageForMandaat(mandaatId, message, messagePositionInArray) {
-    if (!mandaatId || !messagePositionInArray) {
-      return;
+  get errorMessageIdMin() {
+    return `${this.args.bestuursorgaanInTijd.id}-iv-error-message-min`;
+  }
+
+  get errorMessageIdMax() {
+    return `${this.args.bestuursorgaanInTijd.id}-iv-error-message-max`;
+  }
+
+  @action
+  async onUpdate() {
+    for (const id of [this.errorMessageIdMin, this.errorMessageIdMax]) {
+      const exists = this.alerts.findBy('id', id);
+      if (exists) {
+        this.alerts.removeObject(exists);
+      }
+
+      const warning = this.warningMessages.find((w) => w.id === id);
+      if (!warning) {
+        return;
+      }
+      this.alerts.pushObject({
+        id: warning.id,
+        message: warning.message,
+      });
     }
-
-    const current = this.mandaatValueMapping.get(mandaatId);
-    delete current.message;
-    this.mandaatValueMapping.set(mandaatId, {
-      ...current,
-      message,
-    });
-  }
-
-  @action
-  next() {
-    const current = this.warningMessages.shiftObject();
-    console.log({ current });
-    this.warningMessages.pushObject(current);
-  }
-
-  @action
-  previous() {
-    const current = this.warningMessages.popObject();
-    this.warningMessages.unshiftObject(current);
-  }
-
-  get currentShownWarning() {
-    return this.warningMessages.at(0) ?? null;
-  }
-
-  get hasMoreThanOneMessage() {
-    return this.warningMessages.length > 1;
   }
 }
