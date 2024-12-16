@@ -5,6 +5,7 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 import { task } from 'ember-concurrency';
+import { consume } from 'ember-provide-consume-context';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
@@ -15,12 +16,19 @@ import {
 } from 'frontend-lmb/utils/well-known-ids';
 
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
+  @consume('alert-group') alerts;
   @service store;
 
+  @tracked errorMessageId = 'fd8e8697-ce9b-492e-adf1-6d8fe823d434';
   @tracked errorMessage;
 
   isVoorzitterAlsoSchepen = task(async () => {
     const bcsdMandatarissen = this.args.mandatarissen;
+
+    if (bcsdMandatarissen.length === 0) {
+      this.errorMessage = null;
+    }
+
     const mapping = await Promise.all(
       bcsdMandatarissen.map(async (mandataris) => {
         return {
@@ -50,6 +58,7 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
         this.errorMessage = null;
       }
     }
+    this.onUpdate();
   });
 
   async findMandatarisForOneOfBestuursfunctieCodes(
@@ -66,8 +75,25 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
 
   @action
   async mandatarissenUpdated() {
-    if (!this.isVoorzitterAlsoSchepen.isRunning) {
+    if (!this.args.mandatarissen || !this.isVoorzitterAlsoSchepen.isRunning) {
       await this.isVoorzitterAlsoSchepen.perform();
     }
+  }
+
+  @action
+  onUpdate() {
+    const exists = this.alerts.findBy('id', this.errorMessageId);
+    if (exists) {
+      this.alerts.removeObject(exists);
+    }
+
+    if (!this.errorMessage) {
+      return;
+    }
+
+    this.alerts.pushObject({
+      id: this.errorMessageId,
+      message: this.errorMessage,
+    });
   }
 }

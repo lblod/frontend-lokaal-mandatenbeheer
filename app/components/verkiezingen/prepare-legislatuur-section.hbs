@@ -91,12 +91,13 @@
     />
   {{/if}}
 
-  <Verkiezingen::BcsdVoorzitterAlert
-    @bestuursorgaanInTijd={{@bestuursorgaan}}
-    @bestuursperiode={{@bestuursperiode}}
-  />
-
   <Shared::AlertGroup>
+    <Verkiezingen::BcsdVoorzitterAlert
+      @bestuursorgaanInTijd={{@bestuursorgaan}}
+      @bestuursperiode={{@bestuursperiode}}
+      @mandatarissen={{this.mandatarissen}}
+      @trigger={{this.installatievergadering.recomputeBCSDNeededTime}}
+    />
     <Verkiezingen::WarningAmountMandatarissenForOrgaanAlert
       @bestuursorgaanInTijd={{@bestuursorgaan}}
       @mandatarissen={{this.mandatarissen}}
