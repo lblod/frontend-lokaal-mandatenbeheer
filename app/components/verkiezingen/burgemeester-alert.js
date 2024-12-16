@@ -1,47 +1,31 @@
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
+
+import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task, timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
+
+import { consume } from 'ember-provide-consume-context';
+
 import {
   MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
   MANDAAT_BURGEMEESTER_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
+  @consume('alert-group') alerts;
   @service store;
   @service installatievergadering;
 
-  @tracked errorMessage = '';
+  @tracked errorMessageId = 'cb8e18dd-647a-452b-a2a3-67bb644cfc4e';
+  @tracked errorMessage;
   @tracked lastRecomputeTime = null;
-
-  constructor() {
-    super(...arguments);
-    this.installatievergadering.forceRecomputeBCSD();
-  }
 
   get collegeOrgaanInTijd() {
     return this.args.collegeBestuursorgaanInTijd;
   }
 
-  // Polling because otherwise changes in the installatievergadering data are not picked up
   handleErrorMessage = task({ restartable: true }, async () => {
-    if (this.isDestroyed) {
-      return;
-    }
-    if (
-      this.lastRecomputeTime &&
-      this.lastRecomputeTime ===
-        this.installatievergadering.recomputeBCSDNeededTime
-    ) {
-      await timeout(5000);
-      // nothing for now let's try again later
-      this.handleErrorMessage.perform();
-      return;
-    }
-
-    this.lastRecomputeTime =
-      this.installatievergadering.recomputeBCSDNeededTime;
-
     const burgemeesters = await this.getBurgemeesters();
     const aangewezenBurgemeesters = await this.getAangewezenBurgemeesters();
     if (burgemeesters.length > 0) {
@@ -50,11 +34,9 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
     } else if (aangewezenBurgemeesters.length > 1) {
       this.errorMessage = `Er moet exact één aangewezen burgemeester zijn. Er werden er ${aangewezenBurgemeesters.length} gevonden.`;
     } else {
-      this.errorMessage = '';
+      this.errorMessage = null;
     }
-
-    await timeout(5000);
-    this.handleErrorMessage.perform();
+    this.onUpdate();
   });
 
   async getBurgemeesters() {
@@ -86,6 +68,23 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
         },
         ':has:is-bestuurlijke-alias-van': true,
       },
+    });
+  }
+
+  @action
+  onUpdate() {
+    const exists = this.alerts.findBy('id', this.errorMessageId);
+    if (exists) {
+      this.alerts.removeObject(exists);
+    }
+
+    if (!this.errorMessage) {
+      return;
+    }
+
+    this.alerts.pushObject({
+      id: this.errorMessageId,
+      message: this.errorMessage,
     });
   }
 }
