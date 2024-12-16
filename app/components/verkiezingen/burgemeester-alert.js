@@ -3,8 +3,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 
+import { restartableTask } from 'ember-concurrency';
 import { consume } from 'ember-provide-consume-context';
 
 import {
@@ -15,17 +15,15 @@ import {
 export default class VerkiezingenBurgemeesterAlertComponent extends Component {
   @consume('alert-group') alerts;
   @service store;
-  @service installatievergadering;
 
   @tracked errorMessageId = 'cb8e18dd-647a-452b-a2a3-67bb644cfc4e';
   @tracked errorMessage;
-  @tracked lastRecomputeTime = null;
 
   get collegeOrgaanInTijd() {
     return this.args.collegeBestuursorgaanInTijd;
   }
 
-  handleErrorMessage = task({ restartable: true }, async () => {
+  handleErrorMessage = restartableTask(async () => {
     const burgemeesters = await this.getBurgemeesters();
     const aangewezenBurgemeesters = await this.getAangewezenBurgemeesters();
     if (burgemeesters.length > 0) {

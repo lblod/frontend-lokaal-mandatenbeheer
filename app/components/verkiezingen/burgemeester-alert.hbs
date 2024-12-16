@@ -1,4 +1,6 @@
-{{#if (await @bestuursorgaanInTijd.isCBS)}}
-  <div {{did-insert this.handleErrorMessage}}></div>
-  <div {{did-update this.handleErrorMessage @trigger}}></div>
+{{#if (await this.collegeOrgaanInTijd.isCBS)}}
+  <div
+    {{did-insert (perform this.handleErrorMessage)}}
+    {{did-update (perform this.handleErrorMessage @trigger)}}
+  ></div>
 {{/if}}
