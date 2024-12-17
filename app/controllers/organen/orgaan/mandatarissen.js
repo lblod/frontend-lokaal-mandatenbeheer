@@ -14,7 +14,6 @@ export default class OrganenMandatarissenController extends Controller {
   @service fractieApi;
   @service toaster;
   @service('mandataris') mandatarisService;
-  @service bestuursperioden;
 
   queryParams = ['activeOnly'];
 
@@ -85,11 +84,19 @@ export default class OrganenMandatarissenController extends Controller {
     if (!this.model.selectedBestuursperiode) {
       return false;
     }
-    const currentPeriod =
-      await this.bestuursperioden.getCurrentBestuursperiode();
-    const isCurrent =
-      currentPeriod.id === this.model.selectedBestuursperiode.id;
-    this.activeOnly = isCurrent;
+
+    let isCurrent = false;
+    const currentYear = new Date().getFullYear();
+    if (
+      currentYear == this.model.selectedBestuursperiode.start ||
+      currentYear == this.model.selectedBestuursperiode.einde
+    ) {
+      isCurrent = true;
+    }
+
     this.canShowIsActiveToggle = isCurrent;
+    if (!isCurrent) {
+      this.activeOnly = false;
+    }
   }
 }
