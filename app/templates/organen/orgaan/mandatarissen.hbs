@@ -60,12 +60,14 @@
     {{on "input" (perform this.search value="target.value")}}
   />
 </div>
-<div class="au-o-box au-u-padding-top-none">
-  <AuToggleSwitch
-    @checked={{this.activeOnly}}
-    @onChange={{this.toggleActiveOnly}}
-  >Verberg niet actieve mandatarissen</AuToggleSwitch>
-</div>
+{{#if this.selectedPeriodIsCurrent}}
+  <div class="au-o-box au-u-padding-top-none">
+    <AuToggleSwitch
+      @checked={{this.activeOnly}}
+      @onChange={{this.toggleActiveOnly}}
+    >Verberg niet actieve mandatarissen</AuToggleSwitch>
+  </div>
+{{/if}}
 
 <Organen::MandatarisTable
   @content={{@model.mandatarissen}}

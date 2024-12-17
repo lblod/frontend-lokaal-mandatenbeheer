@@ -105,7 +105,9 @@ export default class OrganenMandatarissenRoute extends Route {
 
   getFilteredMandatarissen(mandatarissen, params) {
     let filteredMandatarissen = mandatarissen;
-    if (params.activeOnly) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor('organen.orgaan.mandatarissen');
+    if (params.activeOnly && controller.selectedPeriodIsCurrent) {
       filteredMandatarissen = mandatarissen.filter(
         (mandataris) => mandataris.mandataris.isActive
       );

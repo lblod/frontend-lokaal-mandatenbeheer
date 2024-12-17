@@ -77,4 +77,21 @@ export default class OrganenMandatarissenController extends Controller {
   toggleActiveOnly() {
     this.activeOnly = !this.activeOnly;
   }
+
+  get selectedPeriodIsCurrent() {
+    if (!this.model?.selectedBestuursperiode) {
+      return false;
+    }
+
+    let isCurrent = false;
+    const currentYear = new Date().getFullYear();
+    if (
+      currentYear == this.model.selectedBestuursperiode.start ||
+      currentYear == this.model.selectedBestuursperiode.einde - 1
+    ) {
+      isCurrent = true;
+    }
+
+    return isCurrent;
+  }
 }
