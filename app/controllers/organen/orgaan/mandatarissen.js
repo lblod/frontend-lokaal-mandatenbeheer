@@ -14,6 +14,7 @@ export default class OrganenMandatarissenController extends Controller {
   @service fractieApi;
   @service toaster;
   @service('mandataris') mandatarisService;
+  @service bestuursperioden;
 
   queryParams = ['activeOnly'];
 
@@ -22,6 +23,7 @@ export default class OrganenMandatarissenController extends Controller {
   @tracked isCreatingMandataris = false;
   @tracked createdMandataris = false;
   @tracked activeOnly = true;
+  @tracked canShowIsActiveToggle = true;
   sort = 'is-bestuurlijke-alias-van.achternaam';
   // we are folding the mandataris instances, so just pick a very high number here and hope our government is reasonable about the
   // number of mandatarisses that can exist
@@ -76,5 +78,18 @@ export default class OrganenMandatarissenController extends Controller {
   @action
   toggleActiveOnly() {
     this.activeOnly = !this.activeOnly;
+  }
+
+  @action
+  async isSelectedPeriodCurrent() {
+    if (!this.model.selectedBestuursperiode) {
+      return false;
+    }
+    const currentPeriod =
+      await this.bestuursperioden.getCurrentBestuursperiode();
+    const isCurrent =
+      currentPeriod.id === this.model.selectedBestuursperiode.id;
+    this.activeOnly = isCurrent;
+    this.canShowIsActiveToggle = isCurrent;
   }
 }

@@ -58,6 +58,12 @@ export default class OrganenMandatarissenRoute extends Route {
     };
   }
 
+  async setupController(controller, model) {
+    super.setupController(controller, model);
+
+    await controller.isSelectedPeriodCurrent();
+  }
+
   async getBestuursorgaanInTijdId(selectedBestuursperiode, bestuursorgaan) {
     const bestuursorganenInTijdFromPeriod =
       (await selectedBestuursperiode.heeftBestuursorganenInTijd) ?? [];
