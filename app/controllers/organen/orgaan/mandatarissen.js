@@ -22,7 +22,6 @@ export default class OrganenMandatarissenController extends Controller {
   @tracked isCreatingMandataris = false;
   @tracked createdMandataris = false;
   @tracked activeOnly = true;
-  @tracked canShowIsActiveToggle = true;
   sort = 'is-bestuurlijke-alias-van.achternaam';
   // we are folding the mandataris instances, so just pick a very high number here and hope our government is reasonable about the
   // number of mandatarisses that can exist
@@ -79,9 +78,8 @@ export default class OrganenMandatarissenController extends Controller {
     this.activeOnly = !this.activeOnly;
   }
 
-  @action
-  async isSelectedPeriodCurrent() {
-    if (!this.model.selectedBestuursperiode) {
+  get selectedPeriodIsCurrent() {
+    if (!this.model?.selectedBestuursperiode) {
       return false;
     }
 
@@ -89,14 +87,12 @@ export default class OrganenMandatarissenController extends Controller {
     const currentYear = new Date().getFullYear();
     if (
       currentYear == this.model.selectedBestuursperiode.start ||
-      currentYear == this.model.selectedBestuursperiode.einde
+      currentYear == this.model.selectedBestuursperiode.einde - 1
     ) {
       isCurrent = true;
     }
 
     this.canShowIsActiveToggle = isCurrent;
-    if (!isCurrent) {
-      this.activeOnly = false;
-    }
+    return isCurrent;
   }
 }

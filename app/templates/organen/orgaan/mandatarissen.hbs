@@ -60,7 +60,7 @@
     {{on "input" (perform this.search value="target.value")}}
   />
 </div>
-{{#if this.canShowIsActiveToggle}}
+{{#if this.selectedPeriodIsCurrent}}
   <div class="au-o-box au-u-padding-top-none">
     <AuToggleSwitch
       @checked={{this.activeOnly}}

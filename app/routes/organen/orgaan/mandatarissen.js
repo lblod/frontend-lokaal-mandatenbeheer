@@ -58,12 +58,6 @@ export default class OrganenMandatarissenRoute extends Route {
     };
   }
 
-  async setupController(controller, model) {
-    super.setupController(controller, model);
-
-    await controller.isSelectedPeriodCurrent();
-  }
-
   async getBestuursorgaanInTijdId(selectedBestuursperiode, bestuursorgaan) {
     const bestuursorganenInTijdFromPeriod =
       (await selectedBestuursperiode.heeftBestuursorganenInTijd) ?? [];
@@ -111,7 +105,8 @@ export default class OrganenMandatarissenRoute extends Route {
 
   getFilteredMandatarissen(mandatarissen, params) {
     let filteredMandatarissen = mandatarissen;
-    if (params.activeOnly) {
+    const controller = this.controllerFor('organen.orgaan.mandatarissen');
+    if (params.activeOnly && controller.selectedPeriodIsCurrent) {
       filteredMandatarissen = mandatarissen.filter(
         (mandataris) => mandataris.mandataris.isActive
       );
