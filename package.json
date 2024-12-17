@@ -129,7 +129,7 @@
     "webpack": "^5.78.0"
   },
   "dependencies": {
-    "@lblod/ember-semantic-forms": "0.0.2"
+    "@lblod/ember-semantic-forms": "0.0.4"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
