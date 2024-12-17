@@ -49,9 +49,12 @@
       @onSave={{this.onSave}}
       @formInitialized={{fn (mut this.formInitialized) true}}
       @customHistoryMessage={{true}}
-    />
-    {{#unless this.formInitialized}}
-      <Skeleton::Forms::MandatarisExtraInfo />
-    {{/unless}}
+    >
+      {{#if this.formInitialized}}
+        <GenerateCustomFieldButton @form={{@form}} />
+      {{else}}
+        <Skeleton::Forms::MandatarisExtraInfo />
+      {{/if}}
+    </SemanticForms::Instance>
   </div>
 </AuModal>
