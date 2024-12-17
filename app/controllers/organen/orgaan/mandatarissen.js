@@ -92,7 +92,6 @@ export default class OrganenMandatarissenController extends Controller {
       isCurrent = true;
     }
 
-    this.canShowIsActiveToggle = isCurrent;
     return isCurrent;
   }
 }
