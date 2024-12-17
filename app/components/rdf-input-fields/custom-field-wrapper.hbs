@@ -54,11 +54,10 @@
   {{/each}}
 {{/unless}}
 
-{{#if this.showModal}}
-  <RdfInputFields::CrudCustomFieldModal
-    @isCreating={{false}}
-    @onCloseModal={{fn (mut this.showModal) false}}
-    @form={{@form}}
-    @field={{@field}}
-  />
-{{/if}}
+<RdfInputFields::CrudCustomFieldModal
+  @isCreating={{false}}
+  @showModal={{this.showModal}}
+  @onCloseModal={{fn (mut this.showModal) false}}
+  @form={{@form}}
+  @field={{@field}}
+/>
