@@ -5,12 +5,13 @@ import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
-import { task, timeout } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { consume } from 'ember-provide-consume-context';
 import {
   MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
   MANDAAT_BURGEMEESTER_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
+import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertComponent extends Component {
   @consume('alert-group') alerts;
@@ -20,11 +21,6 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
   @tracked warningMessages = A();
   @tracked possibleWarningIds;
 
-  constructor() {
-    super(...arguments);
-    this.getMaxAnMinNumberForMandaten.perform();
-  }
-
   get errorMessageMinId() {
     return `min`;
   }
@@ -33,7 +29,8 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
     return `max`;
   }
 
-  getMaxAnMinNumberForMandaten = task(async () => {
+  @action
+  async getMaxAnMinNumberForMandaten() {
     if (!this.args.bestuursorgaanInTijd) {
       throw new Error('Geen bestuursorgaan meegegeven aan component.');
     }
@@ -59,24 +56,33 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
       });
     }
     this.setPossibleWarningIds();
-  });
+    this.updateMappingWithMessages.perform();
+  }
 
-  @action
-  async updateMappingWithMessages() {
-    if (
-      !this.mandaatValueMapping ||
-      this.getMaxAnMinNumberForMandaten.isRunning
-    ) {
-      // This could be better
-      await timeout(250);
-      await this.updateMappingWithMessages();
-    }
+  setPossibleWarningIds() {
+    this.possibleWarningIds = Array.from(
+      this.mandaatValueMapping,
+      // eslint-disable-next-line no-unused-vars
+      ([key, value]) => {
+        return [
+          this.createAlertId(value.mandaatId, this.errorMessageMinId),
+          this.createAlertId(value.mandaatId, this.errorMessageMaxId),
+        ];
+      }
+    ).flat();
+  }
+
+  createAlertId(mandaatId, minMaxId) {
+    return `${mandaatId}-${minMaxId}`;
+  }
+
+  updateMappingWithMessages = restartableTask(async () => {
+    await timeout(INPUT_DEBOUNCE);
 
     this.warningMessages.clear();
-
     await Promise.all(
       Array.from(
-        this.mandaatValueMapping,
+        this.mandaatValueMapping ?? [],
         // eslint-disable-next-line no-unused-vars
         async ([key, value]) => {
           if (!value.max) {
@@ -103,24 +109,7 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
       )
     );
     await this.onUpdate();
-  }
-
-  setPossibleWarningIds() {
-    this.possibleWarningIds = Array.from(
-      this.mandaatValueMapping,
-      // eslint-disable-next-line no-unused-vars
-      ([key, value]) => {
-        return [
-          this.createAlertId(value.mandaatId, this.errorMessageMinId),
-          this.createAlertId(value.mandaatId, this.errorMessageMaxId),
-        ];
-      }
-    ).flat();
-  }
-
-  createAlertId(mandaatId, minMaxId) {
-    return `${mandaatId}-${minMaxId}`;
-  }
+  });
 
   @action
   async onUpdate() {

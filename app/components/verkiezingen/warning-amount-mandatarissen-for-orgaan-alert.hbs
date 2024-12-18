@@ -1,5 +1,4 @@
 <div
-  {{did-insert this.updateMappingWithMessages}}
-  {{did-update this.updateMappingWithMessages @trigger}}
->
-</div>
+  {{did-insert this.getMaxAnMinNumberForMandaten}}
+  {{did-update (perform this.updateMappingWithMessages @trigger)}}
+></div>
