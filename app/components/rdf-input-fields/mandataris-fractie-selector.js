@@ -10,10 +10,7 @@ import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValu
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
-import {
-  INPUT_DEBOUNCE,
-  MANDATARIS_PREDICATE,
-} from 'frontend-lmb/utils/constants';
+import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
 import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 
 import { NamedNode } from 'rdflib';
@@ -129,7 +126,6 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   findPersonInForm = restartableTask(async () => {
-    await timeout(INPUT_DEBOUNCE);
     this.isCreating = false;
     let newPerson = await this.findMandatarisPersonInStore(
       this.storeOptions.sourceNode
