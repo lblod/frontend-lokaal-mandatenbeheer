@@ -15,10 +15,19 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
 
   @tracked mandaatValueMapping;
   @tracked warningMessages = A();
+  @tracked possibleWarningIds;
 
   constructor() {
     super(...arguments);
     this.getMaxAnMinNumberForMandaten.perform();
+  }
+
+  get errorMessageMinId() {
+    return `min`;
+  }
+
+  get errorMessageMaxId() {
+    return `max`;
   }
 
   getMaxAnMinNumberForMandaten = task(async () => {
@@ -37,10 +46,12 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
       }
       this.mandaatValueMapping.set(mandaat.id, {
         label: bestuursfunctie.label,
+        mandaatId: mandaat.id,
         min: mandaat.minAantalHouders,
         max: mandaat.maxAantalHouders,
       });
     }
+    this.setPossibleWarningIds();
   });
 
   @action
@@ -71,14 +82,14 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
             const message = `Teveel mandaten gevonden voor "${value.label}". (${totalForMandaat}/${value.max})`;
             this.warningMessages.pushObject({
               message: message,
-              id: this.errorMessageIdMax,
+              id: this.createAlertId(value.mandaatId, this.errorMessageMaxId),
             });
           }
           if (totalForMandaat < value.min) {
             const message = `Te weinig mandaten gevonden voor "${value.label}". (${totalForMandaat}/${value.min})`;
             this.warningMessages.pushObject({
               message: message,
-              id: this.errorMessageIdMin,
+              id: this.createAlertId(value.mandaatId, this.errorMessageMinId),
             });
           }
         }
@@ -87,17 +98,26 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
     await this.onUpdate();
   }
 
-  get errorMessageIdMin() {
-    return `${this.args.bestuursorgaanInTijd.id}-iv-error-message-min`;
+  setPossibleWarningIds() {
+    this.possibleWarningIds = Array.from(
+      this.mandaatValueMapping,
+      // eslint-disable-next-line no-unused-vars
+      ([key, value]) => {
+        return [
+          this.createAlertId(value.mandaatId, this.errorMessageMinId),
+          this.createAlertId(value.mandaatId, this.errorMessageMaxId),
+        ];
+      }
+    ).flat();
   }
 
-  get errorMessageIdMax() {
-    return `${this.args.bestuursorgaanInTijd.id}-iv-error-message-max`;
+  createAlertId(mandaatId, minMaxId) {
+    return `${mandaatId}-${minMaxId}`;
   }
 
   @action
   async onUpdate() {
-    for (const id of [this.errorMessageIdMin, this.errorMessageIdMax]) {
+    for (const id of this.possibleWarningIds) {
       const exists = this.alerts.findBy('id', id);
       if (exists) {
         this.alerts.removeObject(exists);
@@ -105,7 +125,7 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
 
       const warning = this.warningMessages.find((w) => w.id === id);
       if (!warning) {
-        return;
+        continue;
       }
       this.alerts.pushObject({
         id: warning.id,
