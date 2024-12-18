@@ -16,8 +16,13 @@ export default class ApplicationController extends Controller {
 
   appTitle = 'Lokaal mandatenbeheer';
 
-  get isIndex() {
-    return this.router.currentRouteName === 'index';
+  get isNavigationVisible() {
+    const notVisibleOnRoutes = [
+      'overzicht',
+      'overzicht.index',
+      'overzicht.admin',
+    ];
+    return !notVisibleOnRoutes.includes(this.router.currentRouteName);
   }
 
   setNotificationCount = restartableTask(async () => {

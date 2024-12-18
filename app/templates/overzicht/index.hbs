@@ -1,0 +1,98 @@
+<AuMainContainer as |main|>
+  <main.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__content">
+        <Shared::MainMenu />
+      </div>
+      <div class="au-c-sidebar__footer">
+        <AuLinkExternal
+          href="https://www.vlaanderen.be/lokaal-bestuur/loket-voor-lokale-besturen/mandatenbeheer-lokale-besturen"
+          @skin="secondary"
+        >
+          <AuIcon @icon="link" @alignment="left" />
+          Meer info
+        </AuLinkExternal>
+        <AuLinkExternal
+          href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer/"
+          @skin="secondary"
+        >
+          <AuIcon @icon="documents" @alignment="left" />
+          Bekijk handleiding
+        </AuLinkExternal>
+      </div>
+    </div>
+  </main.sidebar>
+  <main.content>
+    <AuBodyContainer>
+      <div class="au-c-body-container au-c-body-container--scroll">
+        <div class="au-o-box">
+          <AuContent class="au-u-margin-bottom">
+            <AuHeading
+              @skin="2"
+            >{{this.currentSession.groupClassification.label}}
+              {{this.currentSession.group.naam}}</AuHeading>
+            <p>Indien u toegang mist tot een van de modules van lokaal
+              mandatenbeheer, neem contact op met uw
+              <strong>interne beheerder</strong>. Indien er zich een probleem
+              voordoet met
+              <strong>toegang</strong>, neem contact op met het
+              <a
+                href="https://overheid.vlaanderen.be/ict/ict-diensten/gebruikersbeheer"
+                class="au-c-link"
+              >gebruikersbeheer Vlaanderen</a>.</p>
+          </AuContent>
+          <AuHeading @level="2" @skin="3" class="au-u-margin-bottom">Beschikbare
+            modules</AuHeading>
+
+          <ul class="au-o-grid au-o-grid--small">
+            <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+              <LoketModuleCard @icon="users">
+                <:title>Organen</:title>
+                <:description>Hier vind je een overzicht van de organen.</:description>
+                <:link>
+                  <AuLink @route="organen" @skin="button">Ga naar organen</AuLink>
+                </:link>
+              </LoketModuleCard>
+            </li>
+            <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+              <LoketModuleCard @icon="user-fill">
+                <:title>Mandatarissen</:title>
+                <:description>Hier vind je een overzicht van alle mandatarissen
+                  en hun historiek.</:description>
+                <:link>
+                  <AuLink @route="mandatarissen.search" @skin="button">Ga naar
+                    mandatarissen</AuLink>
+                </:link>
+              </LoketModuleCard>
+            </li>
+            {{#if this.showLegislatuurModule}}
+              <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+                <LoketModuleCard @icon="vote">
+                  <:title>Opstart nieuwe legislatuur</:title>
+                  <:description>Hier kun je de nieuwe legislatuur voorbereiden.</:description>
+                  <:link>
+                    <AuLink
+                      @route="verkiezingen.installatievergadering"
+                      @skin="button"
+                    >Ga naar opstart nieuwe legislatuur</AuLink>
+                  </:link>
+                </LoketModuleCard>
+              </li>
+            {{/if}}
+            {{#if (is-feature-enabled "show-forms-module")}}
+              <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+                <LoketModuleCard @icon="draft">
+                  <:title>Forms</:title>
+                  <:description>Hier vind je een overzicht van de huidige forms.</:description>
+                  <:link>
+                    <AuLink @route="forms" @skin="button">Ga naar forms</AuLink>
+                  </:link>
+                </LoketModuleCard>
+              </li>
+            {{/if}}
+          </ul>
+        </div>
+      </div>
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>
