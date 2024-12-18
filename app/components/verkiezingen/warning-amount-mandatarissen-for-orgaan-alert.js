@@ -7,7 +7,10 @@ import { service } from '@ember/service';
 
 import { task, timeout } from 'ember-concurrency';
 import { consume } from 'ember-provide-consume-context';
-import { MANDAAT_BURGEMEESTER_CODE } from 'frontend-lmb/utils/well-known-uris';
+import {
+  MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
+  MANDAAT_BURGEMEESTER_CODE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertComponent extends Component {
   @consume('alert-group') alerts;
@@ -41,7 +44,11 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
     this.mandaatValueMapping = new Map();
     for (const mandaat of mandaten) {
       const bestuursfunctie = await mandaat.bestuursfunctie;
-      if (bestuursfunctie.uri === MANDAAT_BURGEMEESTER_CODE) {
+      const functieCodesToExclude = [
+        MANDAAT_BURGEMEESTER_CODE,
+        MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
+      ];
+      if (functieCodesToExclude.includes(bestuursfunctie.uri)) {
         continue;
       }
       this.mandaatValueMapping.set(mandaat.id, {
