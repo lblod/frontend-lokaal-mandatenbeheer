@@ -13,7 +13,7 @@ import {
 } from 'frontend-lmb/utils/well-known-uris';
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
-export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertComponent extends Component {
+export default class VerkiezingenMandateesInOrgaanAlertComponent extends Component {
   @consume('alert-group') alerts;
   @service store;
 
