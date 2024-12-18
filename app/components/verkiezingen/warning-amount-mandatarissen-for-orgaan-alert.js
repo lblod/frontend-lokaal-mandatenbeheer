@@ -79,7 +79,7 @@ export default class VerkiezingenWarningAmountMandatarissenForOrgaanAlertCompone
             return m.get('bekleedt.id') === key;
           }).length;
           if (totalForMandaat > value.max) {
-            const message = `Teveel mandaten gevonden voor "${value.label}". (${totalForMandaat}/${value.max})`;
+            const message = `Te veel mandaten gevonden voor "${value.label}". (${totalForMandaat}/${value.max})`;
             this.warningMessages.pushObject({
               message: message,
               id: this.createAlertId(value.mandaatId, this.errorMessageMaxId),
