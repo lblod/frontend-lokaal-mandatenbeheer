@@ -41,6 +41,7 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
     const hasVoorzitter = mapping.find(
       (mapping) => mapping.persoon && mapping.isVoorzitter
     );
+    this.errorMessage = null;
     if (hasVoorzitter) {
       const schepen = await this.findMandatarisForOneOfBestuursfunctieCodes(
         hasVoorzitter.persoon,
@@ -54,8 +55,6 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
       if (!schepen) {
         this.errorMessage =
           'Kon geen burgemeester of schepen mandataris vinden voor aangeduide voorzitter.';
-      } else {
-        this.errorMessage = null;
       }
     }
     this.onUpdate();
