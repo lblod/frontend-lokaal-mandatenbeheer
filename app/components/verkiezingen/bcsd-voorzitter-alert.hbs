@@ -1,6 +1,6 @@
 {{#if (await @bestuursorgaanInTijd.isBCSD)}}
   <div
-    {{did-insert this.mandatarissenUpdated}}
-    {{did-update this.mandatarissenUpdated @trigger}}
+    {{did-insert (perform this.isVoorzitterAlsoSchepen)}}
+    {{did-update (perform this.isVoorzitterAlsoSchepen @trigger)}}
   ></div>
 {{/if}}
