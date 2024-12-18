@@ -15,7 +15,7 @@ export default class SharedAlertGroupComponent extends Component {
   }
 
   get currentAlert() {
-    return this.alerts.objectAt(this.index);
+    return this.alerts.objectAt(0);
   }
 
   get hasMultipleAlerts() {
@@ -24,14 +24,20 @@ export default class SharedAlertGroupComponent extends Component {
 
   @action
   previous() {
-    this.index = this.index - 1;
+    const current = this.currentAlert;
+    this.alerts.removeObject(current);
+    this.alerts.pushObject(current);
+    this.index -= 1;
     if (this.index < 0) {
       this.index = this.alerts.length - 1;
     }
   }
   @action
   next() {
-    this.index = this.index + 1;
+    const current = this.currentAlert;
+    this.alerts.removeObject(current);
+    this.alerts.pushObject(current);
+    this.index += 1;
     if (this.index >= this.alerts.length) {
       this.index = 0;
     }
