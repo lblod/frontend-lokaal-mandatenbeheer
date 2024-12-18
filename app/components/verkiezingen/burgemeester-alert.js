@@ -4,13 +4,14 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { restartableTask } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { consume } from 'ember-provide-consume-context';
 
 import {
   MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
   MANDAAT_BURGEMEESTER_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
+import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 export default class VerkiezingenBurgemeesterAlertComponent extends Component {
   @consume('alert-group') alerts;
@@ -24,6 +25,7 @@ export default class VerkiezingenBurgemeesterAlertComponent extends Component {
   }
 
   handleErrorMessage = restartableTask(async () => {
+    await timeout(INPUT_DEBOUNCE);
     const burgemeesters = await this.getBurgemeesters();
     const aangewezenBurgemeesters = await this.getAangewezenBurgemeesters();
     if (burgemeesters.length > 0) {
