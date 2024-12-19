@@ -97,6 +97,7 @@
     "ember-power-select-with-create": "^1.0.0",
     "ember-promise-helpers": "^2.0.0",
     "ember-promise-modals": "^4.0.0",
+    "ember-provide-consume-context": "^0.6.1",
     "ember-qunit": "^6.2.0",
     "ember-resolver": "^10.0.0",
     "ember-resources": "^7.0.2",
@@ -129,7 +130,7 @@
     "webpack": "^5.78.0"
   },
   "dependencies": {
-    "@lblod/ember-semantic-forms": "0.0.2"
+    "@lblod/ember-semantic-forms": "0.0.5"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
