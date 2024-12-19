@@ -7,12 +7,15 @@ export default class AdminPanelGlobalSystemMessageRoute extends Route {
   @service session;
   @service router;
   @service('globalSystemMessage') messageService;
+  @service impersonation;
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
-
-    if (!this.currentSession.showAdminFeatures) {
-      this.router.replaceWith('index');
+    if (
+      !this.currentSession.isAdmin ||
+      (this.currentSession.isAdmin && !this.impersonation.isImpersonating)
+    ) {
+      this.router.replaceWith('overzicht');
     }
   }
 

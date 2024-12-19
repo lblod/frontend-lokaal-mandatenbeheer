@@ -6,15 +6,12 @@ export default class AdminPanelRoute extends Route {
   @service currentSession;
   @service session;
   @service router;
+  @service impersonation;
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
-
-    if (!this.currentSession.showAdminFeatures) {
+    if (!this.currentSession.isAdmin && !this.impersonation.isImpersonating) {
       this.router.replaceWith('index');
     }
-
-    //TODO: remove once we have more tabs in the menu and we can create an overview page for the admin panel
-    this.router.replaceWith('admin-panel.global-system-message');
   }
 }

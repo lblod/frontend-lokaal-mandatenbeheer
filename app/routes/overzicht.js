@@ -6,7 +6,6 @@ export default class OverzichtRoute extends Route {
   @service currentSession;
   @service session;
   @service router;
-  @service impersonation;
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
