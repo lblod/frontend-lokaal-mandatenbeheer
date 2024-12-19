@@ -36,8 +36,7 @@
               functies. Een overzicht van deze functies vind je hieronder.</p>
           </AuContent>
           <AuHeading @level="2" @skin="3" class="au-u-margin-bottom">Beschikbare
-            admin modules</AuHeading>
-
+            modules</AuHeading>
           <ul class="au-o-grid au-o-grid--small">
             <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
               <LoketModuleCard @icon="settings">
@@ -88,6 +87,11 @@
               </li>
             {{/unless}}
           </ul>
+          {{#if this.isImpersonating}}
+            <ul class="au-o-grid au-o-grid--small">
+              <Shared::Modules />
+            </ul>
+          {{/if}}
         </div>
       </div>
     </AuBodyContainer>
