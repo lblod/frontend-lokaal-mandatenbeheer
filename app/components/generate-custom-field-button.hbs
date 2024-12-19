@@ -7,3 +7,46 @@
   Voeg een veld toe
 </AuButton>
 {{yield}}
+
+<AuModal
+  @modalOpen={{this.showModal}}
+  @closeModal={{this.closeModal}}
+  @closable={{true}}
+  @title="Voeg een veld toe"
+>
+  <div class="au-o-box au-o-flow">
+    <div>
+      <AuLabel @required={{true}} for="field-name">Naam</AuLabel>
+      <AuInput
+        @width="block"
+        @iconAlignment="left"
+        value={{this.fieldName}}
+        id="field-name"
+        {{on "input" this.updateName}}
+      />
+    </div>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <Shared::Tooltip
+            @showTooltip={{this.invalidFieldInfo}}
+            @tooltipText="Vul alle informatie in om het veld op te slaan."
+            @alignment="left"
+          >
+            <AuButton
+              {{on "click" this.onSaveField}}
+              @disabled={{this.disabled}}
+              @loading={{this.loading}}
+            >
+              Creëer veld
+            </AuButton>
+          </Shared::Tooltip>
+          <AuButton {{on "click" this.closeModal}} @skin="secondary">
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+
+</AuModal>

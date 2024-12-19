@@ -17,9 +17,11 @@ export default class ApplicationRoute extends Route {
   @service router;
   @service decretaleOrganen;
   @service mandatarisStatus;
+  @service formReplacements;
 
   async beforeModel() {
     await this.session.setup();
+    await this.formReplacements.setup();
     await Promise.all([
       this.decretaleOrganen.setup(),
       this.mandatarisStatus.loadStatusOptions(),

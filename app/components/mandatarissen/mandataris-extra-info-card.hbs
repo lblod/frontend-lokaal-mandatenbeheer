@@ -42,19 +42,16 @@
   @closeModal={{this.toggleModal}}
 >
   <div class="au-o-box">
-    <SemanticForms::Instance
+    <EditableForm
       @instanceId={{@mandataris.id}}
       @form={{@form}}
       @onCancel={{this.toggleModal}}
       @onSave={{this.onSave}}
       @formInitialized={{fn (mut this.formInitialized) true}}
       @customHistoryMessage={{true}}
-    >
-      {{#if this.formInitialized}}
-        <GenerateCustomFieldButton @form={{@form}} />
-      {{else}}
-        <Skeleton::Forms::MandatarisExtraInfo />
-      {{/if}}
-    </SemanticForms::Instance>
+    />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::MandatarisExtraInfo />
+    {{/unless}}
   </div>
 </AuModal>

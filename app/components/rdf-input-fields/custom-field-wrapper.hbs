@@ -1,28 +1,31 @@
-<AuLabel
-  for={{this.inputId}}
-  @error={{this.hasErrors}}
-  @warning={{this.hasWarnings}}
-  @required={{this.isRequired}}
->{{this.title}}</AuLabel>
-<div
-  class="au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny"
->
-  <div class="flex-grow">
-    {{yield}}
-  </div>
-  <AuButton
-    @skin="secondary"
-    @alert={{true}}
-    @icon="trash"
-    {{on "click" this.onRemove}}
+{{#unless this.removed}}
+  <AuLabel
+    for={{this.inputId}}
+    @error={{this.hasErrors}}
+    @warning={{this.hasWarnings}}
+    @required={{this.isRequired}}
+  >{{this.title}}</AuLabel>
+  <div
+    class="au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny"
   >
-    Remove
-  </AuButton>
-</div>
-{{#each this.errors as |error|}}
-  <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
-{{/each}}
+    <div class="flex-grow">
+      {{yield}}
+    </div>
+    <AuButton
+      @skin="secondary"
+      @alert={{true}}
+      @icon="trash"
+      @loading={{this.removing}}
+      {{on "click" this.onRemove}}
+    >
+      Remove
+    </AuButton>
+  </div>
+  {{#each this.errors as |error|}}
+    <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+  {{/each}}
 
-{{#each this.warnings as |warning|}}
-  <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
-{{/each}}
+  {{#each this.warnings as |warning|}}
+    <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+  {{/each}}
+{{/unless}}
