@@ -10,7 +10,10 @@ export default class AdminPanelRoute extends Route {
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
-    if (!this.currentSession.isAdmin) {
+    if (
+      !this.currentSession.isAdmin ||
+      (this.currentSession.isAdmin && this.impersonation.isImpersonating)
+    ) {
       this.router.replaceWith('overzicht');
     }
   }
