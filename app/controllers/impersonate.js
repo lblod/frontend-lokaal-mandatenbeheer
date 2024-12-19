@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { restartableTask, task, timeout } from 'ember-concurrency';
 
 export default class ImpersonateController extends Controller {
+  @service currentSession;
   @service impersonation;
   @service router;
   @service store;
@@ -43,8 +44,8 @@ export default class ImpersonateController extends Controller {
 
   impersonateAccount = task(async (accountId) => {
     await this.impersonation.impersonate(accountId);
-    await this.router.transitionTo('overzicht');
-
+    this.router.transitionTo('overzicht');
+    await this.currentSession.load();
     window.location.reload();
   });
 }
