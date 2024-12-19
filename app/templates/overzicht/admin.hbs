@@ -27,7 +27,9 @@
       <div class="au-c-body-container au-c-body-container--scroll">
         <div class="au-o-box">
           <AuContent class="au-u-margin-bottom">
-            <AuHeading @skin="2">{{this.bestuurseenheidLabel}}</AuHeading>
+            <AuHeading
+              @skin="2"
+            >{{this.postfixBestuurseenheidLabel}}{{this.bestuurseenheidLabel}}</AuHeading>
             <p>Welkom op de admin pagina. Als administrator heb je de
               mogelijkheid om als een lokaal bestuur in te loggen, een systeem
               melding voor een bestuurseenheid toe te voegen en nog andere
@@ -46,6 +48,16 @@
                   <AuLink @route="impersonate" @skin="button">Wissel van
                     bestuurseenheid</AuLink>
                 </:link>
+                <:action>
+                  {{#if this.isImpersonating}}
+                    <AuButton
+                      @skin="secondary"
+                      {{on "click" this.stopImpersonation}}
+                    >Simulatie
+                      <strong>{{this.bestuurseenheidLabel}}</strong>
+                      stoppen</AuButton>
+                  {{/if}}
+                </:action>
               </LoketModuleCard>
             </li>
             {{#if this.isImpersonating}}

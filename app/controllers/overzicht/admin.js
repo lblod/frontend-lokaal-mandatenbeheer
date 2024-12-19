@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 
 export default class OverzichtAdminController extends Controller {
@@ -10,11 +11,20 @@ export default class OverzichtAdminController extends Controller {
     return this.impersonation.isImpersonating;
   }
 
+  get postfixBestuurseenheidLabel() {
+    return this.isImpersonating ? 'Administrator ' : '';
+  }
+
   get bestuurseenheidLabel() {
-    const postfix = this.isImpersonating ? 'Administrator ' : '';
     const classificatie = this.currentSession.groupClassification?.label;
     const eenheid = this.currentSession.group.naam;
 
-    return `${postfix}${classificatie ?? ''} ${eenheid}`;
+    return `${classificatie ?? ''} ${eenheid}`;
+  }
+
+  @action
+  async stopImpersonation() {
+    await this.impersonation.stopImpersonation();
+    window.location.reload();
   }
 }
