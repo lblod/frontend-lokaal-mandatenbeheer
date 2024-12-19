@@ -2,14 +2,15 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
-export default class IndexRoute extends Route {
+export default class OverzichtRoute extends Route {
   @service currentSession;
   @service session;
   @service router;
 
-  async beforeModel(transition) {
+  beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
-
-    this.router.replaceWith('overzicht');
+    if (this.currentSession.isAdmin) {
+      this.router.replaceWith('overzicht.admin');
+    }
   }
 }

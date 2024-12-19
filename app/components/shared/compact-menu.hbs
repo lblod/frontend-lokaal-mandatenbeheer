@@ -1,28 +1,30 @@
 {{! the role="menu" is added by the AuDropdown component, so we can ignore the rule here.}}
 {{! template-lint-disable require-context-role}}
-<AuDropdown
-  @alignment="left"
-  @title="Menu modules"
-  @buttonLabel="Account settings"
->
-  <AuLink @route="organen" role="menuitem">
-    <AuIcon @icon="users" @alignment="left" />
-    Organen
-  </AuLink>
-  <AuLink @route="mandatarissen.search" role="menuitem">
-    <AuIcon @icon="user-fill" @alignment="left" />
-    Mandatarissen
-  </AuLink>
-  {{#if this.showLegislatuurModule}}
-    <AuLink @route="verkiezingen.installatievergadering" role="menuitem">
-      <AuIcon @icon="vote" @alignment="left" />
-      Opstart nieuwe legislatuur
+{{#if this.showCommonModules}}
+  <AuDropdown
+    @alignment="left"
+    @title="Menu modules"
+    @buttonLabel="Account settings"
+  >
+    <AuLink @route="organen" role="menuitem">
+      <AuIcon @icon="users" @alignment="left" />
+      Organen
     </AuLink>
-  {{/if}}
-  {{#if (is-feature-enabled "show-forms-module")}}
-    <AuLink @route="forms" role="menuitem">
-      <AuIcon @icon="draft" @alignment="left" />
-      Forms
+    <AuLink @route="mandatarissen.search" role="menuitem">
+      <AuIcon @icon="user-fill" @alignment="left" />
+      Mandatarissen
     </AuLink>
-  {{/if}}
-</AuDropdown>
+    {{#if this.showLegislatuurModule}}
+      <AuLink @route="verkiezingen.installatievergadering" role="menuitem">
+        <AuIcon @icon="vote" @alignment="left" />
+        Opstart nieuwe legislatuur
+      </AuLink>
+    {{/if}}
+    {{#if (is-feature-enabled "show-forms-module")}}
+      <AuLink @route="forms" role="menuitem">
+        <AuIcon @icon="draft" @alignment="left" />
+        Forms
+      </AuLink>
+    {{/if}}
+  </AuDropdown>
+{{/if}}
