@@ -30,19 +30,24 @@
             <AuHeading
               @skin="2"
             >{{this.postfixBestuurseenheidLabel}}{{this.bestuurseenheidLabel}}</AuHeading>
-            <p>Welkom op de admin pagina. Als administrator heb je de
-              mogelijkheid om als een lokaal bestuur in te loggen, een systeem
-              melding voor een bestuurseenheid toe te voegen en nog andere
-              functies. Een overzicht van deze functies vind je hieronder.</p>
+            <p>
+              Als administrator zijn er een aantal functionaliteiten die niet
+              voor de gewone bestuurseenheden zichtbaar zijn, een overzicht vind
+              je hieronder.
+            </p>
           </AuContent>
           <AuHeading @level="2" @skin="3" class="au-u-margin-bottom">Beschikbare
             modules</AuHeading>
           <ul class="au-o-grid au-o-grid--small">
             <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
               <LoketModuleCard @icon="settings">
-                <:title>Login als een lokaal bestuur</:title>
-                <:description>Log in als een administrator voor een
-                  bestuurseenheid.</:description>
+                <:title>Login als een bestuurseenheid</:title>
+                <:description>Als administrator heb je de mogelijkheid om als
+                  eender welk bestuurseenheid in te loggen. Dit doe je door op
+                  "Wissel van bestuurseenheid" te klikken waarop je de
+                  mogelijkheid krijgt om een andere bestuurseenheid te
+                  selecteren. Om de simulatie stop te zetten klik je op de
+                  bijkomende knop "Simulatie stoppen".</:description>
                 <:link>
                   <AuLink @route="impersonate" @skin="button">Wissel van
                     bestuurseenheid</AuLink>
@@ -63,8 +68,10 @@
               <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
                 <LoketModuleCard @icon="settings">
                   <:title>Systeem melding</:title>
-                  <:description>Plaats een systeem melding voor een lokaal
-                    bestuur</:description>
+                  <:description>Plaats een systeem melding voor al de
+                    bestuurseenheden. Deze melding kan gebruikt worden om een
+                    aankondiging te doen aan de gebruikers. Bijvoorbeeld met
+                    betrekking tot een update van het systeem.</:description>
                   <:link>
                     <AuLink
                       @route="admin-panel.global-system-message"
