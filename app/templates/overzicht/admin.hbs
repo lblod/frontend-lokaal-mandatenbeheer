@@ -55,6 +55,7 @@
                 <:action>
                   {{#if this.isImpersonating}}
                     <AuButton
+                      @alert={{true}}
                       @skin="secondary"
                       {{on "click" this.stopImpersonation}}
                     >Simulatie
