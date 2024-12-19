@@ -43,7 +43,7 @@ export default class ImpersonateController extends Controller {
 
   impersonateAccount = task(async (accountId) => {
     await this.impersonation.impersonate(accountId);
-    await this.router.transitionTo('index');
+    await this.router.transitionTo('overzicht');
 
     window.location.reload();
   });

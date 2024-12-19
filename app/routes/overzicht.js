@@ -10,10 +10,7 @@ export default class OverzichtRoute extends Route {
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
-    if (
-      this.currentSession.showAdminFeatures ||
-      this.impersonation.isImpersonating
-    ) {
+    if (this.currentSession.isAdmin) {
       this.router.replaceWith('overzicht.admin');
     }
   }
