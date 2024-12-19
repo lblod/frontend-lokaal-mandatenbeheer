@@ -1,43 +1,39 @@
-<div class="au-c-sidebar__header">
-  <AuHeading @level="6" @skin="6">Menu modules</AuHeading>
-</div>
-<nav>
-  <ul class="au-c-list-navigation">
-    {{#if this.currentSession.showAdminFeatures}}
-      <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="admin-panel.index">
-          <AuIcon @icon="settings" @alignment="left" />
-          Admin panel
-        </AuNavigationLink>
-      </li>
-    {{/if}}
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="organen">
-        <AuIcon @icon="users" @alignment="left" />
-        Organen
-      </AuNavigationLink>
-    </li>
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="mandatarissen.search">
-        <AuIcon @icon="user-fill" @alignment="left" />
-        Mandatarissen
-      </AuNavigationLink>
-    </li>
-    {{#if this.showLegislatuurModule}}
-      <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="verkiezingen.installatievergadering">
-          <AuIcon @icon="vote" @alignment="left" />
-          Opstart nieuwe legislatuur
-        </AuNavigationLink>
-      </li>
-    {{/if}}
-    {{#if (is-feature-enabled "show-forms-module")}}
-      <li class="au-c-list-navigation__item">
-        <AuNavigationLink @route="forms">
-          <AuIcon @icon="draft" @alignment="left" />
-          Forms
-        </AuNavigationLink>
-      </li>
-    {{/if}}
-  </ul>
-</nav>
+{{#if this.areModulesShown}}
+  <div class="au-c-sidebar__header">
+    <AuHeading @level="6" @skin="6">Menu modules</AuHeading>
+  </div>
+  <nav>
+    <ul class="au-c-list-navigation">
+      {{#if this.showCommonModules}}
+        <li class="au-c-list-navigation__item">
+          <AuNavigationLink @route="organen">
+            <AuIcon @icon="users" @alignment="left" />
+            Organen
+          </AuNavigationLink>
+        </li>
+        <li class="au-c-list-navigation__item">
+          <AuNavigationLink @route="mandatarissen.search">
+            <AuIcon @icon="user-fill" @alignment="left" />
+            Mandatarissen
+          </AuNavigationLink>
+        </li>
+        {{#if this.showLegislatuurModule}}
+          <li class="au-c-list-navigation__item">
+            <AuNavigationLink @route="verkiezingen.installatievergadering">
+              <AuIcon @icon="vote" @alignment="left" />
+              Opstart nieuwe legislatuur
+            </AuNavigationLink>
+          </li>
+        {{/if}}
+        {{#if (is-feature-enabled "show-forms-module")}}
+          <li class="au-c-list-navigation__item">
+            <AuNavigationLink @route="forms">
+              <AuIcon @icon="draft" @alignment="left" />
+              Forms
+            </AuNavigationLink>
+          </li>
+        {{/if}}
+      {{/if}}
+    </ul>
+  </nav>
+{{/if}}
