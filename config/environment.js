@@ -56,6 +56,7 @@ module.exports = function (environment) {
     },
   };
 
+  ENV.features['editable-forms'] = false;
   if (environment === 'development') {
     ENV.APP.DISABLE_RELOAD_WARNINGS = true;
     ENV.APP.SHOW_FORM_CONTENT = true;
@@ -64,6 +65,7 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.features['editable-forms'] = true;
   }
 
   if (environment === 'test') {

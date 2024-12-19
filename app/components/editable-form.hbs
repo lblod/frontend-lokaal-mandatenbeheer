@@ -1,0 +1,18 @@
+{{#unless this.loading}}
+  <SemanticForms::Instance
+    @instanceId={{@instanceId}}
+    @form={{this.currentForm}}
+    @onCancel={{@onCancel}}
+    @onSave={{@onSave}}
+    @formInitialized={{@formInitialized}}
+    @customHistoryMessage={{@customHistoryMessage}}
+  >
+    {{#if this.editableFormsEnabled}}
+      <GenerateCustomFieldButton
+        @form={{this.currentForm}}
+        @onUpdate={{this.onFormUpdate}}
+      />
+    {{/if}}
+    {{yield}}
+  </SemanticForms::Instance>
+{{/unless}}
