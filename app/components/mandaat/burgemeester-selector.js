@@ -169,7 +169,6 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       ? [this.aangewezenBurgemeester]
       : [];
 
-    this.installatievergadering.forceRecomputeBCSD();
     if (this.args.onUpdateBurgemeester) {
       this.args.onUpdateBurgemeester();
     }

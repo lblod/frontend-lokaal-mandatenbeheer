@@ -1,6 +1,10 @@
 {{#if (await this.collegeOrgaanInTijd.isCBS)}}
   <div
     {{did-insert (perform this.handleErrorMessage)}}
-    {{did-update (perform this.handleErrorMessage @trigger)}}
+    {{did-update
+      (perform this.handleErrorMessage)
+      @mandatarissen
+      this.installatievergadering.recomputeBCSDNeededTime
+    }}
   ></div>
 {{/if}}

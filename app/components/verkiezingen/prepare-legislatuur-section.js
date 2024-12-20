@@ -180,7 +180,15 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @action
   async onCreate({ instanceId }) {
     this.editMode = null;
-    const mandataris = await this.store.findRecord('mandataris', instanceId);
+    const mandataris = await this.store.findRecord('mandataris', instanceId, {
+      include: [
+        'is-bestuurlijke-alias-van',
+        'bekleedt.bestuursfunctie',
+        'heeft-lidmaatschap.binnen-fractie',
+        'status',
+        'beleidsdomein',
+      ].join(','),
+    });
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
     await this.getMandatarissen.perform({ added: [mandataris] });

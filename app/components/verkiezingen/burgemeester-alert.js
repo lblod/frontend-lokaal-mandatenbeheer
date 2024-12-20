@@ -4,18 +4,18 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { restartableTask, timeout } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency';
 import { consume } from 'ember-provide-consume-context';
 
 import {
   MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
   MANDAAT_BURGEMEESTER_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
-import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 export default class VerkiezingenBurgemeesterAlertComponent extends Component {
   @consume('alert-group') alerts;
   @service store;
+  @service installatievergadering;
 
   @tracked errorMessageId = 'cb8e18dd-647a-452b-a2a3-67bb644cfc4e';
   @tracked errorMessage;
@@ -25,13 +25,12 @@ export default class VerkiezingenBurgemeesterAlertComponent extends Component {
   }
 
   handleErrorMessage = restartableTask(async () => {
-    await timeout(INPUT_DEBOUNCE);
     const burgemeesters = await this.getBurgemeesters();
     const aangewezenBurgemeesters = await this.getAangewezenBurgemeesters();
     if (burgemeesters.length > 0) {
       this.errorMessage =
         'Er is een burgemeester aangeduid. Voor de installatievergadering mag er enkel een aangewezen burgemeester aangeduid worden.';
-    } else if (aangewezenBurgemeesters.length > 1) {
+    } else if (aangewezenBurgemeesters.length != 1) {
       this.errorMessage = `Er moet exact één aangewezen burgemeester zijn. Er werden er ${aangewezenBurgemeesters.length} gevonden.`;
     } else {
       this.errorMessage = null;

@@ -84,18 +84,16 @@
   <Shared::AlertGroup>
     <Verkiezingen::BurgemeesterAlert
       @collegeBestuursorgaanInTijd={{@bestuursorgaan}}
-      @trigger={{this.installatievergadering.recomputeBCSDNeededTime}}
+      @mandatarissen={{this.mandatarissen}}
     />
     <Verkiezingen::BcsdVoorzitterAlert
       @bestuursorgaanInTijd={{@bestuursorgaan}}
       @bestuursperiode={{@bestuursperiode}}
       @mandatarissen={{this.mandatarissen}}
-      @trigger={{this.installatievergadering.recomputeBCSDNeededTime}}
     />
     <Verkiezingen::MandateesInOrgaanAlert
       @bestuursorgaanInTijd={{@bestuursorgaan}}
       @mandatarissen={{this.mandatarissen}}
-      @trigger={{this.installatievergadering.recomputeBCSDNeededTime}}
     />
   </Shared::AlertGroup>
 

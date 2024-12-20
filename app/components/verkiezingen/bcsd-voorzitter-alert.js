@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 
-import { restartableTask, timeout } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency';
 import { consume } from 'ember-provide-consume-context';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
@@ -14,17 +14,16 @@ import {
   MANDAAT_SCHEPEN_CODE_ID,
   MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
-import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
   @consume('alert-group') alerts;
   @service store;
+  @service installatievergadering;
 
   @tracked errorMessageId = 'fd8e8697-ce9b-492e-adf1-6d8fe823d434';
   @tracked errorMessage;
 
   isVoorzitterAlsoSchepen = restartableTask(async () => {
-    await timeout(INPUT_DEBOUNCE);
     const bcsdMandatarissen = this.args.mandatarissen;
 
     if (bcsdMandatarissen.length === 0) {

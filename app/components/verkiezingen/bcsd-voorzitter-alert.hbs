@@ -1,6 +1,10 @@
 {{#if (await @bestuursorgaanInTijd.isBCSD)}}
   <div
     {{did-insert (perform this.isVoorzitterAlsoSchepen)}}
-    {{did-update (perform this.isVoorzitterAlsoSchepen @trigger)}}
+    {{did-update
+      (perform this.isVoorzitterAlsoSchepen)
+      @mandatarissen
+      this.installatievergadering.recomputeBCSDNeededTime
+    }}
   ></div>
 {{/if}}
