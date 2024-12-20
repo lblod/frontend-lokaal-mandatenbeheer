@@ -54,10 +54,12 @@
             </LinkTo>
           </td>
           <td>
-            <Mandaat::FoldedFracties
-              @persoon={{persoon}}
-              @bestuursperiode={{@bestuursperiode}}
-            />
+            {{#unless (this.isClickedObjectOpen object)}}
+              <Mandaat::FoldedFracties
+                @persoon={{persoon}}
+                @bestuursperiode={{@bestuursperiode}}
+              />
+            {{/unless}}
           </td>
           <td>{{! Organen are show in sub rows on click }}</td>
           <td>
@@ -76,7 +78,9 @@
         {{#let object.data as |orgaanWithMandaat|}}
           <td>{{! naam}}</td>
           <td>{{! familienaam}}</td>
-          <td>{{! fracties}}</td>
+          <td>
+            {{orgaanWithMandaat.fractie}}
+          </td>
           <td>
             <LinkTo
               @route="organen.orgaan"
@@ -86,6 +90,7 @@
               {{orgaanWithMandaat.bestuursorgaan.label}}
             </LinkTo>
           </td>
+
           <td>
             <LinkTo
               @route="mandatarissen.persoon.mandataris"
