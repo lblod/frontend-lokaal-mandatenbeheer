@@ -71,7 +71,15 @@
           <td>{{! naam}}</td>
           <td>{{! familienaam}}</td>
           <td>{{! fracties}}</td>
-          <td>{{! orgaan}}</td>
+          <td>
+            <LinkTo
+              @route="organen.orgaan"
+              @model={{orgaanWithMandaat.bestuursorgaan.routeModelId}}
+              class="au-c-link"
+            >
+              {{orgaanWithMandaat.bestuursorgaan.label}}
+            </LinkTo>
+          </td>
           <td>
             <LinkTo
               @route="mandatarissen.persoon.mandataris"

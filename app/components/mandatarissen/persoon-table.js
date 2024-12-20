@@ -49,11 +49,20 @@ export default class MandatarissenPersoonTable extends Component {
           const mandataris = foldedMandataris.mandataris;
           const mandaat = await mandataris.bekleedt;
           const bestuursfunctie = await mandaat.bestuursfunctie;
+          const bestuursorganenInTijd = await mandaat.bevatIn;
+          let bestuursorgaan = null;
+          if (bestuursorganenInTijd.length >= 1) {
+            const bestuursorgaanInTijd = bestuursorganenInTijd.at(0);
+            bestuursorgaan = await bestuursorgaanInTijd.isTijdsspecialisatieVan;
+          }
           return {
             type: this.displayType.subRow,
             data: {
               id: `${persoonId}-${mandataris.id}`,
-              orgaan: null,
+              bestuursorgaan: {
+                label: bestuursorgaan?.naam,
+                routeModelId: bestuursorgaan?.id,
+              },
               mandaat: {
                 label: bestuursfunctie.label,
                 routeModelIds: [persoonId, mandataris.id],
