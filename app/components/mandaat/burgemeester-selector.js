@@ -111,11 +111,13 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
 
     const targetMandatarisses = [];
 
+    let createdMandatarissen = false;
     if (burgemeesters.length === 0) {
       this.aangewezenBurgemeester = await this.createMandataris(
         this.burgemeesterMandate
       );
       targetMandatarisses.push(this.aangewezenBurgemeester);
+      createdMandatarissen = true;
     } else {
       this.aangewezenBurgemeester = burgemeesters[0];
       targetMandatarisses.push(burgemeesters[0]);
@@ -124,8 +126,16 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       targetMandatarisses.push(
         await this.createMandataris(this.voorzitterVastBureauMandate)
       );
+      createdMandatarissen = true;
     } else if (voorzitterVastBureau.length === 1) {
       targetMandatarisses.push(voorzitterVastBureau[0]);
+    }
+    if (createdMandatarissen) {
+      // the tables that depend on this are hard to refresh without reloading the page
+      // without the service-based approach, we should just do a reload.
+      // FIXME: we will remove this module shortly, but when we reactivate this, go for the service-based appraoch
+      // where the component simply follow the state as kept in the installatievergadering service
+      window.location.reload();
     }
 
     this.targetMandatarisses = targetMandatarisses;

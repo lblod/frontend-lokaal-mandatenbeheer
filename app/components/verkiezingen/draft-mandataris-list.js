@@ -16,10 +16,6 @@ export default class DraftMandatarisListComponent extends Component {
   @tracked isEditFormInitialized;
   @tracked mandatarisEdit;
 
-  constructor() {
-    super(...arguments);
-  }
-
   get mandatarissen() {
     return this.args.mandatarissen;
   }
@@ -41,6 +37,7 @@ export default class DraftMandatarisListComponent extends Component {
 
   @action
   async removeMandataris(mandataris) {
+    const isBurgemeester = (await mandataris.bekleedt).isBurgemeester;
     this.args.updateMandatarissen({ removed: [mandataris] });
     mandataris
       .destroyRecord()
@@ -48,6 +45,10 @@ export default class DraftMandatarisListComponent extends Component {
         const succesMessage = 'Mandataris succesvol verwijderd.';
         this.toaster.success(succesMessage, 'Succes', { timeOut: 5000 });
         this.installatievergadering.forceRecomputeBCSD();
+        if (isBurgemeester) {
+          // this brings the app in a weird state. better to reload the page
+          window.location.reload();
+        }
       })
       .catch(() => {
         const errorMessage =
