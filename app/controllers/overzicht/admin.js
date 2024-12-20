@@ -11,7 +11,7 @@ export default class OverzichtAdminController extends Controller {
     return this.impersonation.isImpersonating;
   }
 
-  get postfixBestuurseenheidLabel() {
+  get prefixBestuurseenheidLabel() {
     return this.isImpersonating ? 'Administrator ' : '';
   }
 
