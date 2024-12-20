@@ -22,9 +22,9 @@
         @currentSorting={{@sort}}
         @label="Familienaam"
       />
-      <th>Mandaat</th>
       <th>Fracties</th>
       <th>Orgaan</th>
+      <th>Mandaat</th>
       <th>Status</th>
     </c.header>
     <c.body as |object|>
@@ -55,14 +55,6 @@
           </td>
           <td>
             {{#unless (this.isClickedObjectOpen object)}}
-              <Mandatarissen::MandatenAsLinks
-                @persoon={{persoon}}
-                @bestuursperiode={{@bestuursperiode}}
-              />
-            {{/unless}}
-          </td>
-          <td>
-            {{#unless (this.isClickedObjectOpen object)}}
               <Mandaat::FoldedFracties
                 @persoon={{persoon}}
                 @bestuursperiode={{@bestuursperiode}}
@@ -70,6 +62,14 @@
             {{/unless}}
           </td>
           <td>{{! Organen are show in sub rows on click }}</td>
+          <td>
+            {{#unless (this.isClickedObjectOpen object)}}
+              <Mandatarissen::MandatenAsLinks
+                @persoon={{persoon}}
+                @bestuursperiode={{@bestuursperiode}}
+              />
+            {{/unless}}
+          </td>
           <td>{{! Status are show in sub rows on click }}</td>
         {{/let}}
       {{/if}}
@@ -78,15 +78,6 @@
         {{#let object.data as |orgaanWithMandaat|}}
           <td>{{! naam}}</td>
           <td>{{! familienaam}}</td>
-          <td>
-            <LinkTo
-              @route="mandatarissen.persoon.mandataris"
-              @models={{orgaanWithMandaat.mandaat.routeModelIds}}
-              class="au-c-link"
-            >
-              {{orgaanWithMandaat.mandaat.label}}
-            </LinkTo>
-          </td>
           <td>
             {{orgaanWithMandaat.fractie}}
           </td>
@@ -97,6 +88,16 @@
               class="au-c-link"
             >
               {{orgaanWithMandaat.bestuursorgaan.label}}
+            </LinkTo>
+          </td>
+
+          <td>
+            <LinkTo
+              @route="mandatarissen.persoon.mandataris"
+              @models={{orgaanWithMandaat.mandaat.routeModelIds}}
+              class="au-c-link"
+            >
+              {{orgaanWithMandaat.mandaat.label}}
             </LinkTo>
           </td>
           <td>
