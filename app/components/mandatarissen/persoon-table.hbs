@@ -34,10 +34,7 @@
             <AuButton
               @skin="naked"
               @icon={{object.iconSubRowOpen}}
-              {{on
-                "click"
-                (perform this.showMandatenForPerson persoon.id object)
-              }}
+              {{on "click" (perform this.showMandatenForPerson object persoon)}}
             />
             <LinkTo
               @route={{@detailRoute}}
