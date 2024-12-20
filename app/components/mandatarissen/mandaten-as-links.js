@@ -25,6 +25,11 @@ export default class MandatarissenMandatenAsLinks extends Component {
     for (const foldedMandataris of foldedMandatarissen) {
       const mandataris = foldedMandataris.mandataris;
       const mandaat = await mandataris.bekleedt;
+
+      if (!(await mandaat.isDecretaal)) {
+        continue;
+      }
+
       const bestuursfunctie = await mandaat.bestuursfunctie;
 
       this.mandatenAsLinks.pushObject({
