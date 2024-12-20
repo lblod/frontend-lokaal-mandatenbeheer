@@ -30,7 +30,7 @@
     </li>
     {{#if this.currentSession.isAdmin}}
       <li class="au-c-list-horizontal__item">
-        <ImpersonationMenu />
+        <AuPill @icon="user">{{this.adminLabel}}</AuPill>
       </li>
     {{/if}}
 
