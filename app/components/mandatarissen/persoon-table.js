@@ -20,9 +20,13 @@ export default class MandatarissenPersoonTable extends Component {
     subRow: 'mandaten',
   };
 
-  showMandatenForPerson = restartableTask(async (persoonId, clickedObject) => {
+  showMandatenForPerson = restartableTask(async (clickedObject, persoon) => {
+    if (!persoon) {
+      return;
+    }
+
     const mandatarissen = await this.store.query('mandataris', {
-      'filter[is-bestuurlijke-alias-van][:id:]': persoonId,
+      'filter[is-bestuurlijke-alias-van][:id:]': persoon.id,
       'filter[bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
         this.args.bestuursperiode.id,
       'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
@@ -31,7 +35,7 @@ export default class MandatarissenPersoonTable extends Component {
     if (this.isClickedObjectOpen(clickedObject)) {
       const idsOfRowsToRemove = (
         await foldMandatarisses(null, mandatarissen)
-      ).map((fold) => `${persoonId}-${fold.mandataris.id}`);
+      ).map((fold) => `${persoon.id}-${fold.mandataris.id}`);
       const rowsToRemove = this.tableRows.filter((row) =>
         idsOfRowsToRemove.includes(row.data.id)
       );
@@ -59,7 +63,7 @@ export default class MandatarissenPersoonTable extends Component {
           return {
             type: this.displayType.subRow,
             data: {
-              id: `${persoonId}-${mandataris.id}`,
+              id: `${persoon.id}-${mandataris.id}`,
               mandataris: mandataris,
               bestuursorgaan: {
                 label: bestuursorgaan?.naam,
@@ -67,7 +71,7 @@ export default class MandatarissenPersoonTable extends Component {
               },
               mandaat: {
                 label: bestuursfunctie.label,
-                routeModelIds: [persoonId, mandataris.id],
+                routeModelIds: [persoon.id, mandataris.id],
               },
             },
           };
