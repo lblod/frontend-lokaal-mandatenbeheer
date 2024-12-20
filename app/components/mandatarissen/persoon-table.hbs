@@ -25,6 +25,7 @@
       <th>Fracties</th>
       <th>Orgaan</th>
       <th>Mandaat</th>
+      <th>Status</th>
     </c.header>
     <c.body as |object|>
       {{#if (eq object.type this.displayType.persoon)}}
@@ -63,6 +64,7 @@
           </td>
           <td>{{! Organen are show in sub rows on click }}</td>
           <td>{{! Mandaten are show in sub rows on click }}</td>
+          <td>{{! Status are show in sub rows on click }}</td>
         {{/let}}
       {{/if}}
 
@@ -88,6 +90,11 @@
             >
               {{orgaanWithMandaat.mandaat.label}}
             </LinkTo>
+          </td>
+          <td>
+            <Mandaat::MandatarisStatusPill
+              @mandataris={{orgaanWithMandaat.mandataris}}
+            />
           </td>
         {{/let}}
       {{/if}}

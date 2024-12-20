@@ -59,6 +59,7 @@ export default class MandatarissenPersoonTable extends Component {
             type: this.displayType.subRow,
             data: {
               id: `${persoonId}-${mandataris.id}`,
+              mandataris: mandataris,
               bestuursorgaan: {
                 label: bestuursorgaan?.naam,
                 routeModelId: bestuursorgaan?.id,
