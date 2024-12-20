@@ -42,25 +42,27 @@
         {{/unless}}
       </c.header>
       <c.body as |row|>
-        <td>{{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}</td>
-        <td>{{row.isBestuurlijkeAliasVan.achternaam}}</td>
-        <td>{{row.heeftLidmaatschap.binnenFractie.naam}}</td>
-        <td>{{moment-format row.start "DD-MM-YYYY"}}</td>
-        <td><Beleidsdomeinen @mandataris={{row}} /></td>
-        {{#unless @readOnly}}
-          <td class="au-u-text-right">
-            {{#if this.persoon}}
-              <AuButton
-                @skin="link"
-                {{on "click" (fn (mut this.editBurgemeester) true)}}
-              >Bewerk</AuButton>
-              <AuButton
-                @skin="link"
-                @alert={{true}}
-                {{on "click" this.removeBurgemeester}}
-              >Verwijder</AuButton>
-            {{/if}}
-          </td>
+        {{#unless row.isDeleted}}
+          <td>{{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}</td>
+          <td>{{row.isBestuurlijkeAliasVan.achternaam}}</td>
+          <td>{{row.heeftLidmaatschap.binnenFractie.naam}}</td>
+          <td>{{moment-format row.start "DD-MM-YYYY"}}</td>
+          <td><Beleidsdomeinen @mandataris={{row}} /></td>
+          {{#unless @readOnly}}
+            <td class="au-u-text-right">
+              {{#if this.persoon}}
+                <AuButton
+                  @skin="link"
+                  {{on "click" (fn (mut this.editBurgemeester) true)}}
+                >Bewerk</AuButton>
+                <AuButton
+                  @skin="link"
+                  @alert={{true}}
+                  {{on "click" this.removeBurgemeester}}
+                >Verwijder</AuButton>
+              {{/if}}
+            </td>
+          {{/unless}}
         {{/unless}}
       </c.body>
     </t.content>

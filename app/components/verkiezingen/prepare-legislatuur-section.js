@@ -142,7 +142,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
         'Er ging iets mis bij het overzetten van de mandatarissen.'
       );
     });
-    this.installatievergadering.forceRecomputeBCSD();
     this.getMandatarissen.perform({ updated: true });
     this.router.refresh(); // not doing this breaks burgemeester selector synchronization
   });
@@ -181,11 +180,18 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @action
   async onCreate({ instanceId }) {
     this.editMode = null;
-    const mandataris = await this.store.findRecord('mandataris', instanceId);
-    await this.getMandatarissen.perform({ added: [mandataris] });
+    const mandataris = await this.store.findRecord('mandataris', instanceId, {
+      include: [
+        'is-bestuurlijke-alias-van',
+        'bekleedt.bestuursfunctie',
+        'heeft-lidmaatschap.binnen-fractie',
+        'status',
+        'beleidsdomein',
+      ].join(','),
+    });
     await this.fractieApi.updateCurrentFractie(instanceId);
     await this.mandatarisService.removeDanglingFractiesInPeriod(instanceId);
-    this.installatievergadering.forceRecomputeBCSD();
+    await this.getMandatarissen.perform({ added: [mandataris] });
   }
 
   @action

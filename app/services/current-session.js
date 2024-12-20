@@ -105,7 +105,6 @@ export default class CurrentSessionService extends Service {
 
   async isBestuurseenheidOfClassificatie(classificatieUri) {
     const classificatie = await this.group?.classificatie;
-    console.log(classificatie.uri);
 
     return classificatie ? classificatie.uri === classificatieUri : false;
   }

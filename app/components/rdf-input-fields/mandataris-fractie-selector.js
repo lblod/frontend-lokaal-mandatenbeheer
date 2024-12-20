@@ -58,7 +58,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
       );
 
       if (mustTrigger) {
-        await this.findPersonInForm.perform();
+        this.findPersonInForm.perform();
       }
     });
   }
@@ -68,12 +68,12 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   }
 
   async load() {
-    await Promise.all([
-      this.checkIfShouldLimitFractions(),
-      this.findPersonInForm.perform(),
-      this.loadBestuursorganen(),
-      this.loadProvidedValue(),
-    ]);
+    this.findPersonInForm.perform(),
+      await Promise.all([
+        this.checkIfShouldLimitFractions(),
+        this.loadBestuursorganen(),
+        this.loadProvidedValue(),
+      ]);
     this.initialized = true;
   }
 

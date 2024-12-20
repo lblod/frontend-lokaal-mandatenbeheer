@@ -80,23 +80,22 @@
       {{/unless}}
     </div>
   </div>
-  <Verkiezingen::VoorzitterAlert
-    @bestuursorgaanIT={{@bestuursorgaan}}
-    @mandatarissen={{this.mandatarissen}}
-  />
 
-  {{#if (await @bestuursorgaan.isCBS)}}
+  <Shared::AlertGroup>
     <Verkiezingen::BurgemeesterAlert
       @collegeBestuursorgaanInTijd={{@bestuursorgaan}}
+      @mandatarissen={{this.mandatarissen}}
     />
-  {{/if}}
-
-  <Verkiezingen::BcsdVoorzitterAlert
-    @bestuursorgaanInTijd={{@bestuursorgaan}}
-    @bestuursperiode={{@bestuursperiode}}
-    @mandatarissen={{this.mandatarissen}}
-    @trigger={{this.installatievergadering.recomputeBCSDNeededTime}}
-  />
+    <Verkiezingen::BcsdVoorzitterAlert
+      @bestuursorgaanInTijd={{@bestuursorgaan}}
+      @bestuursperiode={{@bestuursperiode}}
+      @mandatarissen={{this.mandatarissen}}
+    />
+    <Verkiezingen::MandateesInOrgaanAlert
+      @bestuursorgaanInTijd={{@bestuursorgaan}}
+      @mandatarissen={{this.mandatarissen}}
+    />
+  </Shared::AlertGroup>
 
   {{#if
     (and
