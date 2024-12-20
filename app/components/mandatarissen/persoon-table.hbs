@@ -63,7 +63,14 @@
             />
           </td>
           <td>{{! Organen are show in sub rows on click }}</td>
-          <td>{{! Mandaten are show in sub rows on click }}</td>
+          <td>
+            {{#unless (this.isClickedObjectOpen object)}}
+              <Mandatarissen::MandatenAsLinks
+                @persoon={{persoon}}
+                @bestuursperiode={{@bestuursperiode}}
+              />
+            {{/unless}}
+          </td>
           <td>{{! Status are show in sub rows on click }}</td>
         {{/let}}
       {{/if}}
