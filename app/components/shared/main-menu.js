@@ -11,10 +11,6 @@ export default class SharedMainMenuComponent extends Component {
     return this.currentSession.showLegislatuurModule;
   }
 
-  get areModulesShown() {
-    return this.showCommonModules;
-  }
-
   get showCommonModules() {
     if (!this.currentSession.isAdmin) {
       return true;
