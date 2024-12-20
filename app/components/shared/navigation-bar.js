@@ -6,11 +6,7 @@ export default class SharedNavigationBarComponent extends Component {
   @service router;
 
   get isVisible() {
-    const notVisibleOnRoutes = [
-      'overzicht',
-      'overzicht.index',
-      'overzicht.admin',
-    ];
+    const notVisibleOnRoutes = ['index'];
     return !notVisibleOnRoutes.includes(this.router.currentRouteName);
   }
 }

@@ -83,6 +83,31 @@
   </AuMainHeader>
   <Shared::NavigationBar />
   <AuMainContainer as |main|>
+    {{#if this.isIndex}}
+      <main.sidebar>
+        <div class="au-c-sidebar">
+          <div class="au-c-sidebar__content">
+            <Shared::MainMenu />
+          </div>
+          <div class="au-c-sidebar__footer">
+            <AuLinkExternal
+              href="https://www.vlaanderen.be/lokaal-bestuur/loket-voor-lokale-besturen/mandatenbeheer-lokale-besturen"
+              @skin="secondary"
+            >
+              <AuIcon @icon="link" @alignment="left" />
+              Meer info
+            </AuLinkExternal>
+            <AuLinkExternal
+              href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer/"
+              @skin="secondary"
+            >
+              <AuIcon @icon="documents" @alignment="left" />
+              Bekijk handleiding
+            </AuLinkExternal>
+          </div>
+        </div>
+      </main.sidebar>
+    {{/if}}
     <main.content>
       <AuBodyContainer>
         {{outlet}}
