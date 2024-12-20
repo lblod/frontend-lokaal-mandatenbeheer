@@ -52,6 +52,7 @@ export default class MandatarissenPersoonTable extends Component {
       const subRows = await Promise.all(
         foldedMandatarissen.map(async (foldedMandataris) => {
           const mandataris = foldedMandataris.mandataris;
+          const lidmaatschap = await mandataris.heeftLidmaatschap;
           const mandaat = await mandataris.bekleedt;
           const bestuursfunctie = await mandaat.bestuursfunctie;
           const bestuursorganenInTijd = await mandaat.bevatIn;
@@ -65,6 +66,7 @@ export default class MandatarissenPersoonTable extends Component {
             data: {
               id: `${persoon.id}-${mandataris.id}`,
               mandataris: mandataris,
+              fractie: (await lidmaatschap.binnenFractie)?.naam ?? '',
               bestuursorgaan: {
                 label: bestuursorgaan?.naam,
                 routeModelId: bestuursorgaan?.id,
