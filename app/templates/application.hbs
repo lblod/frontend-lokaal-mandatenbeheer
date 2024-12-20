@@ -46,14 +46,7 @@
             Wissel van bestuurseenheid
           </AuLink>
 
-          {{#if
-            (not
-              (and
-                this.currentSession.isAdmin
-                (not this.impersonation.isImpersonating)
-              )
-            )
-          }}
+          {{#if this.currentSession.isUserOrImpersonator}}
             <AuLink @route="settings" @icon="settings" role="menuitem">
               Instellingen
             </AuLink>
