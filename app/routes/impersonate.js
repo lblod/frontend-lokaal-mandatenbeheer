@@ -17,7 +17,7 @@ export default class ImpersonateRoute extends Route {
     this.session.requireAuthentication(transition, 'login');
 
     if (!this.currentSession.isAdmin) {
-      this.router.replaceWith('overzicht');
+      this.router.replaceWith('index');
     }
   }
 

@@ -10,10 +10,15 @@ export default class ApplicationController extends Controller {
   @service impersonation;
   @service currentSession;
   @service store;
+  @service router;
 
   @tracked notificationCount;
 
   appTitle = 'Lokaal mandatenbeheer';
+
+  get isIndex() {
+    return this.router.currentRouteName === 'index';
+  }
 
   setNotificationCount = restartableTask(async () => {
     this.notificationCount = 0;

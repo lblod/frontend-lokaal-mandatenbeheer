@@ -12,7 +12,7 @@ export default class AdminPanelGlobalSystemMessageRoute extends Route {
     this.session.requireAuthentication(transition, 'login');
 
     if (this.currentSession.isUserOrImpersonator) {
-      this.router.replaceWith('overzicht');
+      this.router.replaceWith('index');
     }
   }
 
