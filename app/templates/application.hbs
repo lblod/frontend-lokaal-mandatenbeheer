@@ -30,7 +30,7 @@
     </li>
     {{#if this.currentSession.isAdmin}}
       <li class="au-c-list-horizontal__item">
-        <ImpersonationMenu />
+        <AuPill @icon="user">{{this.adminLabel}}</AuPill>
       </li>
     {{/if}}
 
@@ -46,11 +46,11 @@
             Wissel van bestuurseenheid
           </AuLink>
 
-          {{#unless this.currentSession.showAdminFeatures}}
+          {{#if this.currentSession.isUserOrImpersonator}}
             <AuLink @route="settings" @icon="settings" role="menuitem">
               Instellingen
             </AuLink>
-          {{/unless}}
+          {{/if}}
 
           <AuLink @route="auth.logout" @icon="logout" role="menuitem">
             Afmelden
@@ -81,45 +81,39 @@
       </li>
     {{/if}}
   </AuMainHeader>
-  {{#unless this.isIndex}}
-    <Shared::NavigationBar />
-  {{/unless}}
-  {{#if this.session.isAuthenticated}}
-    <AuMainContainer as |main|>
-      {{#if this.isIndex}}
-        <main.sidebar>
-          <div class="au-c-sidebar">
-            <div class="au-c-sidebar__content">
-              <Shared::MainMenu />
-            </div>
-            <div class="au-c-sidebar__footer">
-              <AuLinkExternal
-                href="https://www.vlaanderen.be/lokaal-bestuur/loket-voor-lokale-besturen/mandatenbeheer-lokale-besturen"
-                @skin="secondary"
-              >
-                <AuIcon @icon="link" @alignment="left" />
-                Meer info
-              </AuLinkExternal>
-              <AuLinkExternal
-                href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer/"
-                @skin="secondary"
-              >
-                <AuIcon @icon="documents" @alignment="left" />
-                Bekijk handleiding
-              </AuLinkExternal>
-            </div>
+  <Shared::NavigationBar />
+  <AuMainContainer as |main|>
+    {{#if this.isIndex}}
+      <main.sidebar>
+        <div class="au-c-sidebar">
+          <div class="au-c-sidebar__content">
+            <Shared::MainMenu />
           </div>
-        </main.sidebar>
-      {{/if}}
-      <main.content>
-        <AuBodyContainer>
-          {{outlet}}
-        </AuBodyContainer>
-      </main.content>
-    </AuMainContainer>
-  {{else}}
-    {{outlet}}
-  {{/if}}
+          <div class="au-c-sidebar__footer">
+            <AuLinkExternal
+              href="https://www.vlaanderen.be/lokaal-bestuur/loket-voor-lokale-besturen/mandatenbeheer-lokale-besturen"
+              @skin="secondary"
+            >
+              <AuIcon @icon="link" @alignment="left" />
+              Meer info
+            </AuLinkExternal>
+            <AuLinkExternal
+              href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer/"
+              @skin="secondary"
+            >
+              <AuIcon @icon="documents" @alignment="left" />
+              Bekijk handleiding
+            </AuLinkExternal>
+          </div>
+        </div>
+      </main.sidebar>
+    {{/if}}
+    <main.content>
+      <AuBodyContainer>
+        {{outlet}}
+      </AuBodyContainer>
+    </main.content>
+  </AuMainContainer>
 </AuApp>
 
 <EpmModalContainer />

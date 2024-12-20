@@ -2,6 +2,6 @@ import Component from '@glimmer/component';
 
 import { service } from '@ember/service';
 
-export default class SharedMainMenuComponent extends Component {
+export default class SharedModulesComponent extends Component {
   @service currentSession;
 }

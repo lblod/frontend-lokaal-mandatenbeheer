@@ -1,0 +1,44 @@
+{{#if this.isAdmin}}
+  <ul class="au-o-grid au-o-grid--small">
+    <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+      <LoketModuleCard @icon="settings">
+        <:title>Login als een bestuurseenheid</:title>
+        <:description>Als administrator heb je de mogelijkheid om als een
+          bestuurseenheid in te loggen. Dit doe je door op "Simuleer
+          bestuurseenheid" te klikken waarop je de mogelijkheid krijgt om een
+          andere bestuurseenheid te selecteren. Om de simulatie stop te zetten
+          klik je op de bijkomende knop "Simulatie stoppen".</:description>
+        <:link>
+          <AuLink @route="impersonate" @skin="button">Simuleer bestuurseenheid</AuLink>
+        </:link>
+        <:action>
+          {{#if this.isImpersonating}}
+            <AuButton
+              @alert={{true}}
+              @skin="secondary"
+              {{on "click" this.stopImpersonation}}
+            >Simulatie
+              <strong>{{this.bestuurseenheidLabel}}</strong>
+              stoppen</AuButton>
+          {{/if}}
+        </:action>
+      </LoketModuleCard>
+    </li>
+    <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+      <LoketModuleCard @icon="settings">
+        <:title>Systeem melding</:title>
+        <:description>Plaats een systeem melding voor al de bestuurseenheden.
+          Deze melding kan gebruikt worden om een aankondiging te doen aan de
+          gebruikers. Bijvoorbeeld met betrekking tot een update van het
+          systeem.</:description>
+        <:link>
+          <AuLink
+            @route="admin-panel.global-system-message"
+            @skin="button"
+          >Creëer een melding</AuLink>
+        </:link>
+      </LoketModuleCard>
+    </li>
+  </ul>
+  {{yield}}
+{{/if}}

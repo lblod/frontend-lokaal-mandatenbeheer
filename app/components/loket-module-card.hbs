@@ -12,9 +12,17 @@
         {{yield to="description"}}
       </p>
     {{/if}}
-    <p data-test-loket-module-card="link">
-      {{yield to="link"}}
-    </p>
+    <div class="au-u-flex au-u-flex--wrap">
+      <p
+        data-test-loket-module-card="link"
+        class="au-u-margin-right au-u-margin-bottom"
+      >
+        {{yield to="link"}}
+      </p>
+      <p data-test-loket-module-card="action">
+        {{yield to="action"}}
+      </p>
+    </div>
   </c.content>
   {{#if (or @extraInformationLink @userManualLink)}}
     <c.footer>
