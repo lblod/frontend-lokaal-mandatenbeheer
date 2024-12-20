@@ -1,4 +1,4 @@
-{{#if this.showCommonModules}}
+{{#if this.currentSession.isUserOrImpersonator}}
   <div class="au-c-sidebar__header">
     <AuHeading @level="6" @skin="6">Menu modules</AuHeading>
   </div>
@@ -16,7 +16,7 @@
           Mandatarissen
         </AuNavigationLink>
       </li>
-      {{#if this.showLegislatuurModule}}
+      {{#if this.currentSession.showLegislatuurModule}}
         <li class="au-c-list-navigation__item">
           <AuNavigationLink @route="verkiezingen.installatievergadering">
             <AuIcon @icon="vote" @alignment="left" />
