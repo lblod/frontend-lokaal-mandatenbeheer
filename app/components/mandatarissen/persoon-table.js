@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 
 import { A } from '@ember/array';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
@@ -94,6 +95,7 @@ export default class MandatarissenPersoonTable extends Component {
     this.tableRows.pushObjects(withModelType);
   });
 
+  @action
   isClickedObjectOpen(clickedObject) {
     return clickedObject.iconSubRowOpen === 'nav-up';
   }
