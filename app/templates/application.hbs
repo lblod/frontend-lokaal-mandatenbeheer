@@ -89,7 +89,13 @@
     {{/if}}
   </AuMainHeader>
   <Shared::NavigationBar @isVisible={{this.isNavigationVisible}} />
-  {{outlet}}
+  <AuMainContainer as |main|>
+    <main.content>
+      <AuBodyContainer>
+        {{outlet}}
+      </AuBodyContainer>
+    </main.content>
+  </AuMainContainer>
 </AuApp>
 
 <EpmModalContainer />
