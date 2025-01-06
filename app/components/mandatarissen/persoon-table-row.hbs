@@ -1,3 +1,4 @@
+{{! Naam}}
 <td>
   <div>
     <AuButton
@@ -17,6 +18,8 @@
     <div> {{! empty }} </div>
   {{/if}}
 </td>
+
+{{! Familienaam}}
 <td>
   <LinkTo
     @route={{this.persoonDetailRoute}}
@@ -29,6 +32,8 @@
     <div> {{! empty }} </div>
   {{/if}}
 </td>
+
+{{! Fractie}}
 <td>
   {{#if this.isSubRowOpen}}
     <div> {{! empty }} </div>
@@ -48,6 +53,32 @@
     </div>
   {{/if}}
 </td>
+
+{{! Orgaan}}
+<td>
+  {{#if this.isSubRowOpen}}
+    <div> {{! empty }} </div>
+  {{else}}
+    <div> {{! organen as links }} </div>
+  {{/if}}
+  {{#if this.isSubRowOpen}}
+    <div>
+      {{#each this.subRows as |subRow|}}
+        <div class={{this.styleClassesSubRow}}>
+          <LinkTo
+            @route="organen.orgaan"
+            @model={{subRow.bestuursorgaan.routeModelId}}
+            class="au-c-link"
+          >
+            {{subRow.bestuursorgaan.label}}
+          </LinkTo>
+        </div>
+      {{/each}}
+    </div>
+  {{/if}}
+</td>
+
+{{! Mandaat}}
 <td>
   {{#if this.isSubRowOpen}}
     <div> {{! empty }} </div>
@@ -68,6 +99,20 @@
           >
             {{subRow.mandaat.label}}
           </LinkTo>
+        </div>
+      {{/each}}
+    </div>
+  {{/if}}
+</td>
+
+{{! Status}}
+<td>
+  <div> {{! empty }} </div>
+  {{#if this.isSubRowOpen}}
+    <div>
+      {{#each this.subRows as |subRow|}}
+        <div class={{this.styleClassesSubRow}}>
+          <Mandaat::MandatarisStatusPill @mandataris={{subRow.mandataris}} />
         </div>
       {{/each}}
     </div>
