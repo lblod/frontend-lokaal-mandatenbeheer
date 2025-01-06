@@ -59,7 +59,10 @@
   {{#if this.isSubRowOpen}}
     <div> {{! empty }} </div>
   {{else}}
-    <div> {{! organen as links }} </div>
+    <Mandatarissen::BestuursorganenAsLinks
+      @persoon={{@persoon}}
+      @bestuursperiode={{@bestuursperiode}}
+    />
   {{/if}}
   {{#if this.isSubRowOpen}}
     <div>
