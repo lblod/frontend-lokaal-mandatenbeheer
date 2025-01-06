@@ -1,11 +1,21 @@
-<td>
-  <LinkTo
-    @route={{this.persoonDetailRoute}}
-    @model={{@persoon.id}}
-    class="au-c-link"
-  >
-    {{@persoon.gebruikteVoornaam}}
-  </LinkTo>
+<td class="au-u-flex au-u-flex--column">
+  <div>
+    <AuButton
+      @skin="naked"
+      @icon={{this.iconSubRowOpen}}
+      {{on "click" (perform this.getSubRowData)}}
+    />
+    <LinkTo
+      @route={{this.persoonDetailRoute}}
+      @model={{@persoon.id}}
+      class="au-c-link"
+    >
+      {{@persoon.gebruikteVoornaam}}
+    </LinkTo>
+  </div>
+  {{#if this.isSubRowOpen}}
+    <div> {{! empty }} </div>
+  {{/if}}
 </td>
 <td>
   <LinkTo
@@ -15,16 +25,25 @@
   >
     {{@persoon.achternaam}}
   </LinkTo>
+  {{#if this.isSubRowOpen}}
+    <div> {{! empty }} </div>
+  {{/if}}
 </td>
 <td>
   <Mandaat::FoldedFracties
     @persoon={{@persoon}}
     @bestuursperiode={{@bestuursperiode}}
   />
+  {{#if this.isSubRowOpen}}
+    <div> {{! empty }} </div>
+  {{/if}}
 </td>
 <td>
   <Mandatarissen::MandatenAsLinks
     @persoon={{@persoon}}
     @bestuursperiode={{@bestuursperiode}}
   />
+  {{#if this.isSubRowOpen}}
+    <div> {{! empty }} </div>
+  {{/if}}
 </td>
