@@ -1,5 +1,5 @@
 <div {{did-insert (perform this.setup)}}>
-  {{#if (and this.setup.isRunning (eq this.organenAsLinks 0))}}
+  {{#if (and this.setup.isRunning (eq this.organenAsLinks.length 0))}}
     <p class="skeleton-text"></p>
   {{else}}
     {{#each this.organenAsLinks as |orgaanAsLink index|}}
