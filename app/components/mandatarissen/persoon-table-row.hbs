@@ -1,1 +1,30 @@
-{{yield}}
+<td>
+  <LinkTo
+    @route={{this.persoonDetailRoute}}
+    @model={{@persoon.id}}
+    class="au-c-link"
+  >
+    {{@persoon.gebruikteVoornaam}}
+  </LinkTo>
+</td>
+<td>
+  <LinkTo
+    @route={{this.persoonDetailRoute}}
+    @model={{@persoon.id}}
+    class="au-c-link"
+  >
+    {{@persoon.achternaam}}
+  </LinkTo>
+</td>
+<td>
+  <Mandaat::FoldedFracties
+    @persoon={{@persoon}}
+    @bestuursperiode={{@bestuursperiode}}
+  />
+</td>
+<td>
+  <Mandatarissen::MandatenAsLinks
+    @persoon={{@persoon}}
+    @bestuursperiode={{@bestuursperiode}}
+  />
+</td>

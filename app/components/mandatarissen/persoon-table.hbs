@@ -1,9 +1,5 @@
-<span
-  {{did-insert (perform this.setupTableRows)}}
-  {{did-update (perform this.setupTableRows @content)}}
-></span>
 <AuDataTable
-  @content={{this.tableRows}}
+  @content={{@content}}
   @noDataMessage="Geen mandatarissen gevonden"
   @sort={{@sort}}
   @page={{@page}}
@@ -23,90 +19,14 @@
         @label="Familienaam"
       />
       <th>Fracties</th>
-      <th>Orgaan</th>
-      <th>Mandaat</th>
-      <th>Status</th>
+      <th>Mandaten</th>
     </c.header>
-    <c.body as |object|>
-      {{#if (eq object.type this.displayType.persoon)}}
-        {{#let object.data as |persoon|}}
-          <td>
-            <AuButton
-              @skin="naked"
-              @icon={{object.iconSubRowOpen}}
-              {{on "click" (perform this.showMandatenForPerson object persoon)}}
-            />
-            <LinkTo
-              @route={{@detailRoute}}
-              @model={{persoon.id}}
-              class="au-c-link au-u-medium"
-            >
-              {{persoon.gebruikteVoornaam}}
-            </LinkTo>
-          </td>
-          <td>
-            <LinkTo
-              @route={{@detailRoute}}
-              @model={{persoon.id}}
-              class="au-c-link au-u-medium"
-            >
-              {{persoon.achternaam}}
-            </LinkTo>
-          </td>
-          <td>
-            {{#unless (this.isClickedObjectOpen object)}}
-              <Mandaat::FoldedFracties
-                @persoon={{persoon}}
-                @bestuursperiode={{@bestuursperiode}}
-              />
-            {{/unless}}
-          </td>
-          <td>{{! Organen are show in sub rows on click }}</td>
-          <td>
-            {{#unless (this.isClickedObjectOpen object)}}
-              <Mandatarissen::MandatenAsLinks
-                @persoon={{persoon}}
-                @bestuursperiode={{@bestuursperiode}}
-              />
-            {{/unless}}
-          </td>
-          <td>{{! Status are show in sub rows on click }}</td>
-        {{/let}}
-      {{/if}}
 
-      {{#if (eq object.type this.displayType.subRow)}}
-        {{#let object.data as |orgaanWithMandaat|}}
-          <td>{{! naam}}</td>
-          <td>{{! familienaam}}</td>
-          <td>
-            {{orgaanWithMandaat.fractie}}
-          </td>
-          <td>
-            <LinkTo
-              @route="organen.orgaan"
-              @model={{orgaanWithMandaat.bestuursorgaan.routeModelId}}
-              class="au-c-link"
-            >
-              {{orgaanWithMandaat.bestuursorgaan.label}}
-            </LinkTo>
-          </td>
-
-          <td>
-            <LinkTo
-              @route="mandatarissen.persoon.mandataris"
-              @models={{orgaanWithMandaat.mandaat.routeModelIds}}
-              class="au-c-link"
-            >
-              {{orgaanWithMandaat.mandaat.label}}
-            </LinkTo>
-          </td>
-          <td>
-            <Mandaat::MandatarisStatusPill
-              @mandataris={{orgaanWithMandaat.mandataris}}
-            />
-          </td>
-        {{/let}}
-      {{/if}}
+    <c.body as |persoon|>
+      <Mandatarissen::PersoonTableRow
+        @persoon={{persoon}}
+        @bestuursperiode={{@bestuursperiode}}
+      />
     </c.body>
   </t.content>
 </AuDataTable>
