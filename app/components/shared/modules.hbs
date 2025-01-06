@@ -1,0 +1,42 @@
+<li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+  <LoketModuleCard @icon="users">
+    <:title>Organen</:title>
+    <:description>Hier vind je een overzicht van de organen.</:description>
+    <:link>
+      <AuLink @route="organen" @skin="button">Ga naar organen</AuLink>
+    </:link>
+  </LoketModuleCard>
+</li>
+<li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+  <LoketModuleCard @icon="user-fill">
+    <:title>Mandatarissen</:title>
+    <:description>Hier vind je een overzicht van alle mandatarissen en hun
+      historiek.</:description>
+    <:link>
+      <AuLink @route="mandatarissen.search" @skin="button">Ga naar mandatarissen</AuLink>
+    </:link>
+  </LoketModuleCard>
+</li>
+{{#if this.currentSession.showLegislatuurModule}}
+  <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+    <LoketModuleCard @icon="vote">
+      <:title>Opstart nieuwe legislatuur</:title>
+      <:description>Hier kun je de nieuwe legislatuur voorbereiden.</:description>
+      <:link>
+        <AuLink @route="verkiezingen.installatievergadering" @skin="button">Ga
+          naar opstart nieuwe legislatuur</AuLink>
+      </:link>
+    </LoketModuleCard>
+  </li>
+{{/if}}
+{{#if (is-feature-enabled "show-forms-module")}}
+  <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
+    <LoketModuleCard @icon="draft">
+      <:title>Forms</:title>
+      <:description>Hier vind je een overzicht van de huidige forms.</:description>
+      <:link>
+        <AuLink @route="forms" @skin="button">Ga naar forms</AuLink>
+      </:link>
+    </LoketModuleCard>
+  </li>
+{{/if}}

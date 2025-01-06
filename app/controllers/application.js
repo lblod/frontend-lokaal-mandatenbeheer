@@ -9,8 +9,8 @@ export default class ApplicationController extends Controller {
   @service session;
   @service impersonation;
   @service currentSession;
-  @service router;
   @service store;
+  @service router;
 
   @tracked notificationCount;
 
@@ -53,7 +53,7 @@ export default class ApplicationController extends Controller {
     let group;
     let classification;
 
-    if (this.impersonation.isImpersonating) {
+    if (this.isImpersonating) {
       user = this.impersonation.originalAccount.gebruiker;
       group = this.impersonation.originalGroup;
       classification = group.belongsTo('classificatie').value();
@@ -155,5 +155,21 @@ export default class ApplicationController extends Controller {
       this.environmentInfo.title !== '' &&
       this.environmentName !== '{{ENVIRONMENT_NAME}}'
     );
+  }
+
+  get user() {
+    if (!this.isImpersonating) {
+      return null;
+    }
+
+    return this.currentSession.user;
+  }
+
+  get isImpersonating() {
+    return this.impersonation.isImpersonating;
+  }
+
+  get adminLabel() {
+    return this.isImpersonating ? `Admin: ${this.user.fullName}` : 'Admin';
   }
 }

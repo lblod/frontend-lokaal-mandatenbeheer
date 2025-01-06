@@ -11,13 +11,13 @@ export default class AdminPanelGlobalSystemMessageRoute extends Route {
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
 
-    if (!this.currentSession.showAdminFeatures) {
+    if (!this.currentSession.isAdmin) {
       this.router.replaceWith('index');
     }
   }
 
   async setupController() {
     super.setupController();
-    await await this.messageService.findMessage();
+    await this.messageService.findMessage();
   }
 }
