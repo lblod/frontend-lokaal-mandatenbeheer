@@ -52,7 +52,6 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
         });
       })
     );
-    console.log(this.subRows);
   });
 
   async getMandatarissen() {

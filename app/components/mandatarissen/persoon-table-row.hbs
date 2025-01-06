@@ -36,7 +36,8 @@
 {{! Fractie}}
 <td>
   {{#if this.isSubRowOpen}}
-    <div> {{! empty }} </div>
+    {{! template-lint-disable no-inline-styles }}
+    <div style="visibility: hidden">hidden</div>
   {{else}}
     <Mandaat::FoldedFracties
       @persoon={{@persoon}}
@@ -57,7 +58,8 @@
 {{! Orgaan}}
 <td>
   {{#if this.isSubRowOpen}}
-    <div> {{! empty }} </div>
+    {{! template-lint-disable no-inline-styles }}
+    <div style="visibility: hidden">hidden</div>
   {{else}}
     <Mandatarissen::BestuursorganenAsLinks
       @persoon={{@persoon}}
@@ -84,7 +86,8 @@
 {{! Mandaat}}
 <td>
   {{#if this.isSubRowOpen}}
-    <div> {{! empty }} </div>
+    {{! template-lint-disable no-inline-styles }}
+    <div style="visibility: hidden">hidden</div>
   {{else}}
     <Mandatarissen::MandatenAsLinks
       @persoon={{@persoon}}
@@ -110,7 +113,8 @@
 
 {{! Status}}
 <td>
-  <div> {{! empty }} </div>
+  {{! template-lint-disable no-inline-styles }}
+  <div style="visibility: hidden">hidden</div>
   {{#if this.isSubRowOpen}}
     <div>
       {{#each this.subRows as |subRow|}}
