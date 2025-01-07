@@ -25,6 +25,44 @@
         {{on "input" this.updateName}}
       />
     </div>
+    <div>
+      <AuLabel @required={{true}} for="library-entry">Uit bibliotheek</AuLabel>
+      <PowerSelect
+        @allowClear={{false}}
+        @renderInPlace={{false}}
+        @searchEnabled={{true}}
+        @loadingMessage="Aan het laden..."
+        @noMatchesMessage="Geen velden gevonden"
+        @searchMessage="Typ om te zoeken"
+        @searchField="name"
+        @options={{this.libraryFieldOptions}}
+        @selected={{this.selectedLibraryFieldType}}
+        @onChange={{this.selectLibraryFieldType}}
+        id="library-entry"
+        as |selected|
+      >
+        {{selected.name}}
+      </PowerSelect>
+    </div>
+    <div>
+      <AuLabel @required={{true}} for="display-type">Type</AuLabel>
+      <PowerSelect
+        @allowClear={{false}}
+        @renderInPlace={{false}}
+        @searchEnabled={{true}}
+        @loadingMessage="Aan het laden..."
+        @noMatchesMessage="Geen types gevonden"
+        @searchMessage="Typ om te zoeken"
+        @searchField="label"
+        @options={{this.displayTypes}}
+        @selected={{this.selectedDisplayType}}
+        @onChange={{this.selectDisplayType}}
+        id="display-type"
+        as |selected|
+      >
+        {{selected.label}}
+      </PowerSelect>
+    </div>
     <AuToolbar class="au-u-margin-top" as |Group|>
       <Group>
         <AuButtonGroup>
