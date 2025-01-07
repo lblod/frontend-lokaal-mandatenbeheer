@@ -45,13 +45,11 @@
     />
   {{/if}}
   {{#if this.isSubRowOpen}}
-    <div>
-      {{#each this.subRows as |subRow|}}
-        <div class={{this.styleClassesSubRow}}>
-          {{subRow.fractie}}
-        </div>
-      {{/each}}
-    </div>
+    {{#each this.subRows as |subRow|}}
+      <div class={{this.styleClassesSubRow}}>
+        {{subRow.fractie}}
+      </div>
+    {{/each}}
   {{/if}}
 </td>
 
@@ -67,19 +65,17 @@
     />
   {{/if}}
   {{#if this.isSubRowOpen}}
-    <div>
-      {{#each this.subRows as |subRow|}}
-        <div class={{this.styleClassesSubRow}}>
-          <LinkTo
-            @route="organen.orgaan"
-            @model={{subRow.bestuursorgaan.routeModelId}}
-            class="au-c-link"
-          >
-            {{subRow.bestuursorgaan.label}}
-          </LinkTo>
-        </div>
-      {{/each}}
-    </div>
+    {{#each this.subRows as |subRow|}}
+      <div class={{this.styleClassesSubRow}}>
+        <LinkTo
+          @route="organen.orgaan"
+          @model={{subRow.bestuursorgaan.routeModelId}}
+          class="au-c-link"
+        >
+          {{subRow.bestuursorgaan.label}}
+        </LinkTo>
+      </div>
+    {{/each}}
   {{/if}}
 </td>
 
@@ -95,19 +91,17 @@
     />
   {{/if}}
   {{#if this.isSubRowOpen}}
-    <div>
-      {{#each this.subRows as |subRow|}}
-        <div class={{this.styleClassesSubRow}}>
-          <LinkTo
-            @route="mandatarissen.persoon.mandataris"
-            @models={{subRow.mandaat.routeModelIds}}
-            class="au-c-link"
-          >
-            {{subRow.mandaat.label}}
-          </LinkTo>
-        </div>
-      {{/each}}
-    </div>
+    {{#each this.subRows as |subRow|}}
+      <div class={{this.styleClassesSubRow}}>
+        <LinkTo
+          @route="mandatarissen.persoon.mandataris"
+          @models={{subRow.mandaat.routeModelIds}}
+          class="au-c-link"
+        >
+          {{subRow.mandaat.label}}
+        </LinkTo>
+      </div>
+    {{/each}}
   {{/if}}
 </td>
 
@@ -116,12 +110,10 @@
   {{! template-lint-disable no-inline-styles }}
   <div style="visibility: hidden">hidden</div>
   {{#if this.isSubRowOpen}}
-    <div>
-      {{#each this.subRows as |subRow|}}
-        <div class={{this.styleClassesSubRow}}>
-          <Mandaat::MandatarisStatusPill @mandataris={{subRow.mandataris}} />
-        </div>
-      {{/each}}
-    </div>
+    {{#each this.subRows as |subRow|}}
+      <div class={{this.styleClassesSubRow}}>
+        <Mandaat::MandatarisStatusPill @mandataris={{subRow.mandataris}} />
+      </div>
+    {{/each}}
   {{/if}}
 </td>
