@@ -371,3 +371,21 @@ $au-region-breakpoint: medium !default;
     justify-content: space-between;
   }
 }
+
+.mandataris-search-content {
+  .au-c-data-table__table tbody tr:nth-child(2n + 1) {
+    background-color: var(--au-gray-100);
+  }
+  .au-c-data-table__table tbody tr:nth-child(2n) {
+    background-color: var(--au-gray-100);
+  }
+  .au-c-data-table__table tbody tr.sub-row:nth-child(2n + 1) {
+    background-color: var(--au-white);
+  }
+  .au-c-data-table__table tbody tr.sub-row:nth-child(2n) {
+    background-color: var(--au-white);
+  }
+  .au-c-data-table__wrapper {
+    overflow-y: hidden;
+  }
+}

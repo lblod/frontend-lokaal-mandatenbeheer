@@ -73,7 +73,7 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
   }
 
   get iconSubRowOpen() {
-    return this.isSubRowOpen ? 'nav-down' : 'nav-up';
+    return this.isSubRowOpen ? 'nav-up' : 'nav-down';
   }
 
   get styleClassesSubRow() {
