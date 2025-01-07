@@ -1,36 +1,34 @@
-<span class="persoonTable">
-  <AuDataTable
-    @content={{@content}}
-    @noDataMessage="Geen mandatarissen gevonden"
-    @sort={{@sort}}
-    @page={{@page}}
-    @size={{@size}}
-    as |t|
-  >
-    <t.content as |c|>
-      <c.header>
-        <AuDataTableThSortable
-          @field="is-bestuurlijke-alias-van.gebruikteVoornaam"
-          @currentSorting={{@sort}}
-          @label="Naam"
-        />
-        <AuDataTableThSortable
-          @field="is-bestuurlijke-alias-van.achternaam"
-          @currentSorting={{@sort}}
-          @label="Familienaam"
-        />
-        <th>Fractie</th>
-        <th>Orgaan</th>
-        <th>Mandaat</th>
-        <th>Status</th>
-      </c.header>
+<AuDataTable
+  @content={{@content}}
+  @noDataMessage="Geen mandatarissen gevonden"
+  @sort={{@sort}}
+  @page={{@page}}
+  @size={{@size}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @field="is-bestuurlijke-alias-van.gebruikteVoornaam"
+        @currentSorting={{@sort}}
+        @label="Naam"
+      />
+      <AuDataTableThSortable
+        @field="is-bestuurlijke-alias-van.achternaam"
+        @currentSorting={{@sort}}
+        @label="Familienaam"
+      />
+      <th>Fractie</th>
+      <th>Orgaan</th>
+      <th>Mandaat</th>
+      <th>Status</th>
+    </c.header>
 
-      <c.body as |persoon|>
-        <Mandatarissen::PersoonTableRow
-          @persoon={{persoon}}
-          @bestuursperiode={{@bestuursperiode}}
-        />
-      </c.body>
-    </t.content>
-  </AuDataTable>
-</span>
+    <c.body as |persoon|>
+      <Mandatarissen::PersoonTableRow
+        @persoon={{persoon}}
+        @bestuursperiode={{@bestuursperiode}}
+      />
+    </c.body>
+  </t.content>
+</AuDataTable>
