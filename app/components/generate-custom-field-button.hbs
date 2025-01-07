@@ -30,7 +30,7 @@
         <AuButtonGroup>
           <Shared::Tooltip
             @showTooltip={{this.invalidFieldInfo}}
-            @tooltipText="Vul alle informatie in om het veld op te slaan."
+            @tooltipText="Nog niet al de velden zijn correct ingevuld."
             @alignment="left"
           >
             <AuButton
@@ -38,7 +38,7 @@
               @disabled={{this.disabled}}
               @loading={{this.loading}}
             >
-              Creëer veld
+              Bewaar
             </AuButton>
           </Shared::Tooltip>
           <AuButton {{on "click" this.closeModal}} @skin="secondary">
