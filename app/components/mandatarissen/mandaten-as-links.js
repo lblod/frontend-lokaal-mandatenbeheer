@@ -16,7 +16,6 @@ export default class MandatarissenMandatenAsLinks extends Component {
       null,
       this.args.mandatarissen ?? []
     );
-    console.log(foldedMandatarissen);
 
     for (const foldedMandataris of foldedMandatarissen) {
       const mandataris = foldedMandataris.mandataris;

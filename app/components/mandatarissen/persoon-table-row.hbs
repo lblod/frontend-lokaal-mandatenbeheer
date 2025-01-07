@@ -1,11 +1,13 @@
 {{! Naam}}
-<td>
+<td {{did-insert this.getSubRowData}}>
   <div class="au-u-flex au-u-flex--row">
-    <AuButton
-      @skin="naked"
-      @icon={{this.iconSubRowOpen}}
-      {{on "click" (perform this.getSubRowData)}}
-    />
+    <span style={{if (eq this.subRows.length 1) "visibility: hidden" ""}}>
+      <AuButton
+        @skin="naked"
+        @icon={{this.iconSubRowOpen}}
+        {{on "click" this.openCloseSubRows}}
+      />
+    </span>
     <LinkTo
       @route={{this.persoonDetailRoute}}
       @model={{@persoon.id}}

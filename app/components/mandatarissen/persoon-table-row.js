@@ -2,9 +2,9 @@ import Component from '@glimmer/component';
 
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 
-import { restartableTask } from 'ember-concurrency';
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
 
 export default class MandatarissenPersoonTableRowComponent extends Component {
@@ -13,13 +13,13 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
   @tracked isSubRowOpen;
   @tracked subRows = A();
 
-  getSubRowData = restartableTask(async () => {
+  @action
+  openCloseSubRows() {
     this.isSubRowOpen = !this.isSubRowOpen;
+  }
 
-    if (this.isSubRowOpen === false) {
-      this.subRows.clear();
-      return;
-    }
+  @action
+  async getSubRowData() {
     const foldedMandatarissen = await foldMandatarisses(
       null,
       this.args.mandatarissen
@@ -51,10 +51,6 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
         });
       })
     );
-  });
-
-  get persoon() {
-    return this.args.persoon;
   }
 
   get persoonDetailRoute() {
