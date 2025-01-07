@@ -14,9 +14,6 @@
       {{@persoon.gebruikteVoornaam}}
     </LinkTo>
   </div>
-  {{#if this.isSubRowOpen}}
-    <div> {{! empty }} </div>
-  {{/if}}
 </td>
 
 {{! Familienaam}}
@@ -28,45 +25,50 @@
   >
     {{@persoon.achternaam}}
   </LinkTo>
-  {{#if this.isSubRowOpen}}
-    <div> {{! empty }} </div>
-  {{/if}}
 </td>
 
 {{! Fractie}}
 <td>
-  {{#if this.isSubRowOpen}}
-    {{! template-lint-disable no-inline-styles }}
-    <div style="visibility: hidden">hidden</div>
-  {{else}}
+  {{#unless this.isSubRowOpen}}
     <Mandaat::FoldedFracties
       @persoon={{@persoon}}
       @bestuursperiode={{@bestuursperiode}}
     />
-  {{/if}}
-  {{#if this.isSubRowOpen}}
-    {{#each this.subRows as |subRow|}}
-      <div class={{this.styleClassesSubRow}}>
-        {{subRow.fractie}}
-      </div>
-    {{/each}}
-  {{/if}}
+  {{/unless}}
 </td>
 
 {{! Orgaan}}
 <td>
-  {{#if this.isSubRowOpen}}
-    {{! template-lint-disable no-inline-styles }}
-    <div style="visibility: hidden">hidden</div>
-  {{else}}
+  {{#unless this.isSubRowOpen}}
     <Mandatarissen::BestuursorganenAsLinks
       @persoon={{@persoon}}
       @bestuursperiode={{@bestuursperiode}}
     />
-  {{/if}}
-  {{#if this.isSubRowOpen}}
-    {{#each this.subRows as |subRow|}}
-      <div class={{this.styleClassesSubRow}}>
+  {{/unless}}
+</td>
+
+{{! Mandaat}}
+<td>
+  {{#unless this.isSubRowOpen}}
+    <Mandatarissen::MandatenAsLinks
+      @persoon={{@persoon}}
+      @bestuursperiode={{@bestuursperiode}}
+    />
+  {{/unless}}
+</td>
+
+<td>{{! Status}}</td>
+
+{{#if this.isSubRowOpen}}
+  {{#each this.subRows as |subRow|}}
+
+    <tr {{in-parent}} class="sub-row">
+      <td>{{! empty  }}</td>
+      <td>{{! empty  }}</td>
+      <td>
+        {{subRow.fractie}}
+      </td>
+      <td>
         <LinkTo
           @route="organen.orgaan"
           @model={{subRow.bestuursorgaan.routeModelId}}
@@ -74,25 +76,8 @@
         >
           {{subRow.bestuursorgaan.label}}
         </LinkTo>
-      </div>
-    {{/each}}
-  {{/if}}
-</td>
-
-{{! Mandaat}}
-<td>
-  {{#if this.isSubRowOpen}}
-    {{! template-lint-disable no-inline-styles }}
-    <div style="visibility: hidden">hidden</div>
-  {{else}}
-    <Mandatarissen::MandatenAsLinks
-      @persoon={{@persoon}}
-      @bestuursperiode={{@bestuursperiode}}
-    />
-  {{/if}}
-  {{#if this.isSubRowOpen}}
-    {{#each this.subRows as |subRow|}}
-      <div class={{this.styleClassesSubRow}}>
+      </td>
+      <td>
         <LinkTo
           @route="mandatarissen.persoon.mandataris"
           @models={{subRow.mandaat.routeModelIds}}
@@ -100,43 +85,10 @@
         >
           {{subRow.mandaat.label}}
         </LinkTo>
-      </div>
-    {{/each}}
-  {{/if}}
-</td>
-
-{{! Status}}
-<td>
-  {{! template-lint-disable no-inline-styles }}
-  <div style="visibility: hidden">hidden</div>
-  {{#if this.isSubRowOpen}}
-    {{#each this.subRows as |subRow|}}
-      <div class={{this.styleClassesSubRow}}>
-        <Mandaat::MandatarisStatusPill @mandataris={{subRow.mandataris}} />
-      </div>
-    {{/each}}
-  {{/if}}
-</td>
-
-{{#if this.isSubRowOpen}}
-  <tr {{in-parent}} class="sub-row">
-    <td>
-
-    </td>
-    <td>
-    </td>
-    <td>
-
-    </td>
-    <td>
-      Quux!
-    </td>
-    <td>
-      Corge!
-    </td>
-    <td>
-      Grault!
-    </td>
-  </tr>
-
+      </td>
+      <td><Mandaat::MandatarisStatusPill
+          @mandataris={{subRow.mandataris}}
+        /></td>
+    </tr>
+  {{/each}}
 {{/if}}
