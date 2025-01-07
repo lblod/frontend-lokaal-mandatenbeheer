@@ -6,7 +6,9 @@ import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 import { TEXT_CUSTOM_DISPLAY_TYPE_ID } from 'frontend-lmb/utils/well-known-ids';
-
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
+import { PROV } from 'frontend-lmb/rdf/namespaces';
 export default class GenerateCustomFieldButtonComponent extends Component {
   @service formReplacements;
   @service store;
@@ -40,10 +42,27 @@ export default class GenerateCustomFieldButtonComponent extends Component {
   }
 
   get libraryFieldOptions() {
+    const forkingStore = new ForkingStore();
+    forkingStore.parse(this.args.form.formTtl, SOURCE_GRAPH, 'text/turtle');
+
+    const alreadyUsedLibraryEntries = forkingStore
+      .match(null, PROV('wasDerivedFrom'), null, SOURCE_GRAPH)
+      .map((triple) => triple.object.value);
+
     return this.store
       .findAll('library-entry', { include: 'display-type' })
       .then((entries) => {
-        return entries.sortBy('id').reverse();
+        return [
+          this.customFieldEntry,
+          ...entries
+            .sortBy('id')
+            .reverse()
+            .filter((entry) => {
+              return (
+                entry.uri && alreadyUsedLibraryEntries.indexOf(entry.uri) < 0
+              );
+            }),
+        ];
       });
   }
 
