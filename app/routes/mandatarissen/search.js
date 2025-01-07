@@ -53,8 +53,10 @@ export default class MandatarissenSearchRoute extends Route {
       })
     );
 
-    const personen = await this.getPersonen(params, selectedPeriod);
-
+    const personenWithMandatarissen = await this.getPersoonWithMandatarissen(
+      params,
+      selectedPeriod
+    );
     const allBestuurfunctieCodes = [];
     const mandatenVoorPeriode = await this.store.query('mandaat', {
       'filter[bevat-in][heeft-bestuursperiode][:id:]': selectedPeriod.id,
@@ -69,7 +71,8 @@ export default class MandatarissenSearchRoute extends Route {
       await this.fractieApi.samenwerkingForBestuursperiode(selectedPeriod.id);
 
     return {
-      personen,
+      personen: personenWithMandatarissen.map((value) => value.persoon),
+      personenWithMandatarissen,
       bestuursPeriods: periodMap,
       selectedPeriod: { period: selectedPeriod, disabled: false },
       bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
@@ -82,12 +85,12 @@ export default class MandatarissenSearchRoute extends Route {
       selectedFracties: params.binnenFractie,
       page: {
         number: 0,
-        size: personen.length,
+        size: personenWithMandatarissen.length,
       },
     };
   }
 
-  async getPersonen(params, bestuursperiode) {
+  async getPersoonWithMandatarissen(params, bestuursperiode) {
     const queryParams = {
       sort: params.sort,
       page: {
@@ -122,16 +125,28 @@ export default class MandatarissenSearchRoute extends Route {
       queryParams['filter[:or:][:has-no:heeft-lidmaatschap]'] = true;
     }
     const mandatarissen = await this.store.query('mandataris', queryParams);
-    const personen = (
-      await Promise.all(
-        mandatarissen.map(async (mandataris) => {
-          if (!params.activeMandatarissen || (await mandataris.isActive)) {
-            return await mandataris.get('isBestuurlijkeAliasVan');
+    const persoonWithMandatarissen = new Map();
+
+    await Promise.all(
+      mandatarissen.map(async (mandataris) => {
+        if (!params.activeMandatarissen || mandataris.isActive) {
+          const persoon = await mandataris.get('isBestuurlijkeAliasVan');
+          if (persoon) {
+            if (!persoonWithMandatarissen.has(persoon.id)) {
+              persoonWithMandatarissen.set(persoon.id, {
+                persoon,
+                mandatarissen: [],
+              });
+            }
+            persoonWithMandatarissen
+              .get(persoon.id)
+              .mandatarissen.push(mandataris);
           }
-        })
-      )
-    ).filter((p) => p);
-    return [...new Set(personen)];
+        }
+      })
+    );
+
+    return Array.from(persoonWithMandatarissen.values());
   }
 
   setupController(controller) {

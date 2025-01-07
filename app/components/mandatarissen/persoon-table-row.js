@@ -20,10 +20,9 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
       this.subRows.clear();
       return;
     }
-
     const foldedMandatarissen = await foldMandatarisses(
       null,
-      await this.getMandatarissen()
+      this.args.mandatarissen
     );
     await Promise.all(
       foldedMandatarissen.map(async (foldedMandataris) => {
@@ -53,16 +52,6 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
       })
     );
   });
-
-  async getMandatarissen() {
-    return await this.store.query('mandataris', {
-      'filter[is-bestuurlijke-alias-van][:id:]': this.args.persoon.id,
-      'filter[bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
-        this.args.bestuursperiode.id,
-      'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
-      include: ['bekleedt', 'bekleedt.bestuursfunctie'].join(','),
-    });
-  }
 
   get persoon() {
     return this.args.persoon;

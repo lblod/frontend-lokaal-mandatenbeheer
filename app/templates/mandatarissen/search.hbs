@@ -114,6 +114,7 @@
       </AuToolbar>
       <Mandatarissen::PersoonTable
         @content={{@model.personen}}
+        @personenWithMandatarissen={{this.model.personenWithMandatarissen}}
         @bestuursperiode={{@model.selectedPeriod.period}}
         @sort={{this.sort}}
         @page={{@model.page.number}}
