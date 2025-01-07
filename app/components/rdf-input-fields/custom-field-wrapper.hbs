@@ -1,27 +1,52 @@
 {{#unless this.removed}}
-  <AuLabel
-    for={{this.inputId}}
-    @error={{this.hasErrors}}
-    @warning={{this.hasWarnings}}
-    @required={{this.isRequired}}
-  >{{this.title}}</AuLabel>
-  <div
-    class="au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny"
-  >
-    <div class="flex-grow">
-      {{yield}}
-    </div>
-    <AuButton
-      @skin="secondary"
-      @alert={{true}}
-      @icon="trash"
-      @loading={{this.removing}}
-      @loadingMessage="Verwijderen"
-      {{on "click" this.onRemove}}
+  {{#if @inline}}
+    <AuLabel
+      for={{this.inputId}}
+      @error={{this.hasErrors}}
+      @warning={{this.hasWarnings}}
+      @required={{this.isRequired}}
+    >{{this.title}}</AuLabel>
+    <div
+      class="au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny"
     >
-      Verwijder
-    </AuButton>
-  </div>
+      <div class="flex-grow">
+        {{yield}}
+      </div>
+      <AuButton
+        @skin="secondary"
+        @alert={{true}}
+        @icon="trash"
+        @loading={{this.removing}}
+        @loadingMessage="Verwijderen"
+        {{on "click" this.onRemove}}
+      >
+        Verwijder
+      </AuButton>
+    </div>
+  {{else}}
+    <div
+      class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-flex--spaced-tiny"
+    >
+      <AuLabel
+        class="flex-grow au-u-margin-bottom-none"
+        for={{this.inputId}}
+        @error={{this.hasErrors}}
+        @warning={{this.hasWarnings}}
+        @required={{this.isRequired}}
+      >{{this.title}}</AuLabel>
+      <AuButton
+        @skin="secondary"
+        @alert={{true}}
+        @icon="trash"
+        @loading={{this.removing}}
+        @loadingMessage="Verwijderen"
+        {{on "click" this.onRemove}}
+      >
+        Verwijder
+      </AuButton>
+    </div>
+    {{yield}}
+  {{/if}}
   {{#each this.errors as |error|}}
     <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
   {{/each}}
