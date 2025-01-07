@@ -385,7 +385,4 @@ $au-region-breakpoint: medium !default;
   .au-c-data-table__table tbody tr.sub-row:nth-child(2n) {
     background-color: var(--au-white);
   }
-  .au-c-data-table__wrapper {
-    overflow-y: hidden;
-  }
 }
