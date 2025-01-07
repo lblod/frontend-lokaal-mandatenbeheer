@@ -107,6 +107,7 @@ export default class MandatarissenSearchRoute extends Route {
         'bekleedt.bevat-in.heeft-bestuursperiode',
         'heeft-lidmaatschap',
         'heeft-lidmaatschap.binnen-fractie',
+        'status',
       ].join(','),
     };
 

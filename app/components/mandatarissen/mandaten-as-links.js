@@ -12,15 +12,11 @@ export default class MandatarissenMandatenAsLinks extends Component {
   @service store;
 
   setup = restartableTask(async () => {
-    const mandatarissen = await this.store.query('mandataris', {
-      'filter[is-bestuurlijke-alias-van][:id:]': this.args.persoon.id,
-      'filter[bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
-        this.args.bestuursperiode.id,
-      'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
-      include: ['bekleedt', 'bekleedt.bestuursfunctie'].join(','),
-    });
-
-    const foldedMandatarissen = await foldMandatarisses(null, mandatarissen);
+    const foldedMandatarissen = await foldMandatarisses(
+      null,
+      this.args.mandatarissen ?? []
+    );
+    console.log(foldedMandatarissen);
 
     for (const foldedMandataris of foldedMandatarissen) {
       const mandataris = foldedMandataris.mandataris;

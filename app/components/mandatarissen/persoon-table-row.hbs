@@ -40,10 +40,7 @@
 {{! Orgaan}}
 <td>
   {{#unless this.isSubRowOpen}}
-    <Mandatarissen::BestuursorganenAsLinks
-      @persoon={{@persoon}}
-      @bestuursperiode={{@bestuursperiode}}
-    />
+    <Mandatarissen::BestuursorganenAsLinks @mandatarissen={{@mandatarissen}} />
   {{/unless}}
 </td>
 
@@ -52,7 +49,7 @@
   {{#unless this.isSubRowOpen}}
     <Mandatarissen::MandatenAsLinks
       @persoon={{@persoon}}
-      @bestuursperiode={{@bestuursperiode}}
+      @mandatarissen={{@mandatarissen}}
     />
   {{/unless}}
 </td>
