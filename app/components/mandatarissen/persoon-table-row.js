@@ -3,13 +3,10 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { action } from '@ember/object';
-import { service } from '@ember/service';
 
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
 
 export default class MandatarissenPersoonTableRowComponent extends Component {
-  @service store;
-
   @tracked isSubRowOpen;
   @tracked subRows = A();
 
