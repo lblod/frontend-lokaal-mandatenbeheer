@@ -14,7 +14,7 @@
       @disabled={{not this.model.hasActiveMandatarissen}}
       @loading={{this.endActiveMandaten.isRunning}}
       @loadingMessage="Beëindigen"
-      {{on "click" (perform this.endActiveMandaten)}}
+      {{on "click" (fn (mut this.isEndMandatesModalOpen) true)}}
     >
       Beëindig mandaten
     </AuButton>
@@ -184,6 +184,37 @@
           {{on "click" this.createMandataris}}
         >
           Voeg nieuw mandaat toe
+        </AuButton>
+        <AuButton @skin="secondary" {{on "click" this.closeModal}}>
+          Annuleer
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </Modal.Footer>
+</AuModal>
+
+<AuModal
+  @title="Beëindig actieve mandaten"
+  @modalOpen={{this.isEndMandatesModalOpen}}
+  @closeModal={{this.closeModal}}
+  as |Modal|
+>
+  <Modal.Body>
+    <AuContent class="au-u-margin-bottom-small">
+      Door verder te gaan, worden de einddatums van de actieve mandatarissen van
+      deze persoon aangepast naar vandaag, waardoor deze mandaten beëindigd
+      worden.
+    </AuContent>
+  </Modal.Body>
+  <Modal.Footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButton
+          @loading={{this.endActiveMandaten.isRunning}}
+          @loadingMessage="Actieve mandaten worden beëindigd"
+          {{on "click" (perform this.endActiveMandaten)}}
+        >
+          Beëindig mandatarissen
         </AuButton>
         <AuButton @skin="secondary" {{on "click" this.closeModal}}>
           Annuleer
