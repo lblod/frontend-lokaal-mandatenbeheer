@@ -11,7 +11,6 @@
   </Group>
   <Group>
     <AuButton
-      @disabled={{not this.model.hasActiveMandatarissen}}
       @loading={{this.endActiveMandaten.isRunning}}
       @loadingMessage="Beëindigen"
       {{on "click" (fn (mut this.isEndMandatesModalOpen) true)}}
