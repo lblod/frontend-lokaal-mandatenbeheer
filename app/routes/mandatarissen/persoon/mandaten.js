@@ -41,6 +41,8 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
 
     return {
       persoon,
+      hasActiveMandatarissen:
+        filteredMandatarissen.length >= 1 && params.activeOnly,
       foldedMandatarissen,
       mandatarissen: filteredMandatarissen,
       bestuurseenheid,
