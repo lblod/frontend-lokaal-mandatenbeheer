@@ -61,7 +61,7 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
     return this.isSubRowOpen ? 'nav-up' : 'nav-down';
   }
 
-  get styleClassesSubRow() {
-    return 'au-u-padding-top-small au-u-padding-bottom-small';
+  get firstSubRow() {
+    return this.subRows?.firstObject;
   }
 }

@@ -56,7 +56,14 @@
   {{/unless}}
 </td>
 
-<td>{{! Status}}</td>
+{{! Status}}
+<td>
+  {{#if (and (eq this.subRows.length 1) this.firstSubRow)}}
+    <Mandaat::MandatarisStatusPill
+      @mandataris={{this.firstSubRow.mandataris}}
+    />
+  {{/if}}
+</td>
 
 {{#if this.isSubRowOpen}}
   {{#each this.subRows as |subRow|}}
@@ -85,9 +92,9 @@
           {{subRow.mandaat.label}}
         </LinkTo>
       </td>
-      <td><Mandaat::MandatarisStatusPill
-          @mandataris={{subRow.mandataris}}
-        /></td>
+      <td>
+        <Mandaat::MandatarisStatusPill @mandataris={{subRow.mandataris}} />
+      </td>
     </tr>
   {{/each}}
 {{/if}}
