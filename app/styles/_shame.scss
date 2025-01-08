@@ -386,3 +386,7 @@ $au-region-breakpoint: medium !default;
     background-color: var(--au-white);
   }
 }
+
+.au-c-pill {
+  border-radius: 3px !important;
+}
