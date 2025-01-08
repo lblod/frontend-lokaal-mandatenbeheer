@@ -17,25 +17,42 @@ export default class PersoonApiService extends Service {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/personen/${persoonId}/bestuursperiode/${bestuursperiodeId}/current-fractie`
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
+      console.error(jsonResponse.message);
       throw {
         status: response.status,
-        message: jsonReponse.message,
+        message: jsonResponse.message,
       };
     }
 
-    if (!jsonReponse.fractie) {
+    if (!jsonResponse.fractie) {
       return null;
     }
 
     return (
       await this.store.query('fractie', {
-        'filter[:uri:]': jsonReponse.fractie,
+        'filter[:uri:]': jsonResponse.fractie,
       })
     ).at(0);
+  }
+
+  async hasActiveMandatarissen(persoonId) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/personen/${persoonId}/has-active-mandates`
+    );
+    const jsonResponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonResponse.message);
+      throw {
+        status: response.status,
+        message: jsonResponse.message,
+      };
+    }
+
+    return jsonResponse.isTrue;
   }
 
   async endActiveMandates(persoonId) {

@@ -10,13 +10,19 @@
     </AuHeading>
   </Group>
   <Group>
-    <AuButton
-      @loading={{this.endActiveMandaten.isRunning}}
-      @loadingMessage="Beëindigen"
-      {{on "click" (fn (mut this.isEndMandatesModalOpen) true)}}
+    <Shared::Tooltip
+      @showTooltip={{not this.model.hasActiveMandatarissen}}
+      @tooltipText="Geen actieve mandatarissen gevonden"
     >
-      Beëindig mandaten
-    </AuButton>
+      <AuButton
+        @loading={{this.endActiveMandaten.isRunning}}
+        @loadingMessage="Beëindigen"
+        @disabled={{not this.model.hasActiveMandatarissen}}
+        {{on "click" (fn (mut this.isEndMandatesModalOpen) true)}}
+      >
+        Beëindig mandaten
+      </AuButton>
+    </Shared::Tooltip>
     <Shared::Tooltip
       @showTooltip={{not this.canBecomeOnafhankelijk}}
       @tooltipText={{this.toolTipText}}
