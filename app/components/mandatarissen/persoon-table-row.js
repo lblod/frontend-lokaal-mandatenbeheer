@@ -24,6 +24,7 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
       null,
       this.args.mandatarissen
     );
+
     await Promise.all(
       foldedMandatarissen.map(async (foldedMandataris) => {
         const mandataris = foldedMandataris.mandataris;
@@ -32,14 +33,21 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
         const bestuursfunctie = await mandaat.bestuursfunctie;
         const bestuursorganenInTijd = await mandaat.bevatIn;
         let bestuursorgaan = null;
+        let fractieLabel = null;
+
         if (bestuursorganenInTijd.length >= 1) {
           const bestuursorgaanInTijd = bestuursorganenInTijd.at(0);
           bestuursorgaan = await bestuursorgaanInTijd.isTijdsspecialisatieVan;
         }
+        if (!lidmaatschap) {
+          fractieLabel = 'Niet beschikbaar';
+        } else {
+          fractieLabel = (await lidmaatschap.binnenFractie)?.naam;
+        }
 
         this.subRows.pushObject({
           mandataris: mandataris,
-          fractie: (await lidmaatschap.binnenFractie)?.naam ?? '',
+          fractie: fractieLabel,
           bestuursorgaan: {
             label: bestuursorgaan?.naam,
             routeModelId: bestuursorgaan?.id,
