@@ -28,7 +28,23 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
   }
 
   get canSaveChanges() {
-    return this.name && this.type && this.order;
+    return this.fieldHasChanged && this.name && this.type && this.order;
+  }
+
+  get fieldHasChanged() {
+    const { label, order, displayType } = this.args.field;
+
+    return (
+      this.name != label || this.type != displayType || this.order != order
+    );
+  }
+
+  @action
+  async loadCurrentFieldInfo() {
+    const { label, order, displayType } = this.args.field;
+    this.name = label;
+    this.type = displayType;
+    this.order = order;
   }
 
   @action

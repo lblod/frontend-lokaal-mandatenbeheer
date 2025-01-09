@@ -12,7 +12,7 @@
       @hideText={{true}}
       {{on "click" (fn (mut this.showEditFieldModal) true)}}
     >
-      Verwijder
+      Pas aan
     </AuButton>
   </div>
   <div
@@ -35,7 +35,8 @@
   @modalOpen={{this.showEditFieldModal}}
   @closeModal={{this.closeEditFieldModal}}
   @closable={{true}}
-  @title="Voeg een veld toe"
+  @title="Pas veld aan"
+  {{did-insert this.loadCurrentFieldInfo}}
 >
   <form class="au-c-form au-o-box au-o-flow" {{on "input" this.updateField}}>
     <AuFormRow @alignment="default">
@@ -43,7 +44,7 @@
       <AuInput
         @width="block"
         @iconAlignment="left"
-        value={{this.fieldName}}
+        value={{this.name}}
         name="name"
         id="name"
       />
