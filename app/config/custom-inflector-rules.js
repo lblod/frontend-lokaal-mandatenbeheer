@@ -73,3 +73,6 @@ inflector.irregular('global-system-message', 'global-system-messages');
 inflector.irregular('werkingsgebied', 'werkingsgebieden');
 
 inflector.irregular('bestuurseenheid-contact', 'bestuurseenheid-contacten');
+
+// Form Library
+inflector.irregular('form-library/display-type', 'display-types');
