@@ -6,13 +6,15 @@ import { tracked } from '@glimmer/tracking';
 
 import { task } from 'ember-concurrency';
 import { consume } from 'ember-provide-consume-context';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
 
-import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import { JSON_API_TYPE, SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+import { PROV } from 'frontend-lmb/rdf/namespaces';
 
 export default class RdfInputFieldsCustomFieldWrapperComponent extends Component {
   @consume('on-form-update') onFormUpdate;
-  @consume('editable-form-id') editableFormId;
+  @consume('form-definition') formDefinition;
 
   @service toaster;
   @service formReplacements;
@@ -31,6 +33,10 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
   }
 
   get canSaveChanges() {
+    if (this.hasALibraryEntree) {
+      return this.fieldHasChanged && this.name && this.order;
+    }
+
     return this.fieldHasChanged && this.name && this.type && this.order;
   }
 
@@ -73,7 +79,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
     await this.removeField();
     try {
       const result = await fetch(
-        `/form-content/${this.editableFormId}/fields`,
+        `/form-content/${this.formDefinition.id}/fields`,
         {
           method: 'POST',
           headers: {
@@ -89,7 +95,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
 
       const body = await result.json();
       const newFormId = body.id;
-      this.formReplacements.setReplacement(this.editableFormId, newFormId);
+      this.formReplacements.setReplacement(this.formDefinition.id, newFormId);
       this.onFormUpdate();
     } catch (error) {
       showErrorToast(
@@ -112,5 +118,18 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
         formUri: this.args.form.uri,
       }),
     });
+  }
+
+  get hasALibraryEntree() {
+    const localStore = new ForkingStore();
+    localStore.parse(this.formDefinition.formTtl, SOURCE_GRAPH, 'text/turtle');
+    const libraryEntree = localStore.any(
+      this.args.field.uri,
+      PROV('wasDerivedFrom'),
+      null,
+      SOURCE_GRAPH
+    );
+
+    return !!libraryEntree;
   }
 }
