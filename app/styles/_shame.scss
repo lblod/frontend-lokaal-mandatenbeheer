@@ -371,3 +371,7 @@ $au-region-breakpoint: medium !default;
     justify-content: space-between;
   }
 }
+
+.au-form-row-full-width {
+  align-items: normal !important;
+}
