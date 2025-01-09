@@ -20,6 +20,9 @@ import RDFGeboorteInput from 'frontend-lmb/components/rdf-input-fields/geboorte-
 import RDFGenderSelector from 'frontend-lmb/components/rdf-input-fields/gender-selector';
 import RdfInputFieldsCustomStringInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-string-input';
 import RdfInputFieldsCustomAddressInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-address-input';
+import RdfInputFieldsCustomDateInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-date-input';
+import RdfInputFieldsCustomNumberInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-number-input';
+import RdfInputFieldsCustomTextInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-text-input';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -120,6 +123,19 @@ export const registerCustomFormFields = () => {
       displayType:
         'http://lblod.data.gift/display-types/lmb/custom-address-input',
       edit: RdfInputFieldsCustomAddressInputComponent,
+    },
+    {
+      displayType: 'http://lblod.data.gift/display-types/lmb/custom-date-input',
+      edit: RdfInputFieldsCustomDateInputComponent,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/lmb/custom-number-input',
+      edit: RdfInputFieldsCustomNumberInputComponent,
+    },
+    {
+      displayType: 'http://lblod.data.gift/display-types/lmb/custom-text-input',
+      edit: RdfInputFieldsCustomTextInputComponent,
     },
   ]);
 };
