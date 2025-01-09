@@ -33,7 +33,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
   }
 
   get canSaveChanges() {
-    if (this.hasALibraryEntree) {
+    if (this.libraryEntree) {
       return this.fieldHasChanged && this.name && this.order;
     }
 
@@ -87,6 +87,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
           },
           body: JSON.stringify({
             displayType: this.type,
+            libraryEntryUri: this.libraryEntree,
             order: this.order,
             name: this.name,
           }),
@@ -120,7 +121,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
     });
   }
 
-  get hasALibraryEntree() {
+  get libraryEntree() {
     const localStore = new ForkingStore();
     localStore.parse(this.formDefinition.formTtl, SOURCE_GRAPH, 'text/turtle');
     const libraryEntree = localStore.any(
@@ -130,6 +131,6 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
       SOURCE_GRAPH
     );
 
-    return !!libraryEntree;
+    return libraryEntree?.value;
   }
 }
