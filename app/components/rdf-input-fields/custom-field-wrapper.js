@@ -5,12 +5,15 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { task } from 'ember-concurrency';
+import { consume } from 'ember-provide-consume-context';
 
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { MANDATARIS_EXTRA_INFO_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class RdfInputFieldsCustomFieldWrapperComponent extends Component {
+  @consume('on-form-update') onFormUpdate;
+
   @service toaster;
   @service formReplacements;
   @service semanticFormRepository;
@@ -60,6 +63,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
         formUri: this.args.form.uri,
       }),
     });
+    this.onFormUpdate();
     this.removed = true;
   }
 
@@ -97,10 +101,11 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
         MANDATARIS_EXTRA_INFO_FORM_ID,
         newFormId
       );
+      this.onFormUpdate();
     } catch (error) {
       showErrorToast(
         this.toaster,
-        'Er ging iets mis bij het aanpassen van het veld.'
+        'Er ging iets mis bij het opslaan van het veld.'
       );
     }
     this.showEditFieldModal = false;
