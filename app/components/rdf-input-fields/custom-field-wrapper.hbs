@@ -50,13 +50,11 @@
       />
     </AuFormRow>
     <AuFormRow @alignment="default">
-      <AuLabel @required={{true}} for="type">Type</AuLabel>
-      <AuInput
-        @width="block"
-        @iconAlignment="left"
-        value={{this.type}}
-        name="type"
-        id="type"
+      <CustomFormFields::DisplayTypeSelector
+        @displayTypeUri={{this.type}}
+        @variableName="type"
+        @label="Type"
+        @onTypeUpdated={{this.updateField}}
       />
     </AuFormRow>
     <AuFormRow @alignment="default">
