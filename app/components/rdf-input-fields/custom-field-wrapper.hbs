@@ -51,6 +51,7 @@
     </AuFormRow>
     <AuFormRow @alignment="default" class="au-form-row-full-width">
       <CustomFormFields::DisplayTypeSelector
+        @disabled={{this.hasALibraryEntree}}
         @displayTypeUri={{this.type}}
         @variableName="type"
         @label="Type"
