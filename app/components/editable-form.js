@@ -38,4 +38,9 @@ export default class EditableFormComponent extends Component {
   onFormUpdate() {
     this.updateForm();
   }
+
+  @provide('editable-form-id')
+  get editableFormId() {
+    return this.currentForm.id;
+  }
 }
