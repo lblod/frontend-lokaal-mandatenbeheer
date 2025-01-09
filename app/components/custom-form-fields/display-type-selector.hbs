@@ -1,0 +1,23 @@
+<div ...attributes>
+  {{#unless @inTable}}
+    <AuLabel @required={{true}} {{did-insert this.load}}>
+      {{this.label}}
+    </AuLabel>
+  {{/unless}}
+  <PowerSelect
+    name={{@variableName}}
+    @searchField="label"
+    @searchEnabled={{true}}
+    @selected={{this.selectedType}}
+    @options={{this.typeOptions}}
+    @onChange={{this.updateSelectedType}}
+    @allowClear={{false}}
+    @loadingMessage="Aan het laden"
+    @noMatchesMessage="Geen resultaten gevonden"
+    as |displayType|
+  >
+    <span>
+      {{displayType.label}}
+    </span>
+  </PowerSelect>
+</div>
