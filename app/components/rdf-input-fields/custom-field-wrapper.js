@@ -4,16 +4,16 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
-
-import { consume } from 'ember-provide-consume-context';
 import { task } from 'ember-concurrency';
-import { showSuccessToast } from 'frontend-lmb/utils/toasts';
+
+import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+import { MANDATARIS_EXTRA_INFO_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class RdfInputFieldsCustomFieldWrapperComponent extends Component {
   @service toaster;
   @service formReplacements;
-  @consume('on-form-update') onUpdate;
+  @service semanticFormRepository;
 
   @tracked removing = false;
   @tracked showEditFieldModal;
@@ -60,7 +60,6 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
         formUri: this.args.form.uri,
       }),
     });
-    this.onUpdate();
     this.removed = true;
   }
 
@@ -76,7 +75,34 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
   }
 
   saveChanges = task(async () => {
-    // TODO:
+    try {
+      const result = await fetch(
+        `/form-content/${MANDATARIS_EXTRA_INFO_FORM_ID}/fields`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': JSON_API_TYPE,
+          },
+          body: JSON.stringify({
+            displayType: this.type,
+            order: this.order,
+            name: this.name,
+          }),
+        }
+      );
+
+      const body = await result.json();
+      const newFormId = body.id;
+      this.formReplacements.setReplacement(
+        MANDATARIS_EXTRA_INFO_FORM_ID,
+        newFormId
+      );
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het aanpassen van het veld.'
+      );
+    }
     this.showEditFieldModal = false;
     showSuccessToast(this.toaster, 'Het veld werd succesvol aangepast.');
   });

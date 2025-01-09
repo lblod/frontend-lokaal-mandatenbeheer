@@ -11,7 +11,7 @@ export default class CustomFormFieldsDisplayTypeSelectorComponent extends Compon
 
   @action
   async load() {
-    this.typeOptions = await this.store.findAll('form-library/display-type');
+    this.typeOptions = await this.store.findAll('display-type');
   }
 
   @action
