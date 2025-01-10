@@ -24,10 +24,10 @@
       <th>Status</th>
     </c.header>
 
-    <c.body as |persoon|>
+    <c.body as |persoonWithMandatarissen|>
       <Mandatarissen::PersoonTableRow
-        @persoon={{persoon}}
-        @mandatarissen={{this.mandatarissenFor persoon}}
+        @persoon={{persoonWithMandatarissen.persoon}}
+        @mandatarissen={{persoonWithMandatarissen.mandatarissen}}
       />
     </c.body>
   </t.content>

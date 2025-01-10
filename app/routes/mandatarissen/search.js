@@ -71,7 +71,6 @@ export default class MandatarissenSearchRoute extends Route {
       await this.fractieApi.samenwerkingForBestuursperiode(selectedPeriod.id);
 
     return {
-      personen: personenWithMandatarissen.map((value) => value.persoon),
       personenWithMandatarissen,
       bestuursPeriods: periodMap,
       selectedPeriod: { period: selectedPeriod, disabled: false },
