@@ -30,7 +30,8 @@ export default class MandaatFoldedFractiesComponent extends Component {
   }
 
   load = task(async () => {
-    const mandatarissen = await this.getMandatarissen(this.persoon);
+    const mandatarissen =
+      this.args.mandatarissen ?? (await this.getMandatarissen(this.persoon));
 
     const { latestFracties, allFracties } =
       await this.getFoldedFracties(mandatarissen);

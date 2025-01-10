@@ -1,5 +1,5 @@
 <div {{did-insert (perform this.setup)}}>
-  {{#if this.setup.isRunning}}
+  {{#if (and this.setup.isRunning (eq this.mandatenAsLinks.length 0))}}
     <p class="skeleton-text"></p>
   {{else}}
     {{#each this.mandatenAsLinks as |mandaatAsLink index|}}

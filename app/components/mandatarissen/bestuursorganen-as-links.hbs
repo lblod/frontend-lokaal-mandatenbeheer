@@ -1,0 +1,12 @@
+<div {{did-insert (perform this.setup)}}>
+  {{#if (and this.setup.isRunning (eq this.organenAsLinks.length 0))}}
+    <p class="skeleton-text"></p>
+  {{else}}
+    {{#each this.organenAsLinks as |orgaanAsLink index|}}
+      <AuLink @route={{orgaanAsLink.route}} @models={{orgaanAsLink.model}}>
+        {{orgaanAsLink.label}}
+        {{#if (not-eq index (sub this.organenAsLinks.length 1))}},{{/if}}
+      </AuLink>
+    {{/each}}
+  {{/if}}
+</div>

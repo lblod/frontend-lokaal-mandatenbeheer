@@ -1,0 +1,118 @@
+{{! Naam}}
+<td>
+  <div class="au-u-flex au-u-flex--row">
+    <span style={{if this.hasOnlyOneMandaat "visibility: hidden" ""}}>
+      <AuButton
+        @skin="naked"
+        @icon={{this.iconSubRowOpen}}
+        {{on "click" this.openCloseSubRows}}
+      />
+    </span>
+    <LinkTo
+      @route={{this.persoonDetailRoute}}
+      @model={{@persoon.id}}
+      class="au-c-link au-u-medium"
+    >
+      {{@persoon.gebruikteVoornaam}}
+    </LinkTo>
+  </div>
+</td>
+
+{{! Familienaam}}
+<td>
+  <LinkTo
+    @route={{this.persoonDetailRoute}}
+    @model={{@persoon.id}}
+    class="au-c-link au-u-medium"
+  >
+    {{@persoon.achternaam}}
+  </LinkTo>
+</td>
+
+{{! Fractie}}
+<td>
+  {{#unless this.isSubRowOpen}}
+    <Mandaat::FoldedFracties
+      @persoon={{@persoon}}
+      @mandatarissen={{this.mandatarissen}}
+    />
+  {{/unless}}
+</td>
+
+{{! Orgaan}}
+<td>
+  {{#if this.showCombinedInfo}}
+    <Mandatarissen::BestuursorganenAsLinks
+      @mandatarissen={{this.mandatarissen}}
+    />
+  {{/if}}
+  {{#if this.hasOnlyOneMandaat}}
+    <LinkTo
+      @route="organen.orgaan"
+      @model={{this.firstRow.rowData.bestuursorgaan.routeModelId}}
+      class="au-c-link"
+    >
+      {{this.firstRow.rowData.bestuursorgaan.label}}
+    </LinkTo>
+  {{/if}}
+</td>
+
+{{! Mandaat}}
+<td>
+  {{#if this.showCombinedInfo}}
+    <Mandatarissen::MandatenAsLinks
+      @persoon={{@persoon}}
+      @mandatarissen={{this.mandatarissen}}
+    />
+  {{/if}}
+  {{#if this.hasOnlyOneMandaat}}
+    <LinkTo
+      @route="mandatarissen.persoon.mandataris"
+      @models={{this.firstRow.rowData.mandaat.routeModelIds}}
+      class="au-c-link"
+    >
+      {{this.firstRow.rowData.mandaat.label}}
+    </LinkTo>
+  {{/if}}
+</td>
+
+{{! Status}}
+<td>
+  {{#if (eq this.mandatarissen.length 1)}}
+    <Mandaat::MandatarisStatusPill @mandataris={{this.firstRow.mandataris}} />
+  {{/if}}
+</td>
+
+{{#if this.isSubRowOpen}}
+  {{#each this.subRows as |subRow|}}
+
+    <tr {{in-parent}} class="sub-row">
+      <td>{{! empty  }}</td>
+      <td>{{! empty  }}</td>
+      <td>
+        {{subRow.fractie}}
+      </td>
+      <td>
+        <LinkTo
+          @route="organen.orgaan"
+          @model={{subRow.bestuursorgaan.routeModelId}}
+          class="au-c-link"
+        >
+          {{subRow.bestuursorgaan.label}}
+        </LinkTo>
+      </td>
+      <td>
+        <LinkTo
+          @route="mandatarissen.persoon.mandataris"
+          @models={{subRow.mandaat.routeModelIds}}
+          class="au-c-link"
+        >
+          {{subRow.mandaat.label}}
+        </LinkTo>
+      </td>
+      <td>
+        <Mandaat::MandatarisStatusPill @mandataris={{subRow.mandataris}} />
+      </td>
+    </tr>
+  {{/each}}
+{{/if}}

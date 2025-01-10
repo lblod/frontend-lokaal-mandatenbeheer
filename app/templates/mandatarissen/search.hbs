@@ -88,7 +88,7 @@
     </div>
   </main.sidebar>
   <main.content>
-    <AuBodyContainer id="content">
+    <AuBodyContainer id="content" class="mandataris-search-content">
       <AuToolbar @size="large" @nowrap="true" as |Group|>
         <Group>
           <AuHeading @skin="2">Mandatarissen</AuHeading>
@@ -113,12 +113,10 @@
         </Group>
       </AuToolbar>
       <Mandatarissen::PersoonTable
-        @content={{@model.personen}}
-        @bestuursperiode={{@model.selectedPeriod.period}}
+        @content={{@model.personenWithMandatarissen}}
         @sort={{this.sort}}
         @page={{@model.page.number}}
         @size={{@model.page.size}}
-        @detailRoute="mandatarissen.persoon.mandaten"
       />
     </AuBodyContainer>
   </main.content>

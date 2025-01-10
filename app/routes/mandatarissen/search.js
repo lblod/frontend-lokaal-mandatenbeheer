@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+
 import {
   placeholderNietBeschikbaar,
   placeholderOnafhankelijk,
@@ -53,8 +54,10 @@ export default class MandatarissenSearchRoute extends Route {
       })
     );
 
-    const personen = await this.getPersonen(params, selectedPeriod);
-
+    const personenWithMandatarissen = await this.getPersoonWithMandatarissen(
+      params,
+      selectedPeriod
+    );
     const allBestuurfunctieCodes = [];
     const mandatenVoorPeriode = await this.store.query('mandaat', {
       'filter[bevat-in][heeft-bestuursperiode][:id:]': selectedPeriod.id,
@@ -69,7 +72,7 @@ export default class MandatarissenSearchRoute extends Route {
       await this.fractieApi.samenwerkingForBestuursperiode(selectedPeriod.id);
 
     return {
-      personen,
+      personenWithMandatarissen,
       bestuursPeriods: periodMap,
       selectedPeriod: { period: selectedPeriod, disabled: false },
       bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
@@ -82,12 +85,12 @@ export default class MandatarissenSearchRoute extends Route {
       selectedFracties: params.binnenFractie,
       page: {
         number: 0,
-        size: personen.length,
+        size: personenWithMandatarissen.length,
       },
     };
   }
 
-  async getPersonen(params, bestuursperiode) {
+  async getPersoonWithMandatarissen(params, bestuursperiode) {
     const queryParams = {
       sort: params.sort,
       page: {
@@ -104,6 +107,7 @@ export default class MandatarissenSearchRoute extends Route {
         'bekleedt.bevat-in.heeft-bestuursperiode',
         'heeft-lidmaatschap',
         'heeft-lidmaatschap.binnen-fractie',
+        'status',
       ].join(','),
     };
 
@@ -122,16 +126,66 @@ export default class MandatarissenSearchRoute extends Route {
       queryParams['filter[:or:][:has-no:heeft-lidmaatschap]'] = true;
     }
     const mandatarissen = await this.store.query('mandataris', queryParams);
-    const personen = (
-      await Promise.all(
-        mandatarissen.map(async (mandataris) => {
-          if (!params.activeMandatarissen || (await mandataris.isActive)) {
-            return await mandataris.get('isBestuurlijkeAliasVan');
+    const persoonWithMandatarissen = new Map();
+
+    await Promise.all(
+      mandatarissen.map(async (mandataris) => {
+        if (!params.activeMandatarissen || mandataris.isActive) {
+          const persoon = await mandataris.get('isBestuurlijkeAliasVan');
+          if (persoon) {
+            if (!persoonWithMandatarissen.has(persoon.id)) {
+              persoonWithMandatarissen.set(persoon.id, {
+                persoon,
+                mandatarissen: [],
+              });
+            }
+            const persoonHasMoreThanOneMandataris =
+              persoonWithMandatarissen.get(persoon.id).mandatarissen.length >=
+              1;
+
+            persoonWithMandatarissen.get(persoon.id).mandatarissen.push({
+              mandataris,
+              isSubRow: persoonHasMoreThanOneMandataris,
+              rowData: await this.getRowDataForMandataris(mandataris, persoon),
+            });
           }
-        })
-      )
-    ).filter((p) => p);
-    return [...new Set(personen)];
+        }
+      })
+    );
+
+    return Array.from(persoonWithMandatarissen.values());
+  }
+
+  async getRowDataForMandataris(mandataris, persoon) {
+    const lidmaatschap = await mandataris.heeftLidmaatschap;
+    const mandaat = await mandataris.bekleedt;
+    const bestuursfunctie = await mandaat.bestuursfunctie;
+    const bestuursorganenInTijd = await mandaat.bevatIn;
+    let bestuursorgaan = null;
+    let fractieLabel = null;
+
+    if (bestuursorganenInTijd.length >= 1) {
+      const bestuursorgaanInTijd = bestuursorganenInTijd.at(0);
+      bestuursorgaan = await bestuursorgaanInTijd.isTijdsspecialisatieVan;
+    }
+    if (!lidmaatschap) {
+      fractieLabel = 'Niet beschikbaar';
+    } else {
+      fractieLabel = (await lidmaatschap.binnenFractie)?.naam;
+    }
+
+    return {
+      mandataris: mandataris,
+      fractie: fractieLabel,
+      bestuursorgaan: {
+        label: bestuursorgaan?.naam,
+        routeModelId: bestuursorgaan?.id,
+      },
+      mandaat: {
+        label: bestuursfunctie.label,
+        routeModelIds: [persoon.id, mandataris.id],
+      },
+    };
   }
 
   setupController(controller) {
