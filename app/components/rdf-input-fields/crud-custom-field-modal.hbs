@@ -63,25 +63,26 @@
     </form>
   </:body>
   <:footer>
-    <AuButtonGroup>
-      <Shared::Tooltip
-        @showTooltip={{false}}
-        @tooltipText="Geen aanpassingen aan het veld gevonden"
-        @alignment="left"
-      >
-        <AuButton
-          {{on "click" (perform this.saveChanges)}}
-          @disabled={{not this.canSaveChanges}}
-          @loading={{this.saveChanges.isRunning}}
+    <div class="au-u-flex au-u-flex--between">
+      <AuButtonGroup>
+        <Shared::Tooltip
+          @showTooltip={{false}}
+          @tooltipText="Geen aanpassingen aan het veld gevonden"
+          @alignment="left"
         >
-          {{this.saveText}}
-        </AuButton>
-      </Shared::Tooltip>
-      {{#if @isCreating}}
+          <AuButton
+            {{on "click" (perform this.saveChanges)}}
+            @disabled={{not this.canSaveChanges}}
+            @loading={{this.saveChanges.isRunning}}
+          >
+            {{this.saveText}}
+          </AuButton>
+        </Shared::Tooltip>
         <AuButton @skin="secondary" {{on "click" this.closeModal}}>
           Annuleer
         </AuButton>
-      {{else}}
+      </AuButtonGroup>
+      {{#unless @isCreating}}
         <AuButton
           @skin="secondary"
           @alert={{true}}
@@ -92,8 +93,8 @@
         >
           Verwijder
         </AuButton>
-      {{/if}}
-    </AuButtonGroup>
+      {{/unless}}
+    </div>
   </:footer>
 
 </AuModal>
