@@ -11,11 +11,15 @@ import { consume } from 'ember-provide-consume-context';
 import { JSON_API_TYPE, SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { PROV } from 'frontend-lmb/rdf/namespaces';
 import { TEXT_CUSTOM_DISPLAY_TYPE_ID } from 'frontend-lmb/utils/well-known-ids';
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class RdfInputFieldCrudCustomFieldModalComponent extends Component {
   @consume('form-definition') formDefinition;
+  @consume('on-form-update') onFormUpdate;
 
   @service store;
+  @service toaster;
+  @service formReplacements;
 
   @tracked isRemovingField;
 
@@ -31,14 +35,18 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   constructor() {
     super(...arguments);
 
-    if (this.args.isCreating) {
-      this.displayTypes.then((displayTypes) => {
-        this.displayType = displayTypes.findBy(
-          'id',
-          TEXT_CUSTOM_DISPLAY_TYPE_ID
-        );
-      });
+    let byProperty = 'id';
+    let withValue = TEXT_CUSTOM_DISPLAY_TYPE_ID;
+    if (!this.args.isCreating) {
+      const { label, displayType } = this.args.field;
+      this.fieldName = label;
+      byProperty = 'uri';
+      withValue = displayType;
     }
+
+    this.displayTypes.then((displayTypes) => {
+      this.displayType = displayTypes.findBy(byProperty, withValue);
+    });
   }
 
   @action
@@ -47,7 +55,40 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     this[name] = value;
   }
 
-  saveChanges = task(async () => {});
+  saveChanges = task(async () => {
+    if (!this.args.isCreating) {
+      await this.removeField();
+    }
+    try {
+      const result = await fetch(
+        `/form-content/${this.formDefinition.id}/fields`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': JSON_API_TYPE,
+          },
+          body: JSON.stringify({
+            displayType: this.displayType.uri,
+            libraryEntryUri: this.libraryFieldType.uri,
+            order: 9000,
+            name: this.fieldName,
+          }),
+        }
+      );
+
+      const body = await result.json();
+      const newFormId = body.id;
+      this.formReplacements.setReplacement(this.formDefinition.id, newFormId);
+      this.onFormUpdate();
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het opslaan van het veld.'
+      );
+      return;
+    }
+    this.showEditFieldModal = false;
+  });
 
   @action
   selectLibraryFieldType(libraryEntry) {
@@ -99,6 +140,19 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     return this.store.findAll('display-type').then((entries) => {
       return entries.sortBy('label');
     });
+  }
+
+  get libraryEntryUri() {
+    const localStore = new ForkingStore();
+    localStore.parse(this.formDefinition.formTtl, SOURCE_GRAPH, 'text/turtle');
+    const libraryEntree = localStore.any(
+      this.args.field.uri,
+      PROV('wasDerivedFrom'),
+      null,
+      SOURCE_GRAPH
+    );
+
+    return libraryEntree?.value;
   }
 
   get libraryFieldOptions() {
@@ -157,7 +211,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   get canSelectTypeForEntry() {
-    return this.libraryFieldType === this.customFieldEntry;
+    if (this.args.isCreating) {
+      return this.libraryFieldType === this.customFieldEntry;
+    }
+
+    return this.libraryEntryUri === this.customFieldEntry.uri;
   }
 
   get title() {
