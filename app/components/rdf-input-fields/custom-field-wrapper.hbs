@@ -10,7 +10,7 @@
       @skin="link-secondary"
       @icon="pencil"
       @hideText={{true}}
-      {{on "click" (fn (mut this.showEditFieldModal) true)}}
+      {{on "click" (fn (mut this.showModal) true)}}
     >
       Pas aan
     </AuButton>
@@ -31,70 +31,10 @@
   {{/each}}
 {{/unless}}
 
-<AuModal
-  @modalOpen={{this.showEditFieldModal}}
-  @closeModal={{this.closeEditFieldModal}}
-  @closable={{true}}
-  @title="Pas veld aan"
-  {{did-insert this.loadCurrentFieldInfo}}
->
-  <form class="au-c-form au-o-box au-o-flow" {{on "input" this.updateField}}>
-    <AuFormRow @alignment="default">
-      <AuLabel @required={{true}} for="name">Naam</AuLabel>
-      <AuInput
-        @width="block"
-        @iconAlignment="left"
-        value={{this.name}}
-        name="name"
-        id="name"
-      />
-    </AuFormRow>
-    <AuFormRow @alignment="default" class="au-form-row-full-width">
-      <CustomFormFields::DisplayTypeSelector
-        @disabled={{this.libraryEntree}}
-        @displayTypeUri={{this.type}}
-        @variableName="type"
-        @label="Type"
-        @onTypeUpdated={{this.updateField}}
-      />
-    </AuFormRow>
-    {{!-- Commented because we do not want to show the order as a number here for demo
-     <AuFormRow @alignment="default">
-      <AuLabel @required={{true}} for="type">Positie in formulier</AuLabel>
-      <AuInput
-        @width="block"
-        @iconAlignment="left"
-        value={{this.order}}
-        name="order"
-        id="order"
-      />
-    </AuFormRow> --}}
-    <AuFormRow>
-      <AuButtonGroup>
-        <Shared::Tooltip
-          @showTooltip={{false}}
-          @tooltipText="Geen aanpassingen aan het veld gevonden"
-          @alignment="left"
-        >
-          <AuButton
-            {{on "click" (perform this.saveChanges)}}
-            @disabled={{not this.canSaveChanges}}
-            @loading={{this.saveChanges.isRunning}}
-          >
-            Pas aan
-          </AuButton>
-        </Shared::Tooltip>
-        <AuButton
-          @skin="secondary"
-          @alert={{true}}
-          @disabled={{this.saveChanges.isRunning}}
-          @loading={{this.removing}}
-          @loadingMessage="Het veld wordt verwijderd"
-          {{on "click" this.onRemove}}
-        >
-          Verwijder
-        </AuButton>
-      </AuButtonGroup>
-    </AuFormRow>
-  </form>
-</AuModal>
+<RdfInputFields::CrudCustomFieldModal
+  @isCreating={{false}}
+  @showModal={{this.showModal}}
+  @onCloseModal={{fn (mut this.showModal) false}}
+  @form={{@form}}
+  @field={{@field}}
+/>
