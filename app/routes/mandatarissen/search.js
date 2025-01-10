@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+
 import {
   placeholderNietBeschikbaar,
   placeholderOnafhankelijk,
@@ -138,15 +139,53 @@ export default class MandatarissenSearchRoute extends Route {
                 mandatarissen: [],
               });
             }
-            persoonWithMandatarissen
-              .get(persoon.id)
-              .mandatarissen.push(mandataris);
+            const persoonHasMoreThanOneMandataris =
+              persoonWithMandatarissen.get(persoon.id).mandatarissen.length >=
+              1;
+
+            persoonWithMandatarissen.get(persoon.id).mandatarissen.push({
+              mandataris,
+              isSubRow: persoonHasMoreThanOneMandataris,
+              rowData: await this.getRowDataForMandataris(mandataris, persoon),
+            });
           }
         }
       })
     );
 
     return Array.from(persoonWithMandatarissen.values());
+  }
+
+  async getRowDataForMandataris(mandataris, persoon) {
+    const lidmaatschap = await mandataris.heeftLidmaatschap;
+    const mandaat = await mandataris.bekleedt;
+    const bestuursfunctie = await mandaat.bestuursfunctie;
+    const bestuursorganenInTijd = await mandaat.bevatIn;
+    let bestuursorgaan = null;
+    let fractieLabel = null;
+
+    if (bestuursorganenInTijd.length >= 1) {
+      const bestuursorgaanInTijd = bestuursorganenInTijd.at(0);
+      bestuursorgaan = await bestuursorgaanInTijd.isTijdsspecialisatieVan;
+    }
+    if (!lidmaatschap) {
+      fractieLabel = 'Niet beschikbaar';
+    } else {
+      fractieLabel = (await lidmaatschap.binnenFractie)?.naam;
+    }
+
+    return {
+      mandataris: mandataris,
+      fractie: fractieLabel,
+      bestuursorgaan: {
+        label: bestuursorgaan?.naam,
+        routeModelId: bestuursorgaan?.id,
+      },
+      mandaat: {
+        label: bestuursfunctie.label,
+        routeModelIds: [persoon.id, mandataris.id],
+      },
+    };
   }
 
   setupController(controller) {

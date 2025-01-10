@@ -1,7 +1,7 @@
 {{! Naam}}
-<td {{did-insert this.getSubRowData}}>
+<td>
   <div class="au-u-flex au-u-flex--row">
-    <span style={{if (eq this.subRows.length 1) "visibility: hidden" ""}}>
+    <span style={{if this.hasOnlyOneMandaat "visibility: hidden" ""}}>
       <AuButton
         @skin="naked"
         @icon={{this.iconSubRowOpen}}
@@ -34,34 +34,52 @@
   {{#unless this.isSubRowOpen}}
     <Mandaat::FoldedFracties
       @persoon={{@persoon}}
-      @mandatarissen={{@mandatarissen}}
+      @mandatarissen={{this.mandatarissen}}
     />
   {{/unless}}
 </td>
 
 {{! Orgaan}}
 <td>
-  {{#unless this.isSubRowOpen}}
-    <Mandatarissen::BestuursorganenAsLinks @mandatarissen={{@mandatarissen}} />
-  {{/unless}}
+  {{#if this.showCombinedInfo}}
+    <Mandatarissen::BestuursorganenAsLinks
+      @mandatarissen={{this.mandatarissen}}
+    />
+  {{/if}}
+  {{#if this.hasOnlyOneMandaat}}
+    <LinkTo
+      @route="organen.orgaan"
+      @model={{this.firstRow.rowData.bestuursorgaan.routeModelId}}
+      class="au-c-link"
+    >
+      {{this.firstRow.rowData.bestuursorgaan.label}}
+    </LinkTo>
+  {{/if}}
 </td>
 
 {{! Mandaat}}
 <td>
-  {{#unless this.isSubRowOpen}}
+  {{#if this.showCombinedInfo}}
     <Mandatarissen::MandatenAsLinks
       @persoon={{@persoon}}
-      @mandatarissen={{@mandatarissen}}
+      @mandatarissen={{this.mandatarissen}}
     />
-  {{/unless}}
+  {{/if}}
+  {{#if this.hasOnlyOneMandaat}}
+    <LinkTo
+      @route="mandatarissen.persoon.mandataris"
+      @models={{this.firstRow.rowData.mandaat.routeModelIds}}
+      class="au-c-link"
+    >
+      {{this.firstRow.rowData.mandaat.label}}
+    </LinkTo>
+  {{/if}}
 </td>
 
 {{! Status}}
 <td>
-  {{#if (and (eq this.subRows.length 1) this.firstSubRow)}}
-    <Mandaat::MandatarisStatusPill
-      @mandataris={{this.firstSubRow.mandataris}}
-    />
+  {{#if (eq this.mandatarissen.length 1)}}
+    <Mandaat::MandatarisStatusPill @mandataris={{this.firstRow.mandataris}} />
   {{/if}}
 </td>
 
