@@ -4,5 +4,52 @@
   @closable={{true}}
   @title={{this.title}}
 >
-  modal
+  <:body>
+    <form class="au-c-form au-o-box au-o-flow" {{on "input" this.updateField}}>
+      <AuFormRow @alignment="default">
+        <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
+        <AuInput
+          @width="block"
+          @iconAlignment="left"
+          value={{this.name}}
+          name="fieldName"
+          id="fieldName"
+        />
+      </AuFormRow>
+    </form>
+  </:body>
+  <:footer>
+    <AuButtonGroup>
+      <Shared::Tooltip
+        @showTooltip={{false}}
+        @tooltipText="Geen aanpassingen aan het veld gevonden"
+        @alignment="left"
+      >
+        <AuButton
+          {{on "click" (perform this.saveChanges)}}
+          @disabled={{not this.canSaveChanges}}
+          @loading={{this.saveChanges.isRunning}}
+        >
+          {{this.saveText}}
+        </AuButton>
+      </Shared::Tooltip>
+      {{#if @isCreating}}
+        <AuButton @skin="secondary" {{on "click" this.closeModal}}>
+          Annuleer
+        </AuButton>
+      {{else}}
+        <AuButton
+          @skin="secondary"
+          @alert={{true}}
+          @disabled={{this.saveChanges.isRunning}}
+          @loading={{this.isRemovingField}}
+          @loadingMessage="Het veld wordt verwijderd"
+          {{on "click" this.onRemove}}
+        >
+          Verwijder
+        </AuButton>
+      {{/if}}
+    </AuButtonGroup>
+  </:footer>
+
 </AuModal>
