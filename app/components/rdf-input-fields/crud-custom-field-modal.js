@@ -83,6 +83,9 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @action
   closeModal() {
     if (this.args.onCloseModal) {
+      this.fieldName = null;
+      this.libraryFieldType = null;
+      this.displayType = null;
       this.args.onCloseModal();
     }
   }
@@ -123,15 +126,21 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   get canSaveChanges() {
-    return this.fieldHasChanged && this.fieldName;
+    return (
+      this.fieldHasChanged && this.hasValidFieldName && this.libraryFieldType
+    );
   }
 
   get fieldHasChanged() {
     if (this.args.isCreating) {
-      return true;
+      return this.fieldName && this.libraryFieldType;
     }
 
     return this.fieldName !== this.args.field.label;
+  }
+
+  get hasValidFieldName() {
+    return this.fieldName || this.fieldName.trim().length > 1;
   }
 
   get title() {
