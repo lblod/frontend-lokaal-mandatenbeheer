@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
+
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+
 import { provide } from 'ember-provide-consume-context';
 
 export default class EditableFormComponent extends Component {
@@ -11,6 +13,8 @@ export default class EditableFormComponent extends Component {
   @service formReplacements;
   @service semanticFormRepository;
   @service features;
+
+  @tracked showModal = false;
 
   constructor() {
     super(...arguments);
@@ -27,6 +31,7 @@ export default class EditableFormComponent extends Component {
     );
     this.currentForm = form;
     this.loading = false;
+    this.showModal = false;
   }
 
   get editableFormsEnabled() {
