@@ -31,6 +31,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @tracked fieldName;
   @tracked libraryFieldType = this.customFieldEntry;
   @tracked displayType;
+  @tracked order;
 
   constructor() {
     super(...arguments);
@@ -38,12 +39,16 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     let byProperty = 'id';
     let withValue = TEXT_CUSTOM_DISPLAY_TYPE_ID;
     if (!this.args.isCreating) {
-      const { label, displayType } = this.args.field;
+      const { label, displayType, order } = this.args.field;
+      console.log(`${label}: order = ${order}`);
+
       this.fieldName = label;
+      this.order = order;
       byProperty = 'uri';
       withValue = displayType;
     }
 
+    this.order = 9000; // This is the default order for the field
     this.displayTypes.then((displayTypes) => {
       this.displayType = displayTypes.findBy(byProperty, withValue);
     });
@@ -59,6 +64,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     if (!this.args.isCreating) {
       await this.removeField();
     }
+    console.log(`${this.fieldName}: order = ${this.order}`);
     try {
       const result = await fetch(
         `/form-content/${this.formDefinition.id}/fields`,
@@ -70,7 +76,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
           body: JSON.stringify({
             displayType: this.displayType.uri,
             libraryEntryUri: this.libraryFieldType.uri,
-            order: 9000,
+            order: this.order,
             name: this.fieldName,
           }),
         }
