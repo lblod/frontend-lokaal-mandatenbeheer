@@ -8,9 +8,23 @@
     @customHistoryMessage={{@customHistoryMessage}}
   >
     {{#if this.editableFormsEnabled}}
-      <GenerateCustomFieldButton
+      <AuButton
+        @skin="link"
+        @icon="plus"
+        {{on "click" (fn (mut this.showModal) true)}}
+        class="au-u-padding-left-none au-u-margin-bottom"
+      >
+        Voeg een veld toe
+      </AuButton>
+
+      {{yield}}
+
+      <RdfInputFields::CrudCustomFieldModal
+        @isCreating={{true}}
+        @showModal={{this.showModal}}
+        @onCloseModal={{this.onFormUpdate}}
         @form={{this.currentForm}}
-        @onUpdate={{this.onFormUpdate}}
+        @field={{@field}}
       />
     {{/if}}
     {{yield}}
