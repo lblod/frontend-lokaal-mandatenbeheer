@@ -16,6 +16,28 @@
           id="fieldName"
         />
       </AuFormRow>
+      {{#if @isCreating}}
+        <AuFormRow class="au-form-row-full-width">
+          <AuLabel @required={{true}} for="library-entry">Uit bibliotheek</AuLabel>
+          <PowerSelect
+            @allowClear={{false}}
+            @renderInPlace={{false}}
+            @searchEnabled={{true}}
+            @loadingMessage="Aan het laden..."
+            @noMatchesMessage="Geen velden gevonden"
+            @searchMessage="Type om te zoeken"
+            @searchField="name"
+            @options={{this.libraryFieldOptions}}
+            @selected={{this.libraryFieldType}}
+            @onChange={{this.selectLibraryFieldType}}
+            id="library-entry"
+            name="libraryEntree"
+            as |selected|
+          >
+            {{selected.name}}
+          </PowerSelect>
+        </AuFormRow>
+      {{/if}}
     </form>
   </:body>
   <:footer>
