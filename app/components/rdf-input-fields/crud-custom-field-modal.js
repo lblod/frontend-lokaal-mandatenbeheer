@@ -59,6 +59,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     });
   }
 
+  @action
+  selectDisplayType(displayType) {
+    this.displayType = displayType;
+  }
+
   async removeField() {
     await fetch(`/form-content/fields`, {
       method: 'DELETE',
@@ -133,14 +138,26 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   get fieldHasChanged() {
     if (this.args.isCreating) {
-      return this.fieldName && this.libraryFieldType;
+      return true;
     }
 
-    return this.fieldName !== this.args.field.label;
+    if (!this.hasValidFieldName) {
+      return false;
+    }
+
+    if (this.canSelectTypeForEntry) {
+      return this.displayType !== this.args.field.type;
+    }
+
+    return false;
   }
 
   get hasValidFieldName() {
-    return this.fieldName || this.fieldName.trim().length > 1;
+    return this.fieldName && this.fieldName.trim().length > 1;
+  }
+
+  get canSelectTypeForEntry() {
+    return this.libraryFieldType === this.customFieldEntry;
   }
 
   get title() {
