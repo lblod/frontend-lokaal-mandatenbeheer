@@ -58,7 +58,8 @@
         @onTypeUpdated={{this.updateField}}
       />
     </AuFormRow>
-    <AuFormRow @alignment="default">
+    {{!-- Commented because we do not want to show the order as a number here for demo
+     <AuFormRow @alignment="default">
       <AuLabel @required={{true}} for="type">Positie in formulier</AuLabel>
       <AuInput
         @width="block"
@@ -67,7 +68,7 @@
         name="order"
         id="order"
       />
-    </AuFormRow>
+    </AuFormRow> --}}
     <AuFormRow>
       <AuButtonGroup>
         <Shared::Tooltip
