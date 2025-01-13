@@ -24,6 +24,8 @@ import RdfInputFieldsCustomDateInputComponent from 'frontend-lmb/components/rdf-
 import RdfInputFieldsCustomNumberInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-number-input';
 import RdfInputFieldsCustomTextInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-text-input';
 
+import CustomFormFieldsCodelistInputComponent from 'frontend-lmb/components/custom-form-fields/codelist-input';
+
 export const registerCustomFormFields = () => {
   registerFormFields([
     {
@@ -136,6 +138,11 @@ export const registerCustomFormFields = () => {
     {
       displayType: 'http://lblod.data.gift/display-types/lmb/custom-text-input',
       edit: RdfInputFieldsCustomTextInputComponent,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/lmb/custom-codelist-input',
+      edit: CustomFormFieldsCodelistInputComponent,
     },
   ]);
 };
