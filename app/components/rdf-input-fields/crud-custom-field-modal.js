@@ -54,10 +54,21 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     this.fieldName = event.target?.value;
   }
 
+  updateField = task(async () => {
+    await fetch(`/form-content/${this.formDefinition.id}/fields`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': JSON_API_TYPE,
+      },
+      body: JSON.stringify({
+        field: this.args.field.uri,
+        displayType: this.displayType.uri,
+        name: this.fieldName,
+      }),
+    });
+  });
+
   saveChanges = task(async () => {
-    if (!this.args.isCreating) {
-      await this.removeField();
-    }
     try {
       const result = await fetch(
         `/form-content/${this.formDefinition.id}/fields`,
@@ -103,7 +114,9 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     this.displayType = displayType;
   }
 
-  async removeField() {
+  @action
+  async onRemove() {
+    this.isRemovingField = true;
     await fetch(`/form-content/fields`, {
       method: 'DELETE',
       headers: {
@@ -114,12 +127,6 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         formUri: this.args.form.uri,
       }),
     });
-  }
-
-  @action
-  async onRemove() {
-    this.isRemovingField = true;
-    await this.removeField();
     this.onFormUpdate();
     this.isRemovingField = false;
   }
@@ -190,18 +197,18 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   get fieldHasChanged() {
     if (this.args.isCreating) {
-      return true;
-    }
-
-    if (!this.hasValidFieldName) {
-      return false;
+      return this.hasValidFieldName;
     }
 
     if (this.canSelectTypeForEntry) {
-      return this.displayType !== this.args.field.type;
+      return (
+        this.hasValidFieldName &&
+        (this.fieldName !== this.args.field.label ||
+          this.displayType.uri !== this.args.field.displayType)
+      );
     }
 
-    return this.fieldName !== this.args.field.label;
+    return this.hasValidFieldName && this.fieldName !== this.args.field.label;
   }
 
   get hasValidFieldName() {
@@ -216,19 +223,19 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     return this.libraryEntryUri === this.customFieldEntry.uri;
   }
 
+  get saveTooltipText() {
+    if (this.args.isCreating) {
+      return 'Vul eerst al de velden in';
+    }
+
+    return 'Geen aanpassingen gevonden';
+  }
+
   get title() {
     if (this.args.isCreating) {
       return 'Voeg een veld toe';
     }
 
     return 'Pas een veld aan';
-  }
-
-  get saveText() {
-    if (this.args.isCreating) {
-      return 'Bewaar';
-    }
-
-    return 'Pas aan';
   }
 }
