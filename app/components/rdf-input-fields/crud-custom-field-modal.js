@@ -50,9 +50,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   @action
-  updateField(event) {
-    const { name, value } = event.target;
-    this[name] = value;
+  updateFieldName(event) {
+    this.fieldName = event.target?.value;
   }
 
   saveChanges = task(async () => {

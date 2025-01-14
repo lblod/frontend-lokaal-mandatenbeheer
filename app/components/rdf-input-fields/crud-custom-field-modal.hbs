@@ -5,15 +5,15 @@
   @title={{this.title}}
 >
   <:body>
-    <form class="au-c-form au-o-box au-o-flow" {{on "input" this.updateField}}>
+    <form class="au-c-form au-o-box au-o-flow">
       <AuFormRow @alignment="default">
         <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
         <AuInput
           @width="block"
           @iconAlignment="left"
           value={{this.fieldName}}
-          name="fieldName"
           id="fieldName"
+          {{on "input" this.updateFieldName}}
         />
       </AuFormRow>
       {{#if @isCreating}}
@@ -31,7 +31,6 @@
             @selected={{this.libraryFieldType}}
             @onChange={{this.selectLibraryFieldType}}
             id="library-entry"
-            name="libraryEntree"
             as |selected|
           >
             {{selected.name}}
@@ -53,7 +52,6 @@
             @selected={{this.displayType}}
             @onChange={{this.selectDisplayType}}
             id="display-type"
-            name="displayType"
             as |selected|
           >
             {{selected.label}}
