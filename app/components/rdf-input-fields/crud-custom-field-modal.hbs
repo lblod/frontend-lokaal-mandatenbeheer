@@ -73,6 +73,7 @@
               {{on "click" (perform this.saveChanges)}}
               @disabled={{not this.canSaveChanges}}
               @loading={{this.saveChanges.isRunning}}
+              @loadingMessage="Het veld wordt aangemaakt"
             >
               Bewaar
             </AuButton>
@@ -81,6 +82,7 @@
               {{on "click" (perform this.updateField)}}
               @disabled={{not this.canSaveChanges}}
               @loading={{this.updateField.isRunning}}
+              @loadingMessage="Het veld wordt aangepast"
             >
               Pas aan
             </AuButton>
