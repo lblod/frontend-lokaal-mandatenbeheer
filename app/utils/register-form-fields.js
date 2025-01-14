@@ -24,10 +24,6 @@ import RdfInputFieldsCustomDateInputComponent from 'frontend-lmb/components/rdf-
 import RdfInputFieldsCustomNumberInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-number-input';
 import RdfInputFieldsCustomTextInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-text-input';
 
-import CustomFormFieldsCodelistInputComponent from 'frontend-lmb/components/custom-form-fields/codelist-input';
-import CustomFormFieldsNationalityInputComponent from 'frontend-lmb/components/custom-form-fields/nationality-input';
-import CustomFormFieldsTelephoneInputComponent from 'frontend-lmb/components/custom-form-fields/telephone-input';
-
 export const registerCustomFormFields = () => {
   registerFormFields([
     {
@@ -140,21 +136,6 @@ export const registerCustomFormFields = () => {
     {
       displayType: 'http://lblod.data.gift/display-types/lmb/custom-text-input',
       edit: RdfInputFieldsCustomTextInputComponent,
-    },
-    {
-      displayType:
-        'http://lblod.data.gift/display-types/lmb/custom-codelist-input',
-      edit: CustomFormFieldsCodelistInputComponent,
-    },
-    {
-      displayType:
-        'http://lblod.data.gift/display-types/lmb/custom-nationality-input',
-      edit: CustomFormFieldsNationalityInputComponent,
-    },
-    {
-      displayType:
-        'http://lblod.data.gift/display-types/lmb/custom-telephone-input',
-      edit: CustomFormFieldsTelephoneInputComponent,
     },
   ]);
 };
