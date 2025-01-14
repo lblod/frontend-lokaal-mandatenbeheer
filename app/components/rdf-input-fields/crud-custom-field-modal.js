@@ -40,7 +40,6 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     let withValue = TEXT_CUSTOM_DISPLAY_TYPE_ID;
     if (!this.args.isCreating) {
       const { label, displayType, order } = this.args.field;
-      console.log(`${label}: order = ${order}`);
 
       this.fieldName = label;
       this.order = order;
@@ -209,7 +208,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       return this.displayType !== this.args.field.type;
     }
 
-    return false;
+    return this.fieldName !== this.args.field.label;
   }
 
   get hasValidFieldName() {
