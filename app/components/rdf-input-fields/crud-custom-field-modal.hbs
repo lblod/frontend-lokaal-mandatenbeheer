@@ -64,17 +64,27 @@
     <div class="au-u-flex au-u-flex--between">
       <AuButtonGroup>
         <Shared::Tooltip
-          @showTooltip={{false}}
-          @tooltipText="Geen aanpassingen aan het veld gevonden"
+          @showTooltip={{not this.canSaveChanges}}
+          @tooltipText={{this.saveTooltipText}}
           @alignment="left"
         >
-          <AuButton
-            {{on "click" (perform this.saveChanges)}}
-            @disabled={{not this.canSaveChanges}}
-            @loading={{this.saveChanges.isRunning}}
-          >
-            {{this.saveText}}
-          </AuButton>
+          {{#if @isCreating}}
+            <AuButton
+              {{on "click" (perform this.saveChanges)}}
+              @disabled={{not this.canSaveChanges}}
+              @loading={{this.saveChanges.isRunning}}
+            >
+              Bewaar
+            </AuButton>
+          {{else}}
+            <AuButton
+              {{on "click" (perform this.updateField)}}
+              @disabled={{not this.canSaveChanges}}
+              @loading={{this.updateField.isRunning}}
+            >
+              Pas aan
+            </AuButton>
+          {{/if}}
         </Shared::Tooltip>
         <AuButton @skin="secondary" {{on "click" this.closeModal}}>
           Annuleer
