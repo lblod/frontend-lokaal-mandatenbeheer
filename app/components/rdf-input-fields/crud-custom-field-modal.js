@@ -55,17 +55,27 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   updateField = task(async () => {
-    await fetch(`/form-content/${this.formDefinition.id}/fields`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': JSON_API_TYPE,
-      },
-      body: JSON.stringify({
-        field: this.args.field.uri,
-        displayType: this.displayType.uri,
-        name: this.fieldName,
-      }),
-    });
+    try {
+      await fetch(`/form-content/${this.formDefinition.id}/fields`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          field: this.args.field.uri.value,
+          displayType: this.displayType.uri,
+          name: this.fieldName,
+        }),
+      });
+      this.onFormUpdate();
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het opslaan van het veld.'
+      );
+      return;
+    }
+    this.showEditFieldModal = false;
   });
 
   saveChanges = task(async () => {
