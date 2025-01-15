@@ -25,7 +25,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @service formReplacements;
 
   @tracked isRemovingField;
-  @tracked wantsToRemove;
+  @tracked isFieldRequired;
 
   customFieldEntry = this.store.createRecord('library-entry', {
     name: 'Eigen veld',
@@ -45,7 +45,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       this.fieldName = label;
       withValue = displayType;
     }
-
+    this.isFieldRequired = this.args.isRequiredField ?? false;
     this.displayTypes.then((displayTypes) => {
       this.displayType = displayTypes.findBy('uri', withValue);
     });
@@ -60,6 +60,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     this.fieldName = event.target?.value;
   }
 
+  @action
+  toggleIsRequired() {
+    this.isFieldRequired = !this.isFieldRequired;
+  }
+
   updateField = task(async () => {
     try {
       await fetch(`/form-content/${this.formDefinition.id}/fields`, {
@@ -71,6 +76,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
           field: this.args.field.uri.value,
           displayType: this.displayType.uri,
           name: this.fieldName,
+          isRequired: !!this.isFieldRequired,
         }),
       });
       this.onFormUpdate();
@@ -226,15 +232,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       return this.hasValidFieldName;
     }
 
-    if (this.canSelectTypeForEntry) {
-      return (
-        this.hasValidFieldName &&
-        (this.fieldName !== this.args.field.label ||
-          this.displayType?.uri !== this.args.field.displayType)
-      );
-    }
-
-    return this.hasValidFieldName && this.fieldName !== this.args.field.label;
+    return (
+      (this.hasValidFieldName && this.fieldName !== this.args.field.label) ||
+      this.displayType.uri !== this.args.field.displayType ||
+      this.isFieldRequired != this.args.isRequiredField
+    );
   }
 
   get hasValidFieldName() {

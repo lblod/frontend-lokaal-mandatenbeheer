@@ -71,8 +71,36 @@
             {{selected.label}}
           </PowerSelect>
         </AuFormRow>
-      </form>
-    {{/if}}
+      <AuFormRow class="au-form-row-full-width">
+        <AuLabel @required={{true}} for="display-type">Type</AuLabel>
+        <PowerSelect
+          @allowClear={{false}}
+          @disabled={{not this.canSelectTypeForEntry}}
+          @renderInPlace={{false}}
+          @searchEnabled={{true}}
+          @loadingMessage="Aan het laden..."
+          @noMatchesMessage="Geen types gevonden"
+          @searchMessage="Typ om te zoeken"
+          @searchField="label"
+          @options={{this.displayTypes}}
+          @selected={{this.displayType}}
+          @onChange={{this.selectDisplayType}}
+          id="display-type"
+          as |selected|
+        >
+          {{selected.label}}
+        </PowerSelect>
+      </AuFormRow>
+      {{#unless @isCreating}}
+        <AuFormRow>
+          <AuToggleSwitch
+            @disabled={{@show}}
+            @checked={{this.isFieldRequired}}
+            @onChange={{this.toggleIsRequired}}
+          >Maak veld verplicht</AuToggleSwitch>
+        </AuFormRow>
+      {{/unless}}
+    </form>
   </:body>
   <:footer>
     <div class="au-u-flex au-u-flex--between">
