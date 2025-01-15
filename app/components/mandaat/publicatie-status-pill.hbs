@@ -1,21 +1,26 @@
 <div>
-  <AuPill
-    @skin={{if
-      (eq @mandataris.publicationStatus.label "Bekrachtigd")
-      "success"
-      (if
-        (eq @mandataris.publicationStatus.label "Effectief")
-        "warning"
-        (if (eq @mandataris.publicationStatus.label "Draft") "border" "default")
-      )
-    }}
-    @draft={{false}}
-    @size="regular"
-    @iconAlignment="left"
-    @hideText={{false}}
+  <Shared::Tooltip
+    @showTooltip={{this.effectiefIsLastStatus}}
+    @tooltipText={{this.lastStatusTooltipText}}
   >
-    {{or @mandataris.publicationStatus.label "Niet beschikbaar"}}
-  </AuPill>
+    <AuPill
+      @skin={{if
+        (eq this.status.label "Bekrachtigd")
+        "success"
+        (if
+          (eq this.status.label "Effectief")
+          "warning"
+          (if (eq this.status.label "Draft") "border" "default")
+        )
+      }}
+      @draft={{false}}
+      @size="regular"
+      @iconAlignment="left"
+      @hideText={{false}}
+    >
+      {{or this.status.label "Niet beschikbaar"}}
+    </AuPill>
+  </Shared::Tooltip>
   {{#if
     (and
       @showBekijkBewijs (await this.linkToDecision) this.isMandatarisBekrachtigd

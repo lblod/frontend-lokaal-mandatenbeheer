@@ -30,7 +30,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
         MANDATARIS_EXTRA_INFO_FORM_ID
       );
 
-    const bestuursorganen = await (await mandataris.bekleedt).get('bevatIn');
+    const bestuursorganen = await mandaat.bevatIn;
     const selectedBestuursperiode = (await bestuursorganen)[0]
       .heeftBestuursperiode;
     const isDistrict = this.currentSession.isDistrict;
@@ -58,6 +58,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       include: [
         'bekleedt.bestuursfunctie',
         'bekleedt.bevat-in',
+        'bekleedt.bevat-in.classificatie',
         'beleidsdomein',
         'status',
         'publication-status',
