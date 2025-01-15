@@ -10,8 +10,11 @@ import { consume } from 'ember-provide-consume-context';
 
 import { JSON_API_TYPE, SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { PROV } from 'frontend-lmb/rdf/namespaces';
-import { TEXT_CUSTOM_DISPLAY_TYPE_ID } from 'frontend-lmb/utils/well-known-ids';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
+import {
+  LIBRARY_ENTREES,
+  TEXT_CUSTOM_DISPLAY_TYPE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class RdfInputFieldCrudCustomFieldModalComponent extends Component {
   @consume('form-definition') formDefinition;
@@ -34,18 +37,17 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   constructor() {
     super(...arguments);
 
-    let byProperty = 'id';
-    let withValue = TEXT_CUSTOM_DISPLAY_TYPE_ID;
+    let withValue = TEXT_CUSTOM_DISPLAY_TYPE;
     if (!this.args.isCreating) {
       const { label, displayType } = this.args.field;
 
       this.fieldName = label;
-      byProperty = 'uri';
       withValue = displayType;
     }
+    console.log(this.formDefinition);
 
     this.displayTypes.then((displayTypes) => {
-      this.displayType = displayTypes.findBy(byProperty, withValue);
+      this.displayType = displayTypes.findBy('uri', withValue);
     });
   }
 
@@ -115,7 +117,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     this.displayTypes.then((types) => {
       this.displayType =
         types.findBy('uri', libraryEntry.get('displayType.uri')) ||
-        types.findBy('id', TEXT_CUSTOM_DISPLAY_TYPE_ID);
+        types.findBy('uri', TEXT_CUSTOM_DISPLAY_TYPE);
     });
   }
 
@@ -158,6 +160,10 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   get libraryEntryUri() {
+    if (!this.args.field) {
+      return null;
+    }
+
     const localStore = new ForkingStore();
     localStore.parse(this.formDefinition.formTtl, SOURCE_GRAPH, 'text/turtle');
     const libraryEntree = localStore.any(
@@ -230,7 +236,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       return this.libraryFieldType === this.customFieldEntry;
     }
 
-    return this.libraryEntryUri === this.customFieldEntry.uri;
+    return !LIBRARY_ENTREES.includes(this.libraryEntryUri);
   }
 
   get saveTooltipText() {
