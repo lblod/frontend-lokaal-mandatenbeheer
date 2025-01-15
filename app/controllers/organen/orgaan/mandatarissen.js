@@ -86,8 +86,9 @@ export default class OrganenMandatarissenController extends Controller {
     let isCurrent = false;
     const currentYear = new Date().getFullYear();
     if (
-      currentYear == this.model.selectedBestuursperiode.start ||
-      currentYear == this.model.selectedBestuursperiode.einde - 1
+      currentYear >= this.model.selectedBestuursperiode.start &&
+      (!this.model.selectedBestuursperiode.einde ||
+        currentYear < this.model.selectedBestuursperiode.einde)
     ) {
       isCurrent = true;
     }
