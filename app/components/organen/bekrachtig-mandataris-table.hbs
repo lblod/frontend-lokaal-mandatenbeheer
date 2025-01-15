@@ -55,10 +55,12 @@
 
     <c.body as |row|>
       <td>
-        <AuCheckbox
-          @checked={{@checkedByDefault}}
-          @onChange={{fn @onCheck row.id}}
-        />
+        {{#unless (eq row.publicationStatus.uri @bekrachtigdStatusUri)}}
+          <AuCheckbox
+            @checked={{@checkedByDefault}}
+            @onChange={{fn @onCheck row.id}}
+          />
+        {{/unless}}
       </td>
       <td>
         {{row.bekleedt.bestuursfunctie.label}}

@@ -25,10 +25,19 @@
   {{this.model.bestuursorgaan.naam}}
   {{this.model.selectedBestuursperiode.label}}
 </AuHeading>
-
+<AuAlert @icon="info-circle" @closable={{false}}>
+  De publicatiestatus
+  <strong>bekrachtigd</strong>
+  is definitief. Je kan mandatarissen met deze status niet terugzetten naar
+  effectief. Als je de status van zo'n mandataris wil aanpassen moet je de
+  <AuLinkExternal
+    href="mailto:lokaalmandatenbeheer@vlaanderen.be?subject=Bekrachtiging terugtrekken - Lokaal Mandatenbeheer"
+  >technische dienst contacteren</AuLinkExternal>
+</AuAlert>
 <Organen::BekrachtigMandatarisTable
   @content={{@model.mandatarissen}}
   @bestuursperiode={{@model.selectedBestuursperiode}}
+  @bekrachtigdStatusUri={{this.bekrachtigdStatusUri}}
   @sort={{this.sort}}
   @page={{this.page}}
   @size={{this.size}}
@@ -46,13 +55,18 @@
   @closeModal={{this.closeModal}}
 >
   <div class="au-o-box au-o-flow">
-    <AuAlert @icon="info-circle" @closable={{false}}>
-      De publicatiestatus
-      <strong>bekrachtigd</strong>
-      is definitief. Indien je mandatarissen hebt geselecteerd met deze
-      publicatiestatus, het is niet mogelijk deze terug naar effectief te
-      zetten.
-    </AuAlert>
+    {{#if (eq this.status "Bekrachtigd")}}
+      <AuAlert @icon="info-circle" @closable={{false}}>
+        De publicatiestatus
+        <strong>bekrachtigd</strong>
+        is definitief. Je kan mandatarissen met deze status niet terugzetten
+        naar effectief. Als je de status van zo'n mandataris wil aanpassen moet
+        je de
+        <AuLinkExternal
+          href="mailto:lokaalmandatenbeheer@vlaanderen.be?subject=Bekrachtiging terugtrekken - Lokaal Mandatenbeheer"
+        >technische dienst contacteren</AuLinkExternal>
+      </AuAlert>
+    {{/if}}
     <div>
       <AuLabel @required={{true}}>
         Nieuwe publicatiestatus

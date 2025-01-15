@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { isValidUri } from 'frontend-lmb/utils/is-valid-uri';
+import { MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class BulkBekrachtigingController extends Controller {
   @service mandatarisApi;
@@ -81,6 +82,10 @@ export default class BulkBekrachtigingController extends Controller {
     return false;
   }
 
+  get bekrachtigdStatusUri() {
+    return MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
+  }
+
   @action checkBox(mandataris, state) {
     if (state) {
       this.checked.add(mandataris);
@@ -95,9 +100,13 @@ export default class BulkBekrachtigingController extends Controller {
     if (state) {
       this.allChecked = true;
       this.model.mandatarissen.forEach((mandataris) => {
-        this.checked.add(mandataris.id);
+        if (
+          mandataris.publicationStatus.get('uri') != this.bekrachtigdStatusUri
+        ) {
+          this.checked.add(mandataris.id);
+        }
       });
-      this.setSize = this.model.mandatarissen.length;
+      this.setSize = this.checked.size;
     } else {
       this.allChecked = false;
       this.checked.clear();
