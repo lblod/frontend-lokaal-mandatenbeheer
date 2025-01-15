@@ -78,7 +78,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     }
   });
 
-  saveChanges = task(async () => {
+  createField = task(async () => {
     try {
       const result = await fetch(
         `/form-content/${this.formDefinition.id}/fields`,
