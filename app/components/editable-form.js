@@ -14,7 +14,7 @@ export default class EditableFormComponent extends Component {
   @service semanticFormRepository;
   @service features;
 
-  @tracked showModal = false;
+  @tracked showModal;
 
   constructor() {
     super(...arguments);

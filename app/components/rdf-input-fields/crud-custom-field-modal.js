@@ -44,7 +44,6 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       this.fieldName = label;
       withValue = displayType;
     }
-    console.log(this.formDefinition);
 
     this.displayTypes.then((displayTypes) => {
       this.displayType = displayTypes.findBy('uri', withValue);
@@ -77,7 +76,6 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       );
       return;
     }
-    this.showEditFieldModal = false;
   });
 
   saveChanges = task(async () => {
@@ -108,7 +106,6 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       );
       return;
     }
-    this.showEditFieldModal = false;
   });
 
   @action
