@@ -102,6 +102,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             displayType: this.displayType.uri,
             libraryEntryUri: this.libraryFieldType.uri,
             name: this.fieldName,
+            isRequired: !!this.isFieldRequired,
           }),
         }
       );
