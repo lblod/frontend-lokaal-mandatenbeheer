@@ -61,7 +61,8 @@
     placeholder="Zoek mandataris"
     {{on "input" (perform this.search value="target.value")}}
   />
-  <div class="au-u-muted au-u-bold">{{this.personCount}} Personen</div>
+  <div class="au-u-muted au-u-bold">{{this.personCount}}
+    {{if (eq this.personCount 1) "Persoon" "Personen"}}</div>
 </div>
 {{#if this.selectedPeriodIsCurrent}}
   <div class="au-o-box au-u-padding-top-none">
