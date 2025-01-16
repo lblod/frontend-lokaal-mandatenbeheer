@@ -63,8 +63,12 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
       include: [
         'is-bestuurlijke-alias-van',
         'bekleedt.bestuursfunctie',
+        'bekleedt.bevat-in',
+        'bekleedt.bevat-in.is-tijdsspecialisatie-van',
         'beleidsdomein',
         'heeft-lidmaatschap.binnen-fractie',
+        'publication-status',
+        'status',
       ].join(','),
     };
 
