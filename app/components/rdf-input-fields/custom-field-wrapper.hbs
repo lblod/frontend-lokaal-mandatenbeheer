@@ -2,11 +2,7 @@
   <div class="au-u-flex au-u-flex--between">
     <div class="flex-grow">
       <div class="au-u-flex au-u-flex--row">
-        {{#if this.isReadOnly}}
-          <AuLabel class="au-c-description-label">
-            {{@field.label}}
-          </AuLabel>
-        {{else}}
+        {{#unless this.isReadOnly}}
           <AuLabel @required={{this.isRequired}}>{{this.title}}</AuLabel>
           <AuButton
             @skin="link-secondary"
@@ -16,14 +12,17 @@
           >
             Pas aan
           </AuButton>
-        {{/if}}
+        {{/unless}}
       </div>
       <div
         class="au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny"
       >
         <div class="flex-grow">
           {{#if this.isReadOnly}}
-            <p>readonly view</p>
+            <ReadOnlyFieldForDisplayType
+              @field={{@field}}
+              @storeOptions={{this.storeOptions}}
+            />
           {{else}}
             {{yield}}
           {{/if}}
