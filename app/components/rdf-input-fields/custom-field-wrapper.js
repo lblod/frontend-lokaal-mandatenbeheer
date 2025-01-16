@@ -11,6 +11,7 @@ import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 export default class RdfInputFieldsCustomFieldWrapperComponent extends Component {
   @consume('on-form-update') onFormUpdate;
   @consume('form-definition') formDefinition;
+  @consume('is-read-only') isReadOnly;
 
   @tracked showModal;
 
