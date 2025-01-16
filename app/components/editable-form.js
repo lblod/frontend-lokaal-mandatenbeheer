@@ -54,4 +54,9 @@ export default class EditableFormComponent extends Component {
     this.showEditModal = false;
     this.onFormUpdate();
   }
+
+  @provide('is-read-only')
+  get isReadOnly() {
+    return this.args.isReadOnly;
+  }
 }
