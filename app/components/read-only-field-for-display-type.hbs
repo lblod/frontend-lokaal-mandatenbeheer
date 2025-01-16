@@ -1,0 +1,14 @@
+<span ...attributes>
+  {{#if this.value}}
+    <div class="au-u-flex au-u-flex--row">
+      <AuLabel class="au-c-description-label">
+        {{@field.label}}:
+      </AuLabel>
+      {{#if this.isTextField}}
+        <p
+          class="au-c-description-value au-u-margin-left-tiny"
+        >{{this.value}}</p>
+      {{/if}}
+    </div>
+  {{/if}}
+</span>
