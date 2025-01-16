@@ -32,6 +32,15 @@
     {{else}}
       Dit mandaat heeft geen bijkomende informatie.
     {{/if}}
+    <EditableForm
+      @isReadOnly={{true}}
+      @instanceId={{@mandataris.id}}
+      @form={{@form}}
+      @onCancel={{this.toggleModal}}
+      @onSave={{this.onSave}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
+      @customHistoryMessage={{true}}
+    />
   </div>
 </div>
 

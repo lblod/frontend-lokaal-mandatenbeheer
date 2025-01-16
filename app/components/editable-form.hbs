@@ -1,5 +1,6 @@
 {{#unless this.loading}}
   <SemanticForms::Instance
+    @show={{this.isReadOnly}}
     @instanceId={{@instanceId}}
     @form={{this.currentForm}}
     @onCancel={{@onCancel}}
@@ -10,14 +11,16 @@
     @saveTitle={{@saveTitle}}
   >
     {{#if this.editableFormsEnabled}}
-      <AuButton
-        @skin="link"
-        @icon="plus"
-        {{on "click" (fn (mut this.showEditModal) true)}}
-        class="au-u-padding-left-none au-u-margin-bottom"
-      >
-        Voeg een veld toe
-      </AuButton>
+      {{#unless this.isReadOnly}}
+        <AuButton
+          @skin="link"
+          @icon="plus"
+          {{on "click" (fn (mut this.showModal) true)}}
+          class="au-u-padding-left-none au-u-margin-bottom"
+        >
+          Voeg een veld toe
+        </AuButton>
+      {{/unless}}
 
       {{yield}}
 
