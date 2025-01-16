@@ -12,6 +12,7 @@ import { JSON_API_TYPE, SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { PROV } from 'frontend-lmb/rdf/namespaces';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import {
+  ADRES_CUSTOM_DISPLAY_TYPE,
   LIBRARY_ENTREES,
   TEXT_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
@@ -266,5 +267,9 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     }
 
     return 'Pas een veld aan';
+  }
+
+  get canShowRequiredToggle() {
+    return this.displayType.uri !== ADRES_CUSTOM_DISPLAY_TYPE;
   }
 }
