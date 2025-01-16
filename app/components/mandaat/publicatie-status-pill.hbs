@@ -4,15 +4,7 @@
     @tooltipText={{this.lastStatusTooltipText}}
   >
     <AuPill
-      @skin={{if
-        (eq this.status.label "Bekrachtigd")
-        "success"
-        (if
-          (eq this.status.label "Effectief")
-          "warning"
-          (if (eq this.status.label "Draft") "border" "default")
-        )
-      }}
+      @skin={{await this.skin}}
       @draft={{false}}
       @size="regular"
       @iconAlignment="left"

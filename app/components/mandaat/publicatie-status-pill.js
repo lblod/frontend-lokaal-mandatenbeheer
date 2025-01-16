@@ -35,4 +35,26 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
 
     return null;
   }
+
+  async getSkinForPill(statusPromise) {
+    const status = await statusPromise;
+    if (status.label === 'Bekrachtigd') {
+      return 'success';
+    }
+    if (status.label === 'Effectief') {
+      if (await this.effectiefIsLastStatus) {
+        return 'success';
+      }
+      return 'warning';
+    }
+    if (status.label === 'Draft') {
+      return 'border';
+    }
+
+    return 'default';
+  }
+
+  get skin() {
+    return this.getSkinForPill(this.status);
+  }
 }
