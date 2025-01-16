@@ -91,13 +91,15 @@
           {{selected.label}}
         </PowerSelect>
       </AuFormRow>
-      <AuFormRow>
-        <AuToggleSwitch
-          @disabled={{@show}}
-          @checked={{this.isFieldRequired}}
-          @onChange={{this.toggleIsRequired}}
-        >Maak veld verplicht</AuToggleSwitch>
-      </AuFormRow>
+      {{#if this.canShowRequiredToggle}}
+        <AuFormRow>
+          <AuToggleSwitch
+            @disabled={{@show}}
+            @checked={{this.isFieldRequired}}
+            @onChange={{this.toggleIsRequired}}
+          >Maak veld verplicht</AuToggleSwitch>
+        </AuFormRow>
+      {{/if}}
     </form>
   </:body>
   <:footer>
