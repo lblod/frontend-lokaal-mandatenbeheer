@@ -1,20 +1,31 @@
 import Component from '@glimmer/component';
 
 import { triplesForPath } from '@lblod/submission-form-helpers';
-import { isLiteral } from 'rdflib';
+import { isNamedNode, Literal } from 'rdflib';
+import moment from 'moment';
+
+import { DATE_CUSTOM_DISPLAY_TYPE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class ReadOnlyFieldForDisplayType extends Component {
-  get isTextField() {
-    return (
-      this.args.field.displayType ===
-      'http://lblod.data.gift/display-types/lmb/custom-string-input'
-    );
-  }
-
   get value() {
     const matches = triplesForPath(this.args.storeOptions);
-    const literal = matches.values.filter((value) => isLiteral(value))?.at(0);
+    const firstMatch = matches.values?.at(0);
+    if (!firstMatch || isNamedNode(firstMatch)) {
+      return null;
+    }
 
-    return literal?.value;
+    return this.formatLiteral(firstMatch);
+  }
+
+  get displayType() {
+    return this.args.field?.displayType;
+  }
+
+  formatLiteral(literal) {
+    if (this.displayType === DATE_CUSTOM_DISPLAY_TYPE) {
+      return moment(Literal.toJS(literal)).format('DD-MM-YYYY');
+    }
+
+    return Literal.toJS(literal);
   }
 }

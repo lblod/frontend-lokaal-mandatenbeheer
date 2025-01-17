@@ -4,7 +4,12 @@
   @graphs={{@graphs}}
   @formStore={{@formStore}}
 >
-  <div class="au-o-box au-u-background-gray-100 au-u-margin-top-tiny">
+  <div
+    class={{unless
+      @show
+      "au-o-box au-u-background-gray-100 au-u-margin-top-tiny"
+    }}
+  >
     <RdfInputFields::AddressSelector
       @inTable={{true}}
       @field={{@field}}
