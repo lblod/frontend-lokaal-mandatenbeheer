@@ -7,6 +7,7 @@ import { task } from 'ember-concurrency';
 import { validationsForFieldWithType } from '@lblod/submission-form-helpers';
 
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import { ADRES_CUSTOM_DISPLAY_TYPE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class RdfInputFieldsCustomFieldWrapperComponent extends Component {
   @consume('on-form-update') onFormUpdate;
@@ -17,6 +18,13 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
 
   get title() {
     return this.args.field?.label;
+  }
+
+  get isFieldReadOnly() {
+    return (
+      this.isReadOnly &&
+      ![ADRES_CUSTOM_DISPLAY_TYPE].includes(this.args.field.displayType)
+    );
   }
 
   moveField = task(async (direction) => {

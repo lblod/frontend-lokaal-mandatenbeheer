@@ -1,8 +1,17 @@
 {{#if this.initialized}}
-  <Address::AdressenregisterSelector
-    @address={{this.address}}
-    @onChange={{this.updateAddress}}
-  />
+  {{#if @show}}
+    <AuLabel class="au-c-description-label">
+      {{@field.label}}
+    </AuLabel>
+    <p class="au-c-description-value">
+      {{this.address.volledigAdres}}
+    </p>
+  {{else}}
+    <Address::AdressenregisterSelector
+      @address={{this.address}}
+      @onChange={{this.updateAddress}}
+    />
+  {{/if}}
 {{else}}
   <AuLabel for="input" class="skeleton-label au-u-margin-top" />
   <p class="skeleton-input-full au-u-margin-top"></p>
