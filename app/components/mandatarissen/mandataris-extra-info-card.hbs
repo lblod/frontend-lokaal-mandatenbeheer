@@ -21,15 +21,17 @@
 
 <div class="au-o-box au-u-background-gray-100">
   <div class="au-o-grid au-o-grid--small">
-    <EditableForm
-      @isReadOnly={{true}}
-      @instanceId={{@mandataris.id}}
-      @form={{@form}}
-      @onCancel={{this.toggleModal}}
-      @onSave={{this.onSave}}
-      @formInitialized={{fn (mut this.formInitialized) true}}
-      @customHistoryMessage={{true}}
-    />
+    {{#if this.onSave.isRunning}}
+      <AuLabel for="input" class="skeleton-label" />
+      <p class="skeleton-text au-u-margin-top"></p>
+    {{else}}
+      <EditableForm
+        @isReadOnly={{true}}
+        @instanceId={{@mandataris.id}}
+        @form={{@form}}
+        @formInitialized={{fn (mut this.formInitialized) true}}
+      />
+    {{/if}}
   </div>
 </div>
 
