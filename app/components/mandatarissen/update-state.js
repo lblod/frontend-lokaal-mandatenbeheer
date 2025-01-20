@@ -203,7 +203,10 @@ export default class MandatarissenUpdateState extends Component {
         (await this.args.mandataris.vervangerVan) || [];
     }
 
-    this.args.mandataris.einde = this.date;
+    this.args.mandataris.einde = moment(this.date)
+      .add(1, 'days')
+      .startOf('day')
+      .toDate();
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
     await this.mandatarisService.createNewLidmaatschap(
@@ -224,7 +227,10 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   async endMandataris() {
-    this.args.mandataris.einde = this.date;
+    this.args.mandataris.einde = moment(this.date)
+      .add(1, 'days')
+      .startOf('day')
+      .toDate();
 
     return await this.args.mandataris.save();
   }
