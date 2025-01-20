@@ -151,12 +151,7 @@ export default class MandatarissenUpdateState extends Component {
       !this.date ||
       this.inValidReplacement ||
       !this.hasChanges ||
-      (this.isFractieSelectorRequired && !this.selectedFractie) ||
-      !isDateInRange(
-        this.date,
-        this.bestuursorgaanStartDate,
-        this.bestuursorgaanEndDate
-      )
+      (this.isFractieSelectorRequired && !this.selectedFractie)
     );
   }
 
