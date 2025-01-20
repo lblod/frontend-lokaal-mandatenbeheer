@@ -18,7 +18,6 @@ import RdfMandatarisRangorde from 'frontend-lmb/components/rdf-input-fields/mand
 import RdfDateInputComponent from 'frontend-lmb/components/rdf-input-fields/rdf-date-input';
 import RDFGeboorteInput from 'frontend-lmb/components/rdf-input-fields/geboorte-input';
 import RDFGenderSelector from 'frontend-lmb/components/rdf-input-fields/gender-selector';
-import RdfDateEndOfDayInputComponent from 'frontend-lmb/components/rdf-input-fields/rdf-date-end-of-day-input';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -101,10 +100,6 @@ export const registerCustomFormFields = () => {
     {
       displayType: 'http://lblod.data.gift/display-types/dateInput',
       edit: RdfDateInputComponent,
-    },
-    {
-      displayType: 'http://lblod.data.gift/display-types/dateEndOfDayInput',
-      edit: RdfDateEndOfDayInputComponent,
     },
     {
       displayType: 'http://lblod.data.gift/display-types/birthDateInput',
