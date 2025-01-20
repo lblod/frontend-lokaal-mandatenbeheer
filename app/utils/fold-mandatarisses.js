@@ -102,7 +102,7 @@ function updateFoldedMandataris(mandataris, foldedMandataris) {
 function buildFoldedMandataris(mandataris) {
   return {
     foldedStart: mandataris.start,
-    foldedEnd: mandataris.einde,
+    foldedEnd: mandataris.displayEinde,
     mandataris,
   };
 }
@@ -124,7 +124,7 @@ function updateFoldedEnd(mandataris, foldedMandataris) {
   } else {
     foldedMandataris.foldedEnd = moment.max(
       moment(foldedMandataris.foldedEnd),
-      moment(mandataris.einde)
+      moment(mandataris.displayEinde)
     );
   }
 }
@@ -133,7 +133,7 @@ function updateMandataris(mandataris, foldedMandataris) {
   // Keep the one with the latest end date. If the end date is null,
   // we assume this is the latest one.
   if (
-    moment(mandataris.einde).isSame(foldedMandataris.foldedEnd) ||
+    moment(mandataris.displayEinde).isSame(foldedMandataris.foldedEnd) ||
     !mandataris.einde
   ) {
     foldedMandataris.mandataris = mandataris;

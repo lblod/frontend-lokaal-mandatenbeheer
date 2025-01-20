@@ -92,6 +92,13 @@ export default class MandatarisModel extends Model {
     );
   }
 
+  get displayEinde() {
+    if (!this.einde) {
+      return this.einde;
+    }
+    return moment(this.einde).subtract(1, 'days').toDate();
+  }
+
   get isActive() {
     if (!this.einde) {
       return true;

@@ -105,7 +105,7 @@ export default class MandatarissenUpdateState extends Component {
     if (!this.args.mandataris.einde) {
       return this.args.mandataris.status;
     }
-    if (this.args.mandataris.einde.getTime() < new Date().getTime()) {
+    if (this.args.mandataris.einde.getTime() <= new Date().getTime()) {
       return this.mandatarisStatus.endedState;
     }
     return this.args.mandataris.status;

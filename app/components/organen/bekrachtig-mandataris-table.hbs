@@ -81,10 +81,10 @@
       <td>
         <Mandaat::MandatarisStatusPill @mandataris={{row}} />
       </td>
-      <td class={{if (is-in-past row.einde) "au-u-muted"}}>
+      <td class={{if (is-in-past row.displayEinde) "au-u-muted"}}>
         {{moment-format row.start "DD-MM-YYYY"}}</td>
-      <td class={{if (is-in-past row.einde) "au-u-muted"}}>
-        {{moment-format row.einde "DD-MM-YYYY"}}</td>
+      <td class={{if (is-in-past row.displayEinde) "au-u-muted"}}>
+        {{moment-format row.displayEinde "DD-MM-YYYY"}}</td>
       <td>
         <Mandaat::PublicatieStatusPill
           @mandataris={{row}}
