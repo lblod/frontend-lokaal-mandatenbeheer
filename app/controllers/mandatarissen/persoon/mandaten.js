@@ -8,6 +8,8 @@ import { task } from 'ember-concurrency';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
+import moment from 'moment';
+
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
   @service toaster;
@@ -123,7 +125,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         newMandataris.id
       );
 
-      mandataris.einde = dateNow;
+      mandataris.einde = moment(dateNow).add(1, 'days').startOf('day').toDate();
       await mandataris.save();
     }
 
