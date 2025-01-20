@@ -3,6 +3,7 @@
     <AuLabel
       for={{(or @id this.elementId)}}
       @error={{(or this.errorMessage this.invalidErrorMessage)}}
+      @warning={{this.warningMessage}}
       @required={{@isRequired}}
     >{{@label}}</AuLabel>
   {{/if}}
@@ -16,6 +17,7 @@
     <AuInput
       {{did-insert this.setupDateValue}}
       @error={{(or this.errorMessage this.invalidErrorMessage)}}
+      @warning={{this.warningMessage}}
       value={{this.dateInputString}}
       id={{(or @id this.elementId)}}
       placeholder="dd-mm-yyyy"
@@ -32,5 +34,8 @@
 
   {{#if (or this.errorMessage this.invalidErrorMessage)}}
     <AuHelpText @error={{true}}>{{this.errorMessages}}</AuHelpText>
+  {{/if}}
+  {{#if this.warningMessage}}
+    <AuHelpText @warning={{true}}>{{this.warningMessage}}</AuHelpText>
   {{/if}}
 </div>
