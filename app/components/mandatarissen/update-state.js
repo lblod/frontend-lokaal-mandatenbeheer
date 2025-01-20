@@ -15,7 +15,6 @@ import {
   burgemeesterOnlyStates,
   notBurgemeesterStates,
 } from 'frontend-lmb/utils/well-known-uris';
-import { isDateInRange } from '../date-input';
 import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 
 export default class MandatarissenUpdateState extends Component {
