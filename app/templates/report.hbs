@@ -1,0 +1,17 @@
+{{page-title "Report"}}
+
+<PowerSelect
+  @allowClear={{false}}
+  @selected={{this.selectedReport}}
+  @options={{this.model.reports}}
+  @class="is-optional"
+  @onChange={{this.onSelectReport}}
+  @searchEnabled={{false}}
+  @loadingMessage="Aan het laden..."
+  @noMatchesMessage="Geen resultaten"
+  as |report|
+>
+  {{
+    report.id
+  }}
+</PowerSelect>
