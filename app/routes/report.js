@@ -16,7 +16,18 @@ export default class ReportRoute extends Route {
 
     return {
       report: latestReport,
-      validationresults: (await latestReport?.validationresults) ?? [],
+      resultsByTargetClass: await this.getMappedResults(latestReport),
     };
+  }
+
+  async getMappedResults(report) {
+    const results = (await report?.validationresults) ?? [];
+    const map = new Map();
+
+    for (const result of results) {
+      const currentResult = map.get(result.targetClassOfFocusNode) ?? [];
+      map.set(result.targetClassOfFocusNode, currentResult.concat(result));
+    }
+    return map;
   }
 }
