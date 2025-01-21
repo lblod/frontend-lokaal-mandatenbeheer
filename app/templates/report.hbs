@@ -1,31 +1,41 @@
 {{page-title "Report"}}
 
-<h1>
-{{ this.model.report.id }} - {{ moment-format this.model.report.created "DD-MM-YYYY HH:mm:ss" }}
-</h1>
+<AuHeading @skin="2">
+  SHACL validatierapport ({{this.model.report.id}}
+  -
+  {{moment-format this.model.report.created "DD-MM-YYYY HH:mm:ss"}})
+</AuHeading>
 
+{{#each this.targetClasses as |targetClass|}}
+  <AuToolbar class="au-o-box" as |Group|>
+    <Group>
+      <AuHeading @skin="2">
+        {{targetClass}}
+      </AuHeading>
+    </Group>
+  </AuToolbar>
 
-<AuDataTable
-    @content={{this.model.validationresults}}
+  <AuDataTable
+    @content={{this.filterResultsByTargetClass targetClass}}
     @noDataMessage="Geen validatieresultaten gevonden"
     @page={{@page}}
-    @size={{@size}}
+    @size={{this.lengthOfResultsByTargetClass targetClass}}
     as |t|
->
+  >
     <t.content as |c|>
-    <c.header>
-        <th class="au-u-padding-small">Id</th>
-        <th>Focus node</th>
-       
-    </c.header>
+      <c.header>
+        <th class="au-u-padding-small">Entiteit</th>
+        <th class="au-u-padding-small">Boodschap</th>
+      </c.header>
 
-    <c.body as |result|>
+      <c.body as |result|>
         <td>
-        {{result.id}}
+          {{result.focusNode}}
         </td>
         <td>
-        {{result.focusNode}}
+          {{result.resultMessage}}
         </td>
-    </c.body>
+      </c.body>
     </t.content>
-</AuDataTable>
+  </AuDataTable>
+{{/each}}
