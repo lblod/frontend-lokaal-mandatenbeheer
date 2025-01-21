@@ -30,7 +30,15 @@
 
       <c.body as |result|>
         <td>
-          {{result.focusNode}}
+          {{#let (await (this.getFocusNodeContext result.focusNode result.targetClassOfFocusNode)) as |context|}}
+          <LinkTo
+            @route={{context.route}}
+            @model={{context.modelId}}
+            class="au-c-link au-u-medium"
+            >
+            {{result.focusNode}}
+        </LinkTo>
+        {{/let}}
         </td>
         <td>
           {{result.resultMessage}}
