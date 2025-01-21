@@ -111,7 +111,13 @@ export default class DateInputComponent extends Component {
   @action
   setupDateValue() {
     if (this.args.value && isValidDate(this.args.value)) {
-      this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
+      if (this.args?.endOfDay) {
+        this.dateInputString = moment(this.args.value)
+          .subtract(1, 'days')
+          .format('DD-MM-YYYY');
+      } else {
+        this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
+      }
       this.processDate(this.args.value);
     }
   }
