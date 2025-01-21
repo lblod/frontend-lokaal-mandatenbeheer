@@ -1,17 +1,31 @@
 {{page-title "Report"}}
 
-<PowerSelect
-  @allowClear={{false}}
-  @selected={{this.selectedReport}}
-  @options={{this.model.reports}}
-  @class="is-optional"
-  @onChange={{this.onSelectReport}}
-  @searchEnabled={{false}}
-  @loadingMessage="Aan het laden..."
-  @noMatchesMessage="Geen resultaten"
-  as |report|
+<h1>
+{{ this.model.report.id }} - {{ moment-format this.model.report.created "DD-MM-YYYY HH:mm:ss" }}
+</h1>
+
+
+<AuDataTable
+    @content={{this.model.validationresults}}
+    @noDataMessage="Geen validatieresultaten gevonden"
+    @page={{@page}}
+    @size={{@size}}
+    as |t|
 >
-  {{
-    report.id
-  }}
-</PowerSelect>
+    <t.content as |c|>
+    <c.header>
+        <th class="au-u-padding-small">Id</th>
+        <th>Focus node</th>
+       
+    </c.header>
+
+    <c.body as |result|>
+        <td>
+        {{result.id}}
+        </td>
+        <td>
+        {{result.focusNode}}
+        </td>
+    </c.body>
+    </t.content>
+</AuDataTable>
