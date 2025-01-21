@@ -86,12 +86,20 @@ export default class OrganenMandatarissenController extends Controller {
     let isCurrent = false;
     const currentYear = new Date().getFullYear();
     if (
-      currentYear == this.model.selectedBestuursperiode.start ||
-      currentYear == this.model.selectedBestuursperiode.einde - 1
+      currentYear >= this.model.selectedBestuursperiode.start &&
+      (!this.model.selectedBestuursperiode.einde ||
+        currentYear < this.model.selectedBestuursperiode.einde)
     ) {
       isCurrent = true;
     }
 
     return isCurrent;
+  }
+
+  get personCount() {
+    const personIds = this.model.mandatarissen.map(
+      (mandataris) => mandataris.mandataris.isBestuurlijkeAliasVan?.id
+    );
+    return new Set(personIds).size;
   }
 }
