@@ -2,9 +2,9 @@ import moment from 'moment';
 
 export function endOfDay(date) {
   if (date) {
-    return moment(date).utc().add(1, 'days').startOf('day').toDate();
+    return moment(date).add(1, 'days').startOf('day').utc().toDate();
   } else {
-    return moment().utc().add(1, 'days').startOf('day').toDate();
+    return moment().add(1, 'days').startOf('day').utc().toDate();
   }
 }
 
