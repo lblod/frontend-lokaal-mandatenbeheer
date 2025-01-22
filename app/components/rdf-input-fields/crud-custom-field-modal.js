@@ -25,6 +25,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @service formReplacements;
 
   @tracked isRemovingField;
+  @tracked wantsToRemove;
 
   customFieldEntry = this.store.createRecord('library-entry', {
     name: 'Eigen veld',
@@ -48,6 +49,10 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     this.displayTypes.then((displayTypes) => {
       this.displayType = displayTypes.findBy('uri', withValue);
     });
+  }
+
+  get deleteWillLoseData() {
+    return this.libraryFieldType?.uri !== null;
   }
 
   @action
@@ -124,7 +129,20 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   @action
+  onCancel() {
+    if (this.wantsToRemove) {
+      this.wantsToRemove = false;
+      return;
+    }
+    this.closeModal();
+  }
+
+  @action
   async onRemove() {
+    if (!this.wantsToRemove) {
+      this.wantsToRemove = true;
+      return;
+    }
     this.isRemovingField = true;
     await fetch(`/form-content/fields`, {
       method: 'DELETE',
@@ -142,12 +160,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   @action
   closeModal() {
-    if (this.args.onCloseModal) {
-      this.fieldName = null;
-      this.libraryFieldType = null;
-      this.displayType = null;
-      this.args.onCloseModal();
-    }
+    this.args.onCloseModal();
   }
 
   get displayTypes() {
@@ -217,7 +230,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       return (
         this.hasValidFieldName &&
         (this.fieldName !== this.args.field.label ||
-          this.displayType.uri !== this.args.field.displayType)
+          this.displayType?.uri !== this.args.field.displayType)
       );
     }
 
