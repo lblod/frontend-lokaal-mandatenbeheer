@@ -8,7 +8,10 @@ import moment from 'moment';
 
 import { INPUT_DEBOUNCE, NULL_DATE } from 'frontend-lmb/utils/constants';
 import { action } from '@ember/object';
-import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
+import {
+  displayEndOfDay,
+  endOfDay,
+} from 'frontend-lmb/utils/date-manipulation';
 
 export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
@@ -116,13 +119,11 @@ export default class DateInputComponent extends Component {
     if (this.args.value && isValidDate(this.args.value)) {
       let date;
       if (this.args?.endOfDay) {
-        let dateMoment = moment(this.args.value).subtract(1, 'days');
-        date = dateMoment.toDate();
-        this.dateInputString = dateMoment.format('DD-MM-YYYY');
+        date = displayEndOfDay(this.args.value);
+        this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
       } else {
-        let dateMoment = moment(this.args.value);
-        date = dateMoment.toDate();
-        this.dateInputString = dateMoment.format('DD-MM-YYYY');
+        date = moment(this.args.value).toDate();
+        this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
       }
       this.processDate(date);
     }
