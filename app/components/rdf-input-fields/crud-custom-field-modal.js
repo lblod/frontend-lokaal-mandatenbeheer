@@ -278,8 +278,4 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
     return 'Pas een veld aan';
   }
-
-  get canShowRequiredToggle() {
-    return this.displayType.uri !== ADRES_CUSTOM_DISPLAY_TYPE;
-  }
 }
