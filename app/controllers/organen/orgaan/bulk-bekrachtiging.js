@@ -44,6 +44,13 @@ export default class BulkBekrachtigingController extends Controller {
     return false;
   }
 
+  get tooltipText() {
+    if (this.hasMandatarissenToEdit) {
+      return 'Gelieve mandatarissen te selecteren.';
+    }
+    return 'Alle mandatarissen hebben hun finale publicatiestatus';
+  }
+
   @action
   updateStatus(status) {
     this.status = status;
@@ -116,6 +123,7 @@ export default class BulkBekrachtigingController extends Controller {
     );
     this.closeModal();
     this.checked.clear();
+    this.setSize = 0;
     setTimeout(() => this.router.refresh(), 1000);
   }
 
