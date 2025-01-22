@@ -98,6 +98,7 @@ export default class OrganenMandatarissenRoute extends Route {
         'bekleedt.bestuursfunctie',
         'heeft-lidmaatschap.binnen-fractie',
         'status',
+        'publication-status',
       ].join(','),
     };
 

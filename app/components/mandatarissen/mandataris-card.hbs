@@ -27,11 +27,16 @@
           />
         {{else}}
           <div class="au-u-flex">
-            <Mandaat::PublicatieStatusPill
-              @mandataris={{@mandataris}}
-              @showInfoText={{true}}
-              @showBekijkBewijs={{true}}
-            />
+            <Shared::Tooltip
+              @showTooltip={{await this.effectiefIsLastStatus}}
+              @tooltipText={{this.lastStatusTooltipText}}
+            >
+              <Mandaat::PublicatieStatusPill
+                @mandataris={{@mandataris}}
+                @showInfoText={{true}}
+                @showBekijkBewijs={{true}}
+              />
+            </Shared::Tooltip>
             {{#if this.canEditPublicationStatus}}
               <AuButton
                 {{on "click" this.editStatus}}

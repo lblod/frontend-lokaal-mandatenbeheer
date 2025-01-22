@@ -12,6 +12,12 @@ import { restartableTask, task, timeout } from 'ember-concurrency';
 
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 import { isValidUri } from 'frontend-lmb/utils/is-valid-uri';
+import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
+import {
+  PUBLICATION_STATUS_BEKRACHTIGD_ID,
+  PUBLICATION_STATUS_DRAFT_ID,
+  PUBLICATION_STATUS_EFFECTIEF_ID,
+} from 'frontend-lmb/utils/well-known-ids';
 
 export default class MandatarissenMandatarisPublicationStatusSelectorComponent extends Component {
   @service store;
@@ -40,9 +46,24 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   async loadOptions() {
     await this.checkPublicationStatus();
 
-    this.options = await this.store.findAll(
-      'mandataris-publication-status-code'
+    const optionIds = [
+      PUBLICATION_STATUS_EFFECTIEF_ID,
+      PUBLICATION_STATUS_DRAFT_ID,
+    ];
+
+    if (!(await this.effectiefIsLastStatus)) {
+      optionIds.push(PUBLICATION_STATUS_BEKRACHTIGD_ID);
+    }
+    this.options = await this.store.query(
+      'mandataris-publication-status-code',
+      {
+        'filter[:id:]': optionIds.join(','),
+      }
     );
+  }
+
+  get effectiefIsLastStatus() {
+    return effectiefIsLastPublicationStatus(this.mandataris);
   }
 
   constructor() {
