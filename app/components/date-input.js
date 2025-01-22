@@ -120,7 +120,7 @@ export default class DateInputComponent extends Component {
       let date;
       if (this.args?.endOfDay) {
         date = displayEndOfDay(this.args.value);
-        this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
+        this.dateInputString = moment(date).format('DD-MM-YYYY');
       } else {
         date = moment(this.args.value).toDate();
         this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
