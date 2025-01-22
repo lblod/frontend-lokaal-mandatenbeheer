@@ -21,15 +21,12 @@ export default class SessionExpiredController extends Controller {
   }
 }
 
-function buildLogoutUrl({ logoutUrl, clientId }) {
+function buildLogoutUrl({ logoutUrl, clientId, switchRedirectUrl }) {
   let switchUrl = new URL(logoutUrl);
   let searchParams = switchUrl.searchParams;
 
   searchParams.append('client_id', clientId);
-  searchParams.append(
-    'post_logout_redirect_uri',
-    `${window.location.protocol}//${window.location.host}/login`
-  );
+  searchParams.append('post_logout_redirect_uri', switchRedirectUrl);
 
   return switchUrl.href;
 }
