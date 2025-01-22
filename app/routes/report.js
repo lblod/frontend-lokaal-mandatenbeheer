@@ -4,6 +4,16 @@ import { service } from '@ember/service';
 
 export default class ReportRoute extends Route {
   @service store;
+  @service router;
+  @service features;
+  @service session;
+  beforeModel(transition) {
+    this.session.requireAuthentication(transition, 'login');
+
+    if (!this.features.isEnabled('shacl-report')) {
+      this.router.replaceWith('index');
+    }
+  }
 
   async model() {
     const latestReport = (
