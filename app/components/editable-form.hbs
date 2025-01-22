@@ -13,7 +13,7 @@
       <AuButton
         @skin="link"
         @icon="plus"
-        {{on "click" (fn (mut this.showModal) true)}}
+        {{on "click" (fn (mut this.showEditModal) true)}}
         class="au-u-padding-left-none au-u-margin-bottom"
       >
         Voeg een veld toe
@@ -21,13 +21,14 @@
 
       {{yield}}
 
-      <RdfInputFields::CrudCustomFieldModal
-        @isCreating={{true}}
-        @showModal={{this.showModal}}
-        @onCloseModal={{this.onFormUpdate}}
-        @form={{this.currentForm}}
-        @field={{@field}}
-      />
+      {{#if this.showEditModal}}
+        <RdfInputFields::CrudCustomFieldModal
+          @isCreating={{true}}
+          @onCloseModal={{this.onCloseEditModal}}
+          @form={{this.currentForm}}
+          @field={{@field}}
+        />
+      {{/if}}
     {{/if}}
     {{yield}}
   </SemanticForms::Instance>
