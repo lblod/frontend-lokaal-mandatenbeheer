@@ -26,7 +26,7 @@ export default class MandatarissenSearchRoute extends Route {
   };
 
   async model(params) {
-    const allBestuursperiode = await this.store.query('bestuursperiode', {
+    const allBestuursperioden = await this.store.query('bestuursperiode', {
       sort: 'label',
       include: [
         'installatievergaderingen',
@@ -34,7 +34,7 @@ export default class MandatarissenSearchRoute extends Route {
       ].join(','),
     });
     let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
-      allBestuursperiode,
+      allBestuursperioden,
       params.bestuursperiode
     );
     const personenWithMandatarissen = await this.getPersoonWithMandatarissen(
@@ -56,7 +56,7 @@ export default class MandatarissenSearchRoute extends Route {
 
     return {
       personenWithMandatarissen,
-      allBestuursperiode,
+      allBestuursperioden,
       selectedPeriod,
       bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
       selectedBestuurfunctieIds: params.bestuursfunctie,
