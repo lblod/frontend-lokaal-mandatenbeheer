@@ -393,3 +393,10 @@ $au-region-breakpoint: medium !default;
 .au-form-row-full-width {
   align-items: normal !important;
 }
+
+.warning-panel {
+  background-color: var(--au-red-200);
+  padding: 1rem;
+  border-radius: 3px;
+  border: solid 1px var(--au-red-600);
+}

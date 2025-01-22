@@ -14,7 +14,7 @@ export default class EditableFormComponent extends Component {
   @service semanticFormRepository;
   @service features;
 
-  @tracked showModal;
+  @tracked showEditModal;
 
   constructor() {
     super(...arguments);
@@ -31,7 +31,7 @@ export default class EditableFormComponent extends Component {
     );
     this.currentForm = form;
     this.loading = false;
-    this.showModal = false;
+    this.showEditModal = false;
   }
 
   get editableFormsEnabled() {
@@ -47,5 +47,11 @@ export default class EditableFormComponent extends Component {
   @provide('form-definition')
   get formDefinition() {
     return this.currentForm;
+  }
+
+  @action
+  onCloseEditModal() {
+    this.showEditModal = false;
+    this.onFormUpdate();
   }
 }
