@@ -7,3 +7,7 @@ export async function endOfDay(date) {
     return moment().utc().add(1, 'days').startOf('day').toDate();
   }
 }
+
+export async function displayEndOfDay(date) {
+  return moment(date).subtract(1, 'days').toDate();
+}

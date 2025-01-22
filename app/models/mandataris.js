@@ -3,6 +3,7 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import { displayEndOfDay } from 'frontend-lmb/utils/date-manipulation';
 
 export default class MandatarisModel extends Model {
   @attr rangorde;
@@ -96,7 +97,7 @@ export default class MandatarisModel extends Model {
     if (!this.einde) {
       return this.einde;
     }
-    return moment(this.einde).subtract(1, 'days').toDate();
+    return displayEndOfDay(this.einde);
   }
 
   get isActive() {
