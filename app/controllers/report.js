@@ -27,6 +27,14 @@ export default class ReportController extends Controller {
         route: 'mandatarissen.mandataris',
         model: 'mandataris',
       },
+      'http://www.w3.org/ns/person#Person': {
+        route: 'mandatarissen.persoon.mandaten',
+        model: 'persoon',
+      },
+      'http://data.vlaanderen.be/ns/besluit#Bestuursorgaan': {
+        route: 'organen.orgaan',
+        model: 'bestuursorgaan',
+      },
     };
     return {
       route: mapTargetClassToRoute[targetClass].route,
