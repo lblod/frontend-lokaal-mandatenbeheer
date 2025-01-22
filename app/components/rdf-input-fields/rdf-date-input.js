@@ -21,7 +21,7 @@ export default class RdfDateInputComponent extends InputFieldComponent {
   @tracked date;
   @tracked from;
   @tracked to;
-  @tracked endOfDay = false;
+  @tracked endOfDay;
 
   constructor() {
     super(...arguments);
@@ -55,15 +55,12 @@ export default class RdfDateInputComponent extends InputFieldComponent {
   }
 
   loadOptions() {
-    let endOfDay = this.args.formStore.any(
+    this.endOfDay = !!this.args.formStore.any(
       this.args.field.uri,
       FIELD_OPTION('endOfDay'),
       undefined,
       this.args.graphs.formGraph
     );
-    if (endOfDay) {
-      this.endOfDay = endOfDay;
-    }
   }
 
   @action
