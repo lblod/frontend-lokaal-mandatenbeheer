@@ -57,8 +57,8 @@ export default class MandatarissenSearchController extends Controller {
   }
 
   @action
-  selectPeriod(periodMap) {
-    this.bestuursperiode = periodMap.period.id;
+  selectPeriod(period) {
+    this.bestuursperiode = period.id;
   }
 
   @action
@@ -83,7 +83,7 @@ export default class MandatarissenSearchController extends Controller {
     if (this.onafhankelijkeFractie) {
       const onafhankelijkeFracties =
         await this.fractieApi.onafhankelijkForBestuursperiode(
-          this.model.selectedPeriod.period.id
+          this.model.selectedPeriod.id
         );
       fracties.push(...onafhankelijkeFracties);
     }

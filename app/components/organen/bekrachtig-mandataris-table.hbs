@@ -9,7 +9,9 @@
   <t.content as |c|>
     <c.header>
       <th>
-        <AuCheckbox @checked={{false}} @onChange={{@checkAll}} />
+        {{#if @hasMandatarissenToEdit}}
+          <AuCheckbox @checked={{false}} @onChange={{@checkAll}} />
+        {{/if}}
       </th>
       <AuDataTableThSortable
         @field="bekleedt.bestuursfunctie.label"
@@ -55,39 +57,39 @@
 
     <c.body as |row|>
       <td>
-        {{#unless (eq row.publicationStatus.uri @bekrachtigdStatusUri)}}
+        {{#if row.canShowCheckbox}}
           <AuCheckbox
             @checked={{@checkedByDefault}}
-            @onChange={{fn @onCheck row.id}}
+            @onChange={{fn @onCheck row.mandataris.id}}
           />
-        {{/unless}}
+        {{/if}}
       </td>
       <td>
-        {{row.bekleedt.bestuursfunctie.label}}
+        {{row.mandataris.bekleedt.bestuursfunctie.label}}
       </td>
       <td>
-        {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+        {{row.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
       </td>
       <td>
-        {{row.isBestuurlijkeAliasVan.achternaam}}
+        {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
       </td>
       <td>
         {{if
-          row.heeftLidmaatschap.binnenFractie
-          row.heeftLidmaatschap.binnenFractie.naam
+          row.mandataris.heeftLidmaatschap.binnenFractie
+          row.mandataris.heeftLidmaatschap.binnenFractie.naam
           "Niet beschikbaar"
         }}
       </td>
       <td>
-        <Mandaat::MandatarisStatusPill @mandataris={{row}} />
+        <Mandaat::MandatarisStatusPill @mandataris={{row.mandataris}} />
       </td>
-      <td class={{if (is-in-past row.displayEinde) "au-u-muted"}}>
-        {{moment-format row.start "DD-MM-YYYY"}}</td>
-      <td class={{if (is-in-past row.displayEinde) "au-u-muted"}}>
-        {{moment-format row.displayEinde "DD-MM-YYYY"}}</td>
+      <td class={{if (is-in-past row.mandataris.displayEinde) "au-u-muted"}}>
+        {{moment-format row.mandataris.start "DD-MM-YYYY"}}</td>
+      <td class={{if (is-in-past row.mandataris.displayEinde) "au-u-muted"}}>
+        {{moment-format row.mandataris.displayEinde "DD-MM-YYYY"}}</td>
       <td>
         <Mandaat::PublicatieStatusPill
-          @mandataris={{row}}
+          @mandataris={{row.mandataris}}
           @showBekijkBewijs={{false}}
         />
       </td>

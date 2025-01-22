@@ -1,6 +1,13 @@
 import { Namespace } from 'rdflib';
 
-export { MU, FORM, RDF, XSD, SKOS } from '@lblod/submission-form-helpers';
+export {
+  MU,
+  FORM,
+  RDF,
+  XSD,
+  SKOS,
+  SHACL,
+} from '@lblod/submission-form-helpers';
 
 export const EXT = new Namespace('http://mu.semte.ch/vocabularies/ext/');
 export const ORG = new Namespace('http://www.w3.org/ns/org#');

@@ -4,7 +4,7 @@
   @statusMessage="Uw sessie is verlopen en u werd uitgelogd. Onze excuses voor het ongemak. Gelieve opnieuw aan te melden."
 >
   <div class="au-o-box">
-    <AuLink @route="login" @skin="button">Aanmelden</AuLink>
+    <AuButton {{on "click" this.clearSessionAndLogin}}>Aanmelden</AuButton>
   </div>
 </Error>
 {{outlet}}

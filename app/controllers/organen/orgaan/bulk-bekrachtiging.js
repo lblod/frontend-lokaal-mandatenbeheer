@@ -1,9 +1,10 @@
 import Controller from '@ember/controller';
+
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+
 import { isValidUri } from 'frontend-lmb/utils/is-valid-uri';
-import { MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class BulkBekrachtigingController extends Controller {
   @service mandatarisApi;
@@ -22,7 +23,6 @@ export default class BulkBekrachtigingController extends Controller {
   @tracked modalOpen = false;
 
   @tracked status;
-  @tracked statusOptions = ['Effectief', 'Bekrachtigd'];
 
   @tracked linkToBesluit;
   @tracked invalidLink = false;
@@ -82,10 +82,6 @@ export default class BulkBekrachtigingController extends Controller {
     return false;
   }
 
-  get bekrachtigdStatusUri() {
-    return MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
-  }
-
   @action checkBox(mandataris, state) {
     if (state) {
       this.checked.add(mandataris);
@@ -99,11 +95,9 @@ export default class BulkBekrachtigingController extends Controller {
   @action checkAll(state) {
     if (state) {
       this.allChecked = true;
-      this.model.mandatarissen.forEach((mandataris) => {
-        if (
-          mandataris.publicationStatus.get('uri') != this.bekrachtigdStatusUri
-        ) {
-          this.checked.add(mandataris.id);
+      this.model.mandatarissenMap.forEach((mapping) => {
+        if (mapping.canShowCheckbox) {
+          this.checked.add(mapping.mandataris.id);
         }
       });
       this.setSize = this.checked.size;
@@ -123,5 +117,19 @@ export default class BulkBekrachtigingController extends Controller {
     this.closeModal();
     this.checked.clear();
     setTimeout(() => this.router.refresh(), 1000);
+  }
+
+  get hasMandatarissenToEdit() {
+    return (
+      this.model.mandatarissenMap.filter((mapping) => mapping.canShowCheckbox)
+        .length >= 1
+    );
+  }
+
+  get statusOptions() {
+    if (this.model.effectiefIsLastStatus) {
+      return ['Effectief'];
+    }
+    return ['Effectief', 'Bekrachtigd'];
   }
 }

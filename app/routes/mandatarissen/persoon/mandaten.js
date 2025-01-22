@@ -9,6 +9,7 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
   @service store;
   @service bestuursorganen;
   @service currentSession;
+  @service('persoon-api') persoonApi;
 
   queryParams = {
     activeOnly: { refreshModel: true },
@@ -23,6 +24,9 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
     const mandatarissen = await this.getMandatarissen(persoon, params);
 
     const bestuurseenheid = this.currentSession.group;
+    const hasActiveMandatarissen = await this.persoonApi.hasActiveMandatarissen(
+      persoon.id
+    );
     const bestuursorganen =
       await this.bestuursorganen.getRealCurrentPoliticalBestuursorganen();
 
@@ -41,6 +45,7 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
 
     return {
       persoon,
+      hasActiveMandatarissen,
       foldedMandatarissen,
       mandatarissen: filteredMandatarissen,
       bestuurseenheid,
@@ -63,8 +68,12 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
       include: [
         'is-bestuurlijke-alias-van',
         'bekleedt.bestuursfunctie',
+        'bekleedt.bevat-in',
+        'bekleedt.bevat-in.is-tijdsspecialisatie-van',
         'beleidsdomein',
         'heeft-lidmaatschap.binnen-fractie',
+        'publication-status',
+        'status',
       ].join(','),
     };
 
