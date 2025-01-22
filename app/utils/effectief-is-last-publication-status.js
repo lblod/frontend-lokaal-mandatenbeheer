@@ -3,5 +3,5 @@ export async function effectiefIsLastPublicationStatus(mandataris) {
   const bestuursorganen = await mandaat.bevatIn;
   const boi = bestuursorganen?.at(0);
 
-  return !!boi?.isVastBureau || boi?.isRMW;
+  return !!(await boi?.isVastBureau) || (await boi?.isRMW);
 }

@@ -50,10 +50,10 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
       PUBLICATION_STATUS_EFFECTIEF_ID,
       PUBLICATION_STATUS_DRAFT_ID,
     ];
-    if (!(await this.effectiefIsLastStatus)) {
-      this.optionIds.push(PUBLICATION_STATUS_BEKRACHTIGD_ID);
-    }
 
+    if (!(await this.effectiefIsLastStatus)) {
+      optionIds.push(PUBLICATION_STATUS_BEKRACHTIGD_ID);
+    }
     this.options = await this.store.query(
       'mandataris-publication-status-code',
       {
