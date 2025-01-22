@@ -18,8 +18,7 @@ import {
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class RdfInputFieldCrudCustomFieldModalComponent extends Component {
-  @consume('form-definition') formDefinition;
-  @consume('on-form-update') onFormUpdate;
+  @consume('form-context') formContext;
 
   @service store;
   @service toaster;
@@ -69,19 +68,22 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   updateField = task(async () => {
     try {
-      await fetch(`/form-content/${this.formDefinition.id}/fields`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': JSON_API_TYPE,
-        },
-        body: JSON.stringify({
-          field: this.args.field.uri.value,
-          displayType: this.displayType.uri,
-          name: this.fieldName,
-          isRequired: !!this.isFieldRequired,
-        }),
-      });
-      this.onFormUpdate();
+      await fetch(
+        `/form-content/${this.formContext.formDefinition.id}/fields`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': JSON_API_TYPE,
+          },
+          body: JSON.stringify({
+            field: this.args.field.uri.value,
+            displayType: this.displayType.uri,
+            name: this.fieldName,
+            isRequired: !!this.isFieldRequired,
+          }),
+        }
+      );
+      this.formContext.onFormUpdate();
     } catch (error) {
       showErrorToast(
         this.toaster,
@@ -94,7 +96,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   createField = task(async () => {
     try {
       const result = await fetch(
-        `/form-content/${this.formDefinition.id}/fields`,
+        `/form-content/${this.formContext.formDefinition.id}/fields`,
         {
           method: 'POST',
           headers: {
@@ -111,8 +113,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
       const body = await result.json();
       const newFormId = body.id;
-      this.formReplacements.setReplacement(this.formDefinition.id, newFormId);
-      this.onFormUpdate();
+      this.formReplacements.setReplacement(
+        this.formContext.formDefinition.id,
+        newFormId
+      );
+      this.formContext.onFormUpdate();
     } catch (error) {
       showErrorToast(
         this.toaster,
@@ -163,7 +168,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         formUri: this.args.form.uri,
       }),
     });
-    this.onFormUpdate();
+    this.formContext.onFormUpdate();
     this.isRemovingField = false;
   }
 
@@ -184,7 +189,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     }
 
     const localStore = new ForkingStore();
-    localStore.parse(this.formDefinition.formTtl, SOURCE_GRAPH, 'text/turtle');
+    localStore.parse(
+      this.formContext.formDefinition.formTtl,
+      SOURCE_GRAPH,
+      'text/turtle'
+    );
     const libraryEntree = localStore.any(
       this.args.field.uri,
       PROV('wasDerivedFrom'),
@@ -198,7 +207,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   get libraryFieldOptions() {
     const forkingStore = new ForkingStore();
     forkingStore.parse(
-      this.formDefinition.formTtl,
+      this.formContext.formDefinition.formTtl,
       SOURCE_GRAPH,
       'text/turtle'
     );

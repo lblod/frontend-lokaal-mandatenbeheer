@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
@@ -38,25 +37,12 @@ export default class EditableFormComponent extends Component {
     return this.features.isEnabled('editable-forms');
   }
 
-  @provide('on-form-update')
-  @action
-  onFormUpdate() {
-    this.updateForm();
-  }
-
-  @provide('form-definition')
-  get formDefinition() {
-    return this.currentForm;
-  }
-
-  @action
-  onCloseEditModal() {
-    this.showEditModal = false;
-    this.onFormUpdate();
-  }
-
-  @provide('is-read-only')
-  get isReadOnly() {
-    return this.args.isReadOnly;
+  @provide('form-context')
+  get formContext() {
+    return {
+      onFormUpdate: () => this.updateForm(),
+      formDefinition: this.currentForm,
+      isReadOnly: this.args.isReadOnly,
+    };
   }
 }
