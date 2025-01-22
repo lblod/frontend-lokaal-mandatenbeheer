@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export async function endOfDay(date) {
+export function endOfDay(date) {
   if (date) {
     return moment(date).utc().add(1, 'days').startOf('day').toDate();
   } else {
@@ -8,6 +8,6 @@ export async function endOfDay(date) {
   }
 }
 
-export async function displayEndOfDay(date) {
+export function displayEndOfDay(date) {
   return moment(date).subtract(1, 'days').toDate();
 }
