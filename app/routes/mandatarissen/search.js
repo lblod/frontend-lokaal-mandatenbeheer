@@ -26,7 +26,7 @@ export default class MandatarissenSearchRoute extends Route {
   };
 
   async model(params) {
-    const bestuursPeriods = await this.store.query('bestuursperiode', {
+    const allBestuursperiode = await this.store.query('bestuursperiode', {
       sort: 'label',
       include: [
         'installatievergaderingen',
@@ -34,26 +34,9 @@ export default class MandatarissenSearchRoute extends Route {
       ].join(','),
     });
     let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
-      bestuursPeriods,
+      allBestuursperiode,
       params.bestuursperiode
     );
-
-    const isDistrict = this.currentSession.isDistrict;
-    // This map is made for disabling certain options in the powerselect
-    const periodMap = await Promise.all(
-      bestuursPeriods.map(async (period) => {
-        const ivs = await period.installatievergaderingen;
-        if (ivs.length < 1) {
-          return { period, disabled: false };
-        }
-        const isBehandeld = await ivs.at(0).isBehandeld;
-        if (isBehandeld) {
-          return { period, disabled: false };
-        }
-        return { period, disabled: isDistrict ? false : true };
-      })
-    );
-
     const personenWithMandatarissen = await this.getPersoonWithMandatarissen(
       params,
       selectedPeriod
@@ -73,8 +56,8 @@ export default class MandatarissenSearchRoute extends Route {
 
     return {
       personenWithMandatarissen,
-      bestuursPeriods: periodMap,
-      selectedPeriod: { period: selectedPeriod, disabled: false },
+      allBestuursperiode,
+      selectedPeriod,
       bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
       selectedBestuurfunctieIds: params.bestuursfunctie,
       fracties: [
