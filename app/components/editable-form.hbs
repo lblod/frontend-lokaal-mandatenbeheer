@@ -2,7 +2,7 @@
   <SemanticForms::Instance
     @show={{@isReadOnly}}
     @instanceId={{@instanceId}}
-    @form={{this.currentForm}}
+    @form={{this.formContext.formDefinition}}
     @onCancel={{@onCancel}}
     @onSave={{@onSave}}
     @formInitialized={{@formInitialized}}
@@ -11,7 +11,7 @@
     @saveTitle={{@saveTitle}}
   >
     {{#if this.editableFormsEnabled}}
-      {{#unless this.isReadOnly}}
+      {{#unless @isReadOnly}}
         <AuButton
           @skin="link"
           @icon="plus"
@@ -24,15 +24,13 @@
 
       {{yield}}
 
-      {{#if this.showEditModal}}
-        <RdfInputFields::CrudCustomFieldModal
-          @isCreating={{true}}
-          @onCloseModal={{this.onCloseEditModal}}
-          @form={{this.currentForm}}
-          @field={{@field}}
-          @showModal={{this.showEditModal}}
-        />
-      {{/if}}
+      <RdfInputFields::CrudCustomFieldModal
+        @isCreating={{true}}
+        @showModal={{this.showModal}}
+        @onCloseModal={{this.formContext.onFormUpdate}}
+        @form={{this.formContext.formDefinition}}
+        @field={{@field}}
+      />
     {{/if}}
     {{yield}}
   </SemanticForms::Instance>

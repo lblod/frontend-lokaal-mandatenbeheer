@@ -10,9 +10,7 @@ import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { ADRES_CUSTOM_DISPLAY_TYPE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class RdfInputFieldsCustomFieldWrapperComponent extends Component {
-  @consume('on-form-update') onFormUpdate;
-  @consume('form-definition') formDefinition;
-  @consume('is-read-only') isReadOnly;
+  @consume('form-context') formContext;
 
   @tracked showModal;
 
@@ -22,14 +20,14 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
 
   get isFieldReadOnly() {
     return (
-      this.isReadOnly &&
+      this.formContext.isReadOnly &&
       ![ADRES_CUSTOM_DISPLAY_TYPE].includes(this.args.field.displayType)
     );
   }
 
   moveField = task(async (direction) => {
     const result = await fetch(
-      `/form-content/${this.formDefinition.id}/fields/move`,
+      `/form-content/${this.formContext.formDefinition.id}/fields/move`,
       {
         method: 'POST',
         headers: {
@@ -44,7 +42,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
     );
 
     if (result.ok) {
-      this.onFormUpdate();
+      this.formContext.onFormUpdate();
     }
   });
 
