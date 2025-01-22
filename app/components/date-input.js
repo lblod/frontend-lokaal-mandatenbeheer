@@ -56,7 +56,7 @@ export default class DateInputComponent extends Component {
 
   processDate(date) {
     if (this.args?.endOfDay) {
-      date = moment(date).add(1, 'days').toDate();
+      date = moment(date).utc().add(1, 'days').toDate();
     }
     if (!isValidDate(date)) {
       this.invalidErrorMessage = `Datum is ongeldig.`;
