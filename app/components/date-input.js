@@ -13,6 +13,7 @@ export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
 
   @tracked dateInputString;
+  @tracked warningMessage;
   @tracked errorMessage;
   @tracked invalidErrorMessage;
 
@@ -58,6 +59,7 @@ export default class DateInputComponent extends Component {
     if (!isValidDate(date)) {
       this.invalidErrorMessage = `Datum is ongeldig.`;
       this.errorMessage = null;
+      this.warningMessage = null;
 
       return date;
     }
@@ -78,12 +80,12 @@ export default class DateInputComponent extends Component {
         ? moment(maxDate).format('DD-MM-YYYY')
         : null;
 
-      this.errorMessage = this.getErrorMessageForDateRange(
+      this.warningMessage = this.getErrorMessageForDateRange(
         stringMinDate,
         stringMaxDate
       );
     } else {
-      this.errorMessage = null;
+      this.warningMessage = null;
     }
 
     return date;
