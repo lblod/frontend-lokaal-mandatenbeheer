@@ -8,6 +8,7 @@ import moment from 'moment';
 
 import { INPUT_DEBOUNCE, NULL_DATE } from 'frontend-lmb/utils/constants';
 import { action } from '@ember/object';
+import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 
 export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
@@ -57,7 +58,7 @@ export default class DateInputComponent extends Component {
 
   processDate(date) {
     if (this.args?.endOfDay) {
-      date = moment(date).utc().add(1, 'days').toDate();
+      date = endOfDay(date);
     }
     if (!isValidDate(date)) {
       this.invalidErrorMessage = `Datum is ongeldig.`;
