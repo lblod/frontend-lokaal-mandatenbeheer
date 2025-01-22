@@ -6,6 +6,7 @@ import { service } from '@ember/service';
 
 export default class MandatarisExtraInfoCardComponent extends Component {
   @service router;
+  @service features;
 
   @tracked isModalActive = false;
   @tracked formInitialized;
@@ -33,6 +34,10 @@ export default class MandatarisExtraInfoCardComponent extends Component {
     } else {
       return false;
     }
+  }
+
+  get editableFormsEnabled() {
+    return this.features.isEnabled('editable-forms');
   }
 
   @action

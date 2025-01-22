@@ -25,12 +25,27 @@
       <AuLabel for="input" class="skeleton-label" />
       <p class="skeleton-text au-u-margin-top"></p>
     {{else}}
-      <EditableForm
-        @isReadOnly={{true}}
-        @instanceId={{@mandataris.id}}
-        @form={{@form}}
-        @formInitialized={{fn (mut this.formInitialized) true}}
-      />
+      {{#if this.editableFormsEnabled}}
+        <EditableForm
+          @isReadOnly={{true}}
+          @instanceId={{@mandataris.id}}
+          @form={{@form}}
+          @formInitialized={{fn (mut this.formInitialized) true}}
+        />
+      {{else}}
+        {{#if this.hasBeleidsdomeinen}}
+          <div class="au-o-grid__item au-u-5-6">
+            <div class="au-c-description-label"><div
+              >Beleidsdomein(en)</div></div>
+            <div class="au-c-description-value">{{await
+                this.formattedBeleidsdomein
+              }}
+            </div>
+          </div>
+        {{else}}
+          Dit mandaat heeft geen bijkomende informatie.
+        {{/if}}
+      {{/if}}
     {{/if}}
   </div>
 </div>
