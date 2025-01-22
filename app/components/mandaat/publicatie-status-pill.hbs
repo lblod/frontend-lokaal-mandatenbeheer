@@ -1,18 +1,13 @@
 <div>
-  <Shared::Tooltip
-    @showTooltip={{this.effectiefIsLastStatus}}
-    @tooltipText={{this.lastStatusTooltipText}}
+  <AuPill
+    @skin={{await this.skin}}
+    @draft={{false}}
+    @size="regular"
+    @iconAlignment="left"
+    @hideText={{false}}
   >
-    <AuPill
-      @skin={{await this.skin}}
-      @draft={{false}}
-      @size="regular"
-      @iconAlignment="left"
-      @hideText={{false}}
-    >
-      {{or this.status.label "Niet beschikbaar"}}
-    </AuPill>
-  </Shared::Tooltip>
+    {{or this.status.label "Niet beschikbaar"}}
+  </AuPill>
   {{#if
     (and
       @showBekijkBewijs (await this.linkToDecision) this.isMandatarisBekrachtigd

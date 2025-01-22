@@ -5,10 +5,12 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 
 import { MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE } from 'frontend-lmb/utils/well-known-uris';
-
-import { task } from 'ember-concurrency';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
+import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
+import { PUBLICATION_STATUS_EFFECTIEF_ID } from 'frontend-lmb/utils/well-known-ids';
+
+import { task } from 'ember-concurrency';
 
 export default class MandatarisCardComponent extends Component {
   @tracked editingStatus = false;
@@ -49,12 +51,22 @@ export default class MandatarisCardComponent extends Component {
     return this.args.mandataris.uniqueVervangersVan;
   }
 
-  get skinForStatusPill() {
-    if (this.status && this.status == 'Effectief') {
-      return 'success';
+  get effectiefIsLastStatus() {
+    return effectiefIsLastPublicationStatus(this.args.mandataris);
+  }
+
+  get lastStatusTooltipText() {
+    const publicatieStatusId =
+      this.args.mandataris.publicationStatus?.get('id');
+    if (
+      this.effectiefIsLastStatus &&
+      publicatieStatusId &&
+      publicatieStatusId === PUBLICATION_STATUS_EFFECTIEF_ID
+    ) {
+      return 'Deze mandataris moet niet bekrachtigd worden.';
     }
 
-    return 'default';
+    return null;
   }
 
   @action
