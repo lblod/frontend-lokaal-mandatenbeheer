@@ -87,6 +87,7 @@
   @personRoute="mandatarissen.persoon.mandaten"
   @mandaatRoute="mandatarissen.persoon.mandataris"
   @hidePublicationStatus={{not (await this.model.bestuursorgaan.isDecretaal)}}
+  @showRangorde={{await @model.bestuursorgaan.hasRangorde}}
 />
 
 {{outlet}}
