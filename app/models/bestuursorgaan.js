@@ -151,7 +151,9 @@ export default class BestuursorgaanModel extends Model {
   }
 
   get hasRangorde() {
-    return this.isCBS || this.isGR;
+    return Promise.all([this.isCBS, this.isGR]).then((promise) => {
+      return promise.some((value) => value);
+    });
   }
 
   get hasVoorzitter() {
