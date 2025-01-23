@@ -154,6 +154,7 @@ export default class MandatarisModel extends Model {
 
   async save() {
     const creating = !this.id;
+    this.modified = new Date();
     const result = await super.save(...arguments);
     if (creating) {
       await fetch(
