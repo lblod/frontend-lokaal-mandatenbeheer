@@ -120,20 +120,8 @@
       @showFractie={{true}}
       @showFunctie={{true}}
       @showStart={{true}}
-      @showRangorde={{or
-        (eq
-          @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
-          this.CBSClassification
-        )
-        (eq
-          @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
-          this.gemeenteRaadClassification
-        )
-      }}
-      @showBeleidsdomein={{eq
-        @bestuursorgaan.isTijdsspecialisatieVan.classificatie.uri
-        this.CBSClassification
-      }}
+      @showRangorde={{@bestuursorgaan.hasRangorde}}
+      @showBeleidsdomein={{@bestuursorgaan.isCBS}}
       @showStartEndDate={{false}}
       @form={{@form}}
       @buildMetaTtl={{this.buildMetaTtl}}
