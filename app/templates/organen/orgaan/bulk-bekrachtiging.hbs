@@ -14,8 +14,8 @@
   </Group>
   <Group>
     <Shared::Tooltip
-      @showTooltip={{not this.hasMandatarissenToEdit}}
-      @tooltipText="Al de mandatarissen staan in hun eindstatus"
+      @showTooltip={{this.openModalDisabled}}
+      @tooltipText={{this.tooltipText}}
     >
       <AuButton
         {{on "click" this.openModal}}
