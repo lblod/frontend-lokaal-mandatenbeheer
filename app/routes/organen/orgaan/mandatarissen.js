@@ -21,13 +21,13 @@ export default class OrganenMandatarissenRoute extends Route {
 
   async model(params) {
     const parentModel = this.modelFor('organen.orgaan');
-    const currentBestuursorgaan = await parentModel.currentBestuursorgaan;
+    const bestuursorgaanInTijd = await parentModel.currentBestuursorgaan;
 
     const bestuurseenheid = this.currentSession.group;
 
     let mandatarissen;
-    if (currentBestuursorgaan) {
-      const options = this.getOptions(params, currentBestuursorgaan);
+    if (bestuursorgaanInTijd) {
+      const options = this.getOptions(params, bestuursorgaanInTijd);
 
       mandatarissen = await this.store.query('mandataris', options);
     }
@@ -42,40 +42,16 @@ export default class OrganenMandatarissenRoute extends Route {
         parentModel.selectedBestuursperiode
       );
     const isDistrict = this.currentSession.isDistrict;
-    const bestuursorgaanInTijdId = await this.getBestuursorgaanInTijdId(
-      parentModel.selectedBestuursperiode,
-      parentModel.bestuursorgaan
-    );
 
     return {
       bestuurseenheid,
       mandatarissen: this.getFilteredMandatarissen(folded, params),
       bestuursorgaan: parentModel.bestuursorgaan,
-      bestuursorgaanInTijdId,
-      bestuursorgaanInTijd: await this.store.findRecord(
-        'bestuursorgaan',
-        bestuursorgaanInTijdId
-      ),
+      bestuursorgaanInTijd,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
-      currentBestuursorgaan: currentBestuursorgaan,
       legislatuurInBehandeling: isDistrict ? false : legislatuurInBehandeling,
     };
-  }
-
-  async getBestuursorgaanInTijdId(selectedBestuursperiode, bestuursorgaan) {
-    const bestuursorganenInTijdFromPeriod =
-      (await selectedBestuursperiode.heeftBestuursorganenInTijd) ?? [];
-    const bestuursorganenInTijd =
-      (await bestuursorgaan?.heeftTijdsspecialisaties) ?? [];
-    const fromPeriodIds = bestuursorganenInTijdFromPeriod.map((boi) => boi.id);
-    const boiIds = bestuursorganenInTijd.map((boi) => boi.id);
-    const boiInPeriod = boiIds.filter((id) => fromPeriodIds.includes(id));
-
-    if (boiInPeriod.length >= 1) {
-      return boiInPeriod.at(0);
-    }
-    return null;
   }
 
   getOptions(params, bestuursOrgaan) {

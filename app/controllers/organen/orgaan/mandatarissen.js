@@ -57,7 +57,7 @@ export default class OrganenMandatarissenController extends Controller {
   @action
   async buildMetaTtl() {
     const metaTtl = await getApplicationContextMetaTtl([
-      this.model.currentBestuursorgaan,
+      this.model.bestuursorgaanInTijd,
     ]);
     return `${metaTtl}
     <http://mu.semte.ch/vocabularies/ext/applicationContext> <http://mu.semte.ch/vocabularies/ext/limitPersonFractions> true .
