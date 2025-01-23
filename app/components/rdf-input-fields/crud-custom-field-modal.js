@@ -26,6 +26,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   @tracked isRemovingField;
   @tracked isFieldRequired;
+  @tracked wantsToRemove;
 
   customFieldEntry = this.store.createRecord('library-entry', {
     name: 'Eigen veld',

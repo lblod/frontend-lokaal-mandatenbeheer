@@ -1,5 +1,5 @@
 <AuModal
-  @modalOpen={{true}}
+  @modalOpen={{@showModal}}
   @closeModal={{this.closeModal}}
   @closable={{true}}
   @title={{this.title}}
@@ -71,34 +71,15 @@
             {{selected.label}}
           </PowerSelect>
         </AuFormRow>
-      <AuFormRow class="au-form-row-full-width">
-        <AuLabel @required={{true}} for="display-type">Type</AuLabel>
-        <PowerSelect
-          @allowClear={{false}}
-          @disabled={{not this.canSelectTypeForEntry}}
-          @renderInPlace={{false}}
-          @searchEnabled={{true}}
-          @loadingMessage="Aan het laden..."
-          @noMatchesMessage="Geen types gevonden"
-          @searchMessage="Typ om te zoeken"
-          @searchField="label"
-          @options={{this.displayTypes}}
-          @selected={{this.displayType}}
-          @onChange={{this.selectDisplayType}}
-          id="display-type"
-          as |selected|
-        >
-          {{selected.label}}
-        </PowerSelect>
-      </AuFormRow>
-      <AuFormRow>
-        <AuToggleSwitch
-          @disabled={{@show}}
-          @checked={{this.isFieldRequired}}
-          @onChange={{this.toggleIsRequired}}
-        >Maak veld verplicht</AuToggleSwitch>
-      </AuFormRow>
-    </form>
+        <AuFormRow>
+          <AuToggleSwitch
+            @disabled={{@show}}
+            @checked={{this.isFieldRequired}}
+            @onChange={{this.toggleIsRequired}}
+          >Maak veld verplicht</AuToggleSwitch>
+        </AuFormRow>
+      </form>
+    {{/if}}
   </:body>
   <:footer>
     <div class="au-u-flex au-u-flex--between">
