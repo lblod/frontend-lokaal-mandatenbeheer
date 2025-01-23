@@ -120,8 +120,8 @@
       @showFractie={{true}}
       @showFunctie={{true}}
       @showStart={{true}}
-      @showRangorde={{@bestuursorgaan.hasRangorde}}
-      @showBeleidsdomein={{@bestuursorgaan.isCBS}}
+      @showRangorde={{await @bestuursorgaan.hasRangorde}}
+      @showBeleidsdomein={{await @bestuursorgaan.isCBS}}
       @showStartEndDate={{false}}
       @form={{@form}}
       @buildMetaTtl={{this.buildMetaTtl}}
