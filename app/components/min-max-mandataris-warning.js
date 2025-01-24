@@ -12,6 +12,7 @@ import {
 
 export default class MinMaxMandatarisWarningComponent extends Component {
   @service store;
+  @service features;
   @tracked warningMessages;
   @tracked currentIndex = 0;
 
@@ -38,6 +39,9 @@ export default class MinMaxMandatarisWarningComponent extends Component {
   }
 
   get currentWarningMessage() {
+    if (!this.features.isEnabled('enable-mandataris-count-warnings')) {
+      return null;
+    }
     return this.warningMessages?.[this.currentIndex];
   }
 

@@ -34,6 +34,7 @@ module.exports = function (environment) {
     },
     features: {
       'show-forms-module': false,
+      'enable-mandataris-count-warnings': false,
     },
     lpdcUrl: '{{LPDC_URL}}',
     worshipDecisionsDatabaseUrl: '{{WORSHIP_DECISIONS_DATABASE_URL}}',
@@ -59,6 +60,7 @@ module.exports = function (environment) {
   if (environment === 'development') {
     ENV.APP.DISABLE_RELOAD_WARNINGS = true;
     ENV.APP.SHOW_FORM_CONTENT = true;
+    ENV.features['enable-mandataris-count-warnings'] = true;
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
