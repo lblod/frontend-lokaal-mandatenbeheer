@@ -4,12 +4,17 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
+import { RESOURCE_CACHE_TIMEOUT } from 'frontend-lmb/utils/constants';
+
+import { timeout } from 'ember-concurrency';
+
 export default class MandatarisExtraInfoCardComponent extends Component {
   @service router;
   @service features;
 
   @tracked isModalActive = false;
   @tracked formInitialized;
+  @tracked isSaving;
 
   get formattedBeleidsdomein() {
     const beleidsdomeinenPromise = this.args.mandataris.beleidsdomein;
@@ -50,9 +55,12 @@ export default class MandatarisExtraInfoCardComponent extends Component {
   }
 
   @action
-  onSave() {
+  async onSave() {
+    this.isSaving = true;
     this.isModalActive = !this.isModalActive;
-    setTimeout(() => this.router.refresh(), 1000);
+    await timeout(RESOURCE_CACHE_TIMEOUT);
+    this.router.refresh();
+    this.isSaving = false;
   }
 
   get disabled() {
