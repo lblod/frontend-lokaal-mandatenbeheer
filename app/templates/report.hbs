@@ -26,6 +26,7 @@
       <c.header>
         <th class="au-u-padding-small">Entiteit</th>
         <th class="au-u-padding-small">Boodschap</th>
+        <th class="au-u-padding-small">Waarde</th>
       </c.header>
 
       <c.body as |result|>
@@ -37,11 +38,14 @@
             class="au-c-link au-u-medium"
             >
             {{result.focusNode}}
-        </LinkTo>
-        {{/let}}
+          </LinkTo>
+          {{/let}}
         </td>
         <td>
           {{result.resultMessage}}
+        </td>
+        <td>
+          {{result.value}}
         </td>
       </c.body>
     </t.content>
