@@ -1,5 +1,5 @@
 <AuModal
-  @modalOpen={{true}}
+  @modalOpen={{@showModal}}
   @closeModal={{this.closeModal}}
   @closable={{true}}
   @title={{this.title}}
@@ -70,6 +70,13 @@
           >
             {{selected.label}}
           </PowerSelect>
+        </AuFormRow>
+        <AuFormRow>
+          <AuToggleSwitch
+            @disabled={{@show}}
+            @checked={{this.isFieldRequired}}
+            @onChange={{this.toggleIsRequired}}
+          >Maak veld verplicht</AuToggleSwitch>
         </AuFormRow>
       </form>
     {{/if}}

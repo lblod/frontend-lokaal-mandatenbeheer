@@ -2,12 +2,7 @@
   <div class="au-u-flex au-u-flex--between">
     <div class="flex-grow">
       <div class="au-u-flex au-u-flex--row">
-        <AuLabel
-          for={{this.inputId}}
-          @error={{this.hasErrors}}
-          @warning={{this.hasWarnings}}
-          @required={{this.isRequired}}
-        >{{this.title}}</AuLabel>
+        <AuLabel @required={{this.isRequired}}>{{this.title}}</AuLabel>
         <AuButton
           @skin="link-secondary"
           @icon="pencil"
@@ -44,21 +39,13 @@
       </AuButton>
     </div>
   </div>
-
-  {{#each this.errors as |error|}}
-    <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
-  {{/each}}
-
-  {{#each this.warnings as |warning|}}
-    <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
-  {{/each}}
 {{/unless}}
 
-{{#if this.showModal}}
-  <RdfInputFields::CrudCustomFieldModal
-    @isCreating={{false}}
-    @onCloseModal={{fn (mut this.showModal) false}}
-    @form={{@form}}
-    @field={{@field}}
-  />
-{{/if}}
+<RdfInputFields::CrudCustomFieldModal
+  @isCreating={{false}}
+  @showModal={{this.showModal}}
+  @onCloseModal={{fn (mut this.showModal) false}}
+  @form={{@form}}
+  @field={{@field}}
+  @isRequiredField={{this.isRequired}}
+/>
