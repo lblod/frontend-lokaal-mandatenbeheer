@@ -1,0 +1,53 @@
+{{page-title "Report"}}
+
+<AuHeading @skin="2">
+  SHACL validatierapport ({{this.model.report.id}}
+  -
+  {{moment-format this.model.report.created "DD-MM-YYYY HH:mm:ss"}})
+</AuHeading>
+
+{{#each this.targetClasses as |targetClass|}}
+  <AuToolbar class="au-o-box" as |Group|>
+    <Group>
+      <AuHeading @skin="2">
+        {{targetClass}}
+      </AuHeading>
+    </Group>
+  </AuToolbar>
+
+  <AuDataTable
+    @content={{this.filterResultsByTargetClass targetClass}}
+    @noDataMessage="Geen validatieresultaten gevonden"
+    @page={{@page}}
+    @size={{this.lengthOfResultsByTargetClass targetClass}}
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        <th class="au-u-padding-small">Entiteit</th>
+        <th class="au-u-padding-small">Boodschap</th>
+        <th class="au-u-padding-small">Waarde</th>
+      </c.header>
+
+      <c.body as |result|>
+        <td>
+          {{#let (await (this.getFocusNodeContext result.focusNode result.targetClassOfFocusNode)) as |context|}}
+          <LinkTo
+            @route={{context.route}}
+            @model={{context.modelId}}
+            class="au-c-link au-u-medium"
+            >
+            {{result.focusNode}}
+          </LinkTo>
+          {{/let}}
+        </td>
+        <td>
+          {{result.resultMessage}}
+        </td>
+        <td>
+          {{result.value}}
+        </td>
+      </c.body>
+    </t.content>
+  </AuDataTable>
+{{/each}}

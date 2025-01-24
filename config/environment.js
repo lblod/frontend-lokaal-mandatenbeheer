@@ -64,6 +64,8 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+
+    ENV.features['shacl-report'] = true;
   }
 
   if (environment === 'test') {
@@ -76,10 +78,13 @@ module.exports = function (environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+
+    ENV.features['shacl-report'] = false;
   }
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
+    ENV.features['shacl-report'] = false;
   }
 
   ENV.features['show-iv-module'] = true;

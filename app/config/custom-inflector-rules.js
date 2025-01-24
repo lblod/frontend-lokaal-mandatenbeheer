@@ -71,3 +71,6 @@ inflector.irregular('global-system-message', 'global-system-messages');
 inflector.irregular('werkingsgebied', 'werkingsgebieden');
 
 inflector.irregular('bestuurseenheid-contact', 'bestuurseenheid-contacten');
+
+inflector.irregular('report', 'reports');
+inflector.irregular('validationresult', 'validationresults');

@@ -74,4 +74,5 @@ Router.map(function () {
     path: '/*wildcard',
   });
   this.route('session-expired');
+  this.route('report');
 });
