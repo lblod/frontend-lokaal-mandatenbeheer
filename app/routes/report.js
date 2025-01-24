@@ -22,7 +22,7 @@ export default class ReportRoute extends Route {
         page: { size: 1 },
         include: 'validationresults',
       })
-    )?.firstObject;
+    )[0];
 
     return {
       report: latestReport,
