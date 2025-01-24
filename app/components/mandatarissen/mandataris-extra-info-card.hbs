@@ -25,7 +25,7 @@
       <AuLabel for="input" class="skeleton-label" />
       <p class="skeleton-text au-u-margin-top"></p>
     {{else}}
-      {{#if this.editableFormsEnabled}}
+      {{#if (and this.editableFormsEnabled (not this.isSaving))}}
         <EditableForm
           @isReadOnly={{true}}
           @instanceId={{@mandataris.id}}
@@ -60,7 +60,7 @@
     <EditableForm
       @instanceId={{@mandataris.id}}
       @form={{@form}}
-      @onCancel={{this.toggleModal}}
+      @onCancel={{this.onSave}}
       @onSave={{this.onSave}}
       @formInitialized={{fn (mut this.formInitialized) true}}
       @customHistoryMessage={{true}}
