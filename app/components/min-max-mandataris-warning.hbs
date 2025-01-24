@@ -1,0 +1,32 @@
+<div {{did-update (perform this.setup) @mandatarissen}}></div>
+{{#if this.currentWarningMessage}}
+  <AuAlert
+    @type="warning"
+    @title={{this.warningTitle}}
+    class="au-u-margin-left-small au-u-margin-right-small au-u-margin-bottom-small"
+  >
+    <div
+      class="au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-flex--stretch"
+    >
+      {{#if (gt this.warningMessages.length 1)}}
+        <AuButton
+          {{on "click" this.previousWarning}}
+          @icon="chevron-left"
+          @skin="naked"
+        />
+      {{/if}}
+      <div class="flex-grow">
+        {{this.currentWarningMessage.text}}
+      </div>
+      {{#if (gt this.warningMessages.length 1)}}
+        <AuButton
+          {{on "click" this.nextWarning}}
+          @icon="chevron-right"
+          @skin="naked"
+        />
+      {{/if}}
+    </div>
+  </AuAlert>
+{{/if}}
+
+{{yield}}

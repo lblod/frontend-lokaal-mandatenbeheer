@@ -24,6 +24,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @tracked canBecomeOnafhankelijk;
   @tracked currentNonOnafhankelijkeMandatarissen = [];
   @tracked isModalOpen = false;
+  @tracked isEndMandatesModalOpen = false;
   @tracked selectedBestuursorgaan = null;
   @tracked activeOnly = true;
   sort = 'is-bestuurlijke-alias-van.achternaam';
@@ -36,6 +37,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @action
   closeModal() {
     this.isModalOpen = false;
+    this.isEndMandatesModalOpen = false;
     this.selectedBestuursorgaan = null;
   }
 
@@ -137,6 +139,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       `Active mandatatarissen beëindigd voor ${this.model.persoon.naam}`
     );
     this.activeOnly = false;
+    this.isEndMandatesModalOpen = false;
     this.router.refresh();
   });
 

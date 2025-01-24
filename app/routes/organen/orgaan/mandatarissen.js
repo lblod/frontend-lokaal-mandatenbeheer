@@ -42,14 +42,19 @@ export default class OrganenMandatarissenRoute extends Route {
         parentModel.selectedBestuursperiode
       );
     const isDistrict = this.currentSession.isDistrict;
+    const bestuursorgaanInTijdId = await this.getBestuursorgaanInTijdId(
+      parentModel.selectedBestuursperiode,
+      parentModel.bestuursorgaan
+    );
 
     return {
       bestuurseenheid,
       mandatarissen: this.getFilteredMandatarissen(folded, params),
       bestuursorgaan: parentModel.bestuursorgaan,
-      bestuursorgaanInTijdId: await this.getBestuursorgaanInTijdId(
-        parentModel.selectedBestuursperiode,
-        parentModel.bestuursorgaan
+      bestuursorgaanInTijdId,
+      bestuursorgaanInTijd: await this.store.findRecord(
+        'bestuursorgaan',
+        bestuursorgaanInTijdId
       ),
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
@@ -93,6 +98,7 @@ export default class OrganenMandatarissenRoute extends Route {
         'bekleedt.bestuursfunctie',
         'heeft-lidmaatschap.binnen-fractie',
         'status',
+        'publication-status',
       ].join(','),
     };
 

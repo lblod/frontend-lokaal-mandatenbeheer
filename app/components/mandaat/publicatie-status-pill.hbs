@@ -1,20 +1,12 @@
 <div>
   <AuPill
-    @skin={{if
-      (eq @mandataris.publicationStatus.label "Bekrachtigd")
-      "success"
-      (if
-        (eq @mandataris.publicationStatus.label "Effectief")
-        "warning"
-        (if (eq @mandataris.publicationStatus.label "Draft") "border" "default")
-      )
-    }}
+    @skin={{await this.skin}}
     @draft={{false}}
     @size="regular"
     @iconAlignment="left"
     @hideText={{false}}
   >
-    {{or @mandataris.publicationStatus.label "Niet beschikbaar"}}
+    {{or this.status.label "Niet beschikbaar"}}
   </AuPill>
   {{#if
     (and

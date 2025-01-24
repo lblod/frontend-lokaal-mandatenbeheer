@@ -11,20 +11,14 @@
             <PowerSelect
               @renderInPlace={{true}}
               @selected={{this.model.selectedPeriod}}
-              @options={{this.model.bestuursPeriods}}
+              @options={{this.model.allBestuursperiodes}}
               class="is-optional"
               @onChange={{this.selectPeriod}}
               @searchEnabled={{false}}
               @noMatchesMessage="Geen bestuursperioden"
               as |period|
             >
-              {{#if period.disabled}}
-                {{period.period.label}}
-                <AuPill @icon="info-circle" @size="small">Voorbereiding
-                  legislatuur nog actief</AuPill>
-              {{else}}
-                {{period.period.label}}
-              {{/if}}
+              {{period.label}}
             </PowerSelect>
           </div>
           <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">

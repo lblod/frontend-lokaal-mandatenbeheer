@@ -11,7 +11,7 @@ import {
 } from '@lblod/submission-form-helpers';
 
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { EXT } from 'frontend-lmb/rdf/namespaces';
+import { EXT, SHACL } from 'frontend-lmb/rdf/namespaces';
 import { loadBestuursorgaanPeriodFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 
 export default class RdfDateInputComponent extends InputFieldComponent {
@@ -35,11 +35,15 @@ export default class RdfDateInputComponent extends InputFieldComponent {
       this.date = new Date(datestring);
     }
 
-    const validations = validationResultsForField(
-      this.args.field.uri,
-      this.storeOptions
-    );
-    const hasMandatarisDateValidation = validations.some(
+    const errors = validationResultsForField(this.args.field.uri, {
+      severity: SHACL('Violation'),
+      ...this.storeOptions,
+    });
+    const warnings = validationResultsForField(this.args.field.uri, {
+      severity: SHACL('Warning'),
+      ...this.storeOptions,
+    });
+    const hasMandatarisDateValidation = [...errors, ...warnings].some(
       (validation) =>
         validation.validationType === EXT('ValidMandatarisDate').value
     );
