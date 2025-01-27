@@ -9,6 +9,7 @@ export default class OrganenMandatarissenRoute extends Route {
   @service currentSession;
   @service store;
   @service installatievergadering;
+  @service bestuursperioden;
   @service semanticFormRepository;
   @service('mandatarissen') mandatarissenService;
 
@@ -34,6 +35,11 @@ export default class OrganenMandatarissenRoute extends Route {
       );
     }
     const folded = await foldMandatarisses(params, mandatarissen);
+    const filtered = this.getFilteredMandatarissen(
+      folded,
+      params,
+      parentModel.selectedBestuursperiode
+    );
     const mandatarisNewForm =
       await this.semanticFormRepository.getFormDefinition(
         MANDATARIS_NEW_FORM_ID
@@ -47,7 +53,7 @@ export default class OrganenMandatarissenRoute extends Route {
 
     return {
       bestuurseenheid,
-      mandatarissen: this.getFilteredMandatarissen(folded, params),
+      mandatarissen: filtered,
       bestuursorgaan: parentModel.bestuursorgaan,
       bestuursorgaanInTijd,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
@@ -56,11 +62,11 @@ export default class OrganenMandatarissenRoute extends Route {
     };
   }
 
-  getFilteredMandatarissen(mandatarissen, params) {
+  getFilteredMandatarissen(mandatarissen, params, bestuursperiode) {
     let filteredMandatarissen = mandatarissen;
-    // eslint-disable-next-line ember/no-controller-access-in-routes
-    const controller = this.controllerFor('organen.orgaan.mandatarissen');
-    if (params.activeOnly && controller.selectedPeriodIsCurrent) {
+    const isCurrentBestuursperiode =
+      this.bestuursperioden.isCurrentPeriod(bestuursperiode);
+    if (params.activeOnly && isCurrentBestuursperiode) {
       filteredMandatarissen = mandatarissen.filter(
         (mandataris) => mandataris.mandataris.isActive
       );
