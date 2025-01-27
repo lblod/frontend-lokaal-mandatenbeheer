@@ -28,6 +28,7 @@ export default class OrganenMandatarissenController extends Controller {
   size = 900000;
 
   @tracked newestMandatarisId = null;
+  @tracked editRangorde = false;
 
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
@@ -42,6 +43,11 @@ export default class OrganenMandatarissenController extends Controller {
   @action
   setIsCreatingMandataris(toggleTo) {
     this.isCreatingMandataris = toggleTo;
+  }
+
+  @action
+  toggleEditRangorde() {
+    this.editRangorde = !this.editRangorde;
   }
 
   @action

@@ -100,7 +100,14 @@
         {{moment-format row.foldedEnd "DD-MM-YYYY"}}</td>
       {{#if @showRangorde}}
         <td>
-          {{row.mandataris.rangorde}}
+          {{#if @editRangorde}}
+            <Verkiezingen::RangordeInput
+              @mandataris={{row.mandataris}}
+              @mandatarissen={{@content}}
+            />
+          {{else}}
+            {{row.mandataris.rangorde}}
+          {{/if}}
         </td>
       {{/if}}
       {{#unless @hidePublicationStatus}}

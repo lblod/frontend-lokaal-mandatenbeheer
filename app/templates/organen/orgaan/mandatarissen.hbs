@@ -10,6 +10,9 @@
     </AuHeading>
   </Group>
   <Group>
+    <AuButton @skin="secondary" {{on "click" this.toggleEditRangorde}}>
+      Wijzig rangorde
+    </AuButton>
     {{#if this.isDisabled}}
       <Shared::Tooltip
         @showTooltip={{true}}
@@ -88,6 +91,7 @@
   @mandaatRoute="mandatarissen.persoon.mandataris"
   @hidePublicationStatus={{not (await this.model.bestuursorgaan.isDecretaal)}}
   @showRangorde={{await @model.bestuursorgaan.hasRangorde}}
+  @editRangorde={{this.editRangorde}}
 />
 
 {{outlet}}
