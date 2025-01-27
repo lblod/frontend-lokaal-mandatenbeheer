@@ -38,4 +38,8 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
   get iconSubRowOpen() {
     return this.isSubRowOpen ? 'nav-up' : 'nav-down';
   }
+
+  get subRowButtonClass() {
+    return this.hasOnlyOneMandaat ? 'hidden-element' : '';
+  }
 }

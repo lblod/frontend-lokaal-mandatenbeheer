@@ -400,3 +400,7 @@ $au-region-breakpoint: medium !default;
   border-radius: 3px;
   border: solid 1px var(--au-red-600);
 }
+
+.hidden-element {
+  visibility: hidden;
+}

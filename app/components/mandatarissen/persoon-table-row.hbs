@@ -1,7 +1,7 @@
 {{! Naam}}
 <td>
   <div class="au-u-flex au-u-flex--row">
-    <span style={{if this.hasOnlyOneMandaat "visibility: hidden" ""}}>
+    <span class={{this.subRowButtonClass}}>
       <AuButton
         @skin="naked"
         @icon={{this.iconSubRowOpen}}
