@@ -15,8 +15,13 @@
           @skin="naked"
         />
       {{/if}}
-      <div class="flex-grow">
+      <div class="flex-grow pre-wrap">
         {{this.currentWarningMessage.text}}
+        {{#if this.currentWarningMessage.mailTo}}
+          Gelieve dit te laten weten aan de
+          <AuLinkExternal href={{this.currentWarningMessage.mailTo}}>technische
+            dienst</AuLinkExternal>.
+        {{/if}}
       </div>
       {{#if (gt this.warningMessages.length 1)}}
         <AuButton
