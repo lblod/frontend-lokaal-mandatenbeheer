@@ -6,6 +6,7 @@ export default class ValidationresultModel extends Model {
   @attr('string') sourceConstraintComponent;
   @attr('string') sourceShape;
   @attr('string') resultMessage;
+  @attr('string') resultPath;
   @attr('string') value;
   @attr('string') targetClassOfFocusNode;
 }

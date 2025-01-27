@@ -10,6 +10,16 @@ export default class ReportController extends Controller {
     return Array.from(this.model.resultsByTargetClass.keys());
   }
 
+  getValueFromValidationResult(result) {
+    let value = '';
+    if (result.value) {
+      value = result.value;
+    } else if (result.resultPath) {
+      value = result.resultPath;
+    }
+    return value;
+  }
+
   @action
   filterResultsByTargetClass(targetClass) {
     return this.model.resultsByTargetClass.get(targetClass);
