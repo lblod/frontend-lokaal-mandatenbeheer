@@ -18,7 +18,6 @@ export default class EditRangordeRoute extends Route {
         bestuursorgaanInTijd
       );
     }
-    console.log(mandatarissen);
 
     return {
       bestuursorgaan: parentModel.bestuursorgaan,
