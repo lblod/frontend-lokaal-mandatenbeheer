@@ -1,0 +1,71 @@
+{{breadcrumb
+  "Wijzig rangorde mandatarissen"
+  route="organen.orgaan.edit-rangorde"
+}}
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom-none"
+  as |Group|
+>
+  <Group class="au-u-margin-bottom-none">
+    <AuHeading @skin="2">
+      Wijzig rangorde mandatarissen
+    </AuHeading>
+  </Group>
+  <Group>
+    <Shared::Tooltip
+      @showTooltip={{this.openModalDisabled}}
+      @tooltipText={{this.tooltipText}}
+    >
+      <AuButton
+        {{on "click" this.openModal}}
+        @disabled={{this.openModalDisabled}}
+      >
+        Wijzig rangordes
+      </AuButton>
+    </Shared::Tooltip>
+  </Group>
+</AuToolbar>
+
+<AuHeading @skin="3" class="au-u-regular au-u-padding-left au-u-padding-bottom">
+  {{this.model.bestuursorgaan.naam}}
+  {{this.model.selectedBestuursperiode.label}}
+</AuHeading>
+
+<AuAlert @icon="info-circle" @closable={{false}}>
+  Verlaat deze pagina niet alvorens je de wijzigingen opgeslagen hebt.
+</AuAlert>
+
+<Organen::EditMandatarisRangordeTable
+  @content={{@model.mandatarissen}}
+  @bestuursperiode={{@model.selectedBestuursperiode}}
+/>
+
+{{outlet}}
+
+<AuModal
+  @title="Bevestig wijziging rangorde"
+  @modalOpen={{this.modalOpen}}
+  @closable={{true}}
+  @closeModal={{this.closeModal}}
+>
+  <div class="au-o-box au-o-flow">
+    <div>
+      <Tmp::todo>
+        Add some filler text here.
+      </Tmp::todo>
+    </div>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton {{on "click" this.confirmEditRangorde}} @disabled="true">
+            Bevestig
+          </AuButton>
+          <AuButton {{on "click" this.closeModal}} @skin="secondary">
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+</AuModal>

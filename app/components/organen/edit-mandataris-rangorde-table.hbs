@@ -1,0 +1,66 @@
+<AuDataTable
+  @content={{@content}}
+  @noDataMessage="Geen mandatarissen gevonden"
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <th>
+        Mandaat
+      </th>
+      <th>
+        Voornaam
+      </th>
+      <th>
+        Familienaam
+      </th>
+      <th>
+        Fractie
+      </th>
+      <th>
+        Status
+      </th>
+      <th>
+        Start mandaat
+      </th>
+      <th>
+        Einde mandaat
+      </th>
+      <th>
+        Rangorde
+      </th>
+    </c.header>
+
+    <c.body as |row|>
+      <td>
+        {{row.bekleedt.bestuursfunctie.label}}
+      </td>
+      <td>
+        {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+      </td>
+      <td>
+        {{row.isBestuurlijkeAliasVan.achternaam}}
+      </td>
+      <td>
+        {{if
+          row.heeftLidmaatschap.binnenFractie
+          row.heeftLidmaatschap.binnenFractie.naam
+          "Niet beschikbaar"
+        }}
+      </td>
+      <td>
+        <Mandaat::MandatarisStatusPill @mandataris={{row}} />
+      </td>
+      <td class={{if (is-in-past row.einde) "au-u-muted"}}>
+        {{moment-format row.start "DD-MM-YYYY"}}</td>
+      <td class={{if (is-in-past row.einde) "au-u-muted"}}>
+        {{moment-format row.einde "DD-MM-YYYY"}}</td>
+      <td>
+        <Verkiezingen::RangordeInput
+          @mandataris={{row}}
+          @mandatarissen={{@content}}
+        />
+      </td>
+    </c.body>
+  </t.content>
+</AuDataTable>
