@@ -3,7 +3,6 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
-import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
 import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class OrganenMandatarissenRoute extends Route {
@@ -11,6 +10,7 @@ export default class OrganenMandatarissenRoute extends Route {
   @service store;
   @service installatievergadering;
   @service semanticFormRepository;
+  @service('mandatarissen') mandatarissenService;
 
   queryParams = {
     activeOnly: { refreshModel: true },
@@ -28,7 +28,10 @@ export default class OrganenMandatarissenRoute extends Route {
 
     let mandatarissen;
     if (bestuursorgaanInTijd) {
-      mandatarissen = await this.getMandatarissen(params, bestuursorgaanInTijd);
+      mandatarissen = await this.mandatarissenService.getMandatarissen(
+        params,
+        bestuursorgaanInTijd
+      );
     }
     const folded = await foldMandatarisses(params, mandatarissen);
     const mandatarisNewForm =
@@ -51,47 +54,6 @@ export default class OrganenMandatarissenRoute extends Route {
       mandatarisNewForm: mandatarisNewForm,
       legislatuurInBehandeling: isDistrict ? false : legislatuurInBehandeling,
     };
-  }
-
-  async getMandatarissen(params, bestuursorgaanInTijd) {
-    const options = this.getOptions(params, bestuursorgaanInTijd);
-    const mandatarissen = await this.store.query('mandataris', options);
-    if (params.sort && params.sort.endsWith('rangorde')) {
-      const reverse = params.sort[0] == '-';
-      return orderMandatarissenByRangorde([...mandatarissen], null, reverse);
-    }
-    return mandatarissen;
-  }
-
-  getOptions(params, bestuursOrgaan) {
-    const queryParams = {
-      sort: params.sort,
-      page: {
-        number: params.page,
-        size: params.size,
-      },
-      filter: {
-        bekleedt: {
-          'bevat-in': {
-            id: bestuursOrgaan.id,
-          },
-        },
-        ':has:is-bestuurlijke-alias-van': true,
-      },
-      include: [
-        'is-bestuurlijke-alias-van',
-        'bekleedt.bestuursfunctie',
-        'heeft-lidmaatschap.binnen-fractie',
-        'status',
-        'publication-status',
-      ].join(','),
-    };
-
-    if (params.filter) {
-      queryParams['filter']['is-bestuurlijke-alias-van'] = params.filter;
-    }
-
-    return queryParams;
   }
 
   getFilteredMandatarissen(mandatarissen, params) {
