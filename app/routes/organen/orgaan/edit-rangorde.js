@@ -13,9 +13,10 @@ export default class EditRangordeRoute extends Route {
     let mandatarissen;
 
     if (bestuursorgaanInTijd) {
-      mandatarissen = await this.mandatarissenService.getMandatarissen(
+      mandatarissen = await this.mandatarissenService.getActiveMandatarissen(
         params,
-        bestuursorgaanInTijd
+        bestuursorgaanInTijd,
+        parentModel.selectedBestuursperiode
       );
     }
 
