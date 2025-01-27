@@ -3,12 +3,17 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
 
 export default class EditRangordeController extends Controller {
   @service mandatarisApi;
   @service router;
 
   @tracked modalOpen = false;
+
+  get orderedMandatarissen() {
+    return orderMandatarissenByRangorde([...this.model.mandatarissen]);
+  }
 
   @action
   openModal() {

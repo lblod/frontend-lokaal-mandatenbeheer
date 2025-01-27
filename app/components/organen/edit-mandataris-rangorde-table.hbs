@@ -1,5 +1,5 @@
 <AuDataTable
-  @content={{@content}}
+  @content={{@orderedMandatarissen}}
   @noDataMessage="Geen mandatarissen gevonden"
   as |t|
 >
@@ -58,7 +58,7 @@
       <td>
         <Verkiezingen::RangordeInput
           @mandataris={{row}}
-          @mandatarissen={{@content}}
+          @mandatarissen={{@mandatarissen}}
         />
       </td>
     </c.body>

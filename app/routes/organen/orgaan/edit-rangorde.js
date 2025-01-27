@@ -13,7 +13,6 @@ export default class EditRangordeRoute extends Route {
     let mandatarissen;
 
     if (bestuursorgaanInTijd) {
-      params.sort = 'rangorde';
       params.size = 9999;
       mandatarissen = await this.mandatarissenService.getActiveMandatarissen(
         params,
