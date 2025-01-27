@@ -21,16 +21,31 @@
 
 <div class="au-o-box au-u-background-gray-100">
   <div class="au-o-grid au-o-grid--small">
-    {{#if this.hasBeleidsdomeinen}}
-      <div class="au-o-grid__item au-u-5-6">
-        <div class="au-c-description-label"><div>Beleidsdomein(en)</div></div>
-        <div class="au-c-description-value">{{await
-            this.formattedBeleidsdomein
-          }}
-        </div>
-      </div>
+    {{#if this.onSave.isRunning}}
+      <AuLabel for="input" class="skeleton-label" />
+      <p class="skeleton-text au-u-margin-top"></p>
     {{else}}
-      Dit mandaat heeft geen bijkomende informatie.
+      {{#if (and this.editableFormsEnabled (not this.isSaving))}}
+        <EditableForm
+          @isReadOnly={{true}}
+          @instanceId={{@mandataris.id}}
+          @form={{@form}}
+          @formInitialized={{fn (mut this.formInitialized) true}}
+        />
+      {{else}}
+        {{#if this.hasBeleidsdomeinen}}
+          <div class="au-o-grid__item au-u-5-6">
+            <div class="au-c-description-label"><div
+              >Beleidsdomein(en)</div></div>
+            <div class="au-c-description-value">{{await
+                this.formattedBeleidsdomein
+              }}
+            </div>
+          </div>
+        {{else}}
+          Dit mandaat heeft geen bijkomende informatie.
+        {{/if}}
+      {{/if}}
     {{/if}}
   </div>
 </div>
@@ -42,10 +57,10 @@
   @closeModal={{this.toggleModal}}
 >
   <div class="au-o-box">
-    <SemanticForms::Instance
+    <EditableForm
       @instanceId={{@mandataris.id}}
       @form={{@form}}
-      @onCancel={{this.toggleModal}}
+      @onCancel={{this.onSave}}
       @onSave={{this.onSave}}
       @formInitialized={{fn (mut this.formInitialized) true}}
       @customHistoryMessage={{true}}

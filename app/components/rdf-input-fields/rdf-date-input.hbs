@@ -1,9 +1,11 @@
-<AuLabel
-  for={{this.inputId}}
-  @error={{this.hasErrors}}
-  @warning={{this.hasWarnings}}
-  @required={{this.isRequired}}
->{{this.title}}</AuLabel>
+{{#unless @inTable}}
+  <AuLabel
+    for={{this.inputId}}
+    @error={{this.hasErrors}}
+    @warning={{this.hasWarnings}}
+    @required={{this.isRequired}}
+  >{{this.title}}</AuLabel>
+{{/unless}}
 <DateInput
   @id={{this.inputId}}
   @value={{this.date}}

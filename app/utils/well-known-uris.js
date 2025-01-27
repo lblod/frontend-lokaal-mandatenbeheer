@@ -98,3 +98,16 @@ export const KANDIDATENLIJST_SENAAT =
   'http://data.vlaanderen.be/id/concept/KandidatenlijstLijsttype/af845873-f8fa-4c7e-b67c-10e44957c40e';
 export const KANDIDATENLIJST_KAMER_VOLKSVERTEGENWOORDIGING =
   'http://data.vlaanderen.be/id/concept/KandidatenlijstLijsttype/83b89937-84e1-4e6c-a070-83b0fda51871';
+
+export const TEXT_CUSTOM_DISPLAY_TYPE =
+  'http://lblod.data.gift/display-types/lmb/custom-string-input';
+export const DATE_CUSTOM_DISPLAY_TYPE =
+  'http://lblod.data.gift/display-types/lmb/custom-date-input';
+export const ADRES_CUSTOM_DISPLAY_TYPE =
+  'http://lblod.data.gift/display-types/lmb/custom-address-input';
+
+export const LIBRARY_ENTREES = [
+  'http://data.lblod.info/id/lmb/form-library-entries/095d1329-a9fa-4d72-8c49-eb52aaf893de', // Verblijfsplaats
+  'http://data.lblod.info/id/lmb/form-library-entries/31004e04-1b1a-4fda-80ae-612d67a14b5e', // Geboorteplaats
+  'http://data.lblod.info/id/lmb/form-library-entries/8991472a-db3f-4f61-b070-5da7883be37d', // Telefoonnummer
+];

@@ -1,0 +1,142 @@
+<AuModal
+  @modalOpen={{@showModal}}
+  @closeModal={{this.closeModal}}
+  @closable={{true}}
+  @title={{this.title}}
+>
+  <:body>
+    {{#if this.wantsToRemove}}
+      <div
+        class="au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-flex--spaced-tiny warning-panel"
+      >
+        <AuBadge @icon="alert-triangle" @skin="error" @size="small" />
+        <span>Dit veld zal verwijderd worden voor
+          <strong>alle items</strong>
+          die bewerkt worden door dit formulier!
+          {{#if this.deleteWillLoseData}}Dit betekent dat u de
+            <strong>gegevens zal verliezen</strong>
+            die opgeslagen werd in dit veld!{{/if}}
+          Wilt u nog steeds doorgaan?</span>
+      </div>
+    {{else}}
+      <form class="au-c-form au-o-box au-o-flow">
+        <AuFormRow @alignment="default">
+          <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
+          <AuInput
+            @width="block"
+            @iconAlignment="left"
+            value={{this.fieldName}}
+            id="fieldName"
+            {{on "input" this.updateFieldName}}
+          />
+        </AuFormRow>
+        {{#if @isCreating}}
+          <AuFormRow class="au-form-row-full-width">
+            <AuLabel @required={{true}} for="library-entry">Uit bibliotheek</AuLabel>
+            <PowerSelect
+              @allowClear={{false}}
+              @renderInPlace={{false}}
+              @searchEnabled={{true}}
+              @loadingMessage="Aan het laden..."
+              @noMatchesMessage="Geen velden gevonden"
+              @searchMessage="Type om te zoeken"
+              @searchField="name"
+              @options={{this.libraryFieldOptions}}
+              @selected={{this.libraryFieldType}}
+              @onChange={{this.selectLibraryFieldType}}
+              id="library-entry"
+              as |selected|
+            >
+              {{selected.name}}
+            </PowerSelect>
+          </AuFormRow>
+        {{/if}}
+        <AuFormRow class="au-form-row-full-width">
+          <AuLabel @required={{true}} for="display-type">Type</AuLabel>
+          <PowerSelect
+            @allowClear={{false}}
+            @disabled={{not this.canSelectTypeForEntry}}
+            @renderInPlace={{false}}
+            @searchEnabled={{true}}
+            @loadingMessage="Aan het laden..."
+            @noMatchesMessage="Geen types gevonden"
+            @searchMessage="Typ om te zoeken"
+            @searchField="label"
+            @options={{this.displayTypes}}
+            @selected={{this.displayType}}
+            @onChange={{this.selectDisplayType}}
+            id="display-type"
+            as |selected|
+          >
+            {{selected.label}}
+          </PowerSelect>
+        </AuFormRow>
+        <AuFormRow>
+          <AuToggleSwitch
+            @disabled={{@show}}
+            @checked={{this.isFieldRequired}}
+            @onChange={{this.toggleIsRequired}}
+          >Maak veld verplicht</AuToggleSwitch>
+        </AuFormRow>
+      </form>
+    {{/if}}
+
+  </:body>
+  <:footer>
+    <div class="au-u-flex au-u-flex--between">
+      <AuButtonGroup>
+        {{#unless this.wantsToRemove}}
+          <Shared::Tooltip
+            @showTooltip={{not this.canSaveChanges}}
+            @tooltipText={{this.saveTooltipText}}
+            @alignment="left"
+          >
+            {{#if @isCreating}}
+              <AuButton
+                {{on "click" (perform this.createField)}}
+                @disabled={{not this.canSaveChanges}}
+                @loading={{this.createField.isRunning}}
+                @loadingMessage="Het veld wordt aangemaakt"
+              >
+                Bewaar
+              </AuButton>
+            {{else}}
+              <AuButton
+                {{on "click" (perform this.updateField)}}
+                @disabled={{not this.canSaveChanges}}
+                @loading={{this.updateField.isRunning}}
+                @loadingMessage="Het veld wordt aangepast"
+              >
+                Pas aan
+              </AuButton>
+            {{/if}}
+          </Shared::Tooltip>
+        {{/unless}}
+        <AuButton
+          @disabled={{(or
+            this.createField.isRunning this.updateField.isRunning
+          )}}
+          @skin="secondary"
+          {{on "click" this.onCancel}}
+        >
+          Annuleer
+        </AuButton>
+      </AuButtonGroup>
+      {{#unless @isCreating}}
+        <AuButton
+          @skin="secondary"
+          @alert={{true}}
+          @disabled={{(or
+            this.createField.isRunning this.updateField.isRunning
+          )}}
+          @loading={{this.isRemovingField}}
+          @loadingMessage="Het veld wordt verwijderd"
+          {{on "click" this.onRemove}}
+        >
+          Verwijder
+        </AuButton>
+      {{/unless}}
+    </div>
+  </:footer>
+
+</AuModal>

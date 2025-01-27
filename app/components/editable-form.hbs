@@ -1,0 +1,37 @@
+{{#unless this.loading}}
+  <SemanticForms::Instance
+    @show={{@isReadOnly}}
+    @instanceId={{@instanceId}}
+    @form={{this.formContext.formDefinition}}
+    @onCancel={{@onCancel}}
+    @onSave={{@onSave}}
+    @formInitialized={{@formInitialized}}
+    @customHistoryMessage={{@customHistoryMessage}}
+    @buildMetaTtl={{@buildMetaTtl}}
+    @saveTitle={{@saveTitle}}
+  >
+    {{#if this.editableFormsEnabled}}
+      {{#unless @isReadOnly}}
+        <AuButton
+          @skin="link"
+          @icon="plus"
+          {{on "click" (fn (mut this.showEditModal) true)}}
+          class="au-u-padding-left-none au-u-margin-bottom"
+        >
+          Voeg een veld toe
+        </AuButton>
+      {{/unless}}
+
+      {{yield}}
+
+      <RdfInputFields::CrudCustomFieldModal
+        @isCreating={{true}}
+        @showModal={{this.showEditModal}}
+        @onCloseModal={{this.formContext.onFormUpdate}}
+        @form={{this.formContext.formDefinition}}
+        @field={{@field}}
+      />
+    {{/if}}
+    {{yield}}
+  </SemanticForms::Instance>
+{{/unless}}
