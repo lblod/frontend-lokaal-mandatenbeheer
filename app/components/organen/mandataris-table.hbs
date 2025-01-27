@@ -44,13 +44,11 @@
         @label="Einde mandaat"
       />
       {{#if @showRangorde}}
-        {{! Needs custom sort... }}
-        {{!-- <AuDataTableThSortable
+        <AuDataTableThSortable
           @field="rangorde"
           @currentSorting={{@sort}}
           @label="Rangorde"
-        /> --}}
-        <th>Rangorde</th>
+        />
       {{/if}}
       {{#unless @hidePublicationStatus}}
         <AuDataTableThSortable

@@ -117,15 +117,16 @@ export const rangordeStringToNumber = (rangordeString) => {
 
 export const orderMandatarissenByRangorde = (
   mandatarissen,
-  allMandatarissenInIv
+  allMandatarissenInIv,
+  reverse
 ) => {
   return mandatarissen.sort((a, b) => {
     const classRankA = a.bekleedt.get('bestuursfunctie.rankForSorting');
     const classRankB = b.bekleedt.get('bestuursfunctie.rankForSorting');
     if (classRankA < classRankB) {
-      return 1;
+      return reverse ? -1 : 1;
     } else if (classRankA > classRankB) {
-      return -1;
+      return reverse ? 1 : -1;
     }
 
     const noRangorde = !a.rangorde && !b.rangorde;
@@ -136,12 +137,12 @@ export const orderMandatarissenByRangorde = (
     const aNumber = rangordeStringToNumber(a.rangorde);
     const bNumber = rangordeStringToNumber(b.rangorde);
     if (aNumber == null) {
-      return -1;
+      return reverse ? 1 : -1;
     }
     if (bNumber == null) {
-      return 1;
+      return reverse ? -1 : 1;
     }
-    return aNumber - bNumber;
+    return reverse ? bNumber - aNumber : aNumber - bNumber;
   });
 };
 
