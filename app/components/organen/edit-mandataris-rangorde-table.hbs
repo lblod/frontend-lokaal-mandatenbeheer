@@ -56,7 +56,7 @@
       <td class={{if (is-in-past row.einde) "au-u-muted"}}>
         {{moment-format row.einde "DD-MM-YYYY"}}</td>
       <td>
-        <Verkiezingen::RangordeInput
+        <Organen::RangordeInput
           @mandataris={{row}}
           @mandatarissen={{@mandatarissen}}
         />
