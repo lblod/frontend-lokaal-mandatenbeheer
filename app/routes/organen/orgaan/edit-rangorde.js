@@ -20,12 +20,15 @@ export default class EditRangordeRoute extends Route {
         parentModel.selectedBestuursperiode
       );
     }
+    const mandatarisStruct = mandatarissen.map((mandataris) => {
+      return { mandataris: mandataris, rangorde: mandataris.rangorde };
+    });
 
     return {
       bestuursorgaan: parentModel.bestuursorgaan,
       bestuursorgaanInTijd,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
-      mandatarissen,
+      mandatarisStruct,
     };
   }
 }

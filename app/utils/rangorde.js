@@ -146,6 +146,32 @@ export const orderMandatarissenByRangorde = (
   });
 };
 
+export const orderMandatarisStructByRangorde = (mandatarissen) => {
+  return mandatarissen.sort((a, b) => {
+    const classRankA = a.mandataris.bekleedt.get(
+      'bestuursfunctie.rankForSorting'
+    );
+    const classRankB = b.mandataris.bekleedt.get(
+      'bestuursfunctie.rankForSorting'
+    );
+    if (classRankA < classRankB) {
+      return 1;
+    } else if (classRankA > classRankB) {
+      return -1;
+    }
+
+    const aNumber = rangordeStringToNumber(a.rangorde);
+    const bNumber = rangordeStringToNumber(b.rangorde);
+    if (aNumber == null) {
+      return -1;
+    }
+    if (bNumber == null) {
+      return 1;
+    }
+    return aNumber - bNumber;
+  });
+};
+
 const findCorrespondingMandatarisIndex = (mandataris, allMandatarissenInIv) => {
   const correspondingMandateUris = mandataris.bekleedt.get(
     'bestuursfunctie.correspondingMandateCodesIV'

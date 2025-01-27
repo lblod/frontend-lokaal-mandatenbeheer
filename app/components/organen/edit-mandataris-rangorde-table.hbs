@@ -33,31 +33,31 @@
 
     <c.body as |row|>
       <td>
-        {{row.bekleedt.bestuursfunctie.label}}
+        {{row.mandataris.bekleedt.bestuursfunctie.label}}
       </td>
       <td>
-        {{row.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+        {{row.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
       </td>
       <td>
-        {{row.isBestuurlijkeAliasVan.achternaam}}
+        {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
       </td>
       <td>
         {{if
-          row.heeftLidmaatschap.binnenFractie
-          row.heeftLidmaatschap.binnenFractie.naam
+          row.mandataris.heeftLidmaatschap.binnenFractie
+          row.mandataris.heeftLidmaatschap.binnenFractie.naam
           "Niet beschikbaar"
         }}
       </td>
       <td>
-        <Mandaat::MandatarisStatusPill @mandataris={{row}} />
+        <Mandaat::MandatarisStatusPill @mandataris={{row.mandataris}} />
       </td>
-      <td class={{if (is-in-past row.einde) "au-u-muted"}}>
-        {{moment-format row.start "DD-MM-YYYY"}}</td>
-      <td class={{if (is-in-past row.einde) "au-u-muted"}}>
-        {{moment-format row.einde "DD-MM-YYYY"}}</td>
+      <td class={{if (is-in-past row.mandataris.einde) "au-u-muted"}}>
+        {{moment-format row.mandataris.start "DD-MM-YYYY"}}</td>
+      <td class={{if (is-in-past row.mandataris.einde) "au-u-muted"}}>
+        {{moment-format row.mandataris.einde "DD-MM-YYYY"}}</td>
       <td>
         <Organen::RangordeInput
-          @mandataris={{row}}
+          @mandataris={{row.mandataris}}
           @mandatarissen={{@mandatarissen}}
         />
       </td>
