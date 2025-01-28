@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class EditRangordeRoute extends Route {
   @service store;
@@ -20,6 +21,9 @@ export default class EditRangordeRoute extends Route {
         parentModel.selectedBestuursperiode
       );
     }
+    mandatarissen = mandatarissen.filter((mandataris) => {
+      return mandataris.get('bekleedt.hasRangorde');
+    });
     const mandatarisStruct = mandatarissen.map((mandataris) => {
       return { mandataris: mandataris, rangorde: mandataris.rangorde };
     });
@@ -34,6 +38,24 @@ export default class EditRangordeRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
+    controller.modalOpen = false;
+    controller.interceptedTransition = null;
+    controller.updatedRangordes = new Set();
+    controller.hasChanges = false;
     controller.updateOrderedMandatarisList();
+  }
+
+  @action
+  willTransition(transition) {
+    // dude, the ember api docs say to do it like this wtf.
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controller;
+    if (
+      controller.getChangedEntries().length > 0 &&
+      !controller.interceptedTransition
+    ) {
+      controller.interceptedTransition = transition;
+      transition.abort();
+    }
   }
 }

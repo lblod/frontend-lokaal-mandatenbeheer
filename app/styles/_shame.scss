@@ -302,6 +302,7 @@
 // Tooltips
 .tooltip-container {
   position: relative;
+  overflow: visible !important;
 }
 
 .tooltip-container .tooltip-text {

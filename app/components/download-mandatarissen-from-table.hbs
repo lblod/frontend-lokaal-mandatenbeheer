@@ -1,10 +1,12 @@
 <Shared::Tooltip
   @showTooltip={{true}}
+  role={{@role}}
   @tooltipText="Exporteer mandatarissen naar CSV formaat"
 >
   <AuLinkExternal
+    role={{@role}}
     href={{await this.downloadLink}}
     download="mandatarissen"
-    @skin="button-secondary"
+    @skin={{@skin}}
   >Download</AuLinkExternal>
 </Shared::Tooltip>

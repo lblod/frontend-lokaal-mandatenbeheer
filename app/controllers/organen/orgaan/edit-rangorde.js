@@ -11,6 +11,7 @@ export default class EditRangordeController extends Controller {
 
   @tracked modalOpen = false;
   @tracked orderedMandatarissen = [];
+  @tracked interceptedTransition = null;
   updatedRangordes = new Set();
   @tracked hasChanges = false;
 
@@ -59,12 +60,29 @@ export default class EditRangordeController extends Controller {
     return mandatarissen;
   }
 
-  @action async confirmEditRangorde() {
+  async changeRangorde(asCorrection) {
     const diff = this.getChangedEntries();
-    await this.rangordeApi.updateRangordes(diff);
+    await this.rangordeApi.updateRangordes(diff, asCorrection);
     this.closeModal();
     this.updatedRangordes.clear();
     this.hasChanges = false;
     this.router.refresh();
+  }
+
+  @action async confirmCorrectRangorde() {
+    this.changeRangorde(true);
+  }
+
+  @action async confirmChangeRangorde() {
+    this.changeRangorde(false);
+  }
+
+  @action confirmLoseChanges() {
+    this.interceptedTransition.retry();
+    this.interceptedTransition = null;
+  }
+
+  @action cancelLoseChanges() {
+    this.interceptedTransition = null;
   }
 }

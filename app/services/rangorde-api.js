@@ -8,9 +8,9 @@ export default class RangordeApiService extends Service {
   @service store;
   @service toaster;
 
-  async updateRangordes(mandatarissen) {
+  async updateRangordes(mandatarissen, asCorrection) {
     const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/rangorde/update-rangordes`,
+      `${API.MANDATARIS_SERVICE}/rangorde/update-rangordes?asCorrection=${asCorrection}`,
       {
         method: 'POST',
         headers: {

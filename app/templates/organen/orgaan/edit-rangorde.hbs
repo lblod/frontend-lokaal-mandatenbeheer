@@ -19,6 +19,7 @@
     >
       <AuButton
         {{on "click" this.openModal}}
+        size="large"
         @disabled={{this.openModalDisabled}}
       >
         Wijzig rangordes
@@ -32,10 +33,6 @@
   {{this.model.selectedBestuursperiode.label}}
 </AuHeading>
 
-<AuAlert @icon="info-circle" @closable={{false}}>
-  Verlaat deze pagina niet alvorens je de wijzigingen opgeslagen hebt.
-</AuAlert>
-
 <Organen::EditMandatarisRangordeTable
   @mandatarissen={{@model.mandatarisStruct}}
   @orderedMandatarissen={{this.orderedMandatarissen}}
@@ -47,22 +44,36 @@
 {{outlet}}
 
 <AuModal
-  @title="Bevestig wijziging rangorde"
+  @title="Hoe wil je de rangorde aanpassen?"
   @modalOpen={{this.modalOpen}}
   @closable={{true}}
   @closeModal={{this.closeModal}}
 >
   <div class="au-o-box au-o-flow">
     <div>
-      <Tmp::todo>
-        Add some filler text here.
-      </Tmp::todo>
+      Je kan de rangorde van deze mandatarissen aanpassen als
+      <strong>"correctie"</strong>
+      of als
+      <strong>"wijziging van de rangorde"</strong>. Bij een "correctie" zet je
+      een fout recht die verkeerd in het systeem geregistreerd was. Bij een
+      "wijziging" van de rangorde geef je aan dat de rangorde van de
+      mandatarissen
+      <strong>doorheen het verloop van de bestuursperiode</strong>
+      daadwerkelijk veranderd is, bijvoorbeeld nadat een mandataris verhinderd
+      werd en er een vervanger werd aangesteld.
     </div>
     <AuToolbar class="au-u-margin-top" as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton {{on "click" this.confirmEditRangorde}}>
-            Bevestig
+          <AuButton
+            @skin="secondary"
+            @alert={{true}}
+            {{on "click" this.confirmCorrectRangorde}}
+          >
+            Corrigeer rangorde
+          </AuButton>
+          <AuButton {{on "click" this.confirmChangeRangorde}}>
+            Wijzig rangorde
           </AuButton>
           <AuButton {{on "click" this.closeModal}} @skin="secondary">
             Annuleer
@@ -71,4 +82,29 @@
       </Group>
     </AuToolbar>
   </div>
+</AuModal>
+
+<AuModal
+  @title="Wijzigingen niet opgeslagen"
+  @modalOpen={{this.interceptedTransition}}
+  @closable={{true}}
+  @closeModal={{this.confirmLoseChanges}}
+><div class="au-o-box au-o-flow">
+    <div>
+      Je wijzigingen zijn niet opgeslagen en gaan verloren als je verder gaat!
+    </div>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton @alert={{true}} {{on "click" this.confirmLoseChanges}}>
+            Verwerp aanpassingen
+          </AuButton>
+          <AuButton {{on "click" this.cancelLoseChanges}} @skin="secondary">
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+
 </AuModal>
