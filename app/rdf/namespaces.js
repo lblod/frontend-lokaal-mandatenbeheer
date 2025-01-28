@@ -14,3 +14,7 @@ export const PROV = new Namespace('http://www.w3.org/ns/prov#');
 export const ORG = new Namespace('http://www.w3.org/ns/org#');
 export const MANDAAT = new Namespace('http://data.vlaanderen.be/ns/mandaat#');
 export const LMB = new Namespace('http://lblod.data.gift/vocabularies/lmb/');
+
+export const FIELD_OPTION = new Namespace(
+  'http://lblod.data.gift/vocabularies/form-field-options/'
+);

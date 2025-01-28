@@ -3,6 +3,7 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import { displayEndOfDay } from 'frontend-lmb/utils/date-manipulation';
 
 export default class MandatarisModel extends Model {
   @attr rangorde;
@@ -90,6 +91,13 @@ export default class MandatarisModel extends Model {
       (uri) =>
         uri == 'http://mu.semte.ch/vocabularies/ext/mandatenExtractorService'
     );
+  }
+
+  get displayEinde() {
+    if (!this.einde) {
+      return this.einde;
+    }
+    return displayEndOfDay(this.einde);
   }
 
   get isActive() {

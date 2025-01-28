@@ -16,6 +16,7 @@ import {
   notBurgemeesterStates,
 } from 'frontend-lmb/utils/well-known-uris';
 import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
+import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 
 export default class MandatarissenUpdateState extends Component {
   @tracked newStatus = null;
@@ -104,7 +105,7 @@ export default class MandatarissenUpdateState extends Component {
     if (!this.args.mandataris.einde) {
       return this.args.mandataris.status;
     }
-    if (this.args.mandataris.einde.getTime() < new Date().getTime()) {
+    if (this.args.mandataris.einde.getTime() <= new Date().getTime()) {
       return this.mandatarisStatus.endedState;
     }
     return this.args.mandataris.status;
@@ -163,12 +164,13 @@ export default class MandatarissenUpdateState extends Component {
 
   async changeMandatarisState() {
     const endDate = this.args.mandataris.einde;
+    const dateOfAction = endOfDay(this.date);
 
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
         rangorde: this.rangorde,
-        start: this.date,
+        start: dateOfAction,
         einde: endDate,
         status: this.newStatus,
         publicationStatus: await getDraftPublicationStatus(this.store),
@@ -197,7 +199,7 @@ export default class MandatarissenUpdateState extends Component {
         (await this.args.mandataris.vervangerVan) || [];
     }
 
-    this.args.mandataris.einde = this.date;
+    this.args.mandataris.einde = dateOfAction;
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
     await this.mandatarisService.createNewLidmaatschap(
@@ -218,8 +220,7 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   async endMandataris() {
-    this.args.mandataris.einde = this.date;
-
+    this.args.mandataris.einde = endOfDay(this.date);
     return await this.args.mandataris.save();
   }
 

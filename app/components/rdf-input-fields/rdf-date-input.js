@@ -11,7 +11,7 @@ import {
 } from '@lblod/submission-form-helpers';
 
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { EXT, SHACL } from 'frontend-lmb/rdf/namespaces';
+import { EXT, FIELD_OPTION, SHACL } from 'frontend-lmb/rdf/namespaces';
 import { loadBestuursorgaanPeriodFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 
 export default class RdfDateInputComponent extends InputFieldComponent {
@@ -21,10 +21,12 @@ export default class RdfDateInputComponent extends InputFieldComponent {
   @tracked date;
   @tracked from;
   @tracked to;
+  @tracked endOfDay;
 
   constructor() {
     super(...arguments);
     this.loadProvidedValue();
+    this.loadOptions();
   }
 
   async loadProvidedValue() {
@@ -54,6 +56,15 @@ export default class RdfDateInputComponent extends InputFieldComponent {
       this.from = startDate;
       this.to = endDate;
     }
+  }
+
+  loadOptions() {
+    this.endOfDay = !!this.args.formStore.any(
+      this.args.field.uri,
+      FIELD_OPTION('endOfDay'),
+      undefined,
+      this.args.graphs.formGraph
+    );
   }
 
   @action

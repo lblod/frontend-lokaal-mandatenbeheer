@@ -85,7 +85,7 @@
       <div class="au-c-description-label">Einde periode</div>
       <div class="au-c-description-value au-u-margin-top-tiny">
         {{#if @mandataris.einde}}
-          {{moment-format @mandataris.einde "DD-MM-YYYY"}}
+          {{moment-format @mandataris.displayEinde "DD-MM-YYYY"}}
         {{else}}
           heden
         {{/if}}
