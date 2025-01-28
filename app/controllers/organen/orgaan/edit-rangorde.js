@@ -59,12 +59,12 @@ export default class EditRangordeController extends Controller {
     return mandatarissen;
   }
 
-  @action confirmEditRangorde() {
+  @action async confirmEditRangorde() {
     const diff = this.getChangedEntries();
-    this.rangordeApi.updateRangordes(diff);
+    await this.rangordeApi.updateRangordes(diff);
     this.closeModal();
     this.updatedRangordes.clear();
     this.hasChanges = false;
-    setTimeout(() => this.router.refresh(), 1000);
+    this.router.refresh();
   }
 }
