@@ -164,12 +164,13 @@ export default class MandatarissenUpdateState extends Component {
 
   async changeMandatarisState() {
     const endDate = this.args.mandataris.einde;
+    const dateOfAction = endOfDay(this.date);
 
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
         rangorde: this.rangorde,
-        start: this.date,
+        start: dateOfAction,
         einde: endDate,
         status: this.newStatus,
         publicationStatus: await getDraftPublicationStatus(this.store),
@@ -198,7 +199,7 @@ export default class MandatarissenUpdateState extends Component {
         (await this.args.mandataris.vervangerVan) || [];
     }
 
-    this.args.mandataris.einde = endOfDay(this.date);
+    this.args.mandataris.einde = dateOfAction;
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
     await this.mandatarisService.createNewLidmaatschap(
