@@ -10,6 +10,8 @@ export default class EditRangordeController extends Controller {
   @service router;
 
   @tracked modalOpen = false;
+  @tracked correcting = false;
+  @tracked date = null;
   @tracked orderedMandatarissen = [];
   @tracked interceptedTransition = null;
   updatedRangordes = new Set();
@@ -29,13 +31,16 @@ export default class EditRangordeController extends Controller {
   }
 
   @action
-  openModal() {
-    this.modalOpen = true;
-  }
-
-  @action
   closeModal() {
     this.modalOpen = false;
+  }
+
+  get modalTitle() {
+    if (this.correcting) {
+      return 'Corrigeer Rangorde';
+    } else {
+      return 'Wijzig Rangorde';
+    }
   }
 
   get openModalDisabled() {
@@ -44,6 +49,10 @@ export default class EditRangordeController extends Controller {
 
   get tooltipText() {
     return 'Er werden nog geen wijzigingen gevonden.';
+  }
+
+  get confirmDisabled() {
+    return !this.correcting && !this.date;
   }
 
   getChangedEntries() {
@@ -60,9 +69,9 @@ export default class EditRangordeController extends Controller {
     return mandatarissen;
   }
 
-  async changeRangorde(asCorrection) {
+  async changeRangorde() {
     const diff = this.getChangedEntries();
-    await this.rangordeApi.updateRangordes(diff, asCorrection);
+    await this.rangordeApi.updateRangordes(diff, this.correcting);
     this.closeModal();
     this.updatedRangordes.clear();
     this.hasChanges = false;
@@ -84,5 +93,14 @@ export default class EditRangordeController extends Controller {
 
   @action cancelLoseChanges() {
     this.interceptedTransition = null;
+  }
+  @action startCorrectingRangorde() {
+    this.modalOpen = true;
+    this.correcting = true;
+  }
+
+  @action startChangeRangorde() {
+    this.modalOpen = true;
+    this.correcting = false;
   }
 }

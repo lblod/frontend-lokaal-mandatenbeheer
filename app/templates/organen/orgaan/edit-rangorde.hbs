@@ -18,11 +18,18 @@
       @tooltipText={{this.tooltipText}}
     >
       <AuButton
-        {{on "click" this.openModal}}
-        size="large"
+        @skin="secondary"
+        @alert={{true}}
+        @disabled={{this.openModalDisabled}}
+        {{on "click" this.startCorrectingRangorde}}
+      >
+        Corrigeer rangorde
+      </AuButton>
+      <AuButton
+        {{on "click" this.startChangeRangorde}}
         @disabled={{this.openModalDisabled}}
       >
-        Wijzig rangordes
+        Wijzig rangorde
       </AuButton>
     </Shared::Tooltip>
   </Group>
@@ -44,36 +51,56 @@
 {{outlet}}
 
 <AuModal
-  @title="Hoe wil je de rangorde aanpassen?"
+  @title={{this.modalTitle}}
   @modalOpen={{this.modalOpen}}
   @closable={{true}}
   @closeModal={{this.closeModal}}
 >
   <div class="au-o-box au-o-flow">
-    <div>
-      Je kan de rangorde van deze mandatarissen aanpassen als
-      <strong>"correctie"</strong>
-      of als
-      <strong>"wijziging van de rangorde"</strong>. Bij een "correctie" zet je
-      een fout recht die verkeerd in het systeem geregistreerd was. Bij een
-      "wijziging" van de rangorde geef je aan dat de rangorde van de
-      mandatarissen
-      <strong>doorheen het verloop van de bestuursperiode</strong>
-      daadwerkelijk veranderd is, bijvoorbeeld nadat een mandataris verhinderd
-      werd en er een vervanger werd aangesteld.
-    </div>
+    {{#if this.correcting}}
+      <div>
+        Een
+        <strong>correctie</strong>
+        van de rangorde betekent dat de rangorde van deze mandatarissen verkeerd
+        geregisteerd stond. Je aanpassing corrigeert dan deze mandatarissen. Als
+        er een
+        <strong>wissel is in de rangordes van verschillende mandatarissen</strong>
+        gebruik dan
+        <strong>wijzig rangorde</strong>.
+      </div>
+
+    {{else}}
+      <div>
+        Een
+        <strong>wijziging</strong>
+        van de rangorde betekent dat de rangorde van deze mandatarissen
+        <strong>doorheen de bestuursperiode</strong>
+        aangepast moet worden, bijvoorbeeld nadat een mandataris verhinderd werd
+        en er een vervanger werd aangesteld met een andere rangorde.
+      </div>
+      <div>
+        In dit geval moet je een datum selecteren vanaf wanneer de rangorde
+        aangepast moet worden. Mandatarissen zonder rangorde krijgen
+        onmiddellijk de juiste rangorde.
+      </div>
+      <DateInput
+        @label="Vanaf"
+        @value={{this.date}}
+        @from={{this.model.bestuursorgaanInTijd.bindingStart}}
+        @to={{this.model.bestuursorgaanInTijd.bindingEinde}}
+        @onChange={{fn (mut this.date)}}
+        @isRequired={{true}}
+      />
+    {{/if}}
+
     <AuToolbar class="au-u-margin-top" as |Group|>
       <Group>
         <AuButtonGroup>
           <AuButton
-            @skin="secondary"
-            @alert={{true}}
-            {{on "click" this.confirmCorrectRangorde}}
+            {{on "click" this.changeRangorde}}
+            @disabled={{this.confirmDisabled}}
           >
-            Corrigeer rangorde
-          </AuButton>
-          <AuButton {{on "click" this.confirmChangeRangorde}}>
-            Wijzig rangorde
+            Bevestig
           </AuButton>
           <AuButton {{on "click" this.closeModal}} @skin="secondary">
             Annuleer
