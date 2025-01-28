@@ -11,12 +11,18 @@ export default class EditRangordeController extends Controller {
 
   @tracked modalOpen = false;
   @tracked orderedMandatarissen = [];
+  updatedRangordes = new Set();
 
   @action
   updateOrderedMandatarisList() {
     this.orderedMandatarissen = orderMandatarisStructByRangorde([
       ...this.model.mandatarisStruct,
     ]);
+  }
+
+  @action
+  trackUpdatedRangorde(rangorde) {
+    this.updatedRangordes.add(rangorde);
   }
 
   @action

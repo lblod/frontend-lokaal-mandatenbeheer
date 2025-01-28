@@ -47,12 +47,14 @@ export default class OrganenRangordeInputComponent extends Component {
     const previousHolder = this.getMandatarisWithRangorde(newRangorde);
 
     this.args.mandatarisStruct.rangorde = newRangorde;
+    this.args.trackUpdatedRangorde(newRangorde);
 
     if (
       previousHolder &&
       previousHolder !== this.args.mandatarisStruct.mandataris
     ) {
       previousHolder.rangorde = oldRangorde;
+      this.args.trackUpdatedRangorde(oldRangorde);
     }
 
     this.args.updateMandatarisList();
