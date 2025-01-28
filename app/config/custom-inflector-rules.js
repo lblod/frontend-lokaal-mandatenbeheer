@@ -1,75 +1,68 @@
-import Inflector from 'ember-inflector';
+import { plural, singular, irregular } from '@ember-data/request-utils/string';
 
-const inflector = Inflector.inflector;
-
-inflector.plural(/$/, 'en');
-inflector.plural(/e$/, 'es');
-inflector.plural(/e([lnr])$/, 'e$1s');
-inflector.plural(/([aiuo])$/, '$1s');
-inflector.plural(/([^aiuoe])([aiuo])([a-z])$/, '$1$2$3$3en'); // TODO: this is a bit hack
-inflector.plural(/uis$/, 'uizen');
-inflector.plural(/ief$/, 'ieven');
-inflector.plural(/or$/, 'oren');
-inflector.plural(/ie$/, 'ies');
-inflector.plural(/eid$/, 'eden');
-inflector.plural(/y$/, 'ies');
-inflector.plural(/aa([a-z])$/, 'a$1en');
-inflector.plural(/uu([a-z])$/, 'u$1en');
-inflector.plural(/oo([a-z])$/, 'o$1en');
-inflector.singular(/en$/, '');
-inflector.singular(/es$/, 'e');
-inflector.singular(/e([lnr])s$/, 'e$1');
-inflector.singular(/([aiuo])s$/, '$1');
-inflector.singular(/([^aiuoe])([aiuo])([a-z])\3en$/, '$1$2$3'); // TODO: this is a bit hack
-inflector.singular(/uizen$/, 'uis');
-inflector.singular(/ieven$/, 'ief');
-inflector.singular(/ies$/, 'ie');
-inflector.singular(/eden$/, 'eid');
-inflector.singular(/a([a-z])en$/, 'aa$1');
-inflector.singular(/u([a-z])en$/, 'uu$1');
-inflector.singular(/o([a-z])en$/, 'oo$1');
-inflector.singular(/([auio])s$/, '$1s');
-inflector.irregular(
-  'behandeling-van-agendapunt',
-  'behandelingen-van-agendapunten'
-);
-inflector.irregular('rechtsgrond-artikel', 'rechtsgronden-artikel');
-inflector.irregular('rechtsgrond-besluit', 'rechtsgronden-besluit');
-inflector.irregular('editor-document', 'editor-documents');
-inflector.irregular('editor-document-status', 'editor-document-statuses');
-inflector.irregular('export', 'exports');
-inflector.irregular('library-entry', 'library-entries');
-inflector.irregular('account', 'accounts');
-inflector.irregular('identificator', 'identificatoren');
-inflector.irregular('file', 'files');
-inflector.irregular('document-status', 'document-statuses');
-inflector.irregular('validation', 'validations');
-inflector.irregular('validation-execution', 'validation-executions');
-inflector.irregular('validation-error', 'validation-errors');
-inflector.irregular('inzending-voor-toezicht', 'inzendingen-voor-toezicht');
-inflector.irregular(
+plural(/$/, 'en');
+plural(/e$/, 'es');
+plural(/e([lnr])$/, 'e$1s');
+plural(/([aiuo])$/, '$1s');
+plural(/([^aiuoe])([aiuo])([a-z])$/, '$1$2$3$3en'); // TODO: this is a bit hack
+plural(/uis$/, 'uizen');
+plural(/ief$/, 'ieven');
+plural(/or$/, 'oren');
+plural(/ie$/, 'ies');
+plural(/eid$/, 'eden');
+plural(/aa([a-z])$/, 'a$1en');
+plural(/uu([a-z])$/, 'u$1en');
+plural(/oo([a-z])$/, 'o$1en');
+singular(/en$/, '');
+singular(/es$/, 'e');
+singular(/e([lnr])s$/, 'e$1');
+singular(/([aiuo])s$/, '$1');
+singular(/([^aiuoe])([aiuo])([a-z])\3en$/, '$1$2$3'); // TODO: this is a bit hack
+singular(/uizen$/, 'uis');
+singular(/ieven$/, 'ief');
+singular(/ies$/, 'ie');
+singular(/eden$/, 'eid');
+singular(/a([a-z])en$/, 'aa$1');
+singular(/u([a-z])en$/, 'uu$1');
+singular(/o([a-z])en$/, 'oo$1');
+singular(/([auio])s$/, '$1s');
+irregular('behandeling-van-agendapunt', 'behandelingen-van-agendapunten');
+irregular('rechtsgrond-artikel', 'rechtsgronden-artikel');
+irregular('rechtsgrond-besluit', 'rechtsgronden-besluit');
+irregular('editor-document', 'editor-documents');
+irregular('editor-document-status', 'editor-document-statuses');
+irregular('export', 'exports');
+irregular('account', 'accounts');
+irregular('identificator', 'identificatoren');
+irregular('file', 'files');
+irregular('document-status', 'document-statuses');
+irregular('validation', 'validations');
+irregular('validation-execution', 'validation-executions');
+irregular('validation-error', 'validation-errors');
+irregular('inzending-voor-toezicht', 'inzendingen-voor-toezicht');
+irregular(
   'toezicht-account-acceptance-status',
   'toezicht-account-acceptance-statuses'
 );
-inflector.irregular('toezicht-fiscal-period', 'toezicht-fiscal-periods');
-inflector.irregular('form-solution', 'form-solutions');
-inflector.irregular('dynamic-subform', 'dynamic-subforms');
-inflector.irregular('form-input', 'form-inputs');
-inflector.irregular(
+irregular('toezicht-fiscal-period', 'toezicht-fiscal-periods');
+irregular('form-solution', 'form-solutions');
+irregular('dynamic-subform', 'dynamic-subforms');
+irregular('form-input', 'form-inputs');
+irregular(
   'inzending-voor-toezicht-form-version',
   'inzending-voor-toezicht-form-versions'
 );
-inflector.irregular('adres', 'adressen');
-inflector.irregular('submission', 'submissions');
-inflector.irregular('concept', 'concepts');
-inflector.irregular('time-block', 'time-blocks');
-inflector.irregular('application-form-entry', 'application-form-entries');
+irregular('adres', 'adressen');
+irregular('submission', 'submissions');
+irregular('concept', 'concepts');
+irregular('time-block', 'time-blocks');
+irregular('application-form-entry', 'application-form-entries');
 
-inflector.irregular('nationality', 'nationalities');
+irregular('nationality', 'nationalities');
 
-inflector.irregular('system-notification', 'system-notifications');
-inflector.irregular('global-system-message', 'global-system-messages');
+irregular('system-notification', 'system-notifications');
+irregular('global-system-message', 'global-system-messages');
 
-inflector.irregular('werkingsgebied', 'werkingsgebieden');
+irregular('werkingsgebied', 'werkingsgebieden');
 
-inflector.irregular('bestuurseenheid-contact', 'bestuurseenheid-contacten');
+irregular('bestuurseenheid-contact', 'bestuurseenheid-contacten');
