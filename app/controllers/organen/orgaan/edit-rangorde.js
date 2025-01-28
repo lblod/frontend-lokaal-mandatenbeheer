@@ -45,7 +45,23 @@ export default class EditRangordeController extends Controller {
     return 'Er werden nog geen wijzigingen gevonden.';
   }
 
+  getChangedEntries() {
+    const mandatarissen = this.orderedMandatarissen
+      .filter((struct) => {
+        return this.updatedRangordes.has(struct.rangorde);
+      })
+      .map((struct) => {
+        return {
+          mandatarisId: struct.mandataris.id,
+          rangorde: struct.rangorde,
+        };
+      });
+    return mandatarissen;
+  }
+
   @action confirmEditRangorde() {
+    // Compute entries that changed
+    const diff = this.getChangedEntries();
     // Call mandataris-service
     this.closeModal();
     // Reset values
