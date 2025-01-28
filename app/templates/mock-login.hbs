@@ -38,33 +38,44 @@
                   @skin="warning"
                 />
               {{/if}}
-              <login.each-account @accounts={{this.model}} as |account|>
-                <div
-                  class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-small"
-                >
-                  <p>
-                    {{account.gebruiker.voornaam}}
-                    {{account.gebruiker.achternaam}}
-                  </p>
-                  {{#if account.gebruiker.group.alternatieveNaam}}
-                    <AuHr />
-                    <p>
-                      <span class="au-c-info-text">Alternatieve naam:</span>
-                      {{#each
-                        account.gebruiker.bestuurseenheden
-                        as |bestuurseenheid|
+              <ul class="au-o-flow au-o-flow--small au-u-margin-bottom-small">
+                {{#each this.model as |account|}}
+                  <li
+                    class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-small"
+                  >
+                    <AuButton
+                      @skin="naked"
+                      class="mock-login-button"
+                      {{on
+                        "click"
+                        (fn login.login account.id account.gebruiker.group.id)
                       }}
-                        {{#each
-                          bestuurseenheid.alternatieveNaam
-                          as |alternatieveNaam|
-                        }}
-                          <AuPill>{{alternatieveNaam}}</AuPill>
-                        {{/each}}
-                      {{/each}}
-                    </p>
-                  {{/if}}
-                </div>
-              </login.each-account>
+                    >
+                      <p>
+                        {{account.gebruiker.voornaam}}
+                        {{account.gebruiker.achternaam}}
+                      </p>
+                      {{#if account.gebruiker.group.alternatieveNaam}}
+                        <AuHr />
+                        <p>
+                          <span class="au-c-info-text">Alternatieve naam:</span>
+                          {{#each
+                            account.gebruiker.bestuurseenheden
+                            as |bestuurseenheid|
+                          }}
+                            {{#each
+                              bestuurseenheid.alternatieveNaam
+                              as |alternatieveNaam|
+                            }}
+                              <AuPill>{{alternatieveNaam}}</AuPill>
+                            {{/each}}
+                          {{/each}}
+                        </p>
+                      {{/if}}
+                    </AuButton>
+                  </li>
+                {{/each}}
+              </ul>
               <AuDataTableNumberPagination
                 @page={{this.page}}
                 @size={{this.size}}
