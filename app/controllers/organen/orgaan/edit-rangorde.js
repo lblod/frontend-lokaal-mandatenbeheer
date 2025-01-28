@@ -12,6 +12,7 @@ export default class EditRangordeController extends Controller {
   @tracked modalOpen = false;
   @tracked orderedMandatarissen = [];
   updatedRangordes = new Set();
+  @tracked hasChanges = false;
 
   @action
   updateOrderedMandatarisList() {
@@ -23,6 +24,7 @@ export default class EditRangordeController extends Controller {
   @action
   trackUpdatedRangorde(rangorde) {
     this.updatedRangordes.add(rangorde);
+    this.hasChanges = true;
   }
 
   @action
@@ -36,7 +38,7 @@ export default class EditRangordeController extends Controller {
   }
 
   get openModalDisabled() {
-    return true;
+    return !this.hasChanges;
   }
 
   get tooltipText() {
