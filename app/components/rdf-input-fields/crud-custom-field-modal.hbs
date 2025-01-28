@@ -113,9 +113,7 @@
           </Shared::Tooltip>
         {{/unless}}
         <AuButton
-          @disabled={{(or
-            this.createField.isRunning this.updateField.isRunning
-          )}}
+          @disabled={{or this.createField.isRunning this.updateField.isRunning}}
           @skin="secondary"
           {{on "click" this.onCancel}}
         >
@@ -126,9 +124,7 @@
         <AuButton
           @skin="secondary"
           @alert={{true}}
-          @disabled={{(or
-            this.createField.isRunning this.updateField.isRunning
-          )}}
+          @disabled={{or this.createField.isRunning this.updateField.isRunning}}
           @loading={{this.isRemovingField}}
           @loadingMessage="Het veld wordt verwijderd"
           {{on "click" this.onRemove}}
