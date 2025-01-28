@@ -49,6 +49,7 @@ export default class OrganenRangordeInputComponent extends Component {
 
     // This should happen in the mandatarissen list ...
     this.args.mandatarisStruct.mandataris.rangorde = newRangorde;
+    this.args.mandatarisStruct.rangorde = newRangorde;
 
     const promises = [this.args.mandatarisStruct.mandataris.save()];
 
@@ -58,6 +59,7 @@ export default class OrganenRangordeInputComponent extends Component {
     ) {
       // This should happen in the mandatarissen list ...
       previousHolder.mandataris.rangorde = oldRangorde;
+      previousHolder.rangorde = oldRangorde;
       promises.push(previousHolder.mandataris.save());
     }
 
