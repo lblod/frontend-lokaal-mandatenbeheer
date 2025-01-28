@@ -6,7 +6,7 @@ import { service } from '@ember/service';
 import { orderMandatarisStructByRangorde } from 'frontend-lmb/utils/rangorde';
 
 export default class EditRangordeController extends Controller {
-  @service mandatarisApi;
+  @service rangordeApi;
   @service router;
 
   @tracked modalOpen = false;
@@ -60,11 +60,11 @@ export default class EditRangordeController extends Controller {
   }
 
   @action confirmEditRangorde() {
-    // Compute entries that changed
     const diff = this.getChangedEntries();
-    // Call mandataris-service
+    this.rangordeApi.updateRangordes(diff);
     this.closeModal();
-    // Reset values
+    this.updatedRangordes.clear();
+    this.hasChanges = false;
     setTimeout(() => this.router.refresh(), 1000);
   }
 }
