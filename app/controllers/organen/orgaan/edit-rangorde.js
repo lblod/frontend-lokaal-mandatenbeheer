@@ -10,9 +10,13 @@ export default class EditRangordeController extends Controller {
   @service router;
 
   @tracked modalOpen = false;
+  @tracked orderedMandatarissen = [];
 
-  get orderedMandatarissen() {
-    return orderMandatarisStructByRangorde([...this.model.mandatarisStruct]);
+  @action
+  updateOrderedMandatarisList() {
+    this.orderedMandatarissen = orderMandatarisStructByRangorde([
+      ...this.model.mandatarisStruct,
+    ]);
   }
 
   @action

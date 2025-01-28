@@ -6,13 +6,13 @@ import { tracked } from '@glimmer/tracking';
 import { keepLatestTask, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import {
-  orderMandatarissenByRangorde,
+  orderMandatarisStructByRangorde,
   rangordeNumberMapping,
   rangordeStringMapping,
   rangordeStringToNumber,
 } from 'frontend-lmb/utils/rangorde';
 
-export default class VerkiezingenRangordeInputComponent extends Component {
+export default class OrganenRangordeInputComponent extends Component {
   @tracked rangordePlaceholder;
 
   constructor() {
@@ -30,32 +30,40 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   get rangordeInteger() {
-    return this.findOrderInString(this.args.mandataris.rangorde);
+    return this.findOrderInString(this.args.mandatarisStruct.rangorde);
   }
 
   get rangorde() {
-    return this.args.mandataris.rangorde;
+    return this.args.mandatarisStruct.rangorde;
   }
 
   async setPlaceholder() {
-    const mandaat = await this.args.mandataris.bekleedt;
+    const mandaat = await this.args.mandatarisStruct.mandataris.get('bekleedt');
     this.rangordePlaceholder = `Vul de rangorde in, bv. “Eerste ${mandaat.rangordeLabel}”`;
   }
 
   updateMandatarisRangorde = keepLatestTask(async (value) => {
-    const oldRangorde = this.args.mandataris.rangorde;
+    const oldRangorde = this.args.mandatarisStruct.rangorde;
     const newRangorde = value;
     const previousHolder = this.getMandatarisWithRangorde(newRangorde);
-    this.args.mandataris.rangorde = newRangorde;
 
-    const promises = [this.args.mandataris.save()];
+    // This should happen in the mandatarissen list ...
+    this.args.mandatarisStruct.mandataris.rangorde = newRangorde;
 
-    if (previousHolder && previousHolder !== this.args.mandataris) {
-      previousHolder.rangorde = oldRangorde;
-      promises.push(previousHolder.save());
+    const promises = [this.args.mandatarisStruct.mandataris.save()];
+
+    if (
+      previousHolder &&
+      previousHolder !== this.args.mandatarisStruct.mandataris
+    ) {
+      // This should happen in the mandatarissen list ...
+      previousHolder.mandataris.rangorde = oldRangorde;
+      promises.push(previousHolder.mandataris.save());
     }
+
     await Promise.all(promises);
     await timeout(SEARCH_TIMEOUT);
+    this.args.updateMandatarisList();
   });
 
   setRangorde(value) {
@@ -63,7 +71,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   async getMandaatLabel() {
-    const mandaat = await this.args.mandataris.get('bekleedt');
+    const mandaat = await this.args.mandatarisStruct.mandataris.get('bekleedt');
     return mandaat?.rangordeLabel;
   }
 
@@ -98,13 +106,13 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   getMandatarisWithRangorde(targetRangorde) {
-    return this.args.mandatarissen.find((mandataris) => {
-      return mandataris.rangorde === targetRangorde;
+    return this.args.mandatarissen.find((mandatarisStruct) => {
+      return mandatarisStruct.rangorde === targetRangorde;
     });
   }
 
   getNextAvailableRangorde() {
-    const sortedMandatarissen = orderMandatarissenByRangorde([
+    const sortedMandatarissen = orderMandatarisStructByRangorde([
       ...this.args.mandatarissen,
     ]);
     const lastNumber = rangordeStringToNumber(

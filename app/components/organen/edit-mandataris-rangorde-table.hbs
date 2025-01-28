@@ -57,8 +57,9 @@
         {{moment-format row.mandataris.einde "DD-MM-YYYY"}}</td>
       <td>
         <Organen::RangordeInput
-          @mandataris={{row.mandataris}}
+          @mandatarisStruct={{row}}
           @mandatarissen={{@mandatarissen}}
+          @updateMandatarisList={{@updateMandatarisList}}
         />
       </td>
     </c.body>

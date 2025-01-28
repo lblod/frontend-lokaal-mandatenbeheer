@@ -31,4 +31,9 @@ export default class EditRangordeRoute extends Route {
       mandatarisStruct,
     };
   }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.updateOrderedMandatarisList();
+  }
 }
