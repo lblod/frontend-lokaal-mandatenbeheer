@@ -3,8 +3,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-import { keepLatestTask, timeout } from 'ember-concurrency';
-import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { keepLatestTask } from 'ember-concurrency';
 import {
   orderMandatarisStructByRangorde,
   rangordeNumberMapping,
@@ -47,24 +46,15 @@ export default class OrganenRangordeInputComponent extends Component {
     const newRangorde = value;
     const previousHolder = this.getMandatarisWithRangorde(newRangorde);
 
-    // This should happen in the mandatarissen list ...
-    this.args.mandatarisStruct.mandataris.rangorde = newRangorde;
     this.args.mandatarisStruct.rangorde = newRangorde;
-
-    const promises = [this.args.mandatarisStruct.mandataris.save()];
 
     if (
       previousHolder &&
       previousHolder !== this.args.mandatarisStruct.mandataris
     ) {
-      // This should happen in the mandatarissen list ...
-      previousHolder.mandataris.rangorde = oldRangorde;
       previousHolder.rangorde = oldRangorde;
-      promises.push(previousHolder.mandataris.save());
     }
 
-    await Promise.all(promises);
-    await timeout(SEARCH_TIMEOUT);
     this.args.updateMandatarisList();
   });
 
