@@ -29,9 +29,10 @@
     >
       <AuButton
         skin="secondary"
-        @loading={{(or
-          this.checkFracties.isRunning this.becomeOnafhankelijk.isRunning
-        )}}
+        @loading={{or
+          this.checkFracties.isRunning
+          this.becomeOnafhankelijk.isRunning
+        }}
         @loadingMessage="Onafhankelijk worden"
         @disabled={{not this.canBecomeOnafhankelijk}}
         {{on "click" (perform this.becomeOnafhankelijk)}}
@@ -168,8 +169,8 @@
       @allowClear={{false}}
       @renderInPlace={{false}}
       @searchEnabled={{true}}
-      @noMatchesMessage={{"Geen resultaten gevonden"}}
-      @searchMessage={{"Typ om een orgaan te zoeken"}}
+      @noMatchesMessage="Geen resultaten gevonden"
+      @searchMessage="Typ om een orgaan te zoeken"
       @options={{@model.bestuursorganen}}
       @selected={{this.selectedBestuursorgaan}}
       @onChange={{fn (mut this.selectedBestuursorgaan)}}

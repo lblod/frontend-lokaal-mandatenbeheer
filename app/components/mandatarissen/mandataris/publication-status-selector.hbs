@@ -45,7 +45,7 @@
       <span class="au-u-padding">
         <AuLabel for="link-to-page">Link naar pagina</AuLabel>
         <AuInput
-          @error={{(and (not this.isInputLinkValid) this.linkToDecision)}}
+          @error={{and (not this.isInputLinkValid) this.linkToDecision}}
           @width="block"
           @iconAlignment="left"
           value={{this.linkToDecision}}
