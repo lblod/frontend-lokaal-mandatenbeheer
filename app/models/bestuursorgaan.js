@@ -2,6 +2,8 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 import { service } from '@ember/service';
 
+import { API } from 'frontend-lmb/utils/constants';
+
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
   BCSD_BESTUURSORGAAN_URI,
@@ -176,18 +178,22 @@ export default class BestuursorgaanModel extends Model {
       include: 'bevat',
     });
 
-    const mandaten = currentOrgaan ? await currentOrgaan.bevat : [];
-    const mandatenAmounts = await Promise.all(
-      mandaten.map(async (mandaat) => {
-        const response = await fetch(
-          `/mandataris-api/mandaten/nbMembers/${mandaat.id}`
-        );
-        const result = await response.json();
-        return result.count;
-      })
-    );
-    const amount = mandatenAmounts.reduce((acc, curr) => acc + curr, 0);
-    return amount;
+    if (!currentOrgaan?.id) {
+      return null;
+    }
+
+    return Promise.all([
+      fetch(
+        `${API.MANDATARIS_SERVICE}/organen/${currentOrgaan.id}/activeMembers`
+      )
+        .then(async (response) => {
+          const result = await response.json();
+          return result?.count;
+        })
+        .catch(() => {
+          return 0;
+        }),
+    ]);
   }
 
   rdfaBindings = {
