@@ -10,6 +10,7 @@ import {
   MANDAAT_SCHEPEN_CODE,
   MANDATARIS_VERHINDERD_STATE,
 } from 'frontend-lmb/utils/well-known-uris';
+import { COLLEGE_ORGANEN_VOEREN_EN_RAND } from 'frontend-lmb/utils/well-known-ids';
 
 export default class MinMaxMandatarisWarningComponent extends Component {
   @service store;
@@ -96,8 +97,11 @@ export default class MinMaxMandatarisWarningComponent extends Component {
         if (min && countFound < min) {
           let extraText = '';
           let mailTo = '';
-          if (isSchepen) {
-            extraText = `U kan beslissen met een lager aantal schepenen de legislatuur te beginnen. In dat geval blijft dit het vaste aantal schepenen voor de hele legislatuur.`;
+          if (
+            isSchepen &&
+            !COLLEGE_ORGANEN_VOEREN_EN_RAND.includes(bestuursorgaan.id)
+          ) {
+            extraText = `Als uw bestuur heeft beslist om minder dan het maximale aantal schepenen te installeren, blijft dit lagere schepenaantal vast voor de hele legislatuur.`;
             mailTo = `mailto://lokaalmandatenbeheer@vlaanderen.be?subject=Wijziging Aantal Schepenen`;
           }
           warnings.push({
