@@ -400,3 +400,16 @@ $au-region-breakpoint: medium !default;
   border-radius: 3px;
   border: solid 1px var(--au-red-600);
 }
+
+.hidden-element {
+  visibility: hidden;
+}
+
+.mock-login-button {
+  color: var(--au-u-gray-700);
+  font-weight: normal;
+}
+
+.mock-login-button:hover {
+  color: var(--au-u-gray-700);
+}

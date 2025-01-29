@@ -141,9 +141,10 @@
   {{/if}}
 
   <AuModal
-    @title={{(concat
-      "Voeg mandataris toe aan " @bestuursorgaan.isTijdsspecialisatieVan.naam
-    )}}
+    @title={{concat
+      "Voeg mandataris toe aan "
+      @bestuursorgaan.isTijdsspecialisatieVan.naam
+    }}
     @modalOpen={{this.isCreating}}
     @closable={{true}}
     @closeModal={{this.cancel}}
@@ -159,17 +160,18 @@
   </AuModal>
 
   <AuModal
-    @title={{(concat
-      "Genereer rijen voor " @bestuursorgaan.isTijdsspecialisatieVan.naam
-    )}}
+    @title={{concat
+      "Genereer rijen voor "
+      @bestuursorgaan.isTijdsspecialisatieVan.naam
+    }}
     @modalOpen={{this.isGeneratingRows}}
     @closable={{true}}
-    @closeModal={{(fn (mut this.isGeneratingRows) false)}}
+    @closeModal={{fn (mut this.isGeneratingRows) false}}
   >
     <div class="au-o-box">
       <Verkiezingen::GenerateRows
         @bestuursorgaan={{@bestuursorgaan}}
-        @onCancel={{(fn (mut this.isGeneratingRows) false)}}
+        @onCancel={{fn (mut this.isGeneratingRows) false}}
         @onCreated={{perform this.getMandatarissen}}
       />
     </div>

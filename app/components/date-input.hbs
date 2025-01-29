@@ -1,8 +1,8 @@
 <div ...attributes>
   {{#if @label}}
     <AuLabel
-      for={{(or @id this.elementId)}}
-      @error={{(or this.errorMessage this.invalidErrorMessage)}}
+      for={{or @id this.elementId}}
+      @error={{or this.errorMessage this.invalidErrorMessage}}
       @warning={{this.warningMessage}}
       @required={{@isRequired}}
     >{{@label}}</AuLabel>
@@ -16,10 +16,10 @@
   {{else}}
     <AuInput
       {{did-insert this.setupDateValue}}
-      @error={{(or this.errorMessage this.invalidErrorMessage)}}
+      @error={{or this.errorMessage this.invalidErrorMessage}}
       @warning={{this.warningMessage}}
       value={{this.dateInputString}}
-      id={{(or @id this.elementId)}}
+      id={{or @id this.elementId}}
       placeholder="dd-mm-yyyy"
       {{au-inputmask options=(hash mask="99-99-9999" placeholder="_")}}
       {{on "input" (perform this.onChange)}}
@@ -27,7 +27,7 @@
     />
   {{/if}}
   {{#unless @showFormatHelpText}}
-    <AuHelpText @error={{(or this.errorMessage this.invalidErrorMessage)}}>
+    <AuHelpText @error={{or this.errorMessage this.invalidErrorMessage}}>
       Datum formaat: DD-MM-JJJJ
     </AuHelpText>
   {{/unless}}

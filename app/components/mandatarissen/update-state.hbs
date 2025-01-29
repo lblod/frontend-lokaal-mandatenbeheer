@@ -1,10 +1,10 @@
 <AuModal
-  @title={{(concat
+  @title={{concat
     "Verander Status "
     @mandataris.bekleedt.bestuursfunctie.label
     " - "
     @mandataris.isBestuurlijkeAliasVan.naam
-  )}}
+  }}
   @modalOpen={{@isChanging}}
   @closable={{true}}
   @closeModal={{this.cancel}}

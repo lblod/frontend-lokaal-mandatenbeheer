@@ -25,10 +25,10 @@
           @tooltipText={{this.toolTipText}}
         >
           <AuButton
-            @disabled={{(or
+            @disabled={{or
               (not this.model.mandataris.isActive)
               this.isDisabledBecauseLegislatuur
-            )}}
+            }}
             {{on "click" (fn (mut this.isChanging) true)}}
           >Wijzig huidig mandaat</AuButton>
         </Shared::Tooltip>
@@ -150,7 +150,7 @@
       @buildMetaTtl={{this.buildMetaTtl}}
       @formInitialized={{fn (mut this.formInitialized) true}}
       @customHistoryMessage={{true}}
-      @saveTitle={{"Pas aan"}}
+      @saveTitle="Pas aan"
     />
     {{#unless this.formInitialized}}
       <Skeleton::Forms::MandatarisCorrect />

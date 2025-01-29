@@ -86,7 +86,7 @@
   @size={{this.size}}
   @personRoute="mandatarissen.persoon.mandaten"
   @mandaatRoute="mandatarissen.persoon.mandataris"
-  @hidePublicationStatus={{(not (await this.model.bestuursorgaan.isDecretaal))}}
+  @hidePublicationStatus={{not (await this.model.bestuursorgaan.isDecretaal)}}
 />
 
 {{outlet}}
@@ -95,7 +95,7 @@
   @title="Voeg nieuwe mandataris toe"
   @modalOpen={{this.isCreatingMandataris}}
   @closable={{true}}
-  @closeModal={{(fn this.setIsCreatingMandataris false)}}
+  @closeModal={{fn this.setIsCreatingMandataris false}}
 >
   {{#if @model.bestuurseenheid.isOCMW}}
     <AuAlert @skin="warning" @icon="alert-triangle" @closable={{false}}>

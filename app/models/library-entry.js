@@ -6,7 +6,7 @@ export default class LibraryEntryModel extends Model {
   @attr path;
   @attr options;
 
-  @belongsTo('displayType', {
+  @belongsTo('display-type', {
     async: true,
     inverse: null,
   })
