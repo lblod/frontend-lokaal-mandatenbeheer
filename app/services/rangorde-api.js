@@ -8,7 +8,7 @@ export default class RangordeApiService extends Service {
   @service store;
   @service toaster;
 
-  async updateRangordes(mandatarissen, asCorrection) {
+  async updateRangordes(mandatarissen, asCorrection, date) {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/rangorde/update-rangordes?asCorrection=${asCorrection}`,
       {
@@ -18,6 +18,7 @@ export default class RangordeApiService extends Service {
         },
         body: JSON.stringify({
           mandatarissen: mandatarissen,
+          date,
         }),
       }
     );
@@ -29,7 +30,8 @@ export default class RangordeApiService extends Service {
         this.toaster,
         'Er ging iets mis bij het updaten van de rangordes'
       );
+    } else {
+      showSuccessToast(this.toaster, `De rangordes werden succesvol geüpdatet`);
     }
-    showSuccessToast(this.toaster, `De rangordes werden succesvol geüpdatet`);
   }
 }

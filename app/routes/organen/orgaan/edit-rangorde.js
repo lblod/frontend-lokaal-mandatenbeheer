@@ -7,6 +7,12 @@ export default class EditRangordeRoute extends Route {
   @service store;
   @service('mandatarissen') mandatarissenService;
 
+  queryParams = {
+    date: {
+      refreshModel: true,
+    },
+  };
+
   async model(params) {
     const parentModel = this.modelFor('organen.orgaan');
     const bestuursorgaanInTijd = await parentModel.currentBestuursorgaan;
@@ -15,11 +21,13 @@ export default class EditRangordeRoute extends Route {
 
     if (bestuursorgaanInTijd) {
       params.size = 9999;
-      mandatarissen = await this.mandatarissenService.getActiveMandatarissen(
-        params,
-        bestuursorgaanInTijd,
-        parentModel.selectedBestuursperiode
-      );
+      mandatarissen =
+        await this.mandatarissenService.getActiveMandatarissenAtTime(
+          params,
+          bestuursorgaanInTijd,
+          parentModel.selectedBestuursperiode,
+          params.date
+        );
     }
     mandatarissen = mandatarissen.filter((mandataris) => {
       return mandataris.get('bekleedt.hasRangorde');
@@ -42,7 +50,6 @@ export default class EditRangordeRoute extends Route {
     controller.interceptedTransition = null;
     controller.updatedRangordes = new Set();
     controller.hasChanges = false;
-    controller.date = null;
     controller.updateOrderedMandatarisList();
   }
 
@@ -52,7 +59,7 @@ export default class EditRangordeRoute extends Route {
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const controller = this.controller;
     if (
-      controller.getChangedEntries().length > 0 &&
+      controller.changedEntries.length > 0 &&
       !controller.interceptedTransition
     ) {
       controller.interceptedTransition = transition;

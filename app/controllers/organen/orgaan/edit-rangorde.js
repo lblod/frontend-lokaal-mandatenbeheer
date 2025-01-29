@@ -6,12 +6,13 @@ import { service } from '@ember/service';
 import { orderMandatarisStructByRangorde } from 'frontend-lmb/utils/rangorde';
 
 export default class EditRangordeController extends Controller {
+  queryParams = ['date'];
   @service rangordeApi;
   @service router;
 
   @tracked modalOpen = false;
   @tracked correcting = false;
-  @tracked date = null;
+  @tracked date = new Date();
   @tracked orderedMandatarissen = [];
   @tracked interceptedTransition = null;
   updatedRangordes = new Set();
@@ -55,7 +56,7 @@ export default class EditRangordeController extends Controller {
     return !this.correcting && !this.date;
   }
 
-  getChangedEntries() {
+  get changedEntries() {
     const mandatarissen = this.orderedMandatarissen
       .filter((struct) => {
         return this.updatedRangordes.has(struct.rangorde);
@@ -69,21 +70,14 @@ export default class EditRangordeController extends Controller {
     return mandatarissen;
   }
 
+  @action
   async changeRangorde() {
-    const diff = this.getChangedEntries();
-    await this.rangordeApi.updateRangordes(diff, this.correcting);
+    const diff = this.changedEntries;
+    await this.rangordeApi.updateRangordes(diff, this.correcting, this.date);
     this.closeModal();
     this.updatedRangordes.clear();
     this.hasChanges = false;
     this.router.refresh();
-  }
-
-  @action async confirmCorrectRangorde() {
-    this.changeRangorde(true);
-  }
-
-  @action async confirmChangeRangorde() {
-    this.changeRangorde(false);
   }
 
   @action confirmLoseChanges() {

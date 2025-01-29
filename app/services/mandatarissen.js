@@ -20,6 +20,26 @@ export default class MandatarissenService extends Service {
     return mandatarissen;
   }
 
+  async getActiveMandatarissenAtTime(
+    params,
+    bestuursorgaanInTijd,
+    bestuursperiode,
+    date
+  ) {
+    let mandatarissen = await this.getMandatarissen(
+      params,
+      bestuursorgaanInTijd
+    );
+    const isCurrentBestuursperiode =
+      this.bestuursperioden.isCurrentPeriod(bestuursperiode);
+    if (isCurrentBestuursperiode) {
+      return mandatarissen.filter((mandataris) => {
+        return mandataris.isActiveAt(date);
+      });
+    }
+    return mandatarissen;
+  }
+
   async getMandatarissen(params, bestuursorgaanInTijd) {
     const options = this.getOptions(params, bestuursorgaanInTijd);
     const mandatarissen = await this.store.query('mandataris', options);

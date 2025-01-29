@@ -40,6 +40,21 @@
   {{this.model.selectedBestuursperiode.label}}
 </AuHeading>
 
+<div class="au-u-padding au-u-padding-top-none">
+  <p class="au-u-margin-bottom">
+    Deze pagina laat je toe om de rangorde van de mandatarissen aan te passen.
+    Selecteer hier de datum waarop je de rangorde wil aanpassen.
+  </p>
+  <DateInput
+    @label="Datum van aanpassing"
+    @value={{this.date}}
+    @from={{this.model.bestuursorgaanInTijd.bindingStart}}
+    @to={{this.model.bestuursorgaanInTijd.bindingEinde}}
+    @onChange={{fn (mut this.date)}}
+    @isRequired={{true}}
+  />
+</div>
+
 <Organen::EditMandatarisRangordeTable
   @mandatarissen={{@model.mandatarisStruct}}
   @orderedMandatarissen={{this.orderedMandatarissen}}
@@ -83,14 +98,6 @@
         aangepast moet worden. Mandatarissen zonder rangorde krijgen
         onmiddellijk de juiste rangorde.
       </div>
-      <DateInput
-        @label="Vanaf"
-        @value={{this.date}}
-        @from={{this.model.bestuursorgaanInTijd.bindingStart}}
-        @to={{this.model.bestuursorgaanInTijd.bindingEinde}}
-        @onChange={{fn (mut this.date)}}
-        @isRequired={{true}}
-      />
     {{/if}}
 
     <AuToolbar class="au-u-margin-top" as |Group|>
