@@ -50,6 +50,7 @@ export default class EditRangordeRoute extends Route {
     controller.interceptedTransition = null;
     controller.updatedRangordes = new Set();
     controller.hasChanges = false;
+    controller.loading = false;
     controller.updateOrderedMandatarisList();
   }
 

@@ -105,6 +105,8 @@
       <Group>
         <AuButtonGroup>
           <AuButton
+            @loading={{this.loading}}
+            @loadingMessage="Bezig met opslaan"
             {{on "click" this.changeRangorde}}
             @disabled={{this.confirmDisabled}}
           >

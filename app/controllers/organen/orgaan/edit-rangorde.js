@@ -11,6 +11,7 @@ export default class EditRangordeController extends Controller {
   @service rangordeApi;
   @service router;
 
+  @tracked loading = false;
   @tracked modalOpen = false;
   @tracked correcting = false;
   @tracked date = new Date();
@@ -77,11 +78,13 @@ export default class EditRangordeController extends Controller {
 
   @action
   async changeRangorde() {
+    this.loading = true;
     const diff = this.changedEntries;
     await this.rangordeApi.updateRangordes(diff, this.correcting, this.date);
     this.closeModal();
     this.updatedRangordes.clear();
     this.hasChanges = false;
+    this.loading = false;
     this.router.refresh();
   }
 
