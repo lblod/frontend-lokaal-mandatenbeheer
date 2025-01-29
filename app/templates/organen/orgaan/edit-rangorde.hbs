@@ -47,7 +47,7 @@
   </p>
   <DateInput
     @label="Datum van aanpassing"
-    @value={{this.date}}
+    @value={{this.momentizedDate}}
     @from={{this.model.bestuursorgaanInTijd.bindingStart}}
     @to={{this.model.bestuursorgaanInTijd.bindingEinde}}
     @onChange={{fn (mut this.date)}}
@@ -77,8 +77,8 @@
         Een
         <strong>correctie</strong>
         van de rangorde betekent dat de rangorde van deze mandatarissen verkeerd
-        geregisteerd stond. Je aanpassing corrigeert dan deze mandatarissen. Als
-        er een
+        ingevuld stond. Je aanpassing corrigeert dan deze mandatarissen. Als er
+        een
         <strong>wissel is in de rangordes van verschillende mandatarissen</strong>
         gebruik dan
         <strong>wijzig rangorde</strong>.
@@ -86,17 +86,18 @@
 
     {{else}}
       <div>
-        Een
-        <strong>wijziging</strong>
-        van de rangorde betekent dat de rangorde van deze mandatarissen
-        <strong>doorheen de bestuursperiode</strong>
-        aangepast moet worden, bijvoorbeeld nadat een mandataris verhinderd werd
-        en er een vervanger werd aangesteld met een andere rangorde.
-      </div>
-      <div>
-        In dit geval moet je een datum selecteren vanaf wanneer de rangorde
-        aangepast moet worden. Mandatarissen zonder rangorde krijgen
-        onmiddellijk de juiste rangorde.
+        <p>
+          Een
+          <strong>wijziging</strong>
+          van de rangorde betekent dat de rangorde van deze mandatarissen
+          <strong>doorheen de bestuursperiode</strong>
+          aangepast moet worden, bijvoorbeeld nadat een mandataris verhinderd
+          werd en er een vervanger werd aangesteld met een andere rangorde.</p>
+        <p>
+          Als dit niet de aanpassing is die je wil doen, maar je een fout wil
+          rechtzetten, gebruik dan
+          <strong>corrigeer rangorde</strong>.
+        </p>
       </div>
     {{/if}}
 

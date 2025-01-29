@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { orderMandatarisStructByRangorde } from 'frontend-lmb/utils/rangorde';
+import moment from 'moment';
 
 export default class EditRangordeController extends Controller {
   queryParams = ['date'];
@@ -42,6 +43,10 @@ export default class EditRangordeController extends Controller {
     } else {
       return 'Wijzig Rangorde';
     }
+  }
+
+  get momentizedDate() {
+    return moment(this.date).toDate();
   }
 
   get openModalDisabled() {
