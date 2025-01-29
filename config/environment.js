@@ -58,7 +58,7 @@ module.exports = function (environment) {
   };
 
   ENV.features['editable-forms'] = false;
-  if (environment === 'development') {
+  if (ENV.environmentName === 'DEV') {
     ENV.APP.DISABLE_RELOAD_WARNINGS = true;
     ENV.APP.SHOW_FORM_CONTENT = true;
     ENV.features['enable-mandataris-count-warnings'] = true;
@@ -70,7 +70,7 @@ module.exports = function (environment) {
     ENV.features['editable-forms'] = true;
   }
 
-  if (environment === 'test') {
+  if (ENV.environmentName === 'TEST') {
     // Testem prefers this...
     ENV.locationType = 'none';
 
@@ -82,7 +82,7 @@ module.exports = function (environment) {
     ENV.APP.autoboot = false;
   }
 
-  if (environment === 'production') {
+  if (ENV.environmentName === 'PROD') {
     // here you can enable a production-specific feature
   }
 

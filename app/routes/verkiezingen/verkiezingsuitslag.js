@@ -17,7 +17,10 @@ export default class VerkiezingenVerkiezingsuitslagRoute extends Route {
     const options = this.getOptions(params);
     const verkiezing = await this.store.findRecord(
       'rechtstreekse-verkiezing',
-      params.id
+      params.id,
+      {
+        include: 'kandidatenlijsten.kandidaten,kandidatenlijsten.resultaten',
+      }
     );
     const verkiezingsresultaten = await this.store.query(
       'verkiezingsresultaat',

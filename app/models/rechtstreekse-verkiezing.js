@@ -26,7 +26,11 @@ export default class RechtstreekseVerkiezingModel extends Model {
   kandidatenlijsten;
 
   get getType() {
-    const type = this.kandidatenlijsten.slice().at(0).get('lijsttype');
+    return this.asyncGetType();
+  }
+
+  async asyncGetType() {
+    const type = (await this.kandidatenlijsten).slice().at(0).get('lijsttype');
     return typeMapping[type.get('uri')];
   }
 }

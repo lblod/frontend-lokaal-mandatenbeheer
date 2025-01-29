@@ -136,7 +136,7 @@
               @model={{verkiezing.id}}
               role="menuitem"
             >Verkiezingsuitslag
-              {{verkiezing.getType}}
+              {{await verkiezing.getType}}
             </AuLink>
           {{/each}}
         </AuDropdown>
