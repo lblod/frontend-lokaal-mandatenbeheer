@@ -1,1 +1,9 @@
-{{yield}}
+<div class="au-o-box">
+  <AuHeading @skin="2">Configureer tabel</AuHeading>
+
+  <ul>
+    {{#each @labels as |label|}}
+      <li role="button" class="clickable-cell">{{label.name}}</li>
+    {{/each}}
+  </ul>
+</div>
