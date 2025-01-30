@@ -10,6 +10,25 @@ export default class FormInstancesRoute extends Route {
 
   async model() {
     const formModel = this.modelFor('forms.form');
-    return { formDefinition: formModel };
+
+    return {
+      formDefinition: formModel,
+      headerLabels: await this.getHeaderLabels(formModel.id),
+    };
+  }
+
+  async getHeaderLabels(formId) {
+    const response = await fetch(
+      `/form-content/instance-table/${formId}/headers`
+    );
+
+    if (!response.ok) {
+      let error = new Error(response.statusText);
+      error.status = response.status;
+      throw error;
+    }
+    const { headers } = await response.json();
+
+    return headers;
   }
 }
