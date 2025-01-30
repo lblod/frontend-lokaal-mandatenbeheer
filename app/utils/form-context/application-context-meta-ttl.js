@@ -91,7 +91,11 @@ const getBestuursperiodeForBestuursorganen = (bestuursorganen) => {
 export const loadIsFractieRequiredFromContext = (storeOptions) => {
   const { store, metaGraph } = storeOptions;
 
-  return Literal.toJS(
-    store.any(LMB('component'), LMB('isFractieRequired'), null, metaGraph)
+  const isRequired = store.any(
+    LMB('component'),
+    LMB('isFractieRequired'),
+    null,
+    metaGraph
   );
+  return Literal.toJS(!!isRequired);
 };
