@@ -28,9 +28,25 @@ export default class InstanceTableConfiguration extends Component {
 
     delete label.isSelected;
     this.labels.push({ ...label, isSelected: !selectedState });
+
+    this.args.onSelectionUpdated(this.selectedLabels);
   }
 
   get sortedLabels() {
     return this.labels.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  get selectedLabels() {
+    const labelCopy = JSON.parse(JSON.stringify(this.labels.toArray()));
+    return labelCopy
+      .map((label) => {
+        if (!label.isSelected) {
+          return null;
+        }
+
+        delete label.isSelected;
+        return label;
+      })
+      .filter((label) => label);
   }
 }

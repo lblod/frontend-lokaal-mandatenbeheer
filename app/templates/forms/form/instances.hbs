@@ -1,6 +1,9 @@
 {{page-title "Instances"}}
 
-<InstanceTableConfiguration @labels={{this.model.headerLabels}} />
+<InstanceTableConfiguration
+  @labels={{this.model.headerLabels}}
+  @onSelectionUpdated={{this.updateTable}}
+/>
 <div class="au-c-body-container au-c-body-container--scroll">
   <SemanticForms::InstanceTable
     @sort={{this.sort}}

@@ -26,4 +26,9 @@ export default class FormInstancesController extends Controller {
     this.page = 0;
     this.filter = searchData;
   });
+
+  @action
+  updateTable(selectedLabels) {
+    console.log(`selected labels:`, selectedLabels);
+  }
 }
