@@ -2,8 +2,12 @@
   <AuHeading @skin="2">Configureer tabel</AuHeading>
 
   <ul>
-    {{#each @labels as |label|}}
-      <li role="button" class="clickable-cell">{{label.name}}</li>
+    {{#each this.sortedLabels as |label|}}
+      <li
+        {{on "click" (fn this.toggleLabel label)}}
+        role="button"
+        class="clickable-cell {{if label.isSelected 'selected'}}"
+      >{{label.name}}</li>
     {{/each}}
   </ul>
 </div>
