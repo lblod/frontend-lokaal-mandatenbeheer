@@ -52,7 +52,6 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
     return {
       persoon,
       hasActiveMandatarissen,
-      foldedMandatarissen,
       mandatarissenForOnafhankelijk,
       mandatarissen: filteredMandatarissen,
       bestuurseenheid,
