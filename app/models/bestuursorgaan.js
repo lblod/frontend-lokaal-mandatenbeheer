@@ -182,18 +182,16 @@ export default class BestuursorgaanModel extends Model {
       return null;
     }
 
-    return Promise.all([
-      fetch(
-        `${API.MANDATARIS_SERVICE}/organen/${currentOrgaan.id}/activeMembers`
-      )
-        .then(async (response) => {
-          const result = await response.json();
-          return result?.count;
-        })
-        .catch(() => {
-          return 0;
-        }),
-    ]);
+    return await fetch(
+      `${API.MANDATARIS_SERVICE}/organen/${currentOrgaan.id}/activeMembers`
+    )
+      .then(async (response) => {
+        const result = await response.json();
+        return result?.count;
+      })
+      .catch(() => {
+        return 0;
+      });
   }
 
   rdfaBindings = {
