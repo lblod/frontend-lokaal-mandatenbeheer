@@ -17,6 +17,9 @@ export const getApplicationContextMetaTtl = async (bestuursorganen) => {
     .join(', ');
 
   const period = getBestuursperiodeForBestuursorganen(bestuursorganen);
+  const isFractieRequired = await isRequiredForBestuursorgaan(
+    bestuursorganen.at(0)
+  );
 
   return `
     @prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
@@ -24,13 +27,7 @@ export const getApplicationContextMetaTtl = async (bestuursorganen) => {
 
     ext:applicationContext ext:currentBestuursorgaan ${bestuursorgaanUris} .
 
-    ${
-      bestuursorganen.length === 1
-        ? `
-        <http://lblod.data.gift/vocabularies/lmb/component> <http://lblod.data.gift/vocabularies/lmb/isFractieRequired> ${await isRequiredForBestuursorgaan(bestuursorganen.at(0))}.
-      `
-        : ``
-    }
+    <http://lblod.data.gift/vocabularies/lmb/component> <http://lblod.data.gift/vocabularies/lmb/isFractieRequired> ${isFractieRequired}.
 
     ${
       period
