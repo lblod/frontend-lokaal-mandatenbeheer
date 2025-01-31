@@ -172,7 +172,7 @@ export default class MandatarissenUpdateState extends Component {
         rangorde: this.rangorde,
         start: dateOfAction,
         einde: endDate,
-        status: this.newStatus,
+        status: await this.newStatus,
         publicationStatus: await getDraftPublicationStatus(this.store),
       }
     );
