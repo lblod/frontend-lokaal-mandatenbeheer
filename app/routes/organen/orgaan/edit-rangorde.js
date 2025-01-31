@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 import { action } from '@ember/object';
+import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 
 export default class EditRangordeRoute extends Route {
   @service store;
@@ -26,7 +27,7 @@ export default class EditRangordeRoute extends Route {
           params,
           bestuursorgaanInTijd,
           parentModel.selectedBestuursperiode,
-          params.date
+          endOfDay(params.date)
         );
     }
     mandatarissen = mandatarissen.filter((mandataris) => {
