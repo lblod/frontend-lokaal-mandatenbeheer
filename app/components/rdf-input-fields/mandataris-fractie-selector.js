@@ -18,7 +18,7 @@ import { restartableTask, timeout } from 'ember-concurrency';
 
 /**
  * The reason that the FractieSelector is a specific component is that when linking a mandataris
- * to a fractie, the link is materialized through a Lidmaadschap class, with a start and end date.
+ * to a fractie, the link is materialized through a Lidmaatschap class, with a start and end date.
  * The start and end date for the Lidmaatschap are set to the to the start and end date of the
  * mandate, and needs to be kept in sync when the mandataris is updated.
  *
