@@ -3,19 +3,19 @@
 <InstanceTableConfiguration
   @labels={{this.model.headerLabels}}
   @onSelectionUpdated={{this.updateTable}}
+  @disabledSelection={{this.isUpdating}}
 />
 <div class="au-c-body-container au-c-body-container--scroll">
-  {{#unless this.isUpdatingLabels}}
-    <SemanticForms::InstanceTable
-      @sort={{this.sort}}
-      @page={{this.page}}
-      @size={{this.size}}
-      @filter={{this.filter}}
-      @labels={{this.columnLabels}}
-      @search={{this.search}}
-      @formDefinition={{this.model.formDefinition}}
-      @onRemoveInstance={{this.onRemoveInstance}}
-      @editRoute="forms.form.instance"
-    />
-  {{/unless}}
+  <SemanticForms::InstanceTable
+    @sort={{this.sort}}
+    @page={{this.page}}
+    @size={{this.size}}
+    @filter={{this.filter}}
+    @labels={{this.columnLabels}}
+    @search={{this.search}}
+    @formDefinition={{this.model.formDefinition}}
+    @onRemoveInstance={{this.onRemoveInstance}}
+    @editRoute="forms.form.instance"
+    @onTableLoaded={{this.onTableLoaded}}
+  />
 </div>

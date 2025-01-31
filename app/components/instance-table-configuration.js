@@ -31,6 +31,10 @@ export default class InstanceTableConfiguration extends Component {
 
   @action
   toggleLabel(label) {
+    if (this.disabledSelection) {
+      return;
+    }
+
     if (label.isSelected && this.selectedLabels.length === 1) {
       showWarningToast(
         this.toaster,
@@ -54,5 +58,9 @@ export default class InstanceTableConfiguration extends Component {
 
   get selectedLabels() {
     return this.labels?.filter((label) => label.isSelected) ?? [];
+  }
+
+  get disabledSelection() {
+    return this.args.disabledSelection;
   }
 }

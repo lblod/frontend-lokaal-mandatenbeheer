@@ -15,7 +15,7 @@ export default class FormInstancesController extends Controller {
   @tracked page = 0;
   @tracked sort = 'uri';
   @tracked filter = '';
-  @tracked isUpdatingLabels;
+  @tracked isUpdating;
   @tracked columnLabels = A([
     {
       name: 'Uri',
@@ -38,9 +38,13 @@ export default class FormInstancesController extends Controller {
 
   @action
   updateTable(selectedLabels) {
-    this.isUpdatingLabels = true;
+    this.isUpdating = true;
     this.columnLabels.clear();
     this.columnLabels.push(...selectedLabels);
-    this.isUpdatingLabels = false;
+  }
+
+  @action
+  onTableLoaded() {
+    this.isUpdating = false;
   }
 }

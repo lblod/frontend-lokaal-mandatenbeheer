@@ -6,7 +6,9 @@
       <li
         {{on "click" (fn this.toggleLabel label)}}
         role="button"
-        class="clickable-cell {{if label.isSelected 'selected'}}"
+        class="clickable-cell
+          {{if label.isSelected 'selected'}}
+          {{if this.disabledSelection 'disabled'}}"
       >{{label.name}}</li>
     {{/each}}
   </ul>
