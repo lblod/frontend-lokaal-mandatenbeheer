@@ -5,14 +5,17 @@
   @onSelectionUpdated={{this.updateTable}}
 />
 <div class="au-c-body-container au-c-body-container--scroll">
-  <SemanticForms::InstanceTable
-    @sort={{this.sort}}
-    @page={{this.page}}
-    @size={{this.size}}
-    @filter={{this.filter}}
-    @search={{this.search}}
-    @formDefinition={{this.model.formDefinition}}
-    @onRemoveInstance={{this.onRemoveInstance}}
-    @editRoute="forms.form.instance"
-  />
+  {{#unless this.isUpdatingLabels}}
+    <SemanticForms::InstanceTable
+      @sort={{this.sort}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @filter={{this.filter}}
+      @labels={{this.columnLabels}}
+      @search={{this.search}}
+      @formDefinition={{this.model.formDefinition}}
+      @onRemoveInstance={{this.onRemoveInstance}}
+      @editRoute="forms.form.instance"
+    />
+  {{/unless}}
 </div>
