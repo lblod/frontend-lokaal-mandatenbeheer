@@ -1,0 +1,13 @@
+<div class="au-o-box">
+  <AuHeading @skin="2">Configureer tabel</AuHeading>
+
+  <ul>
+    {{#each this.sortedLabels as |label|}}
+      <li
+        {{on "click" (fn this.toggleLabel label)}}
+        role="button"
+        class="clickable-cell {{if label.isSelected 'selected'}}"
+      >{{label.name}}</li>
+    {{/each}}
+  </ul>
+</div>
