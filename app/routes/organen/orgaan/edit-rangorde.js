@@ -34,6 +34,7 @@ export default class EditRangordeRoute extends Route {
       return mandataris.get('bekleedt.hasRangorde');
     });
     const mandatarisStruct = mandatarissen.map((mandataris) => {
+      mandataris.oldRangorde = mandataris.rangorde;
       return { mandataris: mandataris, rangorde: mandataris.rangorde };
     });
 
@@ -50,8 +51,8 @@ export default class EditRangordeRoute extends Route {
     controller.modalOpen = false;
     controller.interceptedTransition = null;
     controller.updatedRangordes = new Set();
-    controller.hasChanges = false;
     controller.loading = false;
+    controller.saved = false;
     controller.updateOrderedMandatarisList();
   }
 
@@ -61,6 +62,7 @@ export default class EditRangordeRoute extends Route {
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const controller = this.controller;
     if (
+      !controller.saved &&
       controller.changedEntries.length > 0 &&
       !controller.interceptedTransition
     ) {

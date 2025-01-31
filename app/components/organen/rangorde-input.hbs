@@ -23,6 +23,14 @@
       @disabled={{this.isPlusDisabled}}
       {{on "click" this.rangordeUp}}
     />
+    <div class="au-u-margin-left-tiny">
+      {{#if this.rangordeMovedUp}}
+        <AuBadge @icon="chevron-up" @skin="success" @size="small" />
+      {{/if}}
+      {{#if this.rangordeMovedDown}}
+        <AuBadge @icon="chevron-down" @skin="error" @size="small" />
+      {{/if}}
+    </div>
   </div>
   <AuHelpText @warning={{this.inputWarningMessage}}>
     {{this.inputWarningMessage}}

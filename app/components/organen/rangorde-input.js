@@ -32,6 +32,22 @@ export default class OrganenRangordeInputComponent extends Component {
     return this.findOrderInString(this.args.mandatarisStruct.rangorde);
   }
 
+  get rangordeMovedUp() {
+    const currentNumber = this.rangordeInteger || 0;
+    const oldNumber = this.findOrderInString(
+      this.args.mandatarisStruct.mandataris.oldRangorde
+    );
+    return currentNumber < oldNumber;
+  }
+
+  get rangordeMovedDown() {
+    const currentNumber = this.rangordeInteger || 0;
+    const oldNumber = this.findOrderInString(
+      this.args.mandatarisStruct.mandataris.oldRangorde
+    );
+    return currentNumber > oldNumber;
+  }
+
   get rangorde() {
     return this.args.mandatarisStruct.rangorde;
   }

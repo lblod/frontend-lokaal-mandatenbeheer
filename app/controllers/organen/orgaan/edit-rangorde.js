@@ -17,8 +17,7 @@ export default class EditRangordeController extends Controller {
   @tracked date = new Date();
   @tracked orderedMandatarissen = [];
   @tracked interceptedTransition = null;
-  updatedRangordes = new Set();
-  @tracked hasChanges = false;
+  @tracked updatedRangordeAt = new Date();
 
   @action
   updateOrderedMandatarisList() {
@@ -28,9 +27,12 @@ export default class EditRangordeController extends Controller {
   }
 
   @action
-  trackUpdatedRangorde(rangorde) {
-    this.updatedRangordes.add(rangorde);
-    this.hasChanges = true;
+  trackUpdatedRangorde() {
+    this.updatedRangordeAt = new Date();
+  }
+
+  get hasChanges() {
+    return this.changedEntries.length > 0;
   }
 
   @action
@@ -64,9 +66,7 @@ export default class EditRangordeController extends Controller {
 
   get changedEntries() {
     const mandatarissen = this.orderedMandatarissen
-      .filter((struct) => {
-        return this.updatedRangordes.has(struct.rangorde);
-      })
+      .filter((struct) => struct.mandataris.oldRangorde !== struct.rangorde)
       .map((struct) => {
         return {
           mandatarisId: struct.mandataris.id,
@@ -82,9 +82,9 @@ export default class EditRangordeController extends Controller {
     const diff = this.changedEntries;
     await this.rangordeApi.updateRangordes(diff, this.correcting, this.date);
     this.closeModal();
-    this.updatedRangordes.clear();
-    this.hasChanges = false;
     this.loading = false;
+    // so we can tell the route it's ok to refresh now
+    this.saved = true;
     this.router.refresh();
   }
 

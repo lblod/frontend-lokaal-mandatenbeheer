@@ -4,8 +4,11 @@ import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { displayEndOfDay } from 'frontend-lmb/utils/date-manipulation';
+import { tracked } from '@glimmer/tracking';
 
 export default class MandatarisModel extends Model {
+  @tracked oldRangorde;
+
   @attr rangorde;
   @attr('datetime') start;
   @attr('datetime') einde;
