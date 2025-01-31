@@ -67,7 +67,7 @@ export default class MandatarisService extends Service {
       rangorde: newMandatarisState.rangorde,
       start: newMandatarisState.start,
       einde: newMandatarisState.einde,
-      bekleedt: toReplace.bekleedt,
+      bekleedt: await toReplace.bekleedt,
       isBestuurlijkeAliasVan: replacementPerson,
       beleidsdomein: await newMandatarisState.beleidsdomein,
       status: mandatarisStatus,

@@ -66,3 +66,4 @@ irregular('global-system-message', 'global-system-messages');
 irregular('werkingsgebied', 'werkingsgebieden');
 
 irregular('bestuurseenheid-contact', 'bestuurseenheid-contacten');
+irregular('library-entry', 'library-entries');
