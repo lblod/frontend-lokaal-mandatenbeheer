@@ -8,6 +8,7 @@ import moment from 'moment';
 export default class MandatarissenPersoonMandatenRoute extends Route {
   @service store;
   @service bestuursorganen;
+  @service bestuursperioden;
   @service currentSession;
   @service('persoon-api') persoonApi;
 
@@ -43,17 +44,32 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
       });
     }
 
+    const mandatarissenForOnafhankelijk = await foldMandatarisses(
+      params,
+      await this.getMandatarissen(persoon, params, true)
+    );
+
     return {
       persoon,
       hasActiveMandatarissen,
-      foldedMandatarissen,
+      mandatarissenForOnafhankelijk,
       mandatarissen: filteredMandatarissen,
       bestuurseenheid,
       bestuursorganen,
     };
   }
 
-  async getMandatarissen(persoon, params) {
+  async getMandatarissen(persoon, params, onlyInCurrentPeriod = false) {
+    let bestuursperiodeFilter = {};
+    if (onlyInCurrentPeriod) {
+      const currentPeriod =
+        await this.bestuursperioden.getCurrentBestuursperiode();
+      bestuursperiodeFilter = {
+        'filter[bekleedt][bevat-in][heeft-bestuursperiode][:uri:]':
+          currentPeriod.uri,
+      };
+    }
+
     let queryParams = {
       sort: params.sort,
       filter: {
@@ -65,6 +81,7 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
       // type of the original-bestuursorgaan (other graph) and mu-auth needs the type to be able to check the filter.
       // 'filter[bekleedt][bevat-in][:has-no:original-bestuursorgaan]': true,
       'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
+      ...bestuursperiodeFilter,
       include: [
         'is-bestuurlijke-alias-van',
         'bekleedt.bestuursfunctie',
@@ -83,6 +100,6 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
   setupController(controller, model) {
     super.setupController(controller, model);
 
-    controller.checkFracties.perform(model.foldedMandatarissen);
+    controller.checkFracties.perform(model.mandatarissenForOnafhankelijk);
   }
 }
