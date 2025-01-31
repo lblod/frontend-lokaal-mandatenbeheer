@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 
 import { action } from '@ember/object';
+import { A } from '@ember/array';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
@@ -14,6 +15,8 @@ export default class FormInstancesController extends Controller {
   @tracked page = 0;
   @tracked sort = 'uri';
   @tracked filter = '';
+  @tracked isUpdatingLabels;
+  @tracked columnLabels = A();
   size = 10;
 
   @action
@@ -28,7 +31,10 @@ export default class FormInstancesController extends Controller {
   });
 
   @action
-  updateTable(selectedLabels) {
-    console.log(`selected labels:`, selectedLabels);
+  updateTable(selectedLabels = []) {
+    this.isUpdatingLabels = true;
+    this.columnLabels.clear();
+    this.columnLabels.push(...selectedLabels);
+    this.isUpdatingLabels = false;
   }
 }
