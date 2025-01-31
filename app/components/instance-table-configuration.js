@@ -9,7 +9,7 @@ import { showWarningToast } from 'frontend-lmb/utils/toasts';
 
 export default class InstanceTableConfiguration extends Component {
   @service toaster;
-  @tracked labels = A([]);
+  @tracked labels = A();
 
   constructor() {
     super(...arguments);
@@ -26,9 +26,7 @@ export default class InstanceTableConfiguration extends Component {
       };
     });
 
-    this.labels.clear();
     this.labels.push(...labelsWithIsSelectedProperty);
-    this.args.onSelectionUpdated(this.selectedLabels);
   }
 
   @action
@@ -55,16 +53,6 @@ export default class InstanceTableConfiguration extends Component {
   }
 
   get selectedLabels() {
-    const labelCopy = JSON.parse(JSON.stringify(this.labels.toArray()));
-    return labelCopy
-      .map((label) => {
-        if (!label.isSelected) {
-          return null;
-        }
-
-        delete label.isSelected;
-        return label;
-      })
-      .filter((label) => label);
+    return this.labels?.filter((label) => label.isSelected) ?? [];
   }
 }
