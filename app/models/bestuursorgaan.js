@@ -150,6 +150,12 @@ export default class BestuursorgaanModel extends Model {
     return this.hasBestuursorgaanClassificatie(BURGEMEESTER_BESTUURSORGAAN_URI);
   }
 
+  get hasRangorde() {
+    return Promise.all([this.isCBS, this.isGR]).then((promise) => {
+      return promise.some((value) => value);
+    });
+  }
+
   get hasVoorzitter() {
     return [
       GEMEENTERAAD_BESTUURSORGAAN_URI,

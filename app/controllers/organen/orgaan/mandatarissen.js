@@ -13,6 +13,7 @@ export default class OrganenMandatarissenController extends Controller {
 
   @service fractieApi;
   @service toaster;
+  @service bestuursperioden;
   @service('mandataris') mandatarisService;
 
   queryParams = ['activeOnly'];
@@ -57,7 +58,7 @@ export default class OrganenMandatarissenController extends Controller {
   @action
   async buildMetaTtl() {
     const metaTtl = await getApplicationContextMetaTtl([
-      this.model.currentBestuursorgaan,
+      this.model.bestuursorgaanInTijd,
     ]);
     return `${metaTtl}
     <http://mu.semte.ch/vocabularies/ext/applicationContext> <http://mu.semte.ch/vocabularies/ext/limitPersonFractions> true .
@@ -79,21 +80,9 @@ export default class OrganenMandatarissenController extends Controller {
   }
 
   get selectedPeriodIsCurrent() {
-    if (!this.model?.selectedBestuursperiode) {
-      return false;
-    }
-
-    let isCurrent = false;
-    const currentYear = new Date().getFullYear();
-    if (
-      currentYear >= this.model.selectedBestuursperiode.start &&
-      (!this.model.selectedBestuursperiode.einde ||
-        currentYear < this.model.selectedBestuursperiode.einde)
-    ) {
-      isCurrent = true;
-    }
-
-    return isCurrent;
+    return this.bestuursperioden.isCurrentPeriod(
+      this.model?.selectedBestuursperiode
+    );
   }
 
   get personCount() {

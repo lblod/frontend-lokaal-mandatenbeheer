@@ -43,6 +43,13 @@
         @currentSorting={{@sort}}
         @label="Einde mandaat"
       />
+      {{#if @showRangorde}}
+        <AuDataTableThSortable
+          @field="rangorde"
+          @currentSorting={{@sort}}
+          @label="Rangorde"
+        />
+      {{/if}}
       {{#unless @hidePublicationStatus}}
         <AuDataTableThSortable
           @field="publicationStatus"
@@ -91,6 +98,18 @@
         {{moment-format row.foldedStart "DD-MM-YYYY"}}</td>
       <td class={{if (is-in-past row.foldedEnd) "au-u-muted"}}>
         {{moment-format row.foldedEnd "DD-MM-YYYY"}}</td>
+      {{#if @showRangorde}}
+        <td>
+          {{#if @editRangorde}}
+            <Verkiezingen::RangordeInput
+              @mandataris={{row.mandataris}}
+              @mandatarissen={{@content}}
+            />
+          {{else}}
+            {{row.mandataris.rangorde}}
+          {{/if}}
+        </td>
+      {{/if}}
       {{#unless @hidePublicationStatus}}
         <td>
           <Mandaat::PublicatieStatusPill

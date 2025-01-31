@@ -76,13 +76,6 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     return this.editMode === CREATE_MODE;
   }
 
-  get CBSClassification() {
-    return CBS_BESTUURSORGAAN_URI;
-  }
-  get gemeenteRaadClassification() {
-    return GEMEENTERAAD_BESTUURSORGAAN_URI;
-  }
-
   mirrorTable = restartableTask(async () => {
     this.skeletonRowsOfMirror = null;
     let syncId = null;

@@ -117,20 +117,47 @@ export const rangordeStringToNumber = (rangordeString) => {
 
 export const orderMandatarissenByRangorde = (
   mandatarissen,
-  allMandatarissenInIv
+  allMandatarissenInIv,
+  reverse
 ) => {
   return mandatarissen.sort((a, b) => {
     const classRankA = a.bekleedt.get('bestuursfunctie.rankForSorting');
     const classRankB = b.bekleedt.get('bestuursfunctie.rankForSorting');
     if (classRankA < classRankB) {
-      return 1;
+      return reverse ? -1 : 1;
     } else if (classRankA > classRankB) {
-      return -1;
+      return reverse ? 1 : -1;
     }
 
     const noRangorde = !a.rangorde && !b.rangorde;
     if (noRangorde && allMandatarissenInIv) {
       return fallbackSortByOtherIVOrgans(a, b, allMandatarissenInIv);
+    }
+
+    const aNumber = rangordeStringToNumber(a.rangorde);
+    const bNumber = rangordeStringToNumber(b.rangorde);
+    if (aNumber == null) {
+      return reverse ? 1 : -1;
+    }
+    if (bNumber == null) {
+      return reverse ? -1 : 1;
+    }
+    return reverse ? bNumber - aNumber : aNumber - bNumber;
+  });
+};
+
+export const orderMandatarisStructByRangorde = (mandatarissen) => {
+  return mandatarissen.sort((a, b) => {
+    const classRankA = a.mandataris.bekleedt.get(
+      'bestuursfunctie.rankForSorting'
+    );
+    const classRankB = b.mandataris.bekleedt.get(
+      'bestuursfunctie.rankForSorting'
+    );
+    if (classRankA < classRankB) {
+      return 1;
+    } else if (classRankA > classRankB) {
+      return -1;
     }
 
     const aNumber = rangordeStringToNumber(a.rangorde);

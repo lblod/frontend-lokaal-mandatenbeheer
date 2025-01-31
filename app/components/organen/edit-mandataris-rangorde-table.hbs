@@ -1,0 +1,68 @@
+<AuDataTable
+  @content={{@orderedMandatarissen}}
+  @noDataMessage="Geen mandatarissen gevonden"
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <th>
+        Mandaat
+      </th>
+      <th>
+        Voornaam
+      </th>
+      <th>
+        Familienaam
+      </th>
+      <th>
+        Fractie
+      </th>
+      <th>
+        Status
+      </th>
+      <th>
+        Start mandaat
+      </th>
+      <th>
+        Einde mandaat
+      </th>
+      <th>
+        Rangorde
+      </th>
+    </c.header>
+
+    <c.body as |row|>
+      <td>
+        {{row.mandataris.bekleedt.bestuursfunctie.label}}
+      </td>
+      <td>
+        {{row.mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+      </td>
+      <td>
+        {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
+      </td>
+      <td>
+        {{if
+          row.mandataris.heeftLidmaatschap.binnenFractie
+          row.mandataris.heeftLidmaatschap.binnenFractie.naam
+          "Niet beschikbaar"
+        }}
+      </td>
+      <td>
+        <Mandaat::MandatarisStatusPill @mandataris={{row.mandataris}} />
+      </td>
+      <td class={{if (is-in-past row.mandataris.einde) "au-u-muted"}}>
+        {{moment-format row.mandataris.start "DD-MM-YYYY"}}</td>
+      <td class={{if (is-in-past row.mandataris.einde) "au-u-muted"}}>
+        {{moment-format row.mandataris.displayEinde "DD-MM-YYYY"}}</td>
+      <td>
+        <Organen::RangordeInput
+          @mandatarisStruct={{row}}
+          @mandatarissen={{@mandatarissen}}
+          @updateMandatarisList={{@updateMandatarisList}}
+          @trackUpdatedRangorde={{@trackUpdatedRangorde}}
+        />
+      </td>
+    </c.body>
+  </t.content>
+</AuDataTable>

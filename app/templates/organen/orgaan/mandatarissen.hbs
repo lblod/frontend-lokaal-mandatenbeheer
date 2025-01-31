@@ -10,29 +10,71 @@
     </AuHeading>
   </Group>
   <Group>
-    {{#if this.isDisabled}}
-      <Shared::Tooltip
-        @showTooltip={{true}}
-        @tooltipText="Het is niet mogelijk mandatarissen te bekrachtingen in een bestuursperiode waarvan de voorbereiding van de legislatuur nog actief is."
-      >
-        <AuButton @disabled={{true}}>
-          Bekrachtig mandatarissen
-        </AuButton>
-      </Shared::Tooltip>
-    {{else}}
-      <AuLink
-        @route="organen.orgaan.bulk-bekrachtiging"
-        @skin="button-secondary"
-      >Bekrachtig mandatarissen
-      </AuLink>
-    {{/if}}
-    <DownloadMandatarissenFromTable
-      @bestuursperiode={{@model.selectedBestuursperiode}}
-      @activeOnly={{this.activeOnly}}
-      @bestuursorgaan={{this.model.bestuursorgaan}}
-      @bestuursorgaanInTijdId={{this.model.bestuursorgaanInTijdId}}
-      @sort={{this.sort}}
-    />
+    {{! template-lint-disable require-context-role }}
+    <AuDropdown
+      @title="Meer Acties"
+      @skin="secondary"
+      @icon="three-dots"
+      @iconAlignment="right"
+    >
+      {{#if this.isDisabled}}
+        <Shared::Tooltip
+          role="menuitem"
+          @showTooltip={{true}}
+          @tooltipText="Het is niet mogelijk de rangorde van mandatarissen te wijzigen in een bestuursperiode waarvan de voorbereiding van de legislatuur nog actief is."
+        >
+          <AuButton @disabled={{true}} @skin="link" role="menuitem">
+            Wijzig rangorde
+          </AuButton>
+        </Shared::Tooltip>
+      {{else}}
+        <Shared::Tooltip
+          role="menuitem"
+          @showTooltip={{true}}
+          @tooltipText="Pas de rangorde aan van meerdere mandatarissen tegelijkertijd."
+        >
+          <AuLink
+            role="menuitem"
+            @route="organen.orgaan.edit-rangorde"
+            @skin="link"
+          >Wijzig rangorde
+          </AuLink>
+        </Shared::Tooltip>
+      {{/if}}
+      {{#if this.isDisabled}}
+        <Shared::Tooltip
+          @showTooltip={{true}}
+          role="menuitem"
+          @tooltipText="Het is niet mogelijk mandatarissen te bekrachtingen in een bestuursperiode waarvan de voorbereiding van de legislatuur nog actief is."
+        >
+          <AuButton @disabled={{true}} @skin="link" role="menuitem">
+            Bekrachtig mandatarissen
+          </AuButton>
+        </Shared::Tooltip>
+      {{else}}
+        <Shared::Tooltip
+          role="menuitem"
+          @showTooltip={{true}}
+          @tooltipText="Bekrachtig meerdere mandatarissen tegelijkertijd."
+        >
+          <AuLink
+            role="menuitem"
+            @skin="link"
+            @route="organen.orgaan.bulk-bekrachtiging"
+          >Bekrachtig mandatarissen
+          </AuLink>
+        </Shared::Tooltip>
+      {{/if}}
+      <DownloadMandatarissenFromTable
+        @bestuursperiode={{@model.selectedBestuursperiode}}
+        @activeOnly={{this.activeOnly}}
+        @bestuursorgaan={{this.model.bestuursorgaan}}
+        @bestuursorgaanInTijdId={{this.model.bestuursorgaanInTijd.id}}
+        @sort={{this.sort}}
+        @skin="link"
+        @role="menuitem"
+      />
+    </AuDropdown>
     <Shared::Tooltip
       @showTooltip={{this.isDisabled}}
       @tooltipText="Het is niet mogelijk mandatarissen toe te voegen aan een bestuursperiode terwijl de voorbereiding van de legislatuur actief is."
@@ -87,6 +129,7 @@
   @personRoute="mandatarissen.persoon.mandaten"
   @mandaatRoute="mandatarissen.persoon.mandataris"
   @hidePublicationStatus={{not (await this.model.bestuursorgaan.isDecretaal)}}
+  @showRangorde={{await @model.bestuursorgaan.hasRangorde}}
 />
 
 {{outlet}}
