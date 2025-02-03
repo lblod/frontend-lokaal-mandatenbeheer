@@ -7,8 +7,10 @@ import { restartableTask } from 'ember-concurrency';
 import {
   MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
   MANDAAT_BURGEMEESTER_CODE,
+  MANDAAT_SCHEPEN_CODE,
   MANDATARIS_VERHINDERD_STATE,
 } from 'frontend-lmb/utils/well-known-uris';
+import { COLLEGE_ORGANEN_VOEREN_EN_RAND } from 'frontend-lmb/utils/well-known-ids';
 
 export default class MinMaxMandatarisWarningComponent extends Component {
   @service store;
@@ -87,14 +89,26 @@ export default class MinMaxMandatarisWarningComponent extends Component {
         const min = mandaat.minAantalHouders;
         const max = mandaat.maxAantalHouders;
 
-        const label = (await mandaat.bestuursfunctie).label;
+        const bestuursfunctie = await mandaat.bestuursfunctie;
+        const label = bestuursfunctie.label;
+        const isSchepen = bestuursfunctie.uri === MANDAAT_SCHEPEN_CODE;
 
         const countFound = counts[mandaat.id];
         if (min && countFound < min) {
+          let extraText = '';
+          let mailTo = '';
+          if (
+            isSchepen &&
+            !COLLEGE_ORGANEN_VOEREN_EN_RAND.includes(bestuursorgaan.id)
+          ) {
+            extraText = `Als uw bestuur heeft beslist om minder dan het maximale aantal schepenen te installeren, blijft dit lagere schepenaantal vast voor de hele legislatuur.`;
+            mailTo = `mailto://lokaalmandatenbeheer@vlaanderen.be?subject=Wijziging Aantal Schepenen`;
+          }
           warnings.push({
             mandaat,
-            text: `Er moet${min > 1 ? 'en' : ''} minstens ${min} mandataris${min > 1 ? 'sen' : ''} zijn voor het mandaat ${label}, er werd${countFound == 1 ? '' : 'en'} er ${countFound} gevonden op ${date.format('DD-MM-YYYY')}.`,
+            text: `Er moet${min > 1 ? 'en' : ''} minstens ${min} mandataris${min > 1 ? 'sen' : ''} zijn voor het mandaat ${label}, er werd${countFound == 1 ? '' : 'en'} er ${countFound} gevonden op ${date.format('DD-MM-YYYY')}.\n\n${extraText}`,
             count: countFound,
+            mailTo: mailTo,
           });
         }
         if (max && countFound > max) {
@@ -102,6 +116,7 @@ export default class MinMaxMandatarisWarningComponent extends Component {
             mandaat,
             text: `Er ${max > 1 ? 'mogen' : 'mag'} maximaal ${max} mandataris${max > 1 ? 'sen' : ''} zijn voor het mandaat ${label}, er werd${countFound == 1 ? '' : 'en'} er ${countFound} gevonden op ${date.format('DD-MM-YYYY')}.`,
             count: countFound,
+            mailTo: '',
           });
         }
       })
