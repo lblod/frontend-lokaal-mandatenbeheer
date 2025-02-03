@@ -49,7 +49,7 @@ export default class InstanceTableConfiguration extends Component {
     delete label.isSelected;
     this.labels.push({ ...label, isSelected: !selectedState });
 
-    // this.args.onSelectionUpdated(this.selectedLabels);
+    this.args.onSelectionUpdated(this.selectedLabels);
   }
 
   @action
@@ -73,6 +73,7 @@ export default class InstanceTableConfiguration extends Component {
         order: label.order,
       },
     ]);
+    this.args.onSelectionUpdated(this.selectedLabels);
   }
 
   get sortedLabels() {
