@@ -3,15 +3,19 @@
 
   <ul>
     {{#each this.sortedLabels as |label|}}
-      <div class="au-u-flex au-u-flex--row au-u-flex--between">
-        <li
+      <li
+        class="clickable-cell buttons-at-end
+          {{if label.isSelected 'selected'}}
+          {{if this.disabledSelection 'disabled'}}"
+      >
+        <p
           {{on "click" (fn this.toggleLabel label)}}
           role="button"
-          class="clickable-cell
-            {{if label.isSelected 'selected'}}
-            {{if this.disabledSelection 'disabled'}}"
-        >{{label.name}}, {{label.order}}</li>
-        <div class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
+          class="au-u-flex au-u-flex--vertical-center"
+        >{{label.name}}</p>
+        <div
+          class="au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-flex-self-end"
+        >
           <AuButton
             @skin="naked"
             @icon="nav-up"
@@ -29,7 +33,7 @@
             Naar onder
           </AuButton>
         </div>
-      </div>
+      </li>
     {{/each}}
   </ul>
 </div>
