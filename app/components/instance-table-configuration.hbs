@@ -3,13 +3,33 @@
 
   <ul>
     {{#each this.sortedLabels as |label|}}
-      <li
-        {{on "click" (fn this.toggleLabel label)}}
-        role="button"
-        class="clickable-cell
-          {{if label.isSelected 'selected'}}
-          {{if this.disabledSelection 'disabled'}}"
-      >{{label.name}}</li>
+      <div class="au-u-flex au-u-flex--row au-u-flex--between">
+        <li
+          {{on "click" (fn this.toggleLabel label)}}
+          role="button"
+          class="clickable-cell
+            {{if label.isSelected 'selected'}}
+            {{if this.disabledSelection 'disabled'}}"
+        >{{label.name}}, {{label.order}}</li>
+        <div class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
+          <AuButton
+            @skin="naked"
+            @icon="nav-up"
+            @hideText={{true}}
+            {{on "click" (fn this.moveLabel label "up")}}
+          >
+            Naar boven
+          </AuButton>
+          <AuButton
+            @skin="naked"
+            @icon="nav-down"
+            @hideText={{true}}
+            {{on "click" (fn this.moveLabel label "down")}}
+          >
+            Naar onder
+          </AuButton>
+        </div>
+      </div>
     {{/each}}
   </ul>
 </div>

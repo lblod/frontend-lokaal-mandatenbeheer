@@ -49,11 +49,34 @@ export default class InstanceTableConfiguration extends Component {
     delete label.isSelected;
     this.labels.push({ ...label, isSelected: !selectedState });
 
-    this.args.onSelectionUpdated(this.selectedLabels);
+    // this.args.onSelectionUpdated(this.selectedLabels);
+  }
+
+  @action
+  moveLabel(label, upDown) {
+    const factor = upDown === 'up' ? -1 : 1;
+    let orderWithFactor = label.order + factor;
+    if (orderWithFactor === -1) {
+      orderWithFactor = this.labels.length - 1;
+    } else if (orderWithFactor === this.labels.length) {
+      orderWithFactor = 0;
+    }
+    let switchLabel = this.labels.find((l) => l.order === orderWithFactor);
+    this.labels.removeObjects([label, switchLabel]);
+    this.labels.pushObjects([
+      {
+        ...label,
+        order: switchLabel.order,
+      },
+      {
+        ...switchLabel,
+        order: label.order,
+      },
+    ]);
   }
 
   get sortedLabels() {
-    return this.labels.sort((a, b) => a.name.localeCompare(b.name));
+    return this.labels.sort((a, b) => a.order - b.order);
   }
 
   get selectedLabels() {
