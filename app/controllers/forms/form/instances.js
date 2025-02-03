@@ -6,7 +6,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { task, timeout } from 'ember-concurrency';
-import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { JSON_API_TYPE, SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class FormInstancesController extends Controller {
   queryParams = ['page', 'size', 'sort', 'filter'];
@@ -41,6 +41,29 @@ export default class FormInstancesController extends Controller {
     this.isUpdating = true;
     this.columnLabels.clear();
     this.columnLabels.push(...selectedLabels);
+  }
+
+  @action
+  async downloadLink() {
+    const response = await fetch(
+      `/form-content/instance-table/${this.model.formDefinition.id}/download`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          labels: this.columnLabels,
+        }),
+      }
+    );
+    const csvString = await response.text();
+    let blob = new Blob([csvString], { type: 'text/csv' });
+    let downloadLink = document.createElement('a');
+    downloadLink.download = 'instances';
+    downloadLink.href = window.URL.createObjectURL(blob);
+    downloadLink.click();
+    downloadLink.remove();
   }
 
   @action
