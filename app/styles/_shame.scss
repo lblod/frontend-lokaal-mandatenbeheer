@@ -415,3 +415,8 @@ $au-region-breakpoint: medium !default;
 .mock-login-button:hover {
   color: var(--au-u-gray-700);
 }
+
+// fixes mandataris list in orgaan view being pushed out of visible area on some large-ish screens
+main .au-c-main-container__content .au-u-wide-on-print {
+  overflow: hidden;
+}
