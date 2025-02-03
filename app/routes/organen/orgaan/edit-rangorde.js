@@ -34,7 +34,6 @@ export default class EditRangordeRoute extends Route {
       return mandataris.get('bekleedt.hasRangorde');
     });
     const mandatarisStruct = mandatarissen.map((mandataris) => {
-      mandataris.oldRangorde = mandataris.rangorde;
       return { mandataris: mandataris, rangorde: mandataris.rangorde };
     });
 
@@ -50,7 +49,6 @@ export default class EditRangordeRoute extends Route {
     super.setupController(...arguments);
     controller.modalOpen = false;
     controller.interceptedTransition = null;
-    controller.updatedRangordes = new Set();
     controller.loading = false;
     controller.saved = false;
     controller.updateOrderedMandatarisList();

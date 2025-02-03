@@ -7,19 +7,6 @@ export default class MandatarissenService extends Service {
   @service store;
   @service bestuursperioden;
 
-  async getActiveMandatarissen(params, bestuursorgaanInTijd, bestuursperiode) {
-    let mandatarissen = await this.getMandatarissen(
-      params,
-      bestuursorgaanInTijd
-    );
-    const isCurrentBestuursperiode =
-      this.bestuursperioden.isCurrentPeriod(bestuursperiode);
-    if (isCurrentBestuursperiode) {
-      return mandatarissen.filter((mandataris) => mandataris.isActive);
-    }
-    return mandatarissen;
-  }
-
   async getActiveMandatarissenAtTime(
     params,
     bestuursorgaanInTijd,

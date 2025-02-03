@@ -17,18 +17,12 @@ export default class EditRangordeController extends Controller {
   @tracked date = new Date();
   @tracked orderedMandatarissen = [];
   @tracked interceptedTransition = null;
-  @tracked updatedRangordeAt = new Date();
 
   @action
   updateOrderedMandatarisList() {
     this.orderedMandatarissen = orderMandatarisStructByRangorde([
       ...this.model.mandatarisStruct,
     ]);
-  }
-
-  @action
-  trackUpdatedRangorde() {
-    this.updatedRangordeAt = new Date();
   }
 
   get hasChanges() {
@@ -66,7 +60,7 @@ export default class EditRangordeController extends Controller {
 
   get changedEntries() {
     const mandatarissen = this.orderedMandatarissen
-      .filter((struct) => struct.mandataris.oldRangorde !== struct.rangorde)
+      .filter((struct) => struct.mandataris.rangorde !== struct.rangorde)
       .map((struct) => {
         return {
           mandatarisId: struct.mandataris.id,
