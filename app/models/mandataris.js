@@ -112,6 +112,16 @@ export default class MandatarisModel extends Model {
     return false;
   }
 
+  isActiveAt(date) {
+    if (!this.einde) {
+      return moment(this.start).isSameOrBefore(date);
+    }
+    return (
+      moment(this.start).isSameOrBefore(date) &&
+      moment(this.einde).isAfter(date)
+    );
+  }
+
   get uniqueVervangersDoor() {
     return this.getUnique(this.tijdelijkeVervangingen);
   }

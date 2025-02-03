@@ -10,6 +10,7 @@ import {
 export default class BulkBekrachtigingRoute extends Route {
   @service store;
   @service installatievergadering;
+  @service('mandatarissen') mandatarissenService;
 
   queryParams = {
     page: { refreshModel: true },
@@ -27,9 +28,10 @@ export default class BulkBekrachtigingRoute extends Route {
     let mandatarissen;
     let mandatarissenMap;
     if (currentBestuursorgaan) {
-      const options = this.getOptions(params, currentBestuursorgaan);
-
-      mandatarissen = await this.store.query('mandataris', options);
+      mandatarissen = await this.mandatarissenService.getMandatarissen(
+        params,
+        currentBestuursorgaan
+      );
       mandatarissenMap = await Promise.all(
         mandatarissen.map(async (mandataris) => {
           const uri = (await mandataris.publicationStatus).uri;
@@ -57,33 +59,5 @@ export default class BulkBekrachtigingRoute extends Route {
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       currentBestuursorgaan: currentBestuursorgaan,
     };
-  }
-
-  getOptions(params, bestuursOrgaan) {
-    const queryParams = {
-      sort: params.sort,
-      page: {
-        number: params.page,
-        size: params.size,
-      },
-      filter: {
-        bekleedt: {
-          'bevat-in': {
-            id: bestuursOrgaan.id,
-          },
-        },
-        ':has:is-bestuurlijke-alias-van': true,
-      },
-      include: [
-        'is-bestuurlijke-alias-van',
-        'bekleedt.bestuursfunctie',
-        'heeft-lidmaatschap',
-        'heeft-lidmaatschap.binnen-fractie',
-        'status',
-        'publication-status',
-      ].join(','),
-    };
-
-    return queryParams;
   }
 }

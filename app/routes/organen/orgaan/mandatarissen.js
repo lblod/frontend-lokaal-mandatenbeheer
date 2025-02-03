@@ -9,7 +9,9 @@ export default class OrganenMandatarissenRoute extends Route {
   @service currentSession;
   @service store;
   @service installatievergadering;
+  @service bestuursperioden;
   @service semanticFormRepository;
+  @service('mandatarissen') mandatarissenService;
 
   queryParams = {
     activeOnly: { refreshModel: true },
@@ -21,17 +23,23 @@ export default class OrganenMandatarissenRoute extends Route {
 
   async model(params) {
     const parentModel = this.modelFor('organen.orgaan');
-    const currentBestuursorgaan = await parentModel.currentBestuursorgaan;
+    const bestuursorgaanInTijd = await parentModel.currentBestuursorgaan;
 
     const bestuurseenheid = this.currentSession.group;
 
     let mandatarissen;
-    if (currentBestuursorgaan) {
-      const options = this.getOptions(params, currentBestuursorgaan);
-
-      mandatarissen = await this.store.query('mandataris', options);
+    if (bestuursorgaanInTijd) {
+      mandatarissen = await this.mandatarissenService.getMandatarissen(
+        params,
+        bestuursorgaanInTijd
+      );
     }
     const folded = await foldMandatarisses(params, mandatarissen);
+    const filtered = this.getFilteredMandatarissen(
+      folded,
+      params,
+      parentModel.selectedBestuursperiode
+    );
     const mandatarisNewForm =
       await this.semanticFormRepository.getFormDefinition(
         MANDATARIS_NEW_FORM_ID
@@ -42,78 +50,23 @@ export default class OrganenMandatarissenRoute extends Route {
         parentModel.selectedBestuursperiode
       );
     const isDistrict = this.currentSession.isDistrict;
-    const bestuursorgaanInTijdId = await this.getBestuursorgaanInTijdId(
-      parentModel.selectedBestuursperiode,
-      parentModel.bestuursorgaan
-    );
 
     return {
       bestuurseenheid,
-      mandatarissen: this.getFilteredMandatarissen(folded, params),
+      mandatarissen: filtered,
       bestuursorgaan: parentModel.bestuursorgaan,
-      bestuursorgaanInTijdId,
-      bestuursorgaanInTijd: await this.store.findRecord(
-        'bestuursorgaan',
-        bestuursorgaanInTijdId
-      ),
+      bestuursorgaanInTijd,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
-      currentBestuursorgaan: currentBestuursorgaan,
       legislatuurInBehandeling: isDistrict ? false : legislatuurInBehandeling,
     };
   }
 
-  async getBestuursorgaanInTijdId(selectedBestuursperiode, bestuursorgaan) {
-    const bestuursorganenInTijdFromPeriod =
-      (await selectedBestuursperiode.heeftBestuursorganenInTijd) ?? [];
-    const bestuursorganenInTijd =
-      (await bestuursorgaan?.heeftTijdsspecialisaties) ?? [];
-    const fromPeriodIds = bestuursorganenInTijdFromPeriod.map((boi) => boi.id);
-    const boiIds = bestuursorganenInTijd.map((boi) => boi.id);
-    const boiInPeriod = boiIds.filter((id) => fromPeriodIds.includes(id));
-
-    if (boiInPeriod.length >= 1) {
-      return boiInPeriod.at(0);
-    }
-    return null;
-  }
-
-  getOptions(params, bestuursOrgaan) {
-    const queryParams = {
-      sort: params.sort,
-      page: {
-        number: params.page,
-        size: params.size,
-      },
-      filter: {
-        bekleedt: {
-          'bevat-in': {
-            id: bestuursOrgaan.id,
-          },
-        },
-        ':has:is-bestuurlijke-alias-van': true,
-      },
-      include: [
-        'is-bestuurlijke-alias-van',
-        'bekleedt.bestuursfunctie',
-        'heeft-lidmaatschap.binnen-fractie',
-        'status',
-        'publication-status',
-      ].join(','),
-    };
-
-    if (params.filter) {
-      queryParams['filter']['is-bestuurlijke-alias-van'] = params.filter;
-    }
-
-    return queryParams;
-  }
-
-  getFilteredMandatarissen(mandatarissen, params) {
+  getFilteredMandatarissen(mandatarissen, params, bestuursperiode) {
     let filteredMandatarissen = mandatarissen;
-    // eslint-disable-next-line ember/no-controller-access-in-routes
-    const controller = this.controllerFor('organen.orgaan.mandatarissen');
-    if (params.activeOnly && controller.selectedPeriodIsCurrent) {
+    const isCurrentBestuursperiode =
+      this.bestuursperioden.isCurrentPeriod(bestuursperiode);
+    if (params.activeOnly && isCurrentBestuursperiode) {
       filteredMandatarissen = mandatarissen.filter(
         (mandataris) => mandataris.mandataris.isActive
       );

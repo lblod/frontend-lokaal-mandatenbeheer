@@ -49,4 +49,21 @@ export default class BestuursperiodenService extends Service {
 
     return currentPeriod || firstfuturePeriod || firstPreviousPeriod;
   }
+
+  isCurrentPeriod(period) {
+    if (!period) {
+      return false;
+    }
+
+    let isCurrent = false;
+    const currentYear = new Date().getFullYear();
+    if (
+      currentYear >= period.start &&
+      (!period.einde || currentYear < period.einde)
+    ) {
+      isCurrent = true;
+    }
+
+    return isCurrent;
+  }
 }
