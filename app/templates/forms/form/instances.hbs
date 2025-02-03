@@ -1,21 +1,36 @@
 {{page-title "Instances"}}
 
-<InstanceTableConfiguration
-  @labels={{this.model.headerLabels}}
-  @onSelectionUpdated={{this.updateTable}}
-  @disabledSelection={{this.isUpdating}}
-/>
-<div class="au-c-body-container au-c-body-container--scroll">
-  <SemanticForms::InstanceTable
-    @sort={{this.sort}}
-    @page={{this.page}}
-    @size={{this.size}}
-    @filter={{this.filter}}
-    @labels={{this.columnLabels}}
-    @search={{this.search}}
-    @formDefinition={{this.model.formDefinition}}
-    @onRemoveInstance={{this.onRemoveInstance}}
-    @editRoute="forms.form.instance"
-    @onTableLoaded={{this.onTableLoaded}}
-  />
-</div>
+<AuMainContainer as |main|>
+  <main.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__header au-u-margin-top-small">
+        <AuHeading @level="3" @skin="3">Filters</AuHeading>
+      </div>
+      <div class="au-c-sidebar__content">
+        <InstanceTableConfiguration
+          @labels={{this.model.headerLabels}}
+          @onSelectionUpdated={{this.updateTable}}
+          @disabledSelection={{this.isUpdating}}
+        />
+      </div>
+    </div>
+  </main.sidebar>
+  <main.content>
+    <AuBodyContainer id="content">
+      <div class="au-c-body-container au-c-body-container--scroll">
+        <SemanticForms::InstanceTable
+          @sort={{this.sort}}
+          @page={{this.page}}
+          @size={{this.size}}
+          @filter={{this.filter}}
+          @labels={{this.columnLabels}}
+          @search={{this.search}}
+          @formDefinition={{this.model.formDefinition}}
+          @onRemoveInstance={{this.onRemoveInstance}}
+          @editRoute="forms.form.instance"
+          @onTableLoaded={{this.onTableLoaded}}
+        />
+      </div>
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>
