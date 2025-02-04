@@ -7,6 +7,7 @@ import {
   DECRETALE_BESTUURSORGANEN_CONCEPT_SCHEME,
   GEMEENTE_BESTUURSORGANEN_CONCEPT_SCHEME,
   OTHER_BESTUURSORGANEN_CONCEPT_SCHEME,
+  POLITIERAAD_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 
 export default class DecretaleOrganenService extends Service {
@@ -73,6 +74,7 @@ export default class DecretaleOrganenService extends Service {
     return [
       ...this.decretaleCodes.map((code) => code.id),
       ...this.gemeenteCodes.map((code) => code.id),
+      POLITIERAAD_CODE_ID,
     ];
   }
 
