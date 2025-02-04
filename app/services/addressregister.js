@@ -1,7 +1,5 @@
 import Service from '@ember/service';
 
-import fetch from 'fetch';
-
 class AddressSuggestion {
   constructor({ id, street, housenumber, zipCode, municipality, fullAddress }) {
     this.adresRegisterId = id;
