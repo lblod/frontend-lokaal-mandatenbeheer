@@ -94,5 +94,5 @@ export const loadIsFractieRequiredFromContext = (storeOptions) => {
     null,
     metaGraph
   );
-  return Literal.toJS(isRequired.value === '1' || isRequired.value === 'true');
+  return isRequired.value === '1' || isRequired.value === 'true';
 };
