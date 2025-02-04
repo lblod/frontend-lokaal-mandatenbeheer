@@ -55,6 +55,15 @@ export default class ReportController extends Controller {
     };
   }
 
+  getLabelFromTargetClass(targetClass) {
+    const mapTargetClassToLabel = {
+      'http://data.vlaanderen.be/ns/mandaat#Mandataris': 'Mandataris',
+      'http://www.w3.org/ns/person#Person': 'Persoon',
+      'http://data.vlaanderen.be/ns/besluit#Bestuursorgaan': 'Bestuursorgaan'
+    };
+    return mapTargetClassToLabel[targetClass] ?? targetClass;
+  }
+
   async searchModelIdForFocusNode(modelName, focusNode) {
     return (
       await this.store.query(modelName, {
