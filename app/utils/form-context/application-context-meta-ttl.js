@@ -2,8 +2,6 @@ import { EXT, LMB } from 'frontend-lmb/rdf/namespaces';
 import { NULL_DATE } from 'frontend-lmb/utils/constants';
 import { isRequiredForBestuursorgaan } from '../is-fractie-selector-required';
 
-import { Literal } from 'rdflib';
-
 // Expects bestuursorgaan in de tijd
 export const getApplicationContextMetaTtl = async (bestuursorganen) => {
   if (!bestuursorganen) {
