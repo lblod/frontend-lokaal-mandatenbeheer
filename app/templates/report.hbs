@@ -31,14 +31,21 @@
 
       <c.body as |result|>
         <td>
-          {{#let (await (this.getFocusNodeContext result.focusNode result.targetClassOfFocusNode)) as |context|}}
-          <LinkTo
-            @route={{context.route}}
-            @model={{context.modelId}}
-            class="au-c-link au-u-medium"
+          {{#let
+            (await
+              (this.getFocusNodeContext
+                result.focusNode result.targetClassOfFocusNode
+              )
+            )
+            as |context|
+          }}
+            <LinkTo
+              @route={{context.route}}
+              @model={{context.modelId}}
+              class="au-c-link au-u-medium"
             >
-            {{result.focusNode}}
-          </LinkTo>
+              {{result.focusNode}}
+            </LinkTo>
           {{/let}}
         </td>
         <td>
