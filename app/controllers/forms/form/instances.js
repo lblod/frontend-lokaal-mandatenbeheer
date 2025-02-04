@@ -43,27 +43,11 @@ export default class FormInstancesController extends Controller {
     this.columnLabels.push(...selectedLabels);
   }
 
-  @action
-  async downloadLink() {
-    const response = await fetch(
-      `/form-content/instance-table/${this.model.formDefinition.id}/download`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': JSON_API_TYPE,
-        },
-        body: JSON.stringify({
-          labels: this.columnLabels,
-        }),
-      }
+  get downloadLink() {
+    const labelsQueryParam = encodeURIComponent(
+      JSON.stringify(this.columnLabels)
     );
-    const csvString = await response.text();
-    let blob = new Blob([csvString], { type: 'text/csv' });
-    let downloadLink = document.createElement('a');
-    downloadLink.download = 'instances';
-    downloadLink.href = window.URL.createObjectURL(blob);
-    downloadLink.click();
-    downloadLink.remove();
+    return `/form-content/instance-table/${this.model.formDefinition.id}/download?labels=${labelsQueryParam}`;
   }
 
   @action
