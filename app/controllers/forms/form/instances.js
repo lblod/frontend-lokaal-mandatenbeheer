@@ -6,7 +6,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { task, timeout } from 'ember-concurrency';
-import { JSON_API_TYPE, SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class FormInstancesController extends Controller {
   queryParams = ['page', 'size', 'sort', 'filter'];
@@ -41,13 +41,6 @@ export default class FormInstancesController extends Controller {
     this.isUpdating = true;
     this.columnLabels.clear();
     this.columnLabels.push(...selectedLabels);
-  }
-
-  get downloadLink() {
-    const labelsQueryParam = encodeURIComponent(
-      JSON.stringify(this.columnLabels)
-    );
-    return `/form-content/instance-table/${this.model.formDefinition.id}/download?labels=${labelsQueryParam}`;
   }
 
   @action
