@@ -28,7 +28,15 @@
     </AuButtonGroup>
   </Group>
 </AuToolbar>
-<div class="no-pagination">
+<div class="no-pagination au-c-body-container au-c-body-container--scroll">
+  <div
+    class="au-u-flex au-u-flex--end au-u-margin-bottom-small au-u-margin-right"
+  >
+    <AuHelpText @skin="secondary" @size="large">
+      Aantal:
+      {{this.model.concepten.length}}
+    </AuHelpText>
+  </div>
   <AuDataTable
     @content={{this.model.concepten}}
     @noDataMessage="Geen codelijsten gevonden"
