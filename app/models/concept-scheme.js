@@ -3,6 +3,7 @@ import Model, { attr, hasMany } from '@ember-data/model';
 export default class ConceptSchemeModel extends Model {
   @attr uri;
   @attr label;
+  @attr('boolean') isReadOnly;
 
   @hasMany('concept', {
     async: true,
@@ -17,4 +18,8 @@ export default class ConceptSchemeModel extends Model {
     polymorphic: true,
   })
   topConcepts;
+
+  get readOnly() {
+    return this.isReadOnly ?? true;
+  }
 }
