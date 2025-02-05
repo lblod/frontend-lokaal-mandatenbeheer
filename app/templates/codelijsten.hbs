@@ -52,6 +52,13 @@
     </c.header>
     <c.body as |codelijst|>
       <td class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
+        <LinkTo
+          @route="codelijsten.id"
+          @model={{codelijst.id}}
+          class="au-c-link au-u-medium"
+        >
+          {{codelijst.label}}
+        </LinkTo>
         {{#if codelijst.readOnly}}
           <Shared::Tooltip
             @showTooltip={{true}}
@@ -60,13 +67,13 @@
           >
             <AuButton
               @skin="naked"
-              @icon="eye"
+              @icon="circle-question"
               @hideText={{true}}
               @disabled={{true}}
+              class="au-u-padding-bottom-small"
             >Read-only</AuButton>
           </Shared::Tooltip>
         {{/if}}
-        {{codelijst.label}}
       </td>
       <td>{{codelijst.id}}</td>
     </c.body>
