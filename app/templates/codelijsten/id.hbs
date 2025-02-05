@@ -1,0 +1,49 @@
+{{page-title "Codelijst"}}
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom"
+  as |Group|
+>
+  <Group>
+    <AuHeading @skin="2">{{this.model.codelijst.label}}</AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      <AuButton
+        @disabled={{this.isReadOnly}}
+        @skin="secondary"
+        @alert={{true}}
+      >Verwijder</AuButton>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+<AuDataTable
+  @content={{this.model.concepten}}
+  @noDataMessage="Geen codelijsten gevonden"
+  @page={{0}}
+  @sort={{this.sort}}
+  @size={{9999}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @field="label"
+        @currentSorting={{this.sort}}
+        @label="Naam"
+      />
+      <AuDataTableThSortable
+        @field="id"
+        @currentSorting={{this.sort}}
+        @label="Id"
+      />
+    </c.header>
+    <c.body as |concept|>
+      <td>
+        {{concept.label}}
+      </td>
+      <td>{{concept.id}}</td>
+    </c.body>
+  </t.content>
+</AuDataTable>
+{{yield}}
