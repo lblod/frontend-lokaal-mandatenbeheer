@@ -65,6 +65,10 @@ Router.map(function () {
     });
   });
 
+  this.route('codelijsten', function () {
+    this.route('new');
+  });
+
   this.route('under-construction');
   this.route('lokaal-beheerd');
 

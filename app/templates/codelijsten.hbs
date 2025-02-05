@@ -1,0 +1,59 @@
+{{page-title "Codelijsten"}}
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom"
+  as |Group|
+>
+  <Group>
+    <AuHeading @skin="2">Beheer codelijsten</AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      <AuLink @route="codelijsten.new" @skin="button">Codelijst aanmaken</AuLink>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom"
+  as |Group|
+>
+  <Group class="au-u-1-3@medium">
+    <AuInput
+      @disabled={{true}}
+      value={{this.filter}}
+      @icon="search"
+      @iconAlignment="left"
+      @width="block"
+      placeholder="Zoek codelijst"
+      {{!-- {{on "input" (perform @search value="target.value")}} --}}
+    />
+  </Group>
+</AuToolbar>
+<AuDataTable
+  @content={{this.model.codelijsten}}
+  @noDataMessage="Geen codelijsten gevonden"
+  @sort={{this.sort}}
+  @page={{this.page}}
+  @size={{this.size}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @field="label"
+        @currentSorting={{this.sort}}
+        @label="Naam"
+      />
+      <AuDataTableThSortable
+        @field="id"
+        @currentSorting={{this.sort}}
+        @label="Id"
+      />
+    </c.header>
+    <c.body as |codelijst|>
+      <td>{{codelijst.label}}</td>
+      <td>{{codelijst.id}}</td>
+    </c.body>
+  </t.content>
+</AuDataTable>
