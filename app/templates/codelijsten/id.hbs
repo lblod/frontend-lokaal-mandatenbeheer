@@ -9,41 +9,48 @@
   </Group>
   <Group>
     <AuButtonGroup>
-      <AuButton
-        @disabled={{this.isReadOnly}}
-        @skin="secondary"
-        @alert={{true}}
-      >Verwijder</AuButton>
+      <Shared::Tooltip
+        @showTooltip={{this.isReadOnly}}
+        @alignment="right"
+        @tooltipText="Dit is een basis codelijst die niet verwijderd mag worden."
+      >
+        <AuButton
+          @disabled={{this.isReadOnly}}
+          @skin="secondary"
+          @alert={{true}}
+        >Verwijder</AuButton>
+      </Shared::Tooltip>
     </AuButtonGroup>
   </Group>
 </AuToolbar>
-<AuDataTable
-  @content={{this.model.concepten}}
-  @noDataMessage="Geen codelijsten gevonden"
-  @page={{0}}
-  @sort={{this.sort}}
-  @size={{9999}}
-  as |t|
->
-  <t.content as |c|>
-    <c.header>
-      <AuDataTableThSortable
-        @field="label"
-        @currentSorting={{this.sort}}
-        @label="Naam"
-      />
-      <AuDataTableThSortable
-        @field="id"
-        @currentSorting={{this.sort}}
-        @label="Id"
-      />
-    </c.header>
-    <c.body as |concept|>
-      <td>
-        {{concept.label}}
-      </td>
-      <td>{{concept.id}}</td>
-    </c.body>
-  </t.content>
-</AuDataTable>
-{{yield}}
+<div class="no-pagination">
+  <AuDataTable
+    @content={{this.model.concepten}}
+    @noDataMessage="Geen codelijsten gevonden"
+    @page={{0}}
+    @sort={{this.sort}}
+    @size={{9999}}
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        <AuDataTableThSortable
+          @field="label"
+          @currentSorting={{this.sort}}
+          @label="Naam"
+        />
+        <AuDataTableThSortable
+          @field="id"
+          @currentSorting={{this.sort}}
+          @label="Id"
+        />
+      </c.header>
+      <c.body as |concept|>
+        <td>
+          {{concept.label}}
+        </td>
+        <td>{{concept.id}}</td>
+      </c.body>
+    </t.content>
+  </AuDataTable>
+</div>
