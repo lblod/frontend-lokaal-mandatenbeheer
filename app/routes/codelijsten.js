@@ -23,17 +23,19 @@ export default class CodelijstenRoute extends Route {
           'filter[:or:][id]': params.filter,
         }
       : {};
+    const pageSize = 20;
     const conceptSchemes = await this.store.query('concept-scheme', {
       sort: params.sort ?? 'label',
       page: {
-        number: params.page?.number ?? 0,
-        size: params.page?.size ?? 20,
+        number: parseInt(params.page ?? 0),
+        size: pageSize,
       },
       ...searchFilter,
     });
 
     return {
       codelijsten: conceptSchemes,
+      pageSize: pageSize,
     };
   }
 }
