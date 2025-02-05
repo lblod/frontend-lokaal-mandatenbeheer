@@ -20,13 +20,12 @@
 >
   <Group class="au-u-1-3@medium">
     <AuInput
-      @disabled={{true}}
       value={{this.filter}}
       @icon="search"
       @iconAlignment="left"
       @width="block"
       placeholder="Zoek codelijst"
-      {{!-- {{on "input" (perform @search value="target.value")}} --}}
+      {{on "input" this.search}}
     />
   </Group>
 </AuToolbar>
