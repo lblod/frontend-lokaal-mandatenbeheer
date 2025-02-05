@@ -9,6 +9,10 @@ export default class CodelijstenRoute extends Route {
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
 
-    this.router.transitionTo('codelijsten.overzicht');
+    if (transition.targetName === 'codelijsten.index') {
+      this.router.transitionTo('codelijsten.overzicht');
+    } else {
+      this.router.transitionTo(transition.to?.name);
+    }
   }
 }

@@ -15,10 +15,7 @@ export default class CodelijstenIdRoute extends Route {
   }
 
   async model(params) {
-    const codelijst = await this.modelFor(
-      'codelijsten.overzicht'
-    )?.codelijsten?.find((c) => c.id === params.id);
-    console.log({ codelijst });
+    const codelijst = await this.store.findRecord('concept-scheme', params.id);
     const concepten = await this.store.query('concept', {
       sort: params.sort ?? 'label',
       'filter[concept-schemes][:id:]': params.id,
