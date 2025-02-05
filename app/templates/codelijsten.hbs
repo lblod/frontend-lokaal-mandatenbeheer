@@ -51,7 +51,23 @@
       />
     </c.header>
     <c.body as |codelijst|>
-      <td>{{codelijst.label}}</td>
+      <td class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
+        {{#if codelijst.readOnly}}
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @alignment="left"
+            @tooltipText="Deze codelijst kan je enkel bekijken"
+          >
+            <AuButton
+              @skin="naked"
+              @icon="eye"
+              @hideText={{true}}
+              @disabled={{true}}
+            >Read-only</AuButton>
+          </Shared::Tooltip>
+        {{/if}}
+        {{codelijst.label}}
+      </td>
       <td>{{codelijst.id}}</td>
     </c.body>
   </t.content>
