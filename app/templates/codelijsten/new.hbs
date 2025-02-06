@@ -42,18 +42,26 @@
   <:header>
     <tr>
       <th>Label</th>
+      <th>{{! Acties }}</th>
     </tr>
   </:header>
   <:body>
     {{#each this.concepten as |concept|}}
       <tr>
         <td>{{concept.label}}</td>
+        <td>
+          <AuButton
+            @skin="link"
+            @alert={{true}}
+            {{on "click" (fn this.deleteConcept concept)}}
+          >Verwijder</AuButton>
+        </td>
       </tr>
     {{/each}}
   </:body>
   <:footer>
     <tr>
-      <td colspan="1">
+      <td colspan="2">
         <AuButton
           @skin="secondary"
           @icon="plus"
