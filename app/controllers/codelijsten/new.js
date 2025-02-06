@@ -64,4 +64,9 @@ export default class CodelijstenNewController extends Controller {
     });
     this.isModalOpen = false;
   }
+
+  @action
+  deleteConcept(concept) {
+    this.concepten.removeObject(concept);
+  }
 }
