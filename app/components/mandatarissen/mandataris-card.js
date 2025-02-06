@@ -4,7 +4,10 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
-import { MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE } from 'frontend-lmb/utils/well-known-uris';
+import {
+  MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE,
+  MANDATARIS_EFFECTIEF_PUBLICATION_STATE,
+} from 'frontend-lmb/utils/well-known-uris';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
@@ -29,6 +32,19 @@ export default class MandatarisCardComponent extends Component {
     return !statusId || statusId === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
   }
 
+  get isEffectief() {
+    const statusId = this.args.mandataris.publicationStatus?.get('uri');
+    return !statusId || statusId === MANDATARIS_EFFECTIEF_PUBLICATION_STATE;
+  }
+
+  get isBurgemeester() {
+    return this.args.mandataris.bekleedt.get('isBurgemeester');
+  }
+
+  get isEffectiefBurgemeester() {
+    return this.isEffectief && this.isBurgemeester;
+  }
+
   get fractie() {
     return this.args.mandataris.heeftLidmaatschap.get('binnenFractie')
       ? this.args.mandataris.heeftLidmaatschap.get('binnenFractie').get('naam')
@@ -36,7 +52,11 @@ export default class MandatarisCardComponent extends Component {
   }
 
   get canEditPublicationStatus() {
-    return !this.isBekrachtigd && !this.args.disableEdits;
+    return (
+      !this.isBekrachtigd &&
+      !this.args.disableEdits &&
+      !this.isEffectiefBurgemeester
+    );
   }
 
   get persoon() {
