@@ -1,2 +1,40 @@
-{{page-title "New"}}
-<h1>NEW</h1>
+{{page-title "Codelijst aanmaken"}}
+{{breadcrumb
+  "Codelijst aanmaken"
+  route="codelijsten.id"
+  model=this.model.codelijst.id
+}}
+<AuToolbar @size="large" @border="bottom" class="au-u-margin-bottom" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Codelijst aanmaken</AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      <Shared::Tooltip
+        @showTooltip={{not this.canSave}}
+        @alignment="right"
+        @tooltipText="De huidige status van de codelijst kan niet worden opgeslagen."
+      >
+        <AuButton
+          @disabled={{not this.canSave}}
+          @skin="primary"
+          @loading={{this.isSaving}}
+          {{on "click" this.saveCodelist}}
+        >Opslaan</AuButton>
+      </Shared::Tooltip>
+      <AuButton @skin="secondary">Annuleer</AuButton>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+
+<div class="au-o-box">
+  <div class="au-u-1-3@medium au-u-flex au-u-flex--column">
+    <AuLabel>Naam van de codelijst</AuLabel>
+    <AuInput
+      value={{this.name}}
+      @width="block"
+      placeholder="Codelijst label"
+      {{on "input" this.updateName}}
+    />
+  </div>
+</div>
