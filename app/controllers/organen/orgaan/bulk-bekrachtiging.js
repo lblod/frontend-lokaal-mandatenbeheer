@@ -93,10 +93,10 @@ export default class BulkBekrachtigingController extends Controller {
 
   @action checkBox(mandataris, state) {
     if (state) {
-      this.checked.add(mandataris);
+      this.checked.add(mandataris.id);
       this.setSize += 1;
     } else {
-      this.checked.delete(mandataris);
+      this.checked.delete(mandataris.id);
       this.setSize -= 1;
     }
     if (mandataris.bekleedt.get('isBurgemeester')) {
