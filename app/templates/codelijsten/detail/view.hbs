@@ -21,6 +21,7 @@
       >
         <AuButton
           @disabled={{or this.isReadOnly this.isDeleting}}
+          {{on "click" this.editCodelist}}
         >Bewerk</AuButton>
       </Shared::Tooltip>
       <Shared::Tooltip
