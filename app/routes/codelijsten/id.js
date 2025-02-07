@@ -2,6 +2,8 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
+import { queryRecord } from 'frontend-lmb/utils/query-record';
+
 export default class CodelijstenIdRoute extends Route {
   @service session;
   @service store;
@@ -15,15 +17,14 @@ export default class CodelijstenIdRoute extends Route {
   }
 
   async model(params) {
-    const codelijst = await this.store.findRecord('concept-scheme', params.id);
-    const concepten = await this.store.query('concept', {
-      sort: params.sort ?? 'label',
-      'filter[concept-schemes][:id:]': params.id,
+    const codelijst = await queryRecord(this.store, 'concept-scheme', {
+      'filter[:id:]': params.id,
+      include: 'concepts',
     });
 
     return {
       codelijst,
-      concepten,
+      concepten: await codelijst.concepts,
     };
   }
 }
