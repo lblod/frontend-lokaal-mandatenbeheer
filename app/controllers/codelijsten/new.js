@@ -5,8 +5,12 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+import { showSuccessToast } from 'frontend-lmb/utils/toasts';
+
 export default class CodelijstenNewController extends Controller {
   @service store;
+  @service router;
+  @service toaster;
 
   @tracked isModalOpen;
   @tracked isSaving;
@@ -50,8 +54,18 @@ export default class CodelijstenNewController extends Controller {
     codelijst.concepts = await this.createConceptenForCodelist(codelijst);
     await codelijst.save();
 
+    this.name = null;
+    this.concepten.clear();
     this.isModalOpen = false;
     this.isSaving = false;
+    showSuccessToast(
+      this.toaster,
+      'Codelijst succesvol aangemaakt',
+      'Codelijst'
+    );
+    this.router.transitionTo('codelijsten.overzicht', {
+      queryParams: { filter: codelijst.label },
+    });
   }
 
   async createConceptenForCodelist(codelijst) {
