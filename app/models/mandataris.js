@@ -4,6 +4,7 @@ import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { displayEndOfDay } from 'frontend-lmb/utils/date-manipulation';
+import { MANDAAT_BURGEMEESTER_CODE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisModel extends Model {
   @attr rangorde;
@@ -132,6 +133,13 @@ export default class MandatarisModel extends Model {
 
   get isVoorzitter() {
     return this.bekleedt.get('isVoorzitter');
+  }
+
+  get isStrictBurgemeester() {
+    return (
+      this.bekleedt.get('bestuursfunctie').get('uri') ===
+      MANDAAT_BURGEMEESTER_CODE
+    );
   }
 
   get besluitUri() {

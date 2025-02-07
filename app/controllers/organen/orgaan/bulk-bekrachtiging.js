@@ -99,7 +99,7 @@ export default class BulkBekrachtigingController extends Controller {
       this.checked.delete(mandataris.id);
       this.setSize -= 1;
     }
-    if (mandataris.bekleedt.get('isBurgemeester')) {
+    if (mandataris.isStrictBurgemeester) {
       this.burgemeesterSelected = true;
     }
   }
@@ -111,7 +111,7 @@ export default class BulkBekrachtigingController extends Controller {
         if (mapping.canShowCheckbox) {
           this.checked.add(mapping.mandataris.id);
         }
-        if (mapping.mandataris.bekleedt.get('isBurgemeester')) {
+        if (mapping.isStrictBurgemeester) {
           this.burgemeesterSelected = true;
         }
       });

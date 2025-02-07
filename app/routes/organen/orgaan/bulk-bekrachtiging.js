@@ -44,7 +44,7 @@ export default class BulkBekrachtigingRoute extends Route {
           } else if (uri === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE) {
             canShowCheckbox = false;
           } else if (
-            mandataris.bekleedt.get('isBurgemeester') &&
+            mandataris.isStrictBurgemeester &&
             uri === MANDATARIS_EFFECTIEF_PUBLICATION_STATE
           ) {
             canShowCheckbox = false;
