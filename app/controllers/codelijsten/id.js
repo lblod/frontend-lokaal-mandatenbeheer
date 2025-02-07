@@ -23,13 +23,6 @@ export default class CodelijstenIdController extends Controller {
   }
 
   @action
-  editCodelist() {
-    this.router.transitionTo('codelijsten.edit', {
-      id: this.model.codelijst.id,
-    });
-  }
-
-  @action
   async deleteCodelist() {
     this.isDeleting = true;
     await this.deleteConcepts();
