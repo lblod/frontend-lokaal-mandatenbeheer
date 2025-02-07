@@ -1,0 +1,31 @@
+<AuModal
+  @title="Optie toevoegen"
+  @modalOpen={{@isModalOpen}}
+  @closable={{true}}
+  @closeModal={{@closeModal}}
+>
+  <:body>
+    <div class="au-o-box au-o-flow">
+      <span>
+        <AuLabel>Label</AuLabel>
+        <AuInput
+          @width="default"
+          value={{this.conceptName}}
+          placeholder="Naam van de optie"
+          {{on "input" this.updateConceptName}}
+        />
+      </span>
+    </div>
+  </:body>
+  <:footer>
+    <AuButtonGroup
+      class="au-u-flex au-u-flex--between au-u-padding-left au-u-padding-right"
+    >
+      <AuButton
+        @disabled={{not this.isConceptValid}}
+        {{on "click" this.addConcept}}
+      >Voeg optie toe</AuButton>
+      <AuButton @skin="secondary" {{on "click" @closeModal}}>Annuleer</AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>
