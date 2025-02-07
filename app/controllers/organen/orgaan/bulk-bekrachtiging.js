@@ -27,6 +27,8 @@ export default class BulkBekrachtigingController extends Controller {
   @tracked linkToBesluit;
   @tracked invalidLink = false;
 
+  @tracked burgemeesterSelected = false;
+
   @action
   openModal() {
     this.modalOpen = true;
@@ -97,6 +99,9 @@ export default class BulkBekrachtigingController extends Controller {
       this.checked.delete(mandataris);
       this.setSize -= 1;
     }
+    if (mandataris.bekleedt.get('isBurgemeester')) {
+      this.burgemeesterSelected = true;
+    }
   }
 
   @action checkAll(state) {
@@ -105,6 +110,9 @@ export default class BulkBekrachtigingController extends Controller {
       this.model.mandatarissenMap.forEach((mapping) => {
         if (mapping.canShowCheckbox) {
           this.checked.add(mapping.mandataris.id);
+        }
+        if (mapping.mandataris.bekleedt.get('isBurgemeester')) {
+          this.burgemeesterSelected = true;
         }
       });
       this.setSize = this.checked.size;
@@ -123,6 +131,7 @@ export default class BulkBekrachtigingController extends Controller {
     );
     this.closeModal();
     this.checked.clear();
+    this.burgemeesterSelected = false;
     this.setSize = 0;
     setTimeout(() => this.router.refresh(), 1000);
   }
@@ -135,7 +144,7 @@ export default class BulkBekrachtigingController extends Controller {
   }
 
   get statusOptions() {
-    if (this.model.effectiefIsLastStatus) {
+    if (this.model.effectiefIsLastStatus || this.burgemeesterSelected) {
       return ['Effectief'];
     }
     return ['Effectief', 'Bekrachtigd'];

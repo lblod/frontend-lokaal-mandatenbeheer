@@ -60,6 +60,13 @@
   @closeModal={{this.closeModal}}
 >
   <div class="au-o-box au-o-flow">
+    {{#if this.burgemeesterSelected}}
+      <AuAlert @icon="info-circle" @closable={{false}}>
+        De publicatiestatus van een burgemeester kan niet manueel op
+        <strong>bekrachtigd</strong>
+        geplaatst worden, dit gebeurt automatisch via een benoeming.
+      </AuAlert>
+    {{/if}}
     {{#if (eq this.status "Bekrachtigd")}}
       <AuAlert @icon="info-circle" @closable={{false}}>
         De publicatiestatus
