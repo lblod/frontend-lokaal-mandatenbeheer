@@ -1,7 +1,7 @@
-{{page-title "Codelijst"}}
+{{page-title "View"}}
 {{breadcrumb
   this.model.codelijst.label
-  route="codelijsten.id"
+  route="codelijsten.detail.view"
   model=this.model.codelijst.id
 }}
 <AuToolbar
@@ -51,24 +51,15 @@
   </div>
   <AuDataTable
     @content={{this.model.concepten}}
-    @noDataMessage="Geen codelijsten gevonden"
+    @noDataMessage="Geen concepten gevonden"
     @page={{0}}
-    @sort={{this.sort}}
     @size={{9999}}
     as |t|
   >
     <t.content as |c|>
       <c.header>
-        <AuDataTableThSortable
-          @field="label"
-          @currentSorting={{this.sort}}
-          @label="Naam"
-        />
-        <AuDataTableThSortable
-          @field="id"
-          @currentSorting={{this.sort}}
-          @label="Id"
-        />
+        <th>Label</th>
+        <th>Id</th>
       </c.header>
       <c.body as |concept|>
         <td>
