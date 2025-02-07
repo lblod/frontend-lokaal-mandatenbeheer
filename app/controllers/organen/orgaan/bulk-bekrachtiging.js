@@ -27,7 +27,7 @@ export default class BulkBekrachtigingController extends Controller {
   @tracked linkToBesluit;
   @tracked invalidLink = false;
 
-  @tracked burgemeesterSelected = false;
+  @tracked burgemeesterSelected = 0;
 
   @action
   openModal() {
@@ -95,12 +95,15 @@ export default class BulkBekrachtigingController extends Controller {
     if (state) {
       this.checked.add(mandataris.id);
       this.setSize += 1;
+      if (mandataris.isStrictBurgemeester) {
+        this.burgemeesterSelected += 1;
+      }
     } else {
       this.checked.delete(mandataris.id);
       this.setSize -= 1;
-    }
-    if (mandataris.isStrictBurgemeester) {
-      this.burgemeesterSelected = true;
+      if (mandataris.isStrictBurgemeester) {
+        this.burgemeesterSelected -= 1;
+      }
     }
   }
 
@@ -131,7 +134,7 @@ export default class BulkBekrachtigingController extends Controller {
     );
     this.closeModal();
     this.checked.clear();
-    this.burgemeesterSelected = false;
+    this.burgemeesterSelected = 0;
     this.setSize = 0;
     setTimeout(() => this.router.refresh(), 1000);
   }
