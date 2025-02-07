@@ -16,6 +16,19 @@ export default class CodelijstenIdController extends Controller {
     return this.model.codelijst?.readOnly;
   }
 
+  get editButtonTooltipText() {
+    return this.isReadOnly
+      ? 'Deze codelijst kan niet aangepast worden.'
+      : 'Pas deze codelijst aan.';
+  }
+
+  @action
+  editCodelist() {
+    this.router.transitionTo('codelijsten.edit', {
+      id: this.model.codelijst.id,
+    });
+  }
+
   @action
   async deleteCodelist() {
     this.isDeleting = true;
