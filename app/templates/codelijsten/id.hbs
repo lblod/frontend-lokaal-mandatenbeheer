@@ -20,7 +20,7 @@
         @tooltipText="Dit is een basis codelijst die niet verwijderd mag worden."
       >
         <AuButton
-          @disabled={{and this.isReadOnly this.isDeleting}}
+          @disabled={{or this.isReadOnly this.isDeleting}}
           @skin="secondary"
           @alert={{true}}
           @loading={{this.isDeleting}}
