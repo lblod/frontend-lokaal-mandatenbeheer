@@ -6,7 +6,7 @@ import { service } from '@ember/service';
 
 import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
-export default class CodelijstenIdController extends Controller {
+export default class CodelijstenDetailViewController extends Controller {
   @service router;
   @service toaster;
 
