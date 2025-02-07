@@ -37,12 +37,8 @@ export default class MandatarisCardComponent extends Component {
     return !statusId || statusId === MANDATARIS_EFFECTIEF_PUBLICATION_STATE;
   }
 
-  get isBurgemeester() {
-    return this.args.mandataris.bekleedt.get('isBurgemeester');
-  }
-
   get isEffectiefBurgemeester() {
-    return this.isEffectief && this.isBurgemeester;
+    return this.isEffectief && this.args.mandataris.isStrictBurgemeester;
   }
 
   get fractie() {
