@@ -72,7 +72,7 @@
           @skin="secondary"
           @icon="plus"
           @width="block"
-          {{on "click" this.openAddConceptModal}}
+          {{on "click" (fn (mut this.isModalOpen) true)}}
         >
           Voeg een extra optie toe
         </AuButton>
@@ -81,37 +81,9 @@
   </:footer>
 </AuTable>
 
-<AuModal
-  @title="Optie toevoegen"
-  @modalOpen={{this.isModalOpen}}
-  @closable={{true}}
+<Codelijst::AddConceptModal
+  @conceptScheme={{this.model.codelijst}}
+  @isModalOpen={{this.isModalOpen}}
   @closeModal={{fn (mut this.isModalOpen) false}}
->
-  <:body>
-    <div class="au-o-box au-o-flow">
-      <span>
-        <AuLabel>Label</AuLabel>
-        <AuInput
-          @width="default"
-          value={{this.conceptName}}
-          placeholder="Naam van de optie"
-          {{on "input" this.updateConceptName}}
-        />
-      </span>
-    </div>
-  </:body>
-  <:footer>
-    <AuButtonGroup
-      class="au-u-flex au-u-flex--between au-u-padding-left au-u-padding-right"
-    >
-      <AuButton
-        @disabled={{not this.isConceptValid}}
-        {{on "click" this.addConcept}}
-      >Voeg optie toe</AuButton>
-      <AuButton
-        @skin="secondary"
-        {{on "click" (fn (mut this.isModalOpen) false)}}
-      >Annuleer</AuButton>
-    </AuButtonGroup>
-  </:footer>
-</AuModal>
+  @onNewConcept={{this.addConcept}}
+/>

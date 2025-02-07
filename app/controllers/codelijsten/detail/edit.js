@@ -16,6 +16,27 @@ export default class CodelijstenDetailEditController extends Controller {
   @tracked isModalOpen;
 
   get canSave() {
+    return (
+      (this.isNameChanged && this.name?.length > 2) ||
+      (this.concepten.length > 0 && this.conceptListIsDiverging)
+    );
+  }
+
+  get isNameChanged() {
+    return this.model.codelijst.label !== this.name;
+  }
+
+  get conceptListIsDiverging() {
+    if (this.concepten.length !== this.model.concepten.length) {
+      return true;
+    }
+
+    if (this.concepten.some((concept) => concept.id === null)) {
+      return true;
+    }
+
+    // deep check of concepten TODO:
+
     return false;
   }
 
@@ -33,32 +54,14 @@ export default class CodelijstenDetailEditController extends Controller {
   @action
   updateCodelist() {}
 
-  // copied
-  @action
-  addConcept() {
-    this.concepten.pushObject({
-      label: this.conceptName,
-    });
-    this.isModalOpen = false;
-  }
-
   @action
   deleteConcept(concept) {
     this.concepten.removeObject(concept);
   }
 
-  get isConceptValid() {
-    return this.conceptName?.length > 1;
-  }
-
   @action
-  openAddConceptModal() {
-    this.conceptName = null;
-    this.isModalOpen = true;
-  }
-
-  @action
-  updateConceptName(event) {
-    this.conceptName = event?.target?.value;
+  addConcept(unsavedConcept) {
+    this.concepten.pushObject(unsavedConcept);
+    this.isModalOpen = false;
   }
 }

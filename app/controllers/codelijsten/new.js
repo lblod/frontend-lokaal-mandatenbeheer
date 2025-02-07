@@ -51,7 +51,7 @@ export default class CodelijstenNewController extends Controller {
       isReadOnly: false,
     });
     await codelijst.save();
-    codelijst.concepts = await this.createConceptenForCodelist(codelijst);
+    codelijst.concepts = await this.updateConceptsWithConceptScheme(codelijst);
     await codelijst.save();
 
     this.name = null;
@@ -68,24 +68,20 @@ export default class CodelijstenNewController extends Controller {
     });
   }
 
-  async createConceptenForCodelist(codelijst) {
+  async updateConceptsWithConceptScheme(codelijst) {
     return Promise.all(
       this.concepten.map(async (_concept) => {
-        const concept = this.store.createRecord('concept', {
-          label: _concept.label,
-          conceptSchemes: [codelijst],
-        });
-        await concept.save();
-        return concept;
+        _concept.conceptSchemes = [codelijst];
+
+        await _concept.save();
+        return _concept;
       })
     );
   }
 
   @action
-  addConcept() {
-    this.concepten.pushObject({
-      label: this.conceptName,
-    });
+  addConcept(unsavedConcept) {
+    this.concepten.pushObject(unsavedConcept);
     this.isModalOpen = false;
   }
 
