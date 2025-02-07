@@ -20,9 +20,12 @@
         @tooltipText="Dit is een basis codelijst die niet verwijderd mag worden."
       >
         <AuButton
-          @disabled={{this.isReadOnly}}
+          @disabled={{and this.isReadOnly this.isDeleting}}
           @skin="secondary"
           @alert={{true}}
+          @loading={{this.isDeleting}}
+          @loadingMessage="Codelijst aan het verwijderen"
+          {{on "click" this.deleteCodelist}}
         >Verwijder</AuButton>
       </Shared::Tooltip>
     </AuButtonGroup>
