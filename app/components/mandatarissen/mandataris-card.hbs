@@ -28,7 +28,7 @@
         {{else}}
           <div class="au-u-flex">
             <Shared::Tooltip
-              @showTooltip={{await this.effectiefIsLastStatus}}
+              @showTooltip={{this.isEffectiefLastStatus}}
               @tooltipText={{this.lastStatusTooltipText}}
             >
               <Mandaat::PublicatieStatusPill

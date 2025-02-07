@@ -11,7 +11,6 @@ import {
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
-import { PUBLICATION_STATUS_EFFECTIEF_ID } from 'frontend-lmb/utils/well-known-ids';
 
 import { task } from 'ember-concurrency';
 
@@ -28,17 +27,23 @@ export default class MandatarisCardComponent extends Component {
   }
 
   get isBekrachtigd() {
-    const statusId = this.args.mandataris.publicationStatus?.get('uri');
-    return !statusId || statusId === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
+    const status = this.args.mandataris.publicationStatus?.get('uri');
+    return !status || status === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
   }
 
   get isEffectief() {
-    const statusId = this.args.mandataris.publicationStatus?.get('uri');
-    return !statusId || statusId === MANDATARIS_EFFECTIEF_PUBLICATION_STATE;
+    const status = this.args.mandataris.publicationStatus?.get('uri');
+    return !status || status === MANDATARIS_EFFECTIEF_PUBLICATION_STATE;
   }
 
   get isEffectiefBurgemeester() {
     return this.isEffectief && this.args.mandataris.isStrictBurgemeester;
+  }
+
+  get isEffectiefLastStatus() {
+    return (
+      this.isEffectief && effectiefIsLastPublicationStatus(this.args.mandataris)
+    );
   }
 
   get fractie() {
@@ -67,18 +72,8 @@ export default class MandatarisCardComponent extends Component {
     return this.args.mandataris.uniqueVervangersVan;
   }
 
-  get effectiefIsLastStatus() {
-    return effectiefIsLastPublicationStatus(this.args.mandataris);
-  }
-
   get lastStatusTooltipText() {
-    const publicatieStatusId =
-      this.args.mandataris.publicationStatus?.get('id');
-    if (
-      this.effectiefIsLastStatus &&
-      publicatieStatusId &&
-      publicatieStatusId === PUBLICATION_STATUS_EFFECTIEF_ID
-    ) {
+    if (this.isEffectieLastStatus) {
       return 'Deze mandataris moet niet bekrachtigd worden.';
     }
 
