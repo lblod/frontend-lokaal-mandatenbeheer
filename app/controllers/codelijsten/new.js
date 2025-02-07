@@ -30,7 +30,7 @@ export default class CodelijstenNewController extends Controller {
   }
 
   get isConceptValid() {
-    return this.conceptName?.length > 2;
+    return this.conceptName?.length > 1;
   }
 
   @action
@@ -41,20 +41,30 @@ export default class CodelijstenNewController extends Controller {
 
   @action
   async saveCodelist() {
-    console.log('save', {
-      label: this.name ?? '',
-      isReadOnly: false,
-      concepts: this.concepten.toArray(),
-    });
-    return;
     this.isSaving = true;
     const codelijst = this.store.createRecord('concept-scheme', {
-      label: this.name ?? '',
+      label: this.name?.trim(),
       isReadOnly: false,
-      concepts: this.concepten.toArray(),
     });
     await codelijst.save();
+    codelijst.concepts = await this.createConceptenForCodelist(codelijst);
+    await codelijst.save();
+
+    this.isModalOpen = false;
     this.isSaving = false;
+  }
+
+  async createConceptenForCodelist(codelijst) {
+    return Promise.all(
+      this.concepten.map(async (_concept) => {
+        const concept = this.store.createRecord('concept', {
+          label: _concept.label,
+          conceptSchemes: [codelijst],
+        });
+        await concept.save();
+        return concept;
+      })
+    );
   }
 
   @action

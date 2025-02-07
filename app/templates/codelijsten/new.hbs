@@ -19,6 +19,7 @@
           @disabled={{not this.canSave}}
           @skin="primary"
           @loading={{this.isSaving}}
+          @loadingMessage="Codelijst aan het creëren"
           {{on "click" this.saveCodelist}}
         >Opslaan</AuButton>
       </Shared::Tooltip>
