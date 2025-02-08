@@ -57,25 +57,28 @@ export default class OrganenRangordeInputComponent extends Component {
     this.rangordePlaceholder = `Vul de rangorde in, bv. “Eerste ${mandaat.rangordeLabel}”`;
   }
 
-  updateMandatarisRangorde = keepLatestTask(async (value) => {
-    const oldRangorde = this.args.mandatarisStruct.rangorde;
-    const newRangorde = value;
-    const previousHolder = this.getMandatarisWithRangorde(newRangorde);
+  updateMandatarisRangorde = keepLatestTask(
+    async (value, switchWithPrevious) => {
+      const oldRangorde = this.args.mandatarisStruct.rangorde;
+      const newRangorde = value;
+      const previousHolder = this.getMandatarisWithRangorde(newRangorde);
 
-    this.args.mandatarisStruct.rangorde = newRangorde;
+      this.args.mandatarisStruct.rangorde = newRangorde;
 
-    if (
-      previousHolder &&
-      previousHolder !== this.args.mandatarisStruct.mandataris
-    ) {
-      previousHolder.rangorde = oldRangorde;
+      if (
+        switchWithPrevious &&
+        previousHolder &&
+        previousHolder !== this.args.mandatarisStruct.mandataris
+      ) {
+        previousHolder.rangorde = oldRangorde;
+      }
+
+      this.args.updateMandatarisList();
     }
+  );
 
-    this.args.updateMandatarisList();
-  });
-
-  setRangorde(value) {
-    this.updateMandatarisRangorde.perform(value);
+  setRangorde(value, switchWithPrevious = false) {
+    this.updateMandatarisRangorde.perform(value, switchWithPrevious);
   }
 
   async getMandaatLabel() {
@@ -144,11 +147,12 @@ export default class OrganenRangordeInputComponent extends Component {
 
     if (this.rangordeInteger == null) {
       this.setRangorde(
-        `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`
+        `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`,
+        true
       );
     } else {
       const currentOrder = rangordeNumberMapping[currentNumber];
-      this.setRangorde(this.rangorde.replace(currentOrder, newOrder));
+      this.setRangorde(this.rangorde.replace(currentOrder, newOrder), true);
     }
   }
   @action
@@ -158,11 +162,12 @@ export default class OrganenRangordeInputComponent extends Component {
 
     if (this.rangordeInteger == null) {
       this.setRangorde(
-        `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`
+        `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`,
+        true
       );
     } else {
       const currentOrder = rangordeNumberMapping[currentNumber];
-      this.setRangorde(this.rangorde.replace(currentOrder, newOrder));
+      this.setRangorde(this.rangorde.replace(currentOrder, newOrder), true);
     }
   }
 
