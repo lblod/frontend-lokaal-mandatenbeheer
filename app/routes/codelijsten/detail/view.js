@@ -5,13 +5,17 @@ import { service } from '@ember/service';
 export default class CodelijstenDetailViewRoute extends Route {
   @service store;
 
-  beforeModel() {
-    this.store.unloadAll('concept');
-  }
-
   async model() {
     const codelijst = this.modelFor('codelijsten.detail');
+    const concepten = await codelijst.concepts;
+    codelijst.rollbackAttributes();
+    concepten.forEach((c) => {
+      c.rollbackAttributes();
+    });
 
-    return { codelijst, concepten: await codelijst.concepts };
+    return {
+      codelijst,
+      concepten: concepten,
+    };
   }
 }
