@@ -10,7 +10,10 @@
   </Group>
   <Group>
     <AuButtonGroup>
-      <AuButton @skin="secondary">Annuleer</AuButton>
+      <AuButton
+        @skin="secondary"
+        {{on "click" this.onCancel}}
+      >Annuleer</AuButton>
       <Shared::Tooltip
         @showTooltip={{not this.canSave}}
         @alignment="right"

@@ -41,11 +41,14 @@ export default class CodelijstenDetailEditController extends Controller {
     return false;
   }
 
-  viewCodelist = () =>
+  @action
+  onCancel() {
+    this.isModalOpen = false;
     this.router.transitionTo(
       'codelijsten.detail.view',
       this.model.codelijst.id
     );
+  }
 
   @action
   updateName(event) {
