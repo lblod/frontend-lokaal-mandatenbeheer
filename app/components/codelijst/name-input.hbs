@@ -5,3 +5,9 @@
   placeholder="Codelijst label"
   {{on "input" (perform this.updateName)}}
 />
+{{#if this.warningMessage}}
+  <AuHelpText @warning={{true}}>{{this.warningMessage}}</AuHelpText>
+{{/if}}
+{{#if this.errorMessage}}
+  <AuHelpText @error={{true}}>{{this.errorMessage}}</AuHelpText>
+{{/if}}
