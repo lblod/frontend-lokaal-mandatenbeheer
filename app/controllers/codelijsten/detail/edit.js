@@ -52,7 +52,23 @@ export default class CodelijstenDetailEditController extends Controller {
   }
 
   @action
-  updateCodelist() {}
+  async updateCodelist() {
+    this.model.codelijst.label = this.name;
+    this.concepten = await this.saveUnsavedConcepts();
+    this.model.codelijst.concepts = this.concepten;
+  }
+
+  async saveUnsavedConcepts() {
+    return await Promise.all(
+      this.concepten.map(async (concept) => {
+        if (concept.isNew) {
+          await concept.save();
+        }
+
+        return concept;
+      })
+    );
+  }
 
   @action
   deleteConcept(concept) {
