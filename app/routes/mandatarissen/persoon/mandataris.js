@@ -40,6 +40,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
         params.mandataris_id
       );
 
+    const validationResults = this.getValidationResults(mandataris.uri);
+
     return RSVP.hash({
       bestuurseenheid,
       mandataris,
@@ -50,6 +52,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       selectedBestuursperiode,
       isDistrictEenheid: isDistrict,
       showOCMWLinkedMandatarisWarning,
+      validationResults,
     });
   }
 
@@ -113,5 +116,31 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       return true;
     }
     return false;
+  }
+
+  async getValidationResults(focusNode) {
+    let queryParams = {
+      sort: '-created',
+      page: { size: 1 },
+      filter: {
+        validationresults: {
+          'focus-node': focusNode,
+        },
+      },
+      include: 'validationresults',
+    };
+
+    const latestReport = (await this.store.query('report', queryParams))?.[0];
+
+    if (!latestReport) {
+      return [];
+    }
+
+    const validationResultsData = await latestReport.get('validationresults');
+
+    // Filter the validation results by focusNode
+    return validationResultsData.filter(
+      (result) => result.focusNode === focusNode
+    );
   }
 }

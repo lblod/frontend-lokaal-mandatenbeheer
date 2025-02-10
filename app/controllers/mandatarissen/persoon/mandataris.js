@@ -147,4 +147,25 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
       maken, gelieve dit te doen in de gemeente.`;
   }
+
+  getValueFromValidationResult(result) {
+    let value = '';
+    if (result.value) {
+      value = result.value;
+    } else if (result.resultPath) {
+      value = result.resultPath;
+    }
+    return value;
+  }
+
+  getMessageFromValidationResult(result) {
+    let message = '';
+    if (result.resultMessage) {
+      message = result.resultMessage;
+    }
+    if (message === 'Less than 1 values') {
+      message = 'Niet beschikbaar';
+    }
+    return message;
+  }
 }

@@ -78,6 +78,33 @@
       />
     </ul>
   </div>
+
+  <div class="au-o-box">
+    <AuHeading @level="3" @skin="4">
+      Validatiefouten
+    </AuHeading>
+
+    <ul class="au-c-list-vertical">
+      <AuTable>
+        <:header>
+          <tr>
+            <th>Boodschap</th>
+            <th>Waarde</th>
+          </tr>
+        </:header>
+        <:body>
+          {{#each @model.validationResults as |result|}}
+            <td>
+            {{this.getMessageFromValidationResult result}}
+          </td>
+          <td>
+            {{this.getValueFromValidationResult result}}
+          </td>
+          {{/each}}
+        </:body>
+      </AuTable>
+    </ul>
+  </div>
 </div>
 
 <Mandatarissen::UpdateState
