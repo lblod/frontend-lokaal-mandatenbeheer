@@ -11,7 +11,6 @@ export default class CodelijstenDetailEditController extends Controller {
 
   @tracked name;
   @tracked concepten = A();
-  @tracked removedConcepts = A();
 
   @tracked conceptName;
 
@@ -61,7 +60,7 @@ export default class CodelijstenDetailEditController extends Controller {
   @action
   async updateCodelist() {
     this.model.codelijst.label = this.name;
-    this.concepten = await this.getUpdatedConcepts();
+    this.concepten = await this.saveConcepts();
     this.model.codelijst.concepts = this.concepten;
     await this.model.codelijst.save();
     this.router.transitionTo(
@@ -70,13 +69,8 @@ export default class CodelijstenDetailEditController extends Controller {
     );
   }
 
-  async getUpdatedConcepts() {
-    await Promise.all(
-      this.removedConcepts.map(async (concept) => {
-        await concept.destroyRecord();
-      })
-    );
-
+  async saveConcepts() {
+    // creates or deletes the records in the database
     return await Promise.all(
       this.concepten.map(async (concept) => {
         await concept.save();
@@ -87,8 +81,8 @@ export default class CodelijstenDetailEditController extends Controller {
 
   @action
   deleteConcept(concept) {
-    this.removedConcepts.pushObject(concept);
     this.concepten.removeObject(concept);
+    concept.deleteRecord();
   }
 
   @action
@@ -121,15 +115,6 @@ export default class CodelijstenDetailEditController extends Controller {
   }
 
   _createComparisonHash(conceptArray) {
-    console.log(
-      `hash`,
-      JSON.stringify(
-        conceptArray
-          .toArray()
-          .sortBy('order')
-          .map((c) => c.label)
-      )
-    );
     return JSON.stringify(
       conceptArray
         .toArray()
