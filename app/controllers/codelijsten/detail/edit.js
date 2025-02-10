@@ -57,6 +57,11 @@ export default class CodelijstenDetailEditController extends Controller {
     this.model.codelijst.label = this.name;
     this.concepten = await this.getUpdatedConcepts();
     this.model.codelijst.concepts = this.concepten;
+    await this.model.codelijst.save();
+    this.router.transitionTo(
+      'codelijsten.detail.view',
+      this.model.codelijst.id
+    );
   }
 
   async getUpdatedConcepts() {
