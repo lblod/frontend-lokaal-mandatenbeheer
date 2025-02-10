@@ -7,18 +7,17 @@ import { tracked } from '@glimmer/tracking';
 
 export default class CodelijstenDetailEditController extends Controller {
   @service router;
+  @service store;
 
-  @tracked name = this.model.codelijst?.label;
-  @tracked concepten = A([...this.model.concepten]);
+  @tracked name;
+  @tracked concepten = A();
   @tracked removedConcepts = A();
 
   @tracked conceptName;
 
   @tracked isModalOpen;
 
-  @tracked modelConceptListHash = this._createComparisonHash([
-    ...this.model.concepten,
-  ]);
+  modelConceptListHash;
 
   get canSave() {
     return (
@@ -80,10 +79,7 @@ export default class CodelijstenDetailEditController extends Controller {
 
     return await Promise.all(
       this.concepten.map(async (concept) => {
-        if (concept.isNew) {
-          await concept.save();
-        }
-
+        await concept.save();
         return concept;
       })
     );
@@ -117,7 +113,23 @@ export default class CodelijstenDetailEditController extends Controller {
     switchConcept.order = conceptOrder;
   }
 
+  resetToModelValues(codelijst, concepten) {
+    this.concepten.clear();
+    this.concepten.pushObjects(concepten);
+    this.modelConceptListHash = this._createComparisonHash(concepten);
+    this.name = codelijst.label;
+  }
+
   _createComparisonHash(conceptArray) {
+    console.log(
+      `hash`,
+      JSON.stringify(
+        conceptArray
+          .toArray()
+          .sortBy('order')
+          .map((c) => c.label)
+      )
+    );
     return JSON.stringify(
       conceptArray
         .toArray()
