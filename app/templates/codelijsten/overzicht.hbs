@@ -51,7 +51,7 @@
       />
     </c.header>
     <c.body as |codelijst|>
-      <td class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
+      <td class="au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-1-2">
         <LinkTo
           @route="codelijsten.detail"
           @model={{codelijst.id}}
@@ -75,7 +75,7 @@
           </Shared::Tooltip>
         {{/if}}
       </td>
-      <td>{{codelijst.id}}</td>
+      <td class="au-u-1-2">{{codelijst.id}}</td>
     </c.body>
   </t.content>
 </AuDataTable>
