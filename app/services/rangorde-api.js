@@ -2,7 +2,6 @@ import Service from '@ember/service';
 
 import { service } from '@ember/service';
 import { API, JSON_API_TYPE, STATUS_CODE } from 'frontend-lmb/utils/constants';
-import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class RangordeApiService extends Service {
@@ -19,7 +18,7 @@ export default class RangordeApiService extends Service {
         },
         body: JSON.stringify({
           mandatarissen: mandatarissen,
-          date: endOfDay(date),
+          date: date,
         }),
       }
     );

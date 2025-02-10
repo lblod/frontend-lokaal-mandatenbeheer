@@ -2,8 +2,6 @@ import { EXT, LMB } from 'frontend-lmb/rdf/namespaces';
 import { NULL_DATE } from 'frontend-lmb/utils/constants';
 import { isRequiredForBestuursorgaan } from '../is-fractie-selector-required';
 
-import { Literal } from 'rdflib';
-
 // Expects bestuursorgaan in de tijd
 export const getApplicationContextMetaTtl = async (bestuursorganen) => {
   if (!bestuursorganen) {
@@ -94,5 +92,5 @@ export const loadIsFractieRequiredFromContext = (storeOptions) => {
     null,
     metaGraph
   );
-  return Literal.toJS(!!isRequired);
+  return isRequired.value === '1' || isRequired.value === 'true';
 };
