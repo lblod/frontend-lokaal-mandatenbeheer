@@ -26,23 +26,19 @@ export default class CodelijstenDetailViewController extends Controller {
   async deleteCodelist() {
     this.isDeleting = true;
     await this.deleteConcepts();
-    this.model.codelijst.deleteRecord();
-    this.model.codelijst.save();
+    await this.model.codelijst.destroyRecord();
     showSuccessToast(
       this.toaster,
       'Codelijst succesvol verwijderd',
       'Codelijst'
     );
-    this.router.transitionTo('codelijsten.overzicht');
     this.isDeleting = false;
+    this.router.transitionTo('codelijsten.overzicht');
   }
 
   async deleteConcepts() {
     await Promise.all(
-      this.model.concepten.map(async (concept) => {
-        await concept.deleteRecord();
-        return concept.save();
-      })
+      this.model.concepten.map(async (concept) => await concept.destroyRecord())
     );
   }
 

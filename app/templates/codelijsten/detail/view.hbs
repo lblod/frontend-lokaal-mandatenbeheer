@@ -23,9 +23,7 @@
           @disabled={{or this.isReadOnly this.isDeleting}}
           @skin="secondary"
           @alert={{true}}
-          @loading={{this.isDeleting}}
-          @loadingMessage="Codelijst aan het verwijderen"
-          {{on "click" this.deleteCodelist}}
+          {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
         >Verwijder</AuButton>
       </Shared::Tooltip>
       <Shared::Tooltip
@@ -71,3 +69,33 @@
     </t.content>
   </AuDataTable>
 </div>
+
+<AuModal
+  @title="Verwijder codelijst"
+  @modalOpen={{this.isDeleteModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isDeleteModalOpen) false}}
+  {{action-on-show this.reset}}
+>
+  <:body>
+    <p>Door verder te gaan zal de huidige codelijst met al zijn concepten
+      definitief verwijderd worden.</p>
+  </:body>
+  <:footer>
+    <AuButtonGroup
+      class="au-u-flex au-u-flex--between au-u-padding-left au-u-padding-right"
+    >
+      <AuButton
+        @alert={{true}}
+        @disabled={{this.isDeleting}}
+        @loading={{this.isDeleting}}
+        @loadingMessage="Codelijst wordt verwijderen"
+        {{on "click" this.deleteCodelist}}
+      >Verwijder</AuButton>
+      <AuButton
+        @skin="secondary"
+        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+      >Annuleer</AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>
