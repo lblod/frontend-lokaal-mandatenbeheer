@@ -15,16 +15,6 @@
   <Group>
     <AuButtonGroup>
       <Shared::Tooltip
-        @showTooltip={{this.editButtonTooltipText}}
-        @alignment="right"
-        @tooltipText={{this.editButtonTooltipText}}
-      >
-        <AuButton
-          @disabled={{or this.isReadOnly this.isDeleting}}
-          {{on "click" this.editCodelist}}
-        >Bewerk</AuButton>
-      </Shared::Tooltip>
-      <Shared::Tooltip
         @showTooltip={{this.isReadOnly}}
         @alignment="right"
         @tooltipText="Dit is een basis codelijst die niet verwijderd mag worden."
@@ -37,6 +27,16 @@
           @loadingMessage="Codelijst aan het verwijderen"
           {{on "click" this.deleteCodelist}}
         >Verwijder</AuButton>
+      </Shared::Tooltip>
+      <Shared::Tooltip
+        @showTooltip={{this.editButtonTooltipText}}
+        @alignment="right"
+        @tooltipText={{this.editButtonTooltipText}}
+      >
+        <AuButton
+          @disabled={{or this.isReadOnly this.isDeleting}}
+          {{on "click" this.editCodelist}}
+        >Bewerk</AuButton>
       </Shared::Tooltip>
     </AuButtonGroup>
   </Group>
