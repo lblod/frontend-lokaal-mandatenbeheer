@@ -43,7 +43,14 @@
     />
   </div>
 </div>
-
+<div
+  class="au-u-flex au-u-flex--end au-u-margin-bottom-small au-u-margin-right"
+>
+  <AuHelpText @skin="secondary" @size="large">
+    Aantal:
+    {{this.sortedConcepten.length}}
+  </AuHelpText>
+</div>
 <AuTable @size={{this.size}}>
   <:header>
     <tr>
