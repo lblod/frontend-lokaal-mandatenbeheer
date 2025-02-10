@@ -11,7 +11,6 @@ export default class CodelijstenDetailRoute extends Route {
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
-    this.router.replaceWith('codelijsten.detail.view', transition.to.params.id);
   }
 
   async model(params) {
@@ -19,6 +18,8 @@ export default class CodelijstenDetailRoute extends Route {
       'filter[:id:]': params.id,
       include: 'concepts',
     });
+
+    this.router.replaceWith('codelijsten.detail.view', params.id);
 
     return {
       codelijst,
