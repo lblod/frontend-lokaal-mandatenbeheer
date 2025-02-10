@@ -102,6 +102,5 @@ export default class CodelijstenNewController extends Controller {
   @action
   reset() {
     this.name = null;
-    this.concepten.clear();
   }
 }
