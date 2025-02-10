@@ -22,6 +22,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   @service multiUriFetcher;
 
   @tracked mandaat = null;
+  @tracked isStrictBurgemeester = false;
   @tracked initialized = false;
   @tracked bestuursorganen = [];
   @tracked person;
@@ -78,6 +79,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   @action
   async updateMandaat(mandate) {
     const uri = mandate?.uri;
+    this.isStrictBurgemeester = mandate?.isStrictBurgemeester;
 
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
     this.hasBeenFocused = true;
