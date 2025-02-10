@@ -69,8 +69,8 @@ Router.map(function () {
     this.route('new');
     this.route('overzicht');
     this.route('detail', { path: '/:id' }, function () {
-      this.route('view', { path: '/:id/view' });
-      this.route('edit', { path: '/:id/edit' });
+      this.route('view');
+      this.route('edit');
     });
   });
 
