@@ -7,8 +7,8 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 export default class CodelijstNameInput extends Component {
-  @tracked isValid;
-  @tracked isDuplicate;
+  @tracked isValid = true;
+  @tracked isDuplicate = false;
 
   minCharacters = 2;
 
