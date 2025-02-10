@@ -21,6 +21,7 @@ export default class CodelijstAddConceptModal extends Component {
   addConcept() {
     const concept = this.store.createRecord('concept', {
       label: this.conceptName,
+      order: this.args.order ?? 0,
       conceptSchemes: this.args.conceptScheme ? [this.args.conceptScheme] : [],
     });
     this.args.onNewConcept(concept);

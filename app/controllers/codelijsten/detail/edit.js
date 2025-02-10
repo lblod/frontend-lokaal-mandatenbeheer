@@ -41,6 +41,10 @@ export default class CodelijstenDetailEditController extends Controller {
     return false;
   }
 
+  get sortedConcepten() {
+    return this.concepten.sortBy('order');
+  }
+
   @action
   onCancel() {
     this.isModalOpen = false;
@@ -95,5 +99,21 @@ export default class CodelijstenDetailEditController extends Controller {
   addConcept(unsavedConcept) {
     this.concepten.pushObject(unsavedConcept);
     this.isModalOpen = false;
+  }
+
+  @action
+  moveConcept(concept, upDown) {
+    const factor = upDown === 'up' ? -1 : 1;
+    const conceptOrder = concept.order;
+    let orderWithFactor = conceptOrder + factor;
+
+    if (orderWithFactor === -1) {
+      orderWithFactor = this.concepten.length - 1;
+    } else if (orderWithFactor === this.concepten.length) {
+      orderWithFactor = 0;
+    }
+    let switchConcept = this.concepten.find((l) => l.order === orderWithFactor);
+    concept.order = switchConcept.order;
+    switchConcept.order = conceptOrder;
   }
 }

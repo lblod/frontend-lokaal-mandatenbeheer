@@ -47,14 +47,31 @@
 <AuTable @size={{this.size}}>
   <:header>
     <tr>
+      <th>{{! Order }}</th>
       <th>Label</th>
-      <th>{{! Acties }}</th>
+      <th>{{! Delete }}</th>
     </tr>
   </:header>
   <:body>
-    {{#each this.concepten as |concept|}}
+    {{#each this.sortedConcepten as |concept|}}
       <tr>
-        <td>{{concept.label}}</td>
+        <td class="au-u-flex au-u-flex--column">
+          <AuButton
+            {{on "click" (fn this.moveConcept concept "up")}}
+            @icon="chevron-up"
+            @skin="naked"
+            @hideText={{true}}
+          />
+          <AuButton
+            {{on "click" (fn this.moveConcept concept "down")}}
+            @icon="chevron-down"
+            @skin="naked"
+            @hideText={{true}}
+          />
+        </td>
+        <td class="au-u-4-5">
+          {{concept.label}}
+        </td>
         <td>
           <AuButton
             @skin="link"
@@ -67,7 +84,7 @@
   </:body>
   <:footer>
     <tr>
-      <td colspan="2">
+      <td colspan="3">
         <AuButton
           @skin="secondary"
           @icon="plus"
@@ -86,4 +103,5 @@
   @isModalOpen={{this.isModalOpen}}
   @closeModal={{fn (mut this.isModalOpen) false}}
   @onNewConcept={{this.addConcept}}
+  @order={{this.concepten.length}}
 />
