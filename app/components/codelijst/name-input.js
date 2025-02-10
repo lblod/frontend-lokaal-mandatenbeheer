@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { restartableTask, timeout } from 'ember-concurrency';
@@ -7,8 +8,11 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 export default class CodelijstNameInput extends Component {
+  @service store;
+
   @tracked isValid = true;
   @tracked isDuplicate = false;
+  @tracked duplicateMatches;
 
   minCharacters = 2;
 
@@ -16,7 +20,7 @@ export default class CodelijstNameInput extends Component {
     await timeout(INPUT_DEBOUNCE);
     const name = event?.target?.value;
     this.isValid = this.isValidName(name);
-    this.isDuplicate = this.isDuplicateName(name);
+    this.isDuplicate = await this.isDuplicateName(name);
 
     this.args.onUpdate({
       name: name.trim(),
@@ -28,8 +32,16 @@ export default class CodelijstNameInput extends Component {
     return name && name?.trim().length > this.minCharacters;
   }
 
-  isDuplicateName(name) {
-    return false; // TODO: search for name
+  async isDuplicateName(name) {
+    const searchName = name.trim().toLowerCase();
+    this.duplicateMatches = await this.store.query('concept-scheme', {
+      'filter[label]': searchName,
+    });
+
+    return (
+      this.duplicateMatches.length === 1 &&
+      this.duplicateMatches[0].label.toLowerCase() === searchName
+    );
   }
 
   get errorMessage() {
@@ -45,5 +57,9 @@ export default class CodelijstNameInput extends Component {
       return `Naam moet minsten ${this.minCharacters + 1} lang zijn`;
     }
     return null;
+  }
+
+  get canShowDuplicateCodelistNames() {
+    return this.duplicateMatches?.length <= 10;
   }
 }
