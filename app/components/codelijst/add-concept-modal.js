@@ -25,4 +25,9 @@ export default class CodelijstAddConceptModal extends Component {
     });
     this.args.onNewConcept(concept);
   }
+
+  @action
+  reset() {
+    this.conceptName = null;
+  }
 }
