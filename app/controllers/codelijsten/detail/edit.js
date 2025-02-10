@@ -16,6 +16,10 @@ export default class CodelijstenDetailEditController extends Controller {
 
   @tracked isModalOpen;
 
+  @tracked modelConceptListHash = this._createComparisonHash([
+    ...this.model.concepten,
+  ]);
+
   get canSave() {
     return (
       (this.isNameChanged && this.name?.length > 2) ||
@@ -32,13 +36,9 @@ export default class CodelijstenDetailEditController extends Controller {
       return true;
     }
 
-    if (this.concepten.some((concept) => concept.id === null)) {
-      return true;
-    }
-
-    // deep check of concepten TODO:
-
-    return false;
+    return (
+      this.modelConceptListHash !== this._createComparisonHash(this.concepten)
+    );
   }
 
   get sortedConcepten() {
@@ -115,5 +115,14 @@ export default class CodelijstenDetailEditController extends Controller {
     let switchConcept = this.concepten.find((l) => l.order === orderWithFactor);
     concept.order = switchConcept.order;
     switchConcept.order = conceptOrder;
+  }
+
+  _createComparisonHash(conceptArray) {
+    return JSON.stringify(
+      conceptArray
+        .toArray()
+        .sortBy('order')
+        .map((c) => c.label)
+    );
   }
 }
