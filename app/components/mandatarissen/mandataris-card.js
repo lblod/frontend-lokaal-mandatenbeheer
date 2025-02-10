@@ -81,7 +81,7 @@ export default class MandatarisCardComponent extends Component {
     if (this.args.legislatuurInBehandeling) {
       return 'De publicatiestatus kan niet aangepast worden als de legislatuur nog in behandeling is.';
     } else if (this.isEffectiefBurgemeester) {
-      return 'Een burgemeester kan enkel bekrachtigd worden via een benoeming.';
+      return 'Een burgemeester kan enkel bekrachtigd worden via een benoeming, dit gebeurt automatisch.';
     } else if (this.isEffectiefLastStatus) {
       return 'Deze mandataris moet niet bekrachtigd worden.';
     }
