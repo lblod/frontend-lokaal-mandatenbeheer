@@ -10,6 +10,7 @@ export default class CodelijstenDetailEditController extends Controller {
   @service store;
 
   @tracked name;
+  @tracked isNameValid;
   @tracked concepten = A();
 
   @tracked conceptName;
@@ -20,7 +21,7 @@ export default class CodelijstenDetailEditController extends Controller {
 
   get canSave() {
     return (
-      (this.isNameChanged && this.name?.length > 2) ||
+      (this.isNameChanged && this.isNameValid) ||
       (this.concepten.length > 0 && this.conceptListIsDiverging)
     );
   }
@@ -53,8 +54,10 @@ export default class CodelijstenDetailEditController extends Controller {
   }
 
   @action
-  updateName(event) {
-    this.name = event.target.value;
+  updateName(value) {
+    const { name, isValid } = value;
+    this.name = name;
+    this.isNameValid = isValid;
   }
 
   @action

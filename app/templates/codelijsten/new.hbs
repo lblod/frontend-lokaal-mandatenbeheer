@@ -33,13 +33,7 @@
 
 <div class="au-o-box">
   <div class="au-u-1-3@medium au-u-flex au-u-flex--column">
-    <AuLabel @required={{true}}>Naam van de codelijst</AuLabel>
-    <AuInput
-      value={{this.name}}
-      @width="block"
-      placeholder="Codelijst label"
-      {{on "input" this.updateName}}
-    />
+    <Codelijst::NameInput @name={{this.name}} @onUpdate={{this.updateName}} />
   </div>
 </div>
 <AuTable @size={{this.size}}>

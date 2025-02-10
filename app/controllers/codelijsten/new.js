@@ -16,12 +16,15 @@ export default class CodelijstenNewController extends Controller {
   @tracked isSaving;
 
   @tracked name;
+  @tracked isNameValid;
   @tracked conceptName;
   @tracked concepten = A();
 
   @action
-  updateName(event) {
-    this.name = event?.target?.value;
+  updateName(value) {
+    const { name, isValid } = value;
+    this.name = name;
+    this.isNameValid = isValid;
   }
 
   @action
@@ -30,7 +33,7 @@ export default class CodelijstenNewController extends Controller {
   }
 
   get canSave() {
-    return this.name?.length > 2 && this.concepten.length > 0;
+    return this.isNameValid && this.concepten.length > 0;
   }
 
   get isConceptValid() {
