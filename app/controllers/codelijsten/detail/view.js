@@ -42,9 +42,11 @@ export default class CodelijstenDetailViewController extends Controller {
     );
   }
 
-  editCodelist = () =>
+  @action
+  editCodelist() {
     this.router.transitionTo(
       'codelijsten.detail.edit',
       this.model.codelijst.id
     );
+  }
 }
