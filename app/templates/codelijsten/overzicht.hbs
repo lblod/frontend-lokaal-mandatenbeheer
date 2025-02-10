@@ -49,6 +49,11 @@
         @currentSorting={{this.sort}}
         @label="Id"
       />
+      <AuDataTableThSortable
+        @field="createdAt"
+        @currentSorting={{this.sort}}
+        @label="Aangemaakt op"
+      />
     </c.header>
     <c.body as |codelijst|>
       <td class="au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-1-2">
@@ -75,7 +80,8 @@
           </Shared::Tooltip>
         {{/if}}
       </td>
-      <td class="au-u-1-2">{{codelijst.id}}</td>
+      <td class="au-u-1-5">{{codelijst.id}}</td>
+      <td class="au-u-1-6">{{codelijst.displayCreatedAt}}</td>
     </c.body>
   </t.content>
 </AuDataTable>
