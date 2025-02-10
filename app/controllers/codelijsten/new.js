@@ -52,6 +52,7 @@ export default class CodelijstenNewController extends Controller {
     const codelijst = this.store.createRecord('concept-scheme', {
       label: this.name?.trim(),
       isReadOnly: false,
+      createdAt: new Date(),
     });
     await codelijst.save();
     codelijst.concepts = await this.updateConceptsWithConceptScheme(codelijst);
