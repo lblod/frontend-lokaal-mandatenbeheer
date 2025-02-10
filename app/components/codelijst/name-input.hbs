@@ -1,1 +1,7 @@
-{{yield}}
+<AuLabel @required={{true}}>Naam van de codelijst</AuLabel>
+<AuInput
+  value={{@name}}
+  @width="block"
+  placeholder="Codelijst label"
+  {{on "input" (perform this.updateName)}}
+/>
