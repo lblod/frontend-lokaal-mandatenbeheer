@@ -7,10 +7,14 @@ import { restartableTask } from 'ember-concurrency';
 import {
   MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
   MANDAAT_BURGEMEESTER_CODE,
+  MANDAAT_LID_VAST_BUREAU_CODE,
   MANDAAT_SCHEPEN_CODE,
   MANDATARIS_VERHINDERD_STATE,
 } from 'frontend-lmb/utils/well-known-uris';
-import { COLLEGE_ORGANEN_VOEREN_EN_RAND } from 'frontend-lmb/utils/well-known-ids';
+import {
+  COLLEGE_ORGANEN_VOEREN_EN_RAND,
+  VB_ORGANEN_VOEREN_EN_RAND,
+} from 'frontend-lmb/utils/well-known-ids';
 
 export default class MinMaxMandatarisWarningComponent extends Component {
   @service store;
@@ -87,11 +91,20 @@ export default class MinMaxMandatarisWarningComponent extends Component {
     await Promise.all(
       mandaten.map(async (mandaat) => {
         const min = mandaat.minAantalHouders;
-        const max = mandaat.maxAantalHouders;
+        let max = mandaat.maxAantalHouders;
 
         const bestuursfunctie = await mandaat.bestuursfunctie;
         const label = bestuursfunctie.label;
         const isSchepen = bestuursfunctie.uri === MANDAAT_SCHEPEN_CODE;
+        const isLidVastBureau =
+          bestuursfunctie.uri === MANDAAT_LID_VAST_BUREAU_CODE;
+        if (
+          isLidVastBureau &&
+          !VB_ORGANEN_VOEREN_EN_RAND.includes(bestuursorgaan.id)
+        ) {
+          // toegevoegde schepen is not included in max count
+          max = max + 1;
+        }
 
         const countFound = counts[mandaat.id];
         if (min && countFound < min) {
