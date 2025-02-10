@@ -11,6 +11,10 @@
   </Group>
   <Group>
     <AuButtonGroup>
+      <AuButton
+        @skin="secondary"
+        {{on "click" this.viewCodelist}}
+      >Annuleer</AuButton>
       <Shared::Tooltip
         @showTooltip={{not this.canSave}}
         @alignment="right"
@@ -24,10 +28,6 @@
           {{on "click" this.updateCodelist}}
         >Opslaan</AuButton>
       </Shared::Tooltip>
-      <AuButton
-        @skin="secondary"
-        {{on "click" this.viewCodelist}}
-      >Annuleer</AuButton>
     </AuButtonGroup>
   </Group>
 </AuToolbar>
