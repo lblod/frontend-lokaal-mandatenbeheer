@@ -52,11 +52,16 @@ export default class MandatarisCardComponent extends Component {
       : '';
   }
 
+  get showEditPublicationStatus() {
+    return !this.isBekrachtigd;
+  }
+
   get canEditPublicationStatus() {
     return (
       !this.isBekrachtigd &&
-      !this.args.disableEdits &&
-      !this.isEffectiefBurgemeester
+      !this.args.legislatuurInBehandeling &&
+      !this.isEffectiefBurgemeester &&
+      !this.isEffectiefLastStatus
     );
   }
 
