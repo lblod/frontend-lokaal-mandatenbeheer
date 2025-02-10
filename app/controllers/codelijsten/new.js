@@ -98,4 +98,10 @@ export default class CodelijstenNewController extends Controller {
     this.isModalOpen = false;
     this.router.transitionTo('codelijsten.overzicht');
   }
+
+  @action
+  reset() {
+    this.name = null;
+    this.concepten.clear();
+  }
 }
