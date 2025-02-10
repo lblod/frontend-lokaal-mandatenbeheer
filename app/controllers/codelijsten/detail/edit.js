@@ -10,6 +10,7 @@ export default class CodelijstenDetailEditController extends Controller {
 
   @tracked name = this.model.codelijst?.label;
   @tracked concepten = A([...this.model.concepten]);
+  @tracked removedConcepts = A();
 
   @tracked conceptName;
 
@@ -54,11 +55,17 @@ export default class CodelijstenDetailEditController extends Controller {
   @action
   async updateCodelist() {
     this.model.codelijst.label = this.name;
-    this.concepten = await this.saveUnsavedConcepts();
+    this.concepten = await this.getUpdatedConcepts();
     this.model.codelijst.concepts = this.concepten;
   }
 
-  async saveUnsavedConcepts() {
+  async getUpdatedConcepts() {
+    await Promise.all(
+      this.removedConcepts.map(async (concept) => {
+        await concept.destroyRecord();
+      })
+    );
+
     return await Promise.all(
       this.concepten.map(async (concept) => {
         if (concept.isNew) {
@@ -72,6 +79,7 @@ export default class CodelijstenDetailEditController extends Controller {
 
   @action
   deleteConcept(concept) {
+    this.removedConcepts.pushObject(concept);
     this.concepten.removeObject(concept);
   }
 
