@@ -89,4 +89,10 @@ export default class CodelijstenNewController extends Controller {
   deleteConcept(concept) {
     this.concepten.removeObject(concept);
   }
+
+  @action
+  onCancel() {
+    this.isModalOpen = false;
+    this.router.transitionTo('codelijsten.overzicht');
+  }
 }
