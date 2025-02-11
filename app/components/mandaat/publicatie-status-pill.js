@@ -48,10 +48,7 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
   }
 
   get invalidLink() {
-    return (
-      !this.args.mandataris.linkToBesluit ||
-      !isValidUri(this.args.mandataris.linkToBesluit)
-    );
+    return !this.newLink || !isValidUri(this.newLink);
   }
 
   @action

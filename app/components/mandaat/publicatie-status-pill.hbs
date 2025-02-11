@@ -58,10 +58,17 @@
       >technische dienst contacteren</AuLinkExternal>
     </p>
     <AuInput
+      @error={{this.invalidLink}}
       value={{this.newLink}}
       @width="block"
       {{on "input" this.onEditLink}}
     />
+    {{#if this.invalidLink}}
+      <AuHelpText @skin="secondary" @error={{true}}>
+        Start de url met http:// of https:// om te linken naar de besluit
+        pagina.
+      </AuHelpText>
+    {{/if}}
   </div>
   <AuToolbar class="au-u-padding-top-none au-u-padding" as |Group|>
     <Group>
