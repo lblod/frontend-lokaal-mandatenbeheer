@@ -8,22 +8,27 @@
   >
     {{or this.status.label "Niet beschikbaar"}}
   </AuPill>
-  {{#if
-    (and
-      @showBekijkBewijs (await this.linkToDecision) this.isMandatarisBekrachtigd
-    )
-  }}
-    <AuLinkExternal
-      href={{await this.linkToDecision}}
-      class="au-u-margin-left-tiny"
-    >Bekijk besluit</AuLinkExternal>
+  {{#if @showBekijkBewijs}}
+    {{#if (await @mandataris.besluitUri)}}
+      <AuLinkExternal
+        href={{await @mandataris.besluitUri}}
+        class="au-u-margin-left-tiny"
+      >Bekijk besluit</AuLinkExternal>
+    {{else if @mandataris.linkToBesluit}}
+      <AuLinkExternal
+        href={{@mandataris.linkToBesluit}}
+        class="au-u-margin-left-tiny"
+      >Bekijk besluit</AuLinkExternal>
+    {{/if}}
   {{/if}}
   {{#if (and @showInfoText this.isMandatarisBekrachtigd)}}
     <p
       class="au-u-italic au-u-h-functional au-u-flex au-u-flex--vertical-center"
     >
-      <span class="au-u-margin-top-small u-u-margin-right-tiny">Om een
-        bekrachtiging terug te trekken moet je de
+      <span class="au-u-margin-top-small u-u-margin-right-tiny">
+        Deze mandataris werd
+        {{if @mandataris.linkToBesluit "handmatig" "automatisch"}}
+        bekrachtigd. Om een bekrachtiging terug te trekken moet je de
         <AuLinkExternal
           href="mailto:lokaalmandatenbeheer@vlaanderen.be?subject=Bekrachtiging terugtrekken - Lokaal Mandatenbeheer"
         >technische dienst contacteren</AuLinkExternal>

@@ -7,15 +7,6 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
     return this.status ? this.status.get('isBekrachtigd') : true;
   }
 
-  get linkToDecision() {
-    return this.getLink();
-  }
-
-  async getLink() {
-    const link = this.args.mandataris.besluitUri;
-    return link ?? this.args.mandataris.linkToBesluit;
-  }
-
   get effectiefIsLastStatus() {
     return effectiefIsLastPublicationStatus(this.args.mandataris);
   }
