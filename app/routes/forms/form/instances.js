@@ -1,6 +1,10 @@
 import Route from '@ember/routing/route';
 
+import { service } from '@ember/service';
+
 export default class FormInstancesRoute extends Route {
+  @service semanticFormRepository;
+
   queryParams = {
     filter: { refreshModel: true },
     page: { refreshModel: false },
@@ -13,22 +17,9 @@ export default class FormInstancesRoute extends Route {
 
     return {
       formDefinition: formModel,
-      headerLabels: await this.getHeaderLabels(formModel.id),
+      headerLabels: await this.semanticFormRepository.getHeaderLabels(
+        formModel.id
+      ),
     };
-  }
-
-  async getHeaderLabels(formId) {
-    const response = await fetch(
-      `/form-content/instance-table/${formId}/headers`
-    );
-
-    if (!response.ok) {
-      let error = new Error(response.statusText);
-      error.status = response.status;
-      throw error;
-    }
-    const { headers } = await response.json();
-
-    return headers;
   }
 }
