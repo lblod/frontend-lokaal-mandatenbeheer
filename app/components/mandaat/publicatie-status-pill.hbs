@@ -19,6 +19,13 @@
         href={{@mandataris.linkToBesluit}}
         class="au-u-margin-left-tiny"
       >Bekijk besluit</AuLinkExternal>
+      <AuButton
+        @icon="pencil"
+        @skin="link-secondary"
+        @size="small"
+        @hideText={{true}}
+        {{on "click" this.editLink}}
+      >Pas besluit aan</AuButton>
     {{/if}}
   {{/if}}
   {{#if (and @showInfoText this.isMandatarisBekrachtigd)}}
@@ -36,3 +43,36 @@
     </p>
   {{/if}}
 </div>
+<AuModal
+  @title="Link naar besluit aanpassen"
+  @modalOpen={{this.showEditLinkModal}}
+  @closable={{true}}
+  @closeModal={{this.closeModal}}
+>
+  <div class="au-o-box au-o-flow">
+    <p>
+      Hier kan je de link naar het besluit aanpassen. De bekrachtiging
+      terugtrekken kan je niet in deze applicatie. Daarvoor moet je de
+      <AuLinkExternal
+        href="mailto:lokaalmandatenbeheer@vlaanderen.be?subject=Bekrachtiging terugtrekken - Lokaal Mandatenbeheer"
+      >technische dienst contacteren</AuLinkExternal>
+    </p>
+    <AuInput
+      value={{this.newLink}}
+      @width="block"
+      {{on "input" this.onEditLink}}
+    />
+  </div>
+  <AuToolbar class="au-u-padding-top-none au-u-padding" as |Group|>
+    <Group>
+      <AuButtonGroup>
+        <AuButton {{on "click" this.updateLink}} @disabled={{this.invalidLink}}>
+          Sla op
+        </AuButton>
+        <AuButton {{on "click" this.closeModal}} @skin="secondary">
+          Annuleer
+        </AuButton>
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
+</AuModal>
