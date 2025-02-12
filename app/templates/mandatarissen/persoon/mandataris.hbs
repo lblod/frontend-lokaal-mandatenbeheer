@@ -32,17 +32,40 @@
             {{on "click" (fn (mut this.isChanging) true)}}
           >Wijzig huidig mandaat</AuButton>
         </Shared::Tooltip>
-        <Shared::Tooltip
-          @showTooltip={{true}}
-          @tooltipText={{this.toolTipTextCorrecting}}
-        >
-          <AuButton
-            @alert={{true}}
-            @skin="secondary"
-            @disabled={{this.isDisabledBecauseLegislatuur}}
-            {{on "click" (fn (mut this.isCorrecting) true)}}
-          >Corrigeer fouten</AuButton>
-        </Shared::Tooltip>
+        <div class="au-u-flex au-u-flex--column">
+          <div class="au-u-flex au-u-flex--row">
+            <Shared::Tooltip
+              @showTooltip={{true}}
+              @tooltipText={{this.toolTipTextCorrecting}}
+            >
+              <AuButton
+                class="split-button-main-btn"
+                @alert={{true}}
+                @skin="secondary"
+                @disabled={{this.isDisabledBecauseLegislatuur}}
+                {{on "click" (fn (mut this.isCorrecting) true)}}
+              >Corrigeer fouten</AuButton>
+            </Shared::Tooltip>
+            <AuButton
+              class="split-button-dropdown-btn"
+              @hideText={{true}}
+              @icon="three-dots"
+              @alert={{true}}
+              @skin="secondary"
+              @disabled={{this.isDisabledBecauseLegislatuur}}
+              {{on "click" this.toggleCorrigeerDropdown}}
+            >Corrigeer fouten extra options</AuButton>
+          </div>
+          {{#if this.isCorrigeerDropdownOpen}}
+            <div class="split-button-dropdown-option--container">
+              <AuButton
+                @alert={{true}}
+                @disabled={{false}}
+                {{on "click" this.deleteMandataris}}
+              >Verwijder</AuButton>
+            </div>
+          {{/if}}
+        </div>
       </AuButtonGroup>
     </div>
   </div>

@@ -9,10 +9,12 @@ import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { task } from 'ember-concurrency';
 import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
+import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
   @service store;
+  @service toaster;
   @service fractieApi;
   @service('mandataris') mandatarisService;
 
@@ -26,6 +28,8 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @tracked newMandataris;
 
   @tracked formInitialized;
+
+  @tracked isCorrigeerDropdownOpen;
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt
@@ -146,5 +150,22 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       Het doorstromen van gegevens van de gemeente naar OCMW zal
       hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
       maken, gelieve dit te doen in de gemeente.`;
+  }
+
+  @action
+  toggleCorrigeerDropdown() {
+    this.isCorrigeerDropdownOpen = !this.isCorrigeerDropdownOpen;
+  }
+
+  @action
+  async deleteMandataris() {
+    // TODO : do you have a confirmation modal?
+    // await this.model.mandataris.destroyRecord();
+    showSuccessToast(
+      this.toaster,
+      'Mandataris successvol verwijderd',
+      'Mandataris'
+    );
+    this.router.transitionTo('mandatarissen.persoon.mandaten');
   }
 }
