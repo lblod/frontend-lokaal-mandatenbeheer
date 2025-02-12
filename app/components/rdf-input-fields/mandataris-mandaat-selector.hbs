@@ -1,3 +1,15 @@
+{{#if this.isStrictBurgemeester}}
+  <AuAlert @skin="info" @icon="info-circle" @size="small" @closable={{false}}>
+    <p>
+      De standaard procedure voor het toevoegen van een burgemeester is als
+      volgt: Voeg eerst een aangewezen burgemeester toe, eenmaal deze benoemt
+      wordt en het besluit doorgestroomd is naar deze applicatie zal automatisch
+      een corresponderende burgemeester aangemaakt worden. Idealiter hoeft u dus
+      zelf geen burgemeester toe te voegen.
+    </p>
+  </AuAlert>
+{{/if}}
+
 <AuLabel
   for="mandaat"
   @error={{this.hasErrors}}

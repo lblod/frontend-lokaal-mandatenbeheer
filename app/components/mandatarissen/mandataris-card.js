@@ -4,11 +4,13 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
-import { MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE } from 'frontend-lmb/utils/well-known-uris';
+import {
+  MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE,
+  MANDATARIS_EFFECTIEF_PUBLICATION_STATE,
+} from 'frontend-lmb/utils/well-known-uris';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
-import { PUBLICATION_STATUS_EFFECTIEF_ID } from 'frontend-lmb/utils/well-known-ids';
 
 import { task } from 'ember-concurrency';
 
@@ -25,8 +27,23 @@ export default class MandatarisCardComponent extends Component {
   }
 
   get isBekrachtigd() {
-    const statusId = this.args.mandataris.publicationStatus?.get('uri');
-    return !statusId || statusId === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
+    const status = this.args.mandataris.publicationStatus?.get('uri');
+    return !status || status === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
+  }
+
+  get isEffectief() {
+    const status = this.args.mandataris.publicationStatus?.get('uri');
+    return !status || status === MANDATARIS_EFFECTIEF_PUBLICATION_STATE;
+  }
+
+  get isEffectiefBurgemeester() {
+    return this.isEffectief && this.args.mandataris.isStrictBurgemeester;
+  }
+
+  get isEffectiefLastStatus() {
+    return (
+      this.isEffectief && effectiefIsLastPublicationStatus(this.args.mandataris)
+    );
   }
 
   get fractie() {
@@ -35,8 +52,17 @@ export default class MandatarisCardComponent extends Component {
       : '';
   }
 
+  get showEditPublicationStatus() {
+    return !this.isBekrachtigd;
+  }
+
   get canEditPublicationStatus() {
-    return !this.isBekrachtigd && !this.args.disableEdits;
+    return (
+      !this.isBekrachtigd &&
+      !this.args.legislatuurInBehandeling &&
+      !this.isEffectiefBurgemeester &&
+      !this.isEffectiefLastStatus
+    );
   }
 
   get persoon() {
@@ -51,18 +77,12 @@ export default class MandatarisCardComponent extends Component {
     return this.args.mandataris.uniqueVervangersVan;
   }
 
-  get effectiefIsLastStatus() {
-    return effectiefIsLastPublicationStatus(this.args.mandataris);
-  }
-
   get lastStatusTooltipText() {
-    const publicatieStatusId =
-      this.args.mandataris.publicationStatus?.get('id');
-    if (
-      this.effectiefIsLastStatus &&
-      publicatieStatusId &&
-      publicatieStatusId === PUBLICATION_STATUS_EFFECTIEF_ID
-    ) {
+    if (this.args.legislatuurInBehandeling) {
+      return 'De publicatiestatus kan niet aangepast worden als de legislatuur nog in behandeling is.';
+    } else if (this.isEffectiefBurgemeester) {
+      return 'Een burgemeester kan enkel bekrachtigd worden via een benoeming, dit gebeurt automatisch.';
+    } else if (this.isEffectiefLastStatus) {
       return 'Deze mandataris moet niet bekrachtigd worden.';
     }
 

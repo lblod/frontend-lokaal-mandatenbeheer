@@ -63,7 +63,10 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   }
 
   get effectiefIsLastStatus() {
-    return effectiefIsLastPublicationStatus(this.mandataris);
+    return (
+      this.mandataris.isStrictBurgemeester ||
+      effectiefIsLastPublicationStatus(this.mandataris)
+    );
   }
 
   constructor() {

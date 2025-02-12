@@ -60,6 +60,10 @@ export default class MandaatModel extends Model {
     ].includes(this.bestuursfunctie.get('uri'));
   }
 
+  get isStrictBurgemeester() {
+    return this.bestuursfunctie.get('uri') === MANDAAT_BURGEMEESTER_CODE;
+  }
+
   get isSchepen() {
     return [
       MANDAAT_SCHEPEN_CODE,
