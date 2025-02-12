@@ -11,6 +11,7 @@ export default class Bestuurseenheid extends Model {
   @attr mailAdres;
   @attr wilMailOntvangen;
   @attr isTrialUser;
+  @attr('boolean', { defaultValue: false }) hideLegislatuur;
   @attr viewOnlyModules;
 
   @belongsTo('werkingsgebied', {
