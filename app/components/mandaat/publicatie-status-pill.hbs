@@ -34,7 +34,7 @@
     >
       <span class="au-u-margin-top-small u-u-margin-right-tiny">
         Deze mandataris werd
-        {{if @mandataris.linkToBesluit "handmatig" "automatisch"}}
+        {{if (await @mandataris.besluitUri) "automatisch" "handmatig"}}
         bekrachtigd. Om een bekrachtiging terug te trekken moet je de
         <AuLinkExternal
           href="mailto:lokaalmandatenbeheer@vlaanderen.be?subject=Bekrachtiging terugtrekken - Lokaal Mandatenbeheer"
