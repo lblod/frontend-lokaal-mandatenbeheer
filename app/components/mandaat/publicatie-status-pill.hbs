@@ -73,7 +73,10 @@
   <AuToolbar class="au-u-padding-top-none au-u-padding" as |Group|>
     <Group>
       <AuButtonGroup>
-        <AuButton {{on "click" this.updateLink}} @disabled={{this.invalidLink}}>
+        <AuButton
+          {{on "click" this.updateLink}}
+          @disabled={{this.saveDisabled}}
+        >
           Sla op
         </AuButton>
         <AuButton {{on "click" this.closeModal}} @skin="secondary">
