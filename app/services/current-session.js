@@ -114,7 +114,8 @@ export default class CurrentSessionService extends Service {
       this.features.isEnabled('show-iv-module') &&
       !this.isDistrict &&
       !this.isProvincie &&
-      !this.isPolitiezone
+      !this.isPolitiezone &&
+      !this.group.hideLegislatuur
     );
   }
 
