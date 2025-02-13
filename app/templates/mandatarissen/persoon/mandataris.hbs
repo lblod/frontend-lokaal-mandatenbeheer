@@ -58,12 +58,17 @@
           </div>
           {{#if this.isCorrigeerDropdownOpen}}
             <div class="split-button-dropdown-option--container">
-              <AuButton
-                @alert={{true}}
-                @disabled={{false}}
-                {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
-                {{on "click" (fn (mut this.isCorrigeerDropdownOpen) false)}}
-              >Verwijder</AuButton>
+              <Shared::Tooltip
+                @showTooltip={{not this.isDraftStatus}}
+                @tooltipText="Enkel mandatarissen met publicatie status Draft kunnen verwijderd worden"
+              >
+                <AuButton
+                  @disabled={{not this.isDraftStatus}}
+                  @alert={{true}}
+                  {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+                  {{on "click" (fn (mut this.isCorrigeerDropdownOpen) false)}}
+                >Verwijder</AuButton>
+              </Shared::Tooltip>
             </div>
           {{/if}}
         </div>
