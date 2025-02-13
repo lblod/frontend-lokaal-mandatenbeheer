@@ -61,7 +61,8 @@
               <AuButton
                 @alert={{true}}
                 @disabled={{false}}
-                {{on "click" this.deleteMandataris}}
+                {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+                {{on "click" (fn (mut this.isCorrigeerDropdownOpen) false)}}
               >Verwijder</AuButton>
             </div>
           {{/if}}
@@ -194,4 +195,11 @@
   @newMandataris={{this.newMandataris.id}}
   @callback={{this.callbackAfterUpdate}}
   @updateState="true"
+/>
+
+<Mandatarissen::DeleteModal
+  @isOpen={{this.isDeleteModalOpen}}
+  @onClose={{fn (mut this.isDeleteModalOpen) false}}
+  @mandataris={{this.model.mandataris}}
+  @afterDeleteRoute="mandatarissen.search"
 />

@@ -1,0 +1,26 @@
+<AuModal
+  ...attributes
+  @modalOpen={{@isOpen}}
+  @closable={{@onClose}}
+  @closeModal={{@onClose}}
+>
+  <:title>Verwijder mandataris</:title>
+  <:body>
+    <p>Modal content</p>
+  </:body>
+  <:footer>
+    <AuToolbar @size="medium" as |Group|>
+      <Group>
+        <AuButton
+          @alert={{true}}
+          @loading={{this.isDeleting}}
+          @loadingMessage="Mandataris wordt verwijderd"
+          {{on "click" this.delete}}
+        >Verwijder</AuButton>
+      </Group>
+      <Group>
+        <AuButton @skin="secondary" {{on "click" @onClose}}>Annuleer</AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>

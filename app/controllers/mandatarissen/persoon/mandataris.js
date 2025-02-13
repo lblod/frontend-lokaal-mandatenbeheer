@@ -30,6 +30,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @tracked formInitialized;
 
   @tracked isCorrigeerDropdownOpen;
+  @tracked isDeleteModalOpen;
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt
@@ -155,17 +156,5 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @action
   toggleCorrigeerDropdown() {
     this.isCorrigeerDropdownOpen = !this.isCorrigeerDropdownOpen;
-  }
-
-  @action
-  async deleteMandataris() {
-    // TODO : do you have a confirmation modal?
-    // await this.model.mandataris.destroyRecord();
-    showSuccessToast(
-      this.toaster,
-      'Mandataris successvol verwijderd',
-      'Mandataris'
-    );
-    this.router.transitionTo('mandatarissen.persoon.mandaten');
   }
 }
