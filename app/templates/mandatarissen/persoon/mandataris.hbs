@@ -32,45 +32,49 @@
             {{on "click" (fn (mut this.isChanging) true)}}
           >Wijzig huidig mandaat</AuButton>
         </Shared::Tooltip>
-        <div class="au-u-flex au-u-flex--column">
-          <div class="au-u-flex au-u-flex--row">
+        <div class="au-u-flex au-u-flex--row">
+          <div class="au-u-flex au-u-flex--column">
             <Shared::Tooltip
               @showTooltip={{true}}
               @tooltipText={{this.toolTipTextCorrecting}}
             >
               <AuButton
-                class="split-button-main-btn"
+                class="split-button--main-btn"
                 @alert={{true}}
                 @skin="secondary"
                 @disabled={{this.isDisabledBecauseLegislatuur}}
                 {{on "click" (fn (mut this.isCorrecting) true)}}
+                {{on "click" (fn (mut this.isCorrigeerDropdownOpen) false)}}
               >Corrigeer fouten</AuButton>
             </Shared::Tooltip>
-            <AuButton
-              class="split-button-dropdown-btn"
-              @hideText={{true}}
-              @icon="three-dots"
-              @alert={{true}}
-              @skin="secondary"
-              @disabled={{this.isDisabledBecauseLegislatuur}}
-              {{on "click" this.toggleCorrigeerDropdown}}
-            >Corrigeer fouten extra options</AuButton>
+            {{#if this.isCorrigeerDropdownOpen}}
+              <div>
+                <Shared::Tooltip
+                  @showTooltip={{not this.isDraftStatus}}
+                  @tooltipText="Enkel mandatarissen met publicatie status Draft kunnen verwijderd worden"
+                >
+                  <AuButton
+                    @skin="naked"
+                    @width="block"
+                    class="split-button--option-btn"
+                    @disabled={{not this.isDraftStatus}}
+                    @alert={{true}}
+                    {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+                    {{on "click" (fn (mut this.isCorrigeerDropdownOpen) false)}}
+                  >Verwijder</AuButton>
+                </Shared::Tooltip>
+              </div>
+            {{/if}}
           </div>
-          {{#if this.isCorrigeerDropdownOpen}}
-            <div class="split-button-dropdown-option--container">
-              <Shared::Tooltip
-                @showTooltip={{not this.isDraftStatus}}
-                @tooltipText="Enkel mandatarissen met publicatie status Draft kunnen verwijderd worden"
-              >
-                <AuButton
-                  @disabled={{not this.isDraftStatus}}
-                  @alert={{true}}
-                  {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
-                  {{on "click" (fn (mut this.isCorrigeerDropdownOpen) false)}}
-                >Verwijder</AuButton>
-              </Shared::Tooltip>
-            </div>
-          {{/if}}
+          <AuButton
+            class="split-button--dropdown-btn"
+            @hideText={{true}}
+            @icon="three-dots"
+            @alert={{true}}
+            @skin="secondary"
+            @disabled={{this.isDisabledBecauseLegislatuur}}
+            {{on "click" this.toggleCorrigeerDropdown}}
+          >Corrigeer fouten extra options</AuButton>
         </div>
       </AuButtonGroup>
     </div>
