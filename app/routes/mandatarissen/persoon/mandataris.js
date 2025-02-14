@@ -119,9 +119,4 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     }
     return false;
   }
-
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.isCorrigeerDropdownOpen = false;
-  }
 }

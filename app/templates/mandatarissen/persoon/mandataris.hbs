@@ -19,64 +19,51 @@
       class="au-u-flex au-u-flex--end au-u-margin-bottom"
       {{did-insert (perform this.checkLegislatuur)}}
     >
-      <AuButtonGroup class="au-u-flex--spaced-small">
+      <Shared::Tooltip @showTooltip={{true}} @tooltipText={{this.toolTipText}}>
+        <AuButton
+          class="au-u-margin-right-large"
+          @disabled={{or
+            (not this.model.mandataris.isActive)
+            this.isDisabledBecauseLegislatuur
+          }}
+          {{on "click" (fn (mut this.isChanging) true)}}
+        >Wijzig huidig mandaat</AuButton>
+      </Shared::Tooltip>
+      {{! template-lint-disable require-context-role }}
+      <AuDropdown
+        @title="Andere"
+        @alignment="right"
+        @skin="primary"
+        @hideText={{true}}
+        @icon="three-dots"
+        @onClose={{this.onClose}}
+      >
         <Shared::Tooltip
           @showTooltip={{true}}
-          @tooltipText={{this.toolTipText}}
+          @tooltipText={{this.toolTipTextCorrecting}}
         >
           <AuButton
-            @disabled={{or
-              (not this.model.mandataris.isActive)
-              this.isDisabledBecauseLegislatuur
-            }}
-            {{on "click" (fn (mut this.isChanging) true)}}
-          >Wijzig huidig mandaat</AuButton>
-        </Shared::Tooltip>
-        <div class="au-u-flex au-u-flex--row">
-          <div class="au-u-flex au-u-flex--column">
-            <Shared::Tooltip
-              @showTooltip={{true}}
-              @tooltipText={{this.toolTipTextCorrecting}}
-            >
-              <AuButton
-                class="split-button--main-btn"
-                @alert={{true}}
-                @skin="secondary"
-                @disabled={{this.isDisabledBecauseLegislatuur}}
-                {{on "click" (fn (mut this.isCorrecting) true)}}
-                {{on "click" (fn (mut this.isCorrigeerDropdownOpen) false)}}
-              >Corrigeer fouten</AuButton>
-            </Shared::Tooltip>
-            {{#if this.isCorrigeerDropdownOpen}}
-              <div>
-                <Shared::Tooltip
-                  @showTooltip={{not this.isDraftStatus}}
-                  @tooltipText="Enkel mandatarissen met publicatie status Draft kunnen verwijderd worden"
-                >
-                  <AuButton
-                    @skin="naked"
-                    @width="block"
-                    class="split-button--option-btn"
-                    @disabled={{not this.isDraftStatus}}
-                    @alert={{true}}
-                    {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
-                    {{on "click" (fn (mut this.isCorrigeerDropdownOpen) false)}}
-                  >Verwijder</AuButton>
-                </Shared::Tooltip>
-              </div>
-            {{/if}}
-          </div>
-          <AuButton
-            class="split-button--dropdown-btn"
-            @hideText={{true}}
-            @icon="three-dots"
             @alert={{true}}
-            @skin="secondary"
+            @skin="naked"
             @disabled={{this.isDisabledBecauseLegislatuur}}
-            {{on "click" this.toggleCorrigeerDropdown}}
-          >Corrigeer fouten extra options</AuButton>
-        </div>
-      </AuButtonGroup>
+            {{on "click" (fn (mut this.isCorrecting) true)}}
+          >Corrigeer fouten</AuButton>
+        </Shared::Tooltip>
+        <Shared::Tooltip
+          @showTooltip={{not this.isDraftStatus}}
+          @tooltipText="Enkel mandatarissen met publicatie status Draft kunnen verwijderd worden"
+        >
+          <AuButton
+            @width="block"
+            @skin="primary"
+            @disabled={{not this.isDraftStatus}}
+            @alert={{true}}
+            {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+          >Verwijder</AuButton>
+        </Shared::Tooltip>
+      </AuDropdown>
+      {{! template-lint-enable require-context-role }}
+
     </div>
   </div>
 </div>

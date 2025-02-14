@@ -420,19 +420,3 @@ $au-region-breakpoint: medium !default;
 main .au-c-main-container__content .au-u-wide-on-print {
   overflow: hidden;
 }
-
-.split-button--main-btn {
-  border-top-right-radius: 0px !important;
-  border-bottom-right-radius: 0px !important;
-  border-right: 0px !important;
-}
-.split-button--dropdown-btn {
-  border-top-left-radius: 0px !important;
-  border-bottom-left-radius: 0px !important;
-  border-left: 0px !important;
-}
-.split-button--option-btn {
-  position: absolute;
-  justify-content: right;
-  background-color: rgba(170, 39, 41, 0.18) !important;
-}

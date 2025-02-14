@@ -31,7 +31,6 @@ export default class MandatarissenPersoonMandatarisController extends Controller
 
   @tracked formInitialized;
 
-  @tracked isCorrigeerDropdownOpen;
   @tracked isDeleteModalOpen;
 
   get bestuursorganenTitle() {
@@ -153,11 +152,6 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       Het doorstromen van gegevens van de gemeente naar OCMW zal
       hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
       maken, gelieve dit te doen in de gemeente.`;
-  }
-
-  @action
-  toggleCorrigeerDropdown() {
-    this.isCorrigeerDropdownOpen = !this.isCorrigeerDropdownOpen;
   }
 
   get isDraftStatus() {
