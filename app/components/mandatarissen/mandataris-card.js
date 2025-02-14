@@ -10,7 +10,6 @@ import {
 } from 'frontend-lmb/utils/well-known-uris';
 import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
-import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
 
 import { task } from 'ember-concurrency';
 
@@ -41,9 +40,7 @@ export default class MandatarisCardComponent extends Component {
   }
 
   get isEffectiefLastStatus() {
-    return (
-      this.isEffectief && effectiefIsLastPublicationStatus(this.args.mandataris)
-    );
+    return this.isEffectief && !!this.args.effectiefIsLastPublicationStatus;
   }
 
   get fractie() {
@@ -53,7 +50,7 @@ export default class MandatarisCardComponent extends Component {
   }
 
   get showEditPublicationStatus() {
-    return !this.isBekrachtigd;
+    return !this.isBekrachtig;
   }
 
   get canEditPublicationStatus() {

@@ -37,7 +37,7 @@
                 @showInfoText={{true}}
                 @showBekijkBewijs={{true}}
               />
-              {{#if this.showEditPublicationStatus}}
+              {{#if this.canEditPublicationStatus}}
                 <AuButton
                   {{on "click" this.editStatus}}
                   @icon="pencil"
