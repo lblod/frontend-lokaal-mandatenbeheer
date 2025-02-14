@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 
 import { timeout } from 'ember-concurrency';
 
-import { showSuccessToast } from 'frontend-lmb/utils/toasts';
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { RESOURCE_CACHE_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class MandatarissenDeleteModal extends Component {
@@ -18,16 +18,24 @@ export default class MandatarissenDeleteModal extends Component {
   @action
   async delete() {
     this.isDeleting = true;
-    this.args.mandataris.deleteRecord();
-    await this.args.mandataris.save();
-    await timeout(RESOURCE_CACHE_TIMEOUT);
+    try {
+      this.args.mandataris.deleteRecord();
+      await this.args.mandataris.save();
+      await timeout(RESOURCE_CACHE_TIMEOUT);
+      showSuccessToast(
+        this.toaster,
+        'Mandataris succesvol verwijderd',
+        'Mandataris'
+      );
+      this.router.transitionTo(this.args.afterDeleteRoute);
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Oeps er liep iets mis, kon mandataris niet verwijderen',
+        'Mandataris'
+      );
+    }
     this.isDeleting = false;
     this.args.onClose();
-    showSuccessToast(
-      this.toaster,
-      'Mandataris succesvol verwijderd',
-      'Mandataris'
-    );
-    this.router.transitionTo(this.args.afterDeleteRoute);
   }
 }
