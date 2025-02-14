@@ -21,11 +21,10 @@
     >
       {{! template-lint-disable require-context-role }}
       <AuDropdown
-        @title="Andere"
+        @title="Bewerk"
         @alignment="right"
         @skin="primary"
-        @hideText={{true}}
-        @icon="drag-handle"
+        @icon="chevron-down"
         @onClose={{this.onClose}}
       >
         <Shared::Tooltip
@@ -48,9 +47,7 @@
           @tooltipText={{this.toolTipTextCorrecting}}
         >
           <AuButton
-            @alert={{true}}
             @width="block"
-            @skin="naked"
             @disabled={{this.isDisabledBecauseLegislatuur}}
             {{on "click" (fn (mut this.isCorrecting) true)}}
           >Corrigeer fouten</AuButton>
@@ -61,7 +58,7 @@
         >
           <AuButton
             @width="block"
-            @skin="primary"
+            @skin="naked"
             @disabled={{not this.isDraftStatus}}
             @alert={{true}}
             {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
