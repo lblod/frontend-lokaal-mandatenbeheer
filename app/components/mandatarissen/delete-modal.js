@@ -38,4 +38,8 @@ export default class MandatarissenDeleteModal extends Component {
     this.isDeleting = false;
     this.args.onClose();
   }
+
+  get isClosable() {
+    return !!this.args.onClose;
+  }
 }
