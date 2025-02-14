@@ -7,12 +7,17 @@ import { BESTUURSEENHEID_CLASSIFICATIECODE_GEMEENTE } from 'frontend-lmb/utils/w
 export default class VerkiezingenRoute extends Route {
   @service currentSession;
   @service session;
+  @service router;
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
 
     if (!this.currentSession.canAccessMandaat) {
       this.router.transitionTo('index');
+    }
+
+    if (this.currentSession.isLokaalBeheerd) {
+      this.router.transitionTo('lokaal-beheerd');
     }
   }
 
