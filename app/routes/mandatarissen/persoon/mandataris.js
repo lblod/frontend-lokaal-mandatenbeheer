@@ -2,6 +2,8 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
+import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
+
 import {
   MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_EXTRA_INFO_FORM_ID,
@@ -49,6 +51,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       bestuursorganen,
       selectedBestuursperiode,
       isDistrictEenheid: isDistrict,
+      effectiefIsLastPublicationStatus:
+        await effectiefIsLastPublicationStatus(mandataris),
       showOCMWLinkedMandatarisWarning,
     });
   }
