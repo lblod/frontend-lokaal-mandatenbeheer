@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import {
-  MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE,
   MANDATARIS_DRAFT_PUBLICATION_STATE,
   MANDATARIS_EFFECTIEF_PUBLICATION_STATE,
 } from 'frontend-lmb/utils/well-known-uris';
@@ -48,11 +47,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     await this.checkPublicationStatus();
 
     const optionIds = [PUBLICATION_STATUS_EFFECTIEF_ID];
-    if (
-      !this.nonReturnDraftStatusUri.includes(
-        this.mandataris.publicationStatus?.get('uri')
-      )
-    ) {
+    if (this.canReturnToDraftStatus) {
       optionIds.push(PUBLICATION_STATUS_DRAFT_ID);
     }
 
@@ -139,10 +134,10 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     return 'Voeg een geldige link toe om deze form te kunnen opslaan.';
   }
 
-  get nonReturnDraftStatusUri() {
-    return [
-      MANDATARIS_EFFECTIEF_PUBLICATION_STATE,
-      MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE,
-    ];
+  get canReturnToDraftStatus() {
+    return (
+      this.mandataris.publicationStatus?.get('uri') ===
+      MANDATARIS_DRAFT_PUBLICATION_STATE
+    );
   }
 }
