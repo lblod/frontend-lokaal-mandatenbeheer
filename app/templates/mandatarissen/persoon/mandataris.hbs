@@ -19,31 +19,37 @@
       class="au-u-flex au-u-flex--end au-u-margin-bottom"
       {{did-insert (perform this.checkLegislatuur)}}
     >
-      <Shared::Tooltip @showTooltip={{true}} @tooltipText={{this.toolTipText}}>
-        <AuButton
-          class="au-u-margin-right-large"
-          @disabled={{or
-            (not this.model.mandataris.isActive)
-            this.isDisabledBecauseLegislatuur
-          }}
-          {{on "click" (fn (mut this.isChanging) true)}}
-        >Wijzig huidig mandaat</AuButton>
-      </Shared::Tooltip>
       {{! template-lint-disable require-context-role }}
       <AuDropdown
         @title="Andere"
         @alignment="right"
         @skin="primary"
         @hideText={{true}}
-        @icon="three-dots"
+        @icon="drag-handle"
         @onClose={{this.onClose}}
       >
+        <Shared::Tooltip
+          @showTooltip={{true}}
+          @tooltipText={{this.toolTipText}}
+        >
+          <AuButton
+            class="dropdown-btn--primary"
+            @skin="naked"
+            @width="block"
+            @disabled={{or
+              (not this.model.mandataris.isActive)
+              this.isDisabledBecauseLegislatuur
+            }}
+            {{on "click" (fn (mut this.isChanging) true)}}
+          >Wijzig huidig mandaat</AuButton>
+        </Shared::Tooltip>
         <Shared::Tooltip
           @showTooltip={{true}}
           @tooltipText={{this.toolTipTextCorrecting}}
         >
           <AuButton
             @alert={{true}}
+            @width="block"
             @skin="naked"
             @disabled={{this.isDisabledBecauseLegislatuur}}
             {{on "click" (fn (mut this.isCorrecting) true)}}
@@ -63,7 +69,6 @@
         </Shared::Tooltip>
       </AuDropdown>
       {{! template-lint-enable require-context-role }}
-
     </div>
   </div>
 </div>
