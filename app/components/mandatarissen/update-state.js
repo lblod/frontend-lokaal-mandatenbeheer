@@ -33,6 +33,7 @@ export default class MandatarissenUpdateState extends Component {
   @tracked replacementUpdated;
   @tracked statusOptions = [];
   @tracked isFractieSelectorRequired;
+  @tracked isRangordeModalOpen;
 
   @service mandatarisStatus;
   @service currentSession;
@@ -51,7 +52,7 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   load = task({ drop: true }, async () => {
-    this.newStatus = this.args.mandataris.status;
+    this.newStatus = await this.args.mandataris.status;
     this.date = new Date();
     this.rangorde = this.args.mandataris.rangorde;
     this.selectedFractie = await (
@@ -239,12 +240,14 @@ export default class MandatarissenUpdateState extends Component {
     }
 
     await promise
-      .then((newMandataris) => {
+      .then(async (newMandataris) => {
         showSuccessToast(
           this.toaster,
           'Status van mandaat werd succesvol aangepast.'
         );
         this.onStateChanged(newMandataris);
+        console.log('should open?', await this.shouldOpenRangordeModal());
+        this.isRangordeModalOpen = await this.shouldOpenRangordeModal();
       })
       .catch((e) => {
         console.log(e);
@@ -298,5 +301,23 @@ export default class MandatarissenUpdateState extends Component {
     this.selectedReplacement = null;
     this.replacementUpdated = false;
     this.args.onCancel();
+  }
+
+  async shouldOpenRangordeModal() {
+    if (!this.selectedReplacement) {
+      return false;
+    }
+
+    return (
+      this.args.mandataris.isSchepen &&
+      this.newStatus?.uri === MANDATARIS_VERHINDERD_STATE
+    );
+  }
+
+  get statusIsVerhinderd() {
+    return (
+      this.args.mandataris.isVerhinderd &&
+      this.newStatus?.uri === MANDATARIS_VERHINDERD_STATE
+    );
   }
 }
