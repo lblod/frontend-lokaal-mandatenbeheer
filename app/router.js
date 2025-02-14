@@ -66,6 +66,7 @@ Router.map(function () {
   });
 
   this.route('under-construction');
+  this.route('lokaal-beheerd');
 
   this.route('admin-panel', function () {
     this.route('global-system-message');
