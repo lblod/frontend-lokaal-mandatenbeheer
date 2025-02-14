@@ -43,7 +43,6 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       );
 
     return RSVP.hash({
-      publicationStatus: await mandataris.publicationStatus,
       bestuurseenheid,
       mandataris,
       mandatarissen,

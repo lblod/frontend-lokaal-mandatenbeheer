@@ -4,7 +4,10 @@ import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { displayEndOfDay } from 'frontend-lmb/utils/date-manipulation';
-import { MANDAAT_BURGEMEESTER_CODE } from 'frontend-lmb/utils/well-known-uris';
+import {
+  MANDAAT_BURGEMEESTER_CODE,
+  MANDATARIS_DRAFT_PUBLICATION_STATE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisModel extends Model {
   @attr rangorde;
@@ -92,6 +95,18 @@ export default class MandatarisModel extends Model {
       (uri) =>
         uri == 'http://mu.semte.ch/vocabularies/ext/mandatenExtractorService'
     );
+  }
+
+  get isInDraftStatus() {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async (resolve) => {
+      const status = await this.publicationStatus;
+
+      if (status && status.uri === MANDATARIS_DRAFT_PUBLICATION_STATE) {
+        resolve(true);
+      }
+      resolve(false);
+    });
   }
 
   get displayEinde() {

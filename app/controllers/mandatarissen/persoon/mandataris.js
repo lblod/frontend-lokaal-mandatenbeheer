@@ -8,10 +8,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { task } from 'ember-concurrency';
-import {
-  INSTALLATIEVERGADERING_BEHANDELD_STATUS,
-  MANDATARIS_DRAFT_PUBLICATION_STATE,
-} from 'frontend-lmb/utils/well-known-uris';
+import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
@@ -152,11 +149,5 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       Het doorstromen van gegevens van de gemeente naar OCMW zal
       hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
       maken, gelieve dit te doen in de gemeente.`;
-  }
-
-  get isDraftStatus() {
-    return (
-      this.model.publicationStatus?.uri === MANDATARIS_DRAFT_PUBLICATION_STATE
-    );
   }
 }
