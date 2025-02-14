@@ -50,7 +50,7 @@ export default class MandatarisCardComponent extends Component {
   }
 
   get showEditPublicationStatus() {
-    return !this.isBekrachtig;
+    return !this.isBekrachtigd;
   }
 
   get canEditPublicationStatus() {
