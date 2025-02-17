@@ -58,7 +58,7 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
   }
 
   get besluitIsAddedThrough() {
-    return this.args.mandataris?.bekleedt.then(async (mandaat) => {
+    return this.args.mandataris.bekleedt.then(async (mandaat) => {
       if (mandaat.isStrictBurgemeester) {
         return '';
       }
