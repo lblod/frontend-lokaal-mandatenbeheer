@@ -47,6 +47,12 @@ export default class CodelijstenDetailEditController extends Controller {
   @action
   onCancel() {
     this.isModalOpen = false;
+
+    this.model.codelijst.rollbackAttributes();
+    this.concepten.toArray().forEach((c) => {
+      c.rollbackAttributes();
+    });
+
     this.router.transitionTo(
       'codelijsten.detail.view',
       this.model.codelijst.id
