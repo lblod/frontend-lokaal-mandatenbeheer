@@ -94,13 +94,12 @@
           />
         {{/if}}
       </div>
-      {{#if @mandataris.bekleedt.isSchepen}}
+      {{#if (and @mandataris.bekleedt.isSchepen (not this.statusIsVerhinderd))}}
         <div>
           <AuLabel>
             Rangorde
           </AuLabel>
           <AuInput
-            @disabled={{this.statusIsVerhinderd}}
             value={{this.rangorde}}
             @width="block"
             id="mandataris-rangorde"
