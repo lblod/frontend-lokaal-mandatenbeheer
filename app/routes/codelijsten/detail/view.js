@@ -15,7 +15,7 @@ export default class CodelijstenDetailViewRoute extends Route {
 
     return {
       codelijst,
-      concepten: concepten,
+      concepten: concepten.sortBy('order'),
     };
   }
 }
