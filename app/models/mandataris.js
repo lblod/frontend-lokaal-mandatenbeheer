@@ -151,12 +151,6 @@ export default class MandatarisModel extends Model {
       resolve((await this.status)?.uri === MANDATARIS_VERHINDERD_STATE)
     );
   }
-  get isSchepen() {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve) =>
-      resolve((await this.bekleedt).isSchepen)
-    );
-  }
 
   get besluitUri() {
     // eslint-disable-next-line no-async-promise-executor
