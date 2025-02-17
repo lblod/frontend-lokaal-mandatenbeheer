@@ -58,12 +58,16 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
   }
 
   get besluitIsAddedThrough() {
-    if (this.args.mandataris?.bekleedt?.get('isStrictBurgemeester')) {
-      return '';
-    }
+    return this.args.mandataris?.bekleedt.then(async (mandaat) => {
+      if (mandaat.isStrictBurgemeester) {
+        return '';
+      }
 
-    const how = this.args.mandataris?.besluitUri ? 'automatisch' : 'handmatig';
-    return `Deze mandataris werd ${how} bekrachtigd.`;
+      const how = (await this.args.mandataris?.besluitUri)
+        ? 'automatisch'
+        : 'handmatig';
+      return `Deze mandataris werd ${how} bekrachtigd.`;
+    });
   }
 
   @action
