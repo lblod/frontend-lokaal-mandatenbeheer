@@ -8,10 +8,6 @@ export default class CodelijstenDetailViewRoute extends Route {
   async model() {
     const codelijst = this.modelFor('codelijsten.detail');
     const concepten = await codelijst.concepts;
-    codelijst.rollbackAttributes();
-    concepten.forEach((c) => {
-      c.rollbackAttributes();
-    });
 
     return {
       codelijst,
