@@ -8,6 +8,7 @@ export default class CodelijstenOverzichtRoute extends Route {
   queryParams = {
     filter: { refreshModel: true },
     page: { refreshModel: true },
+    size: { refreshModel: false },
     sort: { refreshModel: true },
   };
 
@@ -18,19 +19,17 @@ export default class CodelijstenOverzichtRoute extends Route {
           'filter[:or:][id]': params.filter,
         }
       : {};
-    const pageSize = 20;
     const conceptSchemes = await this.store.query('concept-scheme', {
       sort: params.sort ?? 'label',
       page: {
-        number: parseInt(params.page ?? 0),
-        size: pageSize,
+        number: params.page,
+        size: params.size,
       },
       ...searchFilter,
     });
 
     return {
       codelijsten: conceptSchemes,
-      pageSize: pageSize,
     };
   }
 }
