@@ -13,7 +13,7 @@ export default class CodelijstenDetailViewController extends Controller {
   @tracked isDeleting;
 
   get isReadOnly() {
-    return this.model.codelijst?.readOnly;
+    return this.model.codelijst?.isReadOnly;
   }
 
   get editButtonTooltipText() {

@@ -6,7 +6,7 @@ export default class ConceptSchemeModel extends Model {
   @attr uri;
   @attr label;
   @attr('datetime') createdAt;
-  @attr('boolean') isReadOnly;
+  @attr('boolean', { defaultValue: true }) isReadOnly;
 
   @hasMany('concept', {
     async: true,
@@ -21,10 +21,6 @@ export default class ConceptSchemeModel extends Model {
     polymorphic: true,
   })
   topConcepts;
-
-  get readOnly() {
-    return this.isReadOnly ?? true;
-  }
 
   get displayCreatedAt() {
     if (!this.createdAt) {
