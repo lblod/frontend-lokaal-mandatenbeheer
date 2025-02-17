@@ -97,6 +97,13 @@ export default class CodelijstenNewController extends Controller {
   @action
   onCancel() {
     this.isModalOpen = false;
+
+    this.concepten.toArray().forEach((c) => {
+      c.rollbackAttributes();
+    });
+
+    this.concepten.clear();
+
     this.router.transitionTo('codelijsten.overzicht');
   }
 
