@@ -57,6 +57,15 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
     );
   }
 
+  get besluitIsAddedThrough() {
+    if (this.args.mandataris?.bekleedt?.get('isStrictBurgemeester')) {
+      return '';
+    }
+
+    const how = this.args.mandataris?.besluitUri ? 'automatisch' : 'handmatig';
+    return `Deze mandataris werd ${how} bekrachtigd.`;
+  }
+
   @action
   updateLink() {
     this.args.mandataris.linkToBesluit = this.newLink;
