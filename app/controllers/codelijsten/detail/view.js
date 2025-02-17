@@ -22,10 +22,6 @@ export default class CodelijstenDetailViewController extends Controller {
       : 'Pas deze codelijst aan.';
   }
 
-  get sortedConcepten() {
-    return this.model.concepten.sortBy('order');
-  }
-
   @action
   async deleteCodelist() {
     this.isDeleting = true;
