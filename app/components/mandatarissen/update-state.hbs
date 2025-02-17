@@ -156,7 +156,8 @@
         <AuLink
           @skin="button"
           @route="organen.orgaan.edit-rangorde"
-          @model={{@mandataris.bekleedt}}
+          @model={{this.currentBestuursorgaan?.isTijdsspecialisatieVan?.id}}
+          @query={{hash bestuursperiode=this.bestuursperiode.id}}
         >
           Pas rangorde aan
         </AuLink>
