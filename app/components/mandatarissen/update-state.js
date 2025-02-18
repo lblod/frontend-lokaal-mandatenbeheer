@@ -170,7 +170,7 @@ export default class MandatarissenUpdateState extends Component {
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
-        rangorde: this.rangorde,
+        rangorde: '',
         start: dateOfAction,
         einde: endDate,
         status: await this.newStatus,
