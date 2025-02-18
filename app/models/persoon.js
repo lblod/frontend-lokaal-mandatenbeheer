@@ -54,4 +54,7 @@ export default class PersoonModel extends Model {
   get naam() {
     return `${this.gebruikteVoornaam} ${this.achternaam}`;
   }
+  get validationText() {
+    return this.naam;
+  }
 }

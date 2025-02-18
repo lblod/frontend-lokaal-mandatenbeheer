@@ -44,4 +44,8 @@ export default class FractieModel extends Model {
         uri == 'http://mu.semte.ch/vocabularies/ext/mandatenExtractorService'
     );
   }
+
+  get validationText() {
+    return this.naam;
+  }
 }
