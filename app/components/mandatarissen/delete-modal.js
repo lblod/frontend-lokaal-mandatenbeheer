@@ -31,7 +31,7 @@ export default class MandatarissenDeleteModal extends Component {
     } catch (error) {
       showErrorToast(
         this.toaster,
-        'Oeps er liep iets mis, kon mandataris niet verwijderen',
+        'De mandataris kon niet verwijderd worden, probeer later opnieuw.',
         'Mandataris'
       );
     }
