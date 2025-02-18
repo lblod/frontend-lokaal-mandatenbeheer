@@ -52,7 +52,7 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   load = task({ drop: true }, async () => {
-    this.newStatus = await this.args.mandataris.status;
+    this.newStatus = this.args.mandataris.status;
     this.date = new Date();
     this.rangorde = this.args.mandataris.rangorde;
     this.selectedFractie = await (
@@ -307,16 +307,16 @@ export default class MandatarissenUpdateState extends Component {
       return false;
     }
 
-    const hasRangorde = this.args.mandataris.bekleedt.get('hasRangorde');
     return (
-      hasRangorde && this.newStatus?.get('uri') === MANDATARIS_VERHINDERD_STATE
+      this.args.mandataris.bekleedt.get('hasRangorde') &&
+      this.newStatus?.get('uri') === MANDATARIS_VERHINDERD_STATE
     );
   }
 
   get showRangordeField() {
     return (
       this.args.mandataris.bekleedt.get('hasRangorde') &&
-      this.newStatus?.uri !== MANDATARIS_VERHINDERD_STATE
+      this.newStatus?.get('uri') !== MANDATARIS_VERHINDERD_STATE
     );
   }
 }
