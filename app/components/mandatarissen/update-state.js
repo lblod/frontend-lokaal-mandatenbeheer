@@ -261,6 +261,9 @@ export default class MandatarissenUpdateState extends Component {
   @action
   updateNewStatus(status) {
     this.newStatus = status;
+    if (status.get('isVerhinderd')) {
+      this.rangorde = this.args.mandataris.rangorde;
+    }
   }
 
   @action
