@@ -308,7 +308,9 @@ export default class MandatarissenUpdateState extends Component {
     }
 
     const hasRangorde = this.args.mandataris.bekleedt.get('hasRangorde');
-    return hasRangorde && this.newStatus?.uri === MANDATARIS_VERHINDERD_STATE;
+    return (
+      hasRangorde && this.newStatus?.get('uri') === MANDATARIS_VERHINDERD_STATE
+    );
   }
 
   get showRangordeField() {
