@@ -1,13 +1,22 @@
 {{page-title "Instances"}}
-<div class="au-c-body-container au-c-body-container--scroll">
-  <SemanticForms::InstanceTable
-    @sort={{this.sort}}
-    @page={{this.page}}
-    @size={{this.size}}
-    @filter={{this.filter}}
-    @search={{this.search}}
-    @formDefinition={{this.model.formDefinition}}
-    @onRemoveInstance={{this.onRemoveInstance}}
-    @editRoute="forms.form.instance"
-  />
-</div>
+
+<AuMainContainer as |main|>
+  <main.content>
+    <AuBodyContainer id="content">
+      <div class="au-c-body-container au-c-body-container--scroll">
+        <SemanticForms::InstanceTable
+          @sort={{this.sort}}
+          @page={{this.page}}
+          @size={{this.size}}
+          @filter={{this.filter}}
+          @labels={{this.model.headerLabels}}
+          @search={{this.search}}
+          @formDefinition={{this.model.formDefinition}}
+          @onRemoveInstance={{this.onRemoveInstance}}
+          @editRoute="forms.form.instance"
+          @onTableLoaded={{this.onTableLoaded}}
+        />
+      </div>
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>
