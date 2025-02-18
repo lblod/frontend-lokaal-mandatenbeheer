@@ -170,7 +170,6 @@ export default class MandatarissenUpdateState extends Component {
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
-        rangorde: '',
         start: dateOfAction,
         einde: endDate,
         status: await this.newStatus,
@@ -184,6 +183,7 @@ export default class MandatarissenUpdateState extends Component {
     );
 
     if (this.selectedReplacement) {
+      newMandatarisProps.rangorde = '';
       const replacementMandataris =
         await this.mandatarisService.getOrCreateReplacement(
           this.args.mandataris,
@@ -261,9 +261,6 @@ export default class MandatarissenUpdateState extends Component {
   @action
   updateNewStatus(status) {
     this.newStatus = status;
-    if (status.get('isVerhinderd')) {
-      this.rangorde = this.args.mandataris.rangorde;
-    }
   }
 
   @action
