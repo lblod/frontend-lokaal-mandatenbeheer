@@ -246,7 +246,7 @@ export default class MandatarissenUpdateState extends Component {
           'Status van mandaat werd succesvol aangepast.'
         );
         this.onStateChanged(newMandataris);
-        this.isRangordeModalOpen = await this.shouldOpenRangordeModal();
+        this.isRangordeModalOpen = this.shouldOpenRangordeModal();
       })
       .catch((e) => {
         console.log(e);
@@ -302,14 +302,13 @@ export default class MandatarissenUpdateState extends Component {
     this.args.onCancel();
   }
 
-  async shouldOpenRangordeModal() {
+  shouldOpenRangordeModal() {
     if (!this.selectedReplacement) {
       return false;
     }
 
-    const isSchepen = await (await this.args.mandataris.bekleedt)?.isSchepen;
-
-    return isSchepen && this.newStatus?.uri === MANDATARIS_VERHINDERD_STATE;
+    const hasRangorde = this.args.mandataris.bekleedt.get('hasRangorde');
+    return hasRangorde && this.newStatus?.uri === MANDATARIS_VERHINDERD_STATE;
   }
 
   get statusIsVerhinderd() {

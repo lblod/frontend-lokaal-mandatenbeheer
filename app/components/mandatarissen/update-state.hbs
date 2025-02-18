@@ -94,7 +94,9 @@
           />
         {{/if}}
       </div>
-      {{#if (and @mandataris.bekleedt.isSchepen (not this.statusIsVerhinderd))}}
+      {{#if
+        (and @mandataris.bekleedt.hasRangorde (not this.statusIsVerhinderd))
+      }}
         <div>
           <AuLabel>
             Rangorde
