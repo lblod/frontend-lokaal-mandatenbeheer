@@ -15,7 +15,7 @@ export const typeToEmberData = {
     route: 'organen.orgaan',
     model: 'bestuursorgaan',
     classLabel: 'Bestuursorganen',
-    include: 'is-tijdsspecialisatie-van',
+    include: 'is-tijdsspecialisatie-van.classificatie,classificatie',
   },
   'http://data.vlaanderen.be/ns/mandaat#Fractie': {
     route: 'organen.fracties',
