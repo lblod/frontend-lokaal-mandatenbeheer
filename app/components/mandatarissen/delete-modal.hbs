@@ -12,15 +12,18 @@
   <:footer>
     <AuToolbar as |Group|>
       <Group>
-        <AuButton
-          @alert={{true}}
-          @loading={{this.isDeleting}}
-          @loadingMessage="Mandataris wordt verwijderd"
-          {{on "click" this.delete}}
-        >Verwijder</AuButton>
-      </Group>
-      <Group>
-        <AuButton @skin="secondary" {{on "click" @onClose}}>Annuleer</AuButton>
+        <AuButtonGroup>
+          <AuButton
+            @alert={{true}}
+            @loading={{this.isDeleting}}
+            @loadingMessage="Mandataris wordt verwijderd"
+            {{on "click" this.delete}}
+          >Verwijder</AuButton>
+          <AuButton
+            @skin="secondary"
+            {{on "click" @onClose}}
+          >Annuleer</AuButton>
+        </AuButtonGroup>
       </Group>
     </AuToolbar>
   </:footer>
