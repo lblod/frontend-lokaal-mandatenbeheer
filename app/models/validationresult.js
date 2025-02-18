@@ -9,4 +9,5 @@ export default class ValidationresultModel extends Model {
   @attr('string') resultPath;
   @attr('string') value;
   @attr('string') targetClassOfFocusNode;
+  @attr('string') focusNodeId;
 }

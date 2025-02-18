@@ -1,60 +1,53 @@
 {{page-title "Report"}}
 
-<AuHeading @skin="2">
-  SHACL validatierapport ({{this.model.report.id}}
-  -
-  {{moment-format this.model.report.created "DD-MM-YYYY HH:mm:ss"}})
-</AuHeading>
+<AuMainContainer as |main|>
+  <main.content>
+    <AuBodyContainer id="content">
+      <div class="au-c-body-container au-c-body-container--scroll au-u-padding">
 
-{{#each this.targetClasses as |targetClass|}}
-  <AuToolbar class="au-o-box" as |Group|>
-    <Group>
-      <AuHeading @skin="2">
-        {{targetClass}}
-      </AuHeading>
-    </Group>
-  </AuToolbar>
+        <AuHeading @skin="2">
+          Validatierapport -
+          {{moment-format this.model.report.created "DD-MM-YYYY HH:mm:ss"}})
+        </AuHeading>
 
-  <AuDataTable
-    @content={{this.filterResultsByTargetClass targetClass}}
-    @noDataMessage="Geen validatieresultaten gevonden"
-    @page={{@page}}
-    @size={{this.lengthOfResultsByTargetClass targetClass}}
-    as |t|
-  >
-    <t.content as |c|>
-      <c.header>
-        <th class="au-u-padding-small">Entiteit</th>
-        <th class="au-u-padding-small">Boodschap</th>
-        <th class="au-u-padding-small">Waarde</th>
-      </c.header>
+        {{#each @model.resultsByTargetClass as |instanceGroup|}}
+          <div class="au-u-box au-u-margin-top no-pagination">
+            <AuHeading @skin="2" class="au-u-margin-bottom">
+              {{instanceGroup.class.label}}
+            </AuHeading>
 
-      <c.body as |result|>
-        <td>
-          {{#let
-            (await
-              (this.getFocusNodeContext
-                result.focusNode result.targetClassOfFocusNode
-              )
-            )
-            as |context|
-          }}
-            <LinkTo
-              @route={{context.route}}
-              @model={{context.modelId}}
-              class="au-c-link au-u-medium"
+            <AuDataTable
+              @content={{instanceGroup.instances}}
+              @noDataMessage="Geen validatieresultaten gevonden"
+              @size={{instanceGroup.instances.length}}
+              as |t|
             >
-              {{result.focusNode}}
-            </LinkTo>
-          {{/let}}
-        </td>
-        <td>
-          {{result.resultMessage}}
-        </td>
-        <td>
-          {{this.getValueFromValidationResult result}}
-        </td>
-      </c.body>
-    </t.content>
-  </AuDataTable>
-{{/each}}
+              <t.content as |c|>
+                <c.header>
+                  <th class="au-u-padding-small">Entiteit</th>
+                  <th class="au-u-padding-small">Boodschap</th>
+                </c.header>
+
+                <c.body as |result|>
+                  <td>
+                    <LinkTo
+                      @route={{result.context.route}}
+                      @model={{result.context.modelId}}
+                      class="au-c-link au-u-medium"
+                    >
+                      {{result.label}}
+                    </LinkTo>
+                  </td>
+                  <td>
+                    {{result.result.resultMessage}}
+                  </td>
+
+                </c.body>
+              </t.content>
+            </AuDataTable>
+          </div>
+        {{/each}}
+      </div>
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>

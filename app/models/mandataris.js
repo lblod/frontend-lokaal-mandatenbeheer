@@ -193,4 +193,12 @@ export default class MandatarisModel extends Model {
 
     return result;
   }
+
+  get validationText() {
+    // eslint-disable-next-line ember/no-get, ember/classic-decorator-no-classic-methods
+    const naam = this.get('isBestuurlijkeAliasVan.naam');
+    // eslint-disable-next-line ember/no-get, ember/classic-decorator-no-classic-methods
+    const bestuursfunctie = this.get('bekleedt.bestuursfunctie.label');
+    return `${naam} [${bestuursfunctie}]`;
+  }
 }
