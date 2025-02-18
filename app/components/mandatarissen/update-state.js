@@ -311,10 +311,10 @@ export default class MandatarissenUpdateState extends Component {
     return hasRangorde && this.newStatus?.uri === MANDATARIS_VERHINDERD_STATE;
   }
 
-  get statusIsVerhinderd() {
+  get showRangordeField() {
     return (
-      this.args.mandataris.isVerhinderd &&
-      this.newStatus?.uri === MANDATARIS_VERHINDERD_STATE
+      this.args.mandataris.bekleedt.get('hasRangorde') &&
+      this.newStatus?.uri !== MANDATARIS_VERHINDERD_STATE
     );
   }
 }

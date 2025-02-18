@@ -4,10 +4,7 @@ import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { displayEndOfDay } from 'frontend-lmb/utils/date-manipulation';
-import {
-  MANDAAT_BURGEMEESTER_CODE,
-  MANDATARIS_VERHINDERD_STATE,
-} from 'frontend-lmb/utils/well-known-uris';
+import { MANDAAT_BURGEMEESTER_CODE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisModel extends Model {
   @attr rangorde;
@@ -142,13 +139,6 @@ export default class MandatarisModel extends Model {
     return (
       this.bekleedt.get('bestuursfunctie').get('uri') ===
       MANDAAT_BURGEMEESTER_CODE
-    );
-  }
-
-  get isVerhinderd() {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve) =>
-      resolve((await this.status)?.uri === MANDATARIS_VERHINDERD_STATE)
     );
   }
 
