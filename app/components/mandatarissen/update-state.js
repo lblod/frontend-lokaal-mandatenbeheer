@@ -240,7 +240,7 @@ export default class MandatarissenUpdateState extends Component {
     }
 
     await promise
-      .then(async (newMandataris) => {
+      .then((newMandataris) => {
         showSuccessToast(
           this.toaster,
           'Status van mandaat werd succesvol aangepast.'
