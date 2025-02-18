@@ -4,10 +4,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { timeout } from 'ember-concurrency';
-
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
-import { RESOURCE_CACHE_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class MandatarissenDeleteModal extends Component {
   @service router;
@@ -21,7 +18,6 @@ export default class MandatarissenDeleteModal extends Component {
     try {
       this.args.mandataris.deleteRecord();
       await this.args.mandataris.save();
-      await timeout(RESOURCE_CACHE_TIMEOUT);
       showSuccessToast(
         this.toaster,
         'Mandataris succesvol verwijderd',
