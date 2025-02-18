@@ -142,11 +142,12 @@
 >
   <:title>Rangorde vervanger</:title>
   <:body>
-    <p>Het aanpassen van de rangorde van huidige mandataris werd op vorig scherm
-      geblokkeerd.
-      <br />
-      Mocht je de rangorde willen aanpassen van de vervanger, dan kan je hier
-      verder klikken. Anders mag u het dit sluiten.
+    <p>
+      U heeft een mandataris verhinderd, die een rangorde heeft. Deze rangorde
+      kan niet automatisch overgenomen worden in de vervanger. Het toewijzen van
+      een rangorde kan namelijk gevolgen hebben op de rangorde van andere
+      mandatarissen. Wenst u dit nu aan te passen? Het is ook mogelijk dit op
+      een later tijdstip aan te passen in de wijzig rangorde pagina.
     </p>
   </:body>
   <:footer>
@@ -158,14 +159,12 @@
           @model={{this.currentBestuursorgaan?.isTijdsspecialisatieVan?.id}}
           @query={{hash bestuursperiode=this.bestuursperiode.id}}
         >
-          Pas rangorde aan
+          Ja
         </AuLink>
-      </Group>
-      <Group>
         <AuButton
           @skin="secondary"
           {{on "click" (fn (mut this.isRangordeModalOpen) false)}}
-        >Sluiten</AuButton>
+        >Nee</AuButton>
       </Group>
     </AuToolbar>
   </:footer>
