@@ -98,15 +98,9 @@ export default class MandatarisModel extends Model {
   }
 
   get isInDraftStatus() {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve) => {
-      const status = await this.publicationStatus;
-
-      if (status && status.uri === MANDATARIS_DRAFT_PUBLICATION_STATE) {
-        resolve(true);
-      }
-      resolve(false);
-    });
+    return (
+      this.publicationStatus?.get('uri') === MANDATARIS_DRAFT_PUBLICATION_STATE
+    );
   }
 
   get displayEinde() {
