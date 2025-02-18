@@ -67,3 +67,8 @@ irregular('werkingsgebied', 'werkingsgebieden');
 
 irregular('bestuurseenheid-contact', 'bestuurseenheid-contacten');
 irregular('library-entry', 'library-entries');
+
+irregular('bestuurseenheid-contact', 'bestuurseenheid-contacten');
+
+irregular('report', 'reports');
+irregular('validationresult', 'validationresults');
