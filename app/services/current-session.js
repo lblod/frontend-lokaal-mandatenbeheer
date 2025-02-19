@@ -123,6 +123,10 @@ export default class CurrentSessionService extends Service {
     return this.canAccess(MODULE.MANDATENBEHEER);
   }
 
+  get isLokaalBeheerd() {
+    return this.group.isLokaalBeheerd;
+  }
+
   get isAdmin() {
     let roles = this.roles;
     if (this.impersonation.isImpersonating) {

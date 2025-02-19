@@ -1,0 +1,20 @@
+{{page-title "Lokaal beheerd"}}
+
+<AuToolbar @border="bottom" @size="large" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Deze bestuurseenheid wordt lokaal beheerd
+    </AuHeading>
+  </Group>
+</AuToolbar>
+
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <AuAlert @icon="info-circle" @size="small">
+      <p>Mandaten voor deze bestuurseenheid worden lokaal beheerd, dit betekent
+        dat deze niet editeerbaar zijn op de centrale applicatie voor lokaal
+        mandatenbeheer. Gelieve deze data dan lokaal te raadplegen en nodige
+        wijzigingen ook lokaal door te voeren.</p>
+    </AuAlert>
+  </div>
+  {{yield}}
+</div>

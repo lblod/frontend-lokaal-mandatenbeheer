@@ -8,9 +8,14 @@ export default class SettingsRoute extends Route {
   @service currentSession;
   @service semanticFormRepository;
   @service store;
+  @service router;
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
+
+    if (this.currentSession.isLokaalBeheerd) {
+      this.router.transitionTo('lokaal-beheerd');
+    }
   }
 
   async model() {

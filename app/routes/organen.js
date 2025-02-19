@@ -17,6 +17,10 @@ export default class OrganenRoute extends Route {
     if (!this.currentSession.canAccessMandaat) {
       this.router.transitionTo('index');
     }
+
+    if (this.currentSession.isLokaalBeheerd) {
+      this.router.transitionTo('lokaal-beheerd');
+    }
   }
 
   async model() {
