@@ -124,7 +124,7 @@ export default class CurrentSessionService extends Service {
   }
 
   get isLokaalBeheerd() {
-    return this.group.lokaalBeheerd;
+    return this.group.isLokaalBeheerd;
   }
 
   get isAdmin() {
