@@ -211,4 +211,14 @@ export default class BestuursorgaanModel extends Model {
       'http://data.vlaanderen.be/ns/mandaat#isTijdspecialisatieVan',
     bevat: 'http://www.w3.org/ns/org#hasPost',
   };
+
+  get validationText() {
+    const org = this.isTijdsspecialisatieVan;
+    if (org) {
+      return `${org.get('classificatie.label')} ${this.bindingStart} - ${this.bindingEinde}`;
+    } else {
+      // eslint-disable-next-line ember/no-get, ember/classic-decorator-no-classic-methods
+      return this.get('classificatie.label');
+    }
+  }
 }

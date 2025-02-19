@@ -16,6 +16,10 @@ export default class VerkiezingenRoute extends Route {
       this.router.transitionTo('index');
     }
 
+    if (!this.currentSession.showLegislatuurModule) {
+      this.router.transitionTo('index');
+    }
+
     if (this.currentSession.isLokaalBeheerd) {
       this.router.transitionTo('lokaal-beheerd');
     }
