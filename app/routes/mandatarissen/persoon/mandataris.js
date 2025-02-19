@@ -7,6 +7,7 @@ import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-i
 import {
   MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_EXTRA_INFO_FORM_ID,
+  POLITIERAAD_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
@@ -14,6 +15,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
   @service currentSession;
   @service store;
   @service semanticFormRepository;
+  @service('mandatarissen') mandatarissenService;
 
   async model(params) {
     const bestuurseenheid = this.currentSession.group;
@@ -42,6 +44,21 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
         bestuurseenheid,
         linkedMandataris.hasDouble
       );
+    const possiblePolitieRaad =
+      await bestuursorganen[0].isTijdsspecialisatieVan;
+    const possiblePolitieRaadClassificatie =
+      await possiblePolitieRaad.classificatie;
+    let owners = null;
+    if (possiblePolitieRaadClassificatie.id === POLITIERAAD_CODE_ID) {
+      const allOwners = await this.mandatarissenService.fetchOwnership([
+        mandataris.id,
+      ]);
+      owners = await this.store.query('bestuurseenheid', {
+        filter: {
+          id: allOwners[mandataris.id].join(','),
+        },
+      });
+    }
 
     return RSVP.hash({
       bestuurseenheid,
@@ -52,6 +69,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       bestuursorganen,
       selectedBestuursperiode,
       linkedMandataris,
+      owners,
       isDistrictEenheid: isDistrict,
       effectiefIsLastPublicationStatus:
         await effectiefIsLastPublicationStatus(mandataris),

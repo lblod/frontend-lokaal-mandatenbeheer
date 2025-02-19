@@ -15,6 +15,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @service store;
   @service toaster;
   @service fractieApi;
+  @service currentSession;
   @service('mandataris') mandatarisService;
 
   @tracked isChanging;
@@ -150,5 +151,14 @@ export default class MandatarissenPersoonMandatarisController extends Controller
       Het doorstromen van gegevens van de gemeente naar OCMW zal
       hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
       maken, gelieve dit te doen in de gemeente.`;
+  }
+
+  get notOwnedByUs() {
+    return (
+      this.model.owners &&
+      !this.model.owners.find(
+        (eenheid) => eenheid.id == this.currentSession.group?.id
+      )
+    );
   }
 }

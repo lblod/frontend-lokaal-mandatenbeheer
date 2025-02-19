@@ -126,9 +126,9 @@
   @sort={{this.sort}}
   @page={{this.page}}
   @size={{this.size}}
+  @bestuursorgaan={{this.model.bestuursorgaan}}
   @personRoute="mandatarissen.persoon.mandaten"
   @mandaatRoute="mandatarissen.persoon.mandataris"
-  @hidePublicationStatus={{not (await this.model.bestuursorgaan.isDecretaal)}}
   @showRangorde={{await @model.bestuursorgaan.hasRangorde}}
 />
 
