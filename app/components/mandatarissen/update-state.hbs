@@ -94,7 +94,7 @@
           />
         {{/if}}
       </div>
-      {{#if @mandataris.bekleedt.isSchepen}}
+      {{#if this.showRangordeField}}
         <div>
           <AuLabel>
             Rangorde
@@ -121,6 +121,7 @@
               {{on "click" (perform this.updateState)}}
               @disabled={{this.disabled}}
               @loading={{this.updateState.isRunning}}
+              @loadingMessage="Mandaat wordt gewijzigd"
             >
               {{if this.hasChanges "Pas aan" "Onveranderd"}}
             </AuButton>
@@ -132,4 +133,39 @@
       </Group>
     </AuToolbar>
   </div>
+</AuModal>
+
+<AuModal
+  @modalOpen={{this.isRangordeModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isRangordeModalOpen) false}}
+>
+  <:title>Rangorde vervanger</:title>
+  <:body>
+    <p>
+      U heeft een mandataris, die een rangorde heeft, verhinderd. Deze rangorde
+      kan niet automatisch overgenomen worden in de vervanger. Het toewijzen van
+      een rangorde kan namelijk gevolgen hebben op de rangorde van andere
+      mandatarissen. Wenst u dit nu aan te passen? Het is ook mogelijk dit op
+      een later tijdstip aan te passen in de wijzig rangorde pagina.
+    </p>
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuLink
+          @skin="button"
+          @route="organen.orgaan.edit-rangorde"
+          @model={{this.currentBestuursorgaan?.isTijdsspecialisatieVan?.id}}
+          @query={{hash bestuursperiode=this.bestuursperiode.id}}
+        >
+          Ja
+        </AuLink>
+        <AuButton
+          @skin="secondary"
+          {{on "click" (fn (mut this.isRangordeModalOpen) false)}}
+        >Nee</AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
 </AuModal>

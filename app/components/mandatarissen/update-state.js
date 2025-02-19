@@ -33,6 +33,7 @@ export default class MandatarissenUpdateState extends Component {
   @tracked replacementUpdated;
   @tracked statusOptions = [];
   @tracked isFractieSelectorRequired;
+  @tracked isRangordeModalOpen;
 
   @service mandatarisStatus;
   @service currentSession;
@@ -169,7 +170,6 @@ export default class MandatarissenUpdateState extends Component {
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
-        rangorde: this.rangorde,
         start: dateOfAction,
         einde: endDate,
         status: await this.newStatus,
@@ -183,6 +183,7 @@ export default class MandatarissenUpdateState extends Component {
     );
 
     if (this.selectedReplacement) {
+      newMandatarisProps.rangorde = '';
       const replacementMandataris =
         await this.mandatarisService.getOrCreateReplacement(
           this.args.mandataris,
@@ -245,6 +246,7 @@ export default class MandatarissenUpdateState extends Component {
           'Status van mandaat werd succesvol aangepast.'
         );
         this.onStateChanged(newMandataris);
+        this.isRangordeModalOpen = this.shouldOpenRangordeModal();
       })
       .catch((e) => {
         console.log(e);
@@ -298,5 +300,23 @@ export default class MandatarissenUpdateState extends Component {
     this.selectedReplacement = null;
     this.replacementUpdated = false;
     this.args.onCancel();
+  }
+
+  shouldOpenRangordeModal() {
+    if (!this.selectedReplacement) {
+      return false;
+    }
+
+    return (
+      this.args.mandataris.bekleedt.get('hasRangorde') &&
+      this.newStatus?.get('uri') === MANDATARIS_VERHINDERD_STATE
+    );
+  }
+
+  get showRangordeField() {
+    return (
+      this.args.mandataris.bekleedt.get('hasRangorde') &&
+      this.newStatus?.get('uri') !== MANDATARIS_VERHINDERD_STATE
+    );
   }
 }
