@@ -124,7 +124,6 @@ export default class CurrentSessionService extends Service {
   }
 
   get isLokaalBeheerd() {
-    console.log(this.group);
     return this.group.lokaalBeheerd;
   }
 
