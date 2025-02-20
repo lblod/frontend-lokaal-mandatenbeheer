@@ -24,12 +24,10 @@
     </:header>
     <:body>
       {{#each this.sortedConcepten as |concept|}}
-        <tr>
-          <Codelijst::ConceptRow
-            @concept={{concept}}
-            @isEditable={{@isEditable}}
-          />
-        </tr>
+        <Codelijst::ConceptRow
+          @concept={{concept}}
+          @isEditable={{@isEditable}}
+        />
       {{/each}}
     </:body>
     <:footer>
