@@ -16,7 +16,7 @@
         {{on "click" this.onCancel}}
       >Annuleer</AuButton>
       <Shared::Tooltip
-        @showTooltip={{not this.canSave}}
+        @showTooltip={{not this.hasChanges}}
         @alignment="right"
         @tooltipText="De huidige status van de codelijst kan niet worden opgeslagen."
       >
@@ -24,7 +24,7 @@
           @disabled={{not this.hasChanges}}
           @skin="primary"
           @loading={{this.isSaving}}
-          @loadingMessage="Codelijst aan het creëren"
+          @loadingMessage="Codelijst aan het opslagen"
           {{on "click" this.updateCodelist}}
         >Opslaan</AuButton>
       </Shared::Tooltip>
