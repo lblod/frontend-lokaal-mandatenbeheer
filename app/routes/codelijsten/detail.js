@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
+import { createKeyValueState } from 'frontend-lmb/utils/create-codelist-state';
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 
 export default class CodelijstenDetailRoute extends Route {
@@ -23,18 +24,7 @@ export default class CodelijstenDetailRoute extends Route {
     return {
       codelijst,
       concepten,
-      keyValueState: this.createKeyValueState(codelijst, concepten),
+      keyValueState: createKeyValueState(codelijst, concepten),
     };
-  }
-
-  createKeyValueState(codelijst, concepten) {
-    const keyValue = {
-      [codelijst.id]: codelijst.label,
-    };
-    for (const concept of concepten) {
-      keyValue[concept.id] = concept.label;
-    }
-
-    return keyValue;
   }
 }
