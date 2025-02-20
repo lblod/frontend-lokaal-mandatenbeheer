@@ -11,28 +11,33 @@
   </Group>
   <Group>
     <AuButtonGroup>
-      <AuButton
-        @skin="secondary"
-        @alert={{true}}
-        {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
-      >Verwijder</AuButton>
+      {{#unless this.model.codelijst.isReadOnly}}
+        <AuButton
+          @skin="secondary"
+          @alert={{true}}
+          {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+        >Verwijder</AuButton>
+      {{/unless}}
       <AuButton
         @skin="secondary"
         {{on "click" this.onCancel}}
       >Annuleer</AuButton>
-      <Shared::Tooltip
-        @showTooltip={{not this.hasChanges}}
-        @alignment="right"
-        @tooltipText="De huidige status van de codelijst kan niet worden opgeslagen."
-      >
-        <AuButton
-          @disabled={{not this.hasChanges}}
-          @skin="primary"
-          @loading={{this.isSaving}}
-          @loadingMessage="Codelijst aan het opslagen"
-          {{on "click" this.updateCodelist}}
-        >Opslaan</AuButton>
-      </Shared::Tooltip>
+      {{#unless this.model.codelijst.isReadOnly}}
+
+        <Shared::Tooltip
+          @showTooltip={{not this.hasChanges}}
+          @alignment="right"
+          @tooltipText="De huidige status van de codelijst kan niet worden opgeslagen."
+        >
+          <AuButton
+            @disabled={{not this.hasChanges}}
+            @skin="primary"
+            @loading={{this.isSaving}}
+            @loadingMessage="Codelijst aan het opslagen"
+            {{on "click" this.updateCodelist}}
+          >Opslaan</AuButton>
+        </Shared::Tooltip>
+      {{/unless}}
     </AuButtonGroup>
   </Group>
 </AuToolbar>
