@@ -4,8 +4,11 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+
 export default class CodelijstConceptRow extends Component {
   @service store;
+  @service toaster;
 
   @tracked label;
 
@@ -33,14 +36,28 @@ export default class CodelijstConceptRow extends Component {
 
     this.errorMessage = null;
     this.isEditing = false;
-    this.concept.label = this.label?.trim();
-    await this.concept.save();
+
+    if (this.args.concept.label === this.label?.trim()) {
+      return;
+    }
+
+    try {
+      this.args.concept.label = this.label?.trim();
+      await this.args.concept.save();
+      showSuccessToast(this.toaster, 'Concept succesvol geüpdatet', 'Concept');
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Kon concept niet updaten. Probeer het later opnieuw.',
+        'Concept'
+      );
+    }
   }
 
   @action
   async discardChanges() {
     this.isEditing = false;
-    this.label = this.args.concept.label ?? 'Optie';
+    this.label = this.args.concept.label?.trim() ?? 'Optie';
   }
 
   get canSaveLabel() {
