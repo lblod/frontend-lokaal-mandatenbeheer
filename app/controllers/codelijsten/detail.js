@@ -62,7 +62,7 @@ export default class CodelijstenDetailController extends Controller {
     this.isSaving = true;
     try {
       await this.model.codelijst.save();
-      for (const concept of this.model.concepten) {
+      for (const concept of this.model.concepten.toArray()) {
         await concept.save();
       }
       showSuccessToast(
