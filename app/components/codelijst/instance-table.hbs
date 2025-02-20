@@ -1,3 +1,9 @@
+<div class="au-o-box au-u-1-3@medium au-u-flex au-u-flex--column">
+  <Codelijst::NameInput
+    @name={{this.codelijst.label}}
+    @onUpdate={{this.updateCodelistName}}
+  />
+</div>
 <div class="no-pagination au-c-body-container au-c-body-container--scroll">
   {{#if @showTotalConcepts}}
     <div
@@ -21,13 +27,13 @@
         <tr>
           <Codelijst::ConceptRow
             @concept={{concept}}
-            @isViewOnly={{this.isTableViewOnly}}
+            @isEditable={{@isEditable}}
           />
         </tr>
       {{/each}}
     </:body>
     <:footer>
-      {{#if this.isEditable}}
+      {{#if @isEditable}}
         <tr>
           <td colspan="2">
             <AuButton
