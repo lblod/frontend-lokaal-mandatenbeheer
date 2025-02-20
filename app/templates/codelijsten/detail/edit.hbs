@@ -40,11 +40,3 @@
   @concepten={{this.concepten}}
   @showTotalConcepts={{true}}
 />
-
-<Codelijst::AddConceptModal
-  @conceptScheme={{this.model.codelijst}}
-  @isModalOpen={{this.isModalOpen}}
-  @closeModal={{fn (mut this.isModalOpen) false}}
-  @onNewConcept={{this.addConcept}}
-  @order={{this.concepten.length}}
-/>
