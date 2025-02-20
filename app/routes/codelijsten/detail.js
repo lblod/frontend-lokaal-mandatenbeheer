@@ -22,6 +22,7 @@ export default class CodelijstenDetailRoute extends Route {
     const concepten = (await codelijst?.concepts) ?? [];
 
     return {
+      ogCodelistName: codelijst.label,
       codelijst,
       concepten,
       keyValueState: createKeyValueState(codelijst, concepten),

@@ -42,6 +42,9 @@ export default class CodelijstInstanceTable extends Component {
     const { name, isValid } = value;
     this.codelijst.label = name;
     this.isCodelistNameValid = isValid;
+    if (this.args.onCodelistNameUpdated) {
+      this.args.onCodelistNameUpdated(value);
+    }
   }
 
   get hasConceptsToDelete() {
