@@ -26,6 +26,10 @@ export default class CodelijstInstanceTable extends Component {
     return this.concepten.toArray().sortBy('order');
   }
 
+  get hasConceptsToDelete() {
+    return this.concepten.filter((c) => c.isDeleted);
+  }
+
   @action
   addConcept() {
     const concept = this.store.createRecord('concept', {
@@ -47,7 +51,20 @@ export default class CodelijstInstanceTable extends Component {
     }
   }
 
-  get hasConceptsToDelete() {
-    return this.concepten.filter((c) => c.isDeleted);
+  @action
+  moveConcept(concept, upDown) {
+    const factor = upDown === 'up' ? -1 : 1;
+    const conceptOrder = concept.order;
+    let orderWithFactor = conceptOrder + factor;
+
+    if (orderWithFactor === -1) {
+      orderWithFactor = this.concepten.length - 1;
+    } else if (orderWithFactor === this.concepten.length) {
+      orderWithFactor = 0;
+    }
+    let switchConcept = this.concepten.find((l) => l.order === orderWithFactor);
+    concept.order = switchConcept.order;
+    switchConcept.order = conceptOrder;
+    this.args.onConceptChanged(concept);
   }
 }
