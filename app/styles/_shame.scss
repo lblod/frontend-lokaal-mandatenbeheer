@@ -433,3 +433,12 @@ main .au-c-main-container__content .au-u-wide-on-print {
 .power-select--min-width {
   min-width: 20rem;
 }
+
+.show-on-hover--btn {
+  opacity: 0;
+}
+.show-on-hover:hover {
+  .show-on-hover--btn {
+    opacity: 1;
+  }
+}
