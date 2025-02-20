@@ -19,10 +19,6 @@ export default class CodelijstenDetailRoute extends Route {
       include: 'concepts',
     });
 
-    return codelijst;
-  }
-
-  afterModel(codelijst) {
-    this.router.replaceWith('codelijsten.detail.view', codelijst.id);
+    return { codelijst, concepten: (await codelijst?.concepts) ?? [] };
   }
 }

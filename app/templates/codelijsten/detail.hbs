@@ -1,2 +1,39 @@
 {{page-title "Detail"}}
-{{outlet}}
+{{breadcrumb
+  this.model.codelijst.label
+  route="codelijsten.detail"
+  model=this.model.codelijst.id
+}}
+
+<AuToolbar @size="large" @border="bottom" class="au-u-margin-bottom" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Codelijst bewerken</AuHeading>
+  </Group>
+  {{!-- <Group>
+    <AuButtonGroup>
+      <AuButton
+        @skin="secondary"
+        {{on "click" this.onCancel}}
+      >Annuleer</AuButton>
+      <Shared::Tooltip
+        @showTooltip={{not this.canSave}}
+        @alignment="right"
+        @tooltipText="De huidige status van de codelijst kan niet worden opgeslagen."
+      >
+        <AuButton
+          @disabled={{not this.canSave}}
+          @skin="primary"
+          @loading={{this.isSaving}}
+          @loadingMessage="Codelijst aan het creëren"
+          {{on "click" this.updateCodelist}}
+        >Opslaan</AuButton>
+      </Shared::Tooltip>
+    </AuButtonGroup>
+  </Group> --}}
+</AuToolbar>
+<Codelijst::InstanceTable
+  @isEditable={{not this.model.codelijst.isReadOnly}}
+  @codelijst={{this.model.codelijst}}
+  @concepten={{this.model.concepten}}
+  @showTotalConcepts={{true}}
+/>

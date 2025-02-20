@@ -1,8 +1,6 @@
 {{#if @concept}}
   <td>
-    {{#if @isViewOnly}}
-      <p>{{this.concept.label}}</p>
-    {{else}}
+    {{#if @isEditable}}
       {{#if this.isEditing}}
         <div class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
           <AuInput
@@ -39,6 +37,8 @@
           />
         </div>
       {{/if}}
+    {{else}}
+      <p>{{this.concept.label}}</p>
     {{/if}}
   </td>
 {{/if}}
