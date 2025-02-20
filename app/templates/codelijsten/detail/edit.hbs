@@ -32,72 +32,14 @@
   </Group>
 </AuToolbar>
 
-<div class="au-o-box">
-  <div class="au-u-1-3@medium au-u-flex au-u-flex--column">
-    <Codelijst::NameInput @name={{this.name}} @onUpdate={{this.updateName}} />
-  </div>
+<div class="au-u-1-3@medium au-u-flex au-u-flex--column">
+  <Codelijst::NameInput @name={{this.name}} @onUpdate={{this.updateName}} />
 </div>
-<div
-  class="au-u-flex au-u-flex--end au-u-margin-bottom-small au-u-margin-right"
->
-  <AuHelpText @skin="secondary" @size="large">
-    Aantal:
-    {{this.sortedConcepten.length}}
-  </AuHelpText>
-</div>
-<AuTable @size={{this.size}}>
-  <:header>
-    <tr>
-      <th>{{! Order }}</th>
-      <th>Label</th>
-      <th>{{! Delete }}</th>
-    </tr>
-  </:header>
-  <:body>
-    {{#each this.sortedConcepten as |concept|}}
-      <tr>
-        <td class="au-u-flex au-u-flex--column">
-          <AuButton
-            {{on "click" (fn this.moveConcept concept "up")}}
-            @icon="chevron-up"
-            @skin="naked"
-            @hideText={{true}}
-          />
-          <AuButton
-            {{on "click" (fn this.moveConcept concept "down")}}
-            @icon="chevron-down"
-            @skin="naked"
-            @hideText={{true}}
-          />
-        </td>
-        <td class="au-u-4-5">
-          {{concept.label}}
-        </td>
-        <td class="au-u-1-6">
-          <AuButton
-            @skin="link"
-            @alert={{true}}
-            {{on "click" (fn this.deleteConcept concept)}}
-          >Verwijder</AuButton>
-        </td>
-      </tr>
-    {{/each}}
-  </:body>
-  <:footer>
-    <tr>
-      <td colspan="3">
-        <AuButton
-          @skin="secondary"
-          @icon="plus"
-          @width="block"
-          {{on "click" (fn (mut this.isModalOpen) true)}}
-        >
-          Voeg een extra optie toe
-        </AuButton>
-      </td>
-    </tr>
-  </:footer>
-</AuTable>
+<Codelijst::InstanceTable
+  @isReadOnly={{false}}
+  @concepten={{this.concepten}}
+  @showTotalConcepts={{true}}
+/>
 
 <Codelijst::AddConceptModal
   @conceptScheme={{this.model.codelijst}}
