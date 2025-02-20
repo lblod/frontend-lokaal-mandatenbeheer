@@ -12,6 +12,7 @@ export default class CodelijstInstanceTable extends Component {
   @tracked concepten = A();
 
   @tracked isCodelistNameValid;
+  @tracked isConceptenChanged;
 
   constructor() {
     super(...arguments);
@@ -30,8 +31,10 @@ export default class CodelijstInstanceTable extends Component {
     const concept = this.store.createRecord('concept', {
       label: 'Optie',
       order: this.concepten.length,
+      conceptSchemes: [this.codelijst],
     });
     this.concepten.pushObject(concept);
+    this.args.onConceptChanged(concept);
   }
 
   @action
@@ -39,5 +42,9 @@ export default class CodelijstInstanceTable extends Component {
     const { name, isValid } = value;
     this.codelijst.label = name;
     this.isCodelistNameValid = isValid;
+  }
+
+  get hasConceptsToDelete() {
+    return this.concepten.filter((c) => c.isDeleted);
   }
 }

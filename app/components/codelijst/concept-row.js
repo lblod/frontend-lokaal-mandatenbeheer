@@ -37,7 +37,7 @@ export default class CodelijstConceptRow extends Component {
     }
 
     this.args.concept.label = this.label?.trim();
-    this.args.onConceptChanged({ concept: this.args.concept });
+    this.args.onConceptChanged(this.args.concept);
   }
 
   @action
@@ -49,7 +49,6 @@ export default class CodelijstConceptRow extends Component {
   @action
   async delete() {
     this.args.concept.deleteRecord();
-    this.args.onConceptDeleted({ concept: this.args.concept });
   }
 
   get canSaveLabel() {

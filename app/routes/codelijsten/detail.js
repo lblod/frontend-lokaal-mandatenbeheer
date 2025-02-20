@@ -18,7 +18,23 @@ export default class CodelijstenDetailRoute extends Route {
       'filter[:id:]': params.id,
       include: 'concepts',
     });
+    const concepten = (await codelijst?.concepts) ?? [];
 
-    return { codelijst, concepten: (await codelijst?.concepts) ?? [] };
+    return {
+      codelijst,
+      concepten,
+      keyValueState: this.createKeyValueState(codelijst, concepten),
+    };
+  }
+
+  createKeyValueState(codelijst, concepten) {
+    const keyValue = {
+      [codelijst.id]: codelijst.label,
+    };
+    for (const concept of concepten) {
+      keyValue[concept.id] = concept.label;
+    }
+
+    return keyValue;
   }
 }
