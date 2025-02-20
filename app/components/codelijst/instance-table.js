@@ -21,8 +21,8 @@ export default class CodelijstInstanceTable extends Component {
     return this.concepten.toArray().sortBy('order');
   }
 
-  get isEditable() {
-    return !this.args.isReadOnly;
+  get isTableViewOnly() {
+    return !!this.args.isReadOnly;
   }
 
   @action
