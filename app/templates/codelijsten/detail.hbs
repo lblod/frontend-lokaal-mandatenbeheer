@@ -31,11 +31,13 @@
     </AuButtonGroup>
   </Group>
 </AuToolbar>
-<Codelijst::InstanceTable
-  @isEditable={{not this.model.codelijst.isReadOnly}}
-  @codelijst={{this.model.codelijst}}
-  @concepten={{this.model.concepten}}
-  @showTotalConcepts={{true}}
-  @onConceptChanged={{this.onConceptChanged}}
-  @onCodelistNameUpdated={{this.onCodelistNameUpdated}}
-/>
+{{#unless this.isSaving}}
+  <Codelijst::InstanceTable
+    @isEditable={{not this.model.codelijst.isReadOnly}}
+    @codelijst={{this.model.codelijst}}
+    @concepten={{this.model.concepten}}
+    @showTotalConcepts={{true}}
+    @onConceptChanged={{this.onConceptChanged}}
+    @onCodelistNameUpdated={{this.onCodelistNameUpdated}}
+  />
+{{/unless}}
