@@ -12,8 +12,10 @@ export default class CodelijstenDetailController extends Controller {
   @service router;
 
   @tracked isSaving;
+  @tracked isDeleting;
   @tracked codelistNameState;
   @tracked isConceptenChanged;
+  @tracked isDeleteModalOpen;
 
   get title() {
     return this.model.codelijst?.isReadOnly
@@ -55,6 +57,27 @@ export default class CodelijstenDetailController extends Controller {
   @action
   onCodelistNameUpdated(state) {
     this.codelistNameState = state;
+  }
+
+  @action
+  async deleteCodelist() {
+    this.isDeleting = true;
+    await this.deleteConcepts();
+    await this.model.codelijst.destroyRecord();
+    showSuccessToast(
+      this.toaster,
+      'Codelijst succesvol verwijderd',
+      'Codelijst'
+    );
+    this.isDeleting = false;
+    this.isDeleteModalOpen = false;
+    this.router.transitionTo('codelijsten.overzicht');
+  }
+
+  async deleteConcepts() {
+    await Promise.all(
+      this.model.concepten.map(async (concept) => await concept.destroyRecord())
+    );
   }
 
   @action
