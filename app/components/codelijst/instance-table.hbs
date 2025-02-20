@@ -9,24 +9,41 @@
       </AuHelpText>
     </div>
   {{/if}}
-  <AuDataTable
-    @content={{this.sortedConcepten}}
-    @noDataMessage="Geen concepten gevonden"
-    @page={{0}}
-    @size={{9999}}
-    as |t|
-  >
-    <t.content as |c|>
-      <c.header>
+  <AuTable @size={{this.size}}>
+    <:header>
+      <tr>
         <th>Label</th>
-        <th>Id</th>
-      </c.header>
-      <c.body as |concept|>
-        <td class="au-u-1-2">
-          {{concept.label}}
-        </td>
-        <td class="au-u-1-2">{{concept.id}}</td>
-      </c.body>
-    </t.content>
-  </AuDataTable>
+        <th>{{! Acties }}</th>
+      </tr>
+    </:header>
+    <:body>
+      {{#each this.sortedConcepten as |concept|}}
+        <tr>
+          <td>
+            {{#if this.isEditable}}
+              <AuInput value={{concept.label}} />
+            {{else}}
+              {{concept.label}}
+            {{/if}}
+          </td>
+        </tr>
+      {{/each}}
+    </:body>
+    <:footer>
+      {{#if this.isEditable}}
+        <tr>
+          <td colspan="2">
+            <AuButton
+              @skin="secondary"
+              @icon="plus"
+              @width="block"
+              {{on "click" this.addConcept}}
+            >
+              Voeg een extra optie toe
+            </AuButton>
+          </td>
+        </tr>
+      {{/if}}
+    </:footer>
+  </AuTable>
 </div>
