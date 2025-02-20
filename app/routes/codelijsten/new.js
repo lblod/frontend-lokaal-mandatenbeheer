@@ -5,17 +5,16 @@ import { service } from '@ember/service';
 export default class CodelijstenNewRoute extends Route {
   @service store;
 
-  setupController(controller) {
-    super.setupController(...arguments);
-    this.store
-      .peekAll('concept-scheme')
-      .filter((cs) => !cs.id)
-      .map((cs) => cs.rollbackAttributes());
-    this.store
-      .peekAll('concept')
-      .filter((c) => !c.id)
-      .map((c) => c.rollbackAttributes());
+  model() {
+    const codelijst = this.store.createRecord('concept-scheme', {
+      label: 'Nieuwe codelijst',
+      createdAt: new Date(),
+      isReadOnly: false,
+    });
 
-    controller.concepten.clear();
+    return {
+      codelijst,
+      concept: [],
+    };
   }
 }

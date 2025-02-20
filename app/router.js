@@ -66,12 +66,9 @@ Router.map(function () {
   });
 
   this.route('codelijsten', function () {
-    this.route('new');
     this.route('overzicht');
-    this.route('detail', { path: '/:id' }, function () {
-      this.route('view');
-      this.route('edit');
-    });
+    this.route('new');
+    this.route('detail', { path: '/:id/detail' });
   });
 
   this.route('under-construction');
