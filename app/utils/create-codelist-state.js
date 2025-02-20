@@ -7,7 +7,8 @@ export function createKeyValueState(codelijst, concepten) {
     [codelijst.id]: codelijst.label,
   };
   for (const concept of concepten) {
-    keyValue[concept.id] = concept.label;
+    const key = concept.id + concept.order;
+    keyValue[key] = concept.label;
   }
 
   return keyValue;

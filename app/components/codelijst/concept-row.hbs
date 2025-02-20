@@ -1,57 +1,50 @@
-{{#if @concept}}
-  <tr>
-    <td>
-      {{#if @isEditable}}
-        {{#if this.isEditing}}
-          <div class="au-u-flex au-u-flex--column">
-            <AuInput
-              value={{this.label}}
-              {{on "keyup" this.updateConceptLabel}}
-            />
-            {{#unless this.canSaveLabel}}
-              <AuHelpText @error={{true}}>
-                {{this.errorMessage}}
-              </AuHelpText>
-            {{/unless}}
-          </div>
-        {{else}}
-          <p>{{this.label}}</p>
-        {{/if}}
-      {{else}}
-        <p>{{this.label}}</p>
-      {{/if}}
-    </td>
-    {{#if @isEditable}}
-      <td class="au-u-1-6">
-        <AuButtonGroup>
-          {{#unless this.isEditing}}
-            <AuButton
-              @skin="link"
-              @size="small"
-              {{on "click" (fn (mut this.isEditing) true)}}
-            >Bewerk</AuButton>
-          {{/unless}}
-          {{#if (and this.isEditing this.canSaveLabel)}}
-            <AuButton
-              @skin="naked"
-              @size="small"
-              {{on "click" this.applyChanges}}
-            >Pas aan</AuButton>
-          {{/if}}
-          {{#if this.isEditing}}
-            <AuButton
-              @skin="link"
-              {{on "click" this.discardChanges}}
-            >Annuleer</AuButton>
-          {{else}}
-            <AuButton
-              @alert={{true}}
-              @skin="link"
-              {{on "click" this.delete}}
-            >Verwijder</AuButton>
-          {{/if}}
-        </AuButtonGroup>
-      </td>
+<td class="au-u-4-5">
+  {{#if @isEditable}}
+    {{#if this.isEditing}}
+      <div class="au-u-flex au-u-flex--column">
+        <AuInput value={{this.label}} {{on "keyup" this.updateConceptLabel}} />
+        {{#unless this.canSaveLabel}}
+          <AuHelpText @error={{true}}>
+            {{this.errorMessage}}
+          </AuHelpText>
+        {{/unless}}
+      </div>
+    {{else}}
+      <p>{{this.label}}</p>
     {{/if}}
-  </tr>
+  {{else}}
+    <p>{{this.label}}</p>
+  {{/if}}
+</td>
+{{#if @isEditable}}
+  <td class="au-u-1-6">
+    <AuButtonGroup>
+      {{#unless this.isEditing}}
+        <AuButton
+          @skin="link"
+          @size="small"
+          {{on "click" (fn (mut this.isEditing) true)}}
+        >Bewerk</AuButton>
+      {{/unless}}
+      {{#if (and this.isEditing this.canSaveLabel)}}
+        <AuButton
+          @skin="naked"
+          @size="small"
+          {{on "click" this.applyChanges}}
+        >Pas aan</AuButton>
+      {{/if}}
+      {{#if this.isEditing}}
+        <AuButton
+          @skin="link"
+          {{on "click" this.discardChanges}}
+        >Annuleer</AuButton>
+      {{else}}
+        <AuButton
+          @alert={{true}}
+          @skin="link"
+          {{on "click" this.delete}}
+        >Verwijder</AuButton>
+      {{/if}}
+    </AuButtonGroup>
+  </td>
 {{/if}}

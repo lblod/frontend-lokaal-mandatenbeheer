@@ -20,6 +20,7 @@
   <AuTable @size={{this.size}}>
     <:header>
       <tr>
+        <th> {{! Order }}</th>
         <th>Label</th>
         <th>{{! Acties }}</th>
       </tr>
@@ -27,18 +28,36 @@
     <:body>
       {{#each this.sortedConcepten as |concept|}}
         {{#unless concept.isDeleted}}
-          <Codelijst::ConceptRow
-            @concept={{concept}}
-            @isEditable={{@isEditable}}
-            @onConceptChanged={{@onConceptChanged}}
-          />
+          <tr>
+            {{#if @isEditable}}
+              <td class="au-u-flex au-u-flex--column">
+                <AuButton
+                  {{on "click" (fn this.moveConcept concept "up")}}
+                  @icon="chevron-up"
+                  @skin="naked"
+                  @hideText={{true}}
+                />
+                <AuButton
+                  {{on "click" (fn this.moveConcept concept "down")}}
+                  @icon="chevron-down"
+                  @skin="naked"
+                  @hideText={{true}}
+                />
+              </td>
+            {{/if}}
+            <Codelijst::ConceptRow
+              @concept={{concept}}
+              @isEditable={{@isEditable}}
+              @onConceptChanged={{@onConceptChanged}}
+            />
+          </tr>
         {{/unless}}
       {{/each}}
     </:body>
     <:footer>
       {{#if @isEditable}}
         <tr>
-          <td colspan="2">
+          <td colspan="3">
             <AuButton
               @skin="secondary"
               @icon="plus"
