@@ -1,9 +1,9 @@
 {{#if @concept}}
-  <td>
-    {{#if @isEditable}}
-      {{#if this.isEditing}}
-        <div class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
-          <div class="au-u-flex au-u-flex--column">
+  <tr>
+    <td>
+      {{#if @isEditable}}
+        {{#if this.isEditing}}
+          <div class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
             <AuInput
               value={{this.label}}
               {{on "keyup" this.updateConceptLabel}}
@@ -14,35 +14,35 @@
               </AuHelpText>
             {{/unless}}
           </div>
-          <AuButton
-            @icon="check"
-            @skin="link-secondary"
-            @size="small"
-            @hideText={{true}}
-            {{on "click" this.saveChanges}}
-          />
-          <AuButton
-            @icon="cross"
-            @skin="link-secondary"
-            @size="small"
-            @hideText={{true}}
-            {{on "click" this.discardChanges}}
-          />
-        </div>
-      {{else}}
-        <div class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
-          <AuButton
-            @icon="pencil"
-            @skin="link-secondary"
-            @size="small"
-            @hideText={{true}}
-            {{on "click" (fn (mut this.isEditing) true)}}
-          />
+        {{else}}
           <p>{{this.label}}</p>
-        </div>
+        {{/if}}
+      {{else}}
+        <p>{{this.label}}</p>
       {{/if}}
-    {{else}}
-      <p>{{this.label}}</p>
-    {{/if}}
-  </td>
+    </td>
+    <td class="au-u-1-6">
+      <AuButtonGroup>
+        {{#unless this.isEditing}}
+          <AuButton
+            @skin="link"
+            @size="small"
+            {{on "click" (fn (mut this.isEditing) true)}}
+          >Bewerk</AuButton>
+        {{/unless}}
+        {{#if (and this.isEditing this.canSaveLabel)}}
+          <AuButton
+            @skin="link"
+            @size="small"
+            {{on "click" this.saveChanges}}
+          >Opslaan</AuButton>
+        {{/if}}
+        <AuButton
+          @alert={{true}}
+          @skin="link"
+          {{on "click" this.discardChanges}}
+        >Verwijder</AuButton>
+      </AuButtonGroup>
+    </td>
+  </tr>
 {{/if}}
