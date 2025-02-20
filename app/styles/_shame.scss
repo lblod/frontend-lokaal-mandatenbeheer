@@ -425,3 +425,12 @@ main .au-c-main-container__content .au-u-wide-on-print {
   display: grid;
   grid-template-columns: 1fr auto;
 }
+
+.show-on-hover--btn {
+  opacity: 0;
+}
+.show-on-hover:hover {
+  .show-on-hover--btn {
+    opacity: 1;
+  }
+}
