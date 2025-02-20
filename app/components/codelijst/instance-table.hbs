@@ -26,11 +26,13 @@
     </:header>
     <:body>
       {{#each this.sortedConcepten as |concept|}}
-        <Codelijst::ConceptRow
-          @concept={{concept}}
-          @isEditable={{@isEditable}}
-          @onConceptChanged={{@onConceptChanged}}
-        />
+        {{#unless concept.isDeleted}}
+          <Codelijst::ConceptRow
+            @concept={{concept}}
+            @isEditable={{@isEditable}}
+            @onConceptChanged={{@onConceptChanged}}
+          />
+        {{/unless}}
       {{/each}}
     </:body>
     <:footer>
