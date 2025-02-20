@@ -33,16 +33,23 @@
           {{/unless}}
           {{#if (and this.isEditing this.canSaveLabel)}}
             <AuButton
-              @skin="link"
+              @skin="naked"
               @size="small"
-              {{on "click" this.saveChanges}}
-            >Opslaan</AuButton>
+              {{on "click" this.applyChanges}}
+            >Pas aan</AuButton>
           {{/if}}
-          <AuButton
-            @alert={{true}}
-            @skin="link"
-            {{on "click" this.discardChanges}}
-          >Verwijder</AuButton>
+          {{#if this.isEditing}}
+            <AuButton
+              @skin="link"
+              {{on "click" this.discardChanges}}
+            >Annuleer</AuButton>
+          {{else}}
+            <AuButton
+              @alert={{true}}
+              @skin="link"
+              {{on "click" this.delete}}
+            >Verwijder</AuButton>
+          {{/if}}
         </AuButtonGroup>
       </td>
     {{/if}}
