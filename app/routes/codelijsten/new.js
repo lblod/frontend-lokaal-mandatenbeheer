@@ -7,14 +7,13 @@ export default class CodelijstenNewRoute extends Route {
 
   model() {
     const codelijst = this.store.createRecord('concept-scheme', {
-      label: 'Nieuwe codelijst',
+      label: '',
       createdAt: new Date(),
       isReadOnly: false,
     });
 
     return {
       codelijst,
-      concept: [],
     };
   }
 }

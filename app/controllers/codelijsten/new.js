@@ -5,93 +5,45 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { showSuccessToast } from 'frontend-lmb/utils/toasts';
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class CodelijstenNewController extends Controller {
-  @service store;
   @service router;
   @service toaster;
 
-  @tracked isModalOpen;
   @tracked isSaving;
 
-  @tracked name;
   @tracked isNameValid;
-  @tracked conceptName;
   @tracked concepten = A();
-
-  @action
-  updateName(value) {
-    const { name, isValid } = value;
-    this.name = name;
-    this.isNameValid = isValid;
-  }
-
-  @action
-  updateConceptName(event) {
-    this.conceptName = event?.target?.value;
-  }
 
   get canSave() {
     return this.isNameValid && this.concepten.length > 0;
   }
 
-  get isConceptValid() {
-    return this.conceptName?.length > 1;
-  }
-
-  @action
-  openAddConceptModal() {
-    this.conceptName = null;
-    this.isModalOpen = true;
-  }
-
   @action
   async saveCodelist() {
     this.isSaving = true;
-    const codelijst = this.store.createRecord('concept-scheme', {
-      label: this.name?.trim(),
-      isReadOnly: false,
-      createdAt: new Date(),
-    });
-    await codelijst.save();
-    codelijst.concepts = await this.updateConceptsWithConceptScheme(codelijst);
-    await codelijst.save();
-
-    this.name = null;
-    this.concepten.clear();
-    this.isModalOpen = false;
-    this.isSaving = false;
-    showSuccessToast(
-      this.toaster,
-      'Codelijst succesvol aangemaakt',
-      'Codelijst'
-    );
-    this.router.transitionTo('codelijsten.overzicht', {
-      queryParams: { filter: codelijst.label },
-    });
-  }
-
-  async updateConceptsWithConceptScheme(codelijst) {
-    return Promise.all(
-      this.concepten.map(async (_concept) => {
-        _concept.conceptSchemes = [codelijst];
-
-        await _concept.save();
-        return _concept;
-      })
-    );
-  }
-
-  @action
-  addConcept(unsavedConcept) {
-    this.concepten.pushObject(unsavedConcept);
-    this.isModalOpen = false;
-  }
-
-  @action
-  deleteConcept(concept) {
-    this.concepten.removeObject(concept);
+    try {
+      await this.model.codelijst.save();
+      await new Promise(
+        this.concepten.toArray().map(async (c) => await c.save())
+      );
+      this.isSaving = false;
+      showSuccessToast(
+        this.toaster,
+        'Codelijst succesvol aangemaakt',
+        'Codelijst'
+      );
+      this.router.transitionTo('codelijsten.overzicht', {
+        queryParams: { filter: this.model.codelijst.label },
+      });
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Codelijst kon niet aangemaakt worden. Probeer het later opnieuw.',
+        'Codelijst'
+      );
+    }
   }
 
   @action
@@ -102,13 +54,16 @@ export default class CodelijstenNewController extends Controller {
       c.rollbackAttributes();
     });
 
-    this.concepten.clear();
-
     this.router.transitionTo('codelijsten.overzicht');
   }
 
   @action
-  reset() {
-    this.name = null;
+  onConceptChanged(concept) {
+    this.concepten.pushObject(concept);
+  }
+
+  @action
+  onCodelistNameUpdated(state) {
+    this.isNameValid = state?.isValid;
   }
 }

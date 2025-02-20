@@ -12,6 +12,7 @@ export default class CodelijstenDetailController extends Controller {
   @service router;
 
   @tracked isSaving;
+  @tracked codelistNameState;
   @tracked isConceptenChanged;
 
   get title() {
@@ -24,7 +25,12 @@ export default class CodelijstenDetailController extends Controller {
     return this.model.concepten.filter((c) => c.isDeleted).length >= 1;
   }
   get hasChanges() {
-    return this.hasDeletions || this.isConceptenChanged;
+    return (
+      this.hasDeletions ||
+      this.isConceptenChanged ||
+      (this.codelistNameState?.isValid &&
+        this.model.ogCodelistName !== this.codelistNameState?.name)
+    );
   }
 
   @action
@@ -44,6 +50,11 @@ export default class CodelijstenDetailController extends Controller {
     this.isConceptenChanged =
       !this.model.keyValueState[concept.id] ||
       this.model.keyValueState[concept.id] !== updatedState[concept.id];
+  }
+
+  @action
+  onCodelistNameUpdated(state) {
+    this.codelistNameState = state;
   }
 
   @action
