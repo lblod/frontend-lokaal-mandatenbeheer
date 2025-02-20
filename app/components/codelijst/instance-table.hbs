@@ -20,9 +20,13 @@
   <AuTable @size={{this.size}}>
     <:header>
       <tr>
-        <th> {{! Order }}</th>
+        {{#if @isEditable}}
+          <th> {{! Order }}</th>
+        {{/if}}
         <th>Label</th>
-        <th>{{! Acties }}</th>
+        {{#if @isEditable}}
+          <th>{{! Acties }}</th>
+        {{/if}}
       </tr>
     </:header>
     <:body>
