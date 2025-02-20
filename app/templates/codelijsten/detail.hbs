@@ -9,7 +9,7 @@
   <Group>
     <AuHeading @skin="2">{{this.title}}</AuHeading>
   </Group>
-  {{!-- <Group>
+  <Group>
     <AuButtonGroup>
       <AuButton
         @skin="secondary"
@@ -21,7 +21,7 @@
         @tooltipText="De huidige status van de codelijst kan niet worden opgeslagen."
       >
         <AuButton
-          @disabled={{not this.canSave}}
+          @disabled={{not this.hasChanges}}
           @skin="primary"
           @loading={{this.isSaving}}
           @loadingMessage="Codelijst aan het creëren"
@@ -29,11 +29,12 @@
         >Opslaan</AuButton>
       </Shared::Tooltip>
     </AuButtonGroup>
-  </Group> --}}
+  </Group>
 </AuToolbar>
 <Codelijst::InstanceTable
   @isEditable={{not this.model.codelijst.isReadOnly}}
   @codelijst={{this.model.codelijst}}
   @concepten={{this.model.concepten}}
   @showTotalConcepts={{true}}
+  @onConceptChanged={{this.onConceptChanged}}
 />
