@@ -13,6 +13,11 @@
     <AuButtonGroup>
       <AuButton
         @skin="secondary"
+        @alert={{true}}
+        {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+      >Verwijder</AuButton>
+      <AuButton
+        @skin="secondary"
         {{on "click" this.onCancel}}
       >Annuleer</AuButton>
       <Shared::Tooltip
@@ -41,3 +46,32 @@
     @onCodelistNameUpdated={{this.onCodelistNameUpdated}}
   />
 {{/unless}}
+
+<AuModal
+  @title="Verwijder codelijst"
+  @modalOpen={{this.isDeleteModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isDeleteModalOpen) false}}
+>
+  <:body>
+    <p>Door verder te gaan zal de huidige codelijst met al zijn concepten
+      definitief verwijderd worden.</p>
+  </:body>
+  <:footer>
+    <AuButtonGroup
+      class="au-u-flex au-u-flex--between au-u-padding-left au-u-padding-right"
+    >
+      <AuButton
+        @alert={{true}}
+        @disabled={{this.isDeleting}}
+        @loading={{this.isDeleting}}
+        @loadingMessage="Codelijst wordt verwijderen"
+        {{on "click" this.deleteCodelist}}
+      >Verwijder</AuButton>
+      <AuButton
+        @skin="secondary"
+        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+      >Annuleer</AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>
