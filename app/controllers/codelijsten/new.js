@@ -25,9 +25,9 @@ export default class CodelijstenNewController extends Controller {
     this.isSaving = true;
     try {
       await this.model.codelijst.save();
-      await new Promise(
-        this.concepten.toArray().map(async (c) => await c.save())
-      );
+      for (const concept of this.concepten.toArray()) {
+        await concept.save();
+      }
       this.isSaving = false;
       showSuccessToast(
         this.toaster,
