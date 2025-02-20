@@ -30,18 +30,15 @@
           />
         </div>
       {{else}}
-        <div
-          class="au-u-flex au-u-flex--row au-u-flex--vertical-center show-on-hover"
-        >
-          <p>{{this.label}}</p>
+        <div class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
           <AuButton
-            class="show-on-hover--btn"
             @icon="pencil"
             @skin="link-secondary"
             @size="small"
             @hideText={{true}}
             {{on "click" (fn (mut this.isEditing) true)}}
           />
+          <p>{{this.label}}</p>
         </div>
       {{/if}}
     {{else}}
