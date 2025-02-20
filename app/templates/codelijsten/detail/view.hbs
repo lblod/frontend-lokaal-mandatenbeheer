@@ -39,36 +39,11 @@
     </AuButtonGroup>
   </Group>
 </AuToolbar>
-<div class="no-pagination au-c-body-container au-c-body-container--scroll">
-  <div
-    class="au-u-flex au-u-flex--end au-u-margin-bottom-small au-u-margin-right"
-  >
-    <AuHelpText @skin="secondary" @size="large">
-      Aantal:
-      {{this.model.concepten.length}}
-    </AuHelpText>
-  </div>
-  <AuDataTable
-    @content={{this.model.concepten}}
-    @noDataMessage="Geen concepten gevonden"
-    @page={{0}}
-    @size={{9999}}
-    as |t|
-  >
-    <t.content as |c|>
-      <c.header>
-        <th>Label</th>
-        <th>Id</th>
-      </c.header>
-      <c.body as |concept|>
-        <td class="au-u-1-2">
-          {{concept.label}}
-        </td>
-        <td class="au-u-1-2">{{concept.id}}</td>
-      </c.body>
-    </t.content>
-  </AuDataTable>
-</div>
+
+<Codelijst::InstanceTable
+  @concepten={{this.model.concepten}}
+  @showTotalConcepts={{true}}
+/>
 
 <AuModal
   @title="Verwijder codelijst"
