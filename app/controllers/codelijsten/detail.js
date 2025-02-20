@@ -78,6 +78,6 @@ export default class CodelijstenDetailController extends Controller {
       );
     }
     this.isSaving = false;
-    this.router.refresh();
+    this.isConceptenChanged = false;
   }
 }
