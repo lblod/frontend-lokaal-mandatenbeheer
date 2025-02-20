@@ -97,7 +97,7 @@ export default class CodelijstenNewController extends Controller {
   @action
   onCancel() {
     this.isModalOpen = false;
-
+    this.model.codelijst.rollbackAttributes();
     this.concepten.toArray().forEach((c) => {
       c.rollbackAttributes();
     });
