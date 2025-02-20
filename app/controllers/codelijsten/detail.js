@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+import { createKeyValueState } from 'frontend-lmb/utils/create-codelist-state';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class CodelijstenDetailController extends Controller {
@@ -35,7 +36,7 @@ export default class CodelijstenDetailController extends Controller {
 
   @action
   onConceptChanged(concept) {
-    const updatedState = this.createKeyValueState(
+    const updatedState = createKeyValueState(
       this.model.codelijst,
       this.model.concepten
     );
@@ -67,18 +68,5 @@ export default class CodelijstenDetailController extends Controller {
     }
     this.isSaving = false;
     this.refresh();
-  }
-
-  // common method
-
-  createKeyValueState(codelijst, concepten) {
-    const keyValue = {
-      [codelijst.id]: codelijst.label,
-    };
-    for (const concept of concepten) {
-      keyValue[concept.id] = concept.label;
-    }
-
-    return keyValue;
   }
 }
