@@ -11,9 +11,3 @@
 {{#if this.errorMessage}}
   <AuHelpText @error={{true}}>{{this.errorMessage}}</AuHelpText>
 {{/if}}
-{{#if this.canShowDuplicateCodelistNames}}
-  <AuHr />
-  {{#each this.duplicateMatches as |codelijst|}}
-    <AuHelpText>{{codelijst.label}}</AuHelpText>
-  {{/each}}
-{{/if}}

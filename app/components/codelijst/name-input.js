@@ -12,7 +12,6 @@ export default class CodelijstNameInput extends Component {
 
   @tracked isValid = true;
   @tracked isDuplicate = false;
-  @tracked duplicateMatches;
 
   minCharacters = 2;
 
@@ -34,13 +33,14 @@ export default class CodelijstNameInput extends Component {
 
   async isDuplicateName(name) {
     const searchName = name.trim().toLowerCase();
-    this.duplicateMatches = await this.store.query('concept-scheme', {
+    const duplicateMatches = await this.store.query('concept-scheme', {
       'filter[label]': searchName,
     });
 
     return (
-      this.duplicateMatches.length === 1 &&
-      this.duplicateMatches[0].label.toLowerCase() === searchName
+      duplicateMatches.length === 1 &&
+      duplicateMatches[0].label.toLowerCase() === searchName &&
+      duplicateMatches[0].label.toLowerCase() !== this.args.name
     );
   }
 
@@ -57,9 +57,5 @@ export default class CodelijstNameInput extends Component {
       return `Naam moet minsten ${this.minCharacters + 1} lang zijn`;
     }
     return null;
-  }
-
-  get canShowDuplicateCodelistNames() {
-    return this.duplicateMatches?.length <= 10;
   }
 }
