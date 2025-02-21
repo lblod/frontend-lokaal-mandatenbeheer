@@ -82,7 +82,7 @@
         {{#if this.load.isRunning}}
           <AuLabel for="input" class="skeleton-label au-u-margin-top" />
           <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
-        {{else}}
+        {{else if (not (await this.showFractieSelector))}}
           <Mandatarissen::FractieSelector
             @fractie={{this.selectedFractie}}
             @isRequired={{this.isFractieSelectorRequired}}
