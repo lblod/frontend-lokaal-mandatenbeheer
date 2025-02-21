@@ -15,6 +15,14 @@ export default class MandatarisPublicationStatusCodeModel extends Model {
     return this.uri === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
   }
 
+  get isEffectief() {
+    return this.uri === MANDATARIS_EFFECTIEF_PUBLICATION_STATE;
+  }
+
+  get isDraft() {
+    return this.uri === MANDATARIS_DRAFT_PUBLICATION_STATE;
+  }
+
   get displayLabel() {
     const statusMapping = {
       [MANDATARIS_DRAFT_PUBLICATION_STATE]: 'Draft',
