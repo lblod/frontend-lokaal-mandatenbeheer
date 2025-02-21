@@ -35,6 +35,8 @@ export default class CodelijstenDetailController extends Controller {
     this.model.codelijst.rollbackAttributes();
     this.model.concepten.map((c) => {
       if (!c.id) {
+        c.destroyRecord();
+        c.save();
         return;
       }
       c.rollbackAttributes();

@@ -18,6 +18,7 @@ export default class CodelijstenDetailRoute extends Route {
     const codelijst = await queryRecord(this.store, 'concept-scheme', {
       'filter[:id:]': params.id,
       include: 'concepts',
+      reload: true,
     });
     const concepten = (await codelijst?.concepts) ?? [];
 
