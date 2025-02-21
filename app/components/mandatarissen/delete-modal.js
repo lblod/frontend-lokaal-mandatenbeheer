@@ -12,27 +12,37 @@ export default class MandatarissenDeleteModal extends Component {
 
   @tracked isDeleting;
 
-  @action
-  async delete() {
+  async realDelete(withLinked) {
     this.isDeleting = true;
     try {
-      this.args.mandataris.deleteRecord();
-      await this.args.mandataris.save();
+      const mandaat = await this.args.mandataris.bekleedt;
+      const orgT = await mandaat.bevatIn;
+      const org = await orgT[0].isTijdsspecialisatieVan;
+      await this.args.mandataris.deleteMandataris(withLinked);
       showSuccessToast(
         this.toaster,
         'Mandataris succesvol verwijderd',
         'Mandataris'
       );
-      this.router.transitionTo(this.args.afterDeleteRoute);
+      this.router.transitionTo('organen.orgaan.mandatarissen', org.id);
     } catch (error) {
       showErrorToast(
         this.toaster,
         'De mandataris kon niet verwijderd worden, probeer later opnieuw.',
         'Mandataris'
       );
+      console.log(error);
     }
     this.isDeleting = false;
     this.args.onClose();
+  }
+  @action
+  delete() {
+    this.realDelete(false);
+  }
+  @action
+  deleteWithLinked() {
+    this.realDelete(true);
   }
 
   get isClosable() {

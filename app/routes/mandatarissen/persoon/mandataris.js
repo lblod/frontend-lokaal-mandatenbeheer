@@ -36,10 +36,13 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const selectedBestuursperiode = (await bestuursorganen)[0]
       .heeftBestuursperiode;
     const isDistrict = this.currentSession.isDistrict;
+    const hasLinkedMandataris = await this.hasLinkedMandataris(
+      params.mandataris_id
+    );
     const showOCMWLinkedMandatarisWarning =
-      await this.showOCMWLinkedMandatarisWarning(
+      this.showOCMWLinkedMandatarisWarning(
         bestuurseenheid,
-        params.mandataris_id
+        hasLinkedMandataris
       );
 
     return RSVP.hash({
@@ -50,6 +53,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       mandatarisExtraInfoForm,
       bestuursorganen,
       selectedBestuursperiode,
+      hasLinkedMandataris,
       isDistrictEenheid: isDistrict,
       effectiefIsLastPublicationStatus:
         await effectiefIsLastPublicationStatus(mandataris),
@@ -97,12 +101,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     return await this.store.query('mandataris', queryParams);
   }
 
-  async showOCMWLinkedMandatarisWarning(bestuurseenheid, mandataris) {
-    const isOCMW = bestuurseenheid.isOCMW;
-    if (!isOCMW) {
-      return false;
-    }
-
+  async hasLinkedMandataris(mandataris) {
     const response = await fetch(
       `/mandataris-api/mandatarissen/${mandataris}/check-possible-double`
     );
@@ -112,10 +111,15 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       console.error(jsonReponse.message);
       throw jsonReponse.message;
     }
+    return jsonReponse.duplicateMandate && jsonReponse.hasDouble;
+  }
 
-    if (jsonReponse.duplicateMandate && jsonReponse.hasDouble) {
-      return true;
+  async showOCMWLinkedMandatarisWarning(bestuurseenheid, hasLinkedMandataris) {
+    const isOCMW = bestuurseenheid.isOCMW;
+    if (!isOCMW) {
+      return false;
     }
-    return false;
+
+    return hasLinkedMandataris;
   }
 }

@@ -218,4 +218,19 @@ export default class MandatarisModel extends Model {
     const bestuursfunctie = this.get('bekleedt.bestuursfunctie.label');
     return `${naam} [${bestuursfunctie}]`;
   }
+
+  // custom delete function so we can tell the mandataris service to also delete the
+  // linked mandataris if any and to remove extra links toward the mandataris that may
+  // otherwise disrupt operations
+  async deleteMandataris(withLinked) {
+    await fetch(`/mandatarissen/${this.id}?withLinked=${withLinked}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': JSON_API_TYPE,
+      },
+    });
+    this.deleteRecord();
+    // give resources cache some time
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
 }

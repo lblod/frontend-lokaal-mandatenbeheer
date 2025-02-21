@@ -197,5 +197,9 @@
   @isOpen={{this.isDeleteModalOpen}}
   @onClose={{fn (mut this.isDeleteModalOpen) false}}
   @mandataris={{this.model.mandataris}}
-  @afterDeleteRoute="mandatarissen.search"
+  @linkedMandatarisCanBeDeleted={{and
+    this.model.hasLinkedMandataris
+    this.model.bestuurseenheid.isGemeente
+  }}
+  @linkedMandatarisExists={{this.model.hasLinkedMandataris}}
 />

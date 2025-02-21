@@ -8,17 +8,36 @@
   <:body>
     <p>Deze mandataris zal definitief verwijderd worden en is dus niet
       recupereerbaar.</p>
+    {{#if @linkedMandatarisCanBeDeleted}}
+      <p>Deze mandataris is ook gelinkt aan een andere mandataris in het OCMW.
+        Je kan kiezen om de gelinkte mandataris ook te verwijderen.</p>
+    {{else if @linkedMandatarisExists}}
+      <p>Deze mandataris is gelinkt aan een andere mandataris in de gemeente.
+        Enkel deze mandataris zal verwijderd worden.</p>
+    {{/if}}
   </:body>
   <:footer>
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
+          {{#if @linkedMandatarisCanBeDeleted}}
+            <AuButton
+              @alert={{true}}
+              @loading={{this.isDeleting}}
+              @loadingMessage="Mandataris wordt verwijderd"
+              {{on "click" this.deleteWithLinked}}
+            >Verwijder beide</AuButton>
+          {{/if}}
           <AuButton
             @alert={{true}}
             @loading={{this.isDeleting}}
             @loadingMessage="Mandataris wordt verwijderd"
+            @skin={{if @linkedMandatarisCanBeDeleted "secondary" "primary"}}
             {{on "click" this.delete}}
-          >Verwijder</AuButton>
+          >Verwijder
+            {{if @linkedMandatarisCanBeDeleted "enkel deze"}}
+          </AuButton>
+
           <AuButton
             @skin="secondary"
             {{on "click" @onClose}}
