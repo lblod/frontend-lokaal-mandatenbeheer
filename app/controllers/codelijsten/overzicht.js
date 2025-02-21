@@ -22,4 +22,14 @@ export default class CodelijstenOverzichtController extends Controller {
 
     return codelijst.label;
   }
+
+  @action
+  codelijstStatusSkin(codelijst) {
+    return codelijst.isReadOnly ? 'success' : 'link';
+  }
+
+  @action
+  codelijstStatusLabel(codelijst) {
+    return codelijst.isReadOnly ? 'Publiek' : 'Eigen codelijst';
+  }
 }
