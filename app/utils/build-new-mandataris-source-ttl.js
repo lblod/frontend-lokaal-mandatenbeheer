@@ -5,17 +5,20 @@ export const buildNewMandatarisSourceTtl = async (
   instanceUri,
   personId
 ) => {
-  const draftTriple = `<${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/hasPublicationStatus> <${MANDATARIS_EFFECTIEF_PUBLICATION_STATE}>.`;
+  const effectiefTriple = `
+    <${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/hasPublicationStatus> <${MANDATARIS_EFFECTIEF_PUBLICATION_STATE}>.
+    <${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/effectiefAt> "${new Date().toJSON()}"^^<http://www.w3.org/2001/XMLSchema#DateTime>.
+  `;
   if (!personId) {
-    return draftTriple;
+    return effectiefTriple;
   }
   const person = await store.findRecord('persoon', personId);
   if (!person) {
-    return draftTriple;
+    return effectiefTriple;
   }
 
   return `
-    ${draftTriple}
+    ${effectiefTriple}
     <${instanceUri}> <http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan> <${person.uri}>.
     `;
 };
