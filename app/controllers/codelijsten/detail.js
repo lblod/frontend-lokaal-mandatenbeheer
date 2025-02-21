@@ -38,7 +38,12 @@ export default class CodelijstenDetailController extends Controller {
   @action
   onCancel() {
     this.model.codelijst.rollbackAttributes();
-    this.model.concepten.map((c) => c.rollbackAttributes());
+    this.model.concepten.map((c) => {
+      if (!c.id) {
+        return;
+      }
+      c.rollbackAttributes();
+    });
     this.router.transitionTo('codelijsten.overzicht');
   }
 
