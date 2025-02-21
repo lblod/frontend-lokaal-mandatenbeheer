@@ -1,14 +1,14 @@
-
-{{#if (and this.isFeatureEnabled (and this.isLoaded (gt this.results.length 0)))}}
+{{#if
+  (and this.isFeatureEnabled (and this.isLoaded (gt this.results.length 0)))
+}}
   <AuHeading @level="3" @skin="4">
     Validatieresultaten
   </AuHeading>
-  
   <ul class="au-c-list-vertical no-pagination">
     <AuDataTable
       @content={{this.results}}
       @noDataMessage="Geen validatieresultaten gevonden"
-      @size={{(or this.results.length 0)}}
+      @size={{or this.results.length 0}}
       as |t|
     >
       <t.content as |c|>
@@ -20,7 +20,6 @@
           <td>
             {{result.resultMessage}}
           </td>
-
         </c.body>
       </t.content>
     </AuDataTable>
