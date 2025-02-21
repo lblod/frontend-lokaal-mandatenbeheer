@@ -49,6 +49,7 @@ export default class CodelijstConceptRow extends Component {
   @action
   async delete() {
     this.args.concept.deleteRecord();
+    this.args.onConceptChanged(this.args.concept);
   }
 
   get canSaveLabel() {

@@ -14,7 +14,7 @@ export default class CodelijstenDetailController extends Controller {
   @tracked isSaving;
   @tracked isDeleting;
   @tracked codelistNameState;
-  @tracked isConceptenChanged;
+  @tracked didCodelijstChange;
   @tracked isDeleteModalOpen;
 
   get title() {
@@ -27,12 +27,7 @@ export default class CodelijstenDetailController extends Controller {
     return this.model.concepten.filter((c) => c.isDeleted).length >= 1;
   }
   get hasChanges() {
-    return (
-      this.hasDeletions ||
-      this.isConceptenChanged ||
-      (this.codelistNameState?.isValid &&
-        this.model.ogCodelistName !== this.codelistNameState?.name)
-    );
+    return this.hasDeletions || this.didCodelijstChange;
   }
 
   @action
@@ -48,20 +43,23 @@ export default class CodelijstenDetailController extends Controller {
   }
 
   @action
-  onConceptChanged(concept) {
+  onConceptChanged() {
     const updatedState = createKeyValueState(
       this.model.codelijst,
       this.model.concepten
     );
 
-    this.isConceptenChanged =
-      !this.model.keyValueState[concept.id] ||
-      this.model.keyValueState[concept.id] !== updatedState[concept.id];
+    this.didCodelijstChange = this.areObjectsDiverging(
+      this.model.keyValueState,
+      updatedState
+    );
   }
 
   @action
   onCodelistNameUpdated(state) {
-    this.codelistNameState = state;
+    if (state.isValid) {
+      this.onConceptChanged();
+    }
   }
 
   @action
@@ -106,6 +104,23 @@ export default class CodelijstenDetailController extends Controller {
       );
     }
     this.isSaving = false;
-    this.isConceptenChanged = false;
+    this.didCodelijstChange = false;
+  }
+
+  areObjectsDiverging(original, updated) {
+    let ogKeys = Object.keys(original);
+    let keys = Object.keys(updated);
+
+    if (ogKeys.length !== keys.length) {
+      return true;
+    }
+
+    for (let key of ogKeys) {
+      if (!updated[key] || original[key] !== updated[key]) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
