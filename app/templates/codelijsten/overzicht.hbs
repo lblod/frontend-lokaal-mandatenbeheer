@@ -62,7 +62,7 @@
           @model={{codelijst.id}}
           class="au-c-link au-u-medium"
         >
-          {{codelijst.label}}
+          {{this.getCodelistName codelijst}}
         </LinkTo>
         {{#if codelijst.isReadOnly}}
           <Shared::Tooltip

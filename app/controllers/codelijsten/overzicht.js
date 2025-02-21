@@ -13,4 +13,13 @@ export default class CodelijstenOverzichtController extends Controller {
     this.page = 0;
     this.filter = event?.target?.value ?? '';
   }
+
+  @action
+  getCodelistName(codelijst) {
+    if (!codelijst.label || codelijst.label.trim() === '') {
+      return codelijst.id;
+    }
+
+    return codelijst.label;
+  }
 }
