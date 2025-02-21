@@ -8,7 +8,7 @@ export default class CodelijstenOverzichtRoute extends Route {
   queryParams = {
     filter: { refreshModel: true },
     page: { refreshModel: true },
-    size: { refreshModel: false },
+    size: { refreshModel: true },
     sort: { refreshModel: true },
   };
 
