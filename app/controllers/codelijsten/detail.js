@@ -27,7 +27,10 @@ export default class CodelijstenDetailController extends Controller {
     return this.model.concepten.filter((c) => c.isDeleted).length >= 1;
   }
   get hasChanges() {
-    return this.hasDeletions || this.didCodelijstChange;
+    return (
+      (this.hasDeletions || this.didCodelijstChange) &&
+      this.codelistNameState?.isValid
+    );
   }
 
   @action
@@ -59,6 +62,7 @@ export default class CodelijstenDetailController extends Controller {
 
   @action
   onCodelistNameUpdated(state) {
+    this.codelistNameState = state;
     if (state.isValid) {
       this.onConceptChanged();
     }
