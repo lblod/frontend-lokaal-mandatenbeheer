@@ -5,17 +5,9 @@ import { tracked } from '@glimmer/tracking';
 
 import { task } from 'ember-concurrency';
 
-import {
-  getDraftPublicationStatus,
-  getEffectiefStatus,
-} from 'frontend-lmb/utils/get-mandataris-status';
-
 export default class GenerateRowsFormComponent extends Component {
   @service store;
   @service('mandataris-api') mandatarisApi;
-
-  effectiefStatus;
-  draftPublicationStatus;
 
   @tracked startDate;
   @tracked endDate;
@@ -28,8 +20,6 @@ export default class GenerateRowsFormComponent extends Component {
   }
 
   initForm = task(async () => {
-    this.effectiefStatus = await getEffectiefStatus(this.store);
-    this.draftPublicationStatus = await getDraftPublicationStatus(this.store);
     this.startDate = new Date(this.args.bestuursorgaan.bindingStart);
     this.endDate = new Date(this.args.bestuursorgaan.bindingEinde);
     const mandaten = await this.args.bestuursorgaan.bevat;
