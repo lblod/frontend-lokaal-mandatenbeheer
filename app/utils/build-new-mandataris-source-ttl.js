@@ -1,11 +1,11 @@
-import { MANDATARIS_DRAFT_PUBLICATION_STATE } from './well-known-uris';
+import { MANDATARIS_EFFECTIEF_PUBLICATION_STATE } from './well-known-uris';
 
 export const buildNewMandatarisSourceTtl = async (
   store,
   instanceUri,
   personId
 ) => {
-  const draftTriple = `<${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/hasPublicationStatus> <${MANDATARIS_DRAFT_PUBLICATION_STATE}>.`;
+  const draftTriple = `<${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/hasPublicationStatus> <${MANDATARIS_EFFECTIEF_PUBLICATION_STATE}>.`;
   if (!personId) {
     return draftTriple;
   }
