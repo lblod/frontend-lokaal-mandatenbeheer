@@ -1,7 +1,7 @@
 import { queryRecord } from './query-record';
 import {
-  MANDATARIS_DRAFT_PUBLICATION_STATE,
   MANDATARIS_EFFECTIEF_STATE,
+  MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE,
 } from './well-known-uris';
 
 export const getEffectiefStatus = async (store) => {
@@ -10,8 +10,8 @@ export const getEffectiefStatus = async (store) => {
   });
 };
 
-export const getDraftPublicationStatus = async (store) => {
+export const getNietBekrachtigdPublicationStatus = async (store) => {
   return await queryRecord(store, 'mandataris-publication-status-code', {
-    'filter[:uri:]': MANDATARIS_DRAFT_PUBLICATION_STATE,
+    'filter[:uri:]': MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE,
   });
 };
