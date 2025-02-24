@@ -24,12 +24,6 @@ export default class MandatarisPublicationStatusCodeModel extends Model {
   }
 
   get displayLabel() {
-    const statusMapping = {
-      [MANDATARIS_DRAFT_PUBLICATION_STATE]: 'Draft',
-      [MANDATARIS_EFFECTIEF_PUBLICATION_STATE]: 'Niet bekrachtigd',
-      [MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE]: 'Bekrachtigd',
-    };
-
-    return statusMapping[this.uri] ?? 'Niet beschikbaar';
+    return this.uri ? this.label : 'Niet beschikbaar';
   }
 }
