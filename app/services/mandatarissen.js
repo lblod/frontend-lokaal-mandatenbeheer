@@ -83,7 +83,7 @@ export default class MandatarissenService extends Service {
     } catch (error) {
       console.error(error);
       this.toaster.error(
-        'Er is iets misgelopen bij het ophalen nagaan wie eigenaar is van welke mandataris'
+        'Er is iets misgelopen bij het ophalen wie eigenaar is van welke mandataris'
       );
       return {};
     }
