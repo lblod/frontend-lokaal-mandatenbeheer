@@ -9,7 +9,6 @@ export default class CodelijstConceptRow extends Component {
 
   @tracked label;
 
-  @tracked isEditing;
   @tracked errorMessage =
     'Label voor een concept moet minstens 2 karakters lang zijn.';
 
@@ -23,27 +22,11 @@ export default class CodelijstConceptRow extends Component {
   @action
   updateConceptLabel(event) {
     this.label = event.target?.value;
-  }
-
-  @action
-  async applyChanges() {
     if (!this.canSaveLabel) {
       return;
     }
-
-    this.isEditing = false;
-    if (this.args.concept.label === this.label?.trim()) {
-      return;
-    }
-
     this.args.concept.label = this.label?.trim();
-    this.args.onConceptChanged(this.args.concept);
-  }
-
-  @action
-  async discardChanges() {
-    this.isEditing = false;
-    this.label = this.args.concept.label?.trim() ?? 'Optie';
+    this.args.onConceptChanged();
   }
 
   @action
@@ -54,7 +37,7 @@ export default class CodelijstConceptRow extends Component {
     } else {
       this.args.concept.deleteRecord();
     }
-    this.args.onConceptChanged(this.args.concept);
+    this.args.onConceptChanged();
   }
 
   get canSaveLabel() {
