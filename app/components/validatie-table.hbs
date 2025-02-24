@@ -1,27 +1,29 @@
 {{#if
   (and this.isFeatureEnabled (and this.isLoaded (gt this.results.length 0)))
 }}
-  <AuHeading @level="3" @skin="4">
-    Validatieresultaten
-  </AuHeading>
-  <ul class="au-c-list-vertical no-pagination">
-    <AuDataTable
-      @content={{this.results}}
-      @noDataMessage="Geen validatieresultaten gevonden"
-      @size={{or this.results.length 0}}
-      as |t|
-    >
-      <t.content as |c|>
-        <c.header>
-          <th class="au-u-padding-small">Boodschap</th>
-        </c.header>
+  <div data-test-validatie-table>
+    <AuHeading @level="3" @skin="4">
+      Validatieresultaten
+    </AuHeading>
+    <ul class="au-c-list-vertical no-pagination">
+      <AuDataTable
+        @content={{this.results}}
+        @noDataMessage="Geen validatieresultaten gevonden"
+        @size={{or this.results.length 0}}
+        as |t|
+      >
+        <t.content as |c|>
+          <c.header>
+            <th class="au-u-padding-small">Boodschap</th>
+          </c.header>
 
-        <c.body as |result|>
-          <td>
-            {{result.resultMessage}}
-          </td>
-        </c.body>
-      </t.content>
-    </AuDataTable>
-  </ul>
+          <c.body as |result|>
+            <td>
+              {{result.resultMessage}}
+            </td>
+          </c.body>
+        </t.content>
+      </AuDataTable>
+    </ul>
+  </div>
 {{/if}}
