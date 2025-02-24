@@ -107,7 +107,7 @@ export default class MandatarissenLinkedModal extends Component {
       );
       message =
         'Corresponderend mandaat in het OCMW werd succesvol aangemaakt.';
-    } else if (this.args.correct) {
+    } else if (this.args.correct || this.args.replacement) {
       response = await fetch(
         `/mandataris-api/mandatarissen/${this.args.mandataris}/correct-linked-mandataris`,
         { method: 'PUT' }
