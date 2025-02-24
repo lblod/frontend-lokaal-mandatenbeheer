@@ -15,7 +15,10 @@ import {
   burgemeesterOnlyStates,
   notBurgemeesterStates,
 } from 'frontend-lmb/utils/well-known-uris';
-import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
+import {
+  isDisabledForBestuursorgaan,
+  isRequiredForBestuursorgaan,
+} from 'frontend-lmb/utils/is-fractie-selector-required';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 
 export default class MandatarissenUpdateState extends Component {
@@ -287,6 +290,10 @@ export default class MandatarissenUpdateState extends Component {
 
   get toolTipText() {
     return 'Er zijn geen wijzigingen om op te slaan.';
+  }
+
+  get showFractieSelector() {
+    return isDisabledForBestuursorgaan(this.bestuursorganenOfMandaat[0]);
   }
 
   @action

@@ -19,51 +19,66 @@
       class="au-u-flex au-u-flex--end au-u-margin-bottom"
       {{did-insert (perform this.checkLegislatuur)}}
     >
-      <AuDropdown
-        @title="Bewerk"
-        @alignment="right"
-        @skin="primary"
-        @icon="chevron-down"
-        @onClose={{this.onClose}}
-      >
-        <Shared::Tooltip
-          @showTooltip={{true}}
-          @tooltipText={{this.toolTipText}}
+      {{#if this.notOwnedByUs}}
+        <AuAlert
+          @title={{this.title}}
+          @skin="info"
+          @icon="eye"
+          @closable={{false}}
         >
-          <AuButton
-            class="dropdown-btn--primary"
-            @skin="naked"
-            @width="block"
-            @disabled={{or
-              (not this.model.mandataris.isActive)
-              this.isDisabledBecauseLegislatuur
-            }}
-            {{on "click" (fn (mut this.isChanging) true)}}
-          >Wijzig huidig mandaat</AuButton>
-        </Shared::Tooltip>
-        <Shared::Tooltip
-          @showTooltip={{true}}
-          @tooltipText={{this.toolTipTextCorrecting}}
+          <div class="au-u-flex au-u-flex--spaced-tiny">
+            <span>Beheerd door:</span>
+            <Mandaat::OwnershipTags @owners={{this.model.owners}} />
+          </div>
+          <p>Je kan deze mandataris niet bewerken.</p>
+        </AuAlert>
+      {{else}}
+        <AuDropdown
+          @title="Bewerk"
+          @alignment="right"
+          @skin="primary"
+          @icon="chevron-down"
+          @onClose={{this.onClose}}
         >
-          <AuButton
-            @width="block"
-            @disabled={{this.isDisabledBecauseLegislatuur}}
-            {{on "click" (fn (mut this.isCorrecting) true)}}
-          >Corrigeer fouten</AuButton>
-        </Shared::Tooltip>
-        <Shared::Tooltip
-          @showTooltip={{not this.model.mandataris.isInDraftStatus}}
-          @tooltipText="Enkel mandatarissen met publicatie status Draft kunnen verwijderd worden"
-        >
-          <AuButton
-            @width="block"
-            @skin="naked"
-            @disabled={{not this.model.mandataris.isInDraftStatus}}
-            @alert={{true}}
-            {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
-          >Verwijder</AuButton>
-        </Shared::Tooltip>
-      </AuDropdown>
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @tooltipText={{this.toolTipText}}
+          >
+            <AuButton
+              class="dropdown-btn--primary"
+              @skin="naked"
+              @width="block"
+              @disabled={{or
+                (not this.model.mandataris.isActive)
+                this.isDisabledBecauseLegislatuur
+              }}
+              {{on "click" (fn (mut this.isChanging) true)}}
+            >Wijzig huidig mandaat</AuButton>
+          </Shared::Tooltip>
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @tooltipText={{this.toolTipTextCorrecting}}
+          >
+            <AuButton
+              @width="block"
+              @disabled={{this.isDisabledBecauseLegislatuur}}
+              {{on "click" (fn (mut this.isCorrecting) true)}}
+            >Corrigeer fouten</AuButton>
+          </Shared::Tooltip>
+          <Shared::Tooltip
+            @showTooltip={{not this.model.mandataris.isInDraftStatus}}
+            @tooltipText="Enkel mandatarissen met publicatie status Draft kunnen verwijderd worden"
+          >
+            <AuButton
+              @width="block"
+              @skin="naked"
+              @disabled={{not this.model.mandataris.isInDraftStatus}}
+              @alert={{true}}
+              {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+            >Verwijder</AuButton>
+          </Shared::Tooltip>
+        </AuDropdown>
+      {{/if}}
     </div>
   </div>
 </div>
@@ -76,6 +91,7 @@
       @legislatuurInBehandeling={{this.isDisabledBecauseLegislatuur}}
       @effectiefIsLastPublicationStatus={{this.model.effectiefIsLastPublicationStatus}}
       @actionWhenAddingReplacement={{fn (mut this.selectedReplacement) true}}
+      @canEdit={{not this.notOwnedByUs}}
     />
   </div>
 
@@ -83,7 +99,10 @@
     <Mandatarissen::MandatarisExtraInfoCard
       @mandataris={{@model.mandataris}}
       @form={{@model.mandatarisExtraInfoForm}}
-      @canEdit={{not this.isDisabledBecauseLegislatuur}}
+      @canEdit={{and
+        (not this.isDisabledBecauseLegislatuur)
+        (not this.notOwnedByUs)
+      }}
     />
   </div>
 

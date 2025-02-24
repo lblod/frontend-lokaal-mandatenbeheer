@@ -111,3 +111,6 @@ export const LIBRARY_ENTREES = [
   'http://data.lblod.info/id/lmb/form-library-entries/31004e04-1b1a-4fda-80ae-612d67a14b5e', // Geboorteplaats
   'http://data.lblod.info/id/lmb/form-library-entries/8991472a-db3f-4f61-b070-5da7883be37d', // Telefoonnummer
 ];
+
+export const OVERIGE_BESTUURSPERIODE =
+  'http://data.lblod.info/id/concept/Bestuursperiode/9486222f-2696-4811-bde1-fef9dc4b5f68';

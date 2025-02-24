@@ -1,29 +1,31 @@
 {{#if this.initialized}}
-  {{#if this.person}}
-    <div class={{if this.hasErrors "ember-power-select--error"}}>
-      <Mandatarissen::FractieSelector
-        @fractie={{this.selectedFractie}}
-        @onSelect={{this.onSelectFractie}}
-        @bestuurseenheid={{this.bestuurseenheid}}
-        @bestuursperiode={{this.bestuursperiode}}
-        @onClose={{fn (mut this.hasBeenFocused) true}}
-        @person={{this.person}}
-        @limitPersonFractionsToCurrent={{this.limitPersonFractionsToCurrent}}
-        @isRequired={{this.isRequiredForBestuursorgaan}}
-        @isCreating={{this.isCreating}}
-        @hasErrors={{this.hasErrors}}
-      />
-    </div>
-    {{#each this.errors as |error|}}
-      <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
-    {{/each}}
+  {{#unless this.isDisabledForBestuursorgaan}}
+    {{#if this.person}}
+      <div class={{if this.hasErrors "ember-power-select--error"}}>
+        <Mandatarissen::FractieSelector
+          @fractie={{this.selectedFractie}}
+          @onSelect={{this.onSelectFractie}}
+          @bestuurseenheid={{this.bestuurseenheid}}
+          @bestuursperiode={{this.bestuursperiode}}
+          @onClose={{fn (mut this.hasBeenFocused) true}}
+          @person={{this.person}}
+          @limitPersonFractionsToCurrent={{this.limitPersonFractionsToCurrent}}
+          @isRequired={{this.isRequiredForBestuursorgaan}}
+          @isCreating={{this.isCreating}}
+          @hasErrors={{this.hasErrors}}
+        />
+      </div>
+      {{#each this.errors as |error|}}
+        <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+      {{/each}}
 
-    {{#each this.warnings as |warning|}}
-      <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
-    {{/each}}
-  {{else}}
-    <p>Selecteer eerst een persoon</p>
-  {{/if}}
+      {{#each this.warnings as |warning|}}
+        <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+      {{/each}}
+    {{else}}
+      <p>Selecteer eerst een persoon</p>
+    {{/if}}
+  {{/unless}}
 {{else}}
   <p class="skeleton-input-full au-u-margin-top"></p>
 {{/if}}

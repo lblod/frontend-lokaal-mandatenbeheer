@@ -90,7 +90,7 @@
 </AuToolbar>
 <AuHeading @skin="3" class="au-u-regular au-u-padding-left">
   {{this.model.bestuursorgaan.naam}}
-  {{this.model.selectedBestuursperiode.label}}
+  {{this.model.selectedBestuursperiode.detailedViewLabel}}
 </AuHeading>
 
 <div
@@ -126,9 +126,9 @@
   @sort={{this.sort}}
   @page={{this.page}}
   @size={{this.size}}
+  @bestuursorgaan={{this.model.bestuursorgaan}}
   @personRoute="mandatarissen.persoon.mandaten"
   @mandaatRoute="mandatarissen.persoon.mandataris"
-  @hidePublicationStatus={{not (await this.model.bestuursorgaan.isDecretaal)}}
   @showRangorde={{await @model.bestuursorgaan.hasRangorde}}
 />
 

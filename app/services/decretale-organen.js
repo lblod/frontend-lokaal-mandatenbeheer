@@ -7,10 +7,12 @@ import {
   DECRETALE_BESTUURSORGANEN_CONCEPT_SCHEME,
   GEMEENTE_BESTUURSORGANEN_CONCEPT_SCHEME,
   OTHER_BESTUURSORGANEN_CONCEPT_SCHEME,
+  POLITIERAAD_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 
 export default class DecretaleOrganenService extends Service {
   @service store;
+  @service features;
   @tracked decretaleCodes;
   @tracked gemeenteCodes;
   @tracked otherCodes;
@@ -70,10 +72,15 @@ export default class DecretaleOrganenService extends Service {
   }
 
   get decretaleIds() {
-    return [
+    const decretaal = [
       ...this.decretaleCodes.map((code) => code.id),
       ...this.gemeenteCodes.map((code) => code.id),
     ];
+    if (this.features.isEnabled('politieraad')) {
+      decretaal.push(POLITIERAAD_CODE_ID);
+    }
+
+    return decretaal;
   }
 
   get nietDecretaleIds() {

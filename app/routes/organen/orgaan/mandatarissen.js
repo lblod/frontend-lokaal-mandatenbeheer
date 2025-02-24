@@ -40,6 +40,8 @@ export default class OrganenMandatarissenRoute extends Route {
       params,
       parentModel.selectedBestuursperiode
     );
+    const bestuursorgaan = parentModel.bestuursorgaan;
+    await this.addOwnership(bestuursorgaan, filtered);
     const mandatarisNewForm =
       await this.semanticFormRepository.getFormDefinition(
         MANDATARIS_NEW_FORM_ID
@@ -54,7 +56,7 @@ export default class OrganenMandatarissenRoute extends Route {
     return {
       bestuurseenheid,
       mandatarissen: filtered,
-      bestuursorgaan: parentModel.bestuursorgaan,
+      bestuursorgaan,
       bestuursorgaanInTijd,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
@@ -72,5 +74,30 @@ export default class OrganenMandatarissenRoute extends Route {
       );
     }
     return filteredMandatarissen;
+  }
+
+  async addOwnership(bestuursorgaan, filteredMandatarissen) {
+    if (!bestuursorgaan.isPolitieraad || filteredMandatarissen.length === 0) {
+      return;
+    }
+    const mandatarisIds = filteredMandatarissen.map(
+      (mandataris) => mandataris.mandataris.id
+    );
+    const ownership =
+      await this.mandatarissenService.fetchOwnership(mandatarisIds);
+    const bestuurseenheidIds = Object.values(ownership).flat();
+    const bestuurseenheden = await this.store.query('bestuurseenheid', {
+      filter: { id: bestuurseenheidIds.join(',') },
+    });
+    Object.keys(ownership).map((mandatarisId) => {
+      const enrichedMandataris = filteredMandatarissen.find(
+        (mandataris) => mandataris.mandataris.id === mandatarisId
+      );
+      if (enrichedMandataris) {
+        enrichedMandataris.owners = bestuurseenheden.filter((eenheid) =>
+          ownership[mandatarisId].includes(eenheid.id)
+        );
+      }
+    });
   }
 }

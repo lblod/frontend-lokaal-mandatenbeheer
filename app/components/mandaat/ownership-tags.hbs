@@ -1,0 +1,12 @@
+<div class="au-u-flex">
+  {{#each this.owners as |owner|}}
+    <AuPill
+      @skin={{owner.skin}}
+      @size="regular"
+      @iconAlignment="left"
+      @hideText={{false}}
+    >
+      {{owner.label}}
+    </AuPill>
+  {{/each}}
+</div>
