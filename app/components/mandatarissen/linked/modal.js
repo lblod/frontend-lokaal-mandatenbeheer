@@ -87,6 +87,12 @@ export default class MandatarissenLinkedModal extends Component {
     U heeft zonet de status van een mandataris met het mandaat ${currentMandate} gewijzigd.
     Deze mandataris heeft ook een corresponderend mandaat ${duplicateMandate}.
     Wenst u de wijzigingen ook door te voeren in dit mandaat?`;
+    } else if (this.args.replacement) {
+      this.doubleMandateTitle = `Voeg vervanger toe voor mandaat ${duplicateMandate}`;
+      this.doubleMandateText = `
+    U heeft zonet een vervanger toegevoegd aan een mandataris met het mandaat ${currentMandate}.
+    Deze mandataris heeft ook een corresponderend mandaat ${duplicateMandate}.
+    Wenst u de vervanger ook toe te voegen in dit mandaat?`;
     }
   }
 

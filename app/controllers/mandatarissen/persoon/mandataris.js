@@ -23,6 +23,7 @@ export default class MandatarissenPersoonMandatarisController extends Controller
 
   @tracked correctedMandataris = false;
   @tracked updatedStateMandataris = false;
+  @tracked selectedReplacement = false;
   @tracked newMandataris;
 
   @tracked formInitialized;
