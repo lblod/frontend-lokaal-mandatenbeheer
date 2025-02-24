@@ -4,7 +4,10 @@ import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { displayEndOfDay } from 'frontend-lmb/utils/date-manipulation';
-import { MANDAAT_BURGEMEESTER_CODE } from 'frontend-lmb/utils/well-known-uris';
+import {
+  MANDAAT_BURGEMEESTER_CODE,
+  MANDATARIS_DRAFT_PUBLICATION_STATE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisModel extends Model {
   @attr rangorde;
@@ -91,6 +94,12 @@ export default class MandatarisModel extends Model {
     return (this.generatedFrom || []).some(
       (uri) =>
         uri == 'http://mu.semte.ch/vocabularies/ext/mandatenExtractorService'
+    );
+  }
+
+  get isInDraftStatus() {
+    return (
+      this.publicationStatus?.get('uri') === MANDATARIS_DRAFT_PUBLICATION_STATE
     );
   }
 
@@ -208,5 +217,20 @@ export default class MandatarisModel extends Model {
     // eslint-disable-next-line ember/no-get, ember/classic-decorator-no-classic-methods
     const bestuursfunctie = this.get('bekleedt.bestuursfunctie.label');
     return `${naam} [${bestuursfunctie}]`;
+  }
+
+  // custom delete function so we can tell the mandataris service to also delete the
+  // linked mandataris if any and to remove extra links toward the mandataris that may
+  // otherwise disrupt operations
+  async deleteMandataris(withLinked) {
+    await fetch(`/mandatarissen/${this.id}?withLinked=${withLinked}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': JSON_API_TYPE,
+      },
+    });
+    this.deleteRecord();
+    // give resources cache some time
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }

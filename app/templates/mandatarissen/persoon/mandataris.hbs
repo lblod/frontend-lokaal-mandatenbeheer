@@ -19,12 +19,21 @@
       class="au-u-flex au-u-flex--end au-u-margin-bottom"
       {{did-insert (perform this.checkLegislatuur)}}
     >
-      <AuButtonGroup class="au-u-flex--spaced-small">
+      <AuDropdown
+        @title="Bewerk"
+        @alignment="right"
+        @skin="primary"
+        @icon="chevron-down"
+        @onClose={{this.onClose}}
+      >
         <Shared::Tooltip
           @showTooltip={{true}}
           @tooltipText={{this.toolTipText}}
         >
           <AuButton
+            class="dropdown-btn--primary"
+            @skin="naked"
+            @width="block"
             @disabled={{or
               (not this.model.mandataris.isActive)
               this.isDisabledBecauseLegislatuur
@@ -37,13 +46,24 @@
           @tooltipText={{this.toolTipTextCorrecting}}
         >
           <AuButton
-            @alert={{true}}
-            @skin="secondary"
+            @width="block"
             @disabled={{this.isDisabledBecauseLegislatuur}}
             {{on "click" (fn (mut this.isCorrecting) true)}}
           >Corrigeer fouten</AuButton>
         </Shared::Tooltip>
-      </AuButtonGroup>
+        <Shared::Tooltip
+          @showTooltip={{not this.model.mandataris.isInDraftStatus}}
+          @tooltipText="Enkel mandatarissen met publicatie status Draft kunnen verwijderd worden"
+        >
+          <AuButton
+            @width="block"
+            @skin="naked"
+            @disabled={{not this.model.mandataris.isInDraftStatus}}
+            @alert={{true}}
+            {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+          >Verwijder</AuButton>
+        </Shared::Tooltip>
+      </AuDropdown>
     </div>
   </div>
 </div>
@@ -178,4 +198,15 @@
   @newMandataris={{this.newMandataris.id}}
   @callback={{this.callbackAfterUpdate}}
   @updateState="true"
+/>
+
+<Mandatarissen::DeleteModal
+  @isOpen={{this.isDeleteModalOpen}}
+  @onClose={{fn (mut this.isDeleteModalOpen) false}}
+  @mandataris={{this.model.mandataris}}
+  @linkedMandatarisCanBeDeleted={{and
+    this.model.linkedMandataris.hasDouble
+    this.model.bestuurseenheid.isGemeente
+  }}
+  @linkedMandataris={{this.model.linkedMandataris}}
 />

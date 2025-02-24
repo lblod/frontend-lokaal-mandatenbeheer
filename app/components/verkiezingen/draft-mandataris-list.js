@@ -43,7 +43,7 @@ export default class DraftMandatarisListComponent extends Component {
   async removeMandataris(mandataris) {
     this.args.updateMandatarissen({ removed: [mandataris] });
     mandataris
-      .destroyRecord()
+      .deleteMandataris(false)
       .then(() => {
         const succesMessage = 'Mandataris succesvol verwijderd.';
         this.toaster.success(succesMessage, 'Succes', { timeOut: 5000 });

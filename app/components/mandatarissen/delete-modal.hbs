@@ -1,0 +1,53 @@
+<AuModal
+  ...attributes
+  @modalOpen={{@isOpen}}
+  @closable={{this.isClosable}}
+  @closeModal={{@onClose}}
+>
+  <:title>Verwijder mandataris</:title>
+  <:body>
+    <p>Deze mandataris zal definitief verwijderd worden en is dus niet
+      recupereerbaar.</p>
+    {{#if @linkedMandatarisCanBeDeleted}}
+      <br />
+      <p>We hebben een gekoppelde mandataris
+        {{this.specificsLinkedMandataris}}
+        binnen het OCMW gevonden. Je kan kiezen om deze ook te verwijderen.</p>
+    {{else if @linkedMandataris.hasDouble}}
+      <br />
+      <p>We hebben een gekoppelde mandataris
+        {{this.specificsLinkedMandataris}}
+        binnen de gemeente gevonden. Let op, deze zal niet verwijderd worden.</p>
+    {{/if}}
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButtonGroup>
+          {{#if @linkedMandatarisCanBeDeleted}}
+            <AuButton
+              @alert={{true}}
+              @loading={{this.isDeleting}}
+              @loadingMessage="Mandataris wordt verwijderd"
+              {{on "click" this.deleteWithLinked}}
+            >Verwijder beide</AuButton>
+          {{/if}}
+          <AuButton
+            @alert={{true}}
+            @loading={{this.isDeleting}}
+            @loadingMessage="Mandataris wordt verwijderd"
+            @skin={{if @linkedMandatarisCanBeDeleted "secondary" "primary"}}
+            {{on "click" this.delete}}
+          >Verwijder
+            {{if @linkedMandatarisCanBeDeleted "enkel deze"}}
+          </AuButton>
+
+          <AuButton
+            @skin="secondary"
+            {{on "click" @onClose}}
+          >Annuleer</AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>

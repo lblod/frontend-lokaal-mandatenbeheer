@@ -421,6 +421,10 @@ main .au-c-main-container__content .au-u-wide-on-print {
   overflow: hidden;
 }
 
+.dropdown-btn--primary {
+  color: var(--au-blue-700) !important;
+}
+
 .buttons-at-end {
   display: grid;
   grid-template-columns: 1fr auto;

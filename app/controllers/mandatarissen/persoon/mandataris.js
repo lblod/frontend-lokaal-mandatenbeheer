@@ -13,6 +13,7 @@ import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
   @service store;
+  @service toaster;
   @service fractieApi;
   @service('mandataris') mandatarisService;
 
@@ -27,6 +28,8 @@ export default class MandatarissenPersoonMandatarisController extends Controller
   @tracked newMandataris;
 
   @tracked formInitialized;
+
+  @tracked isDeleteModalOpen;
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt

@@ -36,10 +36,11 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const selectedBestuursperiode = (await bestuursorganen)[0]
       .heeftBestuursperiode;
     const isDistrict = this.currentSession.isDistrict;
+    const linkedMandataris = await this.linkedMandataris(params.mandataris_id);
     const showOCMWLinkedMandatarisWarning =
-      await this.showOCMWLinkedMandatarisWarning(
+      this.showOCMWLinkedMandatarisWarning(
         bestuurseenheid,
-        params.mandataris_id
+        linkedMandataris.hasDouble
       );
 
     return RSVP.hash({
@@ -50,6 +51,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       mandatarisExtraInfoForm,
       bestuursorganen,
       selectedBestuursperiode,
+      linkedMandataris,
       isDistrictEenheid: isDistrict,
       effectiefIsLastPublicationStatus:
         await effectiefIsLastPublicationStatus(mandataris),
@@ -97,25 +99,29 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     return await this.store.query('mandataris', queryParams);
   }
 
-  async showOCMWLinkedMandatarisWarning(bestuurseenheid, mandataris) {
+  async linkedMandataris(mandataris) {
+    const response = await fetch(
+      `/mandataris-api/mandatarissen/${mandataris}/check-possible-double`
+    );
+    const jsonResponse = await response.json();
+
+    if (response.status !== 200) {
+      throw jsonResponse.message;
+    }
+    const hasDouble = !!jsonResponse.hasDouble;
+
+    return {
+      duplicateMandate: jsonResponse.duplicateMandate ?? null,
+      hasDouble,
+    };
+  }
+
+  async showOCMWLinkedMandatarisWarning(bestuurseenheid, hasLinkedMandataris) {
     const isOCMW = bestuurseenheid.isOCMW;
     if (!isOCMW) {
       return false;
     }
 
-    const response = await fetch(
-      `/mandataris-api/mandatarissen/${mandataris}/check-possible-double`
-    );
-    const jsonReponse = await response.json();
-
-    if (response.status !== 200) {
-      console.error(jsonReponse.message);
-      throw jsonReponse.message;
-    }
-
-    if (jsonReponse.duplicateMandate && jsonReponse.hasDouble) {
-      return true;
-    }
-    return false;
+    return hasLinkedMandataris;
   }
 }

@@ -46,10 +46,10 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   async loadOptions() {
     await this.checkPublicationStatus();
 
-    const optionIds = [
-      PUBLICATION_STATUS_EFFECTIEF_ID,
-      PUBLICATION_STATUS_DRAFT_ID,
-    ];
+    const optionIds = [PUBLICATION_STATUS_EFFECTIEF_ID];
+    if (this.canReturnToDraftStatus) {
+      optionIds.push(PUBLICATION_STATUS_DRAFT_ID);
+    }
 
     if (!(await this.effectiefIsLastStatus)) {
       optionIds.push(PUBLICATION_STATUS_BEKRACHTIGD_ID);
@@ -132,5 +132,12 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
 
   get toolTipText() {
     return 'Voeg een geldige link toe om deze form te kunnen opslaan.';
+  }
+
+  get canReturnToDraftStatus() {
+    return (
+      this.mandataris.publicationStatus?.get('uri') ===
+      MANDATARIS_DRAFT_PUBLICATION_STATE
+    );
   }
 }
