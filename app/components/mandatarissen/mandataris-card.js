@@ -6,9 +6,9 @@ import { service } from '@ember/service';
 
 import {
   MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE,
-  MANDATARIS_EFFECTIEF_PUBLICATION_STATE,
+  MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE,
 } from 'frontend-lmb/utils/well-known-uris';
-import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
+import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 import { task } from 'ember-concurrency';
@@ -30,17 +30,19 @@ export default class MandatarisCardComponent extends Component {
     return !status || status === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
   }
 
-  get isEffectief() {
+  get isNietBekrachtigd() {
     const status = this.args.mandataris.publicationStatus?.get('uri');
-    return !status || status === MANDATARIS_EFFECTIEF_PUBLICATION_STATE;
+    return !status || status === MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE;
   }
 
   get isEffectiefBurgemeester() {
-    return this.isEffectief && this.args.mandataris.isStrictBurgemeester;
+    return this.isNietBekrachtigd && this.args.mandataris.isStrictBurgemeester;
   }
 
   get isEffectiefLastStatus() {
-    return this.isEffectief && !!this.args.effectiefIsLastPublicationStatus;
+    return (
+      this.isNietBekrachtigd && !!this.args.effectiefIsLastPublicationStatus
+    );
   }
 
   get fractie() {
@@ -109,7 +111,9 @@ export default class MandatarisCardComponent extends Component {
       this.args.mandataris,
       {
         start: new Date(),
-        publicationStatus: await getDraftPublicationStatus(this.store),
+        publicationStatus: await getNietBekrachtigdPublicationStatus(
+          this.store
+        ),
       }
     );
     const replacementMandataris =

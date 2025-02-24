@@ -3,7 +3,7 @@ import Service from '@ember/service';
 import { service } from '@ember/service';
 import { fold } from 'frontend-lmb/utils/fold-mandatarisses';
 
-import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
+import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { MANDATARIS_WAARNEMEND_STATE_ID } from 'frontend-lmb/utils/well-known-ids';
 import { MANDATARIS_BEEINDIGD_STATE } from 'frontend-lmb/utils/well-known-uris';
 
@@ -71,7 +71,7 @@ export default class MandatarisService extends Service {
       isBestuurlijkeAliasVan: replacementPerson,
       beleidsdomein: await newMandatarisState.beleidsdomein,
       status: mandatarisStatus,
-      publicationStatus: await getDraftPublicationStatus(this.store),
+      publicationStatus: await getNietBekrachtigdPublicationStatus(this.store),
     });
     await newMandataris.save();
     return newMandataris;

@@ -13,10 +13,6 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
   @tracked newLink;
   @tracked showEditLinkModal;
 
-  get isMandatarisBekrachtigd() {
-    return this.status ? this.status.get('isBekrachtigd') : true;
-  }
-
   get effectiefIsLastStatus() {
     return effectiefIsLastPublicationStatus(this.args.mandataris);
   }
@@ -27,16 +23,16 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
 
   async getSkinForPill(statusPromise) {
     const status = await statusPromise;
-    if (status.label === 'Bekrachtigd') {
+    if (status.isBekrachtigd) {
       return 'success';
     }
-    if (status.label === 'Effectief') {
+    if (status.isNietBekrachtigd) {
       if (await this.effectiefIsLastStatus) {
         return 'success';
       }
       return 'warning';
     }
-    if (status.label === 'Draft') {
+    if (status.isDraft) {
       return 'border';
     }
 

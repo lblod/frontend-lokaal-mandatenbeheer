@@ -7,7 +7,7 @@ import { tracked } from '@glimmer/tracking';
 
 import { restartableTask, task } from 'ember-concurrency';
 
-import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
+import { buildNewIVMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandataris-source-ttl';
 import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { showErrorToast, showWarningToast } from 'frontend-lmb/utils/toasts';
 import {
@@ -183,7 +183,7 @@ export default class PrepareLegislatuurSectionComponent extends Component {
 
   @action
   async buildSourceTtl(instanceUri) {
-    return await buildNewMandatarisSourceTtl(this.store, instanceUri);
+    return await buildNewIVMandatarisSourceTtl(this.store, instanceUri);
   }
 
   @action
