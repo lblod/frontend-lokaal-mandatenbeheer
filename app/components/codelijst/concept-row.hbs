@@ -2,11 +2,15 @@
   {{#if @isEditable}}
     <div class="au-u-flex au-u-flex--column">
       <AuInput value={{this.label}} {{on "input" this.updateConceptLabel}} />
-      {{#unless this.canSaveLabel}}
+      {{#if this.canSaveLabel}}
+        <AuHelpText>
+          Naam moet minstens 2 karakters lang zijn.
+        </AuHelpText>
+      {{else}}
         <AuHelpText @error={{true}}>
           {{this.errorMessage}}
         </AuHelpText>
-      {{/unless}}
+      {{/if}}
     </div>
   {{else}}
     <p>{{this.label}}</p>
