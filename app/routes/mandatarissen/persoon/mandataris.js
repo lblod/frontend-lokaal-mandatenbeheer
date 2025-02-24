@@ -37,7 +37,6 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       .heeftBestuursperiode;
     const isDistrict = this.currentSession.isDistrict;
     const linkedMandataris = await this.linkedMandataris(params.mandataris_id);
-    console.log(linkedMandataris);
     const showOCMWLinkedMandatarisWarning =
       this.showOCMWLinkedMandatarisWarning(
         bestuurseenheid,
@@ -110,10 +109,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       throw jsonResponse.message;
     }
     const hasDouble = !!jsonResponse.hasDouble;
-    delete jsonResponse.hasDouble;
 
     return {
-      currentMandate: jsonResponse.currentMandate ?? null,
       duplicateMandate: jsonResponse.duplicateMandate ?? null,
       hasDouble,
     };
