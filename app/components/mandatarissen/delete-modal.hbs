@@ -9,11 +9,15 @@
     <p>Deze mandataris zal definitief verwijderd worden en is dus niet
       recupereerbaar.</p>
     {{#if @linkedMandatarisCanBeDeleted}}
-      <p>Deze mandataris is ook gelinkt aan een andere mandataris in het OCMW.
-        Je kan kiezen om de gelinkte mandataris ook te verwijderen.</p>
-    {{else if @linkedMandatarisExists}}
-      <p>Deze mandataris is gelinkt aan een andere mandataris in de gemeente.
-        Enkel deze mandataris zal verwijderd worden.</p>
+      <br />
+      <p>We hebben een gekoppelde mandataris
+        {{this.specificsLinkedMandataris}}
+        binnen het OCMW gevonden. Je kan kiezen om deze ook te verwijderen.</p>
+    {{else if @linkedMandataris.hasDouble}}
+      <br />
+      <p>We hebben een gekoppelde mandataris
+        {{this.specificsLinkedMandataris}}
+        binnen de gemeente gevonden. Let op, deze zal niet verwijderd worden.</p>
     {{/if}}
   </:body>
   <:footer>

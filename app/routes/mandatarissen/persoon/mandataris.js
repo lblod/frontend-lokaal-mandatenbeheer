@@ -36,13 +36,12 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const selectedBestuursperiode = (await bestuursorganen)[0]
       .heeftBestuursperiode;
     const isDistrict = this.currentSession.isDistrict;
-    const hasLinkedMandataris = await this.hasLinkedMandataris(
-      params.mandataris_id
-    );
+    const linkedMandataris = await this.linkedMandataris(params.mandataris_id);
+    console.log(linkedMandataris);
     const showOCMWLinkedMandatarisWarning =
       this.showOCMWLinkedMandatarisWarning(
         bestuurseenheid,
-        hasLinkedMandataris
+        linkedMandataris.hasDouble
       );
 
     return RSVP.hash({
@@ -53,7 +52,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       mandatarisExtraInfoForm,
       bestuursorganen,
       selectedBestuursperiode,
-      hasLinkedMandataris,
+      linkedMandataris,
       isDistrictEenheid: isDistrict,
       effectiefIsLastPublicationStatus:
         await effectiefIsLastPublicationStatus(mandataris),
@@ -101,17 +100,23 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     return await this.store.query('mandataris', queryParams);
   }
 
-  async hasLinkedMandataris(mandataris) {
+  async linkedMandataris(mandataris) {
     const response = await fetch(
       `/mandataris-api/mandatarissen/${mandataris}/check-possible-double`
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== 200) {
-      console.error(jsonReponse.message);
-      throw jsonReponse.message;
+      throw jsonResponse.message;
     }
-    return jsonReponse.duplicateMandate && jsonReponse.hasDouble;
+    const hasDouble = !!jsonResponse.hasDouble;
+    delete jsonResponse.hasDouble;
+
+    return {
+      currentMandate: jsonResponse.currentMandate ?? null,
+      duplicateMandate: jsonResponse.duplicateMandate ?? null,
+      hasDouble,
+    };
   }
 
   async showOCMWLinkedMandatarisWarning(bestuurseenheid, hasLinkedMandataris) {

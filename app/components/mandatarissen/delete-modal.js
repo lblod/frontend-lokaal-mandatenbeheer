@@ -48,4 +48,12 @@ export default class MandatarissenDeleteModal extends Component {
   get isClosable() {
     return !!this.args.onClose;
   }
+
+  get specificsLinkedMandataris() {
+    const linked = this.args.linkedMandataris;
+    if (!linked) {
+      return '';
+    }
+    return `(${linked.duplicateMandate})`;
+  }
 }
