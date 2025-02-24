@@ -135,8 +135,9 @@ export default class MandatarissenLinkedModal extends Component {
     if (response.status !== 201 && response.status !== 200) {
       console.error(jsonReponse.message);
       showErrorToast(this.toaster, jsonReponse.message);
+    } else {
+      showSuccessToast(this.toaster, message);
     }
-    showSuccessToast(this.toaster, message);
     this.isModalOpen = false;
 
     if (this.args.callback) {
