@@ -3,7 +3,7 @@ import Model, { attr } from '@ember-data/model';
 import {
   MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE,
   MANDATARIS_DRAFT_PUBLICATION_STATE,
-  MANDATARIS_EFFECTIEF_PUBLICATION_STATE,
+  MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisPublicationStatusCodeModel extends Model {
@@ -15,8 +15,8 @@ export default class MandatarisPublicationStatusCodeModel extends Model {
     return this.uri === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
   }
 
-  get isEffectief() {
-    return this.uri === MANDATARIS_EFFECTIEF_PUBLICATION_STATE;
+  get isNietBekrachtigd() {
+    return this.uri === MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE;
   }
 
   get isDraft() {

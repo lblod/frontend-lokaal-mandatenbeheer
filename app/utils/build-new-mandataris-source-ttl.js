@@ -1,6 +1,6 @@
 import {
   MANDATARIS_DRAFT_PUBLICATION_STATE,
-  MANDATARIS_EFFECTIEF_PUBLICATION_STATE,
+  MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE,
 } from './well-known-uris';
 
 export const buildNewMandatarisSourceTtl = async (
@@ -8,20 +8,20 @@ export const buildNewMandatarisSourceTtl = async (
   instanceUri,
   personId
 ) => {
-  const effectiefTriple = `
-    <${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/hasPublicationStatus> <${MANDATARIS_EFFECTIEF_PUBLICATION_STATE}>.
+  const nietBekrachtigdTriple = `
+    <${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/hasPublicationStatus> <${MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE}>.
     <${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/effectiefAt> "${new Date().toJSON()}"^^<http://www.w3.org/2001/XMLSchema#DateTime>.
   `;
   if (!personId) {
-    return effectiefTriple;
+    return nietBekrachtigdTriple;
   }
   const person = await store.findRecord('persoon', personId);
   if (!person) {
-    return effectiefTriple;
+    return nietBekrachtigdTriple;
   }
 
   return `
-    ${effectiefTriple}
+    ${nietBekrachtigdTriple}
     <${instanceUri}> <http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan> <${person.uri}>.
     `;
 };
