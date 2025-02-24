@@ -66,19 +66,20 @@
             >Corrigeer fouten</AuButton>
           </Shared::Tooltip>
           <Shared::Tooltip
-            @showTooltip={{not this.model.mandataris.isInDraftStatus}}
-            @tooltipText="Enkel mandatarissen met publicatie status Draft kunnen verwijderd worden"
+            @showTooltip={{not this.model.mandataris.isApprovedForDeletion}}
+            @tooltipText="Mandatarissen die bekrachtigd zijn kunnen niet verwijderd worden."
           >
             <AuButton
               @width="block"
               @skin="naked"
-              @disabled={{not this.model.mandataris.isInDraftStatus}}
+              @disabled={{not this.model.mandataris.isApprovedForDeletion}}
               @alert={{true}}
               {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
             >Verwijder</AuButton>
           </Shared::Tooltip>
         </AuDropdown>
       {{/if}}
+
     </div>
   </div>
 </div>
