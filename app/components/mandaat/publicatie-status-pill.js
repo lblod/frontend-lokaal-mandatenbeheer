@@ -26,7 +26,7 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
     if (status.isBekrachtigd) {
       return 'success';
     }
-    if (status.isEffectief) {
+    if (status.isNietBekrachtigd) {
       if (await this.effectiefIsLastStatus) {
         return 'success';
       }
