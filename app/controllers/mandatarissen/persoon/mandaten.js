@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { task } from 'ember-concurrency';
-import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
+import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
@@ -109,7 +109,9 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         mandataris,
         {
           start: dateNow,
-          publicationStatus: await getDraftPublicationStatus(this.store),
+          publicationStatus: await getNietBekrachtigdPublicationStatus(
+            this.store
+          ),
           fractie: onafhankelijkeFractie,
         }
       );
