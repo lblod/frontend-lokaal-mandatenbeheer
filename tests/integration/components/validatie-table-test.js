@@ -45,7 +45,7 @@ module('Integration | Component | validatie-table', function (hooks) {
     assert.ok(this.instance, 'Mandataris instance is created');
   });
 
-  test('it does not render AuDataTable when instance does not have results', async function (assert) {
+  test('it does not render ValidatieTable when instance does not have results', async function (assert) {
     this.set('validatie.getResultsByInstance', async function () {
       return [];
     });
@@ -59,7 +59,7 @@ module('Integration | Component | validatie-table', function (hooks) {
       );
   });
 
-  test('it does render AuDataTable when instance has validation results', async function (assert) {
+  test('it does render ValidatieTable when instance has validation results', async function (assert) {
     // Stubbing the validatie service to return validation results
     this.set('validatie.getResultsByInstance', async function () {
       return [
