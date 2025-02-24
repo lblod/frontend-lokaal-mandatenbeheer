@@ -22,8 +22,4 @@ export default class MandatarisPublicationStatusCodeModel extends Model {
   get isDraft() {
     return this.uri === MANDATARIS_DRAFT_PUBLICATION_STATE;
   }
-
-  get displayLabel() {
-    return this.uri ? this.label : 'Niet beschikbaar';
-  }
 }
