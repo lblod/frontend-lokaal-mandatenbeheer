@@ -6,7 +6,7 @@
     @iconAlignment="left"
     @hideText={{false}}
   >
-    {{this.status.displayLabel}}
+    {{or this.status.label "Niet beschikbaar"}}
   </AuPill>
   {{#if @showBekijkBewijs}}
     {{#if (await @mandataris.besluitUri)}}
