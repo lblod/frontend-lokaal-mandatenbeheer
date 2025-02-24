@@ -1,11 +1,8 @@
 import Component from '@glimmer/component';
 
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-
-import { restartableTask, timeout } from 'ember-concurrency';
-
-import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 
 export default class CodelijstNameInput extends Component {
   @service store;
@@ -15,8 +12,8 @@ export default class CodelijstNameInput extends Component {
 
   minCharacters = 2;
 
-  updateName = restartableTask(async (event) => {
-    await timeout(INPUT_DEBOUNCE);
+  @action
+  async updateName(event) {
     const name = event?.target?.value;
     this.isValid = this.isValidName(name);
     this.isDuplicate = await this.isDuplicateName(name);
@@ -25,7 +22,7 @@ export default class CodelijstNameInput extends Component {
       name: name.trim(),
       isValid: this.isValid && !this.isDuplicate,
     });
-  });
+  }
 
   isValidName(name) {
     return name && name?.trim().length > this.minCharacters;
