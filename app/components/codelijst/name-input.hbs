@@ -3,7 +3,7 @@
   value={{@name}}
   @width="block"
   placeholder="Codelijst label"
-  {{on "input" (perform this.updateName)}}
+  {{on "input" this.updateName}}
 />
 {{#if this.warningMessage}}
   <AuHelpText @warning={{true}}>{{this.warningMessage}}</AuHelpText>
