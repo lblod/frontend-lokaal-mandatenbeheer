@@ -55,6 +55,7 @@
       @bestuursorgaanIT={{get @model.bestuursorganen 0}}
       @legislatuurInBehandeling={{this.isDisabledBecauseLegislatuur}}
       @effectiefIsLastPublicationStatus={{this.model.effectiefIsLastPublicationStatus}}
+      @actionWhenAddingReplacement={{fn (mut this.selectedReplacement) true}}
     />
   </div>
 
@@ -163,6 +164,12 @@
   @recentUpdate={{this.correctedMandataris}}
   @mandataris={{this.model.mandataris.id}}
   @correct="true"
+/>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.selectedReplacement}}
+  @mandataris={{this.model.mandataris.id}}
+  @replacement="true"
 />
 
 <Mandatarissen::Linked::Modal

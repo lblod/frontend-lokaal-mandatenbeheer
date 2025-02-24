@@ -120,5 +120,6 @@ export default class MandatarisCardComponent extends Component {
       );
     this.args.mandataris.tijdelijkeVervangingen = [replacementMandataris];
     await this.args.mandataris.save();
+    this.args.actionWhenAddingReplacement();
   });
 }
