@@ -4,8 +4,12 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+import { showWarningToast } from 'frontend-lmb/utils/toasts';
+
 export default class CodelijstConceptRow extends Component {
   @service store;
+  @service toaster;
+  @service('codelijsten') codelijstApi;
 
   @tracked label;
 
@@ -34,9 +38,23 @@ export default class CodelijstConceptRow extends Component {
     if (!this.args.concept.id) {
       this.args.concept.destroyRecord();
       await this.args.concept.save();
+      this.args.onConceptChanged();
+      return;
+    }
+    const hasImplementation = await this.codelijstApi.conceptHasImplementation(
+      this.args.concept?.id
+    );
+
+    if (hasImplementation) {
+      showWarningToast(
+        this.toaster,
+        'Dit concept is ergens geïmplementeerd. wordt niet verwijderd.',
+        'Concept implementatie'
+      );
     } else {
       this.args.concept.deleteRecord();
     }
+
     this.args.onConceptChanged();
   }
 

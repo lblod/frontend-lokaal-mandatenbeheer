@@ -65,8 +65,6 @@ export default class CodelijstenDetailController extends Controller {
       this.model.keyValueState,
       updatedState
     );
-    console.log(`codelistNameState?`, this.codelistNameState);
-    console.log(`concepts changed?`, this.didCodelijstChange);
   }
 
   @action
