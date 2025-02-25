@@ -21,13 +21,13 @@ export default class MandatarisApiService extends Service {
         method: 'PUT',
       }
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
+      console.error(jsonResponse.message);
       throw {
         status: response.status,
-        message: jsonReponse.message,
+        message: jsonResponse.message,
       };
     }
 
@@ -49,10 +49,10 @@ export default class MandatarisApiService extends Service {
         }),
       }
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
+      console.error(jsonResponse.message);
       showErrorToast(
         this.toaster,
         'Er ging iets mis bij het updaten van de publicatiestatussen'
@@ -68,22 +68,22 @@ export default class MandatarisApiService extends Service {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/fracties`
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
+      console.error(jsonResponse.message);
       throw {
         status: response.status,
-        message: jsonReponse.message,
+        message: jsonResponse.message,
       };
     }
 
-    if (jsonReponse.fracties.length === 0) {
+    if (jsonResponse.fracties.length === 0) {
       return [];
     }
 
     return await this.store.query('fractie', {
-      'filter[:id:]': jsonReponse.fracties.join(','),
+      'filter[:id:]': jsonResponse.fracties.join(','),
       include: 'fractietype',
     });
   }
@@ -145,13 +145,13 @@ export default class MandatarisApiService extends Service {
         }),
       }
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
+      console.error(jsonResponse.message);
       throw {
         status: response.status,
-        message: jsonReponse.message,
+        message: jsonResponse.message,
       };
     }
   }

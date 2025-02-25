@@ -25,22 +25,22 @@ export default class FractieApiService extends Service {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/fracties/${type}/${bestuursperiodeId}/bestuursperiode`
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
+      console.error(jsonResponse.message);
       throw {
         status: response.status,
-        message: jsonReponse.message,
+        message: jsonResponse.message,
       };
     }
 
-    if (jsonReponse.fracties.length === 0) {
+    if (jsonResponse.fracties.length === 0) {
       return [];
     }
 
     const fracties = await this.store.query('fractie', {
-      'filter[:id:]': jsonReponse.fracties.join(','),
+      'filter[:id:]': jsonResponse.fracties.join(','),
     });
 
     return fracties.filter((f) => f);
@@ -53,11 +53,11 @@ export default class FractieApiService extends Service {
     );
 
     if (response.status !== STATUS_CODE.OK) {
-      const jsonReponse = await response.json();
-      console.error(jsonReponse.message);
+      const jsonResponse = await response.json();
+      console.error(jsonResponse.message);
       throw {
         status: response.status,
-        message: jsonReponse.message,
+        message: jsonResponse.message,
       };
     }
 
@@ -69,17 +69,19 @@ export default class FractieApiService extends Service {
       `${API.MANDATARIS_SERVICE}/fracties/cleanup/bestuursperiode/${bestuursperiodeId}`,
       { method: 'DELETE' }
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
+      console.error(jsonResponse.message);
       throw {
         status: response.status,
-        message: jsonReponse.message,
+        message: jsonResponse.message,
       };
     }
 
     await timeout(RESOURCE_CACHE_TIMEOUT);
-    console.info(`Removed ${jsonReponse.fracties.length} dangling fractie(s).`);
+    console.info(
+      `Removed ${jsonResponse.fracties.length} dangling fractie(s).`
+    );
   }
 }

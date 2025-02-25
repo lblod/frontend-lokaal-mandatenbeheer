@@ -45,18 +45,18 @@ export default class MandatarissenLinkedModal extends Component {
     const response = await fetch(
       `/mandataris-api/mandatarissen/${this.args.mandataris}/check-possible-double`
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== 200) {
-      console.error(jsonReponse.message);
-      throw jsonReponse.message;
+      console.error(jsonResponse.message);
+      throw jsonResponse.message;
     }
 
     if (
       (this.args.create &&
-        (!jsonReponse.duplicateMandate || jsonReponse.hasDouble)) ||
+        (!jsonResponse.duplicateMandate || jsonResponse.hasDouble)) ||
       ((this.args.correct || this.args.updateState) &&
-        (!jsonReponse.duplicateMandate || !jsonReponse.hasDouble))
+        (!jsonResponse.duplicateMandate || !jsonResponse.hasDouble))
     ) {
       if (this.args.callback) {
         this.args.callback();
@@ -65,7 +65,7 @@ export default class MandatarissenLinkedModal extends Component {
     }
 
     this.isModalOpen = true;
-    this.setText(jsonReponse.currentMandate, jsonReponse.duplicateMandate);
+    this.setText(jsonResponse.currentMandate, jsonResponse.duplicateMandate);
   }
 
   setText(currentMandate, duplicateMandate) {
@@ -130,11 +130,11 @@ export default class MandatarissenLinkedModal extends Component {
         'Vervanger werd succesvol toegevoegd aan het corresponderend mandaat in het OCMW.';
     }
 
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== 201 && response.status !== 200) {
-      console.error(jsonReponse.message);
-      showErrorToast(this.toaster, jsonReponse.message);
+      console.error(jsonResponse.message);
+      showErrorToast(this.toaster, jsonResponse.message);
     } else {
       showSuccessToast(this.toaster, message);
     }
