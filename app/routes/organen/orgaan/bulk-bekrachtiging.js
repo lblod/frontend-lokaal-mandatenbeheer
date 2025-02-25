@@ -56,6 +56,10 @@ export default class BulkBekrachtigingRoute extends Route {
         })
       );
     }
+
+    const publicationStatussen = await this.store.findAll(
+      'mandataris-publication-status-code'
+    );
     return {
       mandatarissenMap,
       mandatarissen,
@@ -63,6 +67,7 @@ export default class BulkBekrachtigingRoute extends Route {
       bestuursorgaan: parentModel.bestuursorgaan,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       currentBestuursorgaan: currentBestuursorgaan,
+      publicationStatussen,
     };
   }
 }

@@ -58,10 +58,6 @@ export default class BulkBekrachtigingController extends Controller {
     this.status = status;
   }
 
-  get showLinkField() {
-    return this.status == 'Bekrachtigd' ? true : false;
-  }
-
   @action
   updateLink(event) {
     if (event && typeof event.preventDefault === 'function') {
@@ -83,7 +79,7 @@ export default class BulkBekrachtigingController extends Controller {
       return true;
     }
     if (
-      this.status == 'Bekrachtigd' &&
+      this.status.isBekrachtigd &&
       (!this.linkToBesluit || this.invalidLink)
     ) {
       return true;
@@ -148,8 +144,12 @@ export default class BulkBekrachtigingController extends Controller {
 
   get statusOptions() {
     if (this.model.effectiefIsLastStatus || this.burgemeesterSelected) {
-      return ['Effectief'];
+      return this.model.publicationStatussen.filter(
+        (status) => status.isNietBekrachtigd
+      );
     }
-    return ['Effectief', 'Bekrachtigd'];
+    return this.model.publicationStatussen.filter(
+      (status) => status.isNietBekrachtigd || status.isBekrachtigd
+    );
   }
 }

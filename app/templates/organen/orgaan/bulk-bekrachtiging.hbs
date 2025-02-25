@@ -91,10 +91,10 @@
         @noMatchesMessage="Geen resultaten"
         as |status|
       >
-        {{status}}
+        {{status.label}}
       </PowerSelect>
     </div>
-    {{#if this.showLinkField}}
+    {{#if this.status.isBekrachtigd}}
       <div>
         <AuLabel @required={{true}} for="link-to-page">Link naar besluit</AuLabel>
         <AuInput
