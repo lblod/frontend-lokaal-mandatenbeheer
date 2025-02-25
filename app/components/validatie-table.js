@@ -3,8 +3,6 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { task } from 'ember-concurrency';
-
 export default class ValidatieTable extends Component {
   @service validatie;
   @service features;
@@ -22,12 +20,14 @@ export default class ValidatieTable extends Component {
 
   constructor(...args) {
     super(...args);
-    this.getResults.perform();
+    this.getResults();
   }
 
-  getResults = task(async () => {
+  async getResults() {
+    this.results = [];
+    this.isLoaded = false;
     this.results =
       (await this.validatie.getResultsByInstance(this.instance)) ?? [];
     this.isLoaded = true;
-  });
+  }
 }
