@@ -149,4 +149,8 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   get toolTipText() {
     return 'Deze persoon is reeds onafhankelijk.';
   }
+
+  get endMandatarissenDisabled() {
+    return !this.date;
+  }
 }

@@ -225,6 +225,7 @@
         <AuButton
           @loading={{this.endActiveMandaten.isRunning}}
           @loadingMessage="Actieve mandaten worden beëindigd"
+          @disabled={{this.endMandatarissenDisabled}}
           {{on "click" (perform this.endActiveMandaten)}}
         >
           Beëindig mandatarissen
