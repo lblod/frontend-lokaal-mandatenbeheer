@@ -13,9 +13,15 @@ export default class CodelijstenDetailController extends Controller {
 
   @tracked isSaving;
   @tracked isDeleting;
-  @tracked codelistNameState;
+  @tracked codelistNameState = {
+    name: this.model.codelijst?.label,
+    isValid: true,
+  };
   @tracked didCodelijstChange;
   @tracked isDeleteModalOpen;
+
+  @tracked isUnsavedChangesModalOpen;
+  @tracked savedTransition;
 
   get title() {
     return this.model.codelijst?.isReadOnly
@@ -23,14 +29,8 @@ export default class CodelijstenDetailController extends Controller {
       : 'Bewerk codelijst';
   }
 
-  get hasDeletions() {
-    return this.model.concepten.filter((c) => c.isDeleted).length >= 1;
-  }
   get hasChanges() {
-    return (
-      (this.hasDeletions || this.didCodelijstChange) &&
-      this.codelistNameState?.isValid
-    );
+    return this.didCodelijstChange && this.codelistNameState?.isValid;
   }
 
   @action
@@ -44,11 +44,18 @@ export default class CodelijstenDetailController extends Controller {
       }
       c.rollbackAttributes();
     });
-    this.router.transitionTo('codelijsten.overzicht');
+    this.checkIsCodelistChanged();
+    const wasUnsavedChangesModalOpen = this.isUnsavedChangesModalOpen;
+    this.isUnsavedChangesModalOpen = false;
+    if (!wasUnsavedChangesModalOpen) {
+      this.router.transitionTo('codelijsten.overzicht');
+    } else {
+      this.savedTransition?.retry();
+    }
   }
 
   @action
-  onConceptChanged() {
+  checkIsCodelistChanged() {
     const updatedState = createKeyValueState(
       this.model.codelijst,
       this.model.concepten
@@ -58,13 +65,15 @@ export default class CodelijstenDetailController extends Controller {
       this.model.keyValueState,
       updatedState
     );
+    console.log(`codelistNameState?`, this.codelistNameState);
+    console.log(`concepts changed?`, this.didCodelijstChange);
   }
 
   @action
   onCodelistNameUpdated(state) {
     this.codelistNameState = state;
     if (state.isValid) {
-      this.onConceptChanged();
+      this.checkIsCodelistChanged();
     }
   }
 
