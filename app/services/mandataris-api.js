@@ -43,7 +43,7 @@ export default class MandatarisApiService extends Service {
           'Content-Type': JSON_API_TYPE,
         },
         body: JSON.stringify({
-          status: status,
+          statusUri: status.uri,
           decision: decision,
           mandatarissen: mandatarissen,
         }),
@@ -60,7 +60,7 @@ export default class MandatarisApiService extends Service {
     }
     showSuccessToast(
       this.toaster,
-      `De publicatiestatussen werden succesvol geüpdatet naar ${status}`
+      `De publicatiestatussen werden succesvol geüpdatet naar "${status.label}"`
     );
   }
 

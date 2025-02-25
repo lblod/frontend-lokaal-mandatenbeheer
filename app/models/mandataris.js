@@ -7,6 +7,7 @@ import { displayEndOfDay } from 'frontend-lmb/utils/date-manipulation';
 import {
   MANDAAT_BURGEMEESTER_CODE,
   MANDATARIS_DRAFT_PUBLICATION_STATE,
+  MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisModel extends Model {
@@ -97,10 +98,13 @@ export default class MandatarisModel extends Model {
     );
   }
 
-  get isInDraftStatus() {
-    return (
-      this.publicationStatus?.get('uri') === MANDATARIS_DRAFT_PUBLICATION_STATE
-    );
+  get isApprovedForDeletion() {
+    const approvedStatussen = [
+      MANDATARIS_DRAFT_PUBLICATION_STATE,
+      MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE,
+    ];
+
+    return approvedStatussen.includes(this.publicationStatus?.get('uri'));
   }
 
   get displayEinde() {

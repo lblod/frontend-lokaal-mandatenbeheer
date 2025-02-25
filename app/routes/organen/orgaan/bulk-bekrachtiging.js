@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 
 import {
   MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE,
-  MANDATARIS_EFFECTIEF_PUBLICATION_STATE,
+  MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class BulkBekrachtigingRoute extends Route {
@@ -38,14 +38,14 @@ export default class BulkBekrachtigingRoute extends Route {
           let canShowCheckbox = true;
           if (
             effectiefIsLastStatus &&
-            uri === MANDATARIS_EFFECTIEF_PUBLICATION_STATE
+            uri === MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE
           ) {
             canShowCheckbox = false;
           } else if (uri === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE) {
             canShowCheckbox = false;
           } else if (
             mandataris.isStrictBurgemeester &&
-            uri === MANDATARIS_EFFECTIEF_PUBLICATION_STATE
+            uri === MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE
           ) {
             canShowCheckbox = false;
           }
@@ -56,6 +56,10 @@ export default class BulkBekrachtigingRoute extends Route {
         })
       );
     }
+
+    const publicationStatussen = await this.store.findAll(
+      'mandataris-publication-status-code'
+    );
     return {
       mandatarissenMap,
       mandatarissen,
@@ -63,6 +67,7 @@ export default class BulkBekrachtigingRoute extends Route {
       bestuursorgaan: parentModel.bestuursorgaan,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       currentBestuursorgaan: currentBestuursorgaan,
+      publicationStatussen,
     };
   }
 }

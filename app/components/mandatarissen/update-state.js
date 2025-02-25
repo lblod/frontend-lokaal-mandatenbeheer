@@ -8,7 +8,7 @@ import { service } from '@ember/service';
 import moment from 'moment';
 
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
-import { getDraftPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
+import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import {
   MANDATARIS_TITELVOEREND_STATE,
   MANDATARIS_VERHINDERD_STATE,
@@ -176,7 +176,9 @@ export default class MandatarissenUpdateState extends Component {
         start: dateOfAction,
         einde: endDate,
         status: await this.newStatus,
-        publicationStatus: await getDraftPublicationStatus(this.store),
+        publicationStatus: await getNietBekrachtigdPublicationStatus(
+          this.store
+        ),
       }
     );
 
