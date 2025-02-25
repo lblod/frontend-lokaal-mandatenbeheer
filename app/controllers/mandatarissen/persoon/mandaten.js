@@ -29,7 +29,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @tracked isEndMandatesModalOpen = false;
   @tracked selectedBestuursorgaan = null;
   @tracked activeOnly = true;
-  @tracked date = new Date();
+  @tracked date = endOfDay(new Date());
   sort = 'is-bestuurlijke-alias-van.achternaam';
 
   @action
