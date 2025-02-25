@@ -35,6 +35,7 @@ module.exports = function (environment) {
     features: {
       'show-forms-module': false,
       'enable-mandataris-count-warnings': true,
+      politieraad: false,
     },
     lpdcUrl: '{{LPDC_URL}}',
     worshipDecisionsDatabaseUrl: '{{WORSHIP_DECISIONS_DATABASE_URL}}',
@@ -69,6 +70,7 @@ module.exports = function (environment) {
     ENV.features['editable-forms'] = true;
 
     ENV.features['shacl-report'] = true;
+    ENV.features['politieraad'] = true;
   }
 
   if (environment === 'test') {

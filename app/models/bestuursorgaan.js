@@ -5,6 +5,7 @@ import { service } from '@ember/service';
 import { API } from 'frontend-lmb/utils/constants';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
+import { POLITIERAAD_CODE_ID } from 'frontend-lmb/utils/well-known-ids';
 import {
   BCSD_BESTUURSORGAAN_URI,
   BURGEMEESTER_BESTUURSORGAAN_URI,
@@ -220,5 +221,9 @@ export default class BestuursorgaanModel extends Model {
       // eslint-disable-next-line ember/no-get, ember/classic-decorator-no-classic-methods
       return this.get('classificatie.label');
     }
+  }
+
+  get isPolitieraad() {
+    return this.classificatie?.id == POLITIERAAD_CODE_ID;
   }
 }

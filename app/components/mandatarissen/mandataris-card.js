@@ -58,7 +58,8 @@ export default class MandatarisCardComponent extends Component {
       !this.isBekrachtigd &&
       !this.args.legislatuurInBehandeling &&
       !this.isEffectiefBurgemeester &&
-      !this.isEffectiefLastStatus
+      !this.isEffectiefLastStatus &&
+      this.args.canEdit
     );
   }
 
@@ -81,6 +82,8 @@ export default class MandatarisCardComponent extends Component {
       return 'Een burgemeester kan enkel bekrachtigd worden via een benoeming, dit gebeurt automatisch.';
     } else if (this.isEffectiefLastStatus) {
       return 'Deze mandataris moet niet bekrachtigd worden.';
+    } else if (!this.args.canEdit) {
+      return 'Je kan deze mandataris niet bewerken.';
     }
 
     return null;
