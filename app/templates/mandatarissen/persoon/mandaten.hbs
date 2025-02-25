@@ -206,11 +206,22 @@
   as |Modal|
 >
   <Modal.Body>
-    <AuContent class="au-u-margin-bottom-small">
-      Door verder te gaan, worden de einddatums van de actieve mandatarissen van
-      deze persoon aangepast naar vandaag, waardoor deze mandaten beëindigd
-      worden.
-    </AuContent>
+    <div class="au-o-box au-o-flow">
+      <div>
+        Door verder te gaan, worden de einddatums van de actieve mandaten van
+        deze persoon, in de huidige bestuursperiode aangepast, waardoor deze
+        mandaten beëindigd worden. Opgelet dit geld ook voor verhinderde
+        mandaten, hun einddatum wordt dan ook aangepast naar de ingevoerde
+        datum.
+      </div>
+      <DateInput
+        @label="Einddatum"
+        @value={{this.date}}
+        @onChange={{fn (mut this.date)}}
+        @isRequired={{true}}
+        @endOfDay={{true}}
+      />
+    </div>
   </Modal.Body>
   <Modal.Footer>
     <AuToolbar as |Group|>
@@ -218,6 +229,7 @@
         <AuButton
           @loading={{this.endActiveMandaten.isRunning}}
           @loadingMessage="Actieve mandaten worden beëindigd"
+          @disabled={{this.endMandatarissenDisabled}}
           {{on "click" (perform this.endActiveMandaten)}}
         >
           Beëindig mandatarissen

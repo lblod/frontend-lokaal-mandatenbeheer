@@ -29,6 +29,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @tracked isEndMandatesModalOpen = false;
   @tracked selectedBestuursorgaan = null;
   @tracked activeOnly = true;
+  @tracked date = endOfDay(new Date());
   sort = 'is-bestuurlijke-alias-van.achternaam';
 
   @action
@@ -135,7 +136,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   });
 
   endActiveMandaten = task(async () => {
-    await this.persoonApi.endActiveMandates(this.model.persoon.id);
+    await this.persoonApi.endActiveMandates(this.model.persoon.id, this.date);
     showSuccessToast(
       this.toaster,
       `Active mandatatarissen beëindigd voor ${this.model.persoon.naam}`
@@ -147,5 +148,9 @@ export default class MandatarissenPersoonMandatenController extends Controller {
 
   get toolTipText() {
     return 'Deze persoon is reeds onafhankelijk.';
+  }
+
+  get endMandatarissenDisabled() {
+    return !this.date;
   }
 }
