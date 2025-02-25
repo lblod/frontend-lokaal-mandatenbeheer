@@ -22,10 +22,10 @@ export default class RangordeApiService extends Service {
         }),
       }
     );
-    const jsonReponse = await response.json();
+    const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonReponse.message);
+      console.error(jsonResponse.message);
       showErrorToast(
         this.toaster,
         'Er ging iets mis bij het updaten van de rangordes'
