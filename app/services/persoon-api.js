@@ -13,6 +13,7 @@ import {
 
 export default class PersoonApiService extends Service {
   @service store;
+  @service bestuursperioden;
 
   async getCurrentFractie(persoonId, bestuursperiodeId) {
     const response = await fetch(
@@ -40,8 +41,10 @@ export default class PersoonApiService extends Service {
   }
 
   async hasActiveMandatarissen(persoonId) {
+    const currentPeriod =
+      await this.bestuursperioden.getCurrentBestuursperiode();
     const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/personen/${persoonId}/has-active-mandates`
+      `${API.MANDATARIS_SERVICE}/personen/${persoonId}/has-active-mandates/${currentPeriod.id}`
     );
     const jsonResponse = await response.json();
 
@@ -57,6 +60,8 @@ export default class PersoonApiService extends Service {
   }
 
   async endActiveMandates(persoonId, date) {
+    const currentPeriod =
+      await this.bestuursperioden.getCurrentBestuursperiode();
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/personen/${persoonId}/end-active-mandates`,
       {
@@ -65,6 +70,7 @@ export default class PersoonApiService extends Service {
           'Content-Type': JSON_API_TYPE,
         },
         body: JSON.stringify({
+          bestuursperiodeId: currentPeriod.id,
           date: date,
         }),
       }
