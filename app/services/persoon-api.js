@@ -6,6 +6,7 @@ import { timeout } from 'ember-concurrency';
 
 import {
   API,
+  JSON_API_TYPE,
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
@@ -55,11 +56,17 @@ export default class PersoonApiService extends Service {
     return jsonResponse.isTrue;
   }
 
-  async endActiveMandates(persoonId) {
+  async endActiveMandates(persoonId, date) {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/personen/${persoonId}/end-active-mandates`,
       {
         method: 'PUT',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          date: date,
+        }),
       }
     );
     const jsonReponse = await response.json();

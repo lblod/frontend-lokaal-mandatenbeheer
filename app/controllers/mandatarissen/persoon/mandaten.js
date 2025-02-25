@@ -135,7 +135,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   });
 
   endActiveMandaten = task(async () => {
-    await this.persoonApi.endActiveMandates(this.model.persoon.id);
+    await this.persoonApi.endActiveMandates(this.model.persoon.id, this.date);
     showSuccessToast(
       this.toaster,
       `Active mandatatarissen beëindigd voor ${this.model.persoon.naam}`
