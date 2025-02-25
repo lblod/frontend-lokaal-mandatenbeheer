@@ -85,6 +85,10 @@ export default class OrganenMandatarissenController extends Controller {
     );
   }
 
+  get activeFilter() {
+    return this.activeOnly && this.selectedPeriodIsCurrent;
+  }
+
   get personCount() {
     const personIds = this.model.mandatarissen.map(
       (mandataris) => mandataris.mandataris.isBestuurlijkeAliasVan?.id
