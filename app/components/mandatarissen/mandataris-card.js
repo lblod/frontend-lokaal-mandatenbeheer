@@ -4,10 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
-import {
-  MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE,
-  MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE,
-} from 'frontend-lmb/utils/well-known-uris';
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
@@ -26,13 +22,13 @@ export default class MandatarisCardComponent extends Component {
   }
 
   get isBekrachtigd() {
-    const status = this.args.mandataris.publicationStatus?.get('uri');
-    return !status || status === MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE;
+    const status = this.args.mandataris.publicationStatus;
+    return !status || status.get('isBekrachtigd');
   }
 
   get isNietBekrachtigd() {
-    const status = this.args.mandataris.publicationStatus?.get('uri');
-    return !status || status === MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE;
+    const status = this.args.mandataris.publicationStatus;
+    return !status || status.get('isNietBekrachtigd');
   }
 
   get isEffectiefBurgemeester() {
