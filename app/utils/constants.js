@@ -24,6 +24,7 @@ export const API = {
 };
 export const STATUS_CODE = {
   OK: 200,
+  NO_CONTENT: 204,
 };
 
 export const placeholderOnafhankelijk = {
