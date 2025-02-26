@@ -10,6 +10,7 @@ import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 export default class CodelijstenDetailController extends Controller {
   @service toaster;
   @service router;
+  @service conceptSchemeApi;
 
   @tracked isSaving;
   @tracked isDeleting;
@@ -78,7 +79,9 @@ export default class CodelijstenDetailController extends Controller {
   @action
   async deleteCodelist() {
     this.isDeleting = true;
-    await this.deleteConcepts();
+    await this.conceptSchemeApi.deleteConceptsTheirImplementation(
+      this.model.concepten
+    );
     await this.model.codelijst.destroyRecord();
     showSuccessToast(
       this.toaster,
@@ -88,12 +91,6 @@ export default class CodelijstenDetailController extends Controller {
     this.isDeleting = false;
     this.isDeleteModalOpen = false;
     this.router.transitionTo('codelijsten.overzicht');
-  }
-
-  async deleteConcepts() {
-    await Promise.all(
-      this.model.concepten.map(async (concept) => await concept.destroyRecord())
-    );
   }
 
   @action
