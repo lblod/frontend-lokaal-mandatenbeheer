@@ -9,7 +9,7 @@ import { showWarningToast } from 'frontend-lmb/utils/toasts';
 export default class CodelijstConceptRow extends Component {
   @service store;
   @service toaster;
-  @service('codelijsten') codelijstApi;
+  @service conceptSchemeApi;
 
   @tracked label;
 
@@ -41,11 +41,12 @@ export default class CodelijstConceptRow extends Component {
       this.args.onConceptChanged();
       return;
     }
-    const hasImplementation = await this.codelijstApi.conceptHasImplementation(
-      this.args.concept?.id
-    );
+    const hasImplementation =
+      await this.conceptSchemeApi.conceptHasImplementations(
+        this.args.concept?.id
+      );
 
-    if (hasImplementation) {
+    if (hasImplementation?.hasImplementations) {
       showWarningToast(
         this.toaster,
         'Dit concept is ergens geïmplementeerd. wordt niet verwijderd.',
