@@ -4,8 +4,6 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { showWarningToast } from 'frontend-lmb/utils/toasts';
-
 export default class CodelijstConceptRow extends Component {
   @service store;
   @service toaster;
@@ -13,6 +11,8 @@ export default class CodelijstConceptRow extends Component {
 
   @tracked label;
 
+  @tracked isImplementationModalOpen;
+  @tracked conceptImplementations;
   @tracked errorMessage =
     'Label voor een concept moet minstens 2 karakters lang zijn.';
 
@@ -41,21 +41,21 @@ export default class CodelijstConceptRow extends Component {
       this.args.onConceptChanged();
       return;
     }
-    const hasImplementation =
+    this.conceptImplementations =
       await this.conceptSchemeApi.conceptHasImplementations(
         this.args.concept?.id
       );
-
-    if (hasImplementation?.hasImplementations) {
-      showWarningToast(
-        this.toaster,
-        'Dit concept is ergens geïmplementeerd. wordt niet verwijderd.',
-        'Concept implementatie'
-      );
-    } else {
+    this.isImplementationModalOpen =
+      this.conceptImplementations.hasImplementations;
+    if (!this.isImplementationModalOpen) {
       this.args.concept.deleteRecord();
+      this.args.onConceptChanged();
     }
+  }
 
+  @action
+  confirmedDeleteOfUsedConcept() {
+    this.args.concept.deleteRecord();
     this.args.onConceptChanged();
   }
 
