@@ -15,7 +15,7 @@
         <AuButton
           @skin="secondary"
           @alert={{true}}
-          {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+          {{on "click" this.openDeleteModal}}
         >Verwijder</AuButton>
       {{/unless}}
       <AuButton
@@ -59,6 +59,9 @@
   @closeModal={{fn (mut this.isDeleteModalOpen) false}}
 >
   <:body>
+    {{#if this.isDetailedDeleteInfoShown}}
+      <p class="au-u-margin-bottom-small">{{this.detailedDeleteText}}</p>
+    {{/if}}
     <p>Door verder te gaan zal de huidige codelijst met al zijn concepten
       definitief verwijderd worden.</p>
   </:body>

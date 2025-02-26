@@ -24,6 +24,8 @@ export default class CodelijstenDetailController extends Controller {
   @tracked isUnsavedChangesModalOpen;
   @tracked savedTransition;
 
+  @tracked conceptSchemeImplementations;
+
   get title() {
     return this.model.codelijst?.isReadOnly
       ? this.model.codelijst.label
@@ -77,12 +79,20 @@ export default class CodelijstenDetailController extends Controller {
   }
 
   @action
+  async openDeleteModal() {
+    this.conceptSchemeImplementations =
+      await this.conceptSchemeApi.conceptSchemeHasImplementations(
+        this.model.codelijst.id
+      );
+    this.isDeleteModalOpen = true;
+  }
+
+  @action
   async deleteCodelist() {
     this.isDeleting = true;
-    await this.conceptSchemeApi.deleteConceptsTheirImplementation(
-      this.model.concepten
+    await this.conceptSchemeApi.deleteConceptSchemeAndTheirConcepts(
+      this.model.codelijst
     );
-    await this.model.codelijst.destroyRecord();
     showSuccessToast(
       this.toaster,
       'Codelijst succesvol verwijderd',
@@ -132,5 +142,27 @@ export default class CodelijstenDetailController extends Controller {
     }
 
     return false;
+  }
+
+  get isDetailedDeleteInfoShown() {
+    return (
+      (this.conceptSchemeImplementations &&
+        this.conceptSchemeImplementations.hasImplementations) ||
+      this.conceptSchemeImplementations.totalOfConceptImplementations
+    );
+  }
+
+  get detailedDeleteText() {
+    let text = '';
+    if (this.conceptSchemeImplementations.hasImplementations) {
+      text += `Deze codelijst wordt op een aantal plekken gebruikt (${this.conceptSchemeImplementations.uris.length}). `;
+    }
+    const concepten =
+      this.conceptSchemeImplementations.totalOfConceptImplementations;
+    if (concepten >= 1) {
+      text += `Ook zijn er ${concepten} plaatsen gevonden waar er een concept van deze codelijst wordt gebruikt.`;
+    }
+
+    return text;
   }
 }
