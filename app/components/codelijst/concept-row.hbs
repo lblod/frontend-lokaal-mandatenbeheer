@@ -27,3 +27,37 @@
     </AuButtonGroup>
   </td>
 {{/if}}
+
+<AuModal
+  @title="Concept is in gebruik"
+  @modalOpen={{this.isImplementationModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isImplementationModalOpen) false}}
+><div class="au-o-box au-o-flow">
+    <div>
+      <p>Dit concept wordt op een aantal plekken gebruikt ({{this.conceptImplementations.uris.length}})</p>
+      <p class="au-u-margin-top-small">Door verder te gaan wordt het concept nog
+        niet direct verwijderd, dit is pas definitief als u op "Opslaan" duwt.
+        Bij het opslaan worden dan ook al de implementaties verwijderd.</p>
+    </div>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton
+            @alert={{true}}
+            @skin="secondary"
+            {{on "click" this.confirmedDeleteOfUsedConcept}}
+          >
+            Ga door
+          </AuButton>
+          <AuButton
+            {{on "click" (fn (mut this.isImplementationModalOpen) false)}}
+            @skin="secondary"
+          >
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+</AuModal>
