@@ -84,29 +84,9 @@
   </:footer>
 </AuModal>
 
-<AuModal
-  @title="Wijzigingen niet opgeslagen"
-  @modalOpen={{this.isUnsavedChangesModalOpen}}
-  @closable={{true}}
+<Shared::UnsavedChangesModal
+  @isModalOpen={{this.isUnsavedChangesModalOpen}}
   @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
-><div class="au-o-box au-o-flow">
-    <div>
-      Je wijzigingen zijn niet opgeslagen en gaan verloren als je verder gaat!
-    </div>
-    <AuToolbar class="au-u-margin-top" as |Group|>
-      <Group>
-        <AuButtonGroup>
-          <AuButton @alert={{true}} {{on "click" this.onCancel}}>
-            Verwerp aanpassingen
-          </AuButton>
-          <AuButton
-            {{on "click" (fn (mut this.isUnsavedChangesModalOpen) false)}}
-            @skin="secondary"
-          >
-            Annuleer
-          </AuButton>
-        </AuButtonGroup>
-      </Group>
-    </AuToolbar>
-  </div>
-</AuModal>
+  @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onDiscard={{this.onCancel}}
+/>
