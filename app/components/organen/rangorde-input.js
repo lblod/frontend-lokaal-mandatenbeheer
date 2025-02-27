@@ -5,10 +5,9 @@ import { tracked } from '@glimmer/tracking';
 
 import { keepLatestTask } from 'ember-concurrency';
 import {
-  orderMandatarisStructByRangorde,
+  getNextAvailableRangorde,
   rangordeNumberMapping,
   rangordeStringMapping,
-  rangordeStringToNumber,
 } from 'frontend-lmb/utils/rangorde';
 
 export default class OrganenRangordeInputComponent extends Component {
@@ -112,19 +111,6 @@ export default class OrganenRangordeInputComponent extends Component {
     });
   }
 
-  getNextAvailableRangorde() {
-    const sortedMandatarissen = orderMandatarisStructByRangorde([
-      ...this.args.mandatarissen,
-    ]);
-    const lastNumber = rangordeStringToNumber(
-      sortedMandatarissen[sortedMandatarissen.length - 1].rangorde
-    );
-    if (lastNumber) {
-      return rangordeNumberMapping[lastNumber + 1];
-    }
-    return rangordeNumberMapping[1];
-  }
-
   @action
   onUpdateRangorde(rangordeAsString) {
     this.setRangorde(rangordeAsString);
@@ -137,7 +123,7 @@ export default class OrganenRangordeInputComponent extends Component {
 
     if (this.rangordeInteger == null) {
       this.setRangorde(
-        `${this.getNextAvailableRangorde()} ${this.mandaatLabel}`,
+        `${getNextAvailableRangorde(this.args.mandatarissen)} ${this.mandaatLabel}`,
         true
       );
     } else {
@@ -152,19 +138,12 @@ export default class OrganenRangordeInputComponent extends Component {
 
     if (this.rangordeInteger == null) {
       this.setRangorde(
-        `${this.getNextAvailableRangorde()} ${this.mandaatLabel}`,
+        `${getNextAvailableRangorde(this.args.mandatarissen)} ${this.mandaatLabel}`,
         true
       );
     } else {
       const currentOrder = rangordeNumberMapping[currentNumber];
       this.setRangorde(this.rangorde.replace(currentOrder, newOrder), true);
-    }
-  }
-
-  @action
-  onEnterInRangorde(event) {
-    if (event.key === 'Enter') {
-      this.setRangorde(event.currentTarget.value);
     }
   }
 }

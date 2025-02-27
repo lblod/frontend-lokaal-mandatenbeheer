@@ -212,3 +212,14 @@ const fallbackSortByOtherIVOrgans = (a, b, allMandatarissenInIv) => {
   }
   return rankA - rankB;
 };
+
+export const getNextAvailableRangorde = (mandatarissen) => {
+  const sortedMandatarissen = orderMandatarissenByRangorde([mandatarissen]);
+  const lastNumber = rangordeStringToNumber(
+    sortedMandatarissen[sortedMandatarissen.length - 1].rangorde
+  );
+  if (lastNumber) {
+    return rangordeNumberMapping[lastNumber + 1];
+  }
+  return rangordeNumberMapping[1];
+};

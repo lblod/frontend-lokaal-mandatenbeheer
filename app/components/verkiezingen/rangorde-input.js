@@ -6,10 +6,9 @@ import { tracked } from '@glimmer/tracking';
 import { keepLatestTask, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import {
-  orderMandatarissenByRangorde,
+  getNextAvailableRangorde,
   rangordeNumberMapping,
   rangordeStringMapping,
-  rangordeStringToNumber,
 } from 'frontend-lmb/utils/rangorde';
 
 export default class VerkiezingenRangordeInputComponent extends Component {
@@ -100,19 +99,6 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     });
   }
 
-  getNextAvailableRangorde() {
-    const sortedMandatarissen = orderMandatarissenByRangorde([
-      ...this.args.mandatarissen,
-    ]);
-    const lastNumber = rangordeStringToNumber(
-      sortedMandatarissen[sortedMandatarissen.length - 1].rangorde
-    );
-    if (lastNumber) {
-      return rangordeNumberMapping[lastNumber + 1];
-    }
-    return rangordeNumberMapping[1];
-  }
-
   @action
   onUpdateRangorde(rangordeAsString) {
     this.setRangorde(rangordeAsString);
@@ -125,7 +111,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
 
     if (this.rangordeInteger == null) {
       this.setRangorde(
-        `${this.getNextAvailableRangorde()} ${this.mandaatLabel}`,
+        `${getNextAvailableRangorde(this.args.mandatarissen)} ${this.mandaatLabel}`,
         true
       );
     } else {
@@ -140,7 +126,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
 
     if (this.rangordeInteger == null) {
       this.setRangorde(
-        `${this.getNextAvailableRangorde()} ${this.mandaatLabel}`,
+        `${getNextAvailableRangorde(this.args.mandatarissen)} ${this.mandaatLabel}`,
         true
       );
     } else {
