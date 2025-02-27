@@ -1,28 +1,13 @@
 <div>
   <div class="order-input-as-string">
-    <AuButton
-      hideText={{true}}
-      @icon="chevron-up"
-      @skin="secondary"
-      class="order-input-as-string--minus"
-      @disabled={{this.isMinusDisabled}}
-      {{on "click" this.rangordeDown}}
-    />
-    <AuInput
-      value={{this.rangorde}}
-      placeholder={{this.rangordePlaceholder}}
-      @warning={{this.inputWarningMessage}}
-      {{on "blur" this.onUpdateRangorde}}
-      {{on "keyup" this.onEnterInRangorde}}
-    />
-    <AuButton
-      hideText={{true}}
-      @skin="secondary"
-      @icon="chevron-down"
-      class="order-input-as-string--plus"
-      @disabled={{this.isPlusDisabled}}
-      {{on "click" this.rangordeUp}}
-    />
+    {{#if this.mandaat}}
+      <RangordeDropdown
+        @selected={{this.rangorde}}
+        @placeholder={{this.rangordePlaceholder}}
+        @mandaatLabel={{this.mandaatLabel}}
+        @onNewRangorde={{this.onUpdateRangorde}}
+      />
+    {{/if}}
     <div class="au-u-margin-left-tiny">
       {{#if this.rangordeMovedUp}}
         <AuBadge @icon="chevron-up" @skin="success" @size="small" />
@@ -32,7 +17,4 @@
       {{/if}}
     </div>
   </div>
-  <AuHelpText @warning={{this.inputWarningMessage}}>
-    {{this.inputWarningMessage}}
-  </AuHelpText>
 </div>
