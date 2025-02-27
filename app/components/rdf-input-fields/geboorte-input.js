@@ -7,7 +7,7 @@ import { guidFor } from '@ember/object/internals';
 
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { NamedNode } from 'rdflib';
+import { literal, NamedNode } from 'rdflib';
 
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
@@ -16,7 +16,8 @@ import {
   getBirthDate,
   isValidRijksregisternummer,
 } from 'frontend-lmb/utils/form-validations/rijksregisternummer';
-import { SKOS } from 'frontend-lmb/rdf/namespaces';
+import { SKOS, XSD } from 'frontend-lmb/rdf/namespaces';
+import moment from 'moment';
 
 export default class RDFGeboorteInput extends InputFieldComponent {
   inputId = 'birthday-date-' + guidFor(this);
@@ -72,7 +73,10 @@ export default class RDFGeboorteInput extends InputFieldComponent {
 
   @action
   onUpdate(date) {
-    replaceSingleFormValue(this.storeOptions, date);
+    const newDate = date
+      ? literal(moment(date).format('YYYY-MM-DD'), XSD('date'))
+      : null;
+    replaceSingleFormValue(this.storeOptions, newDate);
 
     super.updateValidations();
   }
