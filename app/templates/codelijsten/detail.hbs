@@ -15,7 +15,7 @@
         <AuButton
           @skin="secondary"
           @alert={{true}}
-          {{on "click" this.openDeleteModal}}
+          {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
         >Verwijder</AuButton>
       {{/unless}}
       <AuButton
