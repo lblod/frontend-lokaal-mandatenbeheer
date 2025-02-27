@@ -1,7 +1,7 @@
 {{#if @isEditable}}
   <div class="au-o-box au-u-1-3@medium au-u-flex au-u-flex--column">
     <Codelijst::NameInput
-      @name={{this.codelijst.label}}
+      @name={{@codelijst.label}}
       @onUpdate={{this.updateCodelistName}}
     />
   </div>
@@ -13,7 +13,7 @@
     >
       <AuHelpText @skin="secondary" @size="large">
         Aantal:
-        {{this.concepten.length}}
+        {{@concepten.length}}
       </AuHelpText>
     </div>
   {{/if}}

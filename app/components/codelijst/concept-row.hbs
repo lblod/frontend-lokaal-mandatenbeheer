@@ -1,7 +1,10 @@
 <td class="au-u-4-5">
   {{#if @isEditable}}
     <div class="au-u-flex au-u-flex--column">
-      <AuInput value={{this.label}} {{on "input" this.updateConceptLabel}} />
+      <AuInput
+        value={{@concept.label}}
+        {{on "input" this.updateConceptLabel}}
+      />
       {{#if this.canSaveLabel}}
         <AuHelpText>
           Naam moet minstens 2 karakters lang zijn.
@@ -13,7 +16,7 @@
       {{/if}}
     </div>
   {{else}}
-    <p>{{this.label}}</p>
+    <p>{{@concept.label}}</p>
   {{/if}}
 </td>
 {{#if @isEditable}}
