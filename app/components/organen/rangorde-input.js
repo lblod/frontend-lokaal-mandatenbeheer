@@ -46,7 +46,7 @@ export default class OrganenRangordeInputComponent extends Component {
 
   async setPlaceholder() {
     this.mandaat = await this.args.mandatarisStruct.mandataris.get('bekleedt');
-    this.rangordePlaceholder = `Vul de rangorde in, bv. “Eerste ${this.mandaat.rangordeLabel}”`;
+    this.rangordePlaceholder = `Selecteer een rangorde, bv. “Eerste ${this.mandaat.rangordeLabel}”`;
   }
 
   updateMandatarisRangorde = keepLatestTask(

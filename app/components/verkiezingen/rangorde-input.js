@@ -31,7 +31,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
 
   async setPlaceholder() {
     this.mandaat = await this.args.mandataris.bekleedt;
-    this.rangordePlaceholder = `Vul de rangorde in, bv. “Eerste ${this.mandaat.rangordeLabel}”`;
+    this.rangordePlaceholder = `Selecteer een rangorde, bv. “Eerste ${this.mandaat.rangordeLabel}”`;
   }
 
   updateMandatarisRangorde = keepLatestTask(async (value) => {
