@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { keepLatestTask, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import {
+  findOrderInString,
   getNextAvailableRangorde,
   rangordeNumberMapping,
   rangordeStringMapping,
@@ -21,7 +22,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   get rangordeInteger() {
-    return this.findOrderInString(this.args.mandataris.rangorde);
+    return findOrderInString(this.args.mandataris.rangorde);
   }
 
   get rangorde() {
@@ -62,28 +63,6 @@ export default class VerkiezingenRangordeInputComponent extends Component {
 
   get mandaatLabel() {
     return this.mandaat?.rangordeLabel;
-  }
-
-  findOrderInString(possibleString) {
-    if (!possibleString || typeof possibleString != 'string') {
-      return null;
-    }
-    let foundNumber = null;
-    Object.keys(rangordeStringMapping).forEach((key) => {
-      if (possibleString.startsWith(key)) {
-        foundNumber = rangordeStringMapping[key];
-      }
-    });
-    return foundNumber;
-  }
-
-  findFirstWordOfString(string) {
-    // eslint-disable-next-line no-useless-escape
-    const regex = new RegExp(/^([\w\-]+)/);
-    if (regex.test(string)) {
-      return `${string}`.match(regex);
-    }
-    return null;
   }
 
   get isMinusDisabled() {

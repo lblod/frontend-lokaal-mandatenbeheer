@@ -223,3 +223,16 @@ export const getNextAvailableRangorde = (mandatarissen) => {
   }
   return rangordeNumberMapping[1];
 };
+
+export const findOrderInString = (possibleString) => {
+  if (!possibleString || typeof possibleString != 'string') {
+    return null;
+  }
+  let foundNumber = null;
+  Object.keys(rangordeStringMapping).forEach((key) => {
+    if (possibleString.startsWith(key)) {
+      foundNumber = rangordeStringMapping[key];
+    }
+  });
+  return foundNumber;
+};
