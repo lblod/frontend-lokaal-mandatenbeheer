@@ -8,15 +8,13 @@
     {{@field.label}}
   </AuLabel>
 
-  {{#if this.mandaat}}
-    <RangordeDropdown
-      id={{this.inputId}}
-      @selected={{this.rangorde}}
-      @placeholder={{this.placeholderText}}
-      @mandaatLabel={{this.mandaatLabel}}
-      @onNewRangorde={{this.updateValue}}
-    />
-  {{/if}}
+  <RangordeDropdown
+    id={{this.inputId}}
+    @selected={{this.rangorde}}
+    @placeholder={{this.placeholderText}}
+    @mandaatLabel={{this.mandaatLabel}}
+    @onNewRangorde={{this.updateValue}}
+  />
 
   {{#each this.errors as |error|}}
     <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>

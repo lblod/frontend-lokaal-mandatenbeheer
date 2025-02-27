@@ -1,17 +1,19 @@
 <div class="power-select--min-width">
-  <PowerSelect
-    @allowClear={{false}}
-    @disabled={{@disabled}}
-    @placeholder={{@placeholder}}
-    @selected={{@selected}}
-    @options={{this.labels}}
-    @class="is-optional"
-    @onChange={{this.onUpdateRangorde}}
-    @searchEnabled={{true}}
-    @loadingMessage="Aan het laden..."
-    @noMatchesMessage="Geen resultaten"
-    as |rangordeLabel|
-  >
-    {{rangordeLabel}}
-  </PowerSelect>
+  {{#if @mandaatLabel}}
+    <PowerSelect
+      @allowClear={{false}}
+      @disabled={{@disabled}}
+      @placeholder={{@placeholder}}
+      @selected={{@selected}}
+      @options={{this.labels}}
+      @class="is-optional"
+      @onChange={{this.onUpdateRangorde}}
+      @searchEnabled={{true}}
+      @loadingMessage="Aan het laden..."
+      @noMatchesMessage="Geen resultaten"
+      as |rangordeLabel|
+    >
+      {{rangordeLabel}}
+    </PowerSelect>
+  {{/if}}
 </div>

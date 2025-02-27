@@ -7,14 +7,12 @@
     @disabled={{this.isMinusDisabled}}
     {{on "click" this.rangordeDown}}
   />
-  {{#if this.mandaat}}
-    <RangordeDropdown
-      @selected={{this.rangorde}}
-      @placeholder={{this.rangordePlaceholder}}
-      @mandaatLabel={{this.mandaatLabel}}
-      @onNewRangorde={{this.setRangorde}}
-    />
-  {{/if}}
+  <RangordeDropdown
+    @selected={{this.rangorde}}
+    @placeholder={{this.rangordePlaceholder}}
+    @mandaatLabel={{this.mandaatLabel}}
+    @onNewRangorde={{this.setRangorde}}
+  />
   <AuButton
     hideText={{true}}
     @skin="secondary"
