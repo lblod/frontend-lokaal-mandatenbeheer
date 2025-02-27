@@ -1,4 +1,12 @@
 <div class="order-input-as-string">
+  <AuButton
+    hideText={{true}}
+    @icon="chevron-up"
+    @skin="secondary"
+    class="order-input-as-string--minus"
+    @disabled={{this.isMinusDisabled}}
+    {{on "click" this.rangordeDown}}
+  />
   {{#if this.mandaat}}
     <RangordeDropdown
       @selected={{this.rangorde}}
@@ -7,4 +15,12 @@
       @onNewRangorde={{this.onUpdateRangorde}}
     />
   {{/if}}
+  <AuButton
+    hideText={{true}}
+    @skin="secondary"
+    @icon="chevron-down"
+    class="order-input-as-string--plus"
+    @disabled={{this.isPlusDisabled}}
+    {{on "click" this.rangordeUp}}
+  />
 </div>
