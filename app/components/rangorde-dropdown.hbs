@@ -1,12 +1,12 @@
 <div class="power-select--min-width">
   <PowerSelect
-    @allowClear={{@allowClear}}
+    @allowClear={{false}}
     @disabled={{@disabled}}
     @placeholder={{@placeholder}}
     @selected={{@selected}}
     @options={{this.labels}}
     @class="is-optional"
-    @onChange={{@onNewRangorde}}
+    @onChange={{this.onUpdateRangorde}}
     @searchEnabled={{true}}
     @loadingMessage="Aan het laden..."
     @noMatchesMessage="Geen resultaten"
