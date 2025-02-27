@@ -1,0 +1,17 @@
+<div class="power-select--min-width">
+  <PowerSelect
+    @allowClear={{@allowClear}}
+    @disabled={{@disabled}}
+    @placeholder={{@placeholder}}
+    @selected={{@selected}}
+    @options={{this.labels}}
+    @class="is-optional"
+    @onChange={{@onNewRangorde}}
+    @searchEnabled={{true}}
+    @loadingMessage="Aan het laden..."
+    @noMatchesMessage="Geen resultaten"
+    as |rangordeLabel|
+  >
+    {{rangordeLabel}}
+  </PowerSelect>
+</div>
