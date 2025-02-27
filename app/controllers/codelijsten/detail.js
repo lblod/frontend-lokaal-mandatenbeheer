@@ -24,8 +24,6 @@ export default class CodelijstenDetailController extends Controller {
   @tracked isUnsavedChangesModalOpen;
   @tracked savedTransition;
 
-  @tracked conceptSchemeImplementations;
-
   get title() {
     return this.model.codelijst?.isReadOnly
       ? this.model.codelijst.label
@@ -76,15 +74,6 @@ export default class CodelijstenDetailController extends Controller {
     if (state.isValid) {
       this.checkIsCodelistChanged();
     }
-  }
-
-  @action
-  async openDeleteModal() {
-    this.conceptSchemeImplementations =
-      await this.conceptSchemeApi.conceptSchemeHasImplementations(
-        this.model.codelijst.id
-      );
-    this.isDeleteModalOpen = true;
   }
 
   @action
@@ -146,19 +135,18 @@ export default class CodelijstenDetailController extends Controller {
 
   get isDetailedDeleteInfoShown() {
     return (
-      (this.conceptSchemeImplementations &&
-        this.conceptSchemeImplementations.hasImplementations) ||
-      this.conceptSchemeImplementations.totalOfConceptImplementations
+      (this.model.implementations &&
+        this.model.implementations.hasImplementations) ||
+      this.model.implementations.totalOfConceptImplementations
     );
   }
 
   get detailedDeleteText() {
     let text = '';
-    if (this.conceptSchemeImplementations.hasImplementations) {
-      text += `Deze codelijst wordt op een aantal plekken gebruikt (${this.conceptSchemeImplementations.uris.length}). `;
+    if (this.model.implementations.hasImplementations) {
+      text += `Deze codelijst wordt op een aantal plekken gebruikt (${this.model.implementations.uris.length}). `;
     }
-    const concepten =
-      this.conceptSchemeImplementations.totalOfConceptImplementations;
+    const concepten = this.model.implementations.totalOfConceptImplementations;
     if (concepten >= 1) {
       text += `Ook zijn er ${concepten} plaatsen gevonden waar er een concept van deze codelijst wordt gebruikt.`;
     }

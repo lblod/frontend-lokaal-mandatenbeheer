@@ -10,6 +10,7 @@ export default class CodelijstenDetailRoute extends Route {
   @service session;
   @service store;
   @service router;
+  @service conceptSchemeApi;
 
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
@@ -23,11 +24,21 @@ export default class CodelijstenDetailRoute extends Route {
     });
     const concepten = (await codelijst?.concepts) ?? [];
 
+    let implementations = null;
+
+    if (!codelijst.isReadOnly) {
+      implementations =
+        await this.conceptSchemeApi.conceptSchemeHasImplementations(
+          codelijst.id
+        );
+    }
+
     return {
       ogCodelistName: codelijst.label,
       codelijst,
       concepten,
       keyValueState: createKeyValueState(codelijst, concepten),
+      implementations,
     };
   }
 
