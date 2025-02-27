@@ -67,6 +67,7 @@ export default class OrganenRangordeInputComponent extends Component {
     }
   );
 
+  @action
   setRangorde(value, switchWithPrevious = false) {
     this.updateMandatarisRangorde.perform(value, switchWithPrevious);
   }
@@ -109,11 +110,6 @@ export default class OrganenRangordeInputComponent extends Component {
     return this.args.mandatarissen.find((mandatarisStruct) => {
       return mandatarisStruct.rangorde === targetRangorde;
     });
-  }
-
-  @action
-  onUpdateRangorde(rangordeAsString) {
-    this.setRangorde(rangordeAsString);
   }
 
   @action

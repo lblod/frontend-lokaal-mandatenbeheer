@@ -55,6 +55,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     }
   );
 
+  @action
   setRangorde(value, switchWithPrevious = false) {
     this.updateMandatarisRangorde.perform(value, switchWithPrevious);
   }
@@ -97,11 +98,6 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     return this.args.mandatarissen.find((mandataris) => {
       return mandataris.rangorde === targetRangorde;
     });
-  }
-
-  @action
-  onUpdateRangorde(rangordeAsString) {
-    this.setRangorde(rangordeAsString);
   }
 
   @action
