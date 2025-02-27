@@ -10,6 +10,7 @@ import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 export default class CodelijstenDetailController extends Controller {
   @service toaster;
   @service router;
+  @service store;
   @service conceptSchemeApi;
 
   @tracked isSaving;
@@ -87,9 +88,12 @@ export default class CodelijstenDetailController extends Controller {
       'Codelijst succesvol verwijderd',
       'Codelijst'
     );
+    this.store.unloadRecord(this.model.codelijst);
     this.isDeleting = false;
     this.isDeleteModalOpen = false;
-    this.router.transitionTo('codelijsten.overzicht');
+    this.router.transitionTo('codelijsten.overzicht', {
+      queryParams: { filter: null },
+    });
   }
 
   @action

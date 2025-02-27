@@ -1,4 +1,5 @@
 import Service from '@ember/service';
+
 import { API, JSON_API_TYPE, STATUS_CODE } from 'frontend-lmb/utils/constants';
 
 export default class ConceptSchemeApiService extends Service {
