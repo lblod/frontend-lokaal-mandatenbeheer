@@ -7,6 +7,7 @@ import { keepLatestTask, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import {
   findOrderInString,
+  getMandatarisForRangorde,
   getNextAvailableRangorde,
   rangordeNumberMapping,
   rangordeStringMapping,
@@ -38,7 +39,10 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     async (value, switchWithPrevious) => {
       const oldRangorde = this.args.mandataris.rangorde;
       const newRangorde = value;
-      const previousHolder = this.getMandatarisWithRangorde(newRangorde);
+      const previousHolder = getMandatarisForRangorde(
+        this.args.mandatarissen,
+        newRangorde
+      );
       this.args.mandataris.rangorde = newRangorde;
 
       const promises = [this.args.mandataris.save()];
@@ -71,12 +75,6 @@ export default class VerkiezingenRangordeInputComponent extends Component {
 
   get isPlusDisabled() {
     return this.rangordeInteger >= Object.keys(rangordeStringMapping).length;
-  }
-
-  getMandatarisWithRangorde(targetRangorde) {
-    return this.args.mandatarissen.find((mandataris) => {
-      return mandataris.rangorde === targetRangorde;
-    });
   }
 
   @action

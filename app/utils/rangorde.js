@@ -236,3 +236,9 @@ export const findOrderInString = (possibleString) => {
   });
   return foundNumber;
 };
+
+export const getMandatarisForRangorde = (mandatarissen, targetRangorde) => {
+  return mandatarissen.find((mandatarisStruct) => {
+    return mandatarisStruct.rangorde === targetRangorde;
+  });
+};

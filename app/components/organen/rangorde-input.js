@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { keepLatestTask } from 'ember-concurrency';
 import {
   findOrderInString,
+  getMandatarisForRangorde,
   getNextAvailableRangorde,
   rangordeNumberMapping,
   rangordeStringMapping,
@@ -53,7 +54,10 @@ export default class OrganenRangordeInputComponent extends Component {
     async (value, switchWithPrevious) => {
       const oldRangorde = this.args.mandatarisStruct.rangorde;
       const newRangorde = value;
-      const previousHolder = this.getMandatarisWithRangorde(newRangorde);
+      const previousHolder = getMandatarisForRangorde(
+        this.args.mandatarissen,
+        newRangorde
+      );
 
       this.args.mandatarisStruct.rangorde = newRangorde;
 
@@ -83,12 +87,6 @@ export default class OrganenRangordeInputComponent extends Component {
 
   get isPlusDisabled() {
     return this.rangordeInteger >= Object.keys(rangordeStringMapping).length;
-  }
-
-  getMandatarisWithRangorde(targetRangorde) {
-    return this.args.mandatarissen.find((mandatarisStruct) => {
-      return mandatarisStruct.rangorde === targetRangorde;
-    });
   }
 
   @action
