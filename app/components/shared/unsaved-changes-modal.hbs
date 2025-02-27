@@ -1,0 +1,23 @@
+<AuModal
+  @title={{this.title}}
+  @modalOpen={{@isModalOpen}}
+  @closable={{this.isClosable}}
+  @closeModal={{@closeModal}}
+><div class="au-o-box au-o-flow">
+    <div>
+      {{this.descriptionText}}
+    </div>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton @alert={{true}} {{on "click" @onDiscard}}>
+            Verwerp aanpassingen
+          </AuButton>
+          <AuButton {{on "click" @onCancel}} @skin="secondary">
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+</AuModal>
