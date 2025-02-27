@@ -14,10 +14,10 @@ export default class ConceptSchemeApiService extends Service {
     const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
+      console.error(jsonResponse.error);
       throw {
         status: response.status,
-        message: jsonResponse.message,
+        message: jsonResponse.error.title,
       };
     }
 
@@ -39,10 +39,10 @@ export default class ConceptSchemeApiService extends Service {
     );
     if (response.status !== STATUS_CODE.NO_CONTENT) {
       const jsonResponse = await response.json();
-      console.error(jsonResponse.message);
+      console.error(jsonResponse.error);
       throw {
         status: response.status,
-        message: jsonResponse.message,
+        message: jsonResponse.error.title,
       };
     }
   }
@@ -58,10 +58,10 @@ export default class ConceptSchemeApiService extends Service {
     const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
+      console.error(jsonResponse.error);
       throw {
         status: response.status,
-        message: jsonResponse.message,
+        message: jsonResponse.error.title,
       };
     }
 
@@ -81,10 +81,10 @@ export default class ConceptSchemeApiService extends Service {
 
     if (response.status !== STATUS_CODE.NO_CONTENT) {
       const jsonResponse = await response.json();
-      console.error(jsonResponse.message);
+      console.error(jsonResponse.error);
       throw {
         status: response.status,
-        message: jsonResponse.message,
+        message: jsonResponse.error.title,
       };
     }
   }
