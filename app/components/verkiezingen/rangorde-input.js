@@ -14,19 +14,11 @@ import {
 
 export default class VerkiezingenRangordeInputComponent extends Component {
   @tracked rangordePlaceholder;
+  @tracked mandaat;
 
   constructor() {
     super(...arguments);
     this.setPlaceholder();
-  }
-
-  get inputWarningMessage() {
-    const order = this.rangordeInteger;
-    if (order == null) {
-      return 'Opgelet! Dit is geen gekende rangorde!';
-    } else {
-      return null;
-    }
   }
 
   get rangordeInteger() {
@@ -38,8 +30,8 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   async setPlaceholder() {
-    const mandaat = await this.args.mandataris.bekleedt;
-    this.rangordePlaceholder = `Vul de rangorde in, bv. “Eerste ${mandaat.rangordeLabel}”`;
+    this.mandaat = await this.args.mandataris.bekleedt;
+    this.rangordePlaceholder = `Vul de rangorde in, bv. “Eerste ${this.mandaat.rangordeLabel}”`;
   }
 
   updateMandatarisRangorde = keepLatestTask(async (value) => {
@@ -62,9 +54,8 @@ export default class VerkiezingenRangordeInputComponent extends Component {
     this.updateMandatarisRangorde.perform(value);
   }
 
-  async getMandaatLabel() {
-    const mandaat = await this.args.mandataris.get('bekleedt');
-    return mandaat?.rangordeLabel;
+  get mandaatLabel() {
+    return this.mandaat?.rangordeLabel;
   }
 
   findOrderInString(possibleString) {
@@ -117,8 +108,8 @@ export default class VerkiezingenRangordeInputComponent extends Component {
   }
 
   @action
-  onUpdateRangorde(event) {
-    this.setRangorde(event.currentTarget.value);
+  onUpdateRangorde(rangordeAsString) {
+    this.setRangorde(rangordeAsString);
   }
 
   @action
@@ -128,7 +119,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
 
     if (this.rangordeInteger == null) {
       this.setRangorde(
-        `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`
+        `${this.getNextAvailableRangorde()} ${this.mandaatLabel}`
       );
     } else {
       const currentOrder = rangordeNumberMapping[currentNumber];
@@ -142,7 +133,7 @@ export default class VerkiezingenRangordeInputComponent extends Component {
 
     if (this.rangordeInteger == null) {
       this.setRangorde(
-        `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`
+        `${this.getNextAvailableRangorde()} ${this.mandaatLabel}`
       );
     } else {
       const currentOrder = rangordeNumberMapping[currentNumber];

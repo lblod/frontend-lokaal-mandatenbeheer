@@ -1,20 +1,18 @@
-<div>
-  <div class="order-input-as-string">
-    {{#if this.mandaat}}
-      <RangordeDropdown
-        @selected={{this.rangorde}}
-        @placeholder={{this.rangordePlaceholder}}
-        @mandaatLabel={{this.mandaatLabel}}
-        @onNewRangorde={{this.onUpdateRangorde}}
-      />
+<div class="order-input-as-string">
+  {{#if this.mandaat}}
+    <RangordeDropdown
+      @selected={{this.rangorde}}
+      @placeholder={{this.rangordePlaceholder}}
+      @mandaatLabel={{this.mandaatLabel}}
+      @onNewRangorde={{this.onUpdateRangorde}}
+    />
+  {{/if}}
+  <div class="au-u-margin-left-tiny">
+    {{#if this.rangordeMovedUp}}
+      <AuBadge @icon="chevron-up" @skin="success" @size="small" />
     {{/if}}
-    <div class="au-u-margin-left-tiny">
-      {{#if this.rangordeMovedUp}}
-        <AuBadge @icon="chevron-up" @skin="success" @size="small" />
-      {{/if}}
-      {{#if this.rangordeMovedDown}}
-        <AuBadge @icon="chevron-down" @skin="error" @size="small" />
-      {{/if}}
-    </div>
+    {{#if this.rangordeMovedDown}}
+      <AuBadge @icon="chevron-down" @skin="error" @size="small" />
+    {{/if}}
   </div>
 </div>
