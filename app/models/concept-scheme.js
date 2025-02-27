@@ -24,7 +24,7 @@ export default class ConceptSchemeModel extends Model {
 
   get displayCreatedAt() {
     if (!this.createdAt) {
-      return null;
+      return 'Onbekend';
     }
     return moment(this.createdAt).format('DD-MM-YYYY h:mm:ss');
   }

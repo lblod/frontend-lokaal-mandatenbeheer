@@ -88,7 +88,7 @@ export default class CodelijstenDetailController extends Controller {
       'Codelijst succesvol verwijderd',
       'Codelijst'
     );
-    this.store.unloadRecord(this.model.codelijst);
+    await this.store.unloadRecord(this.model.codelijst);
     this.isDeleting = false;
     this.isDeleteModalOpen = false;
     this.router.transitionTo('codelijsten.overzicht', {
