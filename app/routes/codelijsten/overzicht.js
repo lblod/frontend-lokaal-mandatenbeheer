@@ -25,6 +25,7 @@ export default class CodelijstenOverzichtRoute extends Route {
         number: params.page,
         size: params.size,
       },
+      reload: true,
       ...searchFilter,
     });
 

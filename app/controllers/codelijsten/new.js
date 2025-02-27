@@ -62,6 +62,10 @@ export default class CodelijstenNewController extends Controller {
 
   @action
   onConceptChanged(concept) {
+    if (!concept) {
+      return;
+    }
+
     if (concept.isDeleted) {
       this.concepten.removeObject(concept);
     } else {
