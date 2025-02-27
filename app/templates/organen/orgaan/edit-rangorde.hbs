@@ -120,27 +120,9 @@
   </div>
 </AuModal>
 
-<AuModal
-  @title="Wijzigingen niet opgeslagen"
-  @modalOpen={{this.interceptedTransition}}
-  @closable={{true}}
+<Shared::UnsavedChangesModal
+  @isModalOpen={{this.interceptedTransition}}
   @closeModal={{this.cancelLoseChanges}}
-><div class="au-o-box au-o-flow">
-    <div>
-      Je wijzigingen zijn niet opgeslagen en gaan verloren als je verder gaat!
-    </div>
-    <AuToolbar class="au-u-margin-top" as |Group|>
-      <Group>
-        <AuButtonGroup>
-          <AuButton @alert={{true}} {{on "click" this.confirmLoseChanges}}>
-            Verwerp aanpassingen
-          </AuButton>
-          <AuButton {{on "click" this.cancelLoseChanges}} @skin="secondary">
-            Annuleer
-          </AuButton>
-        </AuButtonGroup>
-      </Group>
-    </AuToolbar>
-  </div>
-
-</AuModal>
+  @onCancel={{this.cancelLoseChanges}}
+  @onDiscard={{this.confirmLoseChanges}}
+/>
