@@ -20,6 +20,7 @@ export default class CodelijstenNewController extends Controller {
   @tracked isUnsavedChangesModalOpen;
   @tracked hasChanges;
   @tracked savedTransition;
+  @tracked isSaved;
 
   get canSave() {
     return (
@@ -33,7 +34,7 @@ export default class CodelijstenNewController extends Controller {
   async saveCodelist() {
     this.isSaving = true;
     try {
-      await this.codelijst.save();
+      await this.model.codelijst.save();
       for (const concept of this.concepten.toArray()) {
         await concept.save();
       }
@@ -43,6 +44,7 @@ export default class CodelijstenNewController extends Controller {
         'Codelijst succesvol aangemaakt',
         'Codelijst'
       );
+      this.isSaved = true;
       this.router.transitionTo('codelijsten.overzicht', {
         queryParams: { filter: this.model.codelijst.label },
       });

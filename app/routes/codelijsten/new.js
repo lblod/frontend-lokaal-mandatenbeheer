@@ -22,7 +22,7 @@ export default class CodelijstenNewRoute extends Route {
   willTransition(transition) {
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const controller = this.controller;
-    if (controller.canSave) {
+    if (!controller.isSaved && controller.canSave) {
       transition.abort();
       controller.isUnsavedChangesModalOpen = true;
       controller.savedTransition = transition;
