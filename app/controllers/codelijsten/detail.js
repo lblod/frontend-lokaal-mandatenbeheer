@@ -42,22 +42,34 @@ export default class CodelijstenDetailController extends Controller {
 
   @action
   onCancel() {
-    this.model.codelijst.rollbackAttributes();
-    this.model.concepten.map((c) => {
-      if (!c.id) {
-        c.destroyRecord();
-        c.save();
-        return;
-      }
-      c.rollbackAttributes();
-    });
-    this.checkIsCodelistChanged();
-    const wasUnsavedChangesModalOpen = this.isUnsavedChangesModalOpen;
-    this.isUnsavedChangesModalOpen = false;
-    if (!wasUnsavedChangesModalOpen) {
-      this.router.transitionTo('codelijsten.overzicht');
+    if (this.hasChanges) {
+      this.isUnsavedChangesModalOpen = true;
     } else {
+      this.router.transitionTo('codelijsten.overzicht');
+    }
+  }
+
+  @action
+  async discardChanges() {
+    this.isDiscarding = true;
+    this.model.codelijst.rollbackAttributes();
+    await Promise.all(
+      this.model.concepten.map(async (c) => {
+        if (!c.id) {
+          c.destroyRecord();
+          await c.save();
+          return;
+        }
+        c.rollbackAttributes();
+      })
+    );
+    this.checkIsCodelistChanged();
+    this.isDiscarding = false;
+    this.isUnsavedChangesModalOpen = false;
+    if (this.savedTransition) {
       this.savedTransition?.retry();
+    } else {
+      this.router.transitionTo('codelijsten.overzicht');
     }
   }
 

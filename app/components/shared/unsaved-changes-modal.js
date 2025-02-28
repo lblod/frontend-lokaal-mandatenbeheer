@@ -15,4 +15,8 @@ export default class SharedUnsavedChangesModal extends Component {
       'Je wijzigingen zijn niet opgeslagen en gaan verloren als je verder gaat!'
     );
   }
+
+  get discardMessage() {
+    return this.args.discardMessage ?? 'Aanpassingen worden verworpen';
+  }
 }

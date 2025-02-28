@@ -91,5 +91,6 @@
   @isModalOpen={{this.isUnsavedChangesModalOpen}}
   @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
   @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
-  @onDiscard={{this.onCancel}}
+  @onDiscard={{this.discardChanges}}
+  @isDiscarding={{this.isDiscarding}}
 />
