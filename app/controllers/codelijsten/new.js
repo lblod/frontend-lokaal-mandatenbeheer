@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 
+import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
@@ -14,12 +15,17 @@ export default class CodelijstenNewController extends Controller {
   @tracked isSaving;
 
   @tracked isNameValid;
+  @tracked concepten = A();
+
+  @tracked isUnsavedChangesModalOpen;
+  @tracked hasChanges;
+  @tracked savedTransition;
 
   get canSave() {
     return (
       this.isNameValid &&
-      this.model.concepten.length > 0 &&
-      areConceptLabelsValid(this.model.concepten)
+      this.concepten.length >= 1 &&
+      areConceptLabelsValid(this.concepten)
     );
   }
 
@@ -27,8 +33,8 @@ export default class CodelijstenNewController extends Controller {
   async saveCodelist() {
     this.isSaving = true;
     try {
-      await this.model.codelijst.save();
-      for (const concept of this.model.concepten.toArray()) {
+      await this.codelijst.save();
+      for (const concept of this.concepten.toArray()) {
         await concept.save();
       }
       this.isSaving = false;
@@ -51,15 +57,24 @@ export default class CodelijstenNewController extends Controller {
 
   @action
   onCancel() {
-    this.isModalOpen = false;
-    this.model.codelijst.rollbackAttributes();
-    this.model.concepten.toArray().forEach((c) => {
+    if (this.canSave) {
+      this.isUnsavedChangesModalOpen = true;
+    } else {
+      this.router.transitionTo('codelijsten.overzicht');
+    }
+  }
+
+  @action
+  discardChanges() {
+    this.model.codelijst.destroyRecord();
+    this.concepten.toArray().forEach((c) => {
       if (!c.id) {
         return;
       }
-      c.rollbackAttributes();
+      c.destroyRecord();
     });
-
+    this.concepten.clear();
+    this.isUnsavedChangesModalOpen = false;
     this.router.transitionTo('codelijsten.overzicht');
   }
 
@@ -70,7 +85,7 @@ export default class CodelijstenNewController extends Controller {
     }
 
     if (concept.isDeleted) {
-      this.model.concepten.removeObject(concept);
+      this.concepten.removeObject(concept);
     }
   }
 

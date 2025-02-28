@@ -35,8 +35,15 @@
 <Codelijst::InstanceTable
   @isEditable={{true}}
   @codelijst={{this.model.codelijst}}
-  @concepten={{this.model.concepten}}
+  @concepten={{this.concepten}}
   @showTotalConcepts={{true}}
   @onConceptChanged={{this.onConceptChanged}}
   @onCodelistNameUpdated={{this.onCodelistNameUpdated}}
+/>
+
+<Shared::UnsavedChangesModal
+  @isModalOpen={{this.isUnsavedChangesModalOpen}}
+  @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onDiscard={{this.discardChanges}}
 />
