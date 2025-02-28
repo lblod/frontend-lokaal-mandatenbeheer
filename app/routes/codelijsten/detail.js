@@ -24,13 +24,10 @@ export default class CodelijstenDetailRoute extends Route {
     });
     const concepten = (await codelijst?.concepts) ?? [];
 
-    let implementations = null;
+    let usages = null;
 
     if (!codelijst.isReadOnly) {
-      implementations =
-        await this.conceptSchemeApi.conceptSchemeHasImplementations(
-          codelijst.id
-        );
+      usages = await this.conceptSchemeApi.conceptSchemeHasUsage(codelijst.id);
     }
 
     return {
@@ -38,7 +35,7 @@ export default class CodelijstenDetailRoute extends Route {
       codelijst,
       concepten,
       keyValueState: createKeyValueState(codelijst, concepten),
-      implementations,
+      usages,
     };
   }
 
