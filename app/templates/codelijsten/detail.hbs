@@ -13,12 +13,14 @@
     <AuButtonGroup>
       {{#unless this.model.codelijst.isReadOnly}}
         <AuButton
+          @disabled={{this.isSaving}}
           @skin="secondary"
           @alert={{true}}
           {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
         >Verwijder</AuButton>
       {{/unless}}
       <AuButton
+        @disabled={{or this.isSaving this.isDeleting}}
         @skin="secondary"
         {{on "click" this.onCancel}}
       >Annuleer</AuButton>
@@ -30,7 +32,7 @@
           @tooltipText="De huidige status van de codelijst kan niet worden opgeslagen."
         >
           <AuButton
-            @disabled={{not this.hasChanges}}
+            @disabled={{or (not this.hasChanges) this.isDeleting}}
             @skin="primary"
             @loading={{this.isSaving}}
             @loadingMessage="Codelijst aan het opslagen"
@@ -78,6 +80,7 @@
       >Verwijder</AuButton>
       <AuButton
         @skin="secondary"
+        @disabled={{this.isDeleting}}
         {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
       >Annuleer</AuButton>
     </AuButtonGroup>

@@ -11,6 +11,7 @@
   <Group>
     <AuButtonGroup>
       <AuButton
+        @disabled={{this.isSaving}}
         @skin="secondary"
         {{on "click" this.onCancel}}
       >Annuleer</AuButton>
