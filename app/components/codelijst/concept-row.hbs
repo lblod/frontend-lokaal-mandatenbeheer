@@ -7,11 +7,11 @@
       />
       {{#if this.canSaveLabel}}
         <AuHelpText>
-          Naam moet minstens 2 karakters lang zijn.
+          {{this.infoMessage}}
         </AuHelpText>
       {{else}}
         <AuHelpText @error={{true}}>
-          {{this.errorMessage}}
+          {{this.infoMessage}}
         </AuHelpText>
       {{/if}}
     </div>
