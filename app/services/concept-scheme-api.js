@@ -17,7 +17,8 @@ export default class ConceptSchemeApiService extends Service {
       console.error(jsonResponse.error);
       throw {
         status: response.status,
-        message: jsonResponse.error.title,
+        message:
+          'Er liep iets mis bij het nakijken of deze codelijst ergens in gebruik is.',
       };
     }
 
@@ -42,7 +43,7 @@ export default class ConceptSchemeApiService extends Service {
       console.error(jsonResponse.error);
       throw {
         status: response.status,
-        message: jsonResponse.error.title,
+        message: 'Er liep iets mis bij het verwijderen van deze codelijst.',
       };
     }
   }
@@ -61,7 +62,8 @@ export default class ConceptSchemeApiService extends Service {
       console.error(jsonResponse.error);
       throw {
         status: response.status,
-        message: jsonResponse.error.title,
+        message:
+          'Er liep iets mis bij het nakijken of deze concept ergens in gebruik is.',
       };
     }
 
@@ -84,7 +86,8 @@ export default class ConceptSchemeApiService extends Service {
       console.error(jsonResponse.error);
       throw {
         status: response.status,
-        message: jsonResponse.error.title,
+        message:
+          'Er liep iets mis bij het verwijderen van deze concepten en hun implementaties.',
       };
     }
   }
