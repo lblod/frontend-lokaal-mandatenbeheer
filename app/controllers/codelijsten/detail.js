@@ -118,7 +118,17 @@ export default class CodelijstenDetailController extends Controller {
     this.isSaving = true;
     try {
       await this.model.codelijst.save();
+      const deletedConcepts = this.model.concepten
+        .toArray()
+        .filter((c) => c.isDeleted);
+      await this.conceptSchemeApi.deleteConceptsAndTheirImplementations(
+        deletedConcepts
+      );
       for (const concept of this.model.concepten.toArray()) {
+        if (concept.isDeleted) {
+          continue;
+        }
+
         concept.label = concept.label.trim();
         await concept.save();
       }

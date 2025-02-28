@@ -43,16 +43,15 @@
     </AuButtonGroup>
   </Group>
 </AuToolbar>
-{{#unless this.isSaving}}
-  <Codelijst::InstanceTable
-    @isEditable={{not this.model.codelijst.isReadOnly}}
-    @codelijst={{this.model.codelijst}}
-    @concepten={{this.model.concepten}}
-    @showTotalConcepts={{true}}
-    @onConceptChanged={{this.checkIsCodelistChanged}}
-    @onCodelistNameUpdated={{this.onCodelistNameUpdated}}
-  />
-{{/unless}}
+
+<Codelijst::InstanceTable
+  @isEditable={{not this.model.codelijst.isReadOnly}}
+  @codelijst={{this.model.codelijst}}
+  @concepten={{this.model.concepten}}
+  @showTotalConcepts={{true}}
+  @onConceptChanged={{this.checkIsCodelistChanged}}
+  @onCodelistNameUpdated={{this.onCodelistNameUpdated}}
+/>
 
 <AuModal
   @title="Verwijder codelijst"
