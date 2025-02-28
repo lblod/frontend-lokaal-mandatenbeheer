@@ -86,15 +86,18 @@ export default class ConceptSchemeApiService extends Service {
       return;
     }
 
-    const response = await fetch(`${API.CONCEPT_SCHEME_SERVICE}/concept/ids`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': JSON_API_TYPE,
-      },
-      body: JSON.stringify({
-        ids: conceptIdsToDelete,
-      }),
-    });
+    const response = await fetch(
+      `${API.CONCEPT_SCHEME_SERVICE}/concept/batch`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          ids: conceptIdsToDelete,
+        }),
+      }
+    );
 
     if (response.status !== STATUS_CODE.NO_CONTENT) {
       const jsonResponse = await response.json();
