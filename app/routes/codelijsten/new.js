@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 
-import { A } from '@ember/array';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 
 export default class CodelijstenNewRoute extends Route {
@@ -15,7 +15,17 @@ export default class CodelijstenNewRoute extends Route {
 
     return {
       codelijst,
-      concepten: A([]),
     };
+  }
+
+  @action
+  willTransition(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controller;
+    if (controller.canSave) {
+      transition.abort();
+      controller.isUnsavedChangesModalOpen = true;
+      controller.savedTransition = transition;
+    }
   }
 }
