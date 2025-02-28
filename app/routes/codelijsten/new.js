@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 
+import { A } from '@ember/array';
 import { service } from '@ember/service';
 
 export default class CodelijstenNewRoute extends Route {
@@ -14,6 +15,7 @@ export default class CodelijstenNewRoute extends Route {
 
     return {
       codelijst,
+      concepten: A([]),
     };
   }
 }
