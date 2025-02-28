@@ -9,8 +9,8 @@ export default class CodelijstConceptRow extends Component {
   @service toaster;
   @service conceptSchemeApi;
 
-  @tracked isImplementationModalOpen;
-  @tracked conceptImplementations;
+  @tracked isUsageModalOpen;
+  @tracked conceptUsages;
 
   @action
   updateConceptLabel(event) {
@@ -26,13 +26,11 @@ export default class CodelijstConceptRow extends Component {
       this.args.onConceptChanged();
       return;
     }
-    this.conceptImplementations =
-      await this.conceptSchemeApi.conceptHasImplementations(
-        this.args.concept?.id
-      );
-    this.isImplementationModalOpen =
-      this.conceptImplementations.hasImplementations;
-    if (!this.isImplementationModalOpen) {
+    this.conceptUsages = await this.conceptSchemeApi.conceptHasUsage(
+      this.args.concept?.id
+    );
+    this.isUsageModalOpen = this.conceptUsages.hasUsage;
+    if (!this.isUsageModalOpen) {
       this.args.concept.deleteRecord();
       this.args.onConceptChanged();
     }

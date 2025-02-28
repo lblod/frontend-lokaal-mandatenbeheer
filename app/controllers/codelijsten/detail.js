@@ -121,9 +121,7 @@ export default class CodelijstenDetailController extends Controller {
       const deletedConcepts = this.model.concepten
         .toArray()
         .filter((c) => c.isDeleted);
-      await this.conceptSchemeApi.deleteConceptsAndTheirImplementations(
-        deletedConcepts
-      );
+      await this.conceptSchemeApi.deleteConceptsAndUsage(deletedConcepts);
       for (const concept of this.model.concepten.toArray()) {
         if (concept.isDeleted) {
           continue;
@@ -167,18 +165,17 @@ export default class CodelijstenDetailController extends Controller {
 
   get isDetailedDeleteInfoShown() {
     return (
-      (this.model.implementations &&
-        this.model.implementations.hasImplementations) ||
-      this.model.implementations.totalOfConceptImplementations
+      (this.model.usages && this.model.usages.hasUsage) ||
+      this.model.usages.conceptUsageCount
     );
   }
 
   get detailedDeleteText() {
     let text = '';
-    if (this.model.implementations.hasImplementations) {
-      text += `Deze codelijst wordt op een aantal plekken gebruikt (${this.model.implementations.uris.length}). `;
+    if (this.model.usages.hasUsage) {
+      text += `Deze codelijst wordt op een aantal plekken gebruikt (${this.model.usages.uris.length}). `;
     }
-    const concepten = this.model.implementations.totalOfConceptImplementations;
+    const concepten = this.model.usages.conceptUsageCount;
     if (concepten >= 1) {
       text += `Ook zijn er ${concepten} plaatsen gevonden waar er een concept van deze codelijst wordt gebruikt.`;
     }

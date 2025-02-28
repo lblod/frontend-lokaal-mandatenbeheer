@@ -10,12 +10,12 @@ import {
 } from 'frontend-lmb/utils/constants';
 
 export default class ConceptSchemeApiService extends Service {
-  async conceptSchemeHasImplementations(conceptSchemeId) {
+  async conceptSchemeHasUsage(conceptSchemeId) {
     if (!conceptSchemeId) {
       return;
     }
     const response = await fetch(
-      `${API.CONCEPT_SCHEME_SERVICE}/concept-scheme/${conceptSchemeId}/has-implementations`
+      `${API.CONCEPT_SCHEME_SERVICE}/concept-scheme/${conceptSchemeId}/has-usage`
     );
 
     const jsonResponse = await response.json();
@@ -29,7 +29,11 @@ export default class ConceptSchemeApiService extends Service {
       };
     }
 
-    return jsonResponse;
+    return {
+      hasUsage: !!jsonResponse.hasUsage,
+      uris: jsonResponse.uris ?? [],
+      conceptUsageCount: jsonResponse.conceptUsageCount ?? 0,
+    };
   }
 
   async deleteConceptSchemeAndTheirConcepts(conceptScheme) {
@@ -56,12 +60,12 @@ export default class ConceptSchemeApiService extends Service {
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 
-  async conceptHasImplementations(conceptId) {
+  async conceptHasUsage(conceptId) {
     if (!conceptId) {
       return;
     }
     const response = await fetch(
-      `${API.CONCEPT_SCHEME_SERVICE}/concept/${conceptId}/has-implementations`
+      `${API.CONCEPT_SCHEME_SERVICE}/concept/${conceptId}/has-usage`
     );
 
     const jsonResponse = await response.json();
@@ -75,10 +79,13 @@ export default class ConceptSchemeApiService extends Service {
       };
     }
 
-    return jsonResponse;
+    return {
+      hasUsage: !!jsonResponse.hasUsage,
+      uris: jsonResponse.uris ?? [],
+    };
   }
 
-  async deleteConceptsAndTheirImplementations(concepts) {
+  async deleteConceptsAndUsage(concepts) {
     const conceptIdsToDelete = concepts
       .map((concept) => concept?.id)
       .filter((c) => c);
