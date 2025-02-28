@@ -32,7 +32,11 @@ export default class CodelijstenDetailController extends Controller {
   }
 
   get hasChanges() {
-    return this.didCodelijstChange && this.codelistNameState?.isValid;
+    return (
+      this.didCodelijstChange &&
+      this.codelistNameState?.isValid &&
+      this.areConceptLabelsValid()
+    );
   }
 
   @action
@@ -54,6 +58,19 @@ export default class CodelijstenDetailController extends Controller {
     } else {
       this.savedTransition?.retry();
     }
+  }
+
+  areConceptLabelsValid() {
+    return this.model.concepten.every((concept) => {
+      if (!concept.label) {
+        return false;
+      }
+      if (concept.label.trim() === '') {
+        return false;
+      }
+
+      return concept.label.trim().length >= 1;
+    });
   }
 
   @action
@@ -102,6 +119,7 @@ export default class CodelijstenDetailController extends Controller {
     try {
       await this.model.codelijst.save();
       for (const concept of this.model.concepten.toArray()) {
+        concept.label = concept.label.trim();
         await concept.save();
       }
       showSuccessToast(
