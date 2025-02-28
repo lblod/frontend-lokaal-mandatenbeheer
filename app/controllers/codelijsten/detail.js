@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+import { areConceptLabelsValid } from 'frontend-lmb/utils/codelijst';
 import { createKeyValueState } from 'frontend-lmb/utils/create-codelist-state';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
@@ -35,7 +36,7 @@ export default class CodelijstenDetailController extends Controller {
     return (
       this.didCodelijstChange &&
       this.codelistNameState?.isValid &&
-      this.areConceptLabelsValid()
+      areConceptLabelsValid(this.model.concepten)
     );
   }
 
@@ -58,19 +59,6 @@ export default class CodelijstenDetailController extends Controller {
     } else {
       this.savedTransition?.retry();
     }
-  }
-
-  areConceptLabelsValid() {
-    return this.model.concepten.every((concept) => {
-      if (!concept.label) {
-        return false;
-      }
-      if (concept.label.trim() === '') {
-        return false;
-      }
-
-      return concept.label.trim().length >= 1;
-    });
   }
 
   @action

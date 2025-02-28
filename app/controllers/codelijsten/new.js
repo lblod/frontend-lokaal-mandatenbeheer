@@ -1,11 +1,11 @@
 import Controller from '@ember/controller';
 
-import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+import { areConceptLabelsValid } from 'frontend-lmb/utils/codelijst';
 
 export default class CodelijstenNewController extends Controller {
   @service router;
@@ -14,10 +14,13 @@ export default class CodelijstenNewController extends Controller {
   @tracked isSaving;
 
   @tracked isNameValid;
-  @tracked concepten = A();
 
   get canSave() {
-    return this.isNameValid && this.concepten.length > 0;
+    return (
+      this.isNameValid &&
+      this.model.concepten.length > 0 &&
+      areConceptLabelsValid(this.model.concepten)
+    );
   }
 
   @action
@@ -25,7 +28,7 @@ export default class CodelijstenNewController extends Controller {
     this.isSaving = true;
     try {
       await this.model.codelijst.save();
-      for (const concept of this.concepten.toArray()) {
+      for (const concept of this.model.concepten.toArray()) {
         await concept.save();
       }
       this.isSaving = false;
@@ -50,7 +53,7 @@ export default class CodelijstenNewController extends Controller {
   onCancel() {
     this.isModalOpen = false;
     this.model.codelijst.rollbackAttributes();
-    this.concepten.toArray().forEach((c) => {
+    this.model.concepten.toArray().forEach((c) => {
       if (!c.id) {
         return;
       }
@@ -67,9 +70,7 @@ export default class CodelijstenNewController extends Controller {
     }
 
     if (concept.isDeleted) {
-      this.concepten.removeObject(concept);
-    } else {
-      this.concepten.pushObject(concept);
+      this.model.concepten.removeObject(concept);
     }
   }
 
