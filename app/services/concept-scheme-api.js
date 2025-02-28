@@ -1,6 +1,13 @@
 import Service from '@ember/service';
 
-import { API, JSON_API_TYPE, STATUS_CODE } from 'frontend-lmb/utils/constants';
+import { timeout } from 'ember-concurrency';
+
+import {
+  API,
+  JSON_API_TYPE,
+  RESOURCE_CACHE_TIMEOUT,
+  STATUS_CODE,
+} from 'frontend-lmb/utils/constants';
 
 export default class ConceptSchemeApiService extends Service {
   async conceptSchemeHasImplementations(conceptSchemeId) {
@@ -46,6 +53,7 @@ export default class ConceptSchemeApiService extends Service {
         message: 'Er liep iets mis bij het verwijderen van deze codelijst.',
       };
     }
+    await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 
   async conceptHasImplementations(conceptId) {
@@ -71,13 +79,20 @@ export default class ConceptSchemeApiService extends Service {
   }
 
   async deleteConceptsAndTheirImplementations(concepts) {
+    const conceptIdsToDelete = concepts
+      .map((concept) => concept?.id)
+      .filter((c) => c);
+    if (conceptIdsToDelete.length === 0) {
+      return;
+    }
+
     const response = await fetch(`${API.CONCEPT_SCHEME_SERVICE}/concept/ids`, {
       method: 'DELETE',
       headers: {
         'Content-Type': JSON_API_TYPE,
       },
       body: JSON.stringify({
-        ids: concepts.map((concept) => concept.id),
+        ids: conceptIdsToDelete,
       }),
     });
 
@@ -90,5 +105,6 @@ export default class ConceptSchemeApiService extends Service {
           'Er liep iets mis bij het verwijderen van deze concepten en hun implementaties.',
       };
     }
+    await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 }
