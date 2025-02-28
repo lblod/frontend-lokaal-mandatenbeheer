@@ -10,10 +10,19 @@
     <AuToolbar class="au-u-margin-top" as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton @alert={{true}} {{on "click" @onDiscard}}>
+          <AuButton
+            @alert={{true}}
+            {{on "click" @onDiscard}}
+            @loading={{@isDiscarding}}
+            @loadingMessage={{this.discardMessage}}
+          >
             Verwerp aanpassingen
           </AuButton>
-          <AuButton {{on "click" @onCancel}} @skin="secondary">
+          <AuButton
+            {{on "click" @onCancel}}
+            @disabled={{@isDiscarding}}
+            @skin="secondary"
+          >
             Annuleer
           </AuButton>
         </AuButtonGroup>
