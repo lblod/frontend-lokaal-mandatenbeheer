@@ -6,6 +6,7 @@ import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 
 export default class EditRangordeRoute extends Route {
   @service store;
+  @service bestuursperioden;
   @service('mandatarissen') mandatarissenService;
 
   queryParams = {
@@ -37,11 +38,17 @@ export default class EditRangordeRoute extends Route {
       return { mandataris: mandataris, rangorde: mandataris.rangorde };
     });
 
+    const currentBestuursperiode =
+      await this.bestuursperioden.getCurrentBestuursperiode();
+    const isEditingInPast =
+      parentModel.selectedBestuursperiode.id !== currentBestuursperiode.id;
+
     return {
       bestuursorgaan: parentModel.bestuursorgaan,
       bestuursorgaanInTijd,
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisStruct,
+      isEditingInPast,
     };
   }
 

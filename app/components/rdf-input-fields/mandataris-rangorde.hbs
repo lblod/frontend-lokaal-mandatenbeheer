@@ -7,14 +7,13 @@
   >
     {{@field.label}}
   </AuLabel>
-  <AuInput
-    @error={{this.hasErrors}}
-    @warning={{this.hasWarnings}}
-    @width="block"
+
+  <RangordeDropdown
     id={{this.inputId}}
-    value={{this.rangorde}}
-    placeholder={{this.placeholderText}}
-    {{on "blur" this.updateValue}}
+    @selected={{this.rangorde}}
+    @placeholder={{this.placeholderText}}
+    @mandaatLabel={{this.mandaatLabel}}
+    @onNewRangorde={{this.updateValue}}
   />
 
   {{#each this.errors as |error|}}
