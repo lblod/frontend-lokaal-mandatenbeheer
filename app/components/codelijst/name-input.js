@@ -37,7 +37,7 @@ export default class CodelijstNameInput extends Component {
     return (
       duplicateMatches.length === 1 &&
       duplicateMatches[0].label.toLowerCase() === searchName &&
-      duplicateMatches[0].label.toLowerCase() !== this.args.name
+      name !== this.args.name
     );
   }
 
