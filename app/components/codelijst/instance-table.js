@@ -40,6 +40,20 @@ export default class CodelijstInstanceTable extends Component {
   }
 
   @action
+  onConceptChanged() {
+    const nonRemovedConcepts = this.sortedConcepten.filter(
+      (c) => !c.isDeleted || c.isDestroyed
+    );
+    for (let index = 0; index < nonRemovedConcepts.length; index++) {
+      const indexOfConcept = this.args.concepten.indexOf(
+        nonRemovedConcepts[index]
+      );
+      this.args.concepten[indexOfConcept].order = index;
+    }
+    this.args.onConceptChanged();
+  }
+
+  @action
   moveConcept(concept, upDown) {
     const factor = upDown === 'up' ? -1 : 1;
     const conceptOrder = concept.order;
