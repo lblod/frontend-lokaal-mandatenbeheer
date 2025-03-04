@@ -11,7 +11,7 @@ import { restartableTask } from 'ember-concurrency';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
-import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
+import { EXT, MANDAAT } from 'frontend-lmb/rdf/namespaces';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
 import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
 
@@ -84,6 +84,22 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
     this.hasBeenFocused = true;
     super.updateValidations();
+
+    this.checkPersonMandates();
+  }
+
+  async checkPersonMandates() {
+    const person = await this.findPersonInForm();
+    if (!person) {
+      return;
+    }
+    this.warningValidations.push({
+      validationType: EXT('hasDuplicateMandate'),
+      hasValidation: true,
+      valid: false,
+      resultMessage:
+        'Deze persoon heeft dit mandaat al in deze bestuursperiode',
+    });
   }
 
   async findPersonInForm() {
