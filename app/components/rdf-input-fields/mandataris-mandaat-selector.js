@@ -39,6 +39,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
 
       if (mustTrigger) {
         await this.findPerson.perform();
+        this.checkPersonMandates();
       }
     });
   }
@@ -106,6 +107,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     if (!hasActiveMandate) {
       return;
     }
+    super.updateValidations();
     this.warningValidations.push({
       validationType: EXT('hasDuplicateMandate'),
       hasValidation: true,
