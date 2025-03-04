@@ -59,6 +59,23 @@ export default class PersoonApiService extends Service {
     return jsonResponse.isTrue;
   }
 
+  async hasActiveMandate(persoonId, mandaatId) {
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/personen/${persoonId}/has-active-mandate/${mandaatId}`
+    );
+    const jsonResponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(jsonResponse.message);
+      throw {
+        status: response.status,
+        message: jsonResponse.message,
+      };
+    }
+
+    return jsonResponse.isTrue;
+  }
+
   async endActiveMandates(persoonId, date) {
     const currentPeriod =
       await this.bestuursperioden.getCurrentBestuursperiode();
