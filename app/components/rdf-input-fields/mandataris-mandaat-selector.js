@@ -118,6 +118,14 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   }
 
   async findPersonInForm() {
+    let newPerson = await this.findPersonInFormStore();
+    if (newPerson) {
+      return newPerson;
+    }
+    return await this.findPersonInEmber(this.storeOptions.sourceNode.value);
+  }
+
+  async findPersonInFormStore() {
     const possiblePersonNode = this.storeOptions.store.any(
       this.storeOptions.sourceNode,
       MANDAAT('isBestuurlijkeAliasVan'),
@@ -134,6 +142,17 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
         return personMatches.at(0);
       }
     }
+  }
+
+  async findPersonInEmber(mandatarisUri) {
+    const mandatarisMatches = await this.store.query('mandataris', {
+      'filter[:uri:]': mandatarisUri,
+    });
+    if (mandatarisMatches.length === 0) {
+      return null;
+    }
+
+    return await mandatarisMatches.at(0).isBestuurlijkeAliasVan;
   }
 
   findPerson = restartableTask(async () => {
