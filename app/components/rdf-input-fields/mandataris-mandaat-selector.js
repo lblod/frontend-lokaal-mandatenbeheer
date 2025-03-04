@@ -99,7 +99,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
       console.log('hmmmm');
       return;
     }
-    const hasActiveMandate = this.persoonApi.hasActiveMandate(
+    const hasActiveMandate = await this.persoonApi.hasActiveMandate(
       person.id,
       this.mandaat.id
     );
