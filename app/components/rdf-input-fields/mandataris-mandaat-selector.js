@@ -20,6 +20,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
 
   @service store;
   @service multiUriFetcher;
+  @service persoonApi;
 
   @tracked mandaat = null;
   @tracked isStrictBurgemeester = false;
@@ -85,12 +86,24 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     this.hasBeenFocused = true;
     super.updateValidations();
 
+    this.mandaat = mandate;
     this.checkPersonMandates();
   }
 
   async checkPersonMandates() {
     const person = await this.findPersonInForm();
     if (!person) {
+      return;
+    }
+    if (!this.mandaat) {
+      console.log('hmmmm');
+      return;
+    }
+    const hasActiveMandate = this.persoonApi.hasActiveMandate(
+      person.id,
+      this.mandaat.id
+    );
+    if (!hasActiveMandate) {
       return;
     }
     this.warningValidations.push({
