@@ -29,39 +29,30 @@ export default class MandaatBestuursorganenSelector extends Component {
         .join(','),
     });
     this.mandaatOptions = mandaten;
-    if (
-      this.args.person &&
-      this.args.bestuursorganen.length === 1 &&
-      !(await this.args.bestuursorganen.at(0).isBCSD)
-    ) {
-      const isElected = await this.verkiezingService.checkIfPersonIsElected(
-        this.args.person.id,
-        this.args.bestuursorganen.at(0)
-      );
-      if (!isElected) {
-        const burgemeesterMandaten = await Promise.all(
-          this.mandaatOptions.map(async (m) => {
-            const isBurgemeester = await m.isBurgemeester;
-            if (isBurgemeester) {
-              return m;
-            }
-          })
-        );
-        this.mandaatOptions = burgemeesterMandaten.filter((m) => m);
-        if (this.mandaatOptions.length === 0) {
-          this.alertMessage = `De geselecteerde persoon is niet gevonden in de verkiezingslijst.`;
-        } else {
-          this.alertMessage = null;
-        }
-      }
-    }
-
     this.initialized = true;
   }
 
   @action
   select(mandaat) {
     this.mandaat = mandaat;
+    this.validatePerson();
     this.args.onSelect(mandaat);
+  }
+
+  async validatePerson() {
+    this.alertMessage = '';
+    if (
+      this.args.person &&
+      this.args.bestuursorganen.length === 1 &&
+      !(await this.mandaat.allowsNonElectedPersons)
+    ) {
+      const isElected = await this.verkiezingService.checkIfPersonIsElected(
+        this.args.person.id,
+        this.args.bestuursorganen.at(0)
+      );
+      if (!isElected) {
+        this.alertMessage = `De geselecteerde persoon is niet gevonden in de verkiezingslijst.`;
+      }
+    }
   }
 }
