@@ -26,7 +26,6 @@ export default class EditRangordeRoute extends Route {
         await this.mandatarissenService.getActiveMandatarissenAtTime(
           params,
           bestuursorgaanInTijd,
-          parentModel.selectedBestuursperiode,
           endOfDay(params.date)
         );
     }
