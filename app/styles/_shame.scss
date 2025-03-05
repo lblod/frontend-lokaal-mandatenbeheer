@@ -429,3 +429,7 @@ main .au-c-main-container__content .au-u-wide-on-print {
   display: grid;
   grid-template-columns: 1fr auto;
 }
+
+.power-select--min-width {
+  min-width: 20rem;
+}

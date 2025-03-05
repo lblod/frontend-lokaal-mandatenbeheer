@@ -15,7 +15,7 @@ export default class MandatarisService extends Service {
 
   async getOverlappingMandate(mandataris, person, endDate = null) {
     const mandate = await mandataris.bekleedt;
-    const mandatarisses = await this.store.query('mandataris', {
+    const mandatarissen = await this.store.query('mandataris', {
       filter: {
         bekleedt: {
           id: mandate.id,
@@ -26,7 +26,7 @@ export default class MandatarisService extends Service {
       },
     });
 
-    const toCheck = mandatarisses.slice();
+    const toCheck = mandatarissen.slice();
     let current;
     const start = moment(mandataris.start);
     const end = moment(endDate || mandataris.einde);
@@ -98,7 +98,6 @@ export default class MandatarisService extends Service {
 
   async createNewProps(mandataris, overwrites) {
     return {
-      rangorde: overwrites.rangorde ?? mandataris.rangorde,
       start: overwrites.start ?? mandataris.start,
       einde: overwrites.einde ?? mandataris.einde,
       bekleedt: overwrites.bekleedt ?? (await mandataris.bekleedt),

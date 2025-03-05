@@ -5,36 +5,29 @@ import { tracked } from '@glimmer/tracking';
 
 import { keepLatestTask } from 'ember-concurrency';
 import {
-  orderMandatarisStructByRangorde,
+  findOrderInString,
+  getMandatarisForRangorde,
+  getNextAvailableRangorde,
   rangordeNumberMapping,
   rangordeStringMapping,
-  rangordeStringToNumber,
 } from 'frontend-lmb/utils/rangorde';
 
 export default class OrganenRangordeInputComponent extends Component {
   @tracked rangordePlaceholder;
+  @tracked mandaat;
 
   constructor() {
     super(...arguments);
     this.setPlaceholder();
   }
 
-  get inputWarningMessage() {
-    const order = this.rangordeInteger;
-    if (order == null) {
-      return 'Opgelet! Dit is geen gekende rangorde!';
-    } else {
-      return null;
-    }
-  }
-
   get rangordeInteger() {
-    return this.findOrderInString(this.args.mandatarisStruct.rangorde);
+    return findOrderInString(this.args.mandatarisStruct.rangorde);
   }
 
   get rangordeMovedUp() {
     const currentNumber = this.rangordeInteger || 0;
-    const oldNumber = this.findOrderInString(
+    const oldNumber = findOrderInString(
       this.args.mandatarisStruct.mandataris.rangorde
     );
     return currentNumber < oldNumber;
@@ -42,7 +35,7 @@ export default class OrganenRangordeInputComponent extends Component {
 
   get rangordeMovedDown() {
     const currentNumber = this.rangordeInteger || 0;
-    const oldNumber = this.findOrderInString(
+    const oldNumber = findOrderInString(
       this.args.mandatarisStruct.mandataris.rangorde
     );
     return currentNumber > oldNumber;
@@ -53,15 +46,18 @@ export default class OrganenRangordeInputComponent extends Component {
   }
 
   async setPlaceholder() {
-    const mandaat = await this.args.mandatarisStruct.mandataris.get('bekleedt');
-    this.rangordePlaceholder = `Vul de rangorde in, bv. “Eerste ${mandaat.rangordeLabel}”`;
+    this.mandaat = await this.args.mandatarisStruct.mandataris.get('bekleedt');
+    this.rangordePlaceholder = `Selecteer een rangorde, bv. “Eerste ${this.mandaat.rangordeLabel}”`;
   }
 
   updateMandatarisRangorde = keepLatestTask(
     async (value, switchWithPrevious) => {
       const oldRangorde = this.args.mandatarisStruct.rangorde;
       const newRangorde = value;
-      const previousHolder = this.getMandatarisWithRangorde(newRangorde);
+      const previousHolder = getMandatarisForRangorde(
+        this.args.mandatarissen,
+        newRangorde
+      );
 
       this.args.mandatarisStruct.rangorde = newRangorde;
 
@@ -72,40 +68,17 @@ export default class OrganenRangordeInputComponent extends Component {
       ) {
         previousHolder.rangorde = oldRangorde;
       }
-
       this.args.updateMandatarisList();
     }
   );
 
+  @action
   setRangorde(value, switchWithPrevious = false) {
     this.updateMandatarisRangorde.perform(value, switchWithPrevious);
   }
 
-  async getMandaatLabel() {
-    const mandaat = await this.args.mandatarisStruct.mandataris.get('bekleedt');
-    return mandaat?.rangordeLabel;
-  }
-
-  findOrderInString(possibleString) {
-    if (!possibleString || typeof possibleString != 'string') {
-      return null;
-    }
-    let foundNumber = null;
-    Object.keys(rangordeStringMapping).forEach((key) => {
-      if (possibleString.startsWith(key)) {
-        foundNumber = rangordeStringMapping[key];
-      }
-    });
-    return foundNumber;
-  }
-
-  findFirstWordOfString(string) {
-    // eslint-disable-next-line no-useless-escape
-    const regex = new RegExp(/^([\w\-]+)/);
-    if (regex.test(string)) {
-      return `${string}`.match(regex);
-    }
-    return null;
+  get mandaatLabel() {
+    return this.mandaat?.rangordeLabel;
   }
 
   get isMinusDisabled() {
@@ -116,30 +89,6 @@ export default class OrganenRangordeInputComponent extends Component {
     return this.rangordeInteger >= Object.keys(rangordeStringMapping).length;
   }
 
-  getMandatarisWithRangorde(targetRangorde) {
-    return this.args.mandatarissen.find((mandatarisStruct) => {
-      return mandatarisStruct.rangorde === targetRangorde;
-    });
-  }
-
-  getNextAvailableRangorde() {
-    const sortedMandatarissen = orderMandatarisStructByRangorde([
-      ...this.args.mandatarissen,
-    ]);
-    const lastNumber = rangordeStringToNumber(
-      sortedMandatarissen[sortedMandatarissen.length - 1].rangorde
-    );
-    if (lastNumber) {
-      return rangordeNumberMapping[lastNumber + 1];
-    }
-    return rangordeNumberMapping[1];
-  }
-
-  @action
-  onUpdateRangorde(event) {
-    this.setRangorde(event.currentTarget.value);
-  }
-
   @action
   async rangordeUp() {
     const currentNumber = this.rangordeInteger || 0;
@@ -147,7 +96,7 @@ export default class OrganenRangordeInputComponent extends Component {
 
     if (this.rangordeInteger == null) {
       this.setRangorde(
-        `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`,
+        `${getNextAvailableRangorde(this.args.mandatarissen)} ${this.mandaatLabel}`,
         true
       );
     } else {
@@ -162,19 +111,12 @@ export default class OrganenRangordeInputComponent extends Component {
 
     if (this.rangordeInteger == null) {
       this.setRangorde(
-        `${this.getNextAvailableRangorde()} ${await this.getMandaatLabel()}`,
+        `${getNextAvailableRangorde(this.args.mandatarissen)} ${this.mandaatLabel}`,
         true
       );
     } else {
       const currentOrder = rangordeNumberMapping[currentNumber];
       this.setRangorde(this.rangorde.replace(currentOrder, newOrder), true);
-    }
-  }
-
-  @action
-  onEnterInRangorde(event) {
-    if (event.key === 'Enter') {
-      this.setRangorde(event.currentTarget.value);
     }
   }
 }
