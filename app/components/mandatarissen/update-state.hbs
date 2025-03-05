@@ -99,13 +99,14 @@
           <AuLabel>
             Rangorde
           </AuLabel>
-          <AuInput
-            value={{this.rangorde}}
-            @width="block"
+          <RangordeDropdown
             id="mandataris-rangorde"
-            placeholder={{this.rangordePlaceholder}}
-            {{on "input" this.updateRangorde}}
+            @selected={{this.rangorde}}
+            @placeholder={{this.placeholderText}}
+            @mandaatLabel={{this.mandaatLabel}}
+            @onNewRangorde={{this.updateRangorde}}
           />
+
         </div>
       {{/if}}
     {{/unless}}

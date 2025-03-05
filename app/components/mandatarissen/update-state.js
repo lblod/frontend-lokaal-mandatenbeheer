@@ -28,6 +28,7 @@ export default class MandatarissenUpdateState extends Component {
   @tracked bestuurseenheid = null;
   @tracked bestuursorganenOfMandaat = [];
   @tracked bestuursperiode;
+  @tracked mandaat;
   @tracked bestuursorgaanStartDate;
   @tracked bestuursorgaanEndDate;
   @tracked rangorde = null;
@@ -76,8 +77,8 @@ export default class MandatarissenUpdateState extends Component {
   });
 
   async getBestuursorgaanPeriod() {
-    const mandaat = await this.args.mandataris.bekleedt;
-    const bestuursorganen = await mandaat.bevatIn;
+    this.mandaat = await this.args.mandataris.bekleedt;
+    const bestuursorganen = await this.mandaat.bevatIn;
     if (bestuursorganen.length >= 1) {
       this.currentBestuursorgaan = bestuursorganen.at(0);
       this.bestuursorgaanStartDate = this.currentBestuursorgaan.bindingStart;
@@ -159,11 +160,12 @@ export default class MandatarissenUpdateState extends Component {
     );
   }
 
+  get mandaatLabel() {
+    return this.mandaat.get('bestuursfunctie.label') || 'schepen';
+  }
+
   get rangordePlaceholder() {
-    const mandaatName = (
-      this.args.mandataris.get('bekleedt.bestuursfunctie.label') || 'schepen'
-    ).toLowerCase();
-    return `Eerste ${mandaatName}`;
+    return `Eerste ${this.mandaatLabel}`;
   }
 
   async changeMandatarisState() {
@@ -176,6 +178,7 @@ export default class MandatarissenUpdateState extends Component {
         start: dateOfAction,
         einde: endDate,
         status: await this.newStatus,
+        rangorde: this.rangorde,
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
         ),
@@ -269,11 +272,8 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   @action
-  updateRangorde(event) {
-    if (event && typeof event.preventDefault === 'function') {
-      event.preventDefault();
-    }
-    this.rangorde = event.target.value;
+  updateRangorde(rangordeAsString) {
+    this.rangorde = rangordeAsString;
   }
 
   @action updateFractie(newFractie) {
