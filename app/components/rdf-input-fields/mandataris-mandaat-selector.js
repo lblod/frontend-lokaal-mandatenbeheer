@@ -99,11 +99,15 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     if (!this.mandaat) {
       return;
     }
-    const hasActiveMandate = await this.persoonApi.hasActiveMandate(
+    const activeMandatees = await this.persoonApi.getActiveMandateesWithMandate(
       person.id,
       this.mandaat.id
     );
-    if (!hasActiveMandate) {
+    if (
+      activeMandatees.length === 0 ||
+      (activeMandatees.length === 1 &&
+        activeMandatees.includes(this.storeOptions.sourceNode.value))
+    ) {
       return;
     }
     super.updateValidations();

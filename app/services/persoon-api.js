@@ -59,9 +59,9 @@ export default class PersoonApiService extends Service {
     return jsonResponse.isTrue;
   }
 
-  async hasActiveMandate(persoonId, mandaatId) {
+  async getActiveMandateesWithMandate(persoonId, mandaatId) {
     const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/personen/${persoonId}/has-active-mandate/${mandaatId}`
+      `${API.MANDATARIS_SERVICE}/personen/${persoonId}/active-mandates/${mandaatId}`
     );
     const jsonResponse = await response.json();
 
@@ -71,7 +71,7 @@ export default class PersoonApiService extends Service {
       throw error;
     }
 
-    return jsonResponse.isTrue;
+    return jsonResponse.mandatarissen;
   }
 
   async endActiveMandates(persoonId, date) {
