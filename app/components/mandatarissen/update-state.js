@@ -161,7 +161,7 @@ export default class MandatarissenUpdateState extends Component {
   }
 
   get mandaatLabel() {
-    return this.mandaat.get('bestuursfunctie.label') || 'schepen';
+    return this.mandaat?.rangordeLabel;
   }
 
   get rangordePlaceholder() {
