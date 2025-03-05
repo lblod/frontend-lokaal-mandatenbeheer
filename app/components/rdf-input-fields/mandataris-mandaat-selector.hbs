@@ -18,13 +18,23 @@
 >Mandaat</AuLabel>
 {{#if this.initialized}}
   <div class={{if this.hasErrors "ember-power-select--error"}}>
-    <Mandatenbeheer::MandaatBestuursorganenSelector
-      @onSelect={{this.updateMandaat}}
-      @bestuursorganen={{this.bestuursorganen}}
-      @mandaat={{this.mandaat}}
+    <PowerSelect
+      @loadingMessage="Aan het laden..."
+      @noMatchesMessage="Geen resultaten"
+      @searchMessage="Typ om te zoeken"
+      @searchEnabled={{true}}
       @allowClear={{false}}
-      @person={{this.person}}
-    />
+      @disabled={{@disabled}}
+      @placeholder="Zoek mandaat"
+      @options={{this.mandaatOptions}}
+      @selected={{this.mandaat}}
+      @searchField="bestuursfunctie.label"
+      @onChange={{this.updateMandaat}}
+      @triggerId="mandaat"
+      as |mandaat|
+    >
+      {{mandaat.bestuursfunctie.label}}
+    </PowerSelect>
   </div>
   {{#each this.errors as |error|}}
     <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
