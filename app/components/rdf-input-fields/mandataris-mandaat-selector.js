@@ -11,7 +11,7 @@ import { restartableTask } from 'ember-concurrency';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
-import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
+import { EXT, MANDAAT } from 'frontend-lmb/rdf/namespaces';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
 import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
 
@@ -20,6 +20,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
 
   @service store;
   @service multiUriFetcher;
+  @service persoonApi;
 
   @tracked mandaat = null;
   @tracked isStrictBurgemeester = false;
@@ -38,6 +39,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
 
       if (mustTrigger) {
         await this.findPerson.perform();
+        this.checkPersonMandates();
       }
     });
   }
@@ -84,9 +86,45 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
     this.hasBeenFocused = true;
     super.updateValidations();
+
+    this.mandaat = mandate;
+    this.checkPersonMandates();
+  }
+
+  async checkPersonMandates() {
+    const person = await this.findPersonInForm();
+    if (!person) {
+      return;
+    }
+    if (!this.mandaat) {
+      return;
+    }
+    const hasActiveMandate = await this.persoonApi.hasActiveMandate(
+      person.id,
+      this.mandaat.id
+    );
+    if (!hasActiveMandate) {
+      return;
+    }
+    super.updateValidations();
+    this.warningValidations.push({
+      validationType: EXT('hasDuplicateMandate'),
+      hasValidation: true,
+      valid: false,
+      resultMessage:
+        'Deze persoon heeft dit mandaat al in deze bestuursperiode',
+    });
   }
 
   async findPersonInForm() {
+    let newPerson = await this.findPersonInFormStore();
+    if (newPerson) {
+      return newPerson;
+    }
+    return await this.findPersonInEmber(this.storeOptions.sourceNode.value);
+  }
+
+  async findPersonInFormStore() {
     const possiblePersonNode = this.storeOptions.store.any(
       this.storeOptions.sourceNode,
       MANDAAT('isBestuurlijkeAliasVan'),
@@ -103,6 +141,17 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
         return personMatches.at(0);
       }
     }
+  }
+
+  async findPersonInEmber(mandatarisUri) {
+    const mandatarisMatches = await this.store.query('mandataris', {
+      'filter[:uri:]': mandatarisUri,
+    });
+    if (mandatarisMatches.length === 0) {
+      return null;
+    }
+
+    return await mandatarisMatches.at(0).isBestuurlijkeAliasVan;
   }
 
   findPerson = restartableTask(async () => {
