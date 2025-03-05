@@ -42,7 +42,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
 
       if (mustTrigger) {
         await this.findPerson.perform();
-        this.checkPersonMandates();
+        this.updateValidations();
       }
     });
   }
@@ -100,11 +100,21 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
 
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
     this.hasBeenFocused = true;
-    super.updateValidations();
-
     this.mandaat = mandate;
-    this.checkPersonMandates();
-    this.validatePerson();
+    this.updateValidations();
+  }
+
+  async updateValidations() {
+    const extraWarning = await this.checkPersonMandates();
+    const extraWarning2 = await this.validatePerson();
+
+    super.updateValidations();
+    if (extraWarning) {
+      this.warningValidations.push(extraWarning);
+    }
+    if (extraWarning2) {
+      this.warningValidations.push(extraWarning2);
+    }
   }
 
   async checkPersonMandates() {
@@ -122,14 +132,13 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     if (!hasActiveMandate) {
       return;
     }
-    super.updateValidations();
-    this.warningValidations.push({
+    return {
       validationType: EXT('hasDuplicateMandate'),
       hasValidation: true,
       valid: false,
       resultMessage:
         'Deze persoon heeft dit mandaat al in deze bestuursperiode',
-    });
+    };
   }
 
   async validatePerson() {
@@ -143,14 +152,13 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
         this.bestuursorganen.at(0)
       );
       if (!isElected) {
-        super.updateValidations();
-        this.warningValidations.push({
+        return {
           validationType: EXT('notElected'),
           hasValidation: true,
           valid: false,
           resultMessage:
             'De geselecteerde persoon is niet gevonden in de verkiezingslijst.',
-        });
+        };
       }
     }
   }
