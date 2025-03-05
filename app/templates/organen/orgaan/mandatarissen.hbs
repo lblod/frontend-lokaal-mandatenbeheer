@@ -17,29 +17,31 @@
       @icon="three-dots"
       @iconAlignment="right"
     >
-      {{#if this.isDisabled}}
-        <Shared::Tooltip
-          role="menuitem"
-          @showTooltip={{true}}
-          @tooltipText="Het is niet mogelijk de rangorde van mandatarissen te wijzigen in een bestuursperiode waarvan de voorbereiding van de legislatuur nog actief is."
-        >
-          <AuButton @disabled={{true}} @skin="link" role="menuitem">
-            Wijzig rangorde
-          </AuButton>
-        </Shared::Tooltip>
-      {{else}}
-        <Shared::Tooltip
-          role="menuitem"
-          @showTooltip={{true}}
-          @tooltipText="Pas de rangorde aan van meerdere mandatarissen tegelijkertijd."
-        >
-          <AuLink
+      {{#if (await this.model.bestuursorgaan.hasRangorde)}}
+        {{#if this.isDisabled}}
+          <Shared::Tooltip
             role="menuitem"
-            @route="organen.orgaan.edit-rangorde"
-            @skin="link"
-          >Wijzig rangorde
-          </AuLink>
-        </Shared::Tooltip>
+            @showTooltip={{true}}
+            @tooltipText="Het is niet mogelijk de rangorde van mandatarissen te wijzigen in een bestuursperiode waarvan de voorbereiding van de legislatuur nog actief is."
+          >
+            <AuButton @disabled={{true}} @skin="link" role="menuitem">
+              Wijzig rangorde
+            </AuButton>
+          </Shared::Tooltip>
+        {{else}}
+          <Shared::Tooltip
+            role="menuitem"
+            @showTooltip={{true}}
+            @tooltipText="Pas de rangorde aan van meerdere mandatarissen tegelijkertijd."
+          >
+            <AuLink
+              role="menuitem"
+              @route="organen.orgaan.edit-rangorde"
+              @skin="link"
+            >Wijzig rangorde
+            </AuLink>
+          </Shared::Tooltip>
+        {{/if}}
       {{/if}}
       {{#if this.isDisabled}}
         <Shared::Tooltip
