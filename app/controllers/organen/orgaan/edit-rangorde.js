@@ -51,14 +51,7 @@ export default class EditRangordeController extends Controller {
   }
 
   get tooltipText() {
-    if (this.openModalDisabled) {
-      return 'Er werden nog geen wijzigingen gevonden.';
-    }
-
-    if (this.model.isEditingInPast) {
-      return 'Rangorde kan enkel gecorrigeerd worden voor mandatarissen in het verleden.';
-    }
-    return null;
+    return 'Er werden nog geen wijzigingen gevonden.';
   }
 
   get confirmDisabled() {

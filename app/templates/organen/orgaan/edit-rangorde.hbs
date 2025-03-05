@@ -14,7 +14,7 @@
   </Group>
   <Group>
     <Shared::Tooltip
-      @showTooltip={{this.tooltipText}}
+      @showTooltip={{this.openModalDisabled}}
       @tooltipText={{this.tooltipText}}
     >
       <AuButton
@@ -25,15 +25,9 @@
       >
         Corrigeer rangorde
       </AuButton>
-    </Shared::Tooltip>
-
-    <Shared::Tooltip
-      @showTooltip={{this.tooltipText}}
-      @tooltipText={{this.tooltipText}}
-    >
       <AuButton
         {{on "click" this.startChangeRangorde}}
-        @disabled={{or this.openModalDisabled this.model.isEditingInPast}}
+        @disabled={{this.openModalDisabled}}
       >
         Wijzig rangorde
       </AuButton>
