@@ -66,11 +66,9 @@ export default class PersoonApiService extends Service {
     const jsonResponse = await response.json();
 
     if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
+      let error = new Error(jsonResponse.message);
+      error.status = response.status;
+      throw error;
     }
 
     return jsonResponse.isTrue;
