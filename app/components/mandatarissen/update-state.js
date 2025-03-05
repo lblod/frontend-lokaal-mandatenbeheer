@@ -178,17 +178,16 @@ export default class MandatarissenUpdateState extends Component {
         start: dateOfAction,
         einde: endDate,
         status: await this.newStatus,
-        rangorde: this.rangorde,
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
         ),
       }
     );
 
-    const newMandataris = this.store.createRecord(
-      'mandataris',
-      newMandatarisProps
-    );
+    const newMandataris = this.store.createRecord('mandataris', {
+      ...newMandatarisProps,
+      rangorde: this.rangorde,
+    });
 
     if (this.selectedReplacement) {
       newMandatarisProps.rangorde = '';
