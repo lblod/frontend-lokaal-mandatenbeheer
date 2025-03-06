@@ -10,8 +10,6 @@ export default class CodelijstNameInput extends Component {
   @tracked isValid = true;
   @tracked isDuplicate = false;
 
-  minCharacters = 2;
-
   @action
   async updateName(event) {
     const name = event?.target?.value;
@@ -25,7 +23,7 @@ export default class CodelijstNameInput extends Component {
   }
 
   isValidName(name) {
-    return name && name?.trim().length > this.minCharacters;
+    return name && name?.trim().length >= 1;
   }
 
   async isDuplicateName(name) {
@@ -43,16 +41,13 @@ export default class CodelijstNameInput extends Component {
 
   get errorMessage() {
     if (this.isDuplicate) {
-      return 'Er bestaat al een codelijst met deze naam';
+      return 'Er bestaat al een codelijst met deze naam.';
     }
 
-    return null;
-  }
-
-  get warningMessage() {
-    if (!this.isValid && this.args.name) {
-      return `Naam moet minsten ${this.minCharacters + 1} lang zijn`;
+    if (!this.isValid) {
+      return `Naam is verplicht.`;
     }
+
     return null;
   }
 }
