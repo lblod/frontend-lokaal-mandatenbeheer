@@ -67,7 +67,7 @@
           @model={{codelijst.id}}
           class="au-c-link au-u-medium"
         >
-          {{this.getCodelistName codelijst}}
+          {{codelijst.label}}
         </LinkTo>
         {{#if codelijst.isReadOnly}}
           <Shared::Tooltip
@@ -86,10 +86,10 @@
         {{/if}}
       </td>
       <td class="au-u-1-5">{{codelijst.id}}</td>
-      <td class="au-u-1-6">{{codelijst.displayCreatedAt}}</td>
+      <td class="au-u-1-6">{{codelijst.createdAt}}</td>
       <td class="au-u-1-6">
-        <AuPill @skin={{this.codelijstStatusSkin codelijst}}>
-          {{this.codelijstStatusLabel codelijst}}
+        <AuPill @skin={{codelijst.status.skin}}>
+          {{codelijst.status.label}}
         </AuPill>
       </td>
     </c.body>

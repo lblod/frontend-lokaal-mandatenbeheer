@@ -30,7 +30,22 @@ export default class CodelijstenOverzichtRoute extends Route {
     });
 
     return {
-      codelijsten: conceptSchemes,
+      codelijsten: this.mapCodelijstenData(conceptSchemes),
     };
+  }
+
+  mapCodelijstenData(codelijsten) {
+    return codelijsten.map((codelijst) => {
+      return {
+        id: codelijst.id,
+        label: codelijst.label || codelijst.id,
+        isReadOnly: codelijst.isReadOnly,
+        createdAt: codelijst.displayCreatedAt,
+        status: {
+          skin: codelijst.isReadOnly ? 'success' : 'link',
+          label: codelijst.isReadOnly ? 'Publiek' : 'Eigen codelijst',
+        },
+      };
+    });
   }
 }
