@@ -59,19 +59,18 @@ export default class PersoonApiService extends Service {
     return jsonResponse.isTrue;
   }
 
-  async getActiveMandateesWithMandate(persoonId, mandaatId) {
-    const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/personen/${persoonId}/active-mandates/${mandaatId}`
-    );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      let error = new Error(jsonResponse.message);
-      error.status = response.status;
-      throw error;
-    }
-
-    return jsonResponse.mandatarissen;
+  async getPersonMandateesWithMandate(persoonId, mandaatId) {
+    const mandatees = await this.store.query('mandataris', {
+      filter: {
+        'is-bestuurlijke-alias-van': {
+          ':id:': persoonId,
+        },
+        bekleedt: {
+          ':id:': mandaatId,
+        },
+      },
+    });
+    return mandatees;
   }
 
   async endActiveMandates(persoonId, date) {
