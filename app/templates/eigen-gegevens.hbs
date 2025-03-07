@@ -1,2 +1,62 @@
-{{page-title "EigenGegevens"}}
-{{outlet}}
+{{page-title "Eigen-gegevens"}}
+<AuMainContainer as |main|>
+  <main.content>
+    <AuToolbar
+      @size="large"
+      class="au-u-padding-bottom-none au-u-margin-bottom"
+      as |Group|
+    >
+      <Group>
+        <AuHeading @skin="2">Eigen gegevens</AuHeading>
+      </Group>
+      <Group>
+        <AuButtonGroup>
+          <AuLink @skin="button-secondary">Codelijsten beheren</AuLink>
+        </AuButtonGroup>
+        <AuButtonGroup>
+          <AuLink @route="eigen-gegevens.new" @skin="button">Nieuw formulier
+            aanmaken</AuLink>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+
+    <AuDataTable
+      @content={{this.model.forms}}
+      @noDataMessage="Geen eigen formulieren gevonden"
+      @size={{or this.results.length 0}}
+      as |t|
+    >
+      <t.content as |c|>
+        <c.header>
+          <AuDataTableThSortable
+            @field="label"
+            @currentSorting={{@sort}}
+            @label="Formulier"
+          />
+          <AuDataTableThSortable
+            @field="description"
+            @currentSorting={{@sort}}
+            @label="Beschrijving"
+          />
+          <AuDataTableThSortable
+            @field="createdAt"
+            @currentSorting={{@sort}}
+            @label="Aangemaakt op"
+          />
+          <AuDataTableThSortable
+            @field="modified"
+            @currentSorting={{@sort}}
+            @label="Laatst bewerkt"
+          />
+        </c.header>
+
+        <c.body as |form|>
+          <td class="au-u-1-6">{{form.label}}</td>
+          <td class="au-u-3-4">{{form.description}}</td>
+          <td>{{form.createdAt}}</td>
+          <td>{{form.modified}}</td>
+        </c.body>
+      </t.content>
+    </AuDataTable>
+  </main.content>
+</AuMainContainer>
