@@ -97,20 +97,28 @@ export default class CodelijstenDetailController extends Controller {
   @action
   async deleteCodelist() {
     this.isDeleting = true;
-    await this.conceptSchemeApi.deleteConceptSchemeAndTheirConcepts(
-      this.model.codelijst
-    );
-    showSuccessToast(
-      this.toaster,
-      'Codelijst succesvol verwijderd',
-      'Codelijst'
-    );
-    await this.store.unloadRecord(this.model.codelijst);
+    try {
+      await this.conceptSchemeApi.deleteConceptSchemeAndTheirConcepts(
+        this.model.codelijst
+      );
+      showSuccessToast(
+        this.toaster,
+        'Codelijst succesvol verwijderd',
+        'Codelijst'
+      );
+      await this.store.unloadRecord(this.model.codelijst);
+      this.router.transitionTo('codelijsten.overzicht', {
+        queryParams: { filter: null },
+      });
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het verwijderen van de codelijst, probeer het later opnieuw.',
+        'Codelijst'
+      );
+    }
     this.isDeleting = false;
     this.isDeleteModalOpen = false;
-    this.router.transitionTo('codelijsten.overzicht', {
-      queryParams: { filter: null },
-    });
   }
 
   @action
