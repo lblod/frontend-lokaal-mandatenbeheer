@@ -16,12 +16,12 @@
         {{on "click" this.onCancel}}
       >Annuleer</AuButton>
       <Shared::Tooltip
-        @showTooltip={{not this.canSave}}
+        @showTooltip={{not this.isNameValid}}
         @alignment="right"
-        @tooltipText="De huidige status van de codelijst kan niet worden opgeslagen."
+        @tooltipText="Geef een naam aan de codelijst."
       >
         <AuButton
-          @disabled={{not this.canSave}}
+          @disabled={{not this.isNameValid}}
           @skin="primary"
           @loading={{this.isSaving}}
           @loadingMessage="Codelijst aan het creëren"
@@ -32,14 +32,12 @@
   </Group>
 </AuToolbar>
 
-<Codelijst::InstanceTable
-  @isEditable={{true}}
-  @codelijst={{this.model.codelijst}}
-  @concepten={{this.concepten}}
-  @showTotalConcepts={{true}}
-  @onConceptChanged={{this.onConceptChanged}}
-  @onCodelistNameUpdated={{this.onCodelistNameUpdated}}
-/>
+<div class="au-o-box au-u-1-3@medium au-u-flex au-u-flex--column">
+  <Codelijst::NameInput
+    @name={{this.model.codelijst.label}}
+    @onUpdate={{this.onCodelistNameUpdated}}
+  />
+</div>
 
 <Shared::UnsavedChangesModal
   @isModalOpen={{this.isUnsavedChangesModalOpen}}
