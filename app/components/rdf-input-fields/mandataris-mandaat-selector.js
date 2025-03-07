@@ -38,7 +38,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
 
       if (mustTrigger) {
         await this.findPerson();
-        this.checkPersonMandates();
+        await this.checkPersonMandates();
       }
     });
   }
@@ -87,7 +87,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     super.updateValidations();
 
     this.mandaat = mandate;
-    this.checkPersonMandates();
+    await this.checkPersonMandates();
   }
 
   async checkPersonMandates() {
