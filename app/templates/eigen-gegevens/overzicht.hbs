@@ -19,9 +19,9 @@
     </AuToolbar>
 
     <AuDataTable
-      @content={{this.model.forms}}
+      @content={{this.model.formNames}}
       @noDataMessage="Geen eigen formulieren gevonden"
-      @size={{or this.model.forms.length 0}}
+      @size={{or this.model.formNames.length 0}}
       as |t|
     >
       <t.content as |c|>
@@ -36,30 +36,16 @@
             @currentSorting={{@sort}}
             @label="Beschrijving"
           />
-          <AuDataTableThSortable
-            @field="createdAt"
-            @currentSorting={{@sort}}
-            @label="Aangemaakt op"
-          />
-          <AuDataTableThSortable
-            @field="modified"
-            @currentSorting={{@sort}}
-            @label="Laatst bewerkt"
-          />
         </c.header>
 
-        <c.body as |form|>
+        <c.body as |formName|>
           <td class="au-u-1-6">
-            <LinkTo
+            <AuLink
               @route="eigen-gegevens.form-instances"
-              class="au-c-link au-u-medium"
-            >
-              {{form.label}}
-            </LinkTo>
+              @query={{hash formName=formName}}
+            >{{formName}}</AuLink>
           </td>
-          <td class="au-u-3-4">{{form.description}}</td>
-          <td>{{form.createdAt}}</td>
-          <td>{{form.modified}}</td>
+          <td></td>
         </c.body>
       </t.content>
     </AuDataTable>

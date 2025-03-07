@@ -1,21 +1,26 @@
 import Route from '@ember/routing/route';
 
-import moment from 'moment';
+import { service } from '@ember/service';
+
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class EigenGegevensOverzichtRoute extends Route {
+  @service toaster;
   async model() {
+    let formNames = [];
+    try {
+      const response = await fetch('/form-content/forms');
+      const form = await response.json();
+      formNames = form.formDirectories;
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het ophalen van het overzicht van formulieren.'
+      );
+    }
+
     return {
-      forms: [
-        {
-          id: 1,
-          label: 'test formulier',
-          description: `
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          `,
-          createdAt: moment(new Date()).format('DD-MM-YYYY HH:mm'),
-          modified: moment(new Date()).format('DD-MM-YYYY HH:mm'),
-        },
-      ],
+      formNames,
     };
   }
 }
