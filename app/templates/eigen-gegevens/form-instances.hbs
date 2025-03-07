@@ -1,5 +1,5 @@
 {{page-title "Detail"}}
-{{breadcrumb this.model.form.label route="eigen-gegevens.detail"}}
+{{breadcrumb this.model.form.label route="eigen-gegevens.form-instances"}}
 <AuMainContainer as |main|>
   <main.content>
     <AuToolbar
@@ -19,23 +19,23 @@
     </AuToolbar>
 
     <AuDataTable
-      @content={{this.model.fields}}
-      @noDataMessage="Geen velden gevonden voor dit formulier"
+      @content={{this.model.instances}}
+      @noDataMessage="Geen instanties gevonden voor dit formulier"
       as |t|
     >
       <t.content as |c|>
         <c.header>
           <AuDataTableThSortable
-            @field="label"
+            @field="id"
             @currentSorting={{@sort}}
-            @label="Veld"
+            @label="Instantie"
           />
-          <th>Type</th>
+          <th>Eigenaar</th>
         </c.header>
 
-        <c.body as |field|>
-          <td class="au-u-1-6">{{field.label}}</td>
-          <td class="au-u-3-4">{{field.type}}</td>
+        <c.body as |instance|>
+          <td class="au-u-1-6">{{instance.id}}</td>
+          <td class="au-u-3-4">{{instance.owner}}</td>
         </c.body>
       </t.content>
     </AuDataTable>

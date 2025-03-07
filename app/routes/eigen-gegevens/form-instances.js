@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 import moment from 'moment';
 
-export default class EigenGegevensDetailRoute extends Route {
+export default class EigenGegevensDFormInstancesRoute extends Route {
   async model() {
     return {
       form: {
@@ -13,7 +13,7 @@ export default class EigenGegevensDetailRoute extends Route {
         createdAt: moment(new Date()).format('DD-MM-YYYY HH:mm'),
         modified: moment(new Date()).format('DD-MM-YYYY HH:mm'),
       },
-      fields: [],
+      instances: [],
     };
   }
 }

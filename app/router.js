@@ -67,7 +67,7 @@ Router.map(function () {
 
   this.route('eigen-gegevens', function () {
     this.route('new');
-    this.route('detail');
+    this.route('form-instances');
     this.route('overzicht');
   });
 
