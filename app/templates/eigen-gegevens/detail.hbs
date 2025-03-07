@@ -1,0 +1,43 @@
+{{page-title "Detail"}}
+{{breadcrumb this.model.form.label route="eigen-gegevens.detail"}}
+<AuMainContainer as |main|>
+  <main.content>
+    <AuToolbar
+      @size="large"
+      class="au-u-padding-bottom-none au-u-margin-bottom"
+      as |Group|
+    >
+      <Group>
+        <AuHeading @skin="2">{{this.model.form.label}}</AuHeading>
+      </Group>
+      <Group>
+        <AuButtonGroup>
+          <AuButton @alert={{true}} @skin="secondary">Formulier verwijderen</AuButton>
+          <AuButton>Nieuw veld toevoegen</AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+
+    <AuDataTable
+      @content={{this.model.fields}}
+      @noDataMessage="Geen velden gevonden voor dit formulier"
+      as |t|
+    >
+      <t.content as |c|>
+        <c.header>
+          <AuDataTableThSortable
+            @field="label"
+            @currentSorting={{@sort}}
+            @label="Veld"
+          />
+          <th>Type</th>
+        </c.header>
+
+        <c.body as |field|>
+          <td class="au-u-1-6">{{field.label}}</td>
+          <td class="au-u-3-4">{{field.type}}</td>
+        </c.body>
+      </t.content>
+    </AuDataTable>
+  </main.content>
+</AuMainContainer>
