@@ -50,6 +50,7 @@
     {{#if this.creatingPerson}}
       <SemanticForms::NewInstance
         @onCreate={{this.onSelectNewPerson}}
+        @beforeCreate={{this.checkPersonCreated}}
         @form={{this.createPersonFormDefinition}}
         @buildSourceTtl={{this.buildSourceTtl}}
       />
@@ -75,6 +76,7 @@
       {{#if this.creatingPerson}}
         <SemanticForms::NewInstance
           @onCreate={{this.onSelectNewPerson}}
+          @beforeCreate={{this.checkPersonCreated}}
           @form={{this.createPersonFormDefinition}}
           @onCancel={{this.cancelCreate}}
           @buildSourceTtl={{this.buildSourceTtl}}
