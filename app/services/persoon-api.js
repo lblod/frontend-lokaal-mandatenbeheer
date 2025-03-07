@@ -59,6 +59,20 @@ export default class PersoonApiService extends Service {
     return jsonResponse.isTrue;
   }
 
+  async getPersonMandateesWithMandate(persoonId, mandaatId) {
+    const mandatees = await this.store.query('mandataris', {
+      filter: {
+        'is-bestuurlijke-alias-van': {
+          ':id:': persoonId,
+        },
+        bekleedt: {
+          ':id:': mandaatId,
+        },
+      },
+    });
+    return mandatees;
+  }
+
   async endActiveMandates(persoonId, date) {
     const currentPeriod =
       await this.bestuursperioden.getCurrentBestuursperiode();

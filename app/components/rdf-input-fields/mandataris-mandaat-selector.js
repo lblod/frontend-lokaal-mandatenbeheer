@@ -6,12 +6,11 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 import { NamedNode } from 'rdflib';
-import { restartableTask } from 'ember-concurrency';
 
 import { triplesForPath } from '@lblod/submission-form-helpers';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { loadBestuursorgaanUrisFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
-import { MANDAAT } from 'frontend-lmb/rdf/namespaces';
+import { EXT, MANDAAT } from 'frontend-lmb/rdf/namespaces';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
 import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
 
@@ -20,6 +19,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
 
   @service store;
   @service multiUriFetcher;
+  @service persoonApi;
 
   @tracked mandaat = null;
   @tracked isStrictBurgemeester = false;
@@ -37,7 +37,8 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
       );
 
       if (mustTrigger) {
-        await this.findPerson.perform();
+        await this.findPerson();
+        await this.checkPersonMandates();
       }
     });
   }
@@ -84,9 +85,52 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
     this.hasBeenFocused = true;
     super.updateValidations();
+
+    this.mandaat = mandate;
+    await this.checkPersonMandates();
+  }
+
+  async checkPersonMandates() {
+    const person = await this.findPersonInForm();
+    this.warningValidations = this.warningValidations.filter((val) => {
+      val.validationType === EXT('hasDuplicateMandate');
+    });
+    if (!person || !this.mandaat) {
+      this.updateValidations();
+      return;
+    }
+    const activeMandatees = await this.persoonApi.getPersonMandateesWithMandate(
+      person.id,
+      this.mandaat.id
+    );
+    if (
+      activeMandatees.length === 0 ||
+      activeMandatees.some(
+        (mand) => mand.uri === this.storeOptions.sourceNode.value
+      )
+    ) {
+      this.updateValidations();
+      return;
+    }
+    this.updateValidations();
+    this.warningValidations.push({
+      validationType: EXT('hasDuplicateMandate'),
+      hasValidation: true,
+      valid: false,
+      resultMessage:
+        'Deze persoon heeft dit mandaat al in deze bestuursperiode',
+    });
   }
 
   async findPersonInForm() {
+    let newPerson = await this.findPersonInFormStore();
+    if (newPerson) {
+      return newPerson;
+    }
+    return await this.findPersonInEmber(this.storeOptions.sourceNode.value);
+  }
+
+  async findPersonInFormStore() {
     const possiblePersonNode = this.storeOptions.store.any(
       this.storeOptions.sourceNode,
       MANDAAT('isBestuurlijkeAliasVan'),
@@ -105,7 +149,18 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     }
   }
 
-  findPerson = restartableTask(async () => {
+  async findPersonInEmber(mandatarisUri) {
+    const mandatarisMatches = await this.store.query('mandataris', {
+      'filter[:uri:]': mandatarisUri,
+    });
+    if (mandatarisMatches.length === 0) {
+      return null;
+    }
+
+    return await mandatarisMatches.at(0).isBestuurlijkeAliasVan;
+  }
+
+  async findPerson() {
     const currentPerson = await this.findPersonInForm();
     if (
       (this.person && !currentPerson) ||
@@ -115,5 +170,5 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
       await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
       this.initialized = true;
     }
-  });
+  }
 }
