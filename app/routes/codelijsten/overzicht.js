@@ -29,8 +29,11 @@ export default class CodelijstenOverzichtRoute extends Route {
       ...searchFilter,
     });
 
+    let codelijsten = this.mapCodelijstenData(conceptSchemes);
+    codelijsten.meta = conceptSchemes.meta;
+
     return {
-      codelijsten: this.mapCodelijstenData(conceptSchemes),
+      codelijsten,
     };
   }
 
