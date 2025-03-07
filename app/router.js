@@ -65,6 +65,12 @@ Router.map(function () {
     });
   });
 
+  this.route('codelijsten', function () {
+    this.route('overzicht');
+    this.route('new');
+    this.route('detail', { path: '/:id/detail' });
+  });
+
   this.route('under-construction');
   this.route('lokaal-beheerd');
 
