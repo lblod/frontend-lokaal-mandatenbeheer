@@ -35,6 +35,7 @@ module.exports = function (environment) {
     features: {
       'show-forms-module': false,
       'enable-mandataris-count-warnings': true,
+      'show-eigen-gegevens-module': false,
       politieraad: false,
     },
     lpdcUrl: '{{LPDC_URL}}',
