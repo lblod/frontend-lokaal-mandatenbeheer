@@ -8,7 +8,11 @@ import { action } from '@ember/object';
 import { CREATE_PERSON_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 
 import { v4 as uuid } from 'uuid';
-
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { JSON_API_TYPE, SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
+import { ADMS, FOAF, PERSOON, SKOS } from 'frontend-lmb/rdf/namespaces';
+import { NamedNode } from 'rdflib';
+import moment from 'moment';
 export default class PersonSelectorComponent extends Component {
   inputId = 'input-' + guidFor(this);
 
@@ -123,5 +127,72 @@ export default class PersonSelectorComponent extends Component {
 
   get personModalTitle() {
     return this.creatingPerson ? 'Voeg persoon toe' : 'Selecteer een persoon';
+  }
+
+  @action
+  async checkPersonCreated(ttlCode, sourceNode) {
+    // todo need to fetch the person info and send it, then clear the ttl except for type if it's a match or block if it exists with other info this isn't great.
+    const forkingstore = new ForkingStore();
+    forkingstore.parse(ttlCode, SOURCE_GRAPH, 'text/turtle');
+    const sourceNodeUri = new NamedNode(sourceNode);
+    const voornaam = forkingstore.any(
+      sourceNodeUri,
+      PERSOON('gebruikteVoornaam'),
+      null,
+      SOURCE_GRAPH
+    );
+    const achternaam = forkingstore.any(
+      sourceNodeUri,
+      FOAF('familyName'),
+      null,
+      SOURCE_GRAPH
+    );
+    const rrnUri = forkingstore.any(
+      sourceNodeUri,
+      ADMS('identifier'),
+      null,
+      SOURCE_GRAPH
+    );
+    const rrn = forkingstore.any(rrnUri, SKOS('notation'), null, SOURCE_GRAPH);
+    const birthdateUri = forkingstore.any(
+      sourceNodeUri,
+      PERSOON('heeftGeboorte'),
+      null,
+      SOURCE_GRAPH
+    );
+    const birthDate = forkingstore.any(
+      birthdateUri,
+      PERSOON('datum'),
+      null,
+      SOURCE_GRAPH
+    );
+    const response = await fetch(`/person-api/person/copy-if-exists`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': JSON_API_TYPE,
+      },
+      body: JSON.stringify({
+        firstName: voornaam.value,
+        lastName: achternaam.value,
+        identifier: rrn.value,
+        birthDate: moment(birthDate.value).toDate(),
+      }),
+    });
+    if (response.status > 299) {
+      const body = await response.json();
+      throw new Error(
+        'Er liep iets fout bij het controleren van de persoon' +
+          (body?.error?.title ? `: ${body.error.title}` : '')
+      );
+    }
+    const body = await response.json();
+    if (body.uri) {
+      return `<${body.uri}> a <http://data.vlaanderen.be/ns/persoon#Persoon>.`;
+    }
+    if (body.safe) {
+      return ttlCode;
+    } else {
+      throw new Error('Er bestaat al een persoon met dit rijksregisternummer');
+    }
   }
 }
