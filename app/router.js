@@ -65,6 +65,8 @@ Router.map(function () {
     });
   });
 
+  this.route('eigen-gegevens');
+
   this.route('under-construction');
   this.route('lokaal-beheerd');
 
