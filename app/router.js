@@ -68,7 +68,10 @@ Router.map(function () {
   this.route('eigen-gegevens', function () {
     this.route('new');
     this.route('overzicht');
-    this.route('form-instances');
+    this.route('form-instances', function () {
+      this.route('instance');
+      this.route('new');
+    });
   });
 
   this.route('under-construction');
