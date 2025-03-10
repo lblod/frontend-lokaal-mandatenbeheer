@@ -10,7 +10,6 @@ export const buildNewMandatarisSourceTtl = async (
 ) => {
   const nietBekrachtigdTriple = `
     <${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/hasPublicationStatus> <${MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE}>.
-    <${instanceUri}> <http://lblod.data.gift/vocabularies/lmb/effectiefAt> "${new Date().toJSON()}"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
   `;
   if (!personId) {
     return nietBekrachtigdTriple;

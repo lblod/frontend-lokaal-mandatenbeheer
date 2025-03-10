@@ -3,10 +3,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import {
-  MANDATARIS_DRAFT_PUBLICATION_STATE,
-  MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE,
-} from 'frontend-lmb/utils/well-known-uris';
+import { MANDATARIS_DRAFT_PUBLICATION_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 import { restartableTask, task, timeout } from 'ember-concurrency';
 
@@ -95,14 +92,6 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   @action
   async setStatus(publicationStatus) {
     this.mandataris.publicationStatus = publicationStatus;
-    if (
-      publicationStatus?.uri === MANDATARIS_NIET_BEKRACHTIGD_PUBLICATION_STATE
-    ) {
-      this.args.mandataris.effectiefAt = new Date();
-    }
-    if (publicationStatus?.uri === MANDATARIS_DRAFT_PUBLICATION_STATE) {
-      this.args.mandataris.effectiefAt = null;
-    }
 
     await this.mandataris.save();
     if (this.args.onUpdate) {

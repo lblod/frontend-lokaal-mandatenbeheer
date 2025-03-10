@@ -27,7 +27,6 @@ module('Integration | Component | validatie-table', function (hooks) {
       uri: 'http://example.com/mandataris/1',
       linkToBesluit: 'http://example.com/besluit/1',
       modified: new Date(),
-      effectiefAt: new Date(),
     });
     this.set('instance', mandataris);
 
