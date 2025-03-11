@@ -212,3 +212,33 @@ const fallbackSortByOtherIVOrgans = (a, b, allMandatarissenInIv) => {
   }
   return rankA - rankB;
 };
+
+export const getNextAvailableRangorde = (mandatarissen) => {
+  const sortedMandatarissen = orderMandatarissenByRangorde([mandatarissen]);
+  const lastNumber = rangordeStringToNumber(
+    sortedMandatarissen[sortedMandatarissen.length - 1].rangorde
+  );
+  if (lastNumber) {
+    return rangordeNumberMapping[lastNumber + 1];
+  }
+  return rangordeNumberMapping[1];
+};
+
+export const findOrderInString = (possibleString) => {
+  if (!possibleString || typeof possibleString != 'string') {
+    return null;
+  }
+  let foundNumber = null;
+  Object.keys(rangordeStringMapping).forEach((key) => {
+    if (possibleString.startsWith(key)) {
+      foundNumber = rangordeStringMapping[key];
+    }
+  });
+  return foundNumber;
+};
+
+export const getMandatarisForRangorde = (mandatarissen, targetRangorde) => {
+  return mandatarissen.find((mandatarisStruct) => {
+    return mandatarisStruct.rangorde === targetRangorde;
+  });
+};

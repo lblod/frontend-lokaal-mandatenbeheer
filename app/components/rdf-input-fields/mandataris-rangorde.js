@@ -23,7 +23,8 @@ export default class RdfMandatarisRangorde extends InputFieldComponent {
   @service store;
   @tracked rangorde;
   @tracked shouldRender;
-  @tracked placeholderText = 'Vul de rangorde in, bvb “Eerste schepen”';
+  @tracked placeholderText;
+  @tracked mandaat;
 
   constructor() {
     super(...arguments);
@@ -68,14 +69,14 @@ export default class RdfMandatarisRangorde extends InputFieldComponent {
       this.storeOptions.sourceGraph
     );
 
-    const mandaat = await getByUri(
+    this.mandaat = await getByUri(
       this.store,
       'mandaat',
       mandaatUri[0]?.object?.value,
       { include: 'bestuursfunctie' }
     );
-    this.shouldRender = mandaat?.hasRangorde;
-    this.placeholderText = `Vul de rangorde in, bvb “Eerste ${mandaat?.rangordeLabel}”`;
+    this.shouldRender = this.mandaat?.hasRangorde;
+    this.placeholderText = `Selecteer een rangorde, bvb “Eerste ${this.mandaat?.rangordeLabel}”`;
 
     if (!this.shouldRender && this.rangorde != null) {
       // without timeout, the form ttl doesn't update immediately
@@ -93,17 +94,17 @@ export default class RdfMandatarisRangorde extends InputFieldComponent {
   }
 
   @action
-  async updateValue(event) {
-    if (event && typeof event.preventDefault === 'function') {
-      event.preventDefault();
-    }
-    const rangorde = event.target.value.trim();
-    this.rangorde = rangorde;
+  async updateValue(rangordeAsString) {
+    this.rangorde = rangordeAsString;
 
-    replaceSingleFormValue(this.storeOptions, rangorde ? rangorde : null);
+    replaceSingleFormValue(this.storeOptions, rangordeAsString ?? null);
 
     this.updateValidations();
 
     this.hasBeenFocused = true;
+  }
+
+  get mandaatLabel() {
+    return this.mandaat?.rangordeLabel;
   }
 }

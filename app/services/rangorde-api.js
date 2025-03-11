@@ -2,6 +2,7 @@ import Service from '@ember/service';
 
 import { service } from '@ember/service';
 import { API, JSON_API_TYPE, STATUS_CODE } from 'frontend-lmb/utils/constants';
+import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class RangordeApiService extends Service {
@@ -9,6 +10,7 @@ export default class RangordeApiService extends Service {
   @service toaster;
 
   async updateRangordes(mandatarissen, asCorrection, date) {
+    const realDate = endOfDay(date);
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/rangorde/update-rangordes?asCorrection=${asCorrection}`,
       {
@@ -18,7 +20,7 @@ export default class RangordeApiService extends Service {
         },
         body: JSON.stringify({
           mandatarissen: mandatarissen,
-          date: date,
+          date: realDate,
         }),
       }
     );
