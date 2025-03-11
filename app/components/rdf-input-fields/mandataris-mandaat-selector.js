@@ -122,7 +122,6 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
       val.validationType === EXT('hasDuplicateMandate');
     });
     if (!person || !this.mandaat) {
-      this.updateValidations();
       return;
     }
     const activeMandatees = await this.persoonApi.getPersonMandateesWithMandate(
@@ -135,7 +134,6 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
         (mand) => mand.uri === this.storeOptions.sourceNode.value
       )
     ) {
-      this.updateValidations();
       return;
     }
     return {
