@@ -1,0 +1,78 @@
+{{#if @isEditable}}
+  <div class="au-o-box au-u-1-3@medium au-u-flex au-u-flex--column">
+    <Codelijst::NameInput
+      @name={{@codelijst.label}}
+      @onUpdate={{this.updateCodelistName}}
+    />
+  </div>
+{{/if}}
+<div class="no-pagination au-c-body-container au-c-body-container--scroll">
+  {{#if @showTotalConcepts}}
+    <div
+      class="au-u-flex au-u-flex--end au-u-margin-bottom-small au-u-margin-right"
+    >
+      <AuHelpText @skin="secondary" @size="large">
+        Aantal:
+        {{@concepten.length}}
+      </AuHelpText>
+    </div>
+  {{/if}}
+  <AuTable @size={{this.size}}>
+    <:header>
+      <tr>
+        {{#if @isEditable}}
+          <th> {{! Order }}</th>
+        {{/if}}
+        <th>Label</th>
+        {{#if @isEditable}}
+          <th>{{! Acties }}</th>
+        {{/if}}
+      </tr>
+    </:header>
+    <:body>
+      {{#each this.sortedConcepten as |concept|}}
+        {{#unless concept.isDeleted}}
+          <tr>
+            {{#if @isEditable}}
+              <td class="au-u-flex au-u-flex--column">
+                <AuButton
+                  {{on "click" (fn this.moveConcept concept "up")}}
+                  @icon="chevron-up"
+                  @skin="naked"
+                  @hideText={{true}}
+                />
+                <AuButton
+                  {{on "click" (fn this.moveConcept concept "down")}}
+                  @icon="chevron-down"
+                  @skin="naked"
+                  @hideText={{true}}
+                />
+              </td>
+            {{/if}}
+            <Codelijst::ConceptRow
+              @concept={{concept}}
+              @isEditable={{@isEditable}}
+              @onConceptChanged={{this.onConceptChanged}}
+            />
+          </tr>
+        {{/unless}}
+      {{/each}}
+    </:body>
+    <:footer>
+      {{#if @isEditable}}
+        <tr>
+          <td colspan="3">
+            <AuButton
+              @skin="secondary"
+              @icon="plus"
+              @width="block"
+              {{on "click" this.addConcept}}
+            >
+              Voeg een extra optie toe
+            </AuButton>
+          </td>
+        </tr>
+      {{/if}}
+    </:footer>
+  </AuTable>
+</div>
