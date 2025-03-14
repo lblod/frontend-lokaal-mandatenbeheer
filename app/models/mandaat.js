@@ -96,6 +96,9 @@ export default class MandaatModel extends Model {
       if (this.isGouverneur) {
         resolve(true);
       }
+      if (this.isBurgemeester) {
+        resolve(true);
+      }
       this.isDecretaalHelper()
         .then((decretaal) => {
           if (!decretaal) {
