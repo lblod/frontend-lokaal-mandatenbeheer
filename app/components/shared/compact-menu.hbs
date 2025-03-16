@@ -26,5 +26,11 @@
         Forms
       </AuLink>
     {{/if}}
+    {{#if (is-feature-enabled "show-eigen-gegevens-module")}}
+      <AuLink @route="eigen-gegevens" role="menuitem">
+        <AuIcon @icon="folder" @alignment="left" />
+        Eigen gegevens
+      </AuLink>
+    {{/if}}
   </AuDropdown>
 {{/if}}

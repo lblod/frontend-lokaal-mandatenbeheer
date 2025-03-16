@@ -32,6 +32,14 @@
           </AuNavigationLink>
         </li>
       {{/if}}
+      {{#if (is-feature-enabled "show-eigen-gegevens-module")}}
+        <li class="au-c-list-navigation__item">
+          <AuNavigationLink @route="eigen-gegevens">
+            <AuIcon @icon="folder" @alignment="left" />
+            Eigen gegevens
+          </AuNavigationLink>
+        </li>
+      {{/if}}
     </ul>
   </nav>
 {{/if}}
