@@ -1,11 +1,12 @@
 import ApiError from './api-error';
 import { showErrorToast, showSuccessToast } from './toasts';
 
-export const handleResponse = async (response) => {
+export const handleResponse = async (response, errorMessage = null) => {
   const jsonResponse = await response.json();
   if (!response.ok) {
     console.error(jsonResponse.message);
-    throw new ApiError(jsonResponse.message, response.status);
+    const message = errorMessage ? errorMessage : jsonResponse.message;
+    throw new ApiError(message, response.status);
   }
   return jsonResponse;
 };
