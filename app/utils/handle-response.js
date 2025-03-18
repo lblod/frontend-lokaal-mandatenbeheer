@@ -21,6 +21,20 @@ export const handleResponseSilently = async (response) => {
   return jsonResponse;
 };
 
+export const handleResponseWithDefault = async (
+  response,
+  functionCall,
+  defaultValue
+) => {
+  // TODO sometimes response has no json!
+  const jsonResponse = await response.json();
+  if (!response.ok) {
+    console.error(jsonResponse.message);
+    return defaultValue;
+  }
+  return functionCall(jsonResponse);
+};
+
 export const handleResponseWithToast = async (
   response,
   toaster,
