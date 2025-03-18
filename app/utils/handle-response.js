@@ -11,6 +11,16 @@ export const handleResponse = async (response, errorMessage = null) => {
   return jsonResponse;
 };
 
+export const handleResponseSilently = async (response) => {
+  // TODO sometimes response has no json!
+  const jsonResponse = await response.json();
+  if (!response.ok) {
+    console.error(jsonResponse.message);
+    return false;
+  }
+  return jsonResponse;
+};
+
 export const handleResponseWithToast = async (
   response,
   toaster,
