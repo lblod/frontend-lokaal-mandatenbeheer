@@ -20,9 +20,11 @@ export const RESOURCE_CACHE_TIMEOUT = 1000;
 
 export const API = {
   MANDATARIS_SERVICE: '/mandataris-api',
+  CONCEPT_SCHEME_SERVICE: '/concept-scheme-api',
 };
 export const STATUS_CODE = {
   OK: 200,
+  NO_CONTENT: 204,
 };
 
 export const placeholderOnafhankelijk = {

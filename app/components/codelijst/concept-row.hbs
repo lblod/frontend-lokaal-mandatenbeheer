@@ -1,0 +1,66 @@
+<td class="au-u-4-5">
+  {{#if @isEditable}}
+    <div class="au-u-flex au-u-flex--column">
+      <AuInput
+        value={{@concept.label}}
+        {{on "input" this.updateConceptLabel}}
+      />
+      {{#if this.canSaveLabel}}
+        <AuHelpText>
+          {{this.infoMessage}}
+        </AuHelpText>
+      {{else}}
+        <AuHelpText @error={{true}}>
+          {{this.infoMessage}}
+        </AuHelpText>
+      {{/if}}
+    </div>
+  {{else}}
+    <p>{{@concept.label}}</p>
+  {{/if}}
+</td>
+{{#if @isEditable}}
+  <td class="au-u-1-6">
+    <AuButtonGroup>
+      <AuButton
+        @alert={{true}}
+        @skin="link"
+        {{on "click" this.delete}}
+      >Verwijder</AuButton>
+    </AuButtonGroup>
+  </td>
+{{/if}}
+
+<AuModal
+  @title="Concept is in gebruik"
+  @modalOpen={{this.isUsageModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isUsageModalOpen) false}}
+><div class="au-o-box au-o-flow">
+    <div>
+      <p>Dit concept wordt op een aantal plekken gebruikt ({{this.conceptUsages.uris.length}})</p>
+      <p class="au-u-margin-top-small">Door verder te gaan wordt het concept nog
+        niet direct verwijderd, dit is pas definitief als u op "Opslaan" duwt.
+        Bij het opslaan worden dan ook al de implementaties verwijderd.</p>
+    </div>
+    <AuToolbar class="au-u-margin-top" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton
+            @alert={{true}}
+            @skin="secondary"
+            {{on "click" this.confirmedDeleteOfUsedConcept}}
+          >
+            Ga door
+          </AuButton>
+          <AuButton
+            {{on "click" (fn (mut this.isUsageModalOpen) false)}}
+            @skin="secondary"
+          >
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </div>
+</AuModal>

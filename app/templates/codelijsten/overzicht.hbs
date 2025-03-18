@@ -1,0 +1,97 @@
+{{page-title "Overzicht"}}
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom"
+  as |Group|
+>
+  <Group>
+    <AuHeading @skin="2">Beheer codelijsten</AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      <AuLink @route="codelijsten.new" @skin="button">Codelijst aanmaken</AuLink>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom"
+  as |Group|
+>
+  <Group class="au-u-1-3@medium">
+    <AuInput
+      value={{this.filter}}
+      @icon="search"
+      @iconAlignment="left"
+      @width="block"
+      placeholder="Zoek codelijst"
+      {{on "input" this.search}}
+    />
+  </Group>
+</AuToolbar>
+<AuDataTable
+  @content={{this.model.codelijsten}}
+  @noDataMessage="Geen codelijsten gevonden"
+  @sort={{this.sort}}
+  @page={{this.page}}
+  @size={{this.size}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @field="label"
+        @currentSorting={{this.sort}}
+        @label="Naam"
+      />
+      <AuDataTableThSortable
+        @field="id"
+        @currentSorting={{this.sort}}
+        @label="Id"
+      />
+      <AuDataTableThSortable
+        @field="createdAt"
+        @currentSorting={{this.sort}}
+        @label="Aangemaakt op"
+      />
+      <AuDataTableThSortable
+        @field="isReadOnly"
+        @currentSorting={{this.sort}}
+        @label=""
+      />
+    </c.header>
+    <c.body as |codelijst|>
+      <td class="au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-1-2">
+        <LinkTo
+          @route="codelijsten.detail"
+          @model={{codelijst.id}}
+          class="au-c-link au-u-medium"
+        >
+          {{codelijst.label}}
+        </LinkTo>
+        {{#if codelijst.isReadOnly}}
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @alignment="left"
+            @tooltipText="Deze codelijst kan je enkel bekijken"
+          >
+            <AuButton
+              @skin="naked"
+              @icon="circle-question"
+              @hideText={{true}}
+              @disabled={{true}}
+              class="au-u-padding-bottom-small"
+            />
+          </Shared::Tooltip>
+        {{/if}}
+      </td>
+      <td class="au-u-1-5">{{codelijst.id}}</td>
+      <td class="au-u-1-6">{{codelijst.createdAt}}</td>
+      <td class="au-u-1-6">
+        <AuPill @skin={{codelijst.status.skin}}>
+          {{codelijst.status.label}}
+        </AuPill>
+      </td>
+    </c.body>
+  </t.content>
+</AuDataTable>

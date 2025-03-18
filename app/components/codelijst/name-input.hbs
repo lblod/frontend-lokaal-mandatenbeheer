@@ -1,0 +1,11 @@
+<AuLabel @error={{this.errorMessage}} @required={{true}}>Naam van de codelijst</AuLabel>
+<AuInput
+  @error={{this.errorMessage}}
+  value={{@name}}
+  @width="block"
+  placeholder="Codelijst label"
+  {{on "input" this.updateName}}
+/>
+{{#if this.errorMessage}}
+  <AuHelpText @error={{true}}>{{this.errorMessage}}</AuHelpText>
+{{/if}}

@@ -34,6 +34,7 @@ module.exports = function (environment) {
     },
     features: {
       'show-forms-module': false,
+      'show-codelijsten-module': false,
       'enable-mandataris-count-warnings': true,
       politieraad: false,
     },

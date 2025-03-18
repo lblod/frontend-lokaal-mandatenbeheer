@@ -1,0 +1,47 @@
+{{page-title "Codelijst aanmaken"}}
+{{breadcrumb
+  "Codelijst aanmaken"
+  route="codelijsten.id"
+  model=this.model.codelijst.id
+}}
+<AuToolbar @size="large" @border="bottom" class="au-u-margin-bottom" as |Group|>
+  <Group>
+    <AuHeading @skin="2">Codelijst aanmaken</AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      <AuButton
+        @disabled={{this.isSaving}}
+        @skin="secondary"
+        {{on "click" this.onCancel}}
+      >Annuleer</AuButton>
+      <Shared::Tooltip
+        @showTooltip={{not this.isNameValid}}
+        @alignment="right"
+        @tooltipText="Geef een naam aan de codelijst."
+      >
+        <AuButton
+          @disabled={{not this.isNameValid}}
+          @skin="primary"
+          @loading={{this.isSaving}}
+          @loadingMessage="Codelijst aan het creëren"
+          {{on "click" this.saveCodelist}}
+        >Opslaan</AuButton>
+      </Shared::Tooltip>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+
+<div class="au-o-box au-u-1-3@medium au-u-flex au-u-flex--column">
+  <Codelijst::NameInput
+    @name={{this.model.codelijst.label}}
+    @onUpdate={{this.onCodelistNameUpdated}}
+  />
+</div>
+
+<Shared::UnsavedChangesModal
+  @isModalOpen={{this.isUnsavedChangesModalOpen}}
+  @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onDiscard={{this.discardChanges}}
+/>

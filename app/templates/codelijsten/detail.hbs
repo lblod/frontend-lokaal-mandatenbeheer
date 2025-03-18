@@ -1,0 +1,95 @@
+{{page-title "Detail"}}
+{{breadcrumb
+  this.model.codelijst.label
+  route="codelijsten.detail"
+  model=this.model.codelijst.id
+}}
+
+<AuToolbar @size="large" @border="bottom" class="au-u-margin-bottom" as |Group|>
+  <Group>
+    <AuHeading @skin="2">{{this.title}}</AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      {{#unless this.model.codelijst.isReadOnly}}
+        <AuButton
+          @disabled={{this.isSaving}}
+          @skin="secondary"
+          @alert={{true}}
+          {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+        >Verwijder</AuButton>
+      {{/unless}}
+      <AuButton
+        @disabled={{or this.isSaving this.isDeleting}}
+        @skin="secondary"
+        {{on "click" this.onCancel}}
+      >Annuleer</AuButton>
+      {{#unless this.model.codelijst.isReadOnly}}
+
+        <Shared::Tooltip
+          @showTooltip={{not this.hasChanges}}
+          @alignment="right"
+          @tooltipText="De huidige status van de codelijst kan niet worden opgeslagen."
+        >
+          <AuButton
+            @disabled={{or (not this.hasChanges) this.isDeleting}}
+            @skin="primary"
+            @loading={{this.isSaving}}
+            @loadingMessage="Codelijst aan het opslagen"
+            {{on "click" this.updateCodelist}}
+          >Opslaan</AuButton>
+        </Shared::Tooltip>
+      {{/unless}}
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+
+<Codelijst::InstanceTable
+  @isEditable={{not this.model.codelijst.isReadOnly}}
+  @codelijst={{this.model.codelijst}}
+  @concepten={{this.model.concepten}}
+  @showTotalConcepts={{true}}
+  @onConceptChanged={{this.checkIsCodelistChanged}}
+  @onCodelistNameUpdated={{this.onCodelistNameUpdated}}
+/>
+
+<AuModal
+  @title="Verwijder codelijst"
+  @modalOpen={{this.isDeleteModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isDeleteModalOpen) false}}
+>
+  <:body>
+    {{#if this.isDetailedDeleteInfoShown}}
+      <p class="au-u-margin-bottom-small">{{this.detailedDeleteText}}</p>
+    {{/if}}
+    <p>Door verder te gaan zal de huidige codelijst met al zijn concepten
+      definitief verwijderd worden.</p>
+  </:body>
+  <:footer>
+    <AuButtonGroup
+      class="au-u-flex au-u-flex--between au-u-padding-left au-u-padding-right"
+    >
+      <AuButton
+        @alert={{true}}
+        @disabled={{this.isDeleting}}
+        @loading={{this.isDeleting}}
+        @loadingMessage="Codelijst wordt verwijderen"
+        {{on "click" this.deleteCodelist}}
+      >Verwijder</AuButton>
+      <AuButton
+        @skin="secondary"
+        @disabled={{this.isDeleting}}
+        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+      >Annuleer</AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>
+
+<Shared::UnsavedChangesModal
+  @isModalOpen={{this.isUnsavedChangesModalOpen}}
+  @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onDiscard={{this.discardChanges}}
+  @isDiscarding={{this.isDiscarding}}
+/>
