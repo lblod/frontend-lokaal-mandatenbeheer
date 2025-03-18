@@ -13,12 +13,14 @@ export const handleResponse = async (response) => {
 export const handleResponseWithToast = async (
   response,
   toaster,
-  successMessage
+  errorMessage = null,
+  successMessage = null
 ) => {
   const jsonResponse = await response.json();
   if (!response.ok) {
-    showErrorToast(toaster, jsonResponse.message);
-  } else {
+    const message = errorMessage ? errorMessage : jsonResponse.message;
+    showErrorToast(toaster, message);
+  } else if (successMessage) {
     showSuccessToast(toaster, successMessage);
   }
   return jsonResponse;
