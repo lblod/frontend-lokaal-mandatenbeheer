@@ -5,6 +5,7 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 import { restartableTask } from 'ember-concurrency';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class MandatarisHistoryComponent extends Component {
   @tracked history = [];
@@ -85,8 +86,8 @@ export default class MandatarisHistoryComponent extends Component {
       `/form-content/${this.args.form.id}/instances/${mandataris.id}/history`
     );
 
-    const json = await result.json();
-    return json.instances;
+    const parsedResponse = handleResponse(result);
+    return parsedResponse.instances;
   }
 
   @action
