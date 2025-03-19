@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 
 import { service } from '@ember/service';
+import { handleResponseWithToast } from 'frontend-lmb/utils/handle-response';
 import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
 
 export default class MandatarissenService extends Service {
@@ -63,21 +64,14 @@ export default class MandatarissenService extends Service {
   }
 
   async fetchOwnership(mandatarisIds) {
-    try {
-      const response = await fetch(
-        `/mandataris-api/mandatarissen/check-ownership?mandatarisIds=${mandatarisIds.join(',')}`,
-        { method: 'GET' }
-      );
-      if (!response.ok) {
-        throw new Error('Failed to fetch ownership');
-      }
-      return response.json();
-    } catch (error) {
-      console.error(error);
-      this.toaster.error(
-        'Er is iets misgelopen bij het ophalen wie eigenaar is van welke mandataris'
-      );
-      return {};
-    }
+    const response = await fetch(
+      `/mandataris-api/mandatarissen/check-ownership?mandatarisIds=${mandatarisIds.join(',')}`,
+      { method: 'GET' }
+    );
+    return await handleResponseWithToast(
+      response,
+      this.toaster,
+      'Er is iets misgelopen bij het ophalen wie eigenaar is van welke mandataris'
+    );
   }
 }
