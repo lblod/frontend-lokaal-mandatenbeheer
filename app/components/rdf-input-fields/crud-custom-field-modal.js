@@ -15,6 +15,7 @@ import {
   LIBRARY_ENTREES,
   TEXT_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
+import { handleResponseWithToast } from 'frontend-lmb/utils/handle-response';
 
 export default class RdfInputFieldCrudCustomFieldModalComponent extends Component {
   @consume('form-context') formContext;
@@ -93,24 +94,28 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   });
 
   createField = task(async () => {
-    try {
-      const result = await fetch(
-        `/form-content/${this.formContext.formDefinition.id}/fields`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': JSON_API_TYPE,
-          },
-          body: JSON.stringify({
-            displayType: this.displayType.uri,
-            libraryEntryUri: this.libraryFieldType.uri,
-            name: this.fieldName,
-            isRequired: !!this.isFieldRequired,
-          }),
-        }
-      );
+    const result = await fetch(
+      `/form-content/${this.formContext.formDefinition.id}/fields`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          displayType: this.displayType.uri,
+          libraryEntryUri: this.libraryFieldType.uri,
+          name: this.fieldName,
+          isRequired: !!this.isFieldRequired,
+        }),
+      }
+    );
 
-      const body = await result.json();
+    const body = await handleResponseWithToast(
+      result,
+      this.toaster,
+      'Er ging iets mis bij het opslaan van het veld.'
+    );
+    try {
       const newFormId = body.id;
       this.formReplacements.setReplacement(
         this.formContext.formDefinition.id,
@@ -122,7 +127,6 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         this.toaster,
         'Er ging iets mis bij het opslaan van het veld.'
       );
-      return;
     }
   });
 
