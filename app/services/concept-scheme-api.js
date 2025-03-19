@@ -6,8 +6,8 @@ import {
   API,
   JSON_API_TYPE,
   RESOURCE_CACHE_TIMEOUT,
-  STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class ConceptSchemeApiService extends Service {
   async conceptSchemeHasUsage(conceptSchemeId) {
@@ -18,16 +18,10 @@ export default class ConceptSchemeApiService extends Service {
       `${API.CONCEPT_SCHEME_SERVICE}/concept-scheme/${conceptSchemeId}/has-usage`
     );
 
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.error);
-      throw {
-        status: response.status,
-        message:
-          'Er liep iets mis bij het nakijken of deze codelijst ergens in gebruik is.',
-      };
-    }
+    const jsonResponse = await handleResponse(
+      response,
+      'Er liep iets mis bij het nakijken of deze codelijst ergens in gebruik is.'
+    );
 
     return {
       hasUsage: !!jsonResponse.hasUsage,
@@ -49,14 +43,10 @@ export default class ConceptSchemeApiService extends Service {
         },
       }
     );
-    if (response.status !== STATUS_CODE.NO_CONTENT) {
-      const jsonResponse = await response.json();
-      console.error(jsonResponse.error);
-      throw {
-        status: response.status,
-        message: 'Er liep iets mis bij het verwijderen van deze codelijst.',
-      };
-    }
+    await handleResponse(
+      response,
+      'Er liep iets mis bij het verwijderen van deze codelijst.'
+    );
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 
@@ -68,16 +58,10 @@ export default class ConceptSchemeApiService extends Service {
       `${API.CONCEPT_SCHEME_SERVICE}/concept/${conceptId}/has-usage`
     );
 
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.error);
-      throw {
-        status: response.status,
-        message:
-          'Er liep iets mis bij het nakijken of deze concept ergens in gebruik is.',
-      };
-    }
+    const jsonResponse = await handleResponse(
+      response,
+      'Er liep iets mis bij het nakijken of deze concept ergens in gebruik is.'
+    );
 
     return {
       hasUsage: !!jsonResponse.hasUsage,
@@ -106,15 +90,11 @@ export default class ConceptSchemeApiService extends Service {
       }
     );
 
-    if (response.status !== STATUS_CODE.NO_CONTENT) {
-      const jsonResponse = await response.json();
-      console.error(jsonResponse.error);
-      throw {
-        status: response.status,
-        message:
-          'Er liep iets mis bij het verwijderen van deze concepten en hun implementaties.',
-      };
-    }
+    await handleResponse(
+      response,
+      'Er liep iets mis bij het verwijderen van deze concepten en hun implementaties.'
+    );
+
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 }
