@@ -60,9 +60,15 @@ export const handleResponseWithToast = async (
   errorMessage = null,
   successMessage = null
 ) => {
-  const jsonResponse = await response.json();
+  let jsonResponse;
+  const message = errorMessage ? errorMessage : jsonResponse.message;
+  try {
+    jsonResponse = await response.json();
+  } catch (e) {
+    console.error('Failed to parse JSON response', e);
+    showErrorToast(toaster, message);
+  }
   if (!response.ok) {
-    const message = errorMessage ? errorMessage : jsonResponse.message;
     showErrorToast(toaster, message);
   } else if (successMessage) {
     showSuccessToast(toaster, successMessage);
