@@ -21,8 +21,13 @@ export const handleResponse = async (response, errorMessage = null) => {
 };
 
 export const handleResponseSilently = async (response) => {
-  // TODO sometimes response has no json!
-  const jsonResponse = await response.json();
+  let jsonResponse;
+  try {
+    jsonResponse = await response.json();
+  } catch (e) {
+    console.error('Failed to parse JSON response', e);
+    return false;
+  }
   if (!response.ok) {
     console.error(jsonResponse.message);
     return false;
