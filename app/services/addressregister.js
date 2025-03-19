@@ -1,4 +1,8 @@
 import Service from '@ember/service';
+import {
+  handleResponseSilently,
+  handleResponseWithDefault,
+} from 'frontend-lmb/utils/handle-response';
 
 class AddressSuggestion {
   constructor({ id, street, housenumber, zipCode, municipality, fullAddress }) {
@@ -60,9 +64,8 @@ class Address {
 
 export default class AddressregisterService extends Service {
   async suggest(query) {
-    const results = await (
-      await fetch(`/adressenregister/search?query=${query}`)
-    ).json();
+    const response = await fetch(`/adressenregister/search?query=${query}`);
+    const results = await handleResponseSilently(response);
     return results.adressen.map(function (result) {
       return new AddressSuggestion({
         id: result.ID,
@@ -81,15 +84,7 @@ export default class AddressregisterService extends Service {
       const response = await fetch(
         `/adressenregister/match?municipality=${suggestion.municipality}&zipcode=${suggestion.zipCode}&thoroughfarename=${suggestion.street}&housenumber=${suggestion.housenumber}`
       );
-      if (!response.ok) {
-        return [];
-      }
-      let results;
-      try {
-        results = await response.json();
-      } catch {
-        return [];
-      }
+      const results = await handleResponseWithDefault(response, (x) => x, []);
       addresses = results.map(function (result) {
         return new Address({
           uri: result.identificator.id,
