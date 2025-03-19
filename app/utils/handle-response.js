@@ -40,8 +40,13 @@ export const handleResponseWithDefault = async (
   functionCall,
   defaultValue
 ) => {
-  // TODO sometimes response has no json!
-  const jsonResponse = await response.json();
+  let jsonResponse;
+  try {
+    jsonResponse = await response.json();
+  } catch (e) {
+    console.error('Failed to parse JSON response', e);
+    return defaultValue;
+  }
   if (!response.ok) {
     console.error(jsonResponse.message);
     return defaultValue;
