@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class FormsRoute extends Route {
   @service session;
@@ -21,12 +22,7 @@ export default class FormsRoute extends Route {
 
   async model() {
     const response = await fetch('/form-content/forms');
-    if (!response.ok) {
-      let error = new Error(response.statusText);
-      error.status = response.status;
-      throw error;
-    }
-    const form = await response.json();
-    return form.formDirectories;
+    const parsedResponse = await handleResponse(response);
+    return parsedResponse.formDirectories;
   }
 }
