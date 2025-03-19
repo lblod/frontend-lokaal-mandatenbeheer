@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import { handleResponseSilently } from 'frontend-lmb/utils/handle-response';
 
 export default class FormReplacementsService extends Service {
   @tracked formReplacements = null;
@@ -13,7 +14,7 @@ export default class FormReplacementsService extends Service {
       },
     });
 
-    const idReplacements = await result.json();
+    const idReplacements = await handleResponseSilently(result);
     const mapping = {};
     for (const replacement of idReplacements.replacements) {
       mapping[replacement.standardId] = replacement.replacementId;
