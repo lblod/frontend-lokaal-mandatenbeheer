@@ -8,6 +8,7 @@ import { task, timeout } from 'ember-concurrency';
 import { NamedNode } from 'rdflib';
 import { ACCEPT_HEADER, SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { getFormProperty } from 'frontend-lmb/utils/form-properties';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 const PAGESIZE = 10;
 
@@ -63,12 +64,7 @@ export default class SelectorComponent extends InputFieldComponent {
   });
 
   async parseResponse(response) {
-    if (!response.ok) {
-      let error = new Error(response.statusText);
-      error.status = response.status;
-      throw error;
-    }
-    const result = await response.json();
+    const result = await handleResponse(response);
     const options = result.data.map((m) => {
       const subject = new NamedNode(m.attributes['uri']);
       return {
