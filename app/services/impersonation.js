@@ -1,6 +1,10 @@
 import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { loadAccountData } from 'frontend-lmb/utils/account';
+import {
+  handleResponse,
+  handleResponseSilently,
+} from 'frontend-lmb/utils/handle-response';
 
 export default class ImpersonationService extends Service {
   @service store;
@@ -15,25 +19,27 @@ export default class ImpersonationService extends Service {
   async load() {
     const response = await fetch('/impersonations/current');
 
-    if (response.ok) {
-      const result = await response.json();
-      const originalAccountId =
-        result.data.relationships['original-account'].data.id;
-
-      const originalGroupId =
-        result.data.relationships['original-session-group'].data.id;
-      const [originalAccount, originalGroup] = await Promise.all([
-        loadAccountData(this.store, originalAccountId),
-        this.store.findRecord('bestuurseenheid', originalGroupId, {
-          include: 'classificatie',
-          reload: true,
-        }),
-      ]);
-
-      this.originalAccount = originalAccount;
-      this.originalGroup = originalGroup;
-      this.originalRoles = result.data.attributes['original-session-roles'];
+    const result = await handleResponseSilently(response);
+    if (!result) {
+      return;
     }
+
+    const originalAccountId =
+      result.data.relationships['original-account'].data.id;
+
+    const originalGroupId =
+      result.data.relationships['original-session-group'].data.id;
+    const [originalAccount, originalGroup] = await Promise.all([
+      loadAccountData(this.store, originalAccountId),
+      this.store.findRecord('bestuurseenheid', originalGroupId, {
+        include: 'classificatie',
+        reload: true,
+      }),
+    ]);
+
+    this.originalAccount = originalAccount;
+    this.originalGroup = originalGroup;
+    this.originalRoles = result.data.attributes['original-session-roles'];
   }
 
   async impersonate(accountId) {
@@ -58,13 +64,10 @@ export default class ImpersonationService extends Service {
       }),
     });
 
-    if (!response.ok) {
-      const result = await response.json();
-      throw new Error(
-        'An exception occurred while trying to impersonate someone: ' +
-          JSON.stringify(result.errors)
-      );
-    }
+    await handleResponse(
+      response,
+      'An exception occurred while trying to impersonate someone'
+    );
   }
 
   async stopImpersonation() {
