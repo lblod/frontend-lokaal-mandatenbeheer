@@ -3,11 +3,8 @@ import Service from '@ember/service';
 import { service } from '@ember/service';
 import { timeout } from 'ember-concurrency';
 
-import {
-  API,
-  RESOURCE_CACHE_TIMEOUT,
-  STATUS_CODE,
-} from 'frontend-lmb/utils/constants';
+import { API, RESOURCE_CACHE_TIMEOUT } from 'frontend-lmb/utils/constants';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class FractieApiService extends Service {
   @service store;
@@ -25,15 +22,7 @@ export default class FractieApiService extends Service {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/fracties/${type}/${bestuursperiodeId}/bestuursperiode`
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
-    }
+    const jsonResponse = await handleResponse(response);
 
     if (jsonResponse.fracties.length === 0) {
       return [];
@@ -51,16 +40,7 @@ export default class FractieApiService extends Service {
       `${API.MANDATARIS_SERVICE}/fracties/${mandatarisId}/current-fractie`,
       { method: 'PUT' }
     );
-
-    if (response.status !== STATUS_CODE.OK) {
-      const jsonResponse = await response.json();
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
-    }
-
+    await handleResponse(response);
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 
@@ -69,16 +49,7 @@ export default class FractieApiService extends Service {
       `${API.MANDATARIS_SERVICE}/fracties/cleanup/bestuursperiode/${bestuursperiodeId}`,
       { method: 'DELETE' }
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
-    }
-
+    const jsonResponse = await handleResponse(response);
     await timeout(RESOURCE_CACHE_TIMEOUT);
     console.info(
       `Removed ${jsonResponse.fracties.length} dangling fractie(s).`
