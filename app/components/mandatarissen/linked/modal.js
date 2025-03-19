@@ -4,7 +4,10 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+import {
+  handleResponse,
+  handleResponseWithToast,
+} from 'frontend-lmb/utils/handle-response';
 
 export default class MandatarissenLinkedModal extends Component {
   @service store;
@@ -45,18 +48,13 @@ export default class MandatarissenLinkedModal extends Component {
     const response = await fetch(
       `/mandataris-api/mandatarissen/${this.args.mandataris}/check-possible-double`
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== 200) {
-      console.error(jsonResponse.message);
-      throw jsonResponse.message;
-    }
+    const parsedResponse = handleResponse(response);
 
     if (
       (this.args.create &&
-        (!jsonResponse.duplicateMandate || jsonResponse.hasDouble)) ||
+        (!parsedResponse.duplicateMandate || parsedResponse.hasDouble)) ||
       ((this.args.correct || this.args.updateState) &&
-        (!jsonResponse.duplicateMandate || !jsonResponse.hasDouble))
+        (!parsedResponse.duplicateMandate || !parsedResponse.hasDouble))
     ) {
       if (this.args.callback) {
         this.args.callback();
@@ -65,7 +63,10 @@ export default class MandatarissenLinkedModal extends Component {
     }
 
     this.isModalOpen = true;
-    this.setText(jsonResponse.currentMandate, jsonResponse.duplicateMandate);
+    this.setText(
+      parsedResponse.currentMandate,
+      parsedResponse.duplicateMandate
+    );
   }
 
   setText(currentMandate, duplicateMandate) {
@@ -130,14 +131,8 @@ export default class MandatarissenLinkedModal extends Component {
         'Vervanger werd succesvol toegevoegd aan het corresponderend mandaat in het OCMW.';
     }
 
-    const jsonResponse = await response.json();
+    await handleResponseWithToast(response, this.toaster, null, message);
 
-    if (response.status !== 201 && response.status !== 200) {
-      console.error(jsonResponse.message);
-      showErrorToast(this.toaster, jsonResponse.message);
-    } else {
-      showSuccessToast(this.toaster, message);
-    }
     this.isModalOpen = false;
 
     if (this.args.callback) {
