@@ -15,7 +15,7 @@ import {
   LIBRARY_ENTREES,
   TEXT_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
-import { handleResponseWithToast } from 'frontend-lmb/utils/handle-response';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class RdfInputFieldCrudCustomFieldModalComponent extends Component {
   @consume('form-context') formContext;
@@ -109,13 +109,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         }),
       }
     );
-
-    const body = await handleResponseWithToast(
-      result,
-      this.toaster,
-      'Er ging iets mis bij het opslaan van het veld.'
-    );
     try {
+      const body = await handleResponse(result);
       const newFormId = body.id;
       this.formReplacements.setReplacement(
         this.formContext.formDefinition.id,
