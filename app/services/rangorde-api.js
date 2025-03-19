@@ -1,9 +1,9 @@
 import Service from '@ember/service';
 
 import { service } from '@ember/service';
-import { API, JSON_API_TYPE, STATUS_CODE } from 'frontend-lmb/utils/constants';
+import { API, JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
-import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+import { handleResponseWithToast } from 'frontend-lmb/utils/handle-response';
 
 export default class RangordeApiService extends Service {
   @service store;
@@ -24,16 +24,11 @@ export default class RangordeApiService extends Service {
         }),
       }
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      showErrorToast(
-        this.toaster,
-        'Er ging iets mis bij het updaten van de rangordes'
-      );
-    } else {
-      showSuccessToast(this.toaster, `De rangordes werden succesvol geüpdatet`);
-    }
+    await handleResponseWithToast(
+      response,
+      this.toaster,
+      'Er ging iets mis bij het updaten van de rangordes',
+      'De rangordes werden succesvol geüpdatet'
+    );
   }
 }
