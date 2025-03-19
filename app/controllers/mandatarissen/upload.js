@@ -3,6 +3,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class MandatarissenUploadController extends Controller {
   @tracked isFileUploaded;
@@ -17,20 +18,21 @@ export default class MandatarissenUploadController extends Controller {
 
   uploadFile = task(async (uploadFile) => {
     this.resetValues();
-    try {
-      const response = await uploadFile.upload(
-        '/mandataris-api/mandatarissen/upload-csv',
-        {
-          contentType: 'multipart/form-data',
-        }
-      );
+    const response = await uploadFile.upload(
+      '/mandataris-api/mandatarissen/upload-csv',
+      {
+        contentType: 'multipart/form-data',
+      }
+    );
 
-      this.fileDetails = await response.json();
-      this.uploadedFile = uploadFile;
-      this.isFileUploaded = true;
-    } catch (error) {
-      this.resetValues();
+    const parsedResponse = await handleResponse(response);
+    if (!parsedResponse) {
+      return;
     }
+
+    this.fileDetails = parsedResponse;
+    this.uploadedFile = uploadFile;
+    this.isFileUploaded = true;
   });
 
   mapErrorsOrWarnings(stringArray) {
