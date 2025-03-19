@@ -3,6 +3,7 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { service } from '@ember/service';
 
 import { API } from 'frontend-lmb/utils/constants';
+import { handleResponseWithDefault } from 'frontend-lmb/utils/handle-response';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import { POLITIERAAD_CODE_ID } from 'frontend-lmb/utils/well-known-ids';
@@ -189,16 +190,10 @@ export default class BestuursorgaanModel extends Model {
       return null;
     }
 
-    return await fetch(
+    const response = await fetch(
       `${API.MANDATARIS_SERVICE}/organen/${currentOrgaan.id}/activeMembers`
-    )
-      .then(async (response) => {
-        const result = await response.json();
-        return result?.count;
-      })
-      .catch(() => {
-        return 0;
-      });
+    );
+    return await handleResponseWithDefault(response, (x) => x?.count ?? 0, 0);
   }
 
   rdfaBindings = {
