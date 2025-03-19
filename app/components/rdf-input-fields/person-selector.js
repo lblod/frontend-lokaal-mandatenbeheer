@@ -123,11 +123,6 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     });
     this.mandaatModel = mandaatModel;
 
-    if (mandaatModel.isBurgemeester) {
-      this.onlyElected = false;
-      return;
-    }
-
     this.onlyElected = !(await mandaatModel.allowsNonElectedPersons);
   });
 }
