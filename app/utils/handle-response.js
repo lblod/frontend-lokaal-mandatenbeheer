@@ -2,7 +2,16 @@ import ApiError from './api-error';
 import { showErrorToast, showSuccessToast } from './toasts';
 
 export const handleResponse = async (response, errorMessage = null) => {
-  const jsonResponse = await response.json();
+  let jsonResponse;
+  try {
+    jsonResponse = await response.json();
+  } catch (e) {
+    console.error('Failed to parse JSON response', e);
+    throw new ApiError(
+      'Ongeldige JSON respons, probeer later opnieuw.',
+      response.status ?? 500
+    );
+  }
   if (!response.ok) {
     console.error(jsonResponse.message);
     const message = errorMessage ? errorMessage : jsonResponse.message;
