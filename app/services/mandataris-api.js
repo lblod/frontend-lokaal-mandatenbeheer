@@ -6,9 +6,11 @@ import {
   API,
   JSON_API_TYPE,
   RESOURCE_CACHE_TIMEOUT,
-  STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
-import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+import {
+  handleResponse,
+  handleResponseWithToast,
+} from 'frontend-lmb/utils/handle-response';
 
 export default class MandatarisApiService extends Service {
   @service store;
@@ -21,15 +23,7 @@ export default class MandatarisApiService extends Service {
         method: 'PUT',
       }
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
-    }
+    await handleResponse(response);
 
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
@@ -49,18 +43,11 @@ export default class MandatarisApiService extends Service {
         }),
       }
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      showErrorToast(
-        this.toaster,
-        'Er ging iets mis bij het updaten van de publicatiestatussen'
-      );
-    }
-    showSuccessToast(
+    await handleResponseWithToast(
+      response,
       this.toaster,
-      `De publicatiestatussen werden succesvol geüpdatet naar "${status.label}"`
+      'Er ging iets mis bij het updaten van de publicatiestatussen.',
+      'De publicatiestatussen werden succesvol geüpdatet.'
     );
   }
 
@@ -68,22 +55,14 @@ export default class MandatarisApiService extends Service {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/fracties`
     );
-    const jsonResponse = await response.json();
+    const parsedResponse = await handleResponse(response);
 
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
-    }
-
-    if (jsonResponse.fracties.length === 0) {
+    if (parsedResponse.fracties.length === 0) {
       return [];
     }
 
     return await this.store.query('fractie', {
-      'filter[:id:]': jsonResponse.fracties.join(','),
+      'filter[:id:]': parsedResponse.fracties.join(','),
       include: 'fractietype',
     });
   }
@@ -145,14 +124,6 @@ export default class MandatarisApiService extends Service {
         }),
       }
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
-    }
+    await handleResponse(response);
   }
 }
