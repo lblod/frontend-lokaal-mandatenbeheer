@@ -98,16 +98,16 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     this.isStrictBurgemeester = mandate?.isStrictBurgemeester;
 
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
-    this.hasBeenFocused = true;
     this.mandaat = mandate;
     await this.updateValidations();
+    this.hasBeenFocused = true;
   }
 
   async updateValidations() {
     const extraWarning = await this.checkPersonMandates();
     const extraWarning2 = await this.validatePerson();
 
-    super.updateValidations();
+    await super.updateValidations();
     if (extraWarning) {
       this.warningValidations.push(extraWarning);
     }
