@@ -8,8 +8,8 @@ import {
   API,
   JSON_API_TYPE,
   RESOURCE_CACHE_TIMEOUT,
-  STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class PersoonApiService extends Service {
   @service store;
@@ -19,15 +19,7 @@ export default class PersoonApiService extends Service {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/personen/${persoonId}/bestuursperiode/${bestuursperiodeId}/current-fractie`
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
-    }
+    const jsonResponse = await handleResponse(response);
 
     if (!jsonResponse.fractie) {
       return null;
@@ -46,15 +38,7 @@ export default class PersoonApiService extends Service {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/personen/${persoonId}/has-active-mandates/${currentPeriod.id}`
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
-    }
+    const jsonResponse = await handleResponse(response);
 
     return jsonResponse.isTrue;
   }
@@ -89,15 +73,7 @@ export default class PersoonApiService extends Service {
         }),
       }
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
-    }
+    await handleResponse(response);
 
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
@@ -109,12 +85,6 @@ export default class PersoonApiService extends Service {
         method: 'POST',
       }
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      let error = new Error(jsonResponse.message);
-      error.status = response.status;
-      throw error;
-    }
+    await handleResponse(response);
   }
 }
