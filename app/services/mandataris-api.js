@@ -43,12 +43,13 @@ export default class MandatarisApiService extends Service {
         }),
       }
     );
-    await handleResponseWithToast(
+    await handleResponseWithToast({
       response,
-      this.toaster,
-      'Er ging iets mis bij het updaten van de publicatiestatussen.',
-      'De publicatiestatussen werden succesvol geüpdatet.'
-    );
+      toaster: this.toaster,
+      errorMessage:
+        'Er ging iets mis bij het updaten van de publicatiestatussen.',
+      successMessage: 'De publicatiestatussen werden succesvol geüpdatet.',
+    });
   }
 
   async getMandatarisFracties(mandatarisId) {

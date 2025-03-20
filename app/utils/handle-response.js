@@ -54,12 +54,12 @@ export const handleResponseWithDefault = async ({
   return modifier ? modifier(jsonResponse) : jsonResponse;
 };
 
-export const handleResponseWithToast = async (
+export const handleResponseWithToast = async ({
   response,
   toaster,
   errorMessage = null,
-  successMessage = null
-) => {
+  successMessage = null,
+}) => {
   let jsonResponse;
   try {
     jsonResponse = await response.json();

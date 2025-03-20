@@ -131,7 +131,11 @@ export default class MandatarissenLinkedModal extends Component {
         'Vervanger werd succesvol toegevoegd aan het corresponderend mandaat in het OCMW.';
     }
 
-    await handleResponseWithToast(response, this.toaster, null, message);
+    await handleResponseWithToast({
+      response,
+      toaster: this.toaster,
+      successMessage: message,
+    });
 
     this.isModalOpen = false;
 

@@ -68,10 +68,11 @@ export default class MandatarissenService extends Service {
       `/mandataris-api/mandatarissen/check-ownership?mandatarisIds=${mandatarisIds.join(',')}`,
       { method: 'GET' }
     );
-    return await handleResponseWithToast(
+    return await handleResponseWithToast({
       response,
-      this.toaster,
-      'Er is iets misgelopen bij het ophalen wie eigenaar is van welke mandataris'
-    );
+      toaster: this.toaster,
+      errorMessage:
+        'Er is iets misgelopen bij het ophalen wie eigenaar is van welke mandataris',
+    });
   }
 }

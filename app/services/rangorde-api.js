@@ -24,11 +24,11 @@ export default class RangordeApiService extends Service {
         }),
       }
     );
-    await handleResponseWithToast(
+    await handleResponseWithToast({
       response,
-      this.toaster,
-      'Er ging iets mis bij het updaten van de rangordes',
-      'De rangordes werden succesvol geüpdatet'
-    );
+      toaster: this.toaster,
+      errorMessage: 'Er ging iets mis bij het updaten van de rangordes',
+      successMessage: 'De rangordes werden succesvol geüpdatet',
+    });
   }
 }
