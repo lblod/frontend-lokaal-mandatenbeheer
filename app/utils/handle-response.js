@@ -1,21 +1,38 @@
 import ApiError from './api-error';
 import { showErrorToast, showSuccessToast } from './toasts';
 
-export const handleResponse = async ({ response, errorMessage = null }) => {
+export const handleResponse = async ({
+  response,
+  toaster = null,
+  errorMessage = null,
+  successMessage = null,
+}) => {
   let jsonResponse;
   try {
     jsonResponse = await response.json();
   } catch (e) {
     console.error('Failed to parse JSON response', e);
-    throw new ApiError(
-      'Ongeldige JSON respons, probeer later opnieuw.',
-      response.status ?? 500
-    );
+    const message =
+      errorMessage ?? 'Ongeldige JSON respons, probeer later opnieuw.';
+    if (toaster) {
+      showErrorToast(toaster, message);
+      return null;
+    } else {
+      throw new ApiError(message, response.status ?? 500);
+    }
   }
+
   if (!response.ok) {
     console.error(jsonResponse.message);
-    const message = errorMessage ? errorMessage : jsonResponse.message;
-    throw new ApiError(message, response.status);
+    const message = errorMessage ?? jsonResponse.message;
+    if (toaster) {
+      showErrorToast(toaster, message);
+      return null;
+    } else {
+      throw new ApiError(message, response.status);
+    }
+  } else if (toaster && successMessage) {
+    showSuccessToast(toaster, successMessage);
   }
   return jsonResponse;
 };
@@ -37,29 +54,4 @@ export const handleResponseSilently = async ({
     return defaultValue;
   }
   return modifier ? modifier(jsonResponse) : jsonResponse;
-};
-
-export const handleResponseWithToast = async ({
-  response,
-  toaster,
-  errorMessage = null,
-  successMessage = null,
-}) => {
-  let jsonResponse;
-  try {
-    jsonResponse = await response.json();
-  } catch (e) {
-    console.error('Failed to parse JSON response', e);
-    const message =
-      errorMessage ?? 'Er liep iets mis, gelieve later opnieuw te proberen.';
-    showErrorToast(toaster, message);
-    return null;
-  }
-  if (!response.ok) {
-    const message = errorMessage ?? jsonResponse.message;
-    showErrorToast(toaster, message);
-  } else if (successMessage) {
-    showSuccessToast(toaster, successMessage);
-  }
-  return jsonResponse;
 };

@@ -7,10 +7,7 @@ import {
   JSON_API_TYPE,
   RESOURCE_CACHE_TIMEOUT,
 } from 'frontend-lmb/utils/constants';
-import {
-  handleResponse,
-  handleResponseWithToast,
-} from 'frontend-lmb/utils/handle-response';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class MandatarisApiService extends Service {
   @service store;
@@ -43,7 +40,7 @@ export default class MandatarisApiService extends Service {
         }),
       }
     );
-    await handleResponseWithToast({
+    await handleResponse({
       response,
       toaster: this.toaster,
       errorMessage:

@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 
 import { service } from '@ember/service';
-import { handleResponseWithToast } from 'frontend-lmb/utils/handle-response';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 import { orderMandatarissenByRangorde } from 'frontend-lmb/utils/rangorde';
 
 export default class MandatarissenService extends Service {
@@ -68,7 +68,7 @@ export default class MandatarissenService extends Service {
       `/mandataris-api/mandatarissen/check-ownership?mandatarisIds=${mandatarisIds.join(',')}`,
       { method: 'GET' }
     );
-    return await handleResponseWithToast({
+    return await handleResponse({
       response,
       toaster: this.toaster,
       errorMessage:

@@ -4,10 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-import {
-  handleResponse,
-  handleResponseWithToast,
-} from 'frontend-lmb/utils/handle-response';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class MandatarissenLinkedModal extends Component {
   @service store;
@@ -131,7 +128,7 @@ export default class MandatarissenLinkedModal extends Component {
         'Vervanger werd succesvol toegevoegd aan het corresponderend mandaat in het OCMW.';
     }
 
-    await handleResponseWithToast({
+    await handleResponse({
       response,
       toaster: this.toaster,
       successMessage: message,

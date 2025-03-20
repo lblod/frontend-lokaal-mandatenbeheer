@@ -3,7 +3,7 @@ import Service from '@ember/service';
 import { service } from '@ember/service';
 import { API, JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
-import { handleResponseWithToast } from 'frontend-lmb/utils/handle-response';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class RangordeApiService extends Service {
   @service store;
@@ -24,7 +24,7 @@ export default class RangordeApiService extends Service {
         }),
       }
     );
-    await handleResponseWithToast({
+    await handleResponse({
       response,
       toaster: this.toaster,
       errorMessage: 'Er ging iets mis bij het updaten van de rangordes',
