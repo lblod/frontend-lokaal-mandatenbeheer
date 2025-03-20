@@ -1,8 +1,5 @@
 import Service from '@ember/service';
-import {
-  handleResponseSilently,
-  handleResponseWithDefault,
-} from 'frontend-lmb/utils/handle-response';
+import { handleResponseSilently } from 'frontend-lmb/utils/handle-response';
 
 class AddressSuggestion {
   constructor({ id, street, housenumber, zipCode, municipality, fullAddress }) {
@@ -84,7 +81,7 @@ export default class AddressregisterService extends Service {
       const response = await fetch(
         `/adressenregister/match?municipality=${suggestion.municipality}&zipcode=${suggestion.zipCode}&thoroughfarename=${suggestion.street}&housenumber=${suggestion.housenumber}`
       );
-      const results = await handleResponseWithDefault({
+      const results = await handleResponseSilently({
         response,
         defaultValue: [],
       });

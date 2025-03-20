@@ -20,24 +20,9 @@ export const handleResponse = async ({ response, errorMessage = null }) => {
   return jsonResponse;
 };
 
-export const handleResponseSilently = async ({ response }) => {
-  let jsonResponse;
-  try {
-    jsonResponse = await response.json();
-  } catch (e) {
-    console.error('Failed to parse JSON response', e);
-    return false;
-  }
-  if (!response.ok) {
-    console.error(jsonResponse.message);
-    return false;
-  }
-  return jsonResponse;
-};
-
-export const handleResponseWithDefault = async ({
+export const handleResponseSilently = async ({
   response,
-  defaultValue,
+  defaultValue = null,
   modifier = null,
 }) => {
   let jsonResponse;

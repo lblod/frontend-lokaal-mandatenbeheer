@@ -3,7 +3,7 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { service } from '@ember/service';
 
 import { API } from 'frontend-lmb/utils/constants';
-import { handleResponseWithDefault } from 'frontend-lmb/utils/handle-response';
+import { handleResponseSilently } from 'frontend-lmb/utils/handle-response';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import { POLITIERAAD_CODE_ID } from 'frontend-lmb/utils/well-known-ids';
@@ -193,7 +193,7 @@ export default class BestuursorgaanModel extends Model {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/organen/${currentOrgaan.id}/activeMembers`
     );
-    return await handleResponseWithDefault({
+    return await handleResponseSilently({
       response,
       modifier: (x) => x?.count ?? 0,
       defaultValue: 0,
