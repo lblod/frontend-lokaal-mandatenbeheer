@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
-import { action } from '@ember/object';
 
 import { restartableTask, timeout } from 'ember-concurrency';
 import moment from 'moment';
@@ -10,28 +9,16 @@ import moment from 'moment';
 import { INPUT_DEBOUNCE, NULL_DATE } from 'frontend-lmb/utils/constants';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 
+import SetupDateValue from './setup-date-value';
+
 export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
+  setupDateValue = SetupDateValue;
 
   @tracked dateInputString;
   @tracked warningMessage;
   @tracked errorMessage;
   @tracked invalidErrorMessage;
-
-  @action
-  setupDateValue() {
-    if (this.args.value && isValidDate(this.args.value)) {
-      let date;
-      if (this.args?.endOfDay) {
-        date = this.args.value;
-        this.dateInputString = moment(date).format('DD-MM-YYYY');
-      } else {
-        date = moment(this.args.value).toDate();
-        this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
-      }
-      this.processDate(date);
-    }
-  }
 
   onChange = restartableTask(async (event) => {
     await timeout(INPUT_DEBOUNCE);
@@ -72,7 +59,6 @@ export default class DateInputComponent extends Component {
   }
 
   processDate(date) {
-    console.log(`process date`, date);
     if (this.args?.endOfDay) {
       date = endOfDay(date);
     }
