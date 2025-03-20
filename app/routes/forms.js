@@ -22,7 +22,7 @@ export default class FormsRoute extends Route {
 
   async model() {
     const response = await fetch('/form-content/forms');
-    const parsedResponse = await handleResponse(response);
+    const parsedResponse = await handleResponse({ response });
     return parsedResponse.formDirectories;
   }
 }

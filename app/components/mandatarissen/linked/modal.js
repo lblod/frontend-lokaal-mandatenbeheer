@@ -48,7 +48,7 @@ export default class MandatarissenLinkedModal extends Component {
     const response = await fetch(
       `/mandataris-api/mandatarissen/${this.args.mandataris}/check-possible-double`
     );
-    const parsedResponse = handleResponse(response);
+    const parsedResponse = handleResponse({ response });
 
     if (
       (this.args.create &&

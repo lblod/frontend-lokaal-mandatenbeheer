@@ -22,7 +22,7 @@ export default class FractieApiService extends Service {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/fracties/${type}/${bestuursperiodeId}/bestuursperiode`
     );
-    const jsonResponse = await handleResponse(response);
+    const jsonResponse = await handleResponse({ response });
 
     if (jsonResponse.fracties.length === 0) {
       return [];
@@ -40,7 +40,7 @@ export default class FractieApiService extends Service {
       `${API.MANDATARIS_SERVICE}/fracties/${mandatarisId}/current-fractie`,
       { method: 'PUT' }
     );
-    await handleResponse(response);
+    await handleResponse({ response });
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 
@@ -49,7 +49,7 @@ export default class FractieApiService extends Service {
       `${API.MANDATARIS_SERVICE}/fracties/cleanup/bestuursperiode/${bestuursperiodeId}`,
       { method: 'DELETE' }
     );
-    const jsonResponse = await handleResponse(response);
+    const jsonResponse = await handleResponse({ response });
     await timeout(RESOURCE_CACHE_TIMEOUT);
     console.info(
       `Removed ${jsonResponse.fracties.length} dangling fractie(s).`

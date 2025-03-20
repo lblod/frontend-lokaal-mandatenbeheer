@@ -25,7 +25,7 @@ export default class MandatarissenUploadController extends Controller {
       }
     );
 
-    const parsedResponse = await handleResponse(response);
+    const parsedResponse = await handleResponse({ response });
     if (!parsedResponse) {
       return;
     }

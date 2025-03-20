@@ -1,7 +1,7 @@
 import ApiError from './api-error';
 import { showErrorToast, showSuccessToast } from './toasts';
 
-export const handleResponse = async (response, errorMessage = null) => {
+export const handleResponse = async ({ response, errorMessage = null }) => {
   let jsonResponse;
   try {
     jsonResponse = await response.json();

@@ -110,7 +110,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       }
     );
     try {
-      const body = await handleResponse(result);
+      const body = await handleResponse({ result });
       const newFormId = body.id;
       this.formReplacements.setReplacement(
         this.formContext.formDefinition.id,

@@ -64,10 +64,10 @@ export default class ImpersonationService extends Service {
       }),
     });
 
-    await handleResponse(
+    await handleResponse({
       response,
-      'An exception occurred while trying to impersonate someone'
-    );
+      errorMessage: 'An exception occurred while trying to impersonate someone',
+    });
   }
 
   async stopImpersonation() {

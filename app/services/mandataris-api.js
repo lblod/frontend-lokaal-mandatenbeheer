@@ -23,7 +23,7 @@ export default class MandatarisApiService extends Service {
         method: 'PUT',
       }
     );
-    await handleResponse(response);
+    await handleResponse({ response });
 
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
@@ -55,7 +55,7 @@ export default class MandatarisApiService extends Service {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/mandatarissen/${mandatarisId}/fracties`
     );
-    const parsedResponse = await handleResponse(response);
+    const parsedResponse = await handleResponse({ response });
 
     if (parsedResponse.fracties.length === 0) {
       return [];
@@ -124,6 +124,6 @@ export default class MandatarisApiService extends Service {
         }),
       }
     );
-    await handleResponse(response);
+    await handleResponse({ response });
   }
 }

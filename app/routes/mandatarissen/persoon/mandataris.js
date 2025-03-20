@@ -122,7 +122,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const response = await fetch(
       `/mandataris-api/mandatarissen/${mandataris}/check-possible-double`
     );
-    const parsedResponse = await handleResponse(response);
+    const parsedResponse = await handleResponse({ response });
 
     return {
       duplicateMandate: parsedResponse.duplicateMandate ?? null,

@@ -86,7 +86,7 @@ export default class MandatarisHistoryComponent extends Component {
       `/form-content/${this.args.form.id}/instances/${mandataris.id}/history`
     );
 
-    const parsedResponse = handleResponse(result);
+    const parsedResponse = handleResponse({ result });
     return parsedResponse.instances;
   }
 

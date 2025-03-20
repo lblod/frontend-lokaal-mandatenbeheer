@@ -64,7 +64,7 @@ export default class SelectorComponent extends InputFieldComponent {
   });
 
   async parseResponse(response) {
-    const result = await handleResponse(response);
+    const result = await handleResponse({ response });
     const options = result.data.map((m) => {
       const subject = new NamedNode(m.attributes['uri']);
       return {
