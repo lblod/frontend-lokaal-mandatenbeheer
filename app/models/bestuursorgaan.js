@@ -193,7 +193,11 @@ export default class BestuursorgaanModel extends Model {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/organen/${currentOrgaan.id}/activeMembers`
     );
-    return await handleResponseWithDefault(response, (x) => x?.count ?? 0, 0);
+    return await handleResponseWithDefault({
+      response,
+      modifier: (x) => x?.count ?? 0,
+      defaultValue: 0,
+    });
   }
 
   rdfaBindings = {

@@ -35,11 +35,11 @@ export const handleResponseSilently = async ({ response }) => {
   return jsonResponse;
 };
 
-export const handleResponseWithDefault = async (
+export const handleResponseWithDefault = async ({
   response,
-  functionCall,
-  defaultValue
-) => {
+  defaultValue,
+  modifier = null,
+}) => {
   let jsonResponse;
   try {
     jsonResponse = await response.json();
@@ -51,7 +51,7 @@ export const handleResponseWithDefault = async (
     console.error(jsonResponse.message);
     return defaultValue;
   }
-  return functionCall(jsonResponse);
+  return modifier ? modifier(jsonResponse) : jsonResponse;
 };
 
 export const handleResponseWithToast = async (

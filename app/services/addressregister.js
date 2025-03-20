@@ -84,7 +84,10 @@ export default class AddressregisterService extends Service {
       const response = await fetch(
         `/adressenregister/match?municipality=${suggestion.municipality}&zipcode=${suggestion.zipCode}&thoroughfarename=${suggestion.street}&housenumber=${suggestion.housenumber}`
       );
-      const results = await handleResponseWithDefault(response, (x) => x, []);
+      const results = await handleResponseWithDefault({
+        response,
+        defaultValue: [],
+      });
       addresses = results.map(function (result) {
         return new Address({
           uri: result.identificator.id,
