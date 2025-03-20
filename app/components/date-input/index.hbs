@@ -15,7 +15,7 @@
     />
   {{else}}
     <AuInput
-      {{did-insert this.setupDateValue}}
+      {{this.setupDateValue @value @endOfDay this.processDate}}
       @error={{or this.errorMessage this.invalidErrorMessage}}
       @warning={{this.warningMessage}}
       value={{this.dateInputString}}
