@@ -20,7 +20,7 @@ export const handleResponse = async ({ response, errorMessage = null }) => {
   return jsonResponse;
 };
 
-export const handleResponseSilently = async (response) => {
+export const handleResponseSilently = async ({ response }) => {
   let jsonResponse;
   try {
     jsonResponse = await response.json();

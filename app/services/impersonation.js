@@ -19,7 +19,7 @@ export default class ImpersonationService extends Service {
   async load() {
     const response = await fetch('/impersonations/current');
 
-    const result = await handleResponseSilently(response);
+    const result = await handleResponseSilently({ response });
     if (!result) {
       return;
     }

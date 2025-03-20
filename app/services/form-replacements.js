@@ -7,14 +7,14 @@ export default class FormReplacementsService extends Service {
   @tracked formReplacements = null;
 
   async setup() {
-    const result = await fetch(`/form-content/form-replacements`, {
+    const response = await fetch(`/form-content/form-replacements`, {
       method: 'GET',
       headers: {
         'Content-Type': JSON_API_TYPE,
       },
     });
 
-    const idReplacements = await handleResponseSilently(result);
+    const idReplacements = await handleResponseSilently({ response });
     const mapping = {};
     for (const replacement of idReplacements.replacements) {
       mapping[replacement.standardId] = replacement.replacementId;
