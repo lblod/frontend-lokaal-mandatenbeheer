@@ -66,6 +66,11 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       mandatarissen,
       mandatarisEditForm,
       mandatarisExtraInfoForm,
+      history: await this.fetchHistory(
+        mandataris,
+        mandatarissen,
+        mandatarisEditForm.id
+      ),
       bestuursorganen,
       selectedBestuursperiode,
       linkedMandataris,
@@ -141,5 +146,72 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     }
 
     return hasLinkedMandataris;
+  }
+
+  async fetchHistory(mandataris, allMandatarissen, formId) {
+    const newHistory = await Promise.all(
+      allMandatarissen.map(async (m) => {
+        let corrections = await this.fetchHistoryForMandataris(
+          mandataris,
+          formId
+        );
+        const historyEntry = {
+          mandataris,
+          corrections,
+          selected: mandataris?.id === m.id,
+        };
+        return historyEntry;
+      })
+    );
+
+    const userIdsInHistory = new Set();
+    newHistory.forEach((h) => {
+      h.corrections.forEach((c) => {
+        userIdsInHistory.add(c.creator);
+      });
+    });
+
+    let users = [];
+    if (userIdsInHistory.size !== 0) {
+      users = await this.store.query('gebruiker', {
+        filter: {
+          id: Array.from(userIdsInHistory).join(','),
+        },
+      });
+    }
+
+    const userIdToUser = {};
+    users.forEach((u) => {
+      userIdToUser[u.id] = u;
+    });
+
+    return newHistory
+      .map((h) => {
+        return {
+          ...h,
+          corrections: h.corrections.map((c) => ({
+            ...c,
+            creator: userIdToUser[c.creator],
+          })),
+        };
+      })
+      .sort((a, b) => {
+        if (!b?.mandataris?.start) {
+          return -1;
+        }
+        if (!a?.mandataris?.start) {
+          return 1;
+        }
+        return b.mandataris.start.getTime() - a.mandataris.start.getTime();
+      });
+  }
+
+  async fetchHistoryForMandataris(mandataris, formId) {
+    const result = await fetch(
+      `/form-content/${formId}/instances/${mandataris.id}/history`
+    );
+
+    const json = await result.json();
+    return json.instances;
   }
 }
