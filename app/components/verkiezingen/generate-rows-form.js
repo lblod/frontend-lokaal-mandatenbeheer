@@ -9,7 +9,7 @@ import { task, restartableTask, timeout } from 'ember-concurrency';
 
 import { rangordeStringToNumber } from 'frontend-lmb/utils/rangorde';
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
-import { isValidDate } from '../date-input';
+import { isValidDate } from '../date-input/index';
 
 export default class GenerateRowsFormComponent extends Component {
   @service store;

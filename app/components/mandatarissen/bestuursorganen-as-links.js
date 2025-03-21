@@ -1,22 +1,16 @@
 import Component from '@glimmer/component';
 
-import { A } from '@ember/array';
-import { tracked } from '@glimmer/tracking';
-import { service } from '@ember/service';
-
-import { restartableTask } from 'ember-concurrency';
 import { foldMandatarisses } from 'frontend-lmb/utils/fold-mandatarisses';
+import { trackedFunction } from 'reactiveweb/function';
+import { use } from 'ember-resources';
 
-export default class MandatarissenBestuursorganenAsLinks extends Component {
-  @tracked organenAsLinks = A([]);
-  @service store;
-
-  setup = restartableTask(async () => {
+function setup() {
+  return trackedFunction(async () => {
     const foldedMandatarissen = await foldMandatarisses(
       null,
       this.args.mandatarissen ?? []
     );
-
+    const links = [];
     await Promise.all(
       foldedMandatarissen.map(async (foldedMandataris) => {
         const mandataris = foldedMandataris.mandataris;
@@ -31,7 +25,7 @@ export default class MandatarissenBestuursorganenAsLinks extends Component {
           const bestuursorgaan =
             await bestuursorgaanInTijd.isTijdsspecialisatieVan;
 
-          this.organenAsLinks.pushObject({
+          links.push({
             label: bestuursorgaan.naam,
             route: `organen.orgaan`,
             model: [bestuursorgaan.id],
@@ -39,5 +33,13 @@ export default class MandatarissenBestuursorganenAsLinks extends Component {
         }
       })
     );
+    return links;
   });
+}
+export default class MandatarissenBestuursorganenAsLinks extends Component {
+  @use(setup) links;
+
+  get organenAsLinks() {
+    return this.links?.value;
+  }
 }

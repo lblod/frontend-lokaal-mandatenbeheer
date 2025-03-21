@@ -134,7 +134,8 @@
   },
   "dependencies": {
     "@lblod/ember-semantic-forms": "0.0.6",
-    "ember-data-table": "^2.1.0"
+    "ember-data-table": "^2.1.0",
+    "reactiveweb": "^1.4.0"
   },
   "engines": {
     "node": ">= 18"
