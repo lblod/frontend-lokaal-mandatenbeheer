@@ -22,6 +22,7 @@ export default class CurrentSessionService extends Service {
   @service store;
   @service impersonation;
   @service features;
+  @service systemNotifications;
 
   @tracked account;
   @tracked user;
@@ -62,7 +63,15 @@ export default class CurrentSessionService extends Service {
       );
 
       this.setupSentrySession();
+      await this.fetchDataOnSessionLoaded();
     }
+  }
+
+  async fetchDataOnSessionLoaded() {
+    await this.systemNotifications.getNotificationsForFilter(
+      { isUnRead: true },
+      {}
+    );
   }
 
   setupSentrySession() {

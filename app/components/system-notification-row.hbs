@@ -23,17 +23,17 @@
       @skin="link"
       @icon="check"
       role="menuitem"
-      {{on "click" (perform this.toggleDate @notification "readAt")}}
+      {{on "click" (perform this.toggleDate "readAt")}}
     >
-      {{this.readAtText @notification}}
+      {{this.readAtText}}
     </AuButton>
     <AuButton
       @skin="link"
       @icon="archive"
       role="menuitem"
-      {{on "click" (perform this.toggleDate @notification "archivedAt")}}
+      {{on "click" (perform this.toggleDate "archivedAt")}}
     >
-      {{this.archivedAtText @notification}}
+      {{this.archivedAtText}}
     </AuButton>
   </AuDropdown>
 </td>

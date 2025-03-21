@@ -3,46 +3,13 @@ import Controller from '@ember/controller';
 import { getOwner } from '@ember/application';
 import { service } from '@ember/service';
 
-import { trackedFunction } from 'reactiveweb/function';
-import { use } from 'ember-resources';
-
-function getNotificationCount() {
-  return trackedFunction(async () => {
-    if (this.currentSession.user) {
-      const unreadNotifications = await this.store.query(
-        'system-notification',
-        {
-          'filter[:has-no:read-at]': true,
-          'filter[:has-no:archived-at]': true,
-          'filter[gebruiker][:id:]': this.currentSession.user.id,
-        }
-      );
-      const unreadGroupNotifications = await this.store.query(
-        'system-notification',
-        {
-          'filter[:has-no:read-at]': true,
-          'filter[:has-no:archived-at]': true,
-          'filter[:has-no:gebruiker]': true,
-        }
-      );
-
-      return (
-        unreadNotifications.meta.count + unreadGroupNotifications.meta.count
-      );
-    } else {
-      return 0;
-    }
-  });
-}
-
 export default class ApplicationController extends Controller {
   @service session;
   @service impersonation;
   @service currentSession;
   @service store;
   @service router;
-
-  @use(getNotificationCount) getNotificationCount;
+  @service systemNotifications;
 
   appTitle = 'Lokaal mandatenbeheer';
 
@@ -51,8 +18,7 @@ export default class ApplicationController extends Controller {
   }
 
   get notificationCount() {
-    console.log(`notification count`, this.getNotificationCount?.value);
-    return this.getNotificationCount?.value;
+    return this.systemNotifications.totalUnreadNotifications;
   }
 
   get userInfo() {
