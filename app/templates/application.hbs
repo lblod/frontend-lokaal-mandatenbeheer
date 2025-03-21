@@ -61,21 +61,14 @@
       {{/if}}
     </li>
     {{#if this.session.isAuthenticated}}
-      <li
-        class="au-c-list-horizontal__item"
-        {{did-insert (perform this.setNotificationCount)}}
-      >
+      <li class="au-c-list-horizontal__item">
         <AuLink
           @hideText={{false}}
           @route="system-notifications"
           @query={{hash isRead=null isUnRead=true isArchived=null}}
         >
           <div class="notification-count-circle">
-            {{#if this.setNotificationCount.isRunning}}
-              0
-            {{else}}
-              {{this.notificationCount}}
-            {{/if}}
+            {{this.notificationCount}}
           </div>
         </AuLink>
       </li>

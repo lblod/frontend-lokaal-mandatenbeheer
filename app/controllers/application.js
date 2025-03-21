@@ -2,26 +2,12 @@ import Controller from '@ember/controller';
 
 import { getOwner } from '@ember/application';
 import { service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
-import { restartableTask, timeout } from 'ember-concurrency';
 
-export default class ApplicationController extends Controller {
-  @service session;
-  @service impersonation;
-  @service currentSession;
-  @service store;
-  @service router;
+import { trackedFunction } from 'reactiveweb/function';
+import { use } from 'ember-resources';
 
-  @tracked notificationCount;
-
-  appTitle = 'Lokaal mandatenbeheer';
-
-  get isIndex() {
-    return this.router.currentRouteName === 'index';
-  }
-
-  setNotificationCount = restartableTask(async () => {
-    this.notificationCount = 0;
+function getNotificationCount() {
+  return trackedFunction(async () => {
     if (this.currentSession.user) {
       const unreadNotifications = await this.store.query(
         'system-notification',
@@ -40,13 +26,34 @@ export default class ApplicationController extends Controller {
         }
       );
 
-      this.notificationCount =
-        unreadNotifications.meta.count + unreadGroupNotifications.meta.count;
+      return (
+        unreadNotifications.meta.count + unreadGroupNotifications.meta.count
+      );
     } else {
-      await timeout(10);
-      this.setNotificationCount.perform();
+      return 0;
     }
   });
+}
+
+export default class ApplicationController extends Controller {
+  @service session;
+  @service impersonation;
+  @service currentSession;
+  @service store;
+  @service router;
+
+  @use(getNotificationCount) getNotificationCount;
+
+  appTitle = 'Lokaal mandatenbeheer';
+
+  get isIndex() {
+    return this.router.currentRouteName === 'index';
+  }
+
+  get notificationCount() {
+    console.log(`notification count`, this.getNotificationCount?.value);
+    return this.getNotificationCount?.value;
+  }
 
   get userInfo() {
     let user;

@@ -85,9 +85,10 @@ export default class SystemNotificationsController extends Controller {
   );
 
   updateNotificationCountInHeader() {
-    const applicationController = getOwner(this).lookup(
-      'controller:application'
-    );
-    applicationController.setNotificationCount.perform();
+    // const applicationController = getOwner(this).lookup(
+    //   'controller:application'
+    // );
+    console.log(`update notificationcount in header`);
+    // applicationController.setNotificationCount.perform();
   }
 }
