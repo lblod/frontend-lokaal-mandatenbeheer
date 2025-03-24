@@ -8,4 +8,9 @@ export default class MandatarissenUploadRoute extends Route {
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
   }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.resetValues();
+  }
 }
