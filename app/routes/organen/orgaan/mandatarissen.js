@@ -23,7 +23,14 @@ export default class OrganenMandatarissenRoute extends Route {
 
   async model(params) {
     const parentModel = this.modelFor('organen.orgaan');
+    const bestuursorgaan = parentModel.bestuursorgaan;
     const bestuursorgaanInTijd = await parentModel.currentBestuursorgaan;
+    const hasRangorde = await bestuursorgaan.hasRangorde;
+    if (!params.sort) {
+      params.sort = hasRangorde
+        ? 'rangorde'
+        : 'is-bestuurlijke-alias-van.achternaam';
+    }
 
     const bestuurseenheid = this.currentSession.group;
 
@@ -40,7 +47,6 @@ export default class OrganenMandatarissenRoute extends Route {
       params,
       parentModel.selectedBestuursperiode
     );
-    const bestuursorgaan = parentModel.bestuursorgaan;
     await this.addOwnership(bestuursorgaan, filtered);
     const mandatarisNewForm =
       await this.semanticFormRepository.getFormDefinition(
@@ -52,9 +58,9 @@ export default class OrganenMandatarissenRoute extends Route {
         parentModel.selectedBestuursperiode
       );
     const isDistrict = this.currentSession.isDistrict;
-
     return {
       bestuurseenheid,
+      hasRangorde,
       mandatarissen: filtered,
       bestuursorgaan,
       bestuursorgaanInTijd,
@@ -99,5 +105,14 @@ export default class OrganenMandatarissenRoute extends Route {
         );
       }
     });
+  }
+
+  setupController(controller, model) {
+    super.setupController(controller, model);
+    if (!controller.sort) {
+      controller.sort = model.hasRangorde
+        ? 'rangorde'
+        : 'is-bestuurlijke-alias-van.achternaam';
+    }
   }
 }
