@@ -21,9 +21,11 @@ export const RESOURCE_CACHE_TIMEOUT = 1000;
 export const API = {
   MANDATARIS_SERVICE: '/mandataris-api',
   CONCEPT_SCHEME_SERVICE: '/concept-scheme-api',
+  FORM_CONTENT_SERVICE: '/form-content',
 };
 export const STATUS_CODE = {
   OK: 200,
+  CREATED: 201,
   NO_CONTENT: 204,
 };
 
