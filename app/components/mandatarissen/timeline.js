@@ -85,7 +85,7 @@ export default class MandatarissenTimeline extends Component {
     const sortedMandatarissen = mandatarissen.sortBy('start');
     const events = sortedMandatarissen.map((mandataris, index) => {
       return {
-        type: index > 0 ? 'Wijziging' : 'Aanmaak',
+        type: index > 0 ? 'Wijziging' : 'Start',
         active: mandataris.isCurrentlyActive,
         date: mandataris.start,
         mandataris,
