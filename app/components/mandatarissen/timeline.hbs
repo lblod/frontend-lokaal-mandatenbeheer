@@ -1,0 +1,82 @@
+{{#if this.isFeatureEnabled}}
+  <div class="au-o-box">
+    <AuHeading @level="3" @skin="4">
+      Historiek
+    </AuHeading>
+    <ul class="au-c-list-vertical">
+      <Mandatarissen::History
+        @mandataris={{@mandataris}}
+        @mandatarissen={{@mandatarissen}}
+        @form={{@form}}
+      />
+    </ul>
+    <div class="timeline">
+      <div class="time-notations au-u-flex au-u-flex--between">
+        <div class="au-u-bold">
+          Start Mandaat
+        </div>
+        <div class="au-u-bold">
+          Einde Mandaat
+        </div>
+      </div>
+      <div class="arrow">
+        <div class="arrow-start"></div>
+        {{#each this.timelineEvents as |event index|}}
+          <div class="event {{if event.selected 'selected'}}">
+            <AuButton
+              class="event-date"
+              @skin="naked"
+              {{on "click" (fn this.selectEvent event)}}
+            >
+              <div class="event-marker"></div>
+              <div class="event-date-value">{{moment-format
+                  event.date
+                  "DD-MM-YYYY"
+                }}</div>
+            </AuButton>
+            <div class="event-connector"></div>
+            {{#if event.selected}}
+              <AuPill @skin="link" class="selected-pill">Geselecteerde Situatie</AuPill>
+            {{/if}}
+            <AuPanel
+              class="event-panel {{if event.selected 'selected'}}"
+              {{on "click" (fn this.selectEvent event)}}
+            >
+
+              <div class="au-u-flex au-u-flex--spaced-tiny">
+                <AuPill>{{event.type}}</AuPill>
+                {{#if event.active}}
+                  <AuPill @skin="success">Actief</AuPill>
+                {{/if}}
+              </div>
+
+              <div
+                class="provenance au-u-muted au-u-italic au-u-margin-top-tiny au-u-margin-bottom-tiny"
+              >
+                <p>Bewerkt op dd-mm-yyyy hh:mm</p>
+                <p>door Jos met de HeleLangenaam</p>
+              </div>
+            </AuPanel>
+          </div>
+          <div class="spacer {{if event.last 'last'}}"></div>
+        {{/each}}
+        <div class="arrow-end"></div>
+      </div>
+    </div>
+  </div>
+{{else}}
+  <div class="au-o-box">
+    <AuHeading @level="3" @skin="4">
+      Historiek
+    </AuHeading>
+
+    <ul class="au-c-list-vertical">
+      <Mandatarissen::History
+        @mandataris={{@mandataris}}
+        @mandatarissen={{@mandatarissen}}
+        @form={{@form}}
+        @history={{@history}}
+      />
+    </ul>
+  </div>
+{{/if}}

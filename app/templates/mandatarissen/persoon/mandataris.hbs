@@ -104,20 +104,12 @@
     />
   </div>
 
-  <div class="au-o-box">
-    <AuHeading @level="3" @skin="4">
-      Historiek
-    </AuHeading>
-
-    <ul class="au-c-list-vertical">
-      <Mandatarissen::History
-        @mandataris={{@model.mandataris}}
-        @mandatarissen={{@model.mandatarissen}}
-        @form={{@model.mandatarisEditForm}}
-        @history={{@model.history}}
-      />
-    </ul>
-  </div>
+  <Mandatarissen::Timeline
+    @mandataris={{@model.mandataris}}
+    @mandatarissen={{@model.mandatarissen}}
+    @history={{@model.history}}
+    @form={{@model.mandatarisEditForm}}
+  />
 
   <div class="au-o-box">
     <ValidatieTable @instance={{@model.mandataris}} />

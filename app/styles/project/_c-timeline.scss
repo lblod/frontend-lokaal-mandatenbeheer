@@ -1,0 +1,96 @@
+.timeline .arrow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .event-date,
+  .spacer {
+    background-color: $au-gray-100;
+    height: 28px;
+    border-radius: 0;
+  }
+  .event-date {
+    width: 100%;
+    position: relative;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    font-weight: normal;
+    padding: 0;
+    gap: 0.5em;
+    color: $au-gray-700;
+    .event-marker {
+      content: "";
+      display: block;
+      padding: 0;
+      flex-grow: 0;
+      width: 8px;
+      height: 8px;
+      overflow: hidden;
+      position: relative;
+      flex-grow: 0;
+      background-color: $au-blue-700;
+      border-radius: 50%;
+      margin-left: 1em;
+    }
+  }
+  .spacer {
+    flex-grow: 1;
+  }
+  .spacer.last {
+    display: none;
+  }
+  .event-connector {
+    position: relative;
+    top: -10px;
+    width: 1px;
+    background-color: $au-gray-200;
+    height: 58px;
+    margin-bottom: -10px;
+    margin-left: calc(1.5em - 2px);
+  }
+  .event-panel {
+    width: 210px;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 5px;
+    &.selected {
+      border: solid 2px $au-blue-700;
+      background-color: $au-blue-100;
+    }
+    &:hover {
+      border: solid 2px $au-blue-700;
+    }
+  }
+  .provenance {
+    font-size: $au-small;
+  }
+  .event {
+    position: relative;
+  }
+  .selected-pill {
+    position: absolute;
+    top: 46px;
+    right: 0;
+  }
+
+  .arrow-start {
+    width: 0;
+    height: 0;
+    border-top: 14px solid $au-gray-100;
+    border-bottom: 14px solid $au-gray-100;
+
+    border-left: 14px solid transparent;
+    margin-left: -14px;
+  }
+  .arrow-end {
+    width: 0;
+    height: 0;
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+
+    border-left: 14px solid $au-gray-100;
+    margin-right: -14px;
+  }
+}
