@@ -41,7 +41,9 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   }
 
   async loadOptions() {
-    await this.checkPublicationStatus();
+    this.isDisabled = !!this.args.mandataris?.get(
+      'publicationStatus.isBekrachtigd'
+    );
 
     const optionIds = [PUBLICATION_STATUS_EFFECTIEF_ID];
     if (this.canReturnToDraftStatus) {
@@ -70,12 +72,6 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     super(...arguments);
 
     this.loadOptions();
-  }
-
-  @action
-  async checkPublicationStatus() {
-    const publicationStatus = await this.mandataris.publicationStatus;
-    this.isDisabled = publicationStatus.isBekrachtigd;
   }
 
   @action
