@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
+import moment from 'moment';
 
 export default class MandatarissenTimeline extends Component {
   @service features;
@@ -13,16 +14,27 @@ export default class MandatarissenTimeline extends Component {
   get timelineEvents() {
     const mandatarissen = this.args.mandatarissen;
     const sortedMandatarissen = mandatarissen.sortBy('start');
-    return sortedMandatarissen.map((mandataris, index) => {
+    const events = sortedMandatarissen.map((mandataris, index) => {
       return {
         type: index > 0 ? 'Wijziging' : 'Aanmaak',
-        active: mandataris.isActive,
+        active: mandataris.isCurrentlyActive,
         date: mandataris.start,
         mandataris,
-        last: index === mandatarissen.length - 1,
         selected: mandataris.id === this.args.mandataris.id,
       };
     });
+    const lastMandataris = sortedMandatarissen[sortedMandatarissen.length - 1];
+    if (lastMandataris.einde) {
+      events.push({
+        type: 'Einde',
+        active: moment().isAfter(lastMandataris.einde),
+        date: lastMandataris.einde,
+        mandataris: lastMandataris,
+        selected: false,
+      });
+    }
+    events[events.length - 1].last = true;
+    return events;
   }
 
   @action

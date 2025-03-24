@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior: none;
+  padding-bottom: 1em;
   .event-date,
   .spacer {
     background-color: $au-gray-100;
@@ -37,6 +41,7 @@
   }
   .spacer {
     flex-grow: 1;
+    min-width: 5px;
   }
   .spacer.last {
     display: none;
@@ -74,23 +79,23 @@
     top: 46px;
     right: 0;
   }
+}
 
-  .arrow-start {
-    width: 0;
-    height: 0;
-    border-top: 14px solid $au-gray-100;
-    border-bottom: 14px solid $au-gray-100;
+.timeline .arrow-start {
+  width: 0;
+  height: 0;
+  border-top: 14px solid $au-gray-100;
+  border-bottom: 14px solid $au-gray-100;
 
-    border-left: 14px solid transparent;
-    margin-left: -14px;
-  }
-  .arrow-end {
-    width: 0;
-    height: 0;
-    border-top: 14px solid transparent;
-    border-bottom: 14px solid transparent;
+  border-left: 14px solid transparent;
+  margin-left: -14px;
+}
+.timeline .arrow-end {
+  width: 0;
+  height: 0;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
 
-    border-left: 14px solid $au-gray-100;
-    margin-right: -14px;
-  }
+  border-left: 14px solid $au-gray-100;
+  margin-right: -14px;
 }
