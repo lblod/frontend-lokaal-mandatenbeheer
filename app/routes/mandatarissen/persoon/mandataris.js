@@ -3,12 +3,13 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
-
 import {
   MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_EXTRA_INFO_FORM_ID,
   POLITIERAAD_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
+import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
+
 import RSVP from 'rsvp';
 
 export default class MandatarissenPersoonMandatarisRoute extends Route {
@@ -35,8 +36,18 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       );
 
     const bestuursorganen = await mandaat.bevatIn;
-    const selectedBestuursperiode = (await bestuursorganen)[0]
-      .heeftBestuursperiode;
+    const selectedBestuursperiode =
+      await bestuursorganen[0]?.heeftBestuursperiode;
+    const periodeHasLegislatuur =
+      (await selectedBestuursperiode.installatievergaderingen)?.length >= 1;
+    const behandeldeVergaderingen = await this.store.query(
+      'installatievergadering',
+      {
+        'filter[status][:uri:]': INSTALLATIEVERGADERING_BEHANDELD_STATUS,
+        'filter[bestuursperiode][:id:]': selectedBestuursperiode.id,
+      }
+    );
+
     const isDistrict = this.currentSession.isDistrict;
     const linkedMandataris = await this.linkedMandataris(params.mandataris_id);
     const showOCMWLinkedMandatarisWarning =
@@ -72,7 +83,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
         mandatarisEditForm.id
       ),
       bestuursorganen,
-      selectedBestuursperiode,
+      periodeHasLegislatuur,
+      behandeldeVergaderingen,
       linkedMandataris,
       owners,
       isDistrictEenheid: isDistrict,
