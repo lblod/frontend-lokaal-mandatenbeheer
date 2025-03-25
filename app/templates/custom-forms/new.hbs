@@ -41,4 +41,11 @@
   {{#if this.errorMessage}}
     <AuHelpText @error={{true}}>{{this.errorMessage}}</AuHelpText>
   {{/if}}
+  <AuLabel class="au-u-margin-top">Beschrijving</AuLabel>
+  <AuTextarea
+    @width={{this.width}}
+    value={{this.description}}
+    placeholder="Formulier beschrijving"
+    {{on "input" this.onFormDescriptionUpdate}}
+  />
 </div>
