@@ -20,10 +20,13 @@ export default class CustomFormsInstancesRoute extends Route {
 
   async model({ id }) {
     const form = await this.store.findRecord('form', id);
+    const formDefinition =
+      await this.semanticFormRepository.getFormDefinition(id);
 
     return {
       form,
-      headerLabels: [],
+      formDefinition,
+      headerLabels: await this.semanticFormRepository.getHeaderLabels(form.id),
     };
   }
 }

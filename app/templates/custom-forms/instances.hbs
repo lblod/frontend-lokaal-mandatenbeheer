@@ -1,44 +1,7 @@
 {{page-title "Overzicht"}}
 {{breadcrumb
   this.model.form.targetLabel
-  route="codelijsten.instances"
+  route="custom-forms.instances"
   model=this.model.form.id
 }}
-<AuToolbar
-  @size="large"
-  class="au-u-padding-bottom-none au-u-margin-bottom"
-  as |Group|
->
-  <Group>
-    <AuHeading @skin="2">{{this.model.form.targetLabel}}</AuHeading>
-  </Group>
-  <Group>
-    <AuButtonGroup>
-      <AuLink @route="custom-forms.new" @skin="button">Nieuw element toevoegen</AuLink>
-    </AuButtonGroup>
-  </Group>
-</AuToolbar>
-<AuToolbar
-  @size="large"
-  class="au-u-padding-bottom-none au-u-margin-bottom"
-  as |Group|
->
-  <Group>
-    <p>{{this.model.form.description}}</p>
-  </Group>
-</AuToolbar>
-
-<div class="au-c-body-container au-c-body-container--scroll">
-  <SemanticForms::InstanceTable
-    @sort={{this.sort}}
-    @page={{this.page}}
-    @size={{this.size}}
-    @filter={{this.filter}}
-    @showDownloadButton={{true}}
-    @search={{this.search}}
-    @formDefinition={{this.model.form}}
-    @onRemoveInstance={{this.onRemoveInstance}}
-    @editRoute="forms.form.instance"
-    @onTableLoaded={{this.onTableLoaded}}
-  />
-</div>
+{{outlet}}

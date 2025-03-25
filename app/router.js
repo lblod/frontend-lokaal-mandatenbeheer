@@ -74,7 +74,10 @@ Router.map(function () {
   this.route('custom-forms', { path: 'eigen-gegevens' }, function () {
     this.route('new');
     this.route('overview', { path: 'overzicht' });
-    this.route('instances', { path: '/:id/instances' });
+    this.route('instances', { path: '/:id/instances' }, function () {
+      this.route('instance', { path: '/:id' });
+      this.route('new');
+    });
   });
 
   this.route('under-construction');
