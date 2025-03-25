@@ -7,6 +7,13 @@ export default class CustomFormsInstancesRoute extends Route {
   @service session;
   @service semanticFormRepository;
 
+  queryParams = {
+    filter: { refreshModel: true },
+    page: { refreshModel: false },
+    size: { refreshModel: false },
+    sort: { refreshModel: true },
+  };
+
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
   }
@@ -16,6 +23,7 @@ export default class CustomFormsInstancesRoute extends Route {
 
     return {
       form,
+      headerLabels: [],
     };
   }
 }
