@@ -30,7 +30,7 @@ export default class CustomFormsNewController extends Controller {
     this.isSaving = true;
     const id = await this.customForms.createEmptyDefinition(this.name.trim());
     this.isSaving = false;
-    this.router.transitionTo('custom-forms.overview', id);
+    this.router.transitionTo('custom-forms.instances', id);
   }
 
   @action
