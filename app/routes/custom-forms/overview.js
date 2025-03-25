@@ -3,13 +3,11 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 export default class CustomFormsOverviewRoute extends Route {
-  @service customForms;
+  @service store;
 
   async model() {
-    const types = await this.customForms.getInstanceTypeList();
-    const instances = await this.customForms.getInstanceList();
-    console.log({ types });
-    console.log({ instances });
-    return instances;
+    const formDefinitions = await this.store.findAll('form');
+    console.log({ formDefinitions });
+    return formDefinitions;
   }
 }

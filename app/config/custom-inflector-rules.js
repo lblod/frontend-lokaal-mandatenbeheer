@@ -72,3 +72,4 @@ irregular('bestuurseenheid-contact', 'bestuurseenheid-contacten');
 
 irregular('report', 'reports');
 irregular('validationresult', 'validationresults');
+irregular('form', 'forms');
