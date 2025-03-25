@@ -44,6 +44,15 @@ export default class CustomFormsNewController extends Controller {
   @action
   onCancel() {
     this.name = null;
+    this.description = null;
     this.router.transitionTo('custom-forms.overview');
+  }
+
+  get descriptionCharacters() {
+    return `Karakters: ${this.description?.length || 0}/500`;
+  }
+
+  get isOverMaxCharacters() {
+    return this.description?.length > 500;
   }
 }
