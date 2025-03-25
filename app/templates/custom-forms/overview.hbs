@@ -1,4 +1,5 @@
 {{page-title "Overzicht"}}
+{{breadcrumb "Overzicht" route="custom-forms.overview"}}
 <AuToolbar
   @size="large"
   class="au-u-padding-bottom-none au-u-margin-bottom"
@@ -51,7 +52,7 @@
     <c.body as |form|>
       <td class="au-u-1-5">
         <LinkTo
-          @route="codelijsten.detail"
+          @route="custom-forms.instances"
           @model={{form.id}}
           class="au-c-link au-u-medium"
         >
