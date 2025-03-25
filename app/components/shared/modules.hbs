@@ -53,16 +53,3 @@
     </LoketModuleCard>
   </li>
 {{/if}}
-{{#if (is-feature-enabled "show-codelijsten-module")}}
-  <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
-    <LoketModuleCard @icon="draft">
-      <:title>Beheer codelijsten</:title>
-      <:description>Hier vind je een overzicht van de codelijsten binnen Lokaal
-        Mandatenbeheer</:description>
-      <:link>
-        <AuLink @route="codelijsten.overzicht" @skin="button">Ga naar
-          codelijsten</AuLink>
-      </:link>
-    </LoketModuleCard>
-  </li>
-{{/if}}
