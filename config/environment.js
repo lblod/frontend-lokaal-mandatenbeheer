@@ -35,6 +35,7 @@ module.exports = function (environment) {
     features: {
       'show-forms-module': false,
       'show-codelijsten-module': false,
+      'show-eigen-gegevens-module': false,
       'enable-mandataris-count-warnings': true,
       timeline: false,
       politieraad: false,

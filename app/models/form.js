@@ -1,8 +1,12 @@
 import Model, { attr, hasMany } from '@ember-data/model';
+import moment from 'moment';
 
 export default class FormModel extends Model {
   @attr targetType;
   @attr targetLabel;
+  @attr description;
+  @attr('datetime') createdAt;
+  @attr('datetime') modifiedAt;
   @attr prefix;
   // @attr id; // SHould bve removed to fetch the forms from the store
   @attr formTtl;
@@ -13,4 +17,18 @@ export default class FormModel extends Model {
     inverse: 'baseForm',
   })
   extensions;
+
+  get displayCreatedDate() {
+    if (!this.createdAt) {
+      return 'Onbekend';
+    }
+    return moment(this.createdAt).format('DD-MM-YYYY h:mm:ss');
+  }
+
+  get displayModifiedDate() {
+    if (!this.modifiedAt) {
+      return 'Onbekend';
+    }
+    return moment(this.modifiedAt).format('DD-MM-YYYY h:mm:ss');
+  }
 }
