@@ -33,7 +33,7 @@
         <p>Dit mandaat is beëindigd</p>
       {{else}}
         <p>
-          Bewerkt op
+          {{if (eq @event.type "Start") "Aangemaakt op" "Bewerkt op"}}
           {{#if this.editedAt}}
             {{moment-format this.editedAt "DD-MM-YY HH:mm"}}
           {{else}}

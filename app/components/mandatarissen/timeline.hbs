@@ -24,7 +24,13 @@
         <div class="arrow">
           {{#each this.timelineEvents as |event index|}}
             <Mandatarissen::TimelineCard @event={{event}} @index={{index}} />
-            <div class="spacer {{if event.last 'last'}}"></div>
+            <div
+              class="spacer
+                {{if
+                  (and (gt this.timelineEvents.length 1) event.last)
+                  'last'
+                }}"
+            ></div>
           {{/each}}
         </div>
         <div class="arrow-end"></div>
