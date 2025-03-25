@@ -24,6 +24,14 @@
           </AuNavigationLink>
         </li>
       {{/if}}
+      {{#if (is-feature-enabled "show-eigen-gegevens-module")}}
+        <li class="au-c-list-navigation__item">
+          <AuNavigationLink @route="custom-forms.overview">
+            <AuIcon @icon="folder" @alignment="left" />
+            Eigen gegevens
+          </AuNavigationLink>
+        </li>
+      {{/if}}
       {{#if (is-feature-enabled "show-forms-module")}}
         <li class="au-c-list-navigation__item">
           <AuNavigationLink @route="forms">
