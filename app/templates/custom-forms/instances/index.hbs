@@ -1,0 +1,32 @@
+{{page-title "Overzicht"}}
+{{breadcrumb
+  this.model.form.targetLabel
+  route="custom-forms..instances"
+  model=this.model.form.id
+}}
+
+<AuMainContainer as |main|>
+  <main.content>
+    <AuBodyContainer id="content">
+      <div class="au-c-body-container au-c-body-container--scroll">
+        <SemanticForms::InstanceTable
+          @title={{this.model.form.targetLabel}}
+          @description={{this.model.form.description}}
+          @newFormRoute="custom-forms.instances.new"
+          @sort={{this.sort}}
+          @page={{this.page}}
+          @size={{this.size}}
+          @filter={{this.filter}}
+          @labels={{this.model.headerLabels}}
+          @showDownloadButton={{true}}
+          @search={{this.search}}
+          @formDefinition={{this.model.formDefinition}}
+          @onRemoveInstance={{this.onRemoveInstance}}
+          @editRoute="custom-forms.instances.instance"
+          @onTableLoaded={{this.onTableLoaded}}
+        />
+      </div>
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>
+{{outlet}}
