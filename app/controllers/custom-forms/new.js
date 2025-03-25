@@ -9,6 +9,7 @@ export default class CustomFormsNewController extends Controller {
   @service customForms;
 
   @tracked name;
+  @tracked description;
   @tracked errorMessage;
   @tracked isSaving;
 
@@ -20,6 +21,10 @@ export default class CustomFormsNewController extends Controller {
       this.errorMessage = 'Dit veld is verplicht';
     }
   }
+  @action
+  onFormDescriptionUpdate(event) {
+    this.description = event.target?.value;
+  }
 
   get isValidName() {
     return this.name && this.name?.trim().length >= 1;
@@ -28,7 +33,10 @@ export default class CustomFormsNewController extends Controller {
   @action
   async saveForm() {
     this.isSaving = true;
-    const id = await this.customForms.createEmptyDefinition(this.name.trim());
+    const id = await this.customForms.createEmptyDefinition(
+      this.name.trim(),
+      this.description
+    );
     this.isSaving = false;
     this.router.transitionTo('custom-forms.instances', id);
   }
