@@ -20,19 +20,4 @@ export default class SystemNotificationsRoute extends Route {
       this.router.transitionTo('lokaal-beheerd');
     }
   }
-
-  model(params) {
-    return {
-      userId: this.currentSession.user.id,
-      sort: params.sort,
-    };
-  }
-
-  setupController(controller) {
-    let filter = controller.activeFilter;
-    if (!filter) {
-      filter = controller.filterUnRead;
-    }
-    controller.getNotifications.perform(filter);
-  }
 }

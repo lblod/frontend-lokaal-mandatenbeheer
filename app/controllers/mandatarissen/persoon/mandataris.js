@@ -7,21 +7,16 @@ import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { getApplicationContextMetaTtl } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
-import { task } from 'ember-concurrency';
-import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenPersoonMandatarisController extends Controller {
   @service router;
   @service store;
-  @service toaster;
   @service fractieApi;
   @service currentSession;
   @service('mandataris') mandatarisService;
 
   @tracked isChanging;
   @tracked isCorrecting;
-  @tracked periodeHasLegislatuur;
-  @tracked behandeldeVergaderingen;
 
   @tracked correctedMandataris = false;
   @tracked updatedStateMandataris = false;
@@ -94,34 +89,11 @@ export default class MandatarissenPersoonMandatarisController extends Controller
     return getApplicationContextMetaTtl(this.model.bestuursorganen);
   }
 
-  checkLegislatuur = task(async () => {
-    const mandaat = await this.model.mandataris.bekleedt;
-    const bestuursorganen = await mandaat.bevatIn;
-
-    if (!bestuursorganen[0]) {
-      this.periodeHasLegislatuur = false;
-      this.behandeldeVergaderingen = null;
-      return;
-    }
-
-    const bestuursperiode = await bestuursorganen[0].heeftBestuursperiode;
-    this.periodeHasLegislatuur =
-      (await bestuursperiode.installatievergaderingen).length >= 1;
-
-    this.behandeldeVergaderingen = await this.store.query(
-      'installatievergadering',
-      {
-        'filter[status][:uri:]': INSTALLATIEVERGADERING_BEHANDELD_STATUS,
-        'filter[bestuursperiode][:id:]': bestuursperiode.id,
-      }
-    );
-  });
-
   get isDisabledBecauseLegislatuur() {
     return (
-      this.periodeHasLegislatuur &&
-      this.behandeldeVergaderingen &&
-      this.behandeldeVergaderingen.length === 0 &&
+      this.model.periodeHasLegislatuur &&
+      this.model.behandeldeVergaderingen &&
+      this.model.behandeldeVergaderingen.length === 0 &&
       !this.model.isDistrictEenheid
     );
   }

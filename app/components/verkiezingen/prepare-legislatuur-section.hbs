@@ -87,7 +87,8 @@
 
   {{#if (await @bestuursorgaan.isCBS)}}
     <Verkiezingen::BurgemeesterAlert
-      @collegeBestuursorgaanInTijd={{@bestuursorgaan}}
+      @burgemeesters={{this.burgemeesters}}
+      @aangewezenBurgemeesters={{this.aangewezenBurgemeesters}}
     />
   {{/if}}
 

@@ -3,12 +3,13 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
-
 import {
   MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_EXTRA_INFO_FORM_ID,
   POLITIERAAD_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
+import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
+
 import RSVP from 'rsvp';
 
 export default class MandatarissenPersoonMandatarisRoute extends Route {
@@ -35,8 +36,18 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       );
 
     const bestuursorganen = await mandaat.bevatIn;
-    const selectedBestuursperiode = (await bestuursorganen)[0]
-      .heeftBestuursperiode;
+    const selectedBestuursperiode =
+      await bestuursorganen[0]?.heeftBestuursperiode;
+    const periodeHasLegislatuur =
+      (await selectedBestuursperiode.installatievergaderingen)?.length >= 1;
+    const behandeldeVergaderingen = await this.store.query(
+      'installatievergadering',
+      {
+        'filter[status][:uri:]': INSTALLATIEVERGADERING_BEHANDELD_STATUS,
+        'filter[bestuursperiode][:id:]': selectedBestuursperiode.id,
+      }
+    );
+
     const isDistrict = this.currentSession.isDistrict;
     const linkedMandataris = await this.linkedMandataris(params.mandataris_id);
     const showOCMWLinkedMandatarisWarning =
@@ -66,8 +77,14 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       mandatarissen,
       mandatarisEditForm,
       mandatarisExtraInfoForm,
+      history: await this.fetchHistory(
+        mandataris,
+        mandatarissen,
+        mandatarisEditForm.id
+      ),
       bestuursorganen,
-      selectedBestuursperiode,
+      periodeHasLegislatuur,
+      behandeldeVergaderingen,
       linkedMandataris,
       owners,
       isDistrictEenheid: isDistrict,
@@ -141,5 +158,72 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     }
 
     return hasLinkedMandataris;
+  }
+
+  async fetchHistory(mandataris, allMandatarissen, formId) {
+    const newHistory = await Promise.all(
+      allMandatarissen.map(async (m) => {
+        let corrections = await this.fetchHistoryForMandataris(
+          mandataris,
+          formId
+        );
+        const historyEntry = {
+          mandataris,
+          corrections,
+          selected: mandataris?.id === m.id,
+        };
+        return historyEntry;
+      })
+    );
+
+    const userIdsInHistory = new Set();
+    newHistory.forEach((h) => {
+      h.corrections.forEach((c) => {
+        userIdsInHistory.add(c.creator);
+      });
+    });
+
+    let users = [];
+    if (userIdsInHistory.size !== 0) {
+      users = await this.store.query('gebruiker', {
+        filter: {
+          id: Array.from(userIdsInHistory).join(','),
+        },
+      });
+    }
+
+    const userIdToUser = {};
+    users.forEach((u) => {
+      userIdToUser[u.id] = u;
+    });
+
+    return newHistory
+      .map((h) => {
+        return {
+          ...h,
+          corrections: h.corrections.map((c) => ({
+            ...c,
+            creator: userIdToUser[c.creator],
+          })),
+        };
+      })
+      .sort((a, b) => {
+        if (!b?.mandataris?.start) {
+          return -1;
+        }
+        if (!a?.mandataris?.start) {
+          return 1;
+        }
+        return b.mandataris.start.getTime() - a.mandataris.start.getTime();
+      });
+  }
+
+  async fetchHistoryForMandataris(mandataris, formId) {
+    const result = await fetch(
+      `/form-content/${formId}/instances/${mandataris.id}/history`
+    );
+
+    const json = await result.json();
+    return json.instances;
   }
 }

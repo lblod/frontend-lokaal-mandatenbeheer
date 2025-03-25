@@ -16,7 +16,6 @@ export default class PersonSelectorComponent extends Component {
   @service persoonApi;
   @service semanticFormRepository;
 
-  @tracked person = null;
   @tracked selectNewPerson = false;
   @tracked creatingPerson = false;
   @tracked createPersonFormDefinition;
@@ -26,33 +25,21 @@ export default class PersonSelectorComponent extends Component {
     this.creatingPerson = false;
   }
 
-  constructor() {
-    super(...arguments);
-    this.onPersonChange();
-  }
-
-  @action
-  onPersonChange() {
-    this.person = this.args.person;
-  }
-
   @action
   async onSelectPerson(person) {
-    this.person = person;
     this.closeModal();
-    this.args.onUpdate(this.person);
+    this.args.onUpdate(person);
   }
 
   @action
   async onSelectNewPerson({ instanceId }) {
     const persoon = await this.store.findRecord('persoon', instanceId);
-    this.person = persoon;
     this.closeModal();
     await this.persoonApi.putPersonInRightGraph(
       instanceId,
       this.args.bestuursorgaanIT.id
     );
-    await this.args.onUpdate(this.person);
+    await this.args.onUpdate(persoon);
   }
 
   @action
@@ -85,8 +72,7 @@ export default class PersonSelectorComponent extends Component {
 
   @action
   removePerson() {
-    this.person = null;
-    this.args.onUpdate(this.person);
+    this.args.onUpdate(null);
   }
 
   @action
