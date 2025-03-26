@@ -7,12 +7,11 @@ export default class MandatarissenTimeline extends Component {
   @service store;
 
   get isFeatureEnabled() {
-    return this.features.isEnabled('shacl-report');
+    return this.features.isEnabled('timeline');
   }
 
   get timelineEvents() {
-    const mandatarissen = this.args.mandatarissen;
-    const sortedMandatarissen = mandatarissen.sortBy('start');
+    const sortedMandatarissen = this.args.mandatarissen.sortBy('start');
     const events = sortedMandatarissen.map((mandataris, index) => {
       return {
         type: index > 0 ? 'Wijziging' : 'Start',
