@@ -3,6 +3,26 @@
 <AuMainContainer as |main|>
   <main.content>
     <AuBodyContainer id="content">
+      <AuModal
+        @title="Editeer formulier"
+        @modalOpen={{true}}
+        @closable={{true}}
+        {{!-- @closeModal={{this.toggleModal}} --}}
+      >
+        <div class="au-o-box">
+          <EditableForm
+            @instanceId={{this.model.form.id}}
+            @form={{this.model.form}}
+            {{!-- @onCancel={{this.onSave}}
+          @onSave={{this.onSave}} --}}
+            @formInitialized={{fn (mut this.formInitialized) true}}
+            @customHistoryMessage={{true}}
+          />
+          {{#unless this.formInitialized}}
+            <Skeleton::Forms::MandatarisExtraInfo />
+          {{/unless}}
+        </div>
+      </AuModal>
       <div class="au-c-body-container au-c-body-container--scroll">
         <SemanticForms::InstanceTable
           @title={{this.model.form.targetLabel}}
