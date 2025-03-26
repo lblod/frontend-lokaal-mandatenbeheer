@@ -8,7 +8,7 @@ export default class FormModel extends Model {
   @attr('datetime') createdAt;
   @attr('datetime') modifiedAt;
   @attr prefix;
-  // @attr id; // SHould bve removed to fetch the forms from the store
+  // @attr id; // Should be removed to fetch the forms from the store
   @attr formTtl;
   @attr metaTtl;
 

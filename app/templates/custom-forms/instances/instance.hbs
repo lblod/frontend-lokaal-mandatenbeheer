@@ -1,2 +1,24 @@
 {{page-title "Instance"}}
-{{outlet}}
+
+<div class="au-o-box">
+  <EditableForm
+    @instanceId={{this.model.instanceId}}
+    @form={{this.model.form}}
+    @onCancel={{this.onCancel}}
+    @onSave={{this.onSave}}
+    @formInitialized={{fn (mut this.formInitialized) true}}
+    @customHistoryMessage={{true}}
+  />
+  {{#unless this.formInitialized}}
+    <div>
+      <AuLabel for="input" class="skeleton-label" />
+      <p class="skeleton-text au-u-margin-top"></p>
+      <p class="skeleton-text au-u-margin-top-small"></p>
+      <p class="skeleton-text au-u-margin-top-small"></p>
+      <AuButtonGroup class="au-u-margin-top">
+        <AuButton class="skeleton-base">Save</AuButton>
+        <AuButton class="skeleton-base">Cancel</AuButton>
+      </AuButtonGroup>
+    </div>
+  {{/unless}}
+</div>
