@@ -14,10 +14,19 @@ export default class CustomFormsInstancesNewController extends Controller {
   @action
   onCreate({ instanceId }) {
     const definitionId = this.model.formDefinition.id;
-    this.router.transitionTo(
-      'custom-forms.instances.instance',
-      definitionId,
-      instanceId
-    );
+    this.router.transitionTo('custom-forms.instances', definitionId);
+    // this.router.transitionTo(
+    //   'custom-forms.instances.instance',
+    //   definitionId,
+    //   instanceId
+    // );
+  }
+
+  get formContext() {
+    return {
+      onFormUpdate: () => this.updateForm(),
+      formDefinition: this.model.formDefinition,
+      isReadOnly: false,
+    };
   }
 }

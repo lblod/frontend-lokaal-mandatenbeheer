@@ -7,6 +7,7 @@ export default class FormNewRoute extends Route {
 
   async model() {
     const formModel = this.modelFor('forms.form');
+
     return { formDefinition: formModel };
   }
 }

@@ -12,6 +12,7 @@ export default class CustomFormsInstancesController extends Controller {
   queryParams = ['page', 'size', 'sort', 'filter'];
 
   @service router;
+  @tracked isEditFormDefinitionOpen;
   @tracked page = 0;
   @tracked sort = 'uri';
   @tracked filter = '';
@@ -46,5 +47,10 @@ export default class CustomFormsInstancesController extends Controller {
   @action
   onTableLoaded() {
     this.isUpdating = false;
+  }
+
+  @action
+  closeEditFormDefinitionModal() {
+    this.isEditFormDefinitionOpen = false;
   }
 }
