@@ -99,3 +99,9 @@
   border-left: 14px solid $au-gray-100;
   margin-right: -14px;
 }
+.timeline-diffs hr {
+  border-color: $au-gray-200;
+  &:last-of-type {
+    display: none;
+  }
+}
