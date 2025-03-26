@@ -74,6 +74,7 @@ export default class RdfDateInputComponent extends InputFieldComponent {
   onUpdate(date) {
     replaceSingleFormValue(this.storeOptions, date);
 
+    this.hasBeenFocused = true;
     super.updateValidations();
   }
 
