@@ -1,0 +1,55 @@
+<div class="event {{if @event.selected 'selected'}}">
+  <AuButton
+    class="event-date"
+    @skin="naked"
+    {{on "click" (fn this.selectEvent @event)}}
+  >
+    <div class="event-marker"></div>
+    <div class="event-date-value">{{moment-format
+        @event.date
+        "DD-MM-YYYY"
+      }}</div>
+  </AuButton>
+  <div class="event-connector"></div>
+  {{#if @event.selected}}
+    <AuPill @skin="link" class="selected-pill">Geselecteerde Situatie</AuPill>
+  {{/if}}
+  <AuPanel
+    class="event-panel {{if @event.selected 'selected'}}"
+    {{on "click" (fn this.selectEvent @event)}}
+  >
+
+    <div class="au-u-flex au-u-flex--spaced-tiny">
+      <AuPill>{{@event.type}}</AuPill>
+      {{#if @event.active}}
+        <AuPill @skin="success">Actief</AuPill>
+      {{/if}}
+    </div>
+
+    <div
+      class="provenance au-u-muted au-u-italic au-u-margin-top-tiny au-u-margin-bottom-tiny"
+    >
+      {{#if (eq @event.type "Einde")}}
+        <p>Dit mandaat is beëindigd</p>
+      {{else}}
+        <p>
+          {{if (eq @event.type "Start") "Aangemaakt op" "Bewerkt op"}}
+          {{#if this.editedAt}}
+            {{moment-format this.editedAt "DD-MM-YY HH:mm"}}
+          {{else}}
+            Onbekend
+          {{/if}}
+        </p>
+        <p>door
+          {{#if this.editor}}
+            {{this.editor.voornaam}}
+            {{this.editor.achternaam}}
+          {{else}}
+            Onbekend
+          {{/if}}
+        </p>
+      {{/if}}
+    </div>
+    {{yield}}
+  </AuPanel>
+</div>

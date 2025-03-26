@@ -1,0 +1,56 @@
+{{#if this.isFeatureEnabled}}
+  <div class="au-o-box">
+    <AuHeading @level="3" @skin="4">
+      Historiek
+    </AuHeading>
+    <ul class="au-c-list-vertical">
+      <Mandatarissen::History
+        @mandataris={{@mandataris}}
+        @mandatarissen={{@mandatarissen}}
+        @history={{@history}}
+        @form={{@form}}
+      />
+    </ul>
+    <div class="timeline">
+      <div class="time-notations au-u-flex au-u-flex--between">
+        <div class="au-u-bold">
+          Start Mandaat
+        </div>
+        <div class="au-u-bold">
+          Einde Mandaat
+        </div>
+      </div>
+      <div class="au-u-flex">
+        <div class="arrow-start"></div>
+        <div class="arrow">
+          {{#each this.timelineEvents as |event index|}}
+            <Mandatarissen::TimelineCard @event={{event}} @index={{index}} />
+            <div
+              class="spacer
+                {{if
+                  (and (gt this.timelineEvents.length 1) event.last)
+                  'last'
+                }}"
+            ></div>
+          {{/each}}
+        </div>
+        <div class="arrow-end"></div>
+      </div>
+    </div>
+  </div>
+{{else}}
+  <div class="au-o-box">
+    <AuHeading @level="3" @skin="4">
+      Historiek
+    </AuHeading>
+
+    <ul class="au-c-list-vertical">
+      <Mandatarissen::History
+        @mandataris={{@mandataris}}
+        @mandatarissen={{@mandatarissen}}
+        @form={{@form}}
+        @history={{@history}}
+      />
+    </ul>
+  </div>
+{{/if}}
