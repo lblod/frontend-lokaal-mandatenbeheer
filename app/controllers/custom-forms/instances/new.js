@@ -12,14 +12,9 @@ export default class CustomFormsInstancesNewController extends Controller {
   }
 
   @action
-  onCreate({ instanceId }) {
+  onCreate() {
     const definitionId = this.model.formDefinition.id;
     this.router.transitionTo('custom-forms.instances', definitionId);
-    // this.router.transitionTo(
-    //   'custom-forms.instances.instance',
-    //   definitionId,
-    //   instanceId
-    // );
   }
 
   get formContext() {

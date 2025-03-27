@@ -1,9 +1,9 @@
 import Route from '@ember/routing/route';
 
 export default class CustomFormsInstancesInstanceRoute extends Route {
-  async model({ id }) {
-    const formModel = this.modelFor('custom-forms.instances');
+  async model(params) {
+    const parent = this.modelFor('custom-forms.instances.index');
 
-    return { form: formModel.form, instanceId: id };
+    return { form: parent.formDefinition, instanceId: params.instance_id };
   }
 }
