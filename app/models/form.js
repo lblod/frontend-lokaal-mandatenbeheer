@@ -4,6 +4,7 @@ import moment from 'moment';
 export default class FormModel extends Model {
   @attr targetType;
   @attr targetLabel;
+  @attr name;
   @attr description;
   @attr('datetime') createdAt;
   @attr('datetime') modifiedAt;

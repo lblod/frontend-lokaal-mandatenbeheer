@@ -1,7 +1,7 @@
 {{page-title "Overzicht"}}
 
 {{breadcrumb
-  this.model.form.targetLabel
+  this.model.form.name
   route="custom-forms.instances.index"
   model=this.model.form.id
 }}
@@ -12,7 +12,7 @@
     <AuBodyContainer id="content">
       <div class="au-c-body-container au-c-body-container--scroll">
         <SemanticForms::InstanceTable
-          @title={{this.model.form.targetLabel}}
+          @title={{this.model.form.name}}
           @description={{this.model.form.description}}
           @newFormRoute="custom-forms.instances.new"
           @sort={{this.sort}}
