@@ -14,7 +14,10 @@ export default class CustomFormsNewRoute extends Route {
   willTransition(transition) {
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const controller = this.controller;
-    if (controller.name || controller.description) {
+    if (
+      !controller.isCreated &&
+      (controller.isValidName || controller.description)
+    ) {
       transition.abort();
       controller.isUnsavedChangesModalOpen = true;
       controller.savedTransition = transition;

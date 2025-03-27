@@ -12,12 +12,14 @@ export default class CustomFormsNewController extends Controller {
   @tracked description;
   @tracked errorMessage;
   @tracked isSaving;
+  @tracked isCreated;
 
   @tracked isUnsavedChangesModalOpen;
   @tracked savedTransition;
 
   @action
   onFormNameUpdate(event) {
+    this.isCreated = false;
     this.name = event.target?.value;
     this.errorMessage = null;
     if (!this.isValidName) {
@@ -26,6 +28,7 @@ export default class CustomFormsNewController extends Controller {
   }
   @action
   onFormDescriptionUpdate(event) {
+    this.isCreated = false;
     this.description = event.target?.value;
   }
 
@@ -41,6 +44,9 @@ export default class CustomFormsNewController extends Controller {
       this.description
     );
     this.isSaving = false;
+    this.isCreated = true;
+    this.name = null;
+    this.description = null;
     this.router.transitionTo('custom-forms.instances', id);
   }
 
