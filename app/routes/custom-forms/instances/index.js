@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
-export default class CustomFormsInstancesRoute extends Route {
+export default class CustomFormsInstancesIndexRoute extends Route {
   @service store;
   @service session;
   @service semanticFormRepository;

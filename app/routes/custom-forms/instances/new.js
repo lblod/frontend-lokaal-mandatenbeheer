@@ -1,9 +1,13 @@
 import Route from '@ember/routing/route';
 
+import { service } from '@ember/service';
 export default class CustomFormsInstancesNewRoute extends Route {
-  async model() {
-    const formModel = this.modelFor('custom-forms.instances');
+  @service semanticFormRepository;
 
-    return { formDefinition: formModel.formDefinition };
+  async model({ id }) {
+    const formDefinition =
+      await this.semanticFormRepository.getFormDefinition(id);
+
+    return { formDefinition };
   }
 }
