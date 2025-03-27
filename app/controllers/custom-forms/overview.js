@@ -12,10 +12,21 @@ export default class CustomFormsOverviewController extends Controller {
   @tracked page = 0;
   @tracked size = 20;
 
+  @tracked isDeleteModalOpen;
+  @tracked isDeleting;
+  @tracked formToDelete;
+
   @action
-  async deleteForms(formModel) {
+  openDeleteFormModal(formModel) {
+    this.isDeleteModalOpen = true;
+    this.formToDelete = formModel;
+  }
+
+  @action
+  async deleteForm() {
+    this.isDeleting = true;
     try {
-      await formModel.destroyRecord();
+      await this.formToDelete.destroyRecord();
       showSuccessToast(
         this.toaster,
         'Formulier definitie and instances succesvol verwijderd',
@@ -28,5 +39,8 @@ export default class CustomFormsOverviewController extends Controller {
         'Formulier'
       );
     }
+    this.isDeleting = false;
+    this.isDeleteModalOpen = false;
+    this.formToDelete = null;
   }
 }

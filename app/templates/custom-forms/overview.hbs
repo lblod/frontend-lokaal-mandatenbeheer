@@ -69,9 +69,39 @@
         <AuButton
           @alert={{true}}
           @skin="link"
-          {{on "click" (fn this.deleteForms form)}}
+          {{on "click" (fn this.openDeleteFormModal form)}}
         >Verwijder</AuButton>
       </td>
     </c.body>
   </t.content>
 </AuDataTable>
+
+<AuModal
+  @title="Verwijder formulier"
+  @modalOpen={{this.isDeleteModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isDeleteModalOpen) false}}
+>
+  <:body>
+    <p>Door verder te gaan zal de formulier definitie met zijn instanties
+      definitief verwijderd worden.</p>
+  </:body>
+  <:footer>
+    <AuButtonGroup
+      class="au-u-flex au-u-flex--between au-u-padding-left au-u-padding-right"
+    >
+      <AuButton
+        @alert={{true}}
+        @disabled={{this.isDeleting}}
+        @loading={{this.isDeleting}}
+        @loadingMessage="Formulier en instanties worden verwijderd"
+        {{on "click" this.deleteForm}}
+      >Verwijder</AuButton>
+      <AuButton
+        @skin="secondary"
+        @disabled={{this.isDeleting}}
+        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+      >Annuleer</AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>
