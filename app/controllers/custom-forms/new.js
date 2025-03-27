@@ -13,6 +13,9 @@ export default class CustomFormsNewController extends Controller {
   @tracked errorMessage;
   @tracked isSaving;
 
+  @tracked isUnsavedChangesModalOpen;
+  @tracked savedTransition;
+
   @action
   onFormNameUpdate(event) {
     this.name = event.target?.value;
@@ -43,9 +46,23 @@ export default class CustomFormsNewController extends Controller {
 
   @action
   onCancel() {
+    if (this.isValidName || this.description?.trim() !== '') {
+      this.isUnsavedChangesModalOpen = true;
+    } else {
+      this.router.transitionTo('custom-forms.overview');
+    }
+  }
+
+  @action
+  discardChanges() {
+    this.isUnsavedChangesModalOpen = false;
     this.name = null;
     this.description = null;
-    this.router.transitionTo('custom-forms.overview');
+    if (this.savedTransition) {
+      this.savedTransition?.retry();
+    } else {
+      this.router.transitionTo('custom-forms.overview');
+    }
   }
 
   get descriptionCharacters() {
