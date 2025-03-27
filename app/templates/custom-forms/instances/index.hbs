@@ -1,5 +1,12 @@
 {{page-title "Overzicht"}}
 
+{{breadcrumb
+  this.model.form.targetLabel
+  route="custom-forms.instances.index"
+  model=this.model.form.id
+}}
+{{outlet}}
+
 <AuMainContainer as |main|>
   <main.content>
     <AuBodyContainer id="content">
