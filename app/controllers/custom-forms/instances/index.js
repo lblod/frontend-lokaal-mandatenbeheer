@@ -59,6 +59,6 @@ export default class CustomFormsInstancesIndexController extends Controller {
     if (!ttl) {
       return;
     }
-    throw new Error('Niet bewaren aub', ttl); // TODO: remove this. Done as ember sees this as a getter
+    throw new Error('Niet bewaren aub', ttl);
   }
 }
