@@ -16,7 +16,6 @@ export function greaterThan([inputValue], options) {
   if (!threshold) {
     return false;
   }
-  console.log(inputValue.value >= threshold.value);
   return inputValue.value >= threshold.value;
 }
 
