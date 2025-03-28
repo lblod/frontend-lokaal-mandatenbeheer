@@ -44,6 +44,7 @@ export default class CustomFormsService extends Service {
       usageUris: jsonResponse.usageUris,
     };
   }
+
   async removeFormDefinitionWithUsage(form) {
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/definition/${form.id}/usage`,
