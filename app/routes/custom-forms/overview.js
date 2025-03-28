@@ -17,7 +17,8 @@ export default class CustomFormsOverviewRoute extends Route {
   }
 
   async model(params) {
-    const formDefinitions = await this.store.query('form', {
+    const formDefinitions = await this.store.query('generated-form', {
+      'filter[:has-no:base-form]': true,
       sort: params.sort || '-modified-at',
       page: {
         number: params.page,
