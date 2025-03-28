@@ -27,9 +27,6 @@ export default class MandatarissenPersoonMandatarisReworkRoute extends Route {
     const mandaat = await mandataris.bekleedt;
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);
 
-    const mandatarisEditForm = this.semanticFormRepository.getFormDefinition(
-      MANDATARIS_EDIT_FORM_ID
-    );
     const mandatarisExtraInfoForm =
       await this.semanticFormRepository.getFormDefinition(
         MANDATARIS_EXTRA_INFO_FORM_ID
@@ -75,7 +72,6 @@ export default class MandatarissenPersoonMandatarisReworkRoute extends Route {
       bestuurseenheid,
       mandataris,
       mandatarissen,
-      mandatarisEditForm,
       mandatarisExtraInfoForm,
       history: await this.fetchHistory(
         mandataris,

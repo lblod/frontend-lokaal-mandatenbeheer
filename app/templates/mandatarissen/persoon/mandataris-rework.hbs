@@ -17,12 +17,7 @@
   <div class="au-o-grid__item au-u-1-2 au-u-text-left">
     <div class="au-u-flex au-u-flex--end au-u-margin-bottom">
       {{#if this.notOwnedByUs}}
-        <AuAlert
-          @title={{this.title}}
-          @skin="info"
-          @icon="eye"
-          @closable={{false}}
-        >
+        <AuAlert @skin="info" @icon="eye" @closable={{false}}>
           <div class="au-u-flex au-u-flex--spaced-tiny">
             <span>Beheerd door:</span>
             <Mandaat::OwnershipTags @owners={{this.model.owners}} />
