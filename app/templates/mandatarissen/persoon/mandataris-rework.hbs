@@ -30,51 +30,29 @@
           <p>Je kan deze mandataris niet bewerken.</p>
         </AuAlert>
       {{else}}
-        <AuDropdown
-          @title="Bewerk"
-          @alignment="right"
-          @skin="primary"
-          @icon="chevron-down"
-          @onClose={{this.onClose}}
-        >
+        <AuButtonGroup>
           <Shared::Tooltip
             @showTooltip={{true}}
             @tooltipText={{this.toolTipText}}
           >
             <AuButton
-              class="dropdown-btn--primary"
-              @skin="naked"
-              @width="block"
-              @disabled={{or
-                (not this.model.mandataris.isActive)
-                this.isDisabledBecauseLegislatuur
-              }}
-              {{on "click" (fn (mut this.isChanging) true)}}
-            >Wijzig huidig mandaat</AuButton>
-          </Shared::Tooltip>
-          <Shared::Tooltip
-            @showTooltip={{true}}
-            @tooltipText={{this.toolTipTextCorrecting}}
-          >
-            <AuButton
-              @width="block"
               @disabled={{this.isDisabledBecauseLegislatuur}}
-              {{on "click" (fn (mut this.isCorrecting) true)}}
-            >Corrigeer fouten</AuButton>
+              {{on "click" (fn (mut this.editMandataris) true)}}
+            >Bewerk mandaat</AuButton>
           </Shared::Tooltip>
           <Shared::Tooltip
             @showTooltip={{not this.model.mandataris.isApprovedForDeletion}}
             @tooltipText="Mandatarissen die bekrachtigd zijn kunnen niet verwijderd worden."
           >
             <AuButton
-              @width="block"
-              @skin="naked"
               @disabled={{not this.model.mandataris.isApprovedForDeletion}}
+              @skin="secondary"
+              @icon="bin"
               @alert={{true}}
               {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
             >Verwijder</AuButton>
           </Shared::Tooltip>
-        </AuDropdown>
+        </AuButtonGroup>
       {{/if}}
 
     </div>
