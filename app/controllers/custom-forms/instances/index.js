@@ -15,6 +15,7 @@ export default class CustomFormsInstancesIndexController extends Controller {
 
   @service router;
   @service toaster;
+  @service customForms;
 
   @tracked isDeleteModalOpen;
   @tracked isDeleting;
@@ -79,12 +80,13 @@ export default class CustomFormsInstancesIndexController extends Controller {
   async deleteForm() {
     this.isDeleting = true;
     try {
-      await this.model.form.destroyRecord();
+      await this.customForms.removeFormDefinitionWithUsage(this.model.form.id);
       showSuccessToast(
         this.toaster,
         'Formulier definitie and instances succesvol verwijderd',
         'Formulier'
       );
+      this.router.transitionTo('custom-forms.overview');
     } catch (error) {
       showErrorToast(
         this.toaster,

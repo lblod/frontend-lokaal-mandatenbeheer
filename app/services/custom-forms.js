@@ -1,5 +1,13 @@
 import Service from '@ember/service';
-import { API, JSON_API_TYPE, STATUS_CODE } from 'frontend-lmb/utils/constants';
+
+import { timeout } from 'ember-concurrency';
+
+import {
+  API,
+  JSON_API_TYPE,
+  RESOURCE_CACHE_TIMEOUT,
+  STATUS_CODE,
+} from 'frontend-lmb/utils/constants';
 
 export default class CustomFormsService extends Service {
   async createEmptyDefinition(formName, description) {
@@ -35,5 +43,20 @@ export default class CustomFormsService extends Service {
       hasUsage: jsonResponse.hasUsage,
       usageUris: jsonResponse.usageUris,
     };
+  }
+  async removeFormDefinitionWithUsage(formDefinitionId) {
+    const response = await fetch(
+      `${API.FORM_CONTENT_SERVICE}/definition/${formDefinitionId}/with-usage`,
+      {
+        method: 'DELETE',
+      }
+    );
+
+    if (!response.ok) {
+      const jsonResponse = await response.json();
+      console.error({ jsonResponse });
+    }
+
+    await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 }
