@@ -44,9 +44,9 @@ export default class CustomFormsService extends Service {
       usageUris: jsonResponse.usageUris,
     };
   }
-  async removeFormDefinitionWithUsage(formDefinitionId) {
+  async removeFormDefinitionWithUsage(form) {
     const response = await fetch(
-      `${API.FORM_CONTENT_SERVICE}/definition/${formDefinitionId}/with-usage`,
+      `${API.FORM_CONTENT_SERVICE}/definition/${form.id}/usage`,
       {
         method: 'DELETE',
       }
@@ -56,7 +56,7 @@ export default class CustomFormsService extends Service {
       const jsonResponse = await response.json();
       console.error({ jsonResponse });
     }
-
+    await form.destroyRecord();
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 }
