@@ -1,0 +1,70 @@
+{{page-title "Overzicht"}}
+
+{{breadcrumb
+  this.model.form.name
+  route="custom-forms.instances.index"
+  model=this.model.form.id
+}}
+{{outlet}}
+
+<AuMainContainer as |main|>
+  <main.content>
+    <AuBodyContainer id="content">
+      <div class="au-c-body-container au-c-body-container--scroll">
+        <SemanticForms::InstanceTable
+          @title={{this.model.form.name}}
+          @description={{this.model.form.description}}
+          @newFormRoute="custom-forms.instances.new"
+          @sort={{this.sort}}
+          @page={{this.page}}
+          @size={{this.size}}
+          @filter={{this.filter}}
+          @labels={{this.model.headerLabels}}
+          @showDownloadButton={{true}}
+          @search={{this.search}}
+          @form={{this.model.form}}
+          @formDefinition={{this.model.formDefinition}}
+          @onRemoveInstance={{this.onRemoveInstance}}
+          @editRoute="custom-forms.instances.instance"
+          @onTableLoaded={{this.onTableLoaded}}
+        >
+          <:extraActions>
+            {{! template-lint-disable require-context-role }}
+            <AuButton
+              role="menuitem"
+              @skin="link"
+              {{on "click" (fn (mut this.isEditFormDefinitionOpen) true)}}
+            >
+              Bewerk formulier definitie
+            </AuButton>
+
+          </:extraActions>
+        </SemanticForms::InstanceTable>
+      </div>
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>
+
+<AuModal
+  @title="Bewerk formulier definitie"
+  @modalOpen={{this.isEditFormDefinitionOpen}}
+  @closable={{true}}
+  @closeModal={{this.closeEditFormDefinitionModal}}
+>
+  <div class="au-o-box">
+    <EditableForm
+      @beforeSave={{this.preventSave}}
+      @instanceId={{this.model.form.id}}
+      @form={{this.model.form}}
+      @onCancel={{this.closeEditFormDefinitionModal}}
+      @onSave={{this.closeEditFormDefinitionModal}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
+      @customHistoryMessage={{true}}
+    />
+    {{#unless this.formInitialized}}
+      <AuLoader />
+    {{/unless}}
+  </div>
+</AuModal>
+
+{{outlet}}
