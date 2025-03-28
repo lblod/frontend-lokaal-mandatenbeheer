@@ -3,6 +3,8 @@ import { rijksregisternummerValidation } from './rijksregisternummer';
 import { isValidRangorde } from './mandataris-rangorde';
 import { isValidMandatarisDate } from './mandataris-date-in-bestuursperiod';
 import { isRequiredWhenBestuursorgaanInList } from './required-constraint-for-bestuursorganen';
+import { greaterThan } from './greater-than';
+import { lessThan } from './less-than';
 
 export const registerCustomValidations = () => {
   registerCustomValidation(
@@ -20,5 +22,13 @@ export const registerCustomValidations = () => {
   registerCustomValidation(
     'http://mu.semte.ch/vocabularies/ext/RequiredForBestuursorganen',
     isRequiredWhenBestuursorgaanInList
+  );
+  registerCustomValidation(
+    'http://mu.semte.ch/vocabularies/ext/LessThan',
+    lessThan
+  );
+  registerCustomValidation(
+    'http://mu.semte.ch/vocabularies/ext/GreaterThan',
+    greaterThan
   );
 };
