@@ -80,7 +80,7 @@ export default class CustomFormsInstancesIndexController extends Controller {
   async deleteForm() {
     this.isDeleting = true;
     try {
-      await this.customForms.removeFormDefinitionWithUsage(this.model.form.id);
+      await this.customForms.removeFormDefinitionWithUsage(this.model.form);
       showSuccessToast(
         this.toaster,
         'Formulier definitie and instances succesvol verwijderd',
