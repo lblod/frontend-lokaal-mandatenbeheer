@@ -21,4 +21,19 @@ export default class CustomFormsService extends Service {
     console.log(`created form`, jsonResponse);
     return jsonResponse.id;
   }
+
+  async findFormDefinitionUsage(formDefinitionId) {
+    const response = await fetch(
+      `${API.FORM_CONTENT_SERVICE}/definition/${formDefinitionId}/has-usage`
+    );
+    const jsonResponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error({ jsonResponse });
+    }
+    return {
+      hasUsage: jsonResponse.hasUsage,
+      usageUris: jsonResponse.usageUris,
+    };
+  }
 }
