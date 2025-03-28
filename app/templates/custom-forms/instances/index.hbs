@@ -35,7 +35,7 @@
               @skin="link"
               {{on "click" (fn (mut this.isEditFormDefinitionOpen) true)}}
             >
-              Editeer formulier definitie
+              Bewerk formulier definitie
             </AuButton>
 
           </:extraActions>
@@ -46,7 +46,7 @@
 </AuMainContainer>
 
 <AuModal
-  @title="Editeer formulier definitie"
+  @title="Bewerk formulier definitie"
   @modalOpen={{this.isEditFormDefinitionOpen}}
   @closable={{true}}
   @closeModal={{this.closeEditFormDefinitionModal}}
