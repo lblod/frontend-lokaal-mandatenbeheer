@@ -1,0 +1,227 @@
+{{breadcrumb
+  this.model.mandataris.bekleedt.bestuursfunctie.label
+  route="mandatarissen.persoon.mandataris"
+  model=this.model.mandataris.id
+}}
+
+<div class="au-o-grid au-u-padding">
+  <div class="au-o-grid__item au-u-1-2">
+    <p class="au-u-h2 au-u-medium">
+      {{this.bestuursorganenTitle}}
+    </p>
+    <p class="au-u-h3">
+      {{this.persoon.gebruikteVoornaam}}
+      {{this.persoon.achternaam}}
+      Test
+    </p>
+  </div>
+  <div class="au-o-grid__item au-u-1-2 au-u-text-left">
+    <div class="au-u-flex au-u-flex--end au-u-margin-bottom">
+      {{#if this.notOwnedByUs}}
+        <AuAlert
+          @title={{this.title}}
+          @skin="info"
+          @icon="eye"
+          @closable={{false}}
+        >
+          <div class="au-u-flex au-u-flex--spaced-tiny">
+            <span>Beheerd door:</span>
+            <Mandaat::OwnershipTags @owners={{this.model.owners}} />
+          </div>
+          <p>Je kan deze mandataris niet bewerken.</p>
+        </AuAlert>
+      {{else}}
+        <AuDropdown
+          @title="Bewerk"
+          @alignment="right"
+          @skin="primary"
+          @icon="chevron-down"
+          @onClose={{this.onClose}}
+        >
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @tooltipText={{this.toolTipText}}
+          >
+            <AuButton
+              class="dropdown-btn--primary"
+              @skin="naked"
+              @width="block"
+              @disabled={{or
+                (not this.model.mandataris.isActive)
+                this.isDisabledBecauseLegislatuur
+              }}
+              {{on "click" (fn (mut this.isChanging) true)}}
+            >Wijzig huidig mandaat</AuButton>
+          </Shared::Tooltip>
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @tooltipText={{this.toolTipTextCorrecting}}
+          >
+            <AuButton
+              @width="block"
+              @disabled={{this.isDisabledBecauseLegislatuur}}
+              {{on "click" (fn (mut this.isCorrecting) true)}}
+            >Corrigeer fouten</AuButton>
+          </Shared::Tooltip>
+          <Shared::Tooltip
+            @showTooltip={{not this.model.mandataris.isApprovedForDeletion}}
+            @tooltipText="Mandatarissen die bekrachtigd zijn kunnen niet verwijderd worden."
+          >
+            <AuButton
+              @width="block"
+              @skin="naked"
+              @disabled={{not this.model.mandataris.isApprovedForDeletion}}
+              @alert={{true}}
+              {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+            >Verwijder</AuButton>
+          </Shared::Tooltip>
+        </AuDropdown>
+      {{/if}}
+
+    </div>
+  </div>
+</div>
+
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <Mandatarissen::MandatarisCard
+      @mandataris={{@model.mandataris}}
+      @bestuursorgaanIT={{get @model.bestuursorganen 0}}
+      @legislatuurInBehandeling={{this.isDisabledBecauseLegislatuur}}
+      @effectiefIsLastPublicationStatus={{this.model.effectiefIsLastPublicationStatus}}
+      @actionWhenAddingReplacement={{fn (mut this.selectedReplacement) true}}
+      @canEdit={{not this.notOwnedByUs}}
+    />
+  </div>
+
+  <div class="au-o-box">
+    <Mandatarissen::MandatarisExtraInfoCard
+      @mandataris={{@model.mandataris}}
+      @form={{@model.mandatarisExtraInfoForm}}
+      @canEdit={{and
+        (not this.isDisabledBecauseLegislatuur)
+        (not this.notOwnedByUs)
+      }}
+    />
+  </div>
+
+  <Mandatarissen::Timeline
+    @mandataris={{@model.mandataris}}
+    @mandatarissen={{@model.mandatarissen}}
+    @history={{@model.history}}
+    @form={{@model.mandatarisEditForm}}
+  />
+
+  <div class="au-o-box">
+    <ValidatieTable @instance={{@model.mandataris}} />
+  </div>
+</div>
+
+<Mandatarissen::UpdateState
+  @onCancel={{this.closeModals}}
+  @isChanging={{this.isChanging}}
+  @onStateChanged={{this.onUpdateState}}
+  @mandataris={{this.model.mandataris}}
+>
+  <AuAlert
+    @skin="info"
+    @icon="info-circle"
+    @size="small"
+    @closable={{false}}
+    class="au-u-margin-small"
+  >
+    <p><span class="au-u-medium">Wijzig huidig mandaat</span>
+      wordt gebruikt om bijvoorbeeld de fractie te wijzigen of de status van het
+      mandaat aan te passen. Dit zal een nieuw mandaat starten met de gewijzigde
+      situatie.</p>
+  </AuAlert>
+  {{#if @model.showOCMWLinkedMandatarisWarning}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @closable={{false}}
+      @size="small"
+      class="au-u-margin-left-small au-u-margin-right-small au-u-margin-bottom-small"
+    >
+      {{this.warningTextOCMWLinkToGemeente}}
+    </AuAlert>
+  {{/if}}
+</Mandatarissen::UpdateState>
+
+<AuModal
+  @title={{this.title}}
+  @modalOpen={{this.isCorrecting}}
+  @closable={{true}}
+  @closeModal={{this.closeModals}}
+>
+  <AuAlert
+    @skin="info"
+    @icon="info-circle"
+    @size="small"
+    @closable={{false}}
+    class="au-u-margin-small"
+  >
+    <p><span class="au-u-medium">Corrigeer fouten</span>
+      wordt gebruikt om bijvoorbeeld typefouten of een foutieve startdatum aan
+      te passen. Voor alle andere mandaatwijzigingen, zoals fractiewijzigingen,
+      gebruik
+      <span class="au-u-medium">Wijzig huidig mandaat</span>.</p>
+  </AuAlert>
+  {{#if @model.showOCMWLinkedMandatarisWarning}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @closable={{false}}
+      @size="small"
+      class="au-u-margin-left-small au-u-margin-right-small au-u-margin-bottom-small"
+    >
+      {{this.warningTextOCMWLinkToGemeente}}
+    </AuAlert>
+  {{/if}}
+  <div class="au-o-box">
+    <EditableForm
+      @instanceId={{this.model.mandataris.id}}
+      @form={{this.model.mandatarisEditForm}}
+      @onSave={{this.onSave}}
+      @onCancel={{this.closeModals}}
+      @buildMetaTtl={{this.buildMetaTtl}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
+      @customHistoryMessage={{true}}
+      @saveTitle="Pas aan"
+    />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::MandatarisCorrect />
+    {{/unless}}
+  </div>
+</AuModal>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.correctedMandataris}}
+  @mandataris={{this.model.mandataris.id}}
+  @correct="true"
+/>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.selectedReplacement}}
+  @mandataris={{this.model.mandataris.id}}
+  @replacement="true"
+/>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.updatedStateMandataris}}
+  @mandataris={{this.model.mandataris.id}}
+  @newMandataris={{this.newMandataris.id}}
+  @callback={{this.callbackAfterUpdate}}
+  @updateState="true"
+/>
+
+<Mandatarissen::DeleteModal
+  @isOpen={{this.isDeleteModalOpen}}
+  @onClose={{fn (mut this.isDeleteModalOpen) false}}
+  @mandataris={{this.model.mandataris}}
+  @linkedMandatarisCanBeDeleted={{and
+    this.model.linkedMandataris.hasDouble
+    this.model.bestuurseenheid.isGemeente
+  }}
+  @linkedMandataris={{this.model.linkedMandataris}}
+/>

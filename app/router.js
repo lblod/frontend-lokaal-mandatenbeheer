@@ -47,6 +47,9 @@ Router.map(function () {
     this.route('persoon', { path: '/:id/persoon' }, function () {
       this.route('mandaten');
       this.route('mandataris', { path: '/:mandataris_id/mandataris' });
+      this.route('mandataris-rework', {
+        path: '/:mandataris_id/mandataris-rework',
+      });
     });
     this.route('upload');
   });
