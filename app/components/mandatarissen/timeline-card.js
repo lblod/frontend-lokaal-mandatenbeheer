@@ -16,8 +16,11 @@ export default class MandatarissenTimelineCard extends Component {
   }
 
   get hasOverlapWithNext() {
+    if (!this.args.event.nextMandataris) {
+      return false;
+    }
     return moment(this.args.event.mandataris.einde || '3000-01-02').isAfter(
-      moment(this.args.event.nextMandataris?.start || '3000-01-01')
+      moment(this.args.event.nextMandataris.start || '3000-01-01')
     );
   }
 
