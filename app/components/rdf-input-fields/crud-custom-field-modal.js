@@ -9,7 +9,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { consume } from 'ember-provide-consume-context';
 
 import { JSON_API_TYPE, SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
-import { PROV, FORM } from 'frontend-lmb/rdf/namespaces';
+import { PROV, FORM, EXT } from 'frontend-lmb/rdf/namespaces';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import {
   LIBRARY_ENTREES,
@@ -220,6 +220,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       'text/turtle'
     );
     return forkingStore;
+  }
+
+  get isCustomForm() {
+    const forkingStore = this.forkingStore;
+    return !forkingStore.any(null, EXT('extendsForm'), null, SOURCE_GRAPH);
   }
 
   get libraryFieldOptions() {
