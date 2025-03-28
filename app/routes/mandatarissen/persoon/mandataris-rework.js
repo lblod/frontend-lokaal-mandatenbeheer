@@ -80,7 +80,7 @@ export default class MandatarissenPersoonMandatarisReworkRoute extends Route {
       history: await this.fetchHistory(
         mandataris,
         mandatarissen,
-        mandatarisEditForm.id
+        MANDATARIS_EDIT_FORM_ID
       ),
       bestuursorganen,
       periodeHasLegislatuur,
