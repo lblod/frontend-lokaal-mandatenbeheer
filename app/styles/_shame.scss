@@ -433,3 +433,9 @@ main .au-c-main-container__content .au-u-wide-on-print {
 .power-select--min-width {
   min-width: 20rem;
 }
+.au-c-modal.overflow-visible {
+  overflow: visible;
+  .au-c-modal__body {
+    overflow: visible;
+  }
+}
