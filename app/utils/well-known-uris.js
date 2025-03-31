@@ -105,6 +105,10 @@ export const DATE_CUSTOM_DISPLAY_TYPE =
   'http://lblod.data.gift/display-types/lmb/custom-date-input';
 export const ADRES_CUSTOM_DISPLAY_TYPE =
   'http://lblod.data.gift/display-types/lmb/custom-address-input';
+export const CONCEPT_SCHEME_SELECTOR_CUSTOM_DISPLAY_TYPE =
+  'http://lblod.data.gift/display-types/lmb/custom-concept-scheme-selector-input';
+export const CONCEPT_SCHEME_MULTI_SELECTOR_CUSTOM_DISPLAY_TYPE =
+  'http://lblod.data.gift/display-types/lmb/custom-concept-scheme-multi-selector-input';
 
 export const LIBRARY_ENTREES = [
   'http://data.lblod.info/id/lmb/form-library-entries/095d1329-a9fa-4d72-8c49-eb52aaf893de', // Verblijfsplaats

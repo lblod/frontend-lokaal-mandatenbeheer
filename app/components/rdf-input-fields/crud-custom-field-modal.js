@@ -36,6 +36,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @tracked fieldName;
   @tracked libraryFieldType = this.customFieldEntry;
   @tracked displayType;
+  @tracked conceptScheme;
 
   constructor() {
     super(...arguments);
@@ -152,6 +153,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   @action
+  selectConceptScheme(conceptScheme) {
+    this.conceptScheme = conceptScheme;
+  }
+
+  @action
   onCancel() {
     if (this.wantsToRemove) {
       this.wantsToRemove = false;
@@ -190,6 +196,16 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     return this.store.findAll('display-type').then((entries) => {
       return entries.sortBy('label');
     });
+  }
+
+  get conceptSchemes() {
+    return this.store
+      .query('concept-scheme', {
+        page: { size: 9999 },
+      })
+      .then((entries) => {
+        return entries.sortBy('displayLabel');
+      });
   }
 
   get libraryEntryUri() {
