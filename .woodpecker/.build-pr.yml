@@ -1,9 +1,10 @@
 steps:
-  build-pr:
-    image: plugins/docker
+  build:
+    image: woodpeckerci/plugin-docker-buildx
     settings:
-      repo: lblod/frontend-lokaal-mandatenbeheer
+      repo: ${CI_REPO}
       dry_run: true
+      tags: latest
 when:
-  event:
-    - pull_request
+  - event: push
+    branch: master
