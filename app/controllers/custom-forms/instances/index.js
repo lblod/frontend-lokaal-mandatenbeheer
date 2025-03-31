@@ -101,14 +101,13 @@ export default class CustomFormsInstancesIndexController extends Controller {
 
   get removeFormModalText() {
     if (this.model.usage.hasUsage) {
-      const usageCount = this.model.usage.usageUris.length;
       let text = (variableText) =>
         `${variableText} van dit type gevonden. Door verder te gaan zal de definitie met zijn implementaties definitief verwijderd worden.`;
 
-      if (usageCount > 1) {
-        return text(`Er werden ${usageCount} formulieren `);
+      if (this.model.usage.count > 1) {
+        return text(`Er werden ${this.model.usage.count} formulieren `);
       }
-      return text(`Er werd ${usageCount} formulier `);
+      return text(`Er werd ${this.model.usage.count} formulier `);
     }
 
     return 'Door verder te gaan zal de formulier definitie verwijderd worden.';
