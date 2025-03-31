@@ -23,8 +23,8 @@ import RdfInputFieldsCustomAddressInputComponent from 'frontend-lmb/components/r
 import RdfInputFieldsCustomDateInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-date-input';
 import RdfInputFieldsCustomNumberInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-number-input';
 import RdfInputFieldsCustomTextInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-text-input';
-import RdfInputFieldCustomConceptSchemeSelectorInput from 'frontend-lmb/components/rdf-input-field/custom-concept-scheme-selector-input';
-import RdfInputFieldCustomConceptSchemeMultiSelectorInput from 'frontend-lmb/components/rdf-input-field/custom-concept-scheme-multi-selector-input';
+import RdfInputFieldCustomConceptSchemeSelectorInput from 'frontend-lmb/components/rdf-input-fields/custom-concept-scheme-selector-input';
+import RdfInputFieldCustomConceptSchemeMultiSelectorInput from 'frontend-lmb/components/rdf-input-fields/custom-concept-scheme-multi-selector-input';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
