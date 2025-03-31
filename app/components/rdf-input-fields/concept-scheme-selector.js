@@ -40,4 +40,8 @@ export default class RdfInputFieldsConceptSchemeSelectorComponent extends Concep
 
     super.updateSelection();
   }
+
+  get showLabel() {
+    return !!this.args.showFieldLabel || true;
+  }
 }

@@ -1,11 +1,13 @@
-<AuLabel
-  @error={{this.hasErrors}}
-  @warnings={{this.hasWarnings}}
-  @required={{this.isRequired}}
-  for={{this.inputId}}
->
-  {{@field.label}}
-</AuLabel>
+{{#if this.showLabel}}
+  <AuLabel
+    @error={{this.hasErrors}}
+    @warnings={{this.hasWarnings}}
+    @required={{this.isRequired}}
+    for={{this.inputId}}
+  >
+    {{@field.label}}
+  </AuLabel>
+{{/if}}
 <div class={{if this.hasErrors "ember-power-select--error"}}>
   <PowerSelectMultiple
     @triggerId={{this.inputId}}
