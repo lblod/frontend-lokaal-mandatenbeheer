@@ -201,7 +201,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   get conceptSchemes() {
     return this.store
       .query('concept-scheme', {
-        page: { size: 9999 },
+        page: { size: 9999 }, // Not ideal
       })
       .then((entries) => {
         return entries.sortBy('displayLabel');
