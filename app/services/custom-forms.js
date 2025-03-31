@@ -26,11 +26,10 @@ export default class CustomFormsService extends Service {
     if (response.status !== STATUS_CODE.CREATED) {
       console.error({ jsonResponse });
     }
-    console.log(`created form`, jsonResponse);
     return jsonResponse.id;
   }
 
-  async findFormDefinitionUsage(formDefinitionId) {
+  async getFormDefinitionUsageCount(formDefinitionId) {
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/definition/${formDefinitionId}/usage-count`
     );
