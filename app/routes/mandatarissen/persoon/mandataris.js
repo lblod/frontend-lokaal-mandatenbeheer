@@ -70,6 +70,14 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
         },
       });
     }
+    const history = await this.fetchHistory(
+      mandataris,
+      mandatarissen,
+      mandatarisEditForm.id
+    );
+
+    const isMostRecentVersion =
+      mandatarissen.sortBy('start').reverse()[0].id === mandataris.id;
 
     return RSVP.hash({
       bestuurseenheid,
@@ -77,11 +85,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       mandatarissen,
       mandatarisEditForm,
       mandatarisExtraInfoForm,
-      history: await this.fetchHistory(
-        mandataris,
-        mandatarissen,
-        mandatarisEditForm.id
-      ),
+      history,
+      isMostRecentVersion,
       bestuursorganen,
       periodeHasLegislatuur,
       behandeldeVergaderingen,
