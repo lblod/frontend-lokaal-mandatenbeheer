@@ -43,10 +43,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
     let withValue = TEXT_CUSTOM_DISPLAY_TYPE;
     if (!this.args.isCreating) {
-      const { label, displayType } = this.args.field;
+      const { label, displayType, options } = this.args.field;
 
       this.fieldName = label;
       withValue = displayType;
+      this.conceptScheme = options.conceptScheme;
     }
     this.isFieldRequired = this.args.isRequiredField ?? false;
     this.isShownInSummary = this.originalIsShownInSummary;
@@ -89,6 +90,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             name: this.fieldName,
             isRequired: !!this.isFieldRequired,
             showInSummary: !!this.isShownInSummary,
+            conceptScheme: this.conceptScheme,
           }),
         }
       );
@@ -117,6 +119,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             name: this.fieldName,
             isRequired: !!this.isFieldRequired,
             showInSummary: !!this.isShownInSummary,
+            conceptScheme: this.conceptScheme,
           }),
         }
       );
@@ -292,8 +295,19 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   get canSaveChanges() {
     return (
-      this.fieldHasChanged && this.hasValidFieldName && this.libraryFieldType
+      this.fieldHasChanged &&
+      this.hasValidFieldName &&
+      this.libraryFieldType &&
+      this.hasConceptSchemeSelected
     );
+  }
+
+  get hasConceptSchemeSelected() {
+    if (!this.displayType?.isConceptSchemeSelector) {
+      return true;
+    }
+
+    return this.conceptScheme;
   }
 
   get fieldHasChanged() {
