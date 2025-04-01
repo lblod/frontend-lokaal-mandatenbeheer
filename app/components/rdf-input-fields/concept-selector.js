@@ -2,23 +2,60 @@ import InputFieldComponent from '@lblod/ember-submission-form-fields/components/
 
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
-import { tracked } from '@glimmer/tracking';
+import { tracked, cached } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
-import { NamedNode } from 'rdflib';
+import { NamedNode, Literal } from 'rdflib';
 import { hasValidFieldOptions } from '@lblod/ember-submission-form-fields/utils/has-valid-field-options';
 import { task, timeout } from 'ember-concurrency';
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
+import { trackedFunction } from 'reactiveweb/function';
+import { use } from 'ember-resources';
+import { FIELD_OPTION } from 'frontend-lmb/rdf/namespaces';
+import { showWarningToast } from 'frontend-lmb/utils/toasts';
+
+function getOptions() {
+  return trackedFunction(async () => {
+    if (!this.conceptScheme) {
+      return [];
+    }
+
+    const queryParams = {
+      filter: {
+        label: this.searchData,
+        'concept-schemes': {
+          ':uri:': this.conceptScheme,
+        },
+      },
+      sort: 'label',
+      page: {
+        size: 9999,
+      },
+    };
+    if (this.searchData) {
+      queryParams['filter']['label'] = this.searchData;
+    }
+    const response = await this.store.query('concept', queryParams);
+
+    return response.map((m) => {
+      const subject = new NamedNode(m.uri);
+      return { subject: subject, label: m.label };
+    });
+  });
+}
 export default class ConceptSchemeSelectorComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
 
+  @service toaster;
   @service store;
 
   @tracked selected = null;
-  @tracked options = [];
   @tracked searchEnabled = true;
-  conceptScheme = null;
+  @tracked searchData;
+  @tracked conceptScheme = null;
+
+  @use(getOptions) getOptions;
 
   constructor() {
     super(...arguments);
@@ -27,27 +64,46 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
   }
 
   async load() {
-    await this.loadOptions();
+    this.loadOptions();
     await this.loadProvidedValue();
   }
 
-  async loadOptions() {
+  loadOptions() {
     const fieldOptions = this.args.field.options;
 
-    if (!hasValidFieldOptions(this.args.field, ['conceptScheme'])) {
-      return;
+    let { conceptScheme, isSearchEnabled } = this.getFieldOptionsByPredicates();
+    if (!conceptScheme) {
+      if (
+        !hasValidFieldOptions(this.args.field, ['conceptScheme']) ||
+        !fieldOptions.conceptScheme
+      ) {
+        showWarningToast(
+          this.toaster,
+          'No conceptScheme was added to field ',
+          this.args.field.label
+        );
+        return;
+      }
+      this.conceptScheme = new NamedNode(fieldOptions.conceptScheme);
+    } else {
+      this.conceptScheme = conceptScheme;
     }
 
-    this.conceptScheme = fieldOptions.conceptScheme;
-
-    if (fieldOptions.searchEnabled !== undefined) {
-      this.searchEnabled = fieldOptions.searchEnabled;
+    if (!isSearchEnabled) {
+      if (fieldOptions.searchEnabled !== undefined) {
+        this.searchEnabled = fieldOptions.searchEnabled;
+      }
+    } else {
+      this.searchEnabled = Literal.toJS(isSearchEnabled);
     }
-
-    this.options = await this.fetchOptions();
   }
 
   async loadProvidedValue() {}
+
+  @cached
+  get options() {
+    return this.getOptions?.value || [];
+  }
 
   @action
   updateSelection() {
@@ -69,33 +125,25 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
     };
   }
 
-  async fetchOptions(searchData) {
-    const queryParams = {
-      filter: {
-        label: searchData,
-        'concept-schemes': {
-          ':uri:': this.conceptScheme,
-        },
-      },
-      sort: 'label',
-      page: {
-        size: 9999,
-      },
-    };
-    if (searchData) {
-      queryParams['filter']['label'] = searchData;
-    }
-    const response = await this.store.query('concept', queryParams);
-    return await response.map((m) => {
-      const subject = new NamedNode(m.uri);
-      return { subject: subject, label: m.label };
-    });
-  }
-
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
-    let searchResults = await this.fetchOptions(searchData);
-    this.options = searchResults;
-    return searchResults;
+    this.searchData = searchData;
   });
+
+  getFieldOptionsByPredicates() {
+    return {
+      conceptScheme: this.args.formStore.any(
+        this.args.field.uri,
+        FIELD_OPTION('conceptScheme'),
+        undefined,
+        this.args.graphs.formGraph
+      )?.value,
+      isSearchEnabled: this.args.formStore.any(
+        this.args.field.uri,
+        FIELD_OPTION('searchEnabled'),
+        undefined,
+        this.args.graphs.formGraph
+      )?.value,
+    };
+  }
 }
