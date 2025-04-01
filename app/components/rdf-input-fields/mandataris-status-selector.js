@@ -17,26 +17,11 @@ import { MANDATARIS_PREDICATE } from 'frontend-lmb/utils/constants';
 export default class RdfInputFieldsMandatarisStatusSelectorComponent extends RdfInputFieldsConceptSchemeSelectorComponent {
   @service store;
 
-  @tracked mandaat = null;
+  @tracked filterCb;
 
-  async loadMandaat() {
-    const forkingStore = this.storeOptions.store;
-    const mandaatUri = forkingStore.any(
-      this.storeOptions.sourceNode,
-      ORG('holds'),
-      null,
-      this.storeOptions.sourceGraph
-    )?.value;
-
-    if (!mandaatUri || this.mandaat?.uri === mandaatUri) {
-      return;
-    }
-
-    this.mandaat = await queryRecord(this.store, 'mandaat', {
-      'filter[:uri:]': mandaatUri,
-    });
-
-    this.options = await this.fetchOptions();
+  constructor() {
+    super(...arguments);
+    this.registerObserver();
   }
 
   registerObserver() {
@@ -60,25 +45,44 @@ export default class RdfInputFieldsMandatarisStatusSelectorComponent extends Rdf
     onFormUpdate();
   }
 
-  constructor() {
-    super(...arguments);
-    this.loadMandaat();
-    this.registerObserver();
-  }
+  async loadMandaat() {
+    const { store, sourceNode, sourceGraph } = this.storeOptions;
+    const mandaatUri = store.any(
+      sourceNode,
+      ORG('holds'),
+      null,
+      sourceGraph
+    )?.value;
 
-  async fetchOptions(searchData) {
-    const statuses = await super.fetchOptions(searchData);
-    const isBurgemeester = (await this.mandaat?.bestuursfunctie)
-      ?.isBurgemeester;
-
-    if (isBurgemeester) {
-      return statuses.filter(
-        (status) => !notBurgemeesterStates.includes(status.subject.value)
-      );
+    if (!mandaatUri || this.mandaat?.uri === mandaatUri) {
+      return;
     }
 
-    return statuses.filter(
-      (status) => !burgemeesterOnlyStates.includes(status.subject.value)
-    );
+    const mandaat = await queryRecord(this.store, 'mandaat', {
+      'filter[:uri:]': mandaatUri,
+      includes: 'bestuursfunctie-code',
+    });
+    const bestuursfunctieCode = await mandaat.bestuursfunctie;
+    this.updateOptionsFilter(bestuursfunctieCode);
+  }
+
+  get filteredOptions() {
+    if (!this.filterCb) {
+      return this.options;
+    }
+    return this.options.filter(this.filterCb);
+  }
+
+  updateOptionsFilter(bestuursfunctieCode) {
+    if (!bestuursfunctieCode) {
+      return;
+    }
+    if (bestuursfunctieCode.isBurgemeester) {
+      this.filterCb = (status) =>
+        !notBurgemeesterStates.includes(status.subject.value);
+    } else {
+      this.filterCb = (status) =>
+        !burgemeesterOnlyStates.includes(status.subject.value);
+    }
   }
 }

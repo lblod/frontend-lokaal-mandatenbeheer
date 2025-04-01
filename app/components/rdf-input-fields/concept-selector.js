@@ -8,10 +8,10 @@ import { service } from '@ember/service';
 import { NamedNode, Literal } from 'rdflib';
 import { hasValidFieldOptions } from '@lblod/ember-submission-form-fields/utils/has-valid-field-options';
 import { task, timeout } from 'ember-concurrency';
-import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
-
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
+
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { FIELD_OPTION } from 'frontend-lmb/rdf/namespaces';
 import { showWarningToast } from 'frontend-lmb/utils/toasts';
 
@@ -84,7 +84,7 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
         );
         return;
       }
-      this.conceptScheme = new NamedNode(fieldOptions.conceptScheme);
+      this.conceptScheme = fieldOptions.conceptScheme;
     } else {
       this.conceptScheme = conceptScheme;
     }
