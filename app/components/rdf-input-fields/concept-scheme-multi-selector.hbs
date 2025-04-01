@@ -1,8 +1,8 @@
-{{#if this.showLabel}}
+{{#if (not (or @inTable this.showLabel))}}
   <AuLabel
     @error={{this.hasErrors}}
-    @warnings={{this.hasWarnings}}
     @required={{this.isRequired}}
+    @warning={{this.hasWarnings}}
     for={{this.inputId}}
   >
     {{@field.label}}
