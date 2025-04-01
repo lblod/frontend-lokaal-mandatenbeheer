@@ -7,11 +7,10 @@ import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { consume } from 'ember-provide-consume-context';
-import { NamedNode } from 'rdflib';
 
 import { JSON_API_TYPE, SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { FIELD_OPTION, FORM, EXT, PROV } from 'frontend-lmb/rdf/namespaces';
-import { showErrorToast, showWarningToast } from 'frontend-lmb/utils/toasts';
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import {
   LIBRARY_ENTREES,
   TEXT_CUSTOM_DISPLAY_TYPE,
@@ -68,20 +67,14 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       SOURCE_GRAPH,
       'text/turtle'
     );
-    const predicateMatches = store.match(
+    const conceptSchemeNode = store.any(
       new NamedNode(this.args.field.uri.value),
       FIELD_OPTION('conceptScheme'),
       undefined,
       SOURCE_GRAPH
     );
 
-    if (predicateMatches.length > 1) {
-      showWarningToast(
-        this.toaster,
-        `Er werden meerdere codelijst uri's gevonden voor veld "${this.args.field?.label || 'zonder label'}"`
-      );
-    }
-    const conceptSchemeUri = predicateMatches.at(0)?.object.value || null;
+    const conceptSchemeUri = conceptSchemeNode.value || null;
     if (!conceptSchemeUri) {
       return null;
     }
