@@ -18,6 +18,11 @@ export default class MandatarissenTimeline extends Component {
         active: mandataris.isCurrentlyActive,
         date: mandataris.start,
         mandataris,
+        previousMandataris: index > 0 ? sortedMandatarissen[index - 1] : null,
+        nextMandataris:
+          index < sortedMandatarissen.length - 1
+            ? sortedMandatarissen[index + 1]
+            : null,
         selected: mandataris.id === this.args.mandataris.id,
       };
     });
