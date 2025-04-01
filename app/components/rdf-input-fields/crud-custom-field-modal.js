@@ -49,7 +49,10 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
       this.fieldName = label;
       withValue = displayType;
-      this.getConceptSchemeFromTtl().then((cs) => (this.conceptScheme = cs));
+      this.getConceptSchemeFromTtl().then((cs) => {
+        this.conceptScheme = cs;
+        this.conceptSchemeOnLoad = cs;
+      });
     }
     this.isFieldRequired = this.args.isRequiredField ?? false;
     this.isShownInSummary = this.originalIsShownInSummary;
@@ -329,12 +332,15 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   get canSaveChanges() {
-    return (
-      this.fieldHasChanged &&
-      this.hasValidFieldName &&
-      this.libraryFieldType &&
-      this.hasConceptSchemeSelected
-    );
+    if (this.args.isCreating) {
+      return (
+        this.hasValidFieldName &&
+        this.libraryFieldType &&
+        this.hasConceptSchemeSelected
+      );
+    }
+
+    return this.fieldHasChanged;
   }
 
   get hasConceptSchemeSelected() {
@@ -346,15 +352,12 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   get fieldHasChanged() {
-    if (this.args.isCreating) {
-      return this.hasValidFieldName;
-    }
-
     return (
       (this.hasValidFieldName && this.fieldName !== this.args.field.label) ||
       this.displayType.uri !== this.args.field.displayType ||
       this.isFieldRequired != this.args.isRequiredField ||
-      this.isShownInSummary != this.args.isShownInSummary
+      this.isShownInSummary != this.args.isShownInSummary ||
+      this.conceptSchemeOnLoad?.id !== this.conceptScheme?.id
     );
   }
 
