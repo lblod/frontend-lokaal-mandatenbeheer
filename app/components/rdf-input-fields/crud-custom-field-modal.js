@@ -15,6 +15,7 @@ import {
   LIBRARY_ENTREES,
   TEXT_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
+import { Literal, NamedNode } from 'rdflib';
 
 export default class RdfInputFieldCrudCustomFieldModalComponent extends Component {
   @consume('form-context') formContext;
@@ -224,7 +225,17 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   get isCustomForm() {
     const forkingStore = this.forkingStore;
-    return !forkingStore.any(null, EXT('extendsForm'), null, SOURCE_GRAPH);
+    return (
+      forkingStore.any(
+        null,
+        EXT('isCustomForm'),
+        new Literal(
+          'true',
+          null,
+          new NamedNode('http://www.w3.org/2001/XMLSchema#boolean')
+        )
+      ) && !forkingStore.any(null, EXT('extendsForm'), null, SOURCE_GRAPH)
+    );
   }
 
   get libraryFieldOptions() {
