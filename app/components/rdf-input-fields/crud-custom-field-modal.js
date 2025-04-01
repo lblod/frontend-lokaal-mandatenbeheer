@@ -7,6 +7,7 @@ import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { consume } from 'ember-provide-consume-context';
+import { NamedNode } from 'rdflib';
 
 import { JSON_API_TYPE, SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { FIELD_OPTION, FORM, EXT, PROV } from 'frontend-lmb/rdf/namespaces';
@@ -65,7 +66,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       'text/turtle'
     );
     const predicateMatches = store.match(
-      undefined,
+      new NamedNode(this.args.field.uri.value),
       FIELD_OPTION('conceptScheme'),
       undefined,
       SOURCE_GRAPH
@@ -153,7 +154,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             name: this.fieldName,
             isRequired: !!this.isFieldRequired,
             showInSummary: !!this.isShownInSummary,
-            conceptScheme: this.conceptScheme,
+            conceptScheme: this.conceptScheme?.uri,
           }),
         }
       );
