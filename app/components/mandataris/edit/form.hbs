@@ -34,6 +34,16 @@
         @isRequired={{true}}
       />
     </div>
+    <div>
+      <DateInput
+        @label="Einddatum"
+        @value={{this.endDate}}
+        @from={{@bestuursorgaanIT.bindingStart}}
+        @to={{@bestuursorgaanIT.bindingEinde}}
+        @onChange={{fn (mut this.endDate)}}
+        @isRequired={{false}}
+      />
+    </div>
     {{#if this.showRangordeField}}
       <div>
         <AuLabel>
