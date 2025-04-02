@@ -8,6 +8,7 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
 
   @tracked selectedReplacement = false;
   @tracked isDeleteModalOpen;
+  @tracked isEditModalOpen;
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt

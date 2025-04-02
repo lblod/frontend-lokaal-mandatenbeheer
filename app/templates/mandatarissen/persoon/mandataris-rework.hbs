@@ -32,7 +32,7 @@
           >
             <AuButton
               @disabled={{this.isDisabledBecauseLegislatuur}}
-              {{on "click" (fn (mut this.editMandataris) true)}}
+              {{on "click" (fn (mut this.isEditModalOpen) true)}}
             >Bewerk mandaat</AuButton>
           </Shared::Tooltip>
           <Shared::Tooltip
@@ -92,6 +92,14 @@
   @recentUpdate={{this.selectedReplacement}}
   @mandataris={{this.model.mandataris.id}}
   @replacement="true"
+/>
+
+<Mandatarissen::EditModal
+  @isOpen={{this.isEditModalOpen}}
+  @onClose={{fn (mut this.isEditModalOpen) false}}
+  @bestuurseenheid={{@model.bestuurseenheid}}
+  @mandataris={{@model.mandataris}}
+  @linkedMandataris={{this.model.linkedMandataris}}
 />
 
 <Mandatarissen::DeleteModal

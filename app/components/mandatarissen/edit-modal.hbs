@@ -1,0 +1,26 @@
+<AuModal @modalOpen={{@isOpen}} @closable={{true}} @closeModal={{this.cancel}}>
+  <:title>Bewerk mandaat</:title>
+  <:body>
+    Form komt hier
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <Shared::Tooltip
+            @showTooltip={{this.disabled}}
+            @tooltipText={{this.toolTipText}}
+            @alignment="left"
+          >
+            <AuButton {{on "click" this.cancel}} @disabled={{this.disabled}}>
+              {{if this.hasChanges "Pas aan" "Onveranderd"}}
+            </AuButton>
+          </Shared::Tooltip>
+          <AuButton {{on "click" this.cancel}} @skin="secondary">
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
