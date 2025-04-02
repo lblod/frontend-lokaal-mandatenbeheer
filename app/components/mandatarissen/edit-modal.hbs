@@ -7,7 +7,23 @@
 
   </:title>
   <:body>
-    Form komt hier
+    <div>
+      <AuLabel @required={{true}}>
+        Nieuwe Status
+      </AuLabel>
+      <PowerSelect
+        @allowClear={{false}}
+        @selected={{this.status}}
+        @options={{this.statusOptions}}
+        @onChange={{this.updateStatus}}
+        @searchEnabled={{true}}
+        @searchField="label"
+        @noMatchesMessage="Geen resultaten"
+        as |status|
+      >
+        {{status.label}}
+      </PowerSelect>
+    </div>
   </:body>
   <:footer>
     <AuToolbar as |Group|>

@@ -1,16 +1,33 @@
 import Component from '@glimmer/component';
 
+import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarissenEditModalComponent extends Component {
   @service toaster;
+  @service mandatarisStatus;
 
   @tracked isSecondModalOpen = false;
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
   @tracked reasonForChange;
+  @tracked status;
+  @tracked statusOptions = [];
+
+  constructor() {
+    super(...arguments);
+    this.load.perform();
+  }
+
+  load = task({ drop: true }, async () => {
+    this.status = this.args.mandataris.status;
+    this.statusOptions = await this.mandatarisStatus.getStatusOptionsForMandate(
+      this.args.mandataris.bekleedt
+    );
+  });
 
   get hasChanges() {
     return true;
@@ -22,6 +39,11 @@ export default class MandatarissenEditModalComponent extends Component {
 
   get toolTipText() {
     return 'Er zijn geen wijzigingen om op te slaan.';
+  }
+
+  @action
+  updateStatus(status) {
+    this.status = status;
   }
 
   @action
