@@ -24,6 +24,16 @@
         {{status.label}}
       </PowerSelect>
     </div>
+    <div>
+      <DateInput
+        @label="Startdatum"
+        @value={{this.startDate}}
+        @from={{@bestuursorgaanIT.bindingStart}}
+        @to={{@bestuursorgaanIT.bindingEinde}}
+        @onChange={{fn (mut this.startDate)}}
+        @isRequired={{true}}
+      />
+    </div>
     {{#if this.showRangordeField}}
       <div>
         <AuLabel>

@@ -14,6 +14,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @tracked status;
   @tracked statusOptions = [];
+  @tracked startDate;
   @tracked rangorde;
 
   @tracked isSecondModalOpen = false;
@@ -31,6 +32,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.statusOptions = await this.mandatarisStatus.getStatusOptionsForMandate(
       this.args.mandataris.bekleedt
     );
+    this.startDate = this.args.mandataris.start;
     this.rangorde = this.args.mandataris.rangorde;
   });
 
