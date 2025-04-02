@@ -24,6 +24,20 @@
         {{status.label}}
       </PowerSelect>
     </div>
+    {{#if this.showRangordeField}}
+      <div>
+        <AuLabel>
+          Rangorde
+        </AuLabel>
+        <RangordeDropdown
+          id="mandataris-rangorde"
+          @selected={{this.rangorde}}
+          @placeholder={{this.rangordePlaceholder}}
+          @mandaatLabel={{this.mandaatLabel}}
+          @onNewRangorde={{this.updateRangorde}}
+        />
+      </div>
+    {{/if}}
   </:body>
   <:footer>
     <AuToolbar as |Group|>

@@ -6,16 +6,19 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisEditFormComponent extends Component {
   @service toaster;
   @service mandatarisStatus;
 
+  @tracked status;
+  @tracked statusOptions = [];
+  @tracked rangorde;
+
   @tracked isSecondModalOpen = false;
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
   @tracked reasonForChange;
-  @tracked status;
-  @tracked statusOptions = [];
 
   constructor() {
     super(...arguments);
@@ -23,10 +26,12 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   load = task({ drop: true }, async () => {
+    this.mandaat = await this.args.mandataris.bekleedt;
     this.status = this.args.mandataris.status;
     this.statusOptions = await this.mandatarisStatus.getStatusOptionsForMandate(
       this.args.mandataris.bekleedt
     );
+    this.rangorde = this.args.mandataris.rangorde;
   });
 
   get hasChanges() {
@@ -41,9 +46,29 @@ export default class MandatarisEditFormComponent extends Component {
     return 'Er zijn geen wijzigingen om op te slaan.';
   }
 
+  get showRangordeField() {
+    return (
+      this.mandaat.get('hasRangorde') &&
+      this.status?.get('uri') !== MANDATARIS_VERHINDERD_STATE
+    );
+  }
+
+  get mandaatLabel() {
+    return this.mandaat.rangordeLabel;
+  }
+
+  get rangordePlaceholder() {
+    return `Eerste ${this.mandaatLabel}`;
+  }
+
   @action
   updateStatus(status) {
     this.status = status;
+  }
+
+  @action
+  updateRangorde(rangordeAsString) {
+    this.rangorde = rangordeAsString;
   }
 
   @action
