@@ -47,7 +47,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     }
     this.isFieldRequired = this.args.isRequiredField ?? false;
     this.displayTypes.then((displayTypes) => {
-      this.displayType = displayTypes.findBy('uri', withValue);
+      this.displayType = displayTypes.find((t) => t.uri === withValue);
     });
   }
 
