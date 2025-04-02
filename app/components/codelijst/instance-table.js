@@ -25,7 +25,7 @@ export default class CodelijstInstanceTable extends Component {
       order: this.args.concepten.length,
       conceptSchemes: [this.args.codelijst],
     });
-    this.args.concepten.pushObject(concept);
+    this.args.concepten.push(concept);
     this.args.onConceptChanged(concept);
   }
 
