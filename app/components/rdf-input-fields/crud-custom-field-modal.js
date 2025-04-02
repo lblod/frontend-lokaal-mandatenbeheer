@@ -131,8 +131,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     this.libraryFieldType = libraryEntry;
     this.displayTypes.then((types) => {
       this.displayType =
-        types.findBy('uri', libraryEntry.get('displayType.uri')) ||
-        types.findBy('uri', TEXT_CUSTOM_DISPLAY_TYPE);
+        types.find((t) => t?.uri === libraryEntry.get('displayType.uri')) ||
+        types.find((t) => t?.uri === TEXT_CUSTOM_DISPLAY_TYPE);
     });
   }
 
