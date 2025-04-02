@@ -11,7 +11,7 @@ export default class CodelijstInstanceTable extends Component {
   @tracked isConceptenChanged;
 
   get sortedConcepten() {
-    return this.args.concepten.toArray().sort((a, b) => a.order - b.order);
+    return [...this.args.concepten].sort((a, b) => a.order - b.order);
   }
 
   get hasConceptsToDelete() {
