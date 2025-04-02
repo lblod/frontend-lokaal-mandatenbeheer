@@ -47,7 +47,22 @@
 
   </:title>
   <:body>
-    Second form komt hier.
+    <div>
+      <AuLabel @required={{true}}>
+        Reden van aanpassing
+      </AuLabel>
+      <PowerSelect
+        @allowClear={{false}}
+        @selected={{this.reasonForChange}}
+        @options={{this.reasonForChangeOptions}}
+        @onChange={{this.selectReasonForChange}}
+        @searchEnabled={{true}}
+        @noMatchesMessage="Geen resultaten"
+        as |reason|
+      >
+        {{reason}}
+      </PowerSelect>
+    </div>
   </:body>
   <:footer>
     <AuToolbar as |Group|>
