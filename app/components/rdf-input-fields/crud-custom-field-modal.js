@@ -177,8 +177,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   get displayTypes() {
-    return this.store.findAll('display-type').then((entries) => {
-      return entries.sortBy('label');
+    return this.store.query('display-type', {
+      sort: 'label',
     });
   }
 
@@ -221,7 +221,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         return [
           this.customFieldEntry,
           ...entries
-            .sortBy('id')
+            .sort((a, b) => a.id - b.id)
             .reverse()
             .filter((entry) => {
               return (

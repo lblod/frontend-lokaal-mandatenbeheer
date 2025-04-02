@@ -45,14 +45,13 @@ export default class OrganenOrgaanIndexRoute extends Route {
     const bestuursFunctiesUsed = await Promise.all(
       mandaten.map((m) => m.bestuursfunctie)
     );
-    const allBestuursfuncties = await this.store.query('bestuursfunctie-code', {
+
+    return await this.store.query('bestuursfunctie-code', {
+      sort: 'label',
+      'filter[:id:]': bestuursFunctiesUsed.map((b) => b.id).join(','),
       page: {
         size: 200,
       },
     });
-    const availableBestuursfuncties = allBestuursfuncties.filter(
-      (bf) => !bestuursFunctiesUsed.includes(bf)
-    );
-    return availableBestuursfuncties.sortBy('label');
   }
 }

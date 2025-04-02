@@ -11,7 +11,9 @@ export default class MandatarissenTimeline extends Component {
   }
 
   get timelineEvents() {
-    const sortedMandatarissen = this.args.mandatarissen.sortBy('start');
+    const sortedMandatarissen = [...this.args.mandatarissen].sort(
+      (a, b) => a.start - b.start
+    );
     const events = sortedMandatarissen.map((mandataris, index) => {
       return {
         type: index > 0 ? 'Wijziging' : 'Start',
