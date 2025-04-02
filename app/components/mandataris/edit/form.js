@@ -7,7 +7,7 @@ import { action } from '@ember/object';
 
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
-export default class MandatarissenEditModalComponent extends Component {
+export default class MandatarisEditFormComponent extends Component {
   @service toaster;
   @service mandatarisStatus;
 
