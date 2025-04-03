@@ -6,6 +6,7 @@ export default class CustomFormsInstancesIndexRoute extends Route {
   @service store;
   @service session;
   @service semanticFormRepository;
+  @service customForms;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -22,11 +23,13 @@ export default class CustomFormsInstancesIndexRoute extends Route {
     const form = await this.store.findRecord('form', id);
     const formDefinition =
       await this.semanticFormRepository.getFormDefinition(id);
+    const usage = await this.customForms.getFormDefinitionUsageCount(id);
 
     return {
       form,
       formDefinition,
       headerLabels: await this.semanticFormRepository.getHeaderLabels(form.id),
+      usage,
     };
   }
 }
