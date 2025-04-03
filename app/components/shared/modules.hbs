@@ -40,15 +40,15 @@
     </LoketModuleCard>
   </li>
 {{/if}}
-{{#if (is-feature-enabled "show-codelijsten-module")}}
+{{#if (is-feature-enabled "editable-forms")}}
   <li class="au-o-grid__item au-u-1-2@medium au-u-1-3@large">
-    <LoketModuleCard @icon="draft">
-      <:title>Beheer codelijsten</:title>
-      <:description>Hier vind je een overzicht van de codelijsten binnen Lokaal
-        Mandatenbeheer</:description>
+    <LoketModuleCard @icon="folder">
+      <:title>Eigen gegevens</:title>
+      <:description>Hier vind je een overzicht van de eigen formulieren binnen
+        Lokaal Mandatenbeheer</:description>
       <:link>
-        <AuLink @route="codelijsten.overzicht" @skin="button">Ga naar
-          codelijsten</AuLink>
+        <AuLink @route="custom-forms.overview" @skin="button">Ga naar eigen
+          gegevens</AuLink>
       </:link>
     </LoketModuleCard>
   </li>

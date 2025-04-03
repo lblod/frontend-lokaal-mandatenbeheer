@@ -4,6 +4,7 @@ export default class FormExtensionModel extends Model {
   @belongsTo('form', {
     async: true,
     inverse: 'extensions',
+    polymorphic: true,
   })
   baseForm;
 }

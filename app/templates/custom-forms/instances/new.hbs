@@ -1,0 +1,14 @@
+{{page-title "New"}}
+{{breadcrumb "Nieuw formulier" route="custom-forms.instances.new"}}
+
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box">
+    <ContextProvider @key="form-context" @value={{this.formContext}}>
+      <SemanticForms::NewInstance
+        @onCreate={{this.onCreate}}
+        @form={{this.model.formDefinition}}
+        @onCancel={{this.onCancel}}
+      />
+    </ContextProvider>
+  </div>
+</div>

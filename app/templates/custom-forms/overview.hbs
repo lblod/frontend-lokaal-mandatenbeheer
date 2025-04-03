@@ -1,0 +1,107 @@
+{{page-title "Overzicht"}}
+{{breadcrumb "Overzicht" route="custom-forms.overview"}}
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom"
+  as |Group|
+>
+  <Group>
+    <AuHeading @skin="2">Eigen gegevens</AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      {{#if (is-feature-enabled "show-codelijsten-module")}}
+        <AuLink @route="codelijsten.overzicht" @skin="button-secondary">Beheer
+          codelijsten</AuLink>
+      {{/if}}
+      <AuLink @route="custom-forms.new" @skin="button">Nieuw formulier aanmaken</AuLink>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+<AuDataTable
+  @content={{this.model.formDefinitions}}
+  @noDataMessage="Geen formulieren gevonden"
+  @sort={{this.sort}}
+  @page={{this.page}}
+  @size={{this.size}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @field="name"
+        @currentSorting={{this.sort}}
+        @label="Formulier"
+      />
+      <AuDataTableThSortable
+        @field="description"
+        @currentSorting={{this.sort}}
+        @label="Beschrijving"
+      />
+      <AuDataTableThSortable
+        @field="createdAt"
+        @currentSorting={{this.sort}}
+        @label="Aangemaakt op"
+      />
+      <AuDataTableThSortable
+        @field="modifiedAt"
+        @currentSorting={{this.sort}}
+        @label="Laatst bewerkt"
+      />
+      <th>{{! Actions }}</th>
+    </c.header>
+    <c.body as |form|>
+      <td class="au-u-1-5">
+        <LinkTo
+          @route="custom-forms.instances.index"
+          @model={{form.id}}
+          class="au-c-link au-u-medium"
+        >
+          {{form.name}}
+        </LinkTo>
+      </td>
+      <td>
+        {{form.description}}
+      </td>
+      <td class="au-u-1-5">{{form.displayCreatedDate}}</td>
+      <td class="au-u-1-5">{{form.displayModifiedDate}}</td>
+      <td class="au-u-1-5">
+        <AuButton
+          @alert={{true}}
+          @skin="link"
+          {{on "click" (fn this.openDeleteFormModal form)}}
+        >Verwijder</AuButton>
+      </td>
+    </c.body>
+  </t.content>
+</AuDataTable>
+
+<AuModal
+  @title="Verwijder formulier"
+  @modalOpen={{this.isDeleteModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isDeleteModalOpen) false}}
+>
+  <:body>
+    <p>Door verder te gaan zal de formulier definitie met zijn instanties
+      definitief verwijderd worden.</p>
+  </:body>
+  <:footer>
+    <AuButtonGroup
+      class="au-u-flex au-u-flex--between au-u-padding-left au-u-padding-right"
+    >
+      <AuButton
+        @alert={{true}}
+        @disabled={{this.isDeleting}}
+        @loading={{this.isDeleting}}
+        @loadingMessage="Formulier en instanties worden verwijderd"
+        {{on "click" this.deleteForm}}
+      >Verwijder</AuButton>
+      <AuButton
+        @skin="secondary"
+        @disabled={{this.isDeleting}}
+        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+      >Annuleer</AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>
