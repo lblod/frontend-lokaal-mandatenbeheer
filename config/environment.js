@@ -88,6 +88,7 @@ module.exports = function (environment) {
     ENV.APP.autoboot = false;
 
     ENV.features['shacl-report'] = false;
+    ENV.features['1234'] = true; // for testing purposes
   }
 
   if (environment === 'production') {
