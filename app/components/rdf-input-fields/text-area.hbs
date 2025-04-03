@@ -31,7 +31,10 @@
 />
 {{#unless @show}}
   {{#if this.maxLength}}
-    <AuPill @skin={{unless this.hasRemainingCharacters "error"}} class="au-u-margin-top-tiny">Resterende karakters: {{this.remainingCharacters}}</AuPill>
+    <AuPill
+      @skin={{unless this.hasRemainingCharacters "error"}}
+      class="au-u-margin-top-tiny"
+    >Resterende karakters: {{this.remainingCharacters}}</AuPill>
   {{/if}}
 {{/unless}}
 {{#each this.errors as |error|}}
