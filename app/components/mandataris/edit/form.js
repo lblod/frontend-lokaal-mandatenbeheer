@@ -44,9 +44,7 @@ export default class MandatarisEditFormComponent extends Component {
     );
     this.startDate = this.args.mandataris.start;
     this.endDate = this.args.mandataris.einde;
-    this.selectedFractie = this.args.mandataris.get(
-      'heeftLidmaatschap.binnenFractie'
-    );
+    this.fractie = this.args.mandataris.get('heeftLidmaatschap.binnenFractie');
     this.isFractieSelectorRequired = await isRequiredForBestuursorgaan(
       this.args.bestuursorgaanIT
     );
