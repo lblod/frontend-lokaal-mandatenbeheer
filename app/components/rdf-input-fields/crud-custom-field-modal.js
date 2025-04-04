@@ -56,7 +56,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     this.isFieldRequired = this.args.isRequiredField ?? false;
     this.isShownInSummary = this.originalIsShownInSummary;
     this.displayTypes.then((displayTypes) => {
-      this.displayType = displayTypes.findBy('uri', withValue);
+      this.displayType = displayTypes.find((t) => t.uri === withValue);
     });
   }
 
@@ -176,8 +176,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     this.libraryFieldType = libraryEntry;
     this.displayTypes.then((types) => {
       this.displayType =
-        types.findBy('uri', libraryEntry.get('displayType.uri')) ||
-        types.findBy('uri', TEXT_CUSTOM_DISPLAY_TYPE);
+        types.find((t) => t?.uri === libraryEntry.get('displayType.uri')) ||
+        types.find((t) => t?.uri === TEXT_CUSTOM_DISPLAY_TYPE);
     });
   }
 
@@ -227,8 +227,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   get displayTypes() {
-    return this.store.findAll('display-type').then((entries) => {
-      return entries.sortBy('label');
+    return this.store.query('display-type', {
+      sort: 'label',
     });
   }
 
@@ -300,7 +300,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         return [
           this.customFieldEntry,
           ...entries
-            .sortBy('id')
+            .sort((a, b) => a.id - b.id)
             .reverse()
             .filter((entry) => {
               return (

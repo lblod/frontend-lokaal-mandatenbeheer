@@ -8,7 +8,7 @@ module.exports = function (environment) {
     locationType: 'history',
     environmentName: '{{ENVIRONMENT_NAME}}',
     EmberENV: {
-      // EXTEND_PROTOTYPES: false, // TODO: lmb-1332
+      EXTEND_PROTOTYPES: false,
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
