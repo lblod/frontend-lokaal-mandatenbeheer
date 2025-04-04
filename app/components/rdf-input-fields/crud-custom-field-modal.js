@@ -74,7 +74,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       SOURCE_GRAPH
     );
 
-    const conceptSchemeUri = conceptSchemeNode.value || null;
+    const conceptSchemeUri = conceptSchemeNode?.value || null;
     if (!conceptSchemeUri) {
       return null;
     }
