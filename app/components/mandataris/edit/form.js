@@ -269,14 +269,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.args.mandataris.einde = dateOfAction;
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
-    await this.mandatarisService.createNewLidmaatschap(
-      newMandataris,
-      this.fractie
-    );
-    await this.fractieApi.updateCurrentFractie(newMandataris.id);
-    await this.mandatarisService.removeDanglingFractiesInPeriod(
-      newMandataris.id
-    );
+    await this.handleFractie(newMandataris);
 
     await this.mandatarisApi.copyOverNonDomainResourceProperties(
       this.args.mandataris.id,
@@ -284,6 +277,15 @@ export default class MandatarisEditFormComponent extends Component {
     );
 
     return newMandataris;
+  }
+
+  async handleFractie(mandataris) {
+    await this.mandatarisService.createNewLidmaatschap(
+      mandataris,
+      this.fractie
+    );
+    await this.fractieApi.updateCurrentFractie(mandataris.id);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(mandataris.id);
   }
 
   shouldOpenRangordeModal() {
