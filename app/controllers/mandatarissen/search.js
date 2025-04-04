@@ -123,22 +123,18 @@ export default class MandatarissenSearchController extends Controller {
   }
 
   get selectedBestuursfuncties() {
-    const bestuurfunctieIds = [
-      ...new Set(this.model.selectedBestuurfunctieIds?.split(',')),
+    const bestuursfunctieIds = [
+      ...new Set(this.model.selectedBestuursfunctieIds?.split(',')),
     ];
 
-    if (bestuurfunctieIds.length == this.uniqueBestuurfuncties.length) {
+    if (bestuursfunctieIds.length == this.model.bestuursfuncties.length) {
       return [];
     }
 
-    const bestuursfuncties = bestuurfunctieIds.map((id) =>
-      this.uniqueBestuurfuncties.find((functie) => functie.id == id)
+    const bestuursfuncties = bestuursfunctieIds.map((id) =>
+      this.model.bestuursfuncties.find((functie) => functie.id == id)
     );
 
     return bestuursfuncties.filter((functie) => functie);
-  }
-
-  get uniqueBestuurfuncties() {
-    return this.model.bestuursfuncties.filter((functie) => functie);
   }
 }

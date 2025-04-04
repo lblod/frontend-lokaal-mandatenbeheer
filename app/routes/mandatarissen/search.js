@@ -37,18 +37,16 @@ export default class MandatarissenSearchRoute extends Route {
       allBestuursperiodes,
       params.bestuursperiode
     );
-    const personenWithMandatarissen = await this.getPersoonWithMandatarissen(
-      params,
-      selectedPeriod
-    );
-    const allBestuurfunctieCodes = [];
+    const { personenWithMandatarissen, persoonIds } =
+      await this.getPersoonWithMandatarissen(params, selectedPeriod);
+    const allBestuursfunctieCodes = [];
     const mandatenVoorPeriode = await this.store.query('mandaat', {
       'filter[bevat-in][heeft-bestuursperiode][:id:]': selectedPeriod.id,
       'filter[bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
       include: ['bevat-in', 'bevat-in.heeft-bestuursperiode'].join(','),
     });
     for (const mandaat of mandatenVoorPeriode) {
-      allBestuurfunctieCodes.push(await mandaat.bestuursfunctie);
+      allBestuursfunctieCodes.push(await mandaat.bestuursfunctie);
     }
 
     const samenWerkendFracties =
@@ -56,10 +54,11 @@ export default class MandatarissenSearchRoute extends Route {
 
     return {
       personenWithMandatarissen,
+      persoonIds: persoonIds,
       allBestuursperiodes,
       selectedPeriod,
-      bestuursfuncties: [...new Set(allBestuurfunctieCodes)],
-      selectedBestuurfunctieIds: params.bestuursfunctie,
+      bestuursfuncties: [...new Set(allBestuursfunctieCodes)],
+      selectedBestuursfunctieIds: params.bestuursfunctie,
       fracties: [
         ...samenWerkendFracties,
         placeholderOnafhankelijk,
@@ -110,12 +109,13 @@ export default class MandatarissenSearchRoute extends Route {
     }
     const mandatarissen = await this.store.query('mandataris', queryParams);
     const persoonWithMandatarissen = new Map();
-
+    const persoonIds = [];
     await Promise.all(
       mandatarissen.map(async (mandataris) => {
         if (!params.activeMandatarissen || mandataris.isActive) {
           const persoon = await mandataris.get('isBestuurlijkeAliasVan');
           if (persoon) {
+            persoonIds.push(persoon.id);
             if (!persoonWithMandatarissen.has(persoon.id)) {
               persoonWithMandatarissen.set(persoon.id, {
                 persoon,
@@ -136,7 +136,10 @@ export default class MandatarissenSearchRoute extends Route {
       })
     );
 
-    return Array.from(persoonWithMandatarissen.values());
+    return {
+      persoonIds: Array.from(new Set(persoonIds)),
+      personenWithMandatarissen: Array.from(persoonWithMandatarissen.values()),
+    };
   }
 
   async getRowDataForMandataris(mandataris, persoon) {
