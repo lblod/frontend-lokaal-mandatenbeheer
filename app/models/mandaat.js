@@ -18,7 +18,10 @@ export default class MandaatModel extends Model {
   @attr uri;
   @attr aantalHouders;
   @attr minAantalHouders;
-  @attr maxAantalHouders;
+
+  get maxAantalHouders() {
+    return this.aantalHouders;
+  }
 
   @belongsTo('bestuursfunctie-code', {
     async: true,
