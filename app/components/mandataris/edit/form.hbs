@@ -24,57 +24,59 @@
         {{status.label}}
       </PowerSelect>
     </div>
-    <div>
-      <DateInput
-        @label="Startdatum"
-        @value={{this.startDate}}
-        @from={{@bestuursorgaanIT.bindingStart}}
-        @to={{@bestuursorgaanIT.bindingEinde}}
-        @onChange={{fn (mut this.startDate)}}
-        @isRequired={{true}}
-      />
-    </div>
-    <div>
-      <DateInput
-        @label="Einddatum"
-        @value={{this.endDate}}
-        @from={{@bestuursorgaanIT.bindingStart}}
-        @to={{@bestuursorgaanIT.bindingEinde}}
-        @onChange={{fn (mut this.endDate)}}
-        @isRequired={{false}}
-      />
-    </div>
-    {{#if this.showRangordeField}}
+    {{#unless this.isTerminatingMandate}}
       <div>
-        <AuLabel>
-          Rangorde
-        </AuLabel>
-        <RangordeDropdown
-          id="mandataris-rangorde"
-          @selected={{this.rangorde}}
-          @placeholder={{this.rangordePlaceholder}}
-          @mandaatLabel={{this.mandaatLabel}}
-          @onNewRangorde={{this.updateRangorde}}
+        <DateInput
+          @label="Startdatum"
+          @value={{this.startDate}}
+          @from={{@bestuursorgaanIT.bindingStart}}
+          @to={{@bestuursorgaanIT.bindingEinde}}
+          @onChange={{fn (mut this.startDate)}}
+          @isRequired={{true}}
         />
       </div>
-    {{/if}}
-    <div>
-      {{#if this.load.isRunning}}
-        <AuLabel for="input" class="skeleton-label au-u-margin-top" />
-        <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
-      {{else if (not (await this.showFractieSelector))}}
-        <Mandatarissen::FractieSelector
-          @fractie={{this.fractie}}
-          @isRequired={{this.isFractieSelectorRequired}}
-          @onSelect={{this.updateFractie}}
-          @bestuurseenheid={{@bestuurseenheid}}
-          @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
-          @mandataris={{@mandataris}}
-          {{! TODO this should be generalised somehow }}
-          @isUpdatingState={{true}}
+      <div>
+        <DateInput
+          @label="Einddatum"
+          @value={{this.endDate}}
+          @from={{@bestuursorgaanIT.bindingStart}}
+          @to={{@bestuursorgaanIT.bindingEinde}}
+          @onChange={{fn (mut this.endDate)}}
+          @isRequired={{false}}
         />
+      </div>
+      {{#if this.showRangordeField}}
+        <div>
+          <AuLabel>
+            Rangorde
+          </AuLabel>
+          <RangordeDropdown
+            id="mandataris-rangorde"
+            @selected={{this.rangorde}}
+            @placeholder={{this.rangordePlaceholder}}
+            @mandaatLabel={{this.mandaatLabel}}
+            @onNewRangorde={{this.updateRangorde}}
+          />
+        </div>
       {{/if}}
-    </div>
+      <div>
+        {{#if this.load.isRunning}}
+          <AuLabel for="input" class="skeleton-label au-u-margin-top" />
+          <p class="skeleton-input-full au-u-margin-top au-u-margin-bottom"></p>
+        {{else if (not (await this.showFractieSelector))}}
+          <Mandatarissen::FractieSelector
+            @fractie={{this.fractie}}
+            @isRequired={{this.isFractieSelectorRequired}}
+            @onSelect={{this.updateFractie}}
+            @bestuurseenheid={{@bestuurseenheid}}
+            @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
+            @mandataris={{@mandataris}}
+            {{! TODO this should be generalised somehow }}
+            @isUpdatingState={{true}}
+          />
+        {{/if}}
+      </div>
+    {{/unless}}
   </:body>
   <:footer>
     <AuToolbar as |Group|>

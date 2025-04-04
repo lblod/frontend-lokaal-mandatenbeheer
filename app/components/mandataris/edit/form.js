@@ -62,6 +62,10 @@ export default class MandatarisEditFormComponent extends Component {
     return 'Er zijn geen wijzigingen om op te slaan.';
   }
 
+  get isTerminatingMandate() {
+    return this.status.get('isBeeindigd');
+  }
+
   get showRangordeField() {
     return (
       this.mandaat.get('hasRangorde') &&
