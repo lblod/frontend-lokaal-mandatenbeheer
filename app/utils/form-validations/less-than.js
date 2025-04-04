@@ -12,10 +12,7 @@ export function lessThan([inputValue], options) {
 
   const threshold = getValue(comparisonPredicate, options);
 
-  if (!inputValue) {
-    return true;
-  }
-  if (!threshold) {
+  if (!inputValue || !threshold) {
     return true;
   }
 

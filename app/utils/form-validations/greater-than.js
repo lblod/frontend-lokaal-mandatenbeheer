@@ -12,11 +12,8 @@ export function greaterThan([inputValue], options) {
 
   const threshold = getValue(comparisonPredicate, options);
 
-  if (!inputValue) {
+  if (!inputValue || !threshold) {
     return true;
-  }
-  if (!threshold) {
-    return false;
   }
 
   const inputLiteral = Literal.toJS(inputValue);
