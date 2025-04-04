@@ -12,6 +12,8 @@ import {
   isRequiredForBestuursorgaan,
 } from 'frontend-lmb/utils/is-fractie-selector-required';
 
+import moment from 'moment';
+
 export default class MandatarisEditFormComponent extends Component {
   @service toaster;
   @service mandatarisStatus;
@@ -56,7 +58,7 @@ export default class MandatarisEditFormComponent extends Component {
     return (
       this.mandaat?.id !== this.args.mandataris.bekleedt?.id ||
       this.status?.id !== this.args.mandataris.status?.id ||
-      this.startDate !== this.args.mandataris.start ||
+      !moment(this.startDate).isSame(moment(this.args.mandataris.start)) ||
       this.endDate !== this.args.mandataris.einde ||
       this.fractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
