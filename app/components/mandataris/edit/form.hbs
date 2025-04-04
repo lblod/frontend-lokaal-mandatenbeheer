@@ -105,7 +105,7 @@
           {{else if (not (await this.showFractieSelector))}}
             <Mandatarissen::FractieSelector
               @fractie={{this.fractie}}
-              @isRequired={{this.isFractieSelectorRequired}}
+              @isRequired={{@isFractieRequired}}
               @onSelect={{this.updateFractie}}
               @bestuurseenheid={{@bestuurseenheid}}
               @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}

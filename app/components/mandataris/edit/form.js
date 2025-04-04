@@ -6,14 +6,22 @@ import { action } from '@ember/object';
 
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
-import {
-  isDisabledForBestuursorgaan,
-  isRequiredForBestuursorgaan,
-} from 'frontend-lmb/utils/is-fractie-selector-required';
+import { isDisabledForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 
 import moment from 'moment';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
+
+import { trackedFunction } from 'reactiveweb/function';
+import { use } from 'ember-resources';
+
+function getStatusOptions() {
+  return trackedFunction(async () => {
+    return await this.mandatarisStatus.getStatusOptionsForMandate(
+      this.args.mandataris.bekleedt
+    );
+  });
+}
 
 export default class MandatarisEditFormComponent extends Component {
   @service store;
@@ -27,13 +35,11 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked mandaat;
   @tracked mandaatError;
   @tracked status;
-  @tracked statusOptions = [];
   @tracked replacement;
   @tracked replacementError;
   @tracked startDate;
   @tracked endDate;
   @tracked fractie;
-  @tracked isFractieSelectorRequired;
   @tracked rangorde;
 
   @tracked isSecondModalOpen = false;
@@ -47,19 +53,11 @@ export default class MandatarisEditFormComponent extends Component {
 
   @tracked isRangordeModalOpen;
 
+  @use(getStatusOptions) getStatusOptions;
+
   constructor() {
     super(...arguments);
-    this.load();
-  }
-
-  async load() {
-    await this.loadValues();
-    this.statusOptions = await this.mandatarisStatus.getStatusOptionsForMandate(
-      this.args.mandataris.bekleedt
-    );
-    this.isFractieSelectorRequired = await isRequiredForBestuursorgaan(
-      this.args.bestuursorgaanIT
-    );
+    this.loadValues();
   }
 
   @action
@@ -75,6 +73,10 @@ export default class MandatarisEditFormComponent extends Component {
     this.replacement = null;
 
     this.vanafDate = new Date();
+  }
+
+  get statusOptions() {
+    return this.getStatusOptions?.value ?? [];
   }
 
   get hasChanges() {
@@ -94,7 +96,7 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   get disabled() {
-    return this.load.isRunning || !this.hasChanges || this.hasErrors;
+    return !this.hasChanges || this.hasErrors;
   }
 
   get toolTipText() {

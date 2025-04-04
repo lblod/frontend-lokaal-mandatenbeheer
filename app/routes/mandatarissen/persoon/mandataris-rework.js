@@ -3,6 +3,7 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
+import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 import {
   MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_EXTRA_INFO_FORM_ID,
@@ -68,6 +69,10 @@ export default class MandatarissenPersoonMandatarisReworkRoute extends Route {
       });
     }
 
+    const isFractieRequired = await isRequiredForBestuursorgaan(
+      bestuursorganen.at(0)
+    );
+
     return RSVP.hash({
       bestuurseenheid,
       mandataris,
@@ -84,6 +89,7 @@ export default class MandatarissenPersoonMandatarisReworkRoute extends Route {
       linkedMandataris,
       owners,
       isDistrictEenheid: isDistrict,
+      isFractieRequired,
       effectiefIsLastPublicationStatus:
         await effectiefIsLastPublicationStatus(mandataris),
       showOCMWLinkedMandatarisWarning,
