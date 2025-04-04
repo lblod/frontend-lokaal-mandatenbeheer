@@ -41,6 +41,8 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked vanafDate;
   @tracked reasonForChange;
 
+  @tracked isRangordeModalOpen;
+
   constructor() {
     super(...arguments);
     this.load.perform();
@@ -209,6 +211,7 @@ export default class MandatarisEditFormComponent extends Component {
           this.toaster,
           'Status van mandaat werd succesvol aangepast.'
         );
+        this.shouldOpenRangordeModal();
       })
       .catch((e) => {
         console.log(e);
@@ -281,5 +284,17 @@ export default class MandatarisEditFormComponent extends Component {
     );
 
     return newMandataris;
+  }
+
+  shouldOpenRangordeModal() {
+    if (!this.mandaat.get('hasRangorde')) {
+      return false;
+    }
+    if (this.status?.get('uri') !== MANDATARIS_VERHINDERD_STATE) {
+      return false;
+    }
+    if (this.replacement) {
+      this.isRangordeModalOpen = true;
+    }
   }
 }
