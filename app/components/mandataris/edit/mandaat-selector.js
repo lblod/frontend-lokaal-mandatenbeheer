@@ -77,7 +77,6 @@ export default class MandatarisMandaatSelector extends Component {
       person.id,
       this.mandaat.id
     );
-    console.log(activeMandatees);
     if (
       activeMandatees.length === 0 ||
       activeMandatees.some((mand) => mand.uri === this.args.mandataris.uri)
