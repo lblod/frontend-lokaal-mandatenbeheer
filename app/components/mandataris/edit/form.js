@@ -53,11 +53,23 @@ export default class MandatarisEditFormComponent extends Component {
   });
 
   get hasChanges() {
-    return true;
+    return (
+      this.mandaat?.id !== this.args.mandataris.bekleedt?.id ||
+      this.status?.id !== this.args.mandataris.status?.id ||
+      this.startDate !== this.args.mandataris.start ||
+      this.endDate !== this.args.mandataris.einde ||
+      this.fractie?.id !==
+        this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
+      this.rangorde !== this.args.mandataris.rangorde
+    );
+  }
+
+  get hasErrors() {
+    return this.replacementError || this.mandaatError;
   }
 
   get disabled() {
-    return !this.hasChanges;
+    return this.load.isRunning || !this.hasChanges || this.hasErrors;
   }
 
   get toolTipText() {
