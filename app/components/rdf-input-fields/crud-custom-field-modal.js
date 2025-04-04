@@ -9,12 +9,13 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { consume } from 'ember-provide-consume-context';
 
 import { JSON_API_TYPE, SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
-import { PROV } from 'frontend-lmb/rdf/namespaces';
+import { PROV, FORM, EXT } from 'frontend-lmb/rdf/namespaces';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import {
   LIBRARY_ENTREES,
   TEXT_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
+import { Literal, NamedNode } from 'rdflib';
 
 export default class RdfInputFieldCrudCustomFieldModalComponent extends Component {
   @consume('form-context') formContext;
@@ -25,6 +26,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   @tracked isRemovingField;
   @tracked isFieldRequired;
+  @tracked isShownInSummary;
   @tracked wantsToRemove;
 
   customFieldEntry = this.store.createRecord('library-entry', {
@@ -46,6 +48,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       withValue = displayType;
     }
     this.isFieldRequired = this.args.isRequiredField ?? false;
+    this.isShownInSummary = this.originalIsShownInSummary;
     this.displayTypes.then((displayTypes) => {
       this.displayType = displayTypes.findBy('uri', withValue);
     });
@@ -65,6 +68,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     this.isFieldRequired = !this.isFieldRequired;
   }
 
+  @action
+  toggleShowInSummary() {
+    this.isShownInSummary = !this.isShownInSummary;
+  }
+
   updateField = task(async () => {
     try {
       await fetch(
@@ -79,6 +87,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             displayType: this.displayType.uri,
             name: this.fieldName,
             isRequired: !!this.isFieldRequired,
+            showInSummary: !!this.isShownInSummary,
           }),
         }
       );
@@ -106,6 +115,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             libraryEntryUri: this.libraryFieldType.uri,
             name: this.fieldName,
             isRequired: !!this.isFieldRequired,
+            showInSummary: !!this.isShownInSummary,
           }),
         }
       );
@@ -203,14 +213,33 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     return libraryEntree?.value;
   }
 
-  get libraryFieldOptions() {
+  get forkingStore() {
     const forkingStore = new ForkingStore();
     forkingStore.parse(
       this.formContext.formDefinition.formTtl,
       SOURCE_GRAPH,
       'text/turtle'
     );
+    return forkingStore;
+  }
 
+  get isCustomForm() {
+    const forkingStore = this.forkingStore;
+    return (
+      forkingStore.any(
+        null,
+        EXT('isCustomForm'),
+        new Literal(
+          'true',
+          null,
+          new NamedNode('http://www.w3.org/2001/XMLSchema#boolean')
+        )
+      ) && !forkingStore.any(null, EXT('extendsForm'), null, SOURCE_GRAPH)
+    );
+  }
+
+  get libraryFieldOptions() {
+    const forkingStore = this.forkingStore;
     const alreadyUsedLibraryEntries = forkingStore
       .match(null, PROV('wasDerivedFrom'), null, SOURCE_GRAPH)
       .map((triple) => triple.object.value);
@@ -232,6 +261,19 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       });
   }
 
+  get originalIsShownInSummary() {
+    const forkingStore = this.forkingStore;
+    if (!this.args.field?.uri) {
+      return false;
+    }
+    return !!forkingStore.any(
+      this.args.field.uri,
+      FORM('showInSummary'),
+      null,
+      SOURCE_GRAPH
+    );
+  }
+
   get canSaveChanges() {
     return (
       this.fieldHasChanged && this.hasValidFieldName && this.libraryFieldType
@@ -246,7 +288,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     return (
       (this.hasValidFieldName && this.fieldName !== this.args.field.label) ||
       this.displayType.uri !== this.args.field.displayType ||
-      this.isFieldRequired != this.args.isRequiredField
+      this.isFieldRequired != this.args.isRequiredField ||
+      this.isShownInSummary != this.args.isShownInSummary
     );
   }
 

@@ -71,6 +71,7 @@ module.exports = function (environment) {
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.features['editable-forms'] = true;
     ENV.features['timeline'] = true;
+    ENV.features['show-eigen-gegevens-module'] = true;
 
     ENV.features['shacl-report'] = true;
     ENV.features['politieraad'] = true;
