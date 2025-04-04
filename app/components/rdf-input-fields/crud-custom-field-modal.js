@@ -9,7 +9,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { consume } from 'ember-provide-consume-context';
 
 import { JSON_API_TYPE, SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
-import { PROV, FORM, EXT } from 'frontend-lmb/rdf/namespaces';
+import { FIELD_OPTION, FORM, EXT, PROV } from 'frontend-lmb/rdf/namespaces';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import {
   LIBRARY_ENTREES,
@@ -36,6 +36,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @tracked fieldName;
   @tracked libraryFieldType = this.customFieldEntry;
   @tracked displayType;
+  @tracked conceptScheme;
+  @tracked conceptSchemeOnLoad;
 
   constructor() {
     super(...arguments);
@@ -46,12 +48,43 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
       this.fieldName = label;
       withValue = displayType;
+      this.getConceptSchemeFromTtl().then((cs) => {
+        this.conceptScheme = cs;
+        this.conceptSchemeOnLoad = cs;
+      });
     }
     this.isFieldRequired = this.args.isRequiredField ?? false;
     this.isShownInSummary = this.originalIsShownInSummary;
     this.displayTypes.then((displayTypes) => {
       this.displayType = displayTypes.findBy('uri', withValue);
     });
+  }
+
+  async getConceptSchemeFromTtl() {
+    const store = new ForkingStore();
+    store.parse(
+      this.formContext.formDefinition?.formTtl,
+      SOURCE_GRAPH,
+      'text/turtle'
+    );
+    const conceptSchemeNode = store.any(
+      new NamedNode(this.args.field.uri.value),
+      FIELD_OPTION('conceptScheme'),
+      undefined,
+      SOURCE_GRAPH
+    );
+
+    const conceptSchemeUri = conceptSchemeNode?.value || null;
+    if (!conceptSchemeUri) {
+      return null;
+    }
+
+    const models = await this.store.query('concept-scheme', {
+      'filter[:uri:]': conceptSchemeUri,
+      page: { size: 1 },
+    });
+
+    return models.at(0) ?? null;
   }
 
   get deleteWillLoseData() {
@@ -88,6 +121,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             name: this.fieldName,
             isRequired: !!this.isFieldRequired,
             showInSummary: !!this.isShownInSummary,
+            conceptScheme: this.conceptScheme?.uri,
           }),
         }
       );
@@ -116,6 +150,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             name: this.fieldName,
             isRequired: !!this.isFieldRequired,
             showInSummary: !!this.isShownInSummary,
+            conceptScheme: this.conceptScheme?.uri,
           }),
         }
       );
@@ -149,6 +184,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @action
   selectDisplayType(displayType) {
     this.displayType = displayType;
+  }
+
+  @action
+  selectConceptScheme(conceptScheme) {
+    this.conceptScheme = conceptScheme;
   }
 
   @action
@@ -190,6 +230,16 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     return this.store.findAll('display-type').then((entries) => {
       return entries.sortBy('label');
     });
+  }
+
+  get conceptSchemes() {
+    return this.store
+      .query('concept-scheme', {
+        page: { size: 9999 }, // Not ideal
+      })
+      .then((entries) => {
+        return entries.sortBy('displayLabel');
+      });
   }
 
   get libraryEntryUri() {
@@ -275,21 +325,32 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   get canSaveChanges() {
-    return (
-      this.fieldHasChanged && this.hasValidFieldName && this.libraryFieldType
-    );
+    if (this.args.isCreating) {
+      return (
+        this.hasValidFieldName &&
+        this.libraryFieldType &&
+        this.hasConceptSchemeSelected
+      );
+    }
+
+    return this.fieldHasChanged;
+  }
+
+  get hasConceptSchemeSelected() {
+    if (!this.displayType?.isConceptSchemeSelector) {
+      return true;
+    }
+
+    return this.conceptScheme;
   }
 
   get fieldHasChanged() {
-    if (this.args.isCreating) {
-      return this.hasValidFieldName;
-    }
-
     return (
       (this.hasValidFieldName && this.fieldName !== this.args.field.label) ||
       this.displayType.uri !== this.args.field.displayType ||
       this.isFieldRequired != this.args.isRequiredField ||
-      this.isShownInSummary != this.args.isShownInSummary
+      this.isShownInSummary != this.args.isShownInSummary ||
+      this.conceptSchemeOnLoad?.id !== this.conceptScheme?.id
     );
   }
 
