@@ -175,10 +175,10 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   async saveForm() {
     if (this.reasonForChange == 'Corrigeer fouten') {
-      this.corrigeerFouten();
+      await this.corrigeerFouten();
       this.correctedMandataris = true;
     } else if (this.reasonForChange == 'Update state') {
-      this.updateState.perform();
+      await this.updateState();
       this.updatedStateMandataris = true;
     } else {
       showErrorToast(
@@ -217,7 +217,7 @@ export default class MandatarisEditFormComponent extends Component {
     await this.handleFractie(this.args.mandataris);
   }
 
-  updateState = task({ drop: true }, async () => {
+  async updateState() {
     let promise;
     if (this.status.get('isBeeindigd')) {
       promise = this.endMandataris();
@@ -241,7 +241,7 @@ export default class MandatarisEditFormComponent extends Component {
           'Er ging iets mis bij het aanpassen van de status van het mandaat.'
         );
       });
-  });
+  }
 
   async endMandataris() {
     this.args.mandataris.einde = endOfDay(this.vanafDate);
