@@ -186,7 +186,6 @@ export default class MandatarisEditFormComponent extends Component {
       );
       return;
     }
-    showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
     this.reasonForChange = null;
     this.isSecondModalOpen = false;
   }
@@ -206,14 +205,22 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   async corrigeerFouten() {
-    this.args.mandataris.bekleedt = this.mandaat;
-    this.args.mandataris.status = this.status;
-    this.args.mandataris.start = this.startDate;
-    this.args.mandataris.einde = this.endDate;
-    this.args.mandataris.rangorde = this.rangorde;
-    this.args.mandataris.tijkdelijkeVervangingen = [this.replacement];
-    await this.args.mandataris.save();
-    await this.handleFractie(this.args.mandataris);
+    try {
+      this.args.mandataris.bekleedt = this.mandaat;
+      this.args.mandataris.status = this.status;
+      this.args.mandataris.start = this.startDate;
+      this.args.mandataris.einde = this.endDate;
+      this.args.mandataris.rangorde = this.rangorde;
+      this.args.mandataris.tijkdelijkeVervangingen = [this.replacement];
+      await this.args.mandataris.save();
+      await this.handleFractie(this.args.mandataris);
+      showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het aanpassen van het mandaat.'
+      );
+    }
   }
 
   async updateState() {
