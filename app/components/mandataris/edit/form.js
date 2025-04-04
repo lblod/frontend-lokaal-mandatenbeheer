@@ -40,19 +40,25 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   load = task({ drop: true }, async () => {
-    this.mandaat = await this.args.mandataris.bekleedt;
-    this.status = this.args.mandataris.status;
+    await this.loadValues();
     this.statusOptions = await this.mandatarisStatus.getStatusOptionsForMandate(
       this.args.mandataris.bekleedt
     );
-    this.startDate = this.args.mandataris.start;
-    this.endDate = this.args.mandataris.einde;
-    this.fractie = this.args.mandataris.get('heeftLidmaatschap.binnenFractie');
     this.isFractieSelectorRequired = await isRequiredForBestuursorgaan(
       this.args.bestuursorgaanIT
     );
-    this.rangorde = this.args.mandataris.rangorde;
   });
+
+  @action
+  async loadValues() {
+    this.mandaat = await this.args.mandataris.bekleedt;
+    this.status = this.args.mandataris.status;
+    this.startDate = this.args.mandataris.start;
+    this.endDate = this.args.mandataris.einde;
+    this.fractie = this.args.mandataris.get('heeftLidmaatschap.binnenFractie');
+    this.rangorde = this.args.mandataris.rangorde;
+    this.replacement = null;
+  }
 
   get hasChanges() {
     return (
@@ -170,6 +176,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   cancel() {
+    this.loadValues();
     this.args.onClose();
   }
 
