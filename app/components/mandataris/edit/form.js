@@ -18,6 +18,8 @@ export default class MandatarisEditFormComponent extends Component {
 
   @tracked status;
   @tracked statusOptions = [];
+  @tracked replacement;
+  @tracked replacementError;
   @tracked startDate;
   @tracked endDate;
   @tracked fractie;
@@ -62,6 +64,13 @@ export default class MandatarisEditFormComponent extends Component {
     return 'Er zijn geen wijzigingen om op te slaan.';
   }
 
+  get showReplacement() {
+    return (
+      this.status.get('isVerhinderd') &&
+      !this.args.mandataris.status.get('isVerhinderd')
+    );
+  }
+
   get isTerminatingMandate() {
     return this.status.get('isBeeindigd');
   }
@@ -88,6 +97,16 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   updateStatus(status) {
     this.status = status;
+  }
+
+  @action
+  updateReplacement(newReplacement) {
+    if (this.args.mandataris.isBestuurlijkeAliasVan.id === newReplacement?.id) {
+      this.replacementError = true;
+    } else {
+      this.replacementError = false;
+    }
+    this.replacement = newReplacement;
   }
 
   @action updateFractie(newFractie) {
