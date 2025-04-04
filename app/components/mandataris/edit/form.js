@@ -170,8 +170,7 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   async saveForm() {
     if (this.reasonForChange == 'Corrigeer fouten') {
-      // Add corrigeer fouten logic here
-      console.log('Corrigeer fouten');
+      this.corrigeerFouten();
     } else if (this.reasonForChange == 'Update state') {
       this.updateState.perform();
     } else {
@@ -195,6 +194,18 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   cancelSecondModal() {
     this.isSecondModalOpen = false;
+  }
+
+  @action
+  async corrigeerFouten() {
+    this.args.mandataris.bekleedt = this.mandaat;
+    this.args.mandataris.status = this.status;
+    this.args.mandataris.start = this.startDate;
+    this.args.mandataris.einde = this.endDate;
+    this.args.mandataris.rangorde = this.rangorde;
+    this.args.mandataris.tijkdelijkeVervangingen = [this.replacement];
+    await this.args.mandataris.save();
+    await this.handleFractie(this.args.mandataris);
   }
 
   updateState = task({ drop: true }, async () => {
