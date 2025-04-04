@@ -13,7 +13,8 @@
         @mandaat={{this.mandaat}}
         @required={{true}}
         @currentBestuursorgaan={{@bestuursorgaanIT}}
-        @update={{this.updateMandaat}}
+        @onUpdate={{this.updateMandaat}}
+        @onValidate={{fn (mut this.mandaatError)}}
       />
       <AuLabel @required={{true}}>
         Nieuwe Status

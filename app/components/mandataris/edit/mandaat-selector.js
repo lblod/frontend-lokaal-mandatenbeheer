@@ -60,12 +60,13 @@ export default class MandatarisMandaatSelector extends Component {
     this.mandaat = mandate;
     this.hasBeenFocused = true;
     await this.updateValidations();
-    this.args.update(mandate);
+    this.args.onUpdate(mandate);
   }
 
   async updateValidations() {
     this.errorValidations = [];
     await this.checkPersonMandates();
+    this.args.onValidate(this.hasErrors);
   }
 
   async checkPersonMandates() {

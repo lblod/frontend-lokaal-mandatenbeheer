@@ -17,6 +17,7 @@ export default class MandatarisEditFormComponent extends Component {
   @service mandatarisStatus;
 
   @tracked mandaat;
+  @tracked mandaatError;
   @tracked status;
   @tracked statusOptions = [];
   @tracked replacement;
