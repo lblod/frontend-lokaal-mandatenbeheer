@@ -1,0 +1,32 @@
+<AuLabel
+  for="mandaat"
+  @error={{this.hasErrors}}
+  @warning={{this.hasWarnings}}
+  @required={{@required}}
+>Mandaat</AuLabel>
+<div class={{if this.hasErrors "ember-power-select--error"}}>
+  <PowerSelect
+    @loadingMessage="Aan het laden..."
+    @noMatchesMessage="Geen resultaten"
+    @searchMessage="Typ om te zoeken"
+    @searchEnabled={{true}}
+    @allowClear={{false}}
+    @disabled={{@disabled}}
+    @placeholder="Zoek mandaat"
+    @options={{this.mandaatOptions}}
+    @selected={{this.mandaat}}
+    @searchField="bestuursfunctie.label"
+    @onChange={{this.updateMandaat}}
+    @triggerId="mandaat"
+    as |mandaat|
+  >
+    {{mandaat.bestuursfunctie.label}}
+  </PowerSelect>
+</div>
+{{#each this.errors as |error|}}
+  <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+{{/each}}
+
+{{#each this.warnings as |warning|}}
+  <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+{{/each}}

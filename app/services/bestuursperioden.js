@@ -6,8 +6,9 @@ export default class BestuursperiodenService extends Service {
   @service store;
 
   async getRelevantTijdsspecialisaties(bestuursperiode) {
-    const tijdsspecialisaties =
-      await bestuursperiode.heeftBestuursorganenInTijd;
+    const tijdsspecialisaties = await bestuursperiode.get(
+      'heeftBestuursorganenInTijd'
+    );
     const filtered = (
       await Promise.all(
         tijdsspecialisaties.map(async (orgaan) => ({
