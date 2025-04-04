@@ -7,6 +7,10 @@ import { action } from '@ember/object';
 
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
+import {
+  isDisabledForBestuursorgaan,
+  isRequiredForBestuursorgaan,
+} from 'frontend-lmb/utils/is-fractie-selector-required';
 
 export default class MandatarisEditFormComponent extends Component {
   @service toaster;
@@ -16,6 +20,8 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked statusOptions = [];
   @tracked startDate;
   @tracked endDate;
+  @tracked fractie;
+  @tracked isFractieSelectorRequired;
   @tracked rangorde;
 
   @tracked isSecondModalOpen = false;
@@ -35,6 +41,12 @@ export default class MandatarisEditFormComponent extends Component {
     );
     this.startDate = this.args.mandataris.start;
     this.endDate = this.args.mandataris.einde;
+    this.selectedFractie = this.args.mandataris.get(
+      'heeftLidmaatschap.binnenFractie'
+    );
+    this.isFractieSelectorRequired = await isRequiredForBestuursorgaan(
+      this.args.bestuursorgaanIT
+    );
     this.rangorde = this.args.mandataris.rangorde;
   });
 
@@ -57,6 +69,10 @@ export default class MandatarisEditFormComponent extends Component {
     );
   }
 
+  get showFractieField() {
+    return isDisabledForBestuursorgaan(this.args.bestuursorgaanIT);
+  }
+
   get mandaatLabel() {
     return this.mandaat.rangordeLabel;
   }
@@ -68,6 +84,10 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   updateStatus(status) {
     this.status = status;
+  }
+
+  @action updateFractie(newFractie) {
+    this.fractie = newFractie;
   }
 
   @action
