@@ -48,4 +48,8 @@ export default class RdfInputFieldsConceptSchemeMultiSelectorComponent extends C
 
     super.updateSelection();
   }
+
+  get showLabel() {
+    return !!this.args.showFieldLabel || true;
+  }
 }

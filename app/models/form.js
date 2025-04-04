@@ -4,7 +4,6 @@ export default class FormModel extends Model {
   @attr targetType;
   @attr targetLabel;
   @attr prefix;
-  @attr id;
   @attr formTtl;
   @attr metaTtl;
 

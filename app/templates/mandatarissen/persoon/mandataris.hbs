@@ -8,6 +8,19 @@
   <div class="au-o-grid__item au-u-1-2">
     <p class="au-u-h2 au-u-medium">
       {{this.bestuursorganenTitle}}
+      {{#unless this.model.isMostRecentVersion}}
+        {{! template-lint-disable no-inline-styles }}
+        <Shared::Tooltip
+          @tooltipText="Je bekijkt een toestand van de mandataris van vóór de laatste wijziging, zie historiek voor meer details."
+          @showTooltip={{true}}
+          @alignment="left"
+          class="au-u-h5 au-u-para au-u-flex--inline au-u-regular"
+          style="top: -5px;"
+        >
+          <AuPill @skin="warning">Versie niet actueel</AuPill>
+        </Shared::Tooltip>
+
+      {{/unless}}
     </p>
     <p class="au-u-h3">
       {{this.persoon.gebruikteVoornaam}}
@@ -15,10 +28,7 @@
     </p>
   </div>
   <div class="au-o-grid__item au-u-1-2 au-u-text-left">
-    <div
-      class="au-u-flex au-u-flex--end au-u-margin-bottom"
-      {{did-insert (perform this.checkLegislatuur)}}
-    >
+    <div class="au-u-flex au-u-flex--end au-u-margin-bottom">
       {{#if this.notOwnedByUs}}
         <AuAlert
           @title={{this.title}}
@@ -107,19 +117,12 @@
     />
   </div>
 
-  <div class="au-o-box">
-    <AuHeading @level="3" @skin="4">
-      Historiek
-    </AuHeading>
-
-    <ul class="au-c-list-vertical">
-      <Mandatarissen::History
-        @mandataris={{@model.mandataris}}
-        @mandatarissen={{@model.mandatarissen}}
-        @form={{@model.mandatarisEditForm}}
-      />
-    </ul>
-  </div>
+  <Mandatarissen::Timeline
+    @mandataris={{@model.mandataris}}
+    @mandatarissen={{@model.mandatarissen}}
+    @history={{@model.history}}
+    @form={{@model.mandatarisEditForm}}
+  />
 
   <div class="au-o-box">
     <ValidatieTable @instance={{@model.mandataris}} />

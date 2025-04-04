@@ -1,36 +1,49 @@
 import Controller from '@ember/controller';
 
-import { tracked } from '@glimmer/tracking';
+import { tracked, cached } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { getOwner } from '@ember/application';
 
-import { restartableTask } from 'ember-concurrency';
+import { trackedFunction } from 'reactiveweb/function';
 
 export default class SystemNotificationsController extends Controller {
   @service router;
   @service store;
   @service currentSession;
+  @service systemNotifications;
 
   @tracked sort;
-  @tracked isRead;
-  @tracked isUnRead;
-  @tracked isArchived;
   @tracked page;
+  @tracked activeFilter = this.systemNotifications.filterUnRead;
 
-  @tracked activeFilter;
-  @tracked notifications;
+  getNotifications = trackedFunction(this, async () => {
+    return await this.systemNotifications.getNotificationsForFilter(
+      this.activeFilter,
+      { sort: this.sort, page: this.page }
+    );
+  });
 
-  get filterUnRead() {
-    return { isUnRead: true, isRead: false, isArchived: false };
+  @cached
+  get notifications() {
+    return this.getNotifications?.value;
   }
 
-  get filterRead() {
-    return { isRead: true, isArchived: false, isUnRead: false };
+  @action
+  showReadNotifications() {
+    this.activeFilter = this.systemNotifications.filterRead;
+  }
+  @action
+  showUnReadNotifications() {
+    this.activeFilter = this.systemNotifications.filterUnRead;
+  }
+  @action
+  showArchivedNotifications() {
+    this.activeFilter = this.systemNotifications.filterArchived;
   }
 
-  get filterArchived() {
-    return { isArchived: true, isRead: false, isUnRead: false };
+  @action
+  updateTable() {
+    this.activeFilter = this.systemNotifications.activeFilter;
   }
 
   @action
@@ -50,44 +63,5 @@ export default class SystemNotificationsController extends Controller {
     }
 
     return '';
-  }
-
-  getNotifications = restartableTask(
-    async ({ isRead, isUnRead, isArchived }) => {
-      this.updateNotificationCountInHeader();
-      const filter = {
-        'filter[:or:][:has-no:gebruiker]': true,
-        'filter[:or:][gebruiker][:id:]': this.currentSession.user.id,
-        sort: this.sort,
-        page: { size: 20, number: this.page },
-      };
-
-      if (isRead) {
-        this.activeFilter = this.filterRead;
-        filter['filter[:has:read-at]'] = true;
-        filter['filter[:has-no:archived-at]'] = true;
-      }
-      if (isUnRead) {
-        this.activeFilter = this.filterUnRead;
-        filter['filter[:has-no:read-at]'] = true;
-        filter['filter[:has-no:archived-at]'] = true;
-      }
-      if (isArchived) {
-        this.activeFilter = this.filterArchived;
-        filter['filter[:has:archived-at]'] = true;
-      }
-
-      this.notifications = await this.store.query(
-        'system-notification',
-        filter
-      );
-    }
-  );
-
-  updateNotificationCountInHeader() {
-    const applicationController = getOwner(this).lookup(
-      'controller:application'
-    );
-    applicationController.setNotificationCount.perform();
   }
 }

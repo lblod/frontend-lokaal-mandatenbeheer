@@ -14,7 +14,7 @@
           <AuLink
             @skin="primary"
             class={{this.getActiveClass "unread"}}
-            {{on "click" (perform this.getNotifications this.filterUnRead)}}
+            {{on "click" this.showUnReadNotifications}}
           >
             Ongelezen
           </AuLink>
@@ -23,7 +23,7 @@
           <AuLink
             @skin="primary"
             class={{this.getActiveClass "read"}}
-            {{on "click" (perform this.getNotifications this.filterRead)}}
+            {{on "click" this.showReadNotifications}}
           >
             Gelezen
           </AuLink>
@@ -32,7 +32,7 @@
           <AuLink
             @skin="primary"
             class={{this.getActiveClass "archived"}}
-            {{on "click" (perform this.getNotifications this.filterArchived)}}
+            {{on "click" this.showArchivedNotifications}}
           >Gearchiveerd
           </AuLink>
         </Tab>
@@ -74,16 +74,12 @@
               >Links</span></th>
             <th>{{! Actions dropdown }}</th>
           </c.header>
-          {{#if this.getNotifications.isRunning}}
-            <AuLoader />
-          {{else}}
-            <c.body as |notification|>
-              <SystemNotificationRow
-                @notification={{notification}}
-                @updateTable={{perform this.getNotifications this.activeFilter}}
-              />
-            </c.body>
-          {{/if}}
+          <c.body as |notification|>
+            <SystemNotificationRow
+              @notification={{notification}}
+              @updateTable={{this.updateTable}}
+            />
+          </c.body>
         </t.content>
       </AuDataTable>
     </div>
