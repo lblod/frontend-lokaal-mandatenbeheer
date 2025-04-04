@@ -13,10 +13,16 @@ import {
 } from 'frontend-lmb/utils/is-fractie-selector-required';
 
 import moment from 'moment';
+import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
+import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 
 export default class MandatarisEditFormComponent extends Component {
+  @service store;
   @service toaster;
   @service mandatarisStatus;
+  @service('mandataris') mandatarisService;
+  @service fractieApi;
+  @service mandatarisApi;
 
   @tracked mandaat;
   @tracked mandaatError;
@@ -32,6 +38,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @tracked isSecondModalOpen = false;
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
+  @tracked vanafDate;
   @tracked reasonForChange;
 
   constructor() {
@@ -60,6 +67,8 @@ export default class MandatarisEditFormComponent extends Component {
     );
     this.rangorde = this.args.mandataris.rangorde;
     this.replacement = null;
+
+    this.vanafDate = new Date();
   }
 
   get hasChanges() {
@@ -157,13 +166,12 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   @action
-  saveForm() {
+  async saveForm() {
     if (this.reasonForChange == 'Corrigeer fouten') {
       // Add corrigeer fouten logic here
       console.log('Corrigeer fouten');
     } else if (this.reasonForChange == 'Update state') {
-      // Add update state logic here
-      console.log('Update state');
+      this.updateState.perform();
     } else {
       showErrorToast(
         this.toaster,
@@ -185,5 +193,93 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   cancelSecondModal() {
     this.isSecondModalOpen = false;
+  }
+
+  updateState = task({ drop: true }, async () => {
+    let promise;
+    if (this.status.get('isBeeindigd')) {
+      promise = this.endMandataris();
+    } else {
+      promise = this.changeMandatarisState();
+    }
+
+    await promise
+      .then(() => {
+        showSuccessToast(
+          this.toaster,
+          'Status van mandaat werd succesvol aangepast.'
+        );
+      })
+      .catch((e) => {
+        console.log(e);
+        showErrorToast(
+          this.toaster,
+          'Er ging iets mis bij het aanpassen van de status van het mandaat.'
+        );
+      });
+  });
+
+  async endMandataris() {
+    this.args.mandataris.einde = endOfDay(this.vanafDate);
+    return await this.args.mandataris.save();
+  }
+
+  async changeMandatarisState() {
+    const endDate = this.args.mandataris.einde;
+    const dateOfAction = endOfDay(this.vanafDate);
+
+    const newMandatarisProps = await this.mandatarisService.createNewProps(
+      this.args.mandataris,
+      {
+        start: dateOfAction,
+        einde: endDate,
+        status: this.status,
+        publicationStatus: await getNietBekrachtigdPublicationStatus(
+          this.store
+        ),
+      }
+    );
+
+    const newMandataris = this.store.createRecord('mandataris', {
+      ...newMandatarisProps,
+      rangorde: this.rangorde,
+    });
+
+    if (this.replacement) {
+      newMandatarisProps.rangorde = '';
+      const replacementMandataris =
+        await this.mandatarisService.getOrCreateReplacement(
+          this.args.mandataris,
+          this.replacement,
+          // passing these along because if we pass the model, relations will be
+          // evaluated as of right now and we haven't saved yet
+          newMandatarisProps
+        );
+      newMandataris.tijdelijkeVervangingen = [replacementMandataris];
+    } else {
+      newMandataris.tijdelijkeVervangingen =
+        (await this.args.mandataris.tijdelijkeVervangingen) || [];
+      newMandataris.vervangerVan =
+        (await this.args.mandataris.vervangerVan) || [];
+    }
+
+    this.args.mandataris.einde = dateOfAction;
+    await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
+
+    await this.mandatarisService.createNewLidmaatschap(
+      newMandataris,
+      this.fractie
+    );
+    await this.fractieApi.updateCurrentFractie(newMandataris.id);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(
+      newMandataris.id
+    );
+
+    await this.mandatarisApi.copyOverNonDomainResourceProperties(
+      this.args.mandataris.id,
+      newMandataris.id
+    );
+
+    return newMandataris;
   }
 }
