@@ -24,7 +24,6 @@ export default class MandatarissenReplacementComponent extends Component {
   @use(getOverlappingMandate) getOverlappingMandate;
 
   get overlappingMandate() {
-    console.log('overlapping', this.getOverlappingMandate?.value);
     return this.getOverlappingMandate?.value;
   }
 }
