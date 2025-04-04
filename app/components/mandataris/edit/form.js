@@ -52,10 +52,12 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   async loadValues() {
     this.mandaat = await this.args.mandataris.bekleedt;
-    this.status = this.args.mandataris.status;
+    this.status = await this.args.mandataris.status;
     this.startDate = this.args.mandataris.start;
     this.endDate = this.args.mandataris.einde;
-    this.fractie = this.args.mandataris.get('heeftLidmaatschap.binnenFractie');
+    this.fractie = await this.args.mandataris.get(
+      'heeftLidmaatschap.binnenFractie'
+    );
     this.rangorde = this.args.mandataris.rangorde;
     this.replacement = null;
   }
