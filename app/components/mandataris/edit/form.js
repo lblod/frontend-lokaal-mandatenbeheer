@@ -323,7 +323,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   callbackAfterUpdate() {
-    if (this.newMandataris != this.model.mandataris) {
+    if (this.newMandataris != this.args.mandataris) {
       this.router.transitionTo(
         'mandatarissen.mandataris',
         this.newMandataris.id
