@@ -138,7 +138,7 @@
 <AuModal
   @modalOpen={{this.isSecondModalOpen}}
   @closable={{true}}
-  @closeModal={{this.cancelSecondModal}}
+  @closeModal={{this.cancel}}
 >
   <:title>
     Bewerk mandaat
@@ -172,8 +172,8 @@
           <AuButton {{on "click" this.saveForm}}>
             Opslaan
           </AuButton>
-          <AuButton {{on "click" this.cancelSecondModal}} @skin="secondary">
-            Annuleer
+          <AuButton {{on "click" this.goBackSecondModal}} @skin="secondary">
+            Ga terug
           </AuButton>
         </AuButtonGroup>
       </Group>

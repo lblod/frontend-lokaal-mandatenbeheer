@@ -158,7 +158,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   confirmMandatarisChanges() {
-    this.args.onClose();
+    this.args.toggleModal(false);
     this.isSecondModalOpen = true;
   }
 
@@ -188,12 +188,14 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   cancel() {
     this.loadValues();
-    this.args.onClose();
+    this.args.toggleModal(false);
+    this.isSecondModalOpen = false;
   }
 
   @action
-  cancelSecondModal() {
+  goBackSecondModal() {
     this.isSecondModalOpen = false;
+    this.args.toggleModal(true);
   }
 
   @action
