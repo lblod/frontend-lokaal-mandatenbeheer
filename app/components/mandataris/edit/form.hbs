@@ -8,6 +8,13 @@
   </:title>
   <:body>
     <div>
+      <Mandataris::Edit::MandaatSelector
+        @mandataris={{@mandataris}}
+        @mandaat={{this.mandaat}}
+        @required={{true}}
+        @currentBestuursorgaan={{@bestuursorgaanIT}}
+        @update={{this.updateMandaat}}
+      />
       <AuLabel @required={{true}}>
         Nieuwe Status
       </AuLabel>

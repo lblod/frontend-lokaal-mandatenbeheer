@@ -16,6 +16,7 @@ export default class MandatarisEditFormComponent extends Component {
   @service toaster;
   @service mandatarisStatus;
 
+  @tracked mandaat;
   @tracked status;
   @tracked statusOptions = [];
   @tracked replacement;
@@ -92,6 +93,11 @@ export default class MandatarisEditFormComponent extends Component {
 
   get rangordePlaceholder() {
     return `Eerste ${this.mandaatLabel}`;
+  }
+
+  @action
+  updateMandaat(mandaat) {
+    this.mandaat = mandaat;
   }
 
   @action
