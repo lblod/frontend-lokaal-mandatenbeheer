@@ -217,3 +217,17 @@
     </AuToolbar>
   </:footer>
 </AuModal>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.selectedReplacement}}
+  @mandataris={{@mandataris.id}}
+  @replacement="true"
+/>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.updatedStateMandataris}}
+  @mandataris={{@mandataris.id}}
+  @newMandataris={{this.newMandataris.id}}
+  @callback={{this.callbackAfterUpdate}}
+  @updateState="true"
+/>

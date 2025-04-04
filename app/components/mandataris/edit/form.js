@@ -18,6 +18,7 @@ import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mand
 
 export default class MandatarisEditFormComponent extends Component {
   @service store;
+  @service router;
   @service toaster;
   @service mandatarisStatus;
   @service('mandataris') mandatarisService;
@@ -40,6 +41,10 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
   @tracked vanafDate;
   @tracked reasonForChange;
+
+  @tracked correctedMandataris = false;
+  @tracked updatedStateMandataris = false;
+  @tracked newMandataris;
 
   @tracked isRangordeModalOpen;
 
@@ -171,8 +176,10 @@ export default class MandatarisEditFormComponent extends Component {
   async saveForm() {
     if (this.reasonForChange == 'Corrigeer fouten') {
       this.corrigeerFouten();
+      this.correctedMandataris = true;
     } else if (this.reasonForChange == 'Update state') {
       this.updateState.perform();
+      this.updatedStateMandataris = true;
     } else {
       showErrorToast(
         this.toaster,
@@ -219,11 +226,12 @@ export default class MandatarisEditFormComponent extends Component {
     }
 
     await promise
-      .then(() => {
+      .then((newMandataris) => {
         showSuccessToast(
           this.toaster,
           'Status van mandaat werd succesvol aangepast.'
         );
+        this.newMandataris = newMandataris;
         this.shouldOpenRangordeModal();
       })
       .catch((e) => {
@@ -310,6 +318,16 @@ export default class MandatarisEditFormComponent extends Component {
     }
     if (this.replacement) {
       this.isRangordeModalOpen = true;
+    }
+  }
+
+  @action
+  callbackAfterUpdate() {
+    if (this.newMandataris != this.model.mandataris) {
+      this.router.transitionTo(
+        'mandatarissen.mandataris',
+        this.newMandataris.id
+      );
     }
   }
 }
