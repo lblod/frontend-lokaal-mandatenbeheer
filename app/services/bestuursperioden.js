@@ -9,7 +9,6 @@ export default class BestuursperiodenService extends Service {
     const tijdsspecialisaties = await bestuursperiode.get(
       'heeftBestuursorganenInTijd'
     );
-    console.log(tijdsspecialisaties);
     const filtered = (
       await Promise.all(
         tijdsspecialisaties.map(async (orgaan) => ({
