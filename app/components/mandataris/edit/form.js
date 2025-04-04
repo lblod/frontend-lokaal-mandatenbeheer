@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 
-import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
@@ -50,10 +49,10 @@ export default class MandatarisEditFormComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.load.perform();
+    this.load();
   }
 
-  load = task({ drop: true }, async () => {
+  async load() {
     await this.loadValues();
     this.statusOptions = await this.mandatarisStatus.getStatusOptionsForMandate(
       this.args.mandataris.bekleedt
@@ -61,7 +60,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.isFractieSelectorRequired = await isRequiredForBestuursorgaan(
       this.args.bestuursorgaanIT
     );
-  });
+  }
 
   @action
   async loadValues() {
