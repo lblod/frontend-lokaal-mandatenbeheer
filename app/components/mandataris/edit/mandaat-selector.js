@@ -4,20 +4,37 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 
+import { trackedFunction } from 'reactiveweb/function';
+import { use } from 'ember-resources';
+
+function getMandaatOptions() {
+  return trackedFunction(async () => {
+    return await this.store.query('mandaat', {
+      sort: 'bestuursfunctie.label',
+      include: 'bestuursfunctie',
+      'filter[bevat-in][:id:]': this.args.currentBestuursorgaan.id,
+    });
+  });
+}
+
 export default class MandatarisMandaatSelector extends Component {
   @service store;
   @service persoonApi;
 
   @tracked errorValidations = [];
   @tracked warningValidations = [];
-  @tracked initialized = false;
   @tracked hasBeenFocused = false;
   @tracked mandaat = null;
-  @tracked mandaatOptions = null;
+
+  @use(getMandaatOptions) getMandaatOptions;
 
   constructor() {
     super(...arguments);
-    this.load();
+    this.mandaat = this.args.mandaat;
+  }
+
+  get mandaatOptions() {
+    return this.getMandaatOptions?.value ?? [];
   }
 
   get canShowValidationMessages() {
@@ -38,21 +55,6 @@ export default class MandatarisMandaatSelector extends Component {
 
   get hasWarnings() {
     return this.warnings.length > 0;
-  }
-
-  async load() {
-    this.mandaat = this.args.mandaat;
-    await this.loadMandaten();
-    this.initialized = true;
-  }
-
-  async loadMandaten() {
-    const mandaten = await this.store.query('mandaat', {
-      sort: 'bestuursfunctie.label',
-      include: 'bestuursfunctie',
-      'filter[bevat-in][:id:]': this.args.currentBestuursorgaan.id,
-    });
-    this.mandaatOptions = mandaten;
   }
 
   @action
