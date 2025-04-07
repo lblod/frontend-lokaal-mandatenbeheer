@@ -1,4 +1,4 @@
-import Component from '@glimmer/component';
+import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 
 import { A } from '@ember/array';
 import { action } from '@ember/object';
@@ -9,7 +9,8 @@ import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
 
 import { API } from 'frontend-lmb/utils/constants';
-export default class CustomFormLinkToFormInstance extends Component {
+import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
+export default class CustomFormLinkToFormInstance extends InputFieldComponent {
   @service semanticFormRepository;
 
   @tracked formType;
@@ -21,7 +22,7 @@ export default class CustomFormLinkToFormInstance extends Component {
   @action
   async selectFormType(type) {
     this.formType = type;
-    this.form = null;
+    replaceSingleFormValue(this.storeOptions, null);
     this.formOptions.clear();
     this.formOptions.pushObjects(await this.fetchFormsForType());
   }
@@ -29,6 +30,9 @@ export default class CustomFormLinkToFormInstance extends Component {
   @action
   selectFormOfType(form) {
     this.form = form;
+    replaceSingleFormValue(this.storeOptions, form.uri);
+
+    super.updateValidations();
   }
 
   get formTypes() {
@@ -62,7 +66,12 @@ export default class CustomFormLinkToFormInstance extends Component {
     );
     let label = summaryLabels[0]?.name || 'uri';
 
-    return form.instances.map((instance) => instance[label] || instance.uri);
+    return form.instances.map((instance) => {
+      return {
+        label: instance[label] || instance.uri,
+        uri: instance.uri,
+      };
+    });
   }
 }
 
