@@ -39,6 +39,7 @@ module.exports = function (environment) {
       timeline: false,
       politieraad: false,
       'editable-forms': false,
+      'edit-mandataris-rework': false,
     },
     lpdcUrl: '{{LPDC_URL}}',
     worshipDecisionsDatabaseUrl: '{{WORSHIP_DECISIONS_DATABASE_URL}}',
