@@ -1,0 +1,61 @@
+<RdfInputFields::CustomFieldWrapper
+  @inline={{true}}
+  @field={{@field}}
+  @form={{@form}}
+  @graphs={{@graphs}}
+  @formStore={{@formStore}}
+>
+  <AuCard @standOut={{true}} as |c|>
+    <c.content>
+      <PowerSelect
+        @labelText="Formulier type"
+        @loadingMessage="Aan het laden..."
+        @noMatchesMessage="Geen resultaten"
+        @searchMessage="Typ om te zoeken"
+        @searchEnabled={{true}}
+        @allowClear={{false}}
+        @placeholder="Type van het formulier"
+        @searchField="id"
+        @selected={{this.formType}}
+        @onChange={{this.selectFormType}}
+        @options={{this.formTypes}}
+        as |form|
+      >
+        {{form.id}}
+      </PowerSelect>
+      <PowerSelect
+        @disabled={{not this.formType}}
+        @labelText="Formulier"
+        @loadingMessage="Aan het laden..."
+        @noMatchesMessage="Geen resultaten"
+        @searchMessage="Typ om te zoeken"
+        @searchEnabled={{true}}
+        @allowClear={{false}}
+        @placeholder="Formulier voor het geselecteerde type"
+        @searchField="id"
+        @selected={{this.form}}
+        @onChange={{this.selectFormOfType}}
+        @options={{this.forms}}
+        as |form|
+      >
+        {{form.id}}
+      </PowerSelect>
+      <PowerSelectMultiple
+        @disabled={{not this.form}}
+        @labelText="Velden"
+        @searchField="label"
+        @searchPlaceholder="Zoek een veld in het formulier"
+        @searchEnabled={{true}}
+        @selected={{this.fields}}
+        @options={{this.fieldOptions}}
+        @onChange={{this.updateSelectedFields}}
+        @allowClear={{false}}
+        @loadingMessage="Aan het laden..."
+        @noMatchesMessage="Geen resultaten gevonden"
+        as |field|
+      >
+        {{field.label}}
+      </PowerSelectMultiple>
+    </c.content>
+  </AuCard>
+</RdfInputFields::CustomFieldWrapper>
