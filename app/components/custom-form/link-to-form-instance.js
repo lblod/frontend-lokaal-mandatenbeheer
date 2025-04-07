@@ -2,18 +2,19 @@ import Component from '@glimmer/component';
 
 import { A } from '@ember/array';
 import { action } from '@ember/object';
-import { tracked, cached } from '@glimmer/tracking';
+import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
 
 import { API } from 'frontend-lmb/utils/constants';
 export default class CustomFormLinkToFormInstance extends Component {
+  @service semanticFormRepository;
+
   @tracked formType;
   @tracked form;
   @tracked formOptions = A([]);
-  @tracked fields = A([]);
-  @tracked selectedFormFields = A([]);
 
   @use(getFormTypes) getFormTypes;
 
@@ -21,7 +22,6 @@ export default class CustomFormLinkToFormInstance extends Component {
   async selectFormType(type) {
     this.formType = type;
     this.form = null;
-    this.fields.clear();
     this.formOptions.clear();
     this.formOptions.pushObjects(await this.fetchFormsForType());
   }
@@ -29,11 +29,6 @@ export default class CustomFormLinkToFormInstance extends Component {
   @action
   selectFormOfType(form) {
     this.form = form;
-  }
-
-  @action
-  updateSelectedFields(selected) {
-    console.log({ selected });
   }
 
   get formTypes() {
@@ -47,7 +42,7 @@ export default class CustomFormLinkToFormInstance extends Component {
         options: types.customTypes,
       },
       {
-        groupName: 'Standaar types',
+        groupName: 'Standaard types',
         options: types.defaultTypes,
       },
     ];
@@ -55,23 +50,19 @@ export default class CustomFormLinkToFormInstance extends Component {
 
   @action
   async fetchFormsForType() {
-    const response = await fetch(
-      `${API.FORM_CONTENT_SERVICE}/custom-form/${this.formType.typeId}/form-options`
+    const allLabels = await this.semanticFormRepository.getHeaderLabels(
+      this.formType.id
     );
+    const summaryLabels = allLabels.filter((label) => label.isShownInSummary);
+    const form = await this.semanticFormRepository.fetchInstances(
+      { id: this.formType.id },
+      {
+        labels: summaryLabels,
+      }
+    );
+    let label = summaryLabels[0]?.name || 'uri';
 
-    if (!response.ok) {
-      console.error(
-        `Er ging iets mis bij het ophalen van de formulieren van type ${this.formType.label}`
-      );
-      return [];
-    }
-    const result = await response.json();
-
-    return result.forms;
-  }
-
-  get fieldOptions() {
-    return [];
+    return form.instances.map((instance) => instance[label] || instance.uri);
   }
 }
 
