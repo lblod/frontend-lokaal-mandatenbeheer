@@ -24,14 +24,6 @@ export default class MandatarissenTimelineCard extends Component {
     );
   }
 
-  get correctionCount() {
-    return (this.args.event?.corrections?.length || 0) - 1;
-  }
-
-  get corrections() {
-    return this.args.event.corrections;
-  }
-
   get beeindigdText() {
     const inTheFuture = moment(
       this.args.event.mandataris.einde || '3000-01-01'
@@ -41,12 +33,6 @@ export default class MandatarissenTimelineCard extends Component {
     } else {
       return 'Dit mandaat is beëindigd';
     }
-  }
-
-  get showCorrections() {
-    return (
-      this.args.event.corrections?.length > 1 && this.args.event.type != 'Einde'
-    );
   }
 
   @action

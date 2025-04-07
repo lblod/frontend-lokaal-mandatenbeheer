@@ -76,9 +76,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       mandatarisEditForm.id
     );
     const isMostRecentVersion =
-      [...mandatarissen]
-        .sort((a, b) => b.start - a.start)
-        .map((m) => m.start)[0].id === mandataris.id;
+      [...mandatarissen].sort((a, b) => b.start - a.start)[0].id ===
+      mandataris.id;
 
     return RSVP.hash({
       bestuurseenheid,
