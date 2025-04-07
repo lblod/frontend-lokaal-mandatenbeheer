@@ -20,7 +20,7 @@ export default class MandatarissenTimelineCorrections extends Component {
   }
 
   get showCorrections() {
-    return this.correctionCount > 1 && this.args.event.type != 'Einde';
+    return this.correctionCount > 0 && this.args.event.type != 'Einde';
   }
 
   @action
