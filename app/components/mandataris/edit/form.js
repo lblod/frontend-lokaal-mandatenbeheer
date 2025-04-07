@@ -57,11 +57,11 @@ export default class MandatarisEditFormComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadValues();
+    this.setInitialFormState();
   }
 
   @action
-  async loadValues() {
+  async setInitialFormState() {
     this.mandaat = await this.args.mandataris.bekleedt;
     this.status = await this.args.mandataris.status;
     this.startDate = this.args.mandataris.start;
@@ -194,7 +194,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   cancel() {
-    this.loadValues();
+    this.setInitialFormState();
     this.args.toggleModal(false);
     this.isSecondModalOpen = false;
   }
