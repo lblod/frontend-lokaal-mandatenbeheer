@@ -38,24 +38,8 @@
         @options={{this.formOptions}}
         as |form|
       >
-        {{form.label}}
+        {{form}}
       </PowerSelect>
-      <PowerSelectMultiple
-        @disabled={{not this.form}}
-        @labelText="Velden"
-        @searchField="label"
-        @searchPlaceholder="Zoek een veld in het formulier"
-        @searchEnabled={{true}}
-        @selected={{this.fields}}
-        @options={{this.fieldOptions}}
-        @onChange={{this.updateSelectedFields}}
-        @allowClear={{false}}
-        @loadingMessage="Aan het laden..."
-        @noMatchesMessage="Geen resultaten gevonden"
-        as |field|
-      >
-        {{field.label}}
-      </PowerSelectMultiple>
     </c.content>
   </AuCard>
 </RdfInputFields::CustomFieldWrapper>
