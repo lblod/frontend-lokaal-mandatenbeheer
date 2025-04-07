@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 import { A } from '@ember/array';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
+import { tracked, cached } from '@glimmer/tracking';
 
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
@@ -11,19 +11,24 @@ import { API } from 'frontend-lmb/utils/constants';
 export default class CustomFormLinkToFormInstance extends Component {
   @tracked formType;
   @tracked form;
+  @tracked formOptions = A([]);
   @tracked fields = A([]);
   @tracked selectedFormFields = A([]);
 
   @use(getFormTypes) getFormTypes;
 
   @action
-  selectFormType(type) {
+  async selectFormType(type) {
     this.formType = type;
+    this.form = null;
+    this.fields.clear();
+    this.formOptions.clear();
+    this.formOptions.pushObjects(await this.fetchFormsForType());
   }
 
   @action
   selectFormOfType(form) {
-    console.log({ form });
+    this.form = form;
   }
 
   @action
@@ -33,7 +38,6 @@ export default class CustomFormLinkToFormInstance extends Component {
 
   get formTypes() {
     const types = this.getFormTypes?.value;
-
     if (!types) {
       return [];
     }
@@ -49,8 +53,21 @@ export default class CustomFormLinkToFormInstance extends Component {
     ];
   }
 
-  get forms() {
-    return [];
+  @action
+  async fetchFormsForType() {
+    const response = await fetch(
+      `${API.FORM_CONTENT_SERVICE}/custom-form/${this.formType.typeId}/form-options`
+    );
+
+    if (!response.ok) {
+      console.error(
+        `Er ging iets mis bij het ophalen van de formulieren van type ${this.formType.label}`
+      );
+      return [];
+    }
+    const result = await response.json();
+
+    return result.forms;
   }
 
   get fieldOptions() {
@@ -61,9 +78,8 @@ export default class CustomFormLinkToFormInstance extends Component {
 function getFormTypes() {
   return trackedFunction(async () => {
     const response = await fetch(
-      `${API.FORM_CONTENT_SERVICE}/custom-form/form-types`
+      `${API.FORM_CONTENT_SERVICE}/custom-form/form-type-options`
     );
-
     if (!response.ok) {
       console.error('Er ging iets mis bij het ophalen van de formulier types');
       return [];
