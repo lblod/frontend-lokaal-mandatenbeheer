@@ -15,4 +15,4 @@ steps:
         from_secret: docker_password
 when:
   - event: tag
-    ref: refs/tag/v*
+    ref: refs/tags/v*
