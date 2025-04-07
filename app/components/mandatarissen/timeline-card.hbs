@@ -62,6 +62,13 @@
           Dit mandaat loopt door tot na de startdatum van het volgende mandaat.</p>
       </AuAlert>
     {{/if}}
+    {{#if this.showCorrections}}
+      <AuPill
+        @skin="default"
+        class="au-u-margin-top-tiny"
+      >{{this.correctionCount}}
+        {{if (eq this.correctionCount 1) "correctie" "correcties"}}</AuPill>
+    {{/if}}
     {{yield}}
   </AuPanel>
 </div>

@@ -169,12 +169,9 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
   async fetchHistory(mandataris, allMandatarissen, formId) {
     const newHistory = await Promise.all(
       allMandatarissen.map(async (m) => {
-        let corrections = await this.fetchHistoryForMandataris(
-          mandataris,
-          formId
-        );
+        let corrections = await this.fetchHistoryForMandataris(m, formId);
         const historyEntry = {
-          mandataris,
+          mandataris: m,
           corrections,
           selected: mandataris?.id === m.id,
         };
