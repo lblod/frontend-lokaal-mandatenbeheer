@@ -1,0 +1,39 @@
+{{#if this.showCorrections}}
+  <AuPill @skin="default" class="au-u-margin-top-tiny">
+    <AuButton
+      @skin="link-secondary"
+      @icon={{if this.collapsed "chevron-right" "chevron-down"}}
+      class="au-u-padding-left-none au-u-bold"
+      {{on "click" this.toggleCollapsed}}
+    >{{this.correctionCount}}
+      {{if (eq this.correctionCount 1) "correctie" "correcties"}}</AuButton>
+  </AuPill>
+  {{#unless this.collapsed}}
+    <div class="timeline-diffs">
+      {{#each this.corrections as |diff|}}
+        <div
+          class="diff provenance au-u-muted au-u-italic au-u-margin-top-tiny au-u-margin-bottom-tiny"
+        >
+          <p>
+            {{if (eq diff.type "Start") "Aangemaakt op" "Bewerkt op"}}
+            {{#if diff.issued}}
+              {{moment-format diff.issued "DD-MM-YY HH:mm"}}
+            {{else}}
+              Onbekend
+            {{/if}}
+          </p>
+          <p>door
+            {{#if diff.creator}}
+              {{diff.creator.voornaam}}
+              {{diff.creator.achternaam}}
+            {{else}}
+              Onbekend
+            {{/if}}
+          </p>
+        </div>
+        <AuHr class="au-u-margin-top-tiny au-u-margin-bottom-tiny" />
+      {{/each}}
+    </div>
+  {{/unless}}
+  {{yield}}
+{{/if}}
