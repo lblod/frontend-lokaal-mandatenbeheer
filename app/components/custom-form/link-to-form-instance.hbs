@@ -15,13 +15,13 @@
         @searchEnabled={{true}}
         @allowClear={{false}}
         @placeholder="Type van het formulier"
-        @searchField="id"
+        @searchField="label"
         @selected={{this.formType}}
         @onChange={{this.selectFormType}}
         @options={{this.formTypes}}
         as |form|
       >
-        {{form.id}}
+        {{form.label}}
       </PowerSelect>
       <PowerSelect
         @disabled={{not this.formType}}
