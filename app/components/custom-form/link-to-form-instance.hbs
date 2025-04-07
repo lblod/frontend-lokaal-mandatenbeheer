@@ -35,10 +35,10 @@
         @searchField="id"
         @selected={{this.form}}
         @onChange={{this.selectFormOfType}}
-        @options={{this.forms}}
+        @options={{this.formOptions}}
         as |form|
       >
-        {{form.id}}
+        {{form.label}}
       </PowerSelect>
       <PowerSelectMultiple
         @disabled={{not this.form}}
