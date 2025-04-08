@@ -38,7 +38,22 @@
         @options={{this.formOptions}}
         as |form|
       >
-        {{form.label}}
+        <AuTable @size={{this.size}}>
+          <:header>
+            <tr>
+              {{#each form.values as |keyValue|}}
+                <th>{{keyValue.key}}</th>
+              {{/each}}
+            </tr>
+          </:header>
+          <:body>
+            <tr>
+              {{#each form.values as |keyValue|}}
+                <td>{{keyValue.value}}</td>
+              {{/each}}
+            </tr>
+          </:body>
+        </AuTable>
       </PowerSelect>
     </c.content>
   </AuCard>
