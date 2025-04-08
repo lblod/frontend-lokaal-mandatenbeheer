@@ -107,9 +107,17 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
       this.formType = [
         ...formTypes.customTypes,
         ...formTypes.defaultTypes,
-      ].find((type) => type.usageUris.includes(selectedFormUri));
-      await this.setFormOptions();
-      this.form = this.formOptions.find((form) => form.uri === selectedFormUri);
+      ].find(
+        (type) =>
+          type.usageUris?.includes(selectedFormUri) ||
+          selectedFormUri.startsWith(type.prefix)
+      );
+      if (this.formType) {
+        await this.setFormOptions();
+        this.form = this.formOptions.find(
+          (form) => form.uri === selectedFormUri
+        );
+      }
     }
   });
 }
