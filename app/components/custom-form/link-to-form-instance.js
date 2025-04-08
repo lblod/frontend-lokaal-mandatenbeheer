@@ -29,19 +29,8 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
   async selectFormType(type) {
     this.formType = type;
     replaceSingleFormValue(this.storeOptions, null);
-    const formInstances = await this.fetchFormsForType();
     this.form = null;
-    this.formOptions.clear();
-    this.formOptions.pushObjects(
-      formInstances.map((instance) => {
-        return {
-          id: instance.id,
-          values: Object.keys(instance).map((key) => {
-            return { key, value: instance[key] };
-          }),
-        };
-      })
-    );
+    await this.setFormOptions();
   }
 
   @action
@@ -50,6 +39,23 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     replaceSingleFormValue(this.storeOptions, form.uri);
 
     super.updateValidations();
+  }
+
+  async setFormOptions() {
+    const formInstances = await this.fetchFormsForType();
+    this.form = null;
+    this.formOptions.clear();
+    this.formOptions.pushObjects(
+      formInstances.map((instance) => {
+        return {
+          id: instance.instance.id,
+          uri: instance.instance.uri,
+          values: Object.keys(instance.displayInstance).map((key) => {
+            return { key, value: instance.displayInstance[key] };
+          }),
+        };
+      })
+    );
   }
 
   @action
@@ -65,13 +71,14 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
       }
     );
     return formInfo.instances.map((instance) => {
-      let cleanedUpInstance = {
-        id: instance.id,
-      };
+      let cleanedUpInstance = {};
       for (const label of formInfo.labels) {
         cleanedUpInstance[label.name] = instance[label.name];
       }
-      return cleanedUpInstance;
+      return {
+        displayInstance: cleanedUpInstance,
+        instance,
+      };
     });
   }
 
@@ -97,7 +104,12 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     const matches = triplesForPath(this.storeOptions);
     if (matches.values.length > 0) {
       const selectedFormUri = matches.values[0].value;
-      console.log({ selectedFormUri });
+      this.formType = [
+        ...formTypes.customTypes,
+        ...formTypes.defaultTypes,
+      ].find((type) => type.usageUris.includes(selectedFormUri));
+      await this.setFormOptions();
+      this.form = this.formOptions.find((form) => form.uri === selectedFormUri);
     }
   });
 }
