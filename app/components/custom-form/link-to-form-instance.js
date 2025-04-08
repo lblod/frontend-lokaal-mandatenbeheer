@@ -5,31 +5,36 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { trackedFunction } from 'reactiveweb/function';
-import { use } from 'ember-resources';
+import { task } from 'ember-concurrency';
+import { triplesForPath } from '@lblod/submission-form-helpers';
 
 import { API } from 'frontend-lmb/utils/constants';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 export default class CustomFormLinkToFormInstance extends InputFieldComponent {
+  @service store;
   @service semanticFormRepository;
 
   @tracked formType;
   @tracked form;
   @tracked formOptions = A([]);
+  @tracked formTypes = [];
 
-  @use(getFormTypes) getFormTypes;
+  constructor() {
+    super(...arguments);
+    this.setInitalValues.perform();
+  }
 
   @action
   async selectFormType(type) {
     this.formType = type;
     replaceSingleFormValue(this.storeOptions, null);
     const formInstances = await this.fetchFormsForType();
+    this.form = null;
     this.formOptions.clear();
     this.formOptions.pushObjects(
       formInstances.map((instance) => {
-        delete instance.uri;
-        delete instance.id;
         return {
+          id: instance.id,
           values: Object.keys(instance).map((key) => {
             return { key, value: instance[key] };
           }),
@@ -46,23 +51,6 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     super.updateValidations();
   }
 
-  get formTypes() {
-    const types = this.getFormTypes?.value;
-    if (!types) {
-      return [];
-    }
-    return [
-      {
-        groupName: 'Eigen types',
-        options: types.customTypes,
-      },
-      {
-        groupName: 'Standaard types',
-        options: types.defaultTypes,
-      },
-    ];
-  }
-
   @action
   async fetchFormsForType() {
     const allLabels = await this.semanticFormRepository.getHeaderLabels(
@@ -77,10 +65,8 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     );
     return formInfo.instances;
   }
-}
 
-function getFormTypes() {
-  return trackedFunction(async () => {
+  setInitalValues = task(async () => {
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/custom-form/form-type-options`
     );
@@ -88,6 +74,21 @@ function getFormTypes() {
       console.error('Er ging iets mis bij het ophalen van de formulier types');
       return [];
     }
-    return await response.json();
+    const formTypes = await response.json();
+    this.formTypes = [
+      {
+        groupName: 'Eigen types',
+        options: formTypes.customTypes,
+      },
+      {
+        groupName: 'Standaard types',
+        options: formTypes.defaultTypes,
+      },
+    ];
+    const matches = triplesForPath(this.storeOptions);
+    if (matches.values.length > 0) {
+      const selectedFormUri = matches.values[0].value;
+      console.log({ selectedFormUri });
+    }
   });
 }
