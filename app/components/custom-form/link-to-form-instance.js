@@ -23,8 +23,19 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
   async selectFormType(type) {
     this.formType = type;
     replaceSingleFormValue(this.storeOptions, null);
+    const formInstances = await this.fetchFormsForType();
     this.formOptions.clear();
-    this.formOptions.pushObjects(await this.fetchFormsForType());
+    this.formOptions.pushObjects(
+      formInstances.map((instance) => {
+        delete instance.uri;
+        delete instance.id;
+        return {
+          values: Object.keys(instance).map((key) => {
+            return { key, value: instance[key] };
+          }),
+        };
+      })
+    );
   }
 
   @action
@@ -58,20 +69,13 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
       this.formType.id
     );
     const summaryLabels = allLabels.filter((label) => label.isShownInSummary);
-    const form = await this.semanticFormRepository.fetchInstances(
+    const formInfo = await this.semanticFormRepository.fetchInstances(
       { id: this.formType.id },
       {
         labels: summaryLabels,
       }
     );
-    let label = summaryLabels[0]?.name || 'uri';
-
-    return form.instances.map((instance) => {
-      return {
-        label: instance[label] || instance.uri,
-        uri: instance.uri,
-      };
-    });
+    return formInfo.instances;
   }
 }
 
