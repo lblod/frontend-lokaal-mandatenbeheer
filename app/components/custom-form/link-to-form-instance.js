@@ -10,6 +10,7 @@ import { triplesForPath } from '@lblod/submission-form-helpers';
 
 import { API } from 'frontend-lmb/utils/constants';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
+
 export default class CustomFormLinkToFormInstance extends InputFieldComponent {
   @service store;
   @service semanticFormRepository;
@@ -63,7 +64,15 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
         labels: summaryLabels,
       }
     );
-    return formInfo.instances;
+    return formInfo.instances.map((instance) => {
+      let cleanedUpInstance = {
+        id: instance.id,
+      };
+      for (const label of formInfo.labels) {
+        cleanedUpInstance[label.name] = instance[label.name];
+      }
+      return cleanedUpInstance;
+    });
   }
 
   setInitalValues = task(async () => {
