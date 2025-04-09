@@ -36,6 +36,7 @@ module.exports = function (environment) {
       'show-forms-module': false,
       'show-codelijsten-module': false,
       'enable-mandataris-count-warnings': true,
+      'custom-organen': false,
       politieraad: false,
     },
     lpdcUrl: '{{LPDC_URL}}',
@@ -72,6 +73,7 @@ module.exports = function (environment) {
 
     ENV.features['shacl-report'] = true;
     ENV.features['politieraad'] = true;
+    ENV.features['custom-organen'] = true;
   }
 
   if (environment === 'test') {
