@@ -1,4 +1,4 @@
-import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
+import SelectorComponent from '../rdf-input-fields/selector';
 
 import { A } from '@ember/array';
 import { action } from '@ember/object';
@@ -6,17 +6,21 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { task, timeout } from 'ember-concurrency';
-import { triplesForPath } from '@lblod/submission-form-helpers';
+import {
+  triplesForPath,
+  updateSimpleFormValue,
+} from '@lblod/submission-form-helpers';
+import { NamedNode } from 'rdflib';
 
 import { API, INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 
-export default class CustomFormLinkToFormInstance extends InputFieldComponent {
+export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @service store;
   @service semanticFormRepository;
 
   @tracked formType;
-  @tracked form;
+  @tracked forms = A([]);
   @tracked formOptions = A([]);
   @tracked formTypes = [];
   @tracked pageToLoad = 0;
@@ -26,14 +30,14 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
 
   constructor() {
     super(...arguments);
-    this.setInitalValues.perform();
+    // this.setInitalValues.perform();
   }
 
   @action
   async selectFormType(type) {
     this.formType = type;
     replaceSingleFormValue(this.storeOptions, null);
-    this.form = null;
+    this.forms.clear();
     this.pageToLoad = 0;
     this.searchFilter = null;
     this.formOptions.clear();
@@ -42,23 +46,35 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
   }
 
   @action
-  async selectFormOfType(form) {
-    if (form.id === 'load-more-options') {
+  async selectFormsOfType(forms) {
+    console.log({ forms });
+    console.log(this.forms);
+
+    if (forms.filter((f) => f.id === 'load-more-options').length === 1) {
       this.isLoadingMoreOptions = true;
       await this.setFormOptions();
       this.isLoadingMoreOptions = false;
       return;
     }
-
-    this.form = form;
-    replaceSingleFormValue(this.storeOptions, form.uri);
-
-    super.updateValidations();
+    this.forms.clear();
+    this.forms.pushObjects(forms);
+    const matches = triplesForPath(this.storeOptions, true).values;
+    matches
+      .filter((m) => !forms.find((form) => m.value === form.uri))
+      .forEach((m) => updateSimpleFormValue(this.storeOptions, undefined, m));
+    forms
+      .filter((form) => !matches.find((m) => form.uri === m.value))
+      .forEach((option) =>
+        updateSimpleFormValue(this.storeOptions, new NamedNode(option.uri))
+      );
+    super.updateSelectedItems();
   }
 
   async setFormOptions() {
     const formInstances = await this.fetchFormsForType();
-    this.form = null;
+    if (!this.isLoadingMoreOptions) {
+      this.forms.clear();
+    }
     if (formInstances.length === 0) {
       return;
     }
@@ -132,12 +148,14 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     });
     const currentPage = formInfo.instances.meta.pagination.self.number;
     const lastPage = formInfo.instances.meta.pagination.last.number;
-    this.pageToLoad = formInfo.instances.meta.pagination.next.number;
+    this.pageToLoad =
+      formInfo.instances.meta.pagination.next?.number ?? currentPage;
     this.canShowLoadMoreOptions = lastPage !== currentPage;
+
     return instances;
   }
 
-  setInitalValues = task(async () => {
+  async loadOptions() {
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/custom-form/form-type-options`
     );
@@ -158,21 +176,30 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     ];
     const matches = triplesForPath(this.storeOptions);
     if (matches.values.length > 0) {
-      const selectedFormUri = matches.values[0].value;
+      const selectedFormUris = matches.values.map((v) => v.value);
       this.formType = [
         ...formTypes.customTypes,
         ...formTypes.defaultTypes,
-      ].find(
-        (type) =>
-          type.usageUris?.includes(selectedFormUri) ||
-          selectedFormUri.startsWith(type.prefix)
-      );
+      ].find((type) => {
+        const foundUsages = type.usageUris?.filter((usageUri) =>
+          selectedFormUris.includes(usageUri)
+        );
+        if (foundUsages?.length >= 1) {
+          return foundUsages[0];
+        } else {
+          const matches = selectedFormUris.filter((uri) =>
+            uri.startsWith(type.prefix)
+          );
+
+          return matches[0] || null;
+        }
+      });
       if (this.formType) {
         await this.setFormOptions();
-        this.form = this.formOptions.find(
-          (form) => form.uri === selectedFormUri
+        this.forms.pushObjects(
+          this.formOptions.filter((form) => selectedFormUris.includes(form.uri))
         );
       }
     }
-  });
+  }
 }

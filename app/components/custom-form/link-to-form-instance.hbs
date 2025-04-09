@@ -23,7 +23,7 @@
       >
         {{form.label}}
       </PowerSelect>
-      <PowerSelect
+      <PowerSelectMultiple
         @disabled={{not this.formType}}
         @labelText="Formulier"
         @loadingMessage="Aan het laden..."
@@ -33,8 +33,8 @@
         @search={{perform this.searchForm}}
         @allowClear={{false}}
         @placeholder="Formulier voor het geselecteerde type"
-        @selected={{this.form}}
-        @onChange={{this.selectFormOfType}}
+        @selected={{this.forms}}
+        @onChange={{this.selectFormsOfType}}
         @options={{this.formOptions}}
         @onClose={{this.preventCloseOnLoadMoreOptions}}
         as |form|
@@ -45,7 +45,7 @@
           >
             {{#if this.canShowLoadMoreOptions}}
               {{#if this.isLoadingMoreOptions}}
-                <AuLoader />
+                <AuLoader @hideMessage={{true}} />
               {{else}}
                 <AuHelpText>Laad meer opties</AuHelpText>
               {{/if}}
@@ -63,7 +63,7 @@
             {{/each}}
           </AuList>
         {{/if}}
-      </PowerSelect>
+      </PowerSelectMultiple>
     </c.content>
   </AuCard>
 </RdfInputFields::CustomFieldWrapper>
