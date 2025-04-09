@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import { service } from '@ember/service';
 
 import {
   MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
@@ -19,6 +20,8 @@ export default class MandaatModel extends Model {
   @attr aantalHouders;
   @attr minAantalHouders;
   @attr maxAantalHouders;
+
+  @service features;
 
   @belongsTo('bestuursfunctie-code', {
     async: true,
@@ -92,6 +95,7 @@ export default class MandaatModel extends Model {
   }
 
   get allowsNonElectedPersons() {
+    const customOrgansAllowed = this.features.isEnabled('custom-organen');
     return new Promise((resolve) => {
       if (this.isGouverneur) {
         resolve(true);
@@ -99,7 +103,7 @@ export default class MandaatModel extends Model {
       this.isDecretaalHelper()
         .then((decretaal) => {
           if (!decretaal) {
-            resolve(true);
+            resolve(customOrgansAllowed);
           } else {
             resolve(this.isInBCSD());
           }

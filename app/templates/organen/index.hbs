@@ -25,19 +25,17 @@
               @onChange={{this.filterActiveOrgans}}
             >Enkel actieve organen</AuToggleSwitch>
           </div>
-          {{#if (is-feature-enabled "custom-organen")}}
-            <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
-              <div class="au-c-label">Type orgaan</div>
-              <AuCheckboxGroup
-                @selected={{this.selectedTypes}}
-                @onChange={{this.filterOrganTypes}}
-                as |Group|
-              >
-                <Group.Checkbox @value="decretaleIds">Standaard</Group.Checkbox>
-                <Group.Checkbox @value="nietDecretaleIds">Eigen</Group.Checkbox>
-              </AuCheckboxGroup>
-            </div>
-          {{/if}}
+          <div class="au-o-grid__item au-u-1-2 au-u-1-1@medium">
+            <div class="au-c-label">Type orgaan</div>
+            <AuCheckboxGroup
+              @selected={{this.selectedTypes}}
+              @onChange={{this.filterOrganTypes}}
+              as |Group|
+            >
+              <Group.Checkbox @value="decretaleIds">Standaard</Group.Checkbox>
+              <Group.Checkbox @value="nietDecretaleIds">Eigen</Group.Checkbox>
+            </AuCheckboxGroup>
+          </div>
           <div class="au-o-grid__item">
             <AuButton
               @skin="naked"
@@ -76,9 +74,7 @@
             >Beheer fracties
             </AuLink>
           {{/if}}
-          {{#if (is-feature-enabled "custom-organen")}}
-            <AuButton {{on "click" this.toggleModal}}>Voeg orgaan toe</AuButton>
-          {{/if}}
+          <AuButton {{on "click" this.toggleModal}}>Voeg orgaan toe</AuButton>
         </Group>
       </AuToolbar>
 

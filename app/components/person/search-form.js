@@ -85,7 +85,11 @@ export default class SharedPersoonPersoonSearchFormComponent extends Component {
     }
 
     const extraFilter = {};
-    if (this.args.onlyElected && this.args.bestuursorgaanIT) {
+    if (
+      this.args.onlyElected &&
+      this.args.bestuursorgaanIT &&
+      (await this.args.bestuursorgaanIT.hasElections())
+    ) {
       extraFilter.verkiezingsresultaten = {
         kandidatenlijst: {
           verkiezing: {

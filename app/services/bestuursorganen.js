@@ -49,10 +49,8 @@ export default class BestuursorganenService extends Service {
     if (queryParams.activeOrgans) {
       queryOptions['filter[:has-no:deactivated-at]'] = true;
     }
-    let filteredTypes = ['decretaleIds'];
-    if (this.features.isEnabled('custom-organen')) {
-      filteredTypes = queryParams.selectedTypes;
-    }
+    let filteredTypes = queryParams.selectedTypes;
+
     const types = filteredTypes.map((type) => {
       return this.decretaleOrganen.get(type).join(',');
     });

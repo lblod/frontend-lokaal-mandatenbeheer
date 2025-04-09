@@ -226,4 +226,13 @@ export default class BestuursorgaanModel extends Model {
   get isPolitieraad() {
     return this.classificatie?.id == POLITIERAAD_CODE_ID;
   }
+
+  async hasElections() {
+    let org = this;
+    const orgWithoutTijd = await this.isTijdsspecialisatieVan;
+    if (orgWithoutTijd) {
+      org = orgWithoutTijd;
+    }
+    return org.isDecretaal;
+  }
 }
