@@ -33,10 +33,10 @@ module.exports = function (environment) {
       switchRedirectUrl: '{{ACMIDM_SWITCH_REDIRECT_URL}}',
     },
     features: {
+      'custom-organen': false,
       'show-forms-module': false,
       'show-codelijsten-module': false,
       'enable-mandataris-count-warnings': true,
-      'custom-organen': false,
       politieraad: false,
     },
     lpdcUrl: '{{LPDC_URL}}',
