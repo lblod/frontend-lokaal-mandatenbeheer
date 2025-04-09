@@ -5,14 +5,13 @@ steps:
       - npm ci
   lint-js:
     image: madnificent/ember:4.12.1-node_18
-    group: lint
+    depends_on: [install]
     commands:
       - npm run lint:js
   lint-hbs:
     image: madnificent/ember:4.12.1-node_18
-    group: lint
+    depends_on: [install]
     commands:
       - npm run lint:hbs
 when:
-  event:
-    - pull_request
+  - event: pull_request

@@ -1,10 +1,13 @@
 steps:
-  push-latest:
-    image: plugins/docker
+  build:
+    image: woodpeckerci/plugin-docker-buildx
     settings:
-      repo: lblod/frontend-lokaal-mandatenbeheer
+      repo: "${CI_REPO_OWNER}/${CI_REPO_NAME}"
       tags: latest
-    secrets: [docker_username, docker_password]
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 when:
-  branch: master
-  event: push
+  - event: push
+    branch: master
