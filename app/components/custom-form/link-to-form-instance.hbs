@@ -36,16 +36,33 @@
         @selected={{this.form}}
         @onChange={{this.selectFormOfType}}
         @options={{this.formOptions}}
+        @onClose={{this.preventCloseOnLoadMoreOptions}}
         as |form|
       >
-        <AuList @direction="vertical" @divider={{true}} as |Item|>
-          {{#each form.values as |keyValue|}}
-            <Item>
-              <AuHelpText>{{keyValue.key}}: </AuHelpText>
-              {{keyValue.value}}
-            </Item>
-          {{/each}}
-        </AuList>
+        {{#if (eq form.id "load-more-options")}}
+          <span
+            class="au-u-flex au-u-flex--center au-u-padding-top-small au-u-padding-bottom-small"
+          >
+            {{#if this.canShowLoadMoreOptions}}
+              {{#if this.isLoadingMoreOptions}}
+                <AuLoader />
+              {{else}}
+                <AuHelpText>Laad meer opties</AuHelpText>
+              {{/if}}
+            {{else}}
+              <AuHelpText>Alle opties ingeladen</AuHelpText>
+            {{/if}}
+          </span>
+        {{else}}
+          <AuList @direction="vertical" @divider={{true}} as |Item|>
+            {{#each form.values as |keyValue|}}
+              <Item>
+                <AuHelpText>{{keyValue.key}}: </AuHelpText>
+                {{keyValue.value}}
+              </Item>
+            {{/each}}
+          </AuList>
+        {{/if}}
       </PowerSelect>
     </c.content>
   </AuCard>
