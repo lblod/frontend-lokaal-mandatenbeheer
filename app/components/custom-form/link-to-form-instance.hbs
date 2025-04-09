@@ -30,9 +30,9 @@
         @noMatchesMessage="Geen resultaten"
         @searchMessage="Typ om te zoeken"
         @searchEnabled={{true}}
+        @search={{perform this.searchForm}}
         @allowClear={{false}}
         @placeholder="Formulier voor het geselecteerde type"
-        @searchField="id"
         @selected={{this.form}}
         @onChange={{this.selectFormOfType}}
         @options={{this.formOptions}}
