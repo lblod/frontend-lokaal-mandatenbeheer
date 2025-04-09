@@ -54,14 +54,14 @@
             {{/if}}
           </span>
         {{else}}
-          <AuList @direction="vertical" @divider={{true}} as |Item|>
+          <div class="au-u-flex au-u-flex--row au-u-flex-wrap">
             {{#each form.values as |keyValue|}}
-              <Item>
+              <span>
                 <AuHelpText>{{keyValue.key}}: </AuHelpText>
                 {{keyValue.value}}
-              </Item>
+              </span>
             {{/each}}
-          </AuList>
+          </div>
         {{/if}}
       </PowerSelectMultiple>
     </c.content>
