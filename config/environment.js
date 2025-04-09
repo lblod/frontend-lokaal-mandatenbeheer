@@ -33,6 +33,7 @@ module.exports = function (environment) {
       switchRedirectUrl: '{{ACMIDM_SWITCH_REDIRECT_URL}}',
     },
     features: {
+      'custom-organen': false,
       'show-forms-module': false,
       'show-codelijsten-module': false,
       'enable-mandataris-count-warnings': true,
@@ -76,6 +77,7 @@ module.exports = function (environment) {
 
     ENV.features['shacl-report'] = true;
     ENV.features['politieraad'] = true;
+    ENV.features['custom-organen'] = true;
   }
 
   if (environment === 'test') {
