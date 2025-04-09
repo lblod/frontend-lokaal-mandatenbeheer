@@ -25,7 +25,7 @@ export default class DownloadMandatarissenFromTableComponent extends Component {
   }
 
   get persoonIds() {
-    return this.args.personen?.map((persoon) => persoon.id);
+    return this.args.persoonIds || [];
   }
 
   get fractieIds() {
