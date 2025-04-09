@@ -19,6 +19,9 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
   @tracked form;
   @tracked formOptions = A([]);
   @tracked formTypes = [];
+  @tracked pageToLoad = 0;
+  @tracked isLoadingMoreOptions;
+  @tracked canShowLoadMoreOptions = true;
 
   constructor() {
     super(...arguments);
@@ -30,11 +33,21 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     this.formType = type;
     replaceSingleFormValue(this.storeOptions, null);
     this.form = null;
+    this.pageToLoad = 0;
+    this.formOptions.clear();
+    this.canShowLoadMoreOptions = true;
     await this.setFormOptions();
   }
 
   @action
-  selectFormOfType(form) {
+  async selectFormOfType(form) {
+    if (form.id === 'load-more-options') {
+      this.isLoadingMoreOptions = true;
+      await this.setFormOptions();
+      this.isLoadingMoreOptions = false;
+      return;
+    }
+
     this.form = form;
     replaceSingleFormValue(this.storeOptions, form.uri);
 
@@ -44,7 +57,13 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
   async setFormOptions() {
     const formInstances = await this.fetchFormsForType();
     this.form = null;
-    this.formOptions.clear();
+    if (formInstances.length === 0) {
+      return;
+    }
+    if (this.formOptions.length > 0) {
+      this.formOptions.popObject();
+    }
+
     this.formOptions.pushObjects(
       formInstances.map((instance) => {
         return {
@@ -56,6 +75,17 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
         };
       })
     );
+    this.formOptions.pushObject({
+      id: 'load-more-options',
+      disabled: !this.canShowLoadMoreOptions,
+    });
+  }
+
+  @action
+  preventCloseOnLoadMoreOptions() {
+    if (this.isLoadingMoreOptions) {
+      return false;
+    }
   }
 
   @action
@@ -68,11 +98,11 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
       { id: this.formType.id },
       {
         labels: summaryLabels,
-        size: 9999, // FIXEM how can we paginate this? data-monitoring has an infinite list
-        page: 0,
+        page: this.pageToLoad,
+        size: 20,
       }
     );
-    return formInfo.instances.map((instance) => {
+    const instances = formInfo.instances.map((instance) => {
       let cleanedUpInstance = {};
       for (const label of formInfo.labels) {
         cleanedUpInstance[label.name] = instance[label.name];
@@ -82,6 +112,11 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
         instance,
       };
     });
+    const currentPage = formInfo.instances.meta.pagination.self.number;
+    const lastPage = formInfo.instances.meta.pagination.last.number;
+    this.pageToLoad = formInfo.instances.meta.pagination.next.number;
+    this.canShowLoadMoreOptions = lastPage !== currentPage;
+    return instances;
   }
 
   setInitalValues = task(async () => {
