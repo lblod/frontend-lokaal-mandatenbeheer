@@ -12,17 +12,25 @@ import {
 } from '@lblod/submission-form-helpers';
 import { NamedNode } from 'rdflib';
 
-import { API, INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
+import {
+  API,
+  INPUT_DEBOUNCE,
+  JSON_API_TYPE,
+} from 'frontend-lmb/utils/constants';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
+import { consume } from 'ember-provide-consume-context';
 
 export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @service store;
   @service semanticFormRepository;
 
+  @consume('form-context') formContext;
+
   @tracked formType;
   @tracked forms = A([]);
   @tracked formOptions = A([]);
   @tracked formTypes = [];
+  @tracked summaryLabels = [];
   @tracked pageToLoad = 0;
   @tracked searchFilter;
   @tracked isLoadingMoreOptions;
@@ -42,7 +50,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
 
   @action
   async selectFormsOfType(forms) {
-    if (forms.filter((f) => f.id === 'load-more-options').length === 1) {
+    if (forms.filter((f) => f.id === 'load-more-options')?.length === 1) {
       this.isLoadingMoreOptions = true;
       await this.setFormOptions();
       this.isLoadingMoreOptions = false;
@@ -62,8 +70,8 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     super.updateSelectedItems();
   }
 
-  async setFormOptions() {
-    const formInstances = await this.fetchFormsForType();
+  async setFormOptions(instanceUris = null) {
+    const formInstances = await this.fetchFormsForType(instanceUris);
     if (!this.isLoadingMoreOptions) {
       this.forms.clear();
     }
@@ -110,7 +118,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   });
 
   @action
-  async fetchFormsForType() {
+  async fetchFormsForType(instanceUris = null) {
     const allLabels = await this.semanticFormRepository.getHeaderLabels(
       this.formType.id
     );
@@ -124,27 +132,44 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     if (!this.searchFilter) {
       delete filterParams.filter;
     }
+
+    const instances = [];
     const formInfo = await this.semanticFormRepository.fetchInstances(
       { id: this.formType.id },
       filterParams
     );
-    const instances = formInfo.instances.map((instance) => {
-      let cleanedUpInstance = {};
-      for (const label of formInfo.labels) {
-        cleanedUpInstance[label.name] = instance[label.name];
-      }
-      return {
-        displayInstance: cleanedUpInstance,
-        instance,
-      };
-    });
+    instances.push(...[...formInfo.instances]);
+
+    this.summaryLabels = formInfo.labels;
     const currentPage = formInfo.instances.meta.pagination.self.number;
     const lastPage = formInfo.instances.meta.pagination.last.number;
     this.pageToLoad =
       formInfo.instances.meta.pagination.next?.number ?? currentPage;
     this.canShowLoadMoreOptions = lastPage !== currentPage;
+    const formInfoForUris = await this.fetchInstancesForUris(instanceUris);
+    if (formInfoForUris) {
+      instances.push(...formInfoForUris.instances);
+    }
 
-    return instances;
+    const uniqueInstanceUris = [];
+    return instances
+      .map((instance) => {
+        if (uniqueInstanceUris.includes(instance.uri)) {
+          return;
+        } else {
+          uniqueInstanceUris.push(instance.uri);
+        }
+
+        let cleanedUpInstance = {};
+        for (const label of formInfo.labels) {
+          cleanedUpInstance[label.name] = instance[label.name];
+        }
+        return {
+          displayInstance: cleanedUpInstance,
+          instance,
+        };
+      })
+      .filter((isInstance) => isInstance);
   }
 
   async loadOptions() {
@@ -187,11 +212,35 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
         }
       });
       if (this.formType) {
-        await this.setFormOptions();
+        await this.setFormOptions(selectedFormUris);
         this.forms.pushObjects(
           this.formOptions.filter((form) => selectedFormUris.includes(form.uri))
         );
       }
     }
+  }
+
+  async fetchInstancesForUris(uris) {
+    const response = await fetch(
+      `${API.FORM_CONTENT_SERVICE}/${this.formType.id}/get-instances-by-uri`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          labels: this.summaryLabels,
+          uris,
+        }),
+      }
+    );
+    if (!response.ok) {
+      console.error(
+        `Er ging iets mis bij het ophalen van instances met uris ${uris.split(', ')}`
+      );
+      return null;
+    }
+
+    return await response.json();
   }
 }
