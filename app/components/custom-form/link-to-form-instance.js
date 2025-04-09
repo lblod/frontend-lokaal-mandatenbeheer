@@ -28,11 +28,6 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @tracked isLoadingMoreOptions;
   @tracked canShowLoadMoreOptions = true;
 
-  constructor() {
-    super(...arguments);
-    // this.setInitalValues.perform();
-  }
-
   @action
   async selectFormType(type) {
     this.formType = type;
@@ -47,9 +42,6 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
 
   @action
   async selectFormsOfType(forms) {
-    console.log({ forms });
-    console.log(this.forms);
-
     if (forms.filter((f) => f.id === 'load-more-options').length === 1) {
       this.isLoadingMoreOptions = true;
       await this.setFormOptions();
