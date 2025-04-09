@@ -5,10 +5,10 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { triplesForPath } from '@lblod/submission-form-helpers';
 
-import { API } from 'frontend-lmb/utils/constants';
+import { API, INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 
 export default class CustomFormLinkToFormInstance extends InputFieldComponent {
@@ -20,6 +20,7 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
   @tracked formOptions = A([]);
   @tracked formTypes = [];
   @tracked pageToLoad = 0;
+  @tracked searchFilter;
   @tracked isLoadingMoreOptions;
   @tracked canShowLoadMoreOptions = true;
 
@@ -34,6 +35,7 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     replaceSingleFormValue(this.storeOptions, null);
     this.form = null;
     this.pageToLoad = 0;
+    this.searchFilter = null;
     this.formOptions.clear();
     this.canShowLoadMoreOptions = true;
     await this.setFormOptions();
@@ -88,19 +90,35 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     }
   }
 
+  searchForm = task({ restartable: true }, async (input) => {
+    await timeout(INPUT_DEBOUNCE);
+    if (this.searchFilter !== input?.trim()) {
+      this.pageToLoad = 0;
+      this.formOptions.clear();
+    }
+    this.searchFilter = input?.trim();
+
+    await this.setFormOptions();
+  });
+
   @action
   async fetchFormsForType() {
     const allLabels = await this.semanticFormRepository.getHeaderLabels(
       this.formType.id
     );
     const summaryLabels = allLabels.filter((label) => label.isShownInSummary);
+    const filterParams = {
+      labels: summaryLabels,
+      page: this.pageToLoad,
+      size: 20,
+      filter: this.searchFilter,
+    };
+    if (!this.searchFilter) {
+      delete filterParams.filter;
+    }
     const formInfo = await this.semanticFormRepository.fetchInstances(
       { id: this.formType.id },
-      {
-        labels: summaryLabels,
-        page: this.pageToLoad,
-        size: 20,
-      }
+      filterParams
     );
     const instances = formInfo.instances.map((instance) => {
       let cleanedUpInstance = {};
