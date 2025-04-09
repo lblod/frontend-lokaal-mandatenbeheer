@@ -6,6 +6,7 @@ export default class BestuursorganenService extends Service {
   @service store;
   @service decretaleOrganen;
   @service bestuursperioden;
+  @service features;
 
   async getAllRealPoliticalBestuursorganen() {
     return await this.store.query('bestuursorgaan', {
@@ -48,8 +49,10 @@ export default class BestuursorganenService extends Service {
     if (queryParams.activeOrgans) {
       queryOptions['filter[:has-no:deactivated-at]'] = true;
     }
-    let filteredTypes = queryParams.selectedTypes;
-
+    let filteredTypes = ['decretaleIds'];
+    if (this.features.isEnabled('custom-organen')) {
+      filteredTypes = queryParams.selectedTypes;
+    }
     const types = filteredTypes.map((type) => {
       return this.decretaleOrganen.get(type).join(',');
     });
