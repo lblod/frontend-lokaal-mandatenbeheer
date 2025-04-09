@@ -68,6 +68,8 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
       { id: this.formType.id },
       {
         labels: summaryLabels,
+        size: 9999, // FIXEM how can we paginate this? data-monitoring has an infinite list
+        page: 0,
       }
     );
     return formInfo.instances.map((instance) => {
