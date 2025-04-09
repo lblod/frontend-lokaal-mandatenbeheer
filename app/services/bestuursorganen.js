@@ -6,7 +6,6 @@ export default class BestuursorganenService extends Service {
   @service store;
   @service decretaleOrganen;
   @service bestuursperioden;
-  @service features;
 
   async getAllRealPoliticalBestuursorganen() {
     return await this.store.query('bestuursorgaan', {
