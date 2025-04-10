@@ -241,7 +241,9 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         page: { size: 9999 }, // Not ideal
       })
       .then((entries) => {
-        return entries.sortBy('displayLabel');
+        return [...entries].sort((a, b) =>
+          a.displayLabel.localeCompare(b.displayLabel)
+        );
       });
   }
 
