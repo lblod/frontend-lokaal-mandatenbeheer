@@ -143,7 +143,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
       { id: this.formType.id },
       filterParams
     );
-    instances.push(...[...formInfo.instances]);
+    instances.push(...formInfo.instances);
 
     this.summaryLabels = formInfo.labels;
     const currentPage = formInfo.instances.meta.pagination.self.number;
