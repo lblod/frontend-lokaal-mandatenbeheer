@@ -5,6 +5,15 @@ $data-list-whitespace-y: $au-unit-small;
   max-height: 28px !important;
 }
 
+.rotate-element-360-degree {
+  animation: rotation 2s infinite linear;
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(360deg);
+  }
+}
+
 .report-refresh-button .au-c-pill {
   max-height: 28px !important;
   border-top-right-radius: 0px !important;
@@ -12,6 +21,8 @@ $data-list-whitespace-y: $au-unit-small;
 }
 
 .refresh-button-next-to-pill,
+.refresh-button-next-to-pill.is-disabled,
+.refresh-button-next-to-pill.is-disabled:hover,
 .refresh-button-next-to-pill:hover {
   background-color: var(--au-gray-100);
   border-top-left-radius: 0px;

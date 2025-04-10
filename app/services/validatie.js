@@ -22,6 +22,10 @@ export default class ValidatieService extends Service {
     }
   }
 
+  get hasReport() {
+    return !!this.latestValidationReport;
+  }
+
   async getResultsByInstance(instance) {
     const results =
       (await this.latestValidationReport?.validationresults) ?? [];
