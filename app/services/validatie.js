@@ -3,12 +3,17 @@ import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
+import { task } from 'ember-concurrency';
+
 import { typeToEmberData } from 'frontend-lmb/utils/type-to-ember-data';
 
 export default class ValidatieService extends Service {
-  @tracked latestValidationReport;
   @service features;
   @service store;
+
+  @tracked latestValidationReport;
+  @tracked runningStatus;
+  @tracked lastRunnningStatus;
 
   async setup() {
     if (this.features.isEnabled('shacl-report')) {
@@ -20,10 +25,6 @@ export default class ValidatieService extends Service {
         })
       )[0];
     }
-  }
-
-  get hasReport() {
-    return !!this.latestValidationReport;
   }
 
   async getResultsByInstance(instance) {
@@ -118,4 +119,40 @@ export default class ValidatieService extends Service {
       modelId: instance?.id,
     };
   }
+
+  async setLastRunningStatus() {
+    this.lastRunnningStatus = (
+      await this.store.query('report-status', {
+        'filter[:has:finished-at]': true,
+        sort: '-finished-at',
+        page: {
+          size: 1,
+        },
+      })
+    )[0];
+  }
+
+  async getRunningStatus() {
+    const statuses = await this.store.query('report-status', {
+      'filter[:has-no:finished-at]': true,
+      page: {
+        size: 1,
+      },
+    });
+    this.runningStatus = statuses[0] || null;
+
+    return this.runningStatus;
+  }
+
+  polling = task(async () => {
+    await this.getRunningStatus();
+    const interval = setInterval(async () => {
+      if (!this.runningStatus) {
+        clearInterval(interval);
+        await this.setLastRunningStatus();
+        return;
+      }
+      await this.getRunningStatus();
+    }, 1500);
+  });
 }

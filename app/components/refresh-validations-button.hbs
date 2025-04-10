@@ -3,14 +3,14 @@
     <AuPill @icon="clock-rewind">Laatste sync
       {{this.lastRefreshedDate}}</AuPill>
     <AuButton
-      @disabled={{this.isLoading}}
+      @disabled={{this.isGeneratingReport}}
       @skin="naked"
       class="refresh-button-next-to-pill"
       {{on "click" (perform this.refresh)}}
     >
       <AuIcon
         @icon="renew"
-        class={{if this.isLoading "rotate-element-360-degree"}}
+        class={{if this.isGeneratingReport "rotate-element-360-degree"}}
       />
       Refresh</AuButton>
   </div>
