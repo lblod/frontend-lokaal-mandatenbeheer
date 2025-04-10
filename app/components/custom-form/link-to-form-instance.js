@@ -11,6 +11,7 @@ import {
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
 import { NamedNode } from 'rdflib';
+import { consume } from 'ember-provide-consume-context';
 
 import {
   API,
@@ -18,7 +19,6 @@ import {
   JSON_API_TYPE,
 } from 'frontend-lmb/utils/constants';
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { consume } from 'ember-provide-consume-context';
 
 export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @service store;
@@ -97,10 +97,11 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
       };
     });
     this.formOptions.pushObjects(uniqueFormOptionsToAdd);
-    this.formOptions.pushObject({
-      id: 'load-more-options',
-      disabled: !this.canShowLoadMoreOptions,
-    });
+    if (this.canShowLoadMoreOptions) {
+      this.formOptions.pushObject({
+        id: 'load-more-options',
+      });
+    }
   }
 
   @action
