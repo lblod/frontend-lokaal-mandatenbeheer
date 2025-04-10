@@ -1,1 +1,20 @@
-{{yield}}
+<div class="au-u-flex au-u-flex--column">
+  <div class="report-refresh-button au-u-flex">
+    <AuPill @icon="clock-rewind">Laatste sync
+      {{this.lastRefreshedDate}}</AuPill>
+    <AuButton
+      @skin="naked"
+      @icon="renew"
+      class="refresh-button-next-to-pill"
+      {{on "click" (perform this.refresh)}}
+    >Refresh</AuButton>
+  </div>
+  <p class="au-u-flex au-u-flex-self-end au-u-padding-top-small">Meer weten over
+    validatie fouten?</p>
+  <AuLinkExternal
+    class="au-u-flex au-u-flex-self-end"
+    href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer"
+  >
+    Bekijk de handleiding
+  </AuLinkExternal>
+</div>
