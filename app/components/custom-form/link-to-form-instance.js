@@ -186,10 +186,13 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
       return [];
     }
     const formTypes = await response.json();
+    const currentFormTypeId = this.formContext?.formDefinition?.id;
     this.formTypes = [
       {
         groupName: 'Eigen types',
-        options: formTypes.customTypes,
+        options: formTypes.customTypes.filter(
+          (t) => t.id !== currentFormTypeId
+        ),
       },
       {
         groupName: 'Standaard types',
