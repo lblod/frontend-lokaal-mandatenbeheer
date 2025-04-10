@@ -18,6 +18,8 @@ export default class ReportRoute extends Route {
 
   async model() {
     const latestReport = this.validatie.latestValidationReport;
+    this.validatie.polling.perform();
+    await this.validatie.setLastRunningStatus();
     return {
       report: latestReport,
       resultsByTargetClass:
