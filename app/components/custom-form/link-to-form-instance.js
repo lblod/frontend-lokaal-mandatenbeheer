@@ -81,18 +81,22 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     if (this.formOptions.length > 0) {
       this.formOptions.popObject();
     }
-
-    this.formOptions.pushObjects(
-      formInstances.map((instance) => {
-        return {
-          id: instance.instance.id,
-          uri: instance.instance.uri,
-          values: Object.keys(instance.displayInstance).map((key) => {
-            return { key, value: instance.displayInstance[key] };
-          }),
-        };
-      })
-    );
+    const addedOptionUris = this.formOptions.map((o) => o.instance?.uri);
+    const uniqueFormOptionsToAdd = formInstances.map((instance) => {
+      if (addedOptionUris.includes(instance.instance.uri)) {
+        return;
+      } else {
+        addedOptionUris.push(instance.instance.uri);
+      }
+      return {
+        id: instance.instance.id,
+        uri: instance.instance.uri,
+        values: Object.keys(instance.displayInstance).map((key) => {
+          return { key, value: instance.displayInstance[key] };
+        }),
+      };
+    });
+    this.formOptions.pushObjects(uniqueFormOptionsToAdd);
     this.formOptions.pushObject({
       id: 'load-more-options',
       disabled: !this.canShowLoadMoreOptions,
@@ -146,18 +150,18 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     this.pageToLoad =
       formInfo.instances.meta.pagination.next?.number ?? currentPage;
     this.canShowLoadMoreOptions = lastPage !== currentPage;
-    const formInfoForUris = await this.fetchInstancesForUris(instanceUris);
-    if (formInfoForUris) {
+    if (instanceUris) {
+      const formInfoForUris = await this.fetchInstancesForUris(instanceUris);
       instances.push(...formInfoForUris.instances);
     }
 
-    const uniqueInstanceUris = [];
+    const addedInstanceUris = [];
     return instances
       .map((instance) => {
-        if (uniqueInstanceUris.includes(instance.uri)) {
+        if (addedInstanceUris.includes(instance.uri)) {
           return;
         } else {
-          uniqueInstanceUris.push(instance.uri);
+          addedInstanceUris.push(instance.uri);
         }
 
         let cleanedUpInstance = {};
