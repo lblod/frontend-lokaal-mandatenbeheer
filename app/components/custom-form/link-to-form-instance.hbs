@@ -49,14 +49,12 @@
               {{else}}
                 <AuHelpText>Laad meer opties</AuHelpText>
               {{/if}}
-            {{else}}
-              <AuHelpText>Alle opties ingeladen</AuHelpText>
             {{/if}}
           </span>
         {{else}}
           <div class="au-u-flex au-u-flex--row au-u-flex-wrap">
             {{#each form.values as |keyValue|}}
-              <span>
+              <span class="au-u-padding-right-small">
                 <AuHelpText>{{keyValue.key}}: </AuHelpText>
                 {{keyValue.value}}
               </span>
