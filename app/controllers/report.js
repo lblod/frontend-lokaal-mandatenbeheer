@@ -14,6 +14,12 @@ export default class ReportController extends Controller {
   get resultsByTargetClass() {
     return this.getResultsByClassForLatestValidationReport?.value || [];
   }
+
+  get isEmptyResult() {
+    return (
+      !this.validatie.runningStatus && this.resultsByTargetClass.length === 0
+    );
+  }
 }
 
 function getResultsByClassForLatestValidationReport() {
