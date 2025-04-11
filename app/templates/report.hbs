@@ -14,7 +14,7 @@
     </AuToolbar>
     <AuBodyContainer id="content">
       <div class="au-c-body-container au-c-body-container--scroll au-u-padding">
-        {{#each @model.resultsByTargetClass as |instanceGroup|}}
+        {{#each this.resultsByTargetClass as |instanceGroup|}}
           <div class="au-u-box au-u-margin-top no-pagination">
             <AuHeading @skin="3" class="au-u-margin-bottom">
               {{instanceGroup.class.label}}
