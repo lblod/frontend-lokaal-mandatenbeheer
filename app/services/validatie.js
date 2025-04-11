@@ -23,17 +23,13 @@ export default class ValidatieService extends Service {
   }
 
   async setLatestValidationReport() {
-    this.latestValidationReport = await this.lastRunnningStatus?.report;
-    if (!this.latestValidationReport) {
-      alert("didn't find the report for last status"); // Try out
-      this.latestValidationReport = (
-        await this.store.query('report', {
-          sort: '-created',
-          page: { size: 1 },
-          include: 'validationresults',
-        })
-      )[0];
-    }
+    this.latestValidationReport = (
+      await this.store.query('report', {
+        sort: '-created',
+        page: { size: 1 },
+        include: 'validationresults',
+      })
+    )[0];
   }
 
   async getResultsByInstance(instance) {
@@ -141,7 +137,7 @@ export default class ValidatieService extends Service {
     )[0];
   }
 
-  async getRunningStatus() {
+  async setRunningStatus() {
     const statuses = await this.store.query('report-status', {
       'filter[:has-no:finished-at]': true,
       page: {
@@ -149,12 +145,15 @@ export default class ValidatieService extends Service {
       },
     });
     this.runningStatus = statuses[0] || null;
-
-    return this.runningStatus;
   }
 
   polling = task(async () => {
-    await this.getRunningStatus();
+    await this.setRunningStatus();
+
+    if (!this.runningStatus) {
+      return;
+    }
+
     const interval = setInterval(async () => {
       if (!this.runningStatus) {
         clearInterval(interval);
@@ -162,7 +161,7 @@ export default class ValidatieService extends Service {
         await this.setLatestValidationReport();
         return;
       }
-      await this.getRunningStatus();
+      await this.setRunningStatus();
     }, 1500);
   });
 }

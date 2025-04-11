@@ -6,7 +6,7 @@
       @disabled={{this.isGeneratingReport}}
       @skin="naked"
       class="refresh-button-next-to-pill"
-      {{on "click" (perform this.refresh)}}
+      {{on "click" this.refresh}}
     >
       <AuIcon
         @icon="renew"
