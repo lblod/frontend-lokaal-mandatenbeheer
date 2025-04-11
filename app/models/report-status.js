@@ -9,8 +9,4 @@ export default class ReportStatusModel extends Model {
     inverse: null,
   })
   report;
-
-  get isRunning() {
-    return this.startedAt && !this.finishedAt;
-  }
 }
