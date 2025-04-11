@@ -33,7 +33,7 @@ export default class RefreshValidationsButton extends Component {
     });
     if (response.ok) {
       for (let index = 0; index < 5; index++) {
-        await timeout(150);
+        await timeout(250);
         this.validatie.polling.perform();
         if (this.validatie.runningStatus) {
           showSuccessToast(
@@ -70,10 +70,20 @@ export default class RefreshValidationsButton extends Component {
   }
 
   get tooltipLastSyncText() {
-    if (!this.validatie.lastRunnningStatus) {
+    const lastStatus = this.validatie.lastRunnningStatus;
+    this.validatie.lastRunnningStatus;
+    if (!lastStatus) {
       return null;
     }
+    if (!lastStatus.startedAt || !lastStatus.finishedAt) {
+      return null;
+    }
+    const startedAt = moment(lastStatus.startedAt);
+    const finishedAt = moment(lastStatus.finishedAt);
+    const duration = moment.duration(finishedAt.diff(startedAt));
+    const minutes = Math.floor(duration.asMinutes());
+    const textForMinutes = `${minutes} ${minutes === 1 ? 'minuut' : 'minuten'} en`;
 
-    return this.validatie.durationOfLastStatus.asText;
+    return `Vorige sync heeft ${minutes !== 0 ? textForMinutes : ''} ${duration.seconds()} seconden geduurd.`;
   }
 }
