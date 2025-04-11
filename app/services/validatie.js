@@ -17,6 +17,15 @@ export default class ValidatieService extends Service {
 
   async setup() {
     if (this.features.isEnabled('shacl-report')) {
+      await this.setLastRunningStatus();
+      await this.setLatestValidationReport();
+    }
+  }
+
+  async setLatestValidationReport() {
+    this.latestValidationReport = await this.lastRunnningStatus?.report;
+    if (!this.latestValidationReport) {
+      alert("didn't find the report for last status"); // Try out
       this.latestValidationReport = (
         await this.store.query('report', {
           sort: '-created',
@@ -150,6 +159,7 @@ export default class ValidatieService extends Service {
       if (!this.runningStatus) {
         clearInterval(interval);
         await this.setLastRunningStatus();
+        await this.setLatestValidationReport();
         return;
       }
       await this.getRunningStatus();
