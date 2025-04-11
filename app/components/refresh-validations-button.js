@@ -7,10 +7,12 @@ import moment from 'moment';
 import { timeout } from 'ember-concurrency';
 
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import { showSuccessToast, showWarningToast } from 'frontend-lmb/utils/toasts';
 
 export default class RefreshValidationsButton extends Component {
   @service validatie;
   @service currentSession;
+  @service toaster;
 
   constructor() {
     super(...arguments);
@@ -31,17 +33,31 @@ export default class RefreshValidationsButton extends Component {
     });
     if (response.ok) {
       for (let index = 0; index < 5; index++) {
-        await timeout(500);
+        await timeout(150);
         this.validatie.polling.perform();
         if (this.validatie.runningStatus) {
+          showSuccessToast(
+            this.toaster,
+            'Rapport wordt gegenereerd. Dit kan mogelijks een tijdje duren.',
+            'Validatie rapport'
+          );
           return;
         }
       }
+      showWarningToast(
+        this.toaster,
+        'De service laat van zich weten. Het genereren van het rapport is gestart in de achtergrond. Mogelijks moet je de pagina refreshen om de status op te volgen.',
+        'Validatie rapport'
+      );
     }
   }
 
+  get isPreviousreportFound() {
+    return this.validatie.lastRunnningStatus?.finishedAt;
+  }
+
   get lastRefreshedDate() {
-    if (!this.validatie.lastRunnningStatus?.finishedAt) {
+    if (!this.isPreviousreportFound) {
       return 'Onbekend';
     }
     return moment(this.validatie.lastRunnningStatus.finishedAt).format(
@@ -51,5 +67,15 @@ export default class RefreshValidationsButton extends Component {
 
   get isGeneratingReport() {
     return this.validatie.runningStatus;
+  }
+
+  get tooltipLastSyncText() {
+    const startedAt = moment(this.validatie.lastRunnningStatus.startedAt);
+    const finishedAt = moment(this.validatie.lastRunnningStatus.finishedAt);
+    const duration = moment.duration(finishedAt.diff(startedAt));
+    const minutes = Math.floor(duration.asMinutes());
+    const textForMinutes = `${minutes} ${minutes === 1 ? 'minuut' : 'minuten'} en`;
+
+    return `Vorige sync heeft ${minutes !== 0 ? textForMinutes : ''} ${duration.seconds()} seconden geduurd.`;
   }
 }

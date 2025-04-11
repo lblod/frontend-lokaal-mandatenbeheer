@@ -6,19 +6,23 @@ import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 import { typeToEmberData } from 'frontend-lmb/utils/type-to-ember-data';
+import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class ValidatieService extends Service {
   @service features;
   @service store;
+  @service toaster;
 
   @tracked latestValidationReport;
   @tracked runningStatus;
   @tracked lastRunnningStatus;
+  @tracked canShowReportIsGenerated;
 
   async setup() {
     if (this.features.isEnabled('shacl-report')) {
       await this.setLastRunningStatus();
       await this.setLatestValidationReport();
+      this.canShowReportIsGenerated = true;
     }
   }
 
@@ -153,12 +157,16 @@ export default class ValidatieService extends Service {
     if (!this.runningStatus) {
       return;
     }
-
+    this.canShowReportIsGenerated = true;
     const interval = setInterval(async () => {
       if (!this.runningStatus) {
         clearInterval(interval);
         await this.setLastRunningStatus();
         await this.setLatestValidationReport();
+        if (this.canShowReportIsGenerated) {
+          showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
+          this.canShowReportIsGenerated = false;
+        }
         return;
       }
       await this.setRunningStatus();

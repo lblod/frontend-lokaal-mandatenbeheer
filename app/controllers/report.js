@@ -18,7 +18,7 @@ export default class ReportController extends Controller {
 
 function getResultsByClassForLatestValidationReport() {
   return trackedFunction(async () => {
-    if (!this.validatie.polling.isRunning) {
+    if (!this.validatie.runningStatus) {
       return await this.validatie.getResultsByClass();
     }
   });
