@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { task } from 'ember-concurrency';
-import moment from 'moment';
 
 import { typeToEmberData } from 'frontend-lmb/utils/type-to-ember-data';
 import { showSuccessToast } from 'frontend-lmb/utils/toasts';
@@ -23,7 +22,6 @@ export default class ValidatieService extends Service {
     if (this.features.isEnabled('shacl-report')) {
       await this.setLastRunningStatus();
       await this.setLatestValidationReport();
-      this.canShowReportIsGenerated = true;
     }
   }
 

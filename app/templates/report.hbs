@@ -14,6 +14,11 @@
     </AuToolbar>
     <AuBodyContainer id="content">
       <div class="au-c-body-container au-c-body-container--scroll au-u-padding">
+        {{#if this.isEmptyResult}}
+          <AuAlert @skin="success" @icon="check">
+            De data binnen deze bestuurseenheid is conform de validatieregels.
+          </AuAlert>
+        {{/if}}
         {{#each this.resultsByTargetClass as |instanceGroup|}}
           <div class="au-u-box au-u-margin-top no-pagination">
             <AuHeading @skin="3" class="au-u-margin-bottom">
