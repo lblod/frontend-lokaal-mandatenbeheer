@@ -70,12 +70,10 @@ export default class RefreshValidationsButton extends Component {
   }
 
   get tooltipLastSyncText() {
-    const startedAt = moment(this.validatie.lastRunnningStatus.startedAt);
-    const finishedAt = moment(this.validatie.lastRunnningStatus.finishedAt);
-    const duration = moment.duration(finishedAt.diff(startedAt));
-    const minutes = Math.floor(duration.asMinutes());
-    const textForMinutes = `${minutes} ${minutes === 1 ? 'minuut' : 'minuten'} en`;
+    if (!this.validatie.lastRunnningStatus) {
+      return null;
+    }
 
-    return `Vorige sync heeft ${minutes !== 0 ? textForMinutes : ''} ${duration.seconds()} seconden geduurd.`;
+    return this.validatie.durationOfLastStatus.asText;
   }
 }

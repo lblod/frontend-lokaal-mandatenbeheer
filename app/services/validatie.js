@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { task } from 'ember-concurrency';
+import moment from 'moment';
 
 import { typeToEmberData } from 'frontend-lmb/utils/type-to-ember-data';
 import { showSuccessToast } from 'frontend-lmb/utils/toasts';
@@ -141,6 +142,25 @@ export default class ValidatieService extends Service {
     )[0];
   }
 
+  get durationOfLastStatus() {
+    if (
+      !this.lastRunnningStatus?.startedAt ||
+      !this.lastRunnningStatus?.finishedAt
+    ) {
+      return null;
+    }
+    const startedAt = moment(this.lastRunnningStatus.startedAt);
+    const finishedAt = moment(this.lastRunnningStatus.finishedAt);
+    const duration = moment.duration(finishedAt.diff(startedAt));
+    const minutes = Math.floor(duration.asMinutes());
+    const textForMinutes = `${minutes} ${minutes === 1 ? 'minuut' : 'minuten'} en`;
+
+    return {
+      inMs: duration.asMilliseconds(),
+      asText: `Vorige sync heeft ${minutes !== 0 ? textForMinutes : ''} ${duration.seconds()} seconden geduurd.`,
+    };
+  }
+
   async setRunningStatus() {
     const statuses = await this.store.query('report-status', {
       'filter[:has-no:finished-at]': true,
@@ -158,6 +178,15 @@ export default class ValidatieService extends Service {
       return;
     }
     this.canShowReportIsGenerated = true;
+    let pollingTimeinMs = 10000;
+    if (this.durationOfLastStatus) {
+      const ellapsedTimeInMs = moment
+        .duration(moment().diff(moment(this.runningStatus.startedAt)))
+        .asMilliseconds();
+      const estimatedTimeInMs =
+        this.durationOfLastStatus.inMs - ellapsedTimeInMs;
+      pollingTimeinMs = estimatedTimeInMs / 3;
+    }
     const interval = setInterval(async () => {
       if (!this.runningStatus) {
         clearInterval(interval);
@@ -167,9 +196,8 @@ export default class ValidatieService extends Service {
           showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
           this.canShowReportIsGenerated = false;
         }
-        return;
       }
       await this.setRunningStatus();
-    }, 1500);
+    }, pollingTimeinMs);
   });
 }
