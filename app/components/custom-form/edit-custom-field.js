@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { trackedFunction } from 'reactiveweb/function';
@@ -11,6 +12,9 @@ import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class CustomFormEditCustomField extends Component {
   @use(getFieldsForForm) getFieldsForForm;
+  @use(getDisplayTypes) getDisplayTypes;
+
+  @service store;
 
   @tracked selectedField;
 
@@ -18,9 +22,33 @@ export default class CustomFormEditCustomField extends Component {
     return this.getFieldsForForm?.value || [];
   }
 
+  get displayTypes() {
+    return this.getDisplayTypes?.value || [];
+  }
+
+  get selectedDisplayType() {
+    if (!this.selectedField?.displayType) {
+      return null;
+    }
+
+    return this.displayTypes.filter(
+      (d) => d.uri === this.selectedField.displayType
+    )?.[0];
+  }
+
   @action
   updateSelectedField(field) {
     this.selectedField = field;
+  }
+
+  @action
+  updateFieldName(event) {
+    this.selectedField.label = event.target?.value;
+  }
+
+  @action
+  updateSelectedDisplayType(displayType) {
+    this.selectedField.displayType = displayType.uri;
   }
 
   @action
@@ -51,5 +79,13 @@ function getFieldsForForm() {
     const result = await response.json();
 
     return result.fields;
+  });
+}
+
+function getDisplayTypes() {
+  return trackedFunction(async () => {
+    return await this.store.query('display-type', {
+      sort: 'label',
+    });
   });
 }

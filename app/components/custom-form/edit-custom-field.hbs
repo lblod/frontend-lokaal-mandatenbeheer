@@ -20,6 +20,7 @@
     <AuFormRow @alignment="default">
       <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
       <AuInput
+        @disabled={{not this.selectedField}}
         @width="block"
         @iconAlignment="left"
         value={{this.selectedField.label}}
@@ -27,8 +28,29 @@
         {{on "input" this.updateFieldName}}
       />
     </AuFormRow>
+    <AuFormRow class="au-form-row-full-width">
+      <AuLabel @required={{true}} for="display-type">Type</AuLabel>
+      <PowerSelect
+        @allowClear={{false}}
+        @disabled={{not this.selectedField}}
+        @renderInPlace={{false}}
+        @searchEnabled={{true}}
+        @loadingMessage="Aan het laden..."
+        @noMatchesMessage="Geen types gevonden"
+        @searchMessage="Typ om te zoeken"
+        @searchField="label"
+        @options={{this.displayTypes}}
+        @selected={{this.selectedDisplayType}}
+        @onChange={{this.updateSelectedDisplayType}}
+        id="display-type"
+        as |selected|
+      >
+        {{selected.label}}
+      </PowerSelect>
+    </AuFormRow>
     <AuFormRow>
       <AuToggleSwitch
+        @disabled={{not this.selectedField}}
         @checked={{this.selectedField.isRequired}}
         @onChange={{this.toggleIsRequired}}
       >Maak veld verplicht
@@ -48,6 +70,7 @@
     </AuFormRow>
     <AuFormRow>
       <AuToggleSwitch
+        @disabled={{not this.selectedField}}
         @checked={{this.selectedField.isShownInSummary}}
         @onChange={{this.toggleShowInSummary}}
       >Toon in samenvatting
