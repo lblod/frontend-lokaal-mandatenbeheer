@@ -1,0 +1,14 @@
+{{page-title "Editeer definitie"}}
+<div class="au-o-box">
+  <EditableForm
+    @instanceId={{this.model.form.id}}
+    @form={{this.model.form}}
+    @onCancel={{this.onCancel}}
+    @onSave={{this.onSave}}
+    @formInitialized={{fn (mut this.formInitialized) true}}
+    @customHistoryMessage={{true}}
+  />
+  {{#unless this.formInitialized}}
+    <AuLoader />
+  {{/unless}}
+</div>

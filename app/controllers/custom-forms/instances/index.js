@@ -20,7 +20,6 @@ export default class CustomFormsInstancesIndexController extends Controller {
   @tracked isDeleteModalOpen;
   @tracked isDeleting;
 
-  @tracked isEditFormDefinitionOpen;
   @tracked page = 0;
   @tracked sort = 'uri';
   @tracked filter = '';
@@ -58,16 +57,11 @@ export default class CustomFormsInstancesIndexController extends Controller {
   }
 
   @action
-  closeEditFormDefinitionModal() {
-    this.isEditFormDefinitionOpen = false;
-  }
-
-  @action
-  preventSave(ttl) {
-    if (!ttl) {
-      return;
-    }
-    throw new Error('Niet bewaren aub', ttl);
+  goToEditFormDefinition() {
+    this.router.transitionTo(
+      'custom-forms.instances.definition',
+      this.model.form.id
+    );
   }
 
   @action
