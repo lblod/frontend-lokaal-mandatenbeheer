@@ -22,6 +22,16 @@ export default class CustomFormEditCustomField extends Component {
   updateSelectedField(field) {
     this.selectedField = field;
   }
+
+  @action
+  toggleIsRequired() {
+    this.selectedField.isRequired = !this.selectedField.isRequired;
+  }
+
+  @action
+  toggleShowInSummary() {
+    this.selectedField.isShownInSummary = !this.selectedField.isShownInSummary;
+  }
 }
 
 function getFieldsForForm() {

@@ -11,8 +11,60 @@
     @selected={{this.selectedField}}
     @onChange={{this.updateSelectedField}}
     id="select-custom-form-field"
+    class="au-u-margin-bottom"
     as |selected|
   >
     {{selected.label}}
   </PowerSelect>
+  <form class="au-c-form au-o-flow">
+    <AuFormRow @alignment="default">
+      <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
+      <AuInput
+        @width="block"
+        @iconAlignment="left"
+        value={{this.selectedField.label}}
+        id="fieldName"
+        {{on "input" this.updateFieldName}}
+      />
+    </AuFormRow>
+    <AuFormRow>
+      <AuToggleSwitch
+        @checked={{this.selectedField.isRequired}}
+        @onChange={{this.toggleIsRequired}}
+      >Maak veld verplicht
+        <Shared::Tooltip
+          @showTooltip={{true}}
+          @alignment="top-left"
+          @tooltipText="Bij het aanmaken of aanpassen van items zal dit veld steeds ingevuld moeten worden."
+        >
+          <AuButton
+            @skin="naked"
+            @icon="circle-question"
+            @hideText={{true}}
+            @disabled={{true}}
+            class="au-u-padding-bottom-small au-u-padding-left-none"
+          />
+        </Shared::Tooltip></AuToggleSwitch>
+    </AuFormRow>
+    <AuFormRow>
+      <AuToggleSwitch
+        @checked={{this.selectedField.isShownInSummary}}
+        @onChange={{this.toggleShowInSummary}}
+      >Toon in samenvatting
+        <Shared::Tooltip
+          @showTooltip={{true}}
+          @alignment="top-left"
+          @tooltipText="Dit veld zal getoond worden in de samenvatting van een item, bijvoorbeeld bij het tonen van een lijst van items of bij een verwijzing naar een item."
+        >
+          <AuButton
+            @skin="naked"
+            @icon="circle-question"
+            @hideText={{true}}
+            @disabled={{true}}
+            class="au-u-padding-bottom-small au-u-padding-left-none"
+          />
+        </Shared::Tooltip>
+      </AuToggleSwitch>
+    </AuFormRow>
+  </form>
 </div>
