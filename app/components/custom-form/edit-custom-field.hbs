@@ -1,3 +1,18 @@
-<div class="edit-form-defintion--edit-panel-containter">
-
+<div class="au-o-box edit-form-defintion--edit-panel-containter">
+  <AuLabel>Selecteer een veld</AuLabel>
+  <PowerSelect
+    @allowClear={{false}}
+    @searchEnabled={{true}}
+    @loadingMessage="Aan het laden..."
+    @noMatchesMessage="Geen velden gevonden"
+    @searchMessage="Typ om te zoeken"
+    @searchField="label"
+    @options={{this.fields}}
+    @selected={{this.selectedField}}
+    @onChange={{this.updateSelectedField}}
+    id="select-custom-form-field"
+    as |selected|
+  >
+    {{selected.label}}
+  </PowerSelect>
 </div>
