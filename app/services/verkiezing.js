@@ -6,6 +6,12 @@ export default class VerkiezingService extends Service {
   @service store;
 
   async checkIfPersonIsElected(personId, bestuursorgaan) {
+    const verkiezing = await bestuursorgaan.verkiezing;
+
+    if (!verkiezing) {
+      // here it doesn't matter if the person is elected or not because no elections are present
+      return true;
+    }
     const matches = await this.store.query('persoon', {
       include: [
         'verkiezingsresultaten',
