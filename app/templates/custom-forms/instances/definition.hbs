@@ -1,14 +1,50 @@
 {{page-title "Editeer definitie"}}
-<div class="au-o-box">
-  <EditableForm
-    @instanceId={{this.model.form.id}}
-    @form={{this.model.form}}
-    @onCancel={{this.onCancel}}
-    @onSave={{this.onSave}}
-    @formInitialized={{fn (mut this.formInitialized) true}}
-    @customHistoryMessage={{true}}
-  />
-  {{#unless this.formInitialized}}
-    <AuLoader />
-  {{/unless}}
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom"
+  as |Group|
+>
+  <Group>
+    <AuHeading @skin="2">{{this.model.form.name}}</AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      <AuLink
+        @route="custom-forms.instances.index"
+        @model={{this.model.form.id}}
+        @skin="button-secondary"
+      >Annuleer</AuLink>
+      <AuLink
+        @route="custom-forms.instances.index"
+        @model={{this.model.form.id}}
+        @skin="button"
+      >Opslaan</AuLink>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom"
+  as |Group|
+>
+  <Group>
+    <p>{{this.model.form.description}}</p>
+  </Group>
+</AuToolbar>
+<div class="edit-form-defintion">
+  <div class="au-o-box edit-form-defintion--form">
+    <EditableForm
+      @instanceId={{this.model.form.id}}
+      @form={{this.model.form}}
+      @onCancel={{this.onCancel}}
+      @onSave={{this.onSave}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
+      @customHistoryMessage={{true}}
+    />
+    {{#unless this.formInitialized}}
+      <AuLoader />
+    {{/unless}}
+  </div>
+  <div class="edit-form-defintion--edit-panel">
+  </div>
 </div>
