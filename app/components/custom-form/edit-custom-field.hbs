@@ -40,7 +40,7 @@
         @searchMessage="Typ om te zoeken"
         @searchField="label"
         @options={{this.displayTypes}}
-        @selected={{this.selectedDisplayType}}
+        @selected={{this.displayType}}
         @onChange={{this.updateSelectedDisplayType}}
         id="display-type"
         as |selected|
@@ -48,6 +48,27 @@
         {{selected.label}}
       </PowerSelect>
     </AuFormRow>
+    {{#if this.displayType.isConceptSchemeSelector}}
+      <AuFormRow class="au-form-row-full-width">
+        <AuLabel @required={{true}} for="display-type">Codelijst</AuLabel>
+        <PowerSelect
+          @allowClear={{false}}
+          @renderInPlace={{false}}
+          @searchEnabled={{true}}
+          @loadingMessage="Aan het laden..."
+          @noMatchesMessage="Geen codelijsten gevonden"
+          @searchMessage="Typ om te zoeken"
+          @searchField="displayLabel"
+          @options={{this.conceptSchemes}}
+          @selected={{this.conceptScheme}}
+          @onChange={{this.updateSelectedConceptScheme}}
+          id="concept-scheme"
+          as |selected|
+        >
+          {{selected.displayLabel}}
+        </PowerSelect>
+      </AuFormRow>
+    {{/if}}
     <AuFormRow>
       <AuToggleSwitch
         @disabled={{not this.selectedField}}
