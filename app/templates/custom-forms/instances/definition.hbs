@@ -5,15 +5,7 @@
   as |Group|
 >
   <Group>
-    <AuHeading @skin="2">{{this.model.form.name}}
-      <AuButton
-        @skin="link-secondary"
-        @icon="pencil"
-        @hideText={{true}}
-        {{on "click" (fn (mut this.isEditFormModalOpen) true)}}
-      >
-        Pas aan
-      </AuButton></AuHeading>
+    <AuHeading @skin="2">{{this.model.form.name}}</AuHeading>
   </Group>
   <Group>
     <AuButtonGroup>
@@ -21,7 +13,12 @@
         @route="custom-forms.instances.index"
         @model={{this.model.form.id}}
         @skin="button-secondary"
-      >Terug naar formulieren</AuLink>
+      >Annuleer</AuLink>
+      <AuLink
+        @route="custom-forms.instances.index"
+        @model={{this.model.form.id}}
+        @skin="button"
+      >Opslaan</AuLink>
     </AuButtonGroup>
   </Group>
 </AuToolbar>
@@ -39,6 +36,8 @@
     <EditableForm
       @instanceId={{this.model.form.id}}
       @form={{this.model.form}}
+      @onCancel={{this.onCancel}}
+      @onSave={{this.onSave}}
       @formInitialized={{fn (mut this.formInitialized) true}}
       @customHistoryMessage={{true}}
     />
