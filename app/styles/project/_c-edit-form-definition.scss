@@ -1,9 +1,10 @@
 .edit-form-defintion {
   background-color: var(--au-blue-100);
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 2.5fr 1fr;
   height: 100%;
   width: 100%;
+  padding: 0 3rem;
 }
 
 .edit-form-defintion--form {
@@ -16,6 +17,13 @@
 
 .edit-form-defintion--edit-panel {
   padding: 2rem 1rem;
+}
+.edit-form-defintion--edit-panel-containter {
+  border: 2px solid var(--au-gray-200);
+  border-radius: 5px;
+  background-color: var(--au-white);
+  height: 100%;
+  width: 100%;
 }
 
 .edit-form-defintion .semantic-forms-instance .au-c-toolbar {
