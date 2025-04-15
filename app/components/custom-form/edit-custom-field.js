@@ -16,10 +16,14 @@ export default class CustomFormEditCustomField extends Component {
   @use(getConceptSchemes) getConceptSchemes;
 
   @service store;
+  @service customForms;
 
   @tracked selectedField;
+  @tracked label;
   @tracked displayType;
   @tracked conceptScheme;
+  @tracked isRequired;
+  @tracked isShownInSummary;
 
   get fields() {
     return this.getFieldsForForm?.value || [];
@@ -35,9 +39,26 @@ export default class CustomFormEditCustomField extends Component {
     return this.getConceptSchemes?.value || [];
   }
 
+  get isChanged() {
+    if (!this.selectedField) {
+      return false;
+    }
+
+    return (
+      this.selectedField.label !== this.label ||
+      this.selectedField.displayType !== this.displayType?.uri ||
+      this.selectedField.conceptScheme !== this.conceptScheme?.uri ||
+      this.selectedField.isRequired !== this.isRequired ||
+      this.selectedField.isShownInSummary !== this.isShownInSummary
+    );
+  }
+
   @action
   updateSelectedField(field) {
     this.selectedField = field;
+    this.label = field.label;
+    this.isRequired = field.isRequired;
+    this.isShownInSummary = field.isShownInSummary;
     this.displayType = this.displayTypes.filter(
       (t) => t.uri === field.displayType
     )?.[0];
@@ -48,7 +69,7 @@ export default class CustomFormEditCustomField extends Component {
 
   @action
   updateFieldName(event) {
-    this.selectedField.label = event.target?.value;
+    this.label = event.target?.value;
   }
 
   @action
@@ -63,12 +84,32 @@ export default class CustomFormEditCustomField extends Component {
 
   @action
   toggleIsRequired() {
-    this.selectedField.isRequired = !this.selectedField.isRequired;
+    this.isRequired = !this.isRequired;
   }
 
   @action
   toggleShowInSummary() {
-    this.selectedField.isShownInSummary = !this.selectedField.isShownInSummary;
+    this.isShownInSummary = !this.isShownInSummary;
+  }
+
+  @action
+  async saveFieldChanges() {
+    await this.customForms.updateCustomFormField(
+      this.args.formDefinitionId,
+      this.selectedField.uri,
+      {
+        label: this.label,
+        displayTypeUri: this.displayType.uri,
+        conceptSchemeUri: this.conceptScheme?.uri,
+        isRequired: this.isRequired,
+        isShownInSummary: this.isShownInSummary,
+      }
+    );
+  }
+
+  @action
+  resetFieldValues() {
+    this.updateSelectedField(this.selectedField);
   }
 }
 

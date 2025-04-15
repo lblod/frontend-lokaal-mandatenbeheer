@@ -72,7 +72,7 @@
     <AuFormRow>
       <AuToggleSwitch
         @disabled={{not this.selectedField}}
-        @checked={{this.selectedField.isRequired}}
+        @checked={{this.isRequired}}
         @onChange={{this.toggleIsRequired}}
       >Maak veld verplicht
         <Shared::Tooltip
@@ -92,7 +92,7 @@
     <AuFormRow>
       <AuToggleSwitch
         @disabled={{not this.selectedField}}
-        @checked={{this.selectedField.isShownInSummary}}
+        @checked={{this.isShownInSummary}}
         @onChange={{this.toggleShowInSummary}}
       >Toon in samenvatting
         <Shared::Tooltip
@@ -109,6 +109,23 @@
           />
         </Shared::Tooltip>
       </AuToggleSwitch>
+    </AuFormRow>
+    <AuFormRow>
+      <AuButtonGroup>
+        <AuButton
+          @disabled={{not this.isChanged}}
+          {{on "click" this.saveFieldChanges}}
+        >
+          Pas aan
+        </AuButton>
+        <AuButton
+          @skin="secondary"
+          @disabled={{or (not this.selectedField) (not this.isChanged)}}
+          {{on "click" this.resetFieldValues}}
+        >
+          Reset
+        </AuButton>
+      </AuButtonGroup>
     </AuFormRow>
   </form>
 </div>

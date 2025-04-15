@@ -1,5 +1,7 @@
 import Service from '@ember/service';
 
+import { service } from '@ember/service';
+
 import { timeout } from 'ember-concurrency';
 
 import {
@@ -8,8 +10,11 @@ import {
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class CustomFormsService extends Service {
+  @service toaster;
+
   async createEmptyDefinition(formName, description) {
     const response = await fetch(`${API.FORM_CONTENT_SERVICE}/definition/new`, {
       method: 'POST',
@@ -59,5 +64,34 @@ export default class CustomFormsService extends Service {
     }
     await form.destroyRecord();
     await timeout(RESOURCE_CACHE_TIMEOUT);
+  }
+
+  async updateCustomFormField(
+    formDefinitionId,
+    fieldUri,
+    { label, displayTypeUri, conceptSchemeUri, isRequired, isShownInSummary }
+  ) {
+    try {
+      await fetch(`/form-content/${formDefinitionId}/fields`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          field: fieldUri,
+          displayType: displayTypeUri,
+          name: label,
+          isRequired: !!isRequired,
+          showInSummary: !!isShownInSummary,
+          conceptScheme: conceptSchemeUri,
+        }),
+      });
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het opslaan van het veld.'
+      );
+      return;
+    }
   }
 }
