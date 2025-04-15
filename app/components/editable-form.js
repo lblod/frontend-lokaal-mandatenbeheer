@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
@@ -14,6 +15,7 @@ export default class EditableFormComponent extends Component {
   @service features;
 
   @tracked showEditModal;
+  @tracked clickedField;
 
   constructor() {
     super(...arguments);
@@ -33,6 +35,14 @@ export default class EditableFormComponent extends Component {
     this.showEditModal = false;
   }
 
+  @action
+  setClickedField(field) {
+    this.clickedField = field;
+    if (this.args.onFieldSelected) {
+      this.args.onFieldSelected(field.uri.value);
+    }
+  }
+
   get editableFormsEnabled() {
     return this.features.isEnabled('editable-forms');
   }
@@ -41,7 +51,9 @@ export default class EditableFormComponent extends Component {
   get formContext() {
     return {
       onFormUpdate: () => this.updateForm(),
+      onFieldClicked: (field) => this.setClickedField(field),
       formDefinition: this.currentForm,
+      clickedField: this.clickedField,
       isReadOnly: this.args.isReadOnly,
     };
   }

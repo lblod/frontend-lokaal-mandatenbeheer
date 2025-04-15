@@ -40,6 +40,7 @@
         @instanceId={{this.model.form.id}}
         @form={{this.model.form}}
         @customHistoryMessage={{true}}
+        @onFieldSelected={{this.setSelectedField}}
       />
     {{/if}}
   </div>
@@ -48,6 +49,7 @@
       @formDefinitionId={{this.model.form.id}}
       @onFieldUpdated={{this.updateFormContent}}
       @isLoading={{this.isRefreshForm}}
+      @selectedFieldUri={{this.selectedFieldUri}}
     />
   </div>
 </div>

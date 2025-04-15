@@ -3,11 +3,15 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+import { consume } from 'ember-provide-consume-context';
 import { timeout } from 'ember-concurrency';
 
 export default class CustomFormsInstancesDefinitionController extends Controller {
+  @consume('form-context') formContext;
+
   @tracked isEditFormModalOpen;
   @tracked isRefreshForm;
+  @tracked selectedFieldUri;
 
   @action
   updateFormName(event) {
@@ -36,6 +40,12 @@ export default class CustomFormsInstancesDefinitionController extends Controller
 
   get saveButtonDisabled() {
     return this.isOverMaxCharacters || this.formNameErrorMessage;
+  }
+
+  @action
+  setSelectedField(fielduri) {
+    console.log({ fielduri });
+    this.selectedFieldUri = fielduri;
   }
 
   @action

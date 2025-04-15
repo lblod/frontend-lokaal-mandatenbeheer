@@ -29,3 +29,10 @@
 .edit-form-defintion .semantic-forms-instance .au-c-toolbar {
   display: none;
 }
+
+.custom-form-field:hover,
+.custom-form-field--selected {
+  border-radius: 2px;
+  background-color: var(--au-blue-200);
+  border: 2px solid var(--au-blue-300);
+}

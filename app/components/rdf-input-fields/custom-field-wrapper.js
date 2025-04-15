@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 import { consume } from 'ember-provide-consume-context';
@@ -23,6 +24,17 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
       this.formContext.isReadOnly &&
       ![ADRES_CUSTOM_DISPLAY_TYPE].includes(this.args.field.displayType)
     );
+  }
+
+  get isFieldSelected() {
+    return (
+      this.formContext.clickedField?.uri.value === this.args.field.uri.value
+    );
+  }
+
+  @action
+  passOnClickedField() {
+    this.formContext.onFieldClicked(this.args.field);
   }
 
   moveField = task(async (direction) => {

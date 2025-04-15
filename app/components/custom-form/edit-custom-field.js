@@ -12,13 +12,14 @@ import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class CustomFormEditCustomField extends Component {
   @use(getFieldsForForm) getFieldsForForm;
+  @use(setSelectedField) setSelectedField;
   @use(getDisplayTypes) getDisplayTypes;
   @use(getConceptSchemes) getConceptSchemes;
 
   @service store;
   @service customForms;
 
-  @tracked selectedField;
+  // @tracked selectedField;
   @tracked label;
   @tracked displayType;
   @tracked conceptScheme;
@@ -39,6 +40,10 @@ export default class CustomFormEditCustomField extends Component {
     return this.getConceptSchemes?.value || [];
   }
 
+  get selectedField() {
+    return this.setSelectedField?.value;
+  }
+
   get isChanged() {
     if (!this.selectedField) {
       return false;
@@ -55,7 +60,6 @@ export default class CustomFormEditCustomField extends Component {
 
   @action
   updateSelectedField(field) {
-    this.selectedField = field;
     this.label = field?.label;
     this.isRequired = !!field?.isRequired;
     this.isShownInSummary = !!field?.isShownInSummary;
@@ -107,7 +111,6 @@ export default class CustomFormEditCustomField extends Component {
     );
 
     if (this.args.onFieldUpdated) {
-      this.selectedField = null;
       this.resetFieldValues();
       this.getFieldsForForm.retry();
       this.args.onFieldUpdated();
@@ -136,10 +139,6 @@ function getFieldsForForm() {
 
     const result = await response.json();
 
-    if (result.fields[0]) {
-      this.updateSelectedField(result.fields[0]);
-    }
-
     return result.fields;
   });
 }
@@ -163,5 +162,17 @@ function getConceptSchemes() {
           a.displayLabel.localeCompare(b.displayLabel)
         );
       });
+  });
+}
+
+function setSelectedField() {
+  return trackedFunction(async () => {
+    const field = this.fields.filter(
+      (f) => f.uri === this.args.selectedFieldUri
+    )[0];
+    console.log(this.fields);
+    console.log(`selectedField`, field);
+    this.updateSelectedField(field);
+    return field;
   });
 }

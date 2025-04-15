@@ -1,5 +1,5 @@
 <div class="au-o-box edit-form-defintion--edit-panel-containter">
-  <AuLabel>Selecteer een veld</AuLabel>
+  {{!-- <AuLabel>Selecteer een veld</AuLabel>
   <PowerSelect
     @allowClear={{false}}
     @searchEnabled={{true}}
@@ -15,7 +15,7 @@
     as |selected|
   >
     {{selected.label}}
-  </PowerSelect>
+  </PowerSelect> --}}
   <form class="au-c-form au-o-flow">
     <AuFormRow @alignment="default">
       <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
@@ -23,7 +23,7 @@
         @disabled={{not this.selectedField}}
         @width="block"
         @iconAlignment="left"
-        value={{this.selectedField.label}}
+        value={{this.label}}
         id="fieldName"
         {{on "input" this.updateFieldName}}
       />
