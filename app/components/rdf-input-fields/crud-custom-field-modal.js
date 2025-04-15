@@ -26,6 +26,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @service store;
   @service toaster;
   @service formReplacements;
+  @service customForms;
 
   @tracked isRemovingField;
   @tracked isFieldRequired;
@@ -110,32 +111,18 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   updateField = task(async () => {
-    try {
-      await fetch(
-        `/form-content/${this.formContext.formDefinition.id}/fields`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': JSON_API_TYPE,
-          },
-          body: JSON.stringify({
-            field: this.args.field.uri.value,
-            displayType: this.displayType.uri,
-            name: this.fieldName,
-            isRequired: !!this.isFieldRequired,
-            showInSummary: !!this.isShownInSummary,
-            conceptScheme: this.conceptScheme?.uri,
-          }),
-        }
-      );
-      this.formContext.onFormUpdate();
-    } catch (error) {
-      showErrorToast(
-        this.toaster,
-        'Er ging iets mis bij het opslaan van het veld.'
-      );
-      return;
-    }
+    await this.customForms.updateCustomFormField(
+      this.formContext.formDefinition.id,
+      this.args.field.uri.value,
+      {
+        label: this.fieldName,
+        displayTypeUri: this.displayType.uri,
+        conceptSchemeUri: this.conceptScheme?.uri,
+        isRequired: this.isRequired,
+        isShownInSummary: this.isShownInSummary,
+      }
+    );
+    this.formContext.onFormUpdate();
   });
 
   createField = task(async () => {
