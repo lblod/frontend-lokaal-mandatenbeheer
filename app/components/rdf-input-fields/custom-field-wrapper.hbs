@@ -1,11 +1,5 @@
 {{#unless this.removed}}
-  <div
-    class={{if
-      this.isFieldSelected
-      "custom-form-field--selected"
-      "custom-form-field"
-    }}
-  >
+  <div class={{this.styleClassForMainContainer}}>
     {{! template-lint-disable no-invalid-interactive }}
     <div
       class="au-u-flex au-u-flex--row au-u-padding-small"

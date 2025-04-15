@@ -32,8 +32,25 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
     );
   }
 
+  get styleClassForMainContainer() {
+    if (!this.formContext.canSelectField) {
+      return '';
+    }
+
+    const classes = ['custom-form-field'];
+
+    if (this.isFieldSelected) {
+      classes.push('custom-form-field--selected');
+    }
+
+    return classes.join(' ');
+  }
+
   @action
   passOnClickedField() {
+    if (!this.formContext.canSelectField) {
+      return;
+    }
     this.formContext.onFieldClicked(this.args.field);
   }
 

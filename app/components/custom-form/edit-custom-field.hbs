@@ -1,21 +1,4 @@
 <div class="au-o-box edit-form-defintion--edit-panel-containter">
-  {{!-- <AuLabel>Selecteer een veld</AuLabel>
-  <PowerSelect
-    @allowClear={{false}}
-    @searchEnabled={{true}}
-    @loadingMessage="Aan het laden..."
-    @noMatchesMessage="Geen velden gevonden"
-    @searchMessage="Typ om te zoeken"
-    @searchField="label"
-    @options={{this.fields}}
-    @selected={{this.selectedField}}
-    @onChange={{this.updateSelectedField}}
-    id="select-custom-form-field"
-    class="au-u-margin-bottom"
-    as |selected|
-  >
-    {{selected.label}}
-  </PowerSelect> --}}
   <form class="au-c-form au-o-flow">
     <AuFormRow @alignment="default">
       <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
