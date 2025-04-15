@@ -33,20 +33,22 @@
 </AuToolbar>
 <div class="edit-form-defintion">
   <div class="au-o-box edit-form-defintion--form">
-    <EditableForm
-      @instanceId={{this.model.form.id}}
-      @form={{this.model.form}}
-      @onCancel={{this.onCancel}}
-      @onSave={{this.onSave}}
-      @formInitialized={{fn (mut this.formInitialized) true}}
-      @customHistoryMessage={{true}}
-    />
-    {{#unless this.formInitialized}}
+    {{#if this.isRefreshForm}}
       <AuLoader @hideMessage={{true}} />
-    {{/unless}}
+    {{else}}
+      <EditableForm
+        @instanceId={{this.model.form.id}}
+        @form={{this.model.form}}
+        @customHistoryMessage={{true}}
+      />
+    {{/if}}
   </div>
   <div class="edit-form-defintion--edit-panel">
-    <CustomForm::EditCustomField @formDefinitionId={{this.model.form.id}} />
+    <CustomForm::EditCustomField
+      @formDefinitionId={{this.model.form.id}}
+      @onFieldUpdated={{this.updateFormContent}}
+      @isLoading={{this.isRefreshForm}}
+    />
   </div>
 </div>
 

@@ -3,8 +3,11 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+import { timeout } from 'ember-concurrency';
+
 export default class CustomFormsInstancesDefinitionController extends Controller {
   @tracked isEditFormModalOpen;
+  @tracked isRefreshForm;
 
   @action
   updateFormName(event) {
@@ -39,6 +42,13 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   async saveFormDetails() {
     await this.model.form.save();
     this.isEditFormModalOpen = false;
+  }
+
+  @action
+  async updateFormContent() {
+    this.isRefreshForm = true;
+    await timeout(100);
+    this.isRefreshForm = false;
   }
 
   @action

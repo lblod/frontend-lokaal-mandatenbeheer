@@ -56,14 +56,14 @@ export default class CustomFormEditCustomField extends Component {
   @action
   updateSelectedField(field) {
     this.selectedField = field;
-    this.label = field.label;
-    this.isRequired = field.isRequired;
-    this.isShownInSummary = field.isShownInSummary;
+    this.label = field?.label;
+    this.isRequired = !!field?.isRequired;
+    this.isShownInSummary = !!field?.isShownInSummary;
     this.displayType = this.displayTypes.filter(
-      (t) => t.uri === field.displayType
+      (t) => t.uri === field?.displayType
     )?.[0];
     this.conceptScheme = this.conceptSchemes.filter(
-      (cs) => cs.uri === field.conceptScheme
+      (cs) => cs.uri === field?.conceptScheme
     )?.[0];
   }
 
@@ -105,6 +105,13 @@ export default class CustomFormEditCustomField extends Component {
         isShownInSummary: this.isShownInSummary,
       }
     );
+
+    if (this.args.onFieldUpdated) {
+      this.selectedField = null;
+      this.resetFieldValues();
+      this.getFieldsForForm.retry();
+      this.args.onFieldUpdated();
+    }
   }
 
   @action
@@ -128,6 +135,10 @@ function getFieldsForForm() {
     }
 
     const result = await response.json();
+
+    if (result.fields[0]) {
+      this.updateSelectedField(result.fields[0]);
+    }
 
     return result.fields;
   });
