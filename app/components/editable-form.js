@@ -26,6 +26,9 @@ export default class EditableFormComponent extends Component {
   constructor() {
     super(...arguments);
     this.updateForm();
+    if (this.args.selectedField) {
+      this.clickedField = this.args.selectedField;
+    }
   }
 
   async updateForm() {
