@@ -31,11 +31,11 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   }
 
   get isOverMaxCharacters() {
-    return this.model.form.description?.length > 250;
+    return this.model.form.description?.length > 500;
   }
 
   get descriptionCharacters() {
-    return `Karakters: ${this.model.form.description?.length || 0}/250`;
+    return `Karakters: ${this.model.form.description?.length || 0}/500`;
   }
 
   get saveButtonDisabled() {

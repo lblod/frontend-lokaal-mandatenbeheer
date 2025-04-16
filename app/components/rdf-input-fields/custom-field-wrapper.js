@@ -76,6 +76,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
 
     if (result.ok) {
       this.formContext.onFormUpdate();
+      this.formContext.onFieldClicked(null);
     }
   });
 
