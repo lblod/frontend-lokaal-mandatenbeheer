@@ -43,9 +43,8 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   }
 
   @action
-  setSelectedField(fielduri) {
-    console.log({ fielduri });
-    this.selectedFieldUri = fielduri;
+  setSelectedField(fieldUri) {
+    this.selectedFieldUri = fieldUri;
   }
 
   @action
@@ -55,10 +54,11 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   }
 
   @action
-  async updateFormContent() {
+  async updateFormContent(fieldUri) {
     this.isRefreshForm = true;
     await timeout(100);
     this.isRefreshForm = false;
+    this.setSelectedField(fieldUri);
   }
 
   @action

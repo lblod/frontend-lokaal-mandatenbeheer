@@ -7,7 +7,7 @@
     >
       <div class="flex-grow">
         <div class="au-u-flex au-u-flex--row">
-          {{#unless this.formContext.isReadOnly}}
+          {{#unless this.formState.isReadOnly}}
             <AuLabel @required={{this.isRequired}}>{{this.title}}</AuLabel>
             <AuButton
               @skin="link-secondary"
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-      {{#unless this.formContext.isReadOnly}}
+      {{#unless this.formState.isReadOnly}}
         <div class="au-u-flex au-u-flex--column au-u-flex--vertical-center">
           <AuButton
             @skin="naked"

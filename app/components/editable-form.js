@@ -37,9 +37,6 @@ export default class EditableFormComponent extends Component {
 
   @action
   setClickedField(field) {
-    if (!this.formContext.canSelectField) {
-      return;
-    }
     this.clickedField = field;
     if (this.args.onFieldSelected) {
       this.args.onFieldSelected(field.uri.value);
@@ -50,15 +47,21 @@ export default class EditableFormComponent extends Component {
     return this.features.isEnabled('editable-forms');
   }
 
+  @provide('form-state')
+  get formState() {
+    return {
+      canSelectField: !!this.args.canSelectField,
+      clickedField: this.clickedField,
+      isReadOnly: this.args.isReadOnly,
+    };
+  }
+
   @provide('form-context')
   get formContext() {
     return {
       onFormUpdate: () => this.updateForm(),
       onFieldClicked: (field) => this.setClickedField(field),
-      canSelectField: !!this.args.canSelectField,
       formDefinition: this.currentForm,
-      clickedField: this.clickedField,
-      isReadOnly: this.args.isReadOnly,
     };
   }
 }

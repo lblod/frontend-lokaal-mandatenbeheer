@@ -113,7 +113,7 @@ export default class CustomFormEditCustomField extends Component {
     if (this.args.onFieldUpdated) {
       this.resetFieldValues();
       this.getFieldsForForm.retry();
-      this.args.onFieldUpdated();
+      this.args.onFieldUpdated(this.selectedField.uri);
     }
   }
 
@@ -170,8 +170,6 @@ function setSelectedField() {
     const field = this.fields.filter(
       (f) => f.uri === this.args.selectedFieldUri
     )[0];
-    console.log(this.fields);
-    console.log(`selectedField`, field);
     this.updateSelectedField(field);
     return field;
   });
