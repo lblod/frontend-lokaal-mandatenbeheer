@@ -103,4 +103,25 @@ export default class CustomFormsService extends Service {
       return;
     }
   }
+
+  async removeFormField(fieldUri, formUri) {
+    try {
+      await fetch(`/form-content/fields`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          fieldUri,
+          formUri,
+        }),
+      });
+    } catch (error) {
+      showErrorToast(
+        this.toaster,
+        'Er ging iets mis bij het verwijderen van het veld.'
+      );
+      return;
+    }
+  }
 }

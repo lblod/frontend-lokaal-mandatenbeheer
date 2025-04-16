@@ -197,16 +197,10 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       return;
     }
     this.isRemovingField = true;
-    await fetch(`/form-content/fields`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': JSON_API_TYPE,
-      },
-      body: JSON.stringify({
-        fieldUri: this.args.field.uri.value,
-        formUri: this.args.form.uri,
-      }),
-    });
+    await this.customForms.removeFormField(
+      this.args.field.uri.value,
+      this.args.form.uri
+    );
     this.formContext.onFormUpdate();
     this.isRemovingField = false;
   }
