@@ -68,14 +68,17 @@ export default class EditableFormComponent extends Component {
 
   @provide('form-state')
   get formState() {
+    const canEditFieldsInlineInForm =
+      this.args.editFieldsInForm == undefined
+        ? true
+        : !!this.args.editFieldsInForm;
     return {
-      editFieldsInForm:
-        this.args.editFieldsInForm == undefined
-          ? true
-          : !!this.args.editFieldsInForm,
+      editFieldsInForm: canEditFieldsInlineInForm,
       canSelectField: !!this.args.canSelectField,
       clickedField: this.clickedField,
       isReadOnly: this.args.isReadOnly,
+      isFieldEditPencilShown:
+        canEditFieldsInlineInForm && !this.args.toReceiveUserInput,
     };
   }
 

@@ -9,7 +9,7 @@
         <div class="au-u-flex au-u-flex--row">
           {{#unless this.formState.isReadOnly}}
             <AuLabel @required={{this.isRequired}}>{{this.title}}</AuLabel>
-            {{#if this.formState.editFieldsInForm}}
+            {{#if this.formState.isFieldEditPencilShown}}
               <AuButton
                 @skin="link-secondary"
                 @icon="pencil"
