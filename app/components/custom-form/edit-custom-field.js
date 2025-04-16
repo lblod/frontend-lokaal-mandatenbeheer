@@ -113,7 +113,7 @@ export default class CustomFormEditCustomField extends Component {
     if (this.args.onFieldUpdated) {
       this.resetFieldValues();
       this.getFieldsForForm.retry();
-      this.args.onFieldUpdated(this.selectedField.uri);
+      this.args.onFieldUpdated(this.args.selectedFieldUri);
     }
   }
 
