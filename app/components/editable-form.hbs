@@ -12,7 +12,7 @@
     @saveTitle={{@saveTitle}}
   >
     {{#if this.editableFormsEnabled}}
-      {{#unless @isReadOnly}}
+      {{#if this.formState.isAddFieldShownInForm}}
         <AuButton
           @skin="secondary"
           @width="block"
@@ -22,7 +22,7 @@
         >
           Voeg een veld toe
         </AuButton>
-      {{/unless}}
+      {{/if}}
 
       {{yield}}
 

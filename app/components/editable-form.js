@@ -79,6 +79,8 @@ export default class EditableFormComponent extends Component {
       isReadOnly: this.args.isReadOnly,
       isFieldEditPencilShown:
         canEditFieldsInlineInForm && !this.args.toReceiveUserInput,
+      isAddFieldShownInForm:
+        !this.args.toReceiveUserInput && !this.args.isReadOnly,
     };
   }
 
