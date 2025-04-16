@@ -28,7 +28,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
   }
 
   get isFieldSelected() {
-    return this.formState.clickedField?.uri.value === this.args.field.uri.value;
+    return this.formState.clickedField?.uri === this.args.field.uri.value;
   }
 
   get styleClassForMainContainer() {
@@ -50,7 +50,12 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
     if (!this.formState.canSelectField) {
       return;
     }
-    this.formContext.onFieldClicked(this.args.field);
+
+    let clickedField = null;
+    if (this.formState.clickedField?.uri !== this.args.field.uri.value) {
+      clickedField = this.args.field;
+    }
+    this.formContext.onFieldClicked(clickedField);
   }
 
   moveField = task(async (direction) => {

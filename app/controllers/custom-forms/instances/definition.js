@@ -55,7 +55,6 @@ export default class CustomFormsInstancesDefinitionController extends Controller
 
   @action
   async updateFormContent(field) {
-    console.log('updatedformcontent', field);
     this.isRefreshForm = true;
     await timeout(100);
     this.setSelectedField(field);

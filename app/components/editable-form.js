@@ -48,15 +48,16 @@ export default class EditableFormComponent extends Component {
   }
 
   @action
-  async setClickedField(clickedField) {
-    this.clickedField = clickedField;
-    if (this.args.onFieldSelected) {
+  async setClickedField(fieldModel) {
+    this.clickedField = fieldModel;
+    if (this.args.onFieldSelected && fieldModel) {
       await this.getFieldsForForm.retry();
       const field = this.fields.filter(
-        (f) => f.uri === clickedField.uri?.value
+        (f) => f.uri === fieldModel.uri?.value
       )[0];
-      this.args.onFieldSelected(field);
+      this.clickedField = field;
     }
+    this.args.onFieldSelected(this.clickedField);
   }
 
   get editableFormsEnabled() {
@@ -76,7 +77,7 @@ export default class EditableFormComponent extends Component {
   get formContext() {
     return {
       onFormUpdate: () => this.updateForm(),
-      onFieldClicked: (field) => this.setClickedField(field),
+      onFieldClicked: (fieldModel) => this.setClickedField(fieldModel),
       formDefinition: this.currentForm,
     };
   }
@@ -95,13 +96,12 @@ function getFieldsForForm() {
     if (!response.ok) {
       showErrorToast(
         this.toaster,
-        `Er liep iets mis bij het ophalen van de velden voor formulier met id: ${this.args.formDefinitionId}`,
+        `Er liep iets mis bij het ophalen van de velden voor formulier met id: ${this.currentForm?.id}`,
         'Formulier'
       );
     }
 
     const result = await response.json();
-    console.log(`fields`, result.fields);
     return result.fields;
   });
 }

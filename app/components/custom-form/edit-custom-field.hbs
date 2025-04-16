@@ -1,107 +1,112 @@
 <div class="au-o-box edit-form-defintion--edit-panel-containter">
-  <form class="au-c-form au-o-flow">
-    <AuFormRow @alignment="default">
-      <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
-      <AuInput
-        @disabled={{not this.selectedField}}
-        @width="block"
-        @iconAlignment="left"
-        value={{this.label}}
-        id="fieldName"
-        {{on "input" this.updateFieldName}}
-      />
-    </AuFormRow>
-    <AuFormRow class="au-form-row-full-width">
-      <AuLabel @required={{true}} for="display-type">Type</AuLabel>
-      <PowerSelect
-        @allowClear={{false}}
-        @disabled={{not this.selectedField}}
-        @renderInPlace={{false}}
-        @searchEnabled={{true}}
-        @loadingMessage="Aan het laden..."
-        @noMatchesMessage="Geen types gevonden"
-        @searchMessage="Typ om te zoeken"
-        @searchField="label"
-        @options={{this.displayTypes}}
-        @selected={{this.displayType}}
-        @onChange={{this.updateSelectedDisplayType}}
-        id="display-type"
-        as |selected|
-      >
-        {{selected.label}}
-      </PowerSelect>
-    </AuFormRow>
-    {{#if this.displayType.isConceptSchemeSelector}}
+  {{#unless this.selectedField}}
+    <p>Selecteer een veld om aan te passen</p>
+  {{/unless}}
+  {{#if this.selectedField}}
+    <form class="au-c-form au-o-flow">
+      <AuFormRow @alignment="default">
+        <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
+        <AuInput
+          @disabled={{not this.selectedField}}
+          @width="block"
+          @iconAlignment="left"
+          value={{this.label}}
+          id="fieldName"
+          {{on "input" this.updateFieldName}}
+        />
+      </AuFormRow>
       <AuFormRow class="au-form-row-full-width">
-        <AuLabel @required={{true}} for="display-type">Codelijst</AuLabel>
+        <AuLabel @required={{true}} for="display-type">Type</AuLabel>
         <PowerSelect
           @allowClear={{false}}
+          @disabled={{not this.selectedField}}
           @renderInPlace={{false}}
           @searchEnabled={{true}}
           @loadingMessage="Aan het laden..."
-          @noMatchesMessage="Geen codelijsten gevonden"
+          @noMatchesMessage="Geen types gevonden"
           @searchMessage="Typ om te zoeken"
-          @searchField="displayLabel"
-          @options={{this.conceptSchemes}}
-          @selected={{this.conceptScheme}}
-          @onChange={{this.updateSelectedConceptScheme}}
-          id="concept-scheme"
+          @searchField="label"
+          @options={{this.displayTypes}}
+          @selected={{this.displayType}}
+          @onChange={{this.updateSelectedDisplayType}}
+          id="display-type"
           as |selected|
         >
-          {{selected.displayLabel}}
+          {{selected.label}}
         </PowerSelect>
       </AuFormRow>
-    {{/if}}
-    <AuFormRow>
-      <AuToggleSwitch
-        @disabled={{not this.selectedField}}
-        @checked={{this.isRequired}}
-        @onChange={{this.toggleIsRequired}}
-      >Maak veld verplicht
-        <Shared::Tooltip
-          @showTooltip={{true}}
-          @alignment="top-left"
-          @tooltipText="Bij het aanmaken of aanpassen van items zal dit veld steeds ingevuld moeten worden."
-        >
+      {{#if this.displayType.isConceptSchemeSelector}}
+        <AuFormRow class="au-form-row-full-width">
+          <AuLabel @required={{true}} for="display-type">Codelijst</AuLabel>
+          <PowerSelect
+            @allowClear={{false}}
+            @renderInPlace={{false}}
+            @searchEnabled={{true}}
+            @loadingMessage="Aan het laden..."
+            @noMatchesMessage="Geen codelijsten gevonden"
+            @searchMessage="Typ om te zoeken"
+            @searchField="displayLabel"
+            @options={{this.conceptSchemes}}
+            @selected={{this.conceptScheme}}
+            @onChange={{this.updateSelectedConceptScheme}}
+            id="concept-scheme"
+            as |selected|
+          >
+            {{selected.displayLabel}}
+          </PowerSelect>
+        </AuFormRow>
+      {{/if}}
+      <AuFormRow>
+        <AuToggleSwitch
+          @disabled={{not this.selectedField}}
+          @checked={{this.isRequired}}
+          @onChange={{this.toggleIsRequired}}
+        >Maak veld verplicht
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @alignment="top-left"
+            @tooltipText="Bij het aanmaken of aanpassen van items zal dit veld steeds ingevuld moeten worden."
+          >
+            <AuButton
+              @skin="naked"
+              @icon="circle-question"
+              @hideText={{true}}
+              @disabled={{true}}
+              class="au-u-padding-bottom-small au-u-padding-left-none"
+            />
+          </Shared::Tooltip></AuToggleSwitch>
+      </AuFormRow>
+      <AuFormRow>
+        <AuToggleSwitch
+          @disabled={{not this.selectedField}}
+          @checked={{this.isShownInSummary}}
+          @onChange={{this.toggleShowInSummary}}
+        >Toon in samenvatting
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @alignment="top-left"
+            @tooltipText="Dit veld zal getoond worden in de samenvatting van een item, bijvoorbeeld bij het tonen van een lijst van items of bij een verwijzing naar een item."
+          >
+            <AuButton
+              @skin="naked"
+              @icon="circle-question"
+              @hideText={{true}}
+              @disabled={{true}}
+              class="au-u-padding-bottom-small au-u-padding-left-none"
+            />
+          </Shared::Tooltip>
+        </AuToggleSwitch>
+      </AuFormRow>
+      <AuFormRow>
+        <AuButtonGroup>
           <AuButton
-            @skin="naked"
-            @icon="circle-question"
-            @hideText={{true}}
-            @disabled={{true}}
-            class="au-u-padding-bottom-small au-u-padding-left-none"
-          />
-        </Shared::Tooltip></AuToggleSwitch>
-    </AuFormRow>
-    <AuFormRow>
-      <AuToggleSwitch
-        @disabled={{not this.selectedField}}
-        @checked={{this.isShownInSummary}}
-        @onChange={{this.toggleShowInSummary}}
-      >Toon in samenvatting
-        <Shared::Tooltip
-          @showTooltip={{true}}
-          @alignment="top-left"
-          @tooltipText="Dit veld zal getoond worden in de samenvatting van een item, bijvoorbeeld bij het tonen van een lijst van items of bij een verwijzing naar een item."
-        >
-          <AuButton
-            @skin="naked"
-            @icon="circle-question"
-            @hideText={{true}}
-            @disabled={{true}}
-            class="au-u-padding-bottom-small au-u-padding-left-none"
-          />
-        </Shared::Tooltip>
-      </AuToggleSwitch>
-    </AuFormRow>
-    <AuFormRow>
-      <AuButtonGroup>
-        <AuButton
-          @disabled={{not this.isChanged}}
-          {{on "click" this.saveFieldChanges}}
-        >
-          Pas aan
-        </AuButton>
-      </AuButtonGroup>
-    </AuFormRow>
-  </form>
+            @disabled={{not this.isChanged}}
+            {{on "click" this.saveFieldChanges}}
+          >
+            Pas aan
+          </AuButton>
+        </AuButtonGroup>
+      </AuFormRow>
+    </form>
+  {{/if}}
 </div>
