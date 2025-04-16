@@ -101,13 +101,6 @@
         >
           Pas aan
         </AuButton>
-        <AuButton
-          @skin="secondary"
-          @disabled={{or (not this.selectedField) (not this.isChanged)}}
-          {{on "click" this.resetFieldValues}}
-        >
-          Reset
-        </AuButton>
       </AuButtonGroup>
     </AuFormRow>
   </form>

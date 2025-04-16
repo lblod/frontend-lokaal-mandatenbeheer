@@ -1,13 +1,19 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
+import { tracked, cached } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { provide } from 'ember-provide-consume-context';
+import { trackedFunction } from 'reactiveweb/function';
+import { use } from 'ember-resources';
+
+import { API } from 'frontend-lmb/utils/constants';
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class EditableFormComponent extends Component {
-  baseFormId;
+  @use(getFieldsForForm) getFieldsForForm;
+
   @tracked currentForm;
   @tracked loading = true;
   @service formReplacements;
@@ -19,13 +25,14 @@ export default class EditableFormComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.baseFormId = this.args.form.id;
     this.updateForm();
   }
 
   async updateForm() {
     this.loading = true;
-    const currentFormId = this.formReplacements.getReplacement(this.baseFormId);
+    const currentFormId = this.formReplacements.getReplacement(
+      this.args.form.id
+    );
     const form = await this.semanticFormRepository.getFormDefinition(
       currentFormId,
       true
@@ -35,11 +42,20 @@ export default class EditableFormComponent extends Component {
     this.showEditModal = false;
   }
 
+  @cached
+  get fields() {
+    return this.getFieldsForForm?.value || [];
+  }
+
   @action
-  setClickedField(field) {
-    this.clickedField = field;
+  async setClickedField(clickedField) {
+    this.clickedField = clickedField;
     if (this.args.onFieldSelected) {
-      this.args.onFieldSelected(field.uri.value);
+      await this.getFieldsForForm.retry();
+      const field = this.fields.filter(
+        (f) => f.uri === clickedField.uri?.value
+      )[0];
+      this.args.onFieldSelected(field);
     }
   }
 
@@ -64,4 +80,28 @@ export default class EditableFormComponent extends Component {
       formDefinition: this.currentForm,
     };
   }
+}
+
+function getFieldsForForm() {
+  return trackedFunction(async () => {
+    if (this.args.onFieldsInForm || !this.currentForm) {
+      return [];
+    }
+
+    const response = await fetch(
+      `${API.FORM_CONTENT_SERVICE}/custom-form/${this.currentForm.id}/fields`
+    );
+
+    if (!response.ok) {
+      showErrorToast(
+        this.toaster,
+        `Er liep iets mis bij het ophalen van de velden voor formulier met id: ${this.args.formDefinitionId}`,
+        'Formulier'
+      );
+    }
+
+    const result = await response.json();
+    console.log(`fields`, result.fields);
+    return result.fields;
+  });
 }

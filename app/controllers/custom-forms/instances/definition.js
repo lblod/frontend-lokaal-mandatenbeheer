@@ -11,7 +11,7 @@ export default class CustomFormsInstancesDefinitionController extends Controller
 
   @tracked isEditFormModalOpen;
   @tracked isRefreshForm;
-  @tracked selectedFieldUri;
+  @tracked selectedField;
 
   @action
   updateFormName(event) {
@@ -43,8 +43,8 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   }
 
   @action
-  setSelectedField(fieldUri) {
-    this.selectedFieldUri = fieldUri;
+  setSelectedField(field) {
+    this.selectedField = field;
   }
 
   @action
@@ -54,10 +54,11 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   }
 
   @action
-  async updateFormContent(fieldUri) {
+  async updateFormContent(field) {
+    console.log('updatedformcontent', field);
     this.isRefreshForm = true;
     await timeout(100);
-    this.setSelectedField(fieldUri);
+    this.setSelectedField(field);
     this.isRefreshForm = false;
   }
 

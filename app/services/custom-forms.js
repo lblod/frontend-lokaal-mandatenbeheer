@@ -86,6 +86,15 @@ export default class CustomFormsService extends Service {
           conceptScheme: conceptSchemeUri,
         }),
       });
+
+      return {
+        uri: fieldUri,
+        displayType: displayTypeUri,
+        label,
+        isRequired: !!isRequired,
+        showInSummary: !!isShownInSummary,
+        conceptScheme: conceptSchemeUri,
+      };
     } catch (error) {
       showErrorToast(
         this.toaster,

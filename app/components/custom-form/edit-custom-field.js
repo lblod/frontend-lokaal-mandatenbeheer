@@ -7,11 +7,7 @@ import { tracked, cached } from '@glimmer/tracking';
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
 
-import { API } from 'frontend-lmb/utils/constants';
-import { showErrorToast } from 'frontend-lmb/utils/toasts';
-
 export default class CustomFormEditCustomField extends Component {
-  @use(getFieldsForForm) getFieldsForForm;
   @use(setSelectedField) setSelectedField;
   @use(getDisplayTypes) getDisplayTypes;
   @use(getConceptSchemes) getConceptSchemes;
@@ -98,7 +94,7 @@ export default class CustomFormEditCustomField extends Component {
 
   @action
   async saveFieldChanges() {
-    await this.customForms.updateCustomFormField(
+    const updatedField = await this.customForms.updateCustomFormField(
       this.args.formDefinitionId,
       this.selectedField.uri,
       {
@@ -111,36 +107,9 @@ export default class CustomFormEditCustomField extends Component {
     );
 
     if (this.args.onFieldUpdated) {
-      this.resetFieldValues();
-      this.getFieldsForForm.retry();
-      this.args.onFieldUpdated(this.args.selectedFieldUri);
+      this.args.onFieldUpdated(updatedField);
     }
   }
-
-  @action
-  resetFieldValues() {
-    this.updateSelectedField(this.selectedField);
-  }
-}
-
-function getFieldsForForm() {
-  return trackedFunction(async () => {
-    const response = await fetch(
-      `${API.FORM_CONTENT_SERVICE}/custom-form/${this.args.formDefinitionId}/fields`
-    );
-
-    if (!response.ok) {
-      showErrorToast(
-        this.toaster,
-        `Er liep iets mis bij het ophalen van de velden voor formulier met id: ${this.args.formDefinitionId}`,
-        'Formulier'
-      );
-    }
-
-    const result = await response.json();
-
-    return result.fields;
-  });
 }
 
 function getDisplayTypes() {
@@ -167,10 +136,8 @@ function getConceptSchemes() {
 
 function setSelectedField() {
   return trackedFunction(async () => {
-    const field = this.fields.filter(
-      (f) => f.uri === this.args.selectedFieldUri
-    )[0];
-    this.updateSelectedField(field);
-    return field;
+    this.updateSelectedField(this.args.selectedField);
+
+    return this.args.selectedField;
   });
 }
