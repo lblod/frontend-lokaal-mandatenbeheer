@@ -36,7 +36,7 @@
           </div>
         </div>
       </div>
-      {{#unless this.formState.isReadOnly}}
+      {{#if this.formState.canMoveFieldsInForm}}
         <div class="au-u-flex au-u-flex--column au-u-flex--vertical-center">
           <AuButton
             @skin="naked"
@@ -55,7 +55,7 @@
             Naar onder
           </AuButton>
         </div>
-      {{/unless}}
+      {{/if}}
     </div>
   </div>
 {{/unless}}

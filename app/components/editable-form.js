@@ -81,6 +81,8 @@ export default class EditableFormComponent extends Component {
         canEditFieldsInlineInForm && !this.args.toReceiveUserInput,
       isAddFieldShownInForm:
         !this.args.toReceiveUserInput && !this.args.isReadOnly,
+      canMoveFieldsInForm:
+        !this.args.toReceiveUserInput && !this.args.isReadOnly,
     };
   }
 
