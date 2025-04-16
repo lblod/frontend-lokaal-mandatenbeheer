@@ -67,6 +67,10 @@ export default class EditableFormComponent extends Component {
   @provide('form-state')
   get formState() {
     return {
+      editFieldsInForm:
+        this.args.editFieldsInForm == undefined
+          ? true
+          : !!this.args.editFieldsInForm,
       canSelectField: !!this.args.canSelectField,
       clickedField: this.clickedField,
       isReadOnly: this.args.isReadOnly,
