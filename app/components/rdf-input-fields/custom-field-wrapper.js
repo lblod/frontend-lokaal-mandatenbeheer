@@ -22,17 +22,17 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
 
   get isFieldReadOnly() {
     return (
-      this.formState.isReadOnly &&
+      this.formState?.isReadOnly &&
       ![ADRES_CUSTOM_DISPLAY_TYPE].includes(this.args.field.displayType)
     );
   }
 
   get isFieldSelected() {
-    return this.formState.clickedField?.uri === this.args.field.uri.value;
+    return this.formState?.clickedField?.uri === this.args.field.uri.value;
   }
 
   get styleClassForMainContainer() {
-    if (!this.formState.canSelectField) {
+    if (!this.formState?.canSelectField) {
       return '';
     }
 
@@ -47,7 +47,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
 
   @action
   passOnClickedField() {
-    if (!this.formState.canSelectField) {
+    if (!this.formState?.canSelectField) {
       return;
     }
 

@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
-import { tracked, cached } from '@glimmer/tracking';
+import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { provide } from 'ember-provide-consume-context';
@@ -45,7 +45,6 @@ export default class EditableFormComponent extends Component {
     this.showEditModal = false;
   }
 
-  @cached
   get fields() {
     return this.getFieldsForForm?.value || [];
   }
