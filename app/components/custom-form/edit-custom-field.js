@@ -15,12 +15,15 @@ export default class CustomFormEditCustomField extends Component {
   @service store;
   @service customForms;
 
-  // @tracked selectedField;
   @tracked label;
   @tracked displayType;
   @tracked conceptScheme;
   @tracked isRequired;
   @tracked isShownInSummary;
+
+  @tracked isSaving;
+  @tracked isDeleteWarningShown;
+  @tracked isDeleting;
 
   get fields() {
     return this.getFieldsForForm?.value || [];
@@ -73,6 +76,10 @@ export default class CustomFormEditCustomField extends Component {
     this.conceptScheme = this.conceptSchemes.filter(
       (cs) => cs.uri === field?.conceptScheme
     )?.[0];
+
+    this.isSaving = false;
+    this.isDeleteWarningShown = false;
+    this.isDeleting = false;
   }
 
   @action
@@ -102,6 +109,7 @@ export default class CustomFormEditCustomField extends Component {
 
   @action
   async saveFieldChanges() {
+    this.isSaving = true;
     const updatedField = await this.customForms.updateCustomFormField(
       this.args.formDefinitionId,
       this.selectedField.uri,
@@ -113,9 +121,24 @@ export default class CustomFormEditCustomField extends Component {
         isShownInSummary: this.isShownInSummary,
       }
     );
+    this.isSaving = false;
 
     if (this.args.onFieldUpdated) {
       this.args.onFieldUpdated(updatedField);
+    }
+  }
+
+  @action
+  async removeFormField() {
+    this.isDeleting = true;
+    await this.customForms.removeFormField(
+      this.selectedField.uri,
+      this.args.formDefinitionId
+    );
+    this.isDeleteWarningShown = false;
+    this.isDeleting = false;
+    if (this.args.onFieldUpdated) {
+      this.args.onFieldUpdated(null);
     }
   }
 }
