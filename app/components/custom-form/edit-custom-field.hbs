@@ -5,8 +5,13 @@
   {{#if this.selectedField}}
     <form class="au-c-form au-o-flow">
       <AuFormRow @alignment="default">
-        <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
+        <AuLabel
+          @required={{true}}
+          @error={{not this.isValidLabel}}
+          for="fieldName"
+        >Naam</AuLabel>
         <AuInput
+          @error={{not this.isValidLabel}}
           @disabled={{not this.selectedField}}
           @width="block"
           @iconAlignment="left"
@@ -14,6 +19,9 @@
           id="fieldName"
           {{on "input" this.updateFieldName}}
         />
+        {{#unless this.isValidLabel}}
+          <AuHelpText @error={{true}}>Label is verplicht</AuHelpText>
+        {{/unless}}
       </AuFormRow>
       <AuFormRow class="au-form-row-full-width">
         <AuLabel @required={{true}} for="display-type">Type</AuLabel>
@@ -64,7 +72,7 @@
         >Maak veld verplicht
           <Shared::Tooltip
             @showTooltip={{true}}
-            @alignment="top-left"
+            @alignment="center"
             @tooltipText="Bij het aanmaken of aanpassen van items zal dit veld steeds ingevuld moeten worden."
           >
             <AuButton
@@ -84,7 +92,7 @@
         >Toon in samenvatting
           <Shared::Tooltip
             @showTooltip={{true}}
-            @alignment="top-left"
+            @alignment="center"
             @tooltipText="Dit veld zal getoond worden in de samenvatting van een item, bijvoorbeeld bij het tonen van een lijst van items of bij een verwijzing naar een item."
           >
             <AuButton
@@ -100,7 +108,7 @@
       <AuFormRow>
         <AuButtonGroup>
           <AuButton
-            @disabled={{not this.isChanged}}
+            @disabled={{not this.canSaveChanges}}
             {{on "click" this.saveFieldChanges}}
           >
             Pas aan

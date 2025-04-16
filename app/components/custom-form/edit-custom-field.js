@@ -40,6 +40,14 @@ export default class CustomFormEditCustomField extends Component {
     return this.setSelectedField?.value;
   }
 
+  get isValidLabel() {
+    return this.label?.trim() !== '';
+  }
+
+  get canSaveChanges() {
+    return this.isChanged && this.isValidLabel && this.displayType;
+  }
+
   get isChanged() {
     if (!this.selectedField) {
       return false;
