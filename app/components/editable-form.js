@@ -92,6 +92,7 @@ export default class EditableFormComponent extends Component {
       onFormUpdate: () => this.updateForm(),
       onFieldClicked: (fieldModel) => this.setClickedField(fieldModel),
       formDefinition: this.currentForm,
+      fieldsInForm: this.fields,
     };
   }
 }
@@ -115,6 +116,10 @@ function getFieldsForForm() {
     }
 
     const result = await response.json();
+
+    if (this.args.onFieldsSet) {
+      this.args.onFieldsSet(result.fields);
+    }
     return result.fields;
   });
 }

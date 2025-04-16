@@ -62,6 +62,15 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   }
 
   @action
+  updateSelectedFieldData(fields) {
+    if (this.selectedField) {
+      this.selectedField = fields.filter(
+        (f) => f.uri === this.selectedField.uri
+      )[0];
+    }
+  }
+
+  @action
   cancelUpdateFormDetails() {
     this.model.form.rollbackAttributes();
     this.isEditFormModalOpen = false;
