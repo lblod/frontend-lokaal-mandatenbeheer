@@ -119,6 +119,7 @@ export default class CustomFormEditCustomField extends Component {
         conceptSchemeUri: this.conceptScheme?.uri,
         isRequired: this.isRequired,
         isShownInSummary: this.isShownInSummary,
+        formUri: this.args.selectedField.formUri,
       }
     );
     this.isSaving = false;
@@ -133,7 +134,7 @@ export default class CustomFormEditCustomField extends Component {
     this.isDeleting = true;
     await this.customForms.removeFormField(
       this.selectedField.uri,
-      this.args.formDefinitionId
+      this.selectedField.formUri
     );
     this.isDeleteWarningShown = false;
     this.isDeleting = false;

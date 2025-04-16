@@ -69,7 +69,14 @@ export default class CustomFormsService extends Service {
   async updateCustomFormField(
     formDefinitionId,
     fieldUri,
-    { label, displayTypeUri, conceptSchemeUri, isRequired, isShownInSummary }
+    {
+      label,
+      displayTypeUri,
+      conceptSchemeUri,
+      isRequired,
+      isShownInSummary,
+      formUri,
+    }
   ) {
     try {
       await fetch(`/form-content/${formDefinitionId}/fields`, {
@@ -94,6 +101,7 @@ export default class CustomFormsService extends Service {
         isRequired: !!isRequired,
         showInSummary: !!isShownInSummary,
         conceptScheme: conceptSchemeUri,
+        formUri,
       };
     } catch (error) {
       showErrorToast(
