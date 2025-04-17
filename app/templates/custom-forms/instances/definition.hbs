@@ -44,17 +44,8 @@
         @canSelectField={{true}}
         @onFieldSelected={{this.setSelectedField}}
         @selectedField={{this.selectedField}}
-        @onFieldsSet={{this.updateSelectedFieldData}}
       />
-    {{/if}}
-  </div>
-  <div class="edit-form-defintion--edit-panel">
-    <CustomForm::EditCustomField
-      @formDefinitionId={{this.model.form.id}}
-      @onFieldUpdated={{this.updateFormContent}}
-      @isLoading={{this.isRefreshForm}}
-      @selectedField={{this.selectedField}}
-    />
+    </div>
   </div>
 </div>
 
