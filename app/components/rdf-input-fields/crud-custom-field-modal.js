@@ -16,9 +16,12 @@ import {
   TEXT_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
 import { Literal, NamedNode } from 'rdflib';
+import { trackedFunction } from 'reactiveweb/function';
+import { use } from 'ember-resources';
 
 export default class RdfInputFieldCrudCustomFieldModalComponent extends Component {
   @consume('form-context') formContext;
+  @use(getLibraryFieldOptions) getLibraryFieldOptions;
 
   @service store;
   @service toaster;
@@ -238,7 +241,9 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         page: { size: 9999 }, // Not ideal
       })
       .then((entries) => {
-        return entries.sortBy('displayLabel');
+        return [...entries].sort((a, b) =>
+          a.displayLabel.localeCompare(b.displayLabel)
+        );
       });
   }
 
@@ -289,26 +294,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   get libraryFieldOptions() {
-    const forkingStore = this.forkingStore;
-    const alreadyUsedLibraryEntries = forkingStore
-      .match(null, PROV('wasDerivedFrom'), null, SOURCE_GRAPH)
-      .map((triple) => triple.object.value);
-
-    return this.store
-      .findAll('library-entry', { include: 'display-type' })
-      .then((entries) => {
-        return [
-          this.customFieldEntry,
-          ...entries
-            .sort((a, b) => a.id - b.id)
-            .reverse()
-            .filter((entry) => {
-              return (
-                entry.uri && alreadyUsedLibraryEntries.indexOf(entry.uri) < 0
-              );
-            }),
-        ];
-      });
+    return this.getLibraryFieldOptions?.value || [];
   }
 
   get originalIsShownInSummary() {
@@ -381,4 +367,20 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
     return 'Pas een veld aan';
   }
+}
+
+function getLibraryFieldOptions() {
+  return trackedFunction(async () => {
+    const allOptions = await this.store.query('library-entry', {
+      sort: 'name',
+      include: 'display-type',
+    });
+    const usedOptions = this.forkingStore
+      .match(null, PROV('wasDerivedFrom'), null, SOURCE_GRAPH)
+      .map((triple) => triple.object.value);
+    const unused = allOptions.filter((entry) => {
+      return entry.uri && usedOptions.indexOf(entry.uri) < 0;
+    });
+    return [this.customFieldEntry, ...unused];
+  });
 }
