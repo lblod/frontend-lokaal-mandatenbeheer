@@ -132,6 +132,7 @@ export default class ValidatieService extends Service {
     this.lastRunnningStatus = (
       await this.store.query('report-status', {
         'filter[:has:finished-at]': true,
+        'filter[:has-no:is-flagged-as-crashed]': true,
         sort: '-finished-at',
         page: {
           size: 1,
@@ -143,6 +144,7 @@ export default class ValidatieService extends Service {
   async setRunningStatus() {
     const statuses = await this.store.query('report-status', {
       'filter[:has-no:finished-at]': true,
+      'filter[:has-no:is-flagged-as-crashed]': true,
       page: {
         size: 1,
       },
