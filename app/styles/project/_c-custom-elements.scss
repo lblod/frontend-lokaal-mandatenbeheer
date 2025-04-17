@@ -1,0 +1,24 @@
+.rotate-element-360-degree {
+  animation: rotation 2s infinite linear;
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(360deg);
+  }
+}
+
+.report-refresh-button .au-c-pill {
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.refresh-button-next-to-pill,
+.refresh-button-next-to-pill.is-disabled,
+.refresh-button-next-to-pill.is-disabled:hover,
+.refresh-button-next-to-pill:hover {
+  background-color: var(--au-gray-100);
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border: 0.1rem solid var(--vl-grey-50);
+  border-left: 0px;
+}

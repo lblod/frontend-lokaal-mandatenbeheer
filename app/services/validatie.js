@@ -3,23 +3,36 @@ import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
+import { task } from 'ember-concurrency';
+
 import { typeToEmberData } from 'frontend-lmb/utils/type-to-ember-data';
+import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class ValidatieService extends Service {
-  @tracked latestValidationReport;
   @service features;
   @service store;
+  @service toaster;
+
+  @tracked latestValidationReport;
+  @tracked runningStatus;
+  @tracked lastRunnningStatus;
+  @tracked canShowReportIsGenerated;
 
   async setup() {
     if (this.features.isEnabled('shacl-report')) {
-      this.latestValidationReport = (
-        await this.store.query('report', {
-          sort: '-created',
-          page: { size: 1 },
-          include: 'validationresults',
-        })
-      )[0];
+      await this.setLastRunningStatus();
+      await this.setLatestValidationReport();
     }
+  }
+
+  async setLatestValidationReport() {
+    this.latestValidationReport = (
+      await this.store.query('report', {
+        sort: '-created',
+        page: { size: 1 },
+        include: 'validationresults',
+      })
+    )[0];
   }
 
   async getResultsByInstance(instance) {
@@ -114,4 +127,49 @@ export default class ValidatieService extends Service {
       modelId: instance?.id,
     };
   }
+
+  async setLastRunningStatus() {
+    this.lastRunnningStatus = (
+      await this.store.query('report-status', {
+        'filter[:has:finished-at]': true,
+        'filter[:has-no:is-flagged-as-crashed]': true,
+        sort: '-finished-at',
+        page: {
+          size: 1,
+        },
+      })
+    )[0];
+  }
+
+  async setRunningStatus() {
+    const statuses = await this.store.query('report-status', {
+      'filter[:has-no:finished-at]': true,
+      'filter[:has-no:is-flagged-as-crashed]': true,
+      page: {
+        size: 1,
+      },
+    });
+    this.runningStatus = statuses[0] || null;
+  }
+
+  polling = task({ drop: true }, async () => {
+    await this.setRunningStatus();
+
+    if (!this.runningStatus) {
+      return;
+    }
+    this.canShowReportIsGenerated = true;
+    const interval = setInterval(async () => {
+      if (!this.runningStatus) {
+        clearInterval(interval);
+        await this.setLastRunningStatus();
+        await this.setLatestValidationReport();
+        if (this.canShowReportIsGenerated) {
+          showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
+          this.canShowReportIsGenerated = false;
+        }
+      }
+      await this.setRunningStatus();
+    }, 10000);
+  });
 }

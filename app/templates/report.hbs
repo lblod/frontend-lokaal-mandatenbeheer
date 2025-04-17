@@ -2,15 +2,24 @@
 
 <AuMainContainer as |main|>
   <main.content>
+    <AuToolbar @size="large" as |Group|>
+      <Group>
+        <AuHeading @skin="2">
+          Validatierapport
+        </AuHeading>
+      </Group>
+      <Group>
+        <RefreshValidationsButton />
+      </Group>
+    </AuToolbar>
     <AuBodyContainer id="content">
       <div class="au-c-body-container au-c-body-container--scroll au-u-padding">
-
-        <AuHeading @skin="2">
-          Validatierapport -
-          {{moment-format this.model.report.created "DD-MM-YYYY HH:mm:ss"}}
-        </AuHeading>
-
-        {{#each @model.resultsByTargetClass as |instanceGroup|}}
+        {{#if this.isEmptyResult}}
+          <AuAlert @skin="success" @icon="check">
+            De data binnen deze bestuurseenheid is conform de validatieregels.
+          </AuAlert>
+        {{/if}}
+        {{#each this.resultsByTargetClass as |instanceGroup|}}
           <div class="au-u-box au-u-margin-top no-pagination">
             <AuHeading @skin="3" class="au-u-margin-bottom">
               {{instanceGroup.class.label}}
