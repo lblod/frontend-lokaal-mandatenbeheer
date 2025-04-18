@@ -1,23 +1,43 @@
 .edit-form-defintion {
   background-color: var(--au-blue-100);
-  display: grid;
-  grid-template-columns: 3fr 1fr;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
   height: 100%;
-  width: 100%;
+  padding: 2rem;
+}
+
+@media (max-width: 750px) {
+  .edit-form-defintion {
+    flex-direction: column-reverse;
+  }
 }
 
 .edit-form-defintion--form {
-  width: 70%;
+  min-width: 70vw;
   border: 2px solid var(--au-gray-200);
   border-radius: 5px;
   background-color: var(--au-white);
-  margin: 2rem auto;
 }
 
 .edit-form-defintion--edit-panel {
-  padding: 2rem 1rem;
+  width: 100%;
+}
+
+.edit-form-defintion--edit-panel-containter {
+  border: 2px solid var(--au-gray-200);
+  border-radius: 5px;
+  background-color: var(--au-white);
+  width: 100%;
 }
 
 .edit-form-defintion .semantic-forms-instance .au-c-toolbar {
   display: none;
+}
+
+.custom-form-field:hover,
+.custom-form-field--selected {
+  border-radius: 2px;
+  background-color: var(--au-blue-200);
+  outline: 2px solid var(--au-blue-300);
 }

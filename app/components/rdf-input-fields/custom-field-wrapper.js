@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 import { consume } from 'ember-provide-consume-context';
@@ -11,6 +12,7 @@ import { ADRES_CUSTOM_DISPLAY_TYPE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class RdfInputFieldsCustomFieldWrapperComponent extends Component {
   @consume('form-context') formContext;
+  @consume('form-state') formState;
 
   @tracked showModal;
 
@@ -20,9 +22,40 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
 
   get isFieldReadOnly() {
     return (
-      this.formContext.isReadOnly &&
+      this.formState?.isReadOnly &&
       ![ADRES_CUSTOM_DISPLAY_TYPE].includes(this.args.field.displayType)
     );
+  }
+
+  get isFieldSelected() {
+    return this.formState?.clickedField?.uri === this.args.field.uri.value;
+  }
+
+  get styleClassForMainContainer() {
+    if (!this.formState?.canSelectField) {
+      return '';
+    }
+
+    const classes = ['custom-form-field'];
+
+    if (this.isFieldSelected) {
+      classes.push('custom-form-field--selected');
+    }
+
+    return classes.join(' ');
+  }
+
+  @action
+  passOnClickedField() {
+    if (!this.formState?.canSelectField) {
+      return;
+    }
+
+    let clickedField = null;
+    if (this.formState.clickedField?.uri !== this.args.field.uri.value) {
+      clickedField = this.args.field;
+    }
+    this.formContext.onFieldClicked(clickedField);
   }
 
   moveField = task(async (direction) => {
@@ -43,6 +76,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
 
     if (result.ok) {
       this.formContext.onFormUpdate();
+      this.formContext.onFieldClicked(null);
     }
   });
 

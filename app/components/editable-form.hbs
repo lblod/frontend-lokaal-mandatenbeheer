@@ -12,17 +12,17 @@
     @saveTitle={{@saveTitle}}
   >
     {{#if this.editableFormsEnabled}}
-      {{#unless @isReadOnly}}
+      {{#if this.formState.isAddFieldShownInForm}}
         <AuButton
           @skin="secondary"
           @width="block"
           @icon="plus"
           {{on "click" (fn (mut this.showEditModal) true)}}
-          class="au-u-padding-left-none au-u-margin-bottom au-u-margin-top"
+          class="au-u-margin-bottom au-u-margin-top"
         >
           Voeg een veld toe
         </AuButton>
-      {{/unless}}
+      {{/if}}
 
       {{yield}}
 

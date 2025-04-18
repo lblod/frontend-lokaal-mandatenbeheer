@@ -3,8 +3,15 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+import { consume } from 'ember-provide-consume-context';
+import { timeout } from 'ember-concurrency';
+
 export default class CustomFormsInstancesDefinitionController extends Controller {
+  @consume('form-context') formContext;
+
   @tracked isEditFormModalOpen;
+  @tracked isRefreshForm;
+  @tracked selectedField;
 
   @action
   updateFormName(event) {
@@ -24,11 +31,11 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   }
 
   get isOverMaxCharacters() {
-    return this.model.form.description?.length > 250;
+    return this.model.form.description?.length > 500;
   }
 
   get descriptionCharacters() {
-    return `Karakters: ${this.model.form.description?.length || 0}/250`;
+    return `Karakters: ${this.model.form.description?.length || 0}/500`;
   }
 
   get saveButtonDisabled() {
@@ -36,9 +43,31 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   }
 
   @action
+  setSelectedField(field) {
+    this.selectedField = field;
+  }
+
+  @action
   async saveFormDetails() {
     await this.model.form.save();
     this.isEditFormModalOpen = false;
+  }
+
+  @action
+  async updateFormContent(field) {
+    this.isRefreshForm = true;
+    await timeout(100);
+    this.setSelectedField(field);
+    this.isRefreshForm = false;
+  }
+
+  @action
+  updateSelectedFieldData(fields) {
+    if (this.selectedField) {
+      this.selectedField = fields.filter(
+        (f) => f.uri === this.selectedField.uri
+      )[0];
+    }
   }
 
   @action

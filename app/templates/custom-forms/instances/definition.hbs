@@ -1,52 +1,65 @@
 {{page-title "Bewerk formulier definitie"}}
-<AuToolbar
-  @size="large"
-  class="au-u-padding-bottom-none au-u-margin-bottom"
-  as |Group|
->
-  <Group>
-    <AuHeading @skin="2">{{this.model.form.name}}
-      <AuButton
-        @skin="link-secondary"
-        @icon="pencil"
-        @hideText={{true}}
-        {{on "click" (fn (mut this.isEditFormModalOpen) true)}}
-      >
-        Pas aan
-      </AuButton></AuHeading>
-  </Group>
-  <Group>
-    <AuButtonGroup>
-      <AuLink
-        @route="custom-forms.instances.index"
-        @model={{this.model.form.id}}
-        @skin="button-secondary"
-      >Terug naar formulieren</AuLink>
-    </AuButtonGroup>
-  </Group>
-</AuToolbar>
-<AuToolbar
-  @size="large"
-  class="au-u-padding-bottom-none au-u-margin-bottom"
-  as |Group|
->
-  <Group>
-    <p>{{this.model.form.description}}</p>
-  </Group>
-</AuToolbar>
-<div class="edit-form-defintion">
-  <div class="au-o-box edit-form-defintion--form">
-    <EditableForm
-      @instanceId={{this.model.form.id}}
-      @form={{this.model.form}}
-      @formInitialized={{fn (mut this.formInitialized) true}}
-      @customHistoryMessage={{true}}
-    />
-    {{#unless this.formInitialized}}
-      <AuLoader />
-    {{/unless}}
-  </div>
-  <div class="edit-form-defintion--edit-panel">
+<div class="au-c-body-container au-c-body-container--scroll">
+  <AuToolbar
+    @size="large"
+    class="au-u-padding-bottom-none au-u-margin-bottom"
+    as |Group|
+  >
+    <Group>
+      <AuHeading @skin="2">{{this.model.form.name}}
+        <AuButton
+          @skin="link-secondary"
+          @icon="pencil"
+          @hideText={{true}}
+          {{on "click" (fn (mut this.isEditFormModalOpen) true)}}
+        >
+          Pas aan
+        </AuButton></AuHeading>
+    </Group>
+    <Group>
+      <AuButtonGroup>
+        <AuLink
+          @route="custom-forms.instances.index"
+          @model={{this.model.form.id}}
+          @skin="button-secondary"
+        >Terug naar formulieren</AuLink>
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
+  <AuToolbar
+    @size="large"
+    class="au-u-padding-bottom-none au-u-margin-bottom"
+    as |Group|
+  >
+    <Group>
+      <p>{{this.model.form.description}}</p>
+    </Group>
+  </AuToolbar>
+  <div class="edit-form-defintion">
+    <div class="au-o-box edit-form-defintion--form">
+      {{#if this.isRefreshForm}}
+        <AuLoader @hideMessage={{true}} />
+      {{else}}
+        <EditableForm
+          @instanceId={{this.model.form.id}}
+          @form={{this.model.form}}
+          @customHistoryMessage={{true}}
+          @editFieldsInForm={{false}}
+          @canSelectField={{true}}
+          @onFieldSelected={{this.setSelectedField}}
+          @selectedField={{this.selectedField}}
+          @onFieldsSet={{this.updateSelectedFieldData}}
+        />
+      {{/if}}
+    </div>
+    <div class="edit-form-defintion--edit-panel">
+      <CustomForm::EditCustomField
+        @formDefinitionId={{this.model.form.id}}
+        @onFieldUpdated={{this.updateFormContent}}
+        @isLoading={{this.isRefreshForm}}
+        @selectedField={{this.selectedField}}
+      />
+    </div>
   </div>
 </div>
 
