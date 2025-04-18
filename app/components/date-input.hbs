@@ -37,4 +37,9 @@
   {{#if this.warningMessage}}
     <AuHelpText @warning={{true}}>{{this.warningMessage}}</AuHelpText>
   {{/if}}
+  {{#if this.warningMessages}}
+    {{#each this.warningMessages as |message|}}
+      <AuHelpText @warning={{true}}>{{message}}</AuHelpText>
+    {{/each}}
+  {{/if}}
 </div>
