@@ -5,12 +5,42 @@ import { guidFor } from '@ember/object/internals';
 
 import { restartableTask, timeout } from 'ember-concurrency';
 import moment from 'moment';
+import { trackedFunction } from 'reactiveweb/function';
+import { use } from 'ember-resources';
 
 import { INPUT_DEBOUNCE, NULL_DATE } from 'frontend-lmb/utils/constants';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 
+function getWarningMessages() {
+  return trackedFunction(async () => {
+    const warnings = [];
+    if (!isValidDate(this.args.value)) {
+      warnings.push('Dit is geen geldige datum');
+    }
+
+    if (!isDateInRange(this.args.value, this.minDate, this.maxDate)) {
+      const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
+      const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
+      if (this.minDate && this.maxDate) {
+        warnings.push(
+          `Kies een datum tussen ${formattedMinDate} en ${formattedMaxDate}.`
+        );
+      }
+
+      if (this.minDate && !this.maxDate) {
+        warnings.push(`Kies een datum vanaf ${formattedMinDate}`);
+      }
+
+      if (!this.minDate && this.maxDate) {
+        warnings.push(`Kies een datum tot ${formattedMaxDate}`);
+      }
+    }
+    return warnings;
+  });
+}
 export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
+  @use(getWarningMessages) getWarningMessages;
 
   @tracked dateInputString;
   @tracked warningMessage;
@@ -30,6 +60,18 @@ export default class DateInputComponent extends Component {
       }
       this.processDate(date);
     }
+  }
+
+  get warningMessages() {
+    return this.getWarningMessages?.value || [];
+  }
+
+  get minDate() {
+    return isValidDate(this.args.from) ? this.args.from : null;
+  }
+
+  get maxDate() {
+    return isValidDate(this.args.to) ? this.args.to : null;
   }
 
   onChange = restartableTask(async (event) => {
