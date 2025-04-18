@@ -1,0 +1,101 @@
+{{page-title "Bewerk formulier definitie"}}
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom"
+  as |Group|
+>
+  <Group>
+    <AuHeading @skin="2">{{this.model.form.name}}
+      <AuButton
+        @skin="link-secondary"
+        @icon="pencil"
+        @hideText={{true}}
+        {{on "click" (fn (mut this.isEditFormModalOpen) true)}}
+      >
+        Pas aan
+      </AuButton></AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
+      <AuLink
+        @route="custom-forms.instances.index"
+        @model={{this.model.form.id}}
+        @skin="button-secondary"
+      >Terug naar formulieren</AuLink>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom"
+  as |Group|
+>
+  <Group>
+    <p>{{this.model.form.description}}</p>
+  </Group>
+</AuToolbar>
+<div class="edit-form-defintion">
+  <div class="au-o-box edit-form-defintion--form">
+    <EditableForm
+      @instanceId={{this.model.form.id}}
+      @form={{this.model.form}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
+      @customHistoryMessage={{true}}
+    />
+    {{#unless this.formInitialized}}
+      <AuLoader />
+    {{/unless}}
+  </div>
+  <div class="edit-form-defintion--edit-panel">
+  </div>
+</div>
+
+<AuModal
+  @title="Bewerk formulier detail"
+  @modalOpen={{this.isEditFormModalOpen}}
+  @closable={{true}}
+  @closeModal={{this.cancelUpdateFormDetails}}
+>
+  <:body>
+    <div class="au-o-box">
+      <AuLabel @required={{true}} @error={{this.formNameErrorMessage}}>Naam
+        formulier</AuLabel>
+      <AuInput
+        @error={{this.formNameErrorMessage}}
+        value={{this.model.form.name}}
+        @width="block"
+        placeholder="Formulier naam"
+        {{on "input" this.updateFormName}}
+      />
+      {{#if this.formNameErrorMessage}}
+        <AuHelpText @error={{true}}>{{this.formNameErrorMessage}}</AuHelpText>
+      {{/if}}
+      <AuLabel class="au-u-margin-top">Beschrijving</AuLabel>
+      <AuTextarea
+        value={{this.model.form.description}}
+        @width="block"
+        @error={{this.isOverMaxCharacters}}
+        rows="5"
+        placeholder="Beschrijving van het formulier"
+        {{on "input" this.updateFormDescription}}
+      />
+      <AuHelpText
+        class="au-u-text-right"
+        @error={{this.isOverMaxCharacters}}
+      >{{this.descriptionCharacters}}</AuHelpText>
+    </div>
+  </:body>
+  <:footer>
+    <AuButtonGroup class="au-u-flex au-u-padding-left au-u-padding-right">
+      <AuButton
+        @loadingMessage="Aanpassen"
+        @disabled={{this.saveButtonDisabled}}
+        {{on "click" this.saveFormDetails}}
+      >Opslaan</AuButton>
+      <AuButton
+        @skin="secondary"
+        {{on "click" this.cancelUpdateFormDetails}}
+      >Annuleer</AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>

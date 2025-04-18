@@ -1,0 +1,23 @@
+.edit-form-defintion {
+  background-color: var(--au-blue-100);
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  height: 100%;
+  width: 100%;
+}
+
+.edit-form-defintion--form {
+  width: 70%;
+  border: 2px solid var(--au-gray-200);
+  border-radius: 5px;
+  background-color: var(--au-white);
+  margin: 2rem auto;
+}
+
+.edit-form-defintion--edit-panel {
+  padding: 2rem 1rem;
+}
+
+.edit-form-defintion .semantic-forms-instance .au-c-toolbar {
+  display: none;
+}

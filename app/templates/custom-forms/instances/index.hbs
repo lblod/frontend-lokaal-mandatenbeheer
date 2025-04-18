@@ -33,7 +33,7 @@
             <AuButton
               role="menuitem"
               @skin="link"
-              {{on "click" (fn (mut this.isEditFormDefinitionOpen) true)}}
+              {{on "click" this.goToEditFormDefinition}}
             >
               Bewerk formulier definitie
             </AuButton>
@@ -49,28 +49,6 @@
     </AuBodyContainer>
   </main.content>
 </AuMainContainer>
-
-<AuModal
-  @title="Bewerk formulier definitie"
-  @modalOpen={{this.isEditFormDefinitionOpen}}
-  @closable={{true}}
-  @closeModal={{this.closeEditFormDefinitionModal}}
->
-  <div class="au-o-box">
-    <EditableForm
-      @beforeSave={{this.preventSave}}
-      @instanceId={{this.model.form.id}}
-      @form={{this.model.form}}
-      @onCancel={{this.closeEditFormDefinitionModal}}
-      @onSave={{this.closeEditFormDefinitionModal}}
-      @formInitialized={{fn (mut this.formInitialized) true}}
-      @customHistoryMessage={{true}}
-    />
-    {{#unless this.formInitialized}}
-      <AuLoader />
-    {{/unless}}
-  </div>
-</AuModal>
 
 <AuModal
   @title="Verwijder formulier"

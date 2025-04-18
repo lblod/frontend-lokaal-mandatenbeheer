@@ -81,6 +81,7 @@ Router.map(function () {
       this.route('index', { path: '/:id' });
       this.route('instance', { path: '/:instance_id/instance' });
       this.route('new', { path: '/:id/new' });
+      this.route('definition', { path: '/:id/bewerk-formulier-definitie' });
     });
   });
 
