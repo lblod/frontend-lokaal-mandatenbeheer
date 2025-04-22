@@ -18,6 +18,7 @@ import {
   INPUT_DEBOUNCE,
   JSON_API_TYPE,
 } from 'frontend-lmb/utils/constants';
+import { EXT } from 'frontend-lmb/rdf/namespaces';
 export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @service store;
   @service semanticFormRepository;
@@ -31,6 +32,15 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @tracked searchFilter;
   @tracked isLoadingMoreOptions;
   @tracked canShowLoadMoreOptions = true;
+
+  get formTypeId() {
+    return this.storeOptions.store.any(
+      this.args.field.uri,
+      EXT('targetTypeId'),
+      undefined,
+      this.storeOptions.formGraph
+    )?.value;
+  }
 
   @action
   async selectFormsOfType(forms) {
@@ -108,7 +118,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @action
   async fetchFormsForType(instanceUris = null) {
     const allLabels = await this.semanticFormRepository.getHeaderLabels(
-      this.args.formTypeId
+      this.formTypeId
     );
     const summaryLabels = allLabels.filter((label) => label.isShownInSummary);
     const filterParams = {
@@ -123,7 +133,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
 
     const instances = [];
     const formInfo = await this.semanticFormRepository.fetchInstances(
-      { id: this.args.formTypeId },
+      { id: this.formTypeId },
       filterParams
     );
     instances.push(...formInfo.instances);
@@ -162,9 +172,11 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
 
   async loadOptions() {
     const matches = triplesForPath(this.storeOptions);
+    console.log('matches', matches);
     if (matches.values.length > 0) {
       const selectedFormUris = matches.values.map((v) => v.value);
-      if (this.args.formTypeId) {
+      console.log('formTypeId', this.formTypeId);
+      if (this.formTypeId) {
         await this.setFormOptions(selectedFormUris);
         this.forms.pushObjects(
           this.formOptions.filter((form) => selectedFormUris.includes(form.uri))
@@ -175,7 +187,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
 
   async fetchInstancesForUris(uris) {
     const response = await fetch(
-      `${API.FORM_CONTENT_SERVICE}/${this.args.formTypeId}/get-instances-by-uri`,
+      `${API.FORM_CONTENT_SERVICE}/${this.formTypeId}/get-instances-by-uri`,
       {
         method: 'POST',
         headers: {

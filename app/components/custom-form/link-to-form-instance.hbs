@@ -5,47 +5,42 @@
   @graphs={{@graphs}}
   @formStore={{@formStore}}
 >
-  <AuCard @standOut={{true}} as |c|>
-    <c.content>
-      <PowerSelectMultiple
-        @disabled={{not this.formType}}
-        @labelText="Formulier"
-        @loadingMessage="Aan het laden..."
-        @noMatchesMessage="Geen resultaten"
-        @searchMessage="Typ om te zoeken"
-        @searchEnabled={{true}}
-        @search={{perform this.searchForm}}
-        @allowClear={{false}}
-        @placeholder="Formulier voor het geselecteerde type"
-        @selected={{this.forms}}
-        @onChange={{this.selectFormsOfType}}
-        @options={{this.formOptions}}
-        @onClose={{this.preventCloseOnLoadMoreOptions}}
-        as |form|
+  <PowerSelectMultiple
+    @labelText="Formulier"
+    @loadingMessage="Aan het laden..."
+    @noMatchesMessage="Geen resultaten"
+    @searchMessage="Typ om te zoeken"
+    @searchEnabled={{true}}
+    @search={{perform this.searchForm}}
+    @allowClear={{false}}
+    @placeholder="Selecteer instantie"
+    @selected={{this.forms}}
+    @onChange={{this.selectFormsOfType}}
+    @options={{this.formOptions}}
+    @onClose={{this.preventCloseOnLoadMoreOptions}}
+    as |form|
+  >
+    {{#if (eq form.id "load-more-options")}}
+      <span
+        class="au-u-flex au-u-flex--center au-u-padding-top-small au-u-padding-bottom-small"
       >
-        {{#if (eq form.id "load-more-options")}}
-          <span
-            class="au-u-flex au-u-flex--center au-u-padding-top-small au-u-padding-bottom-small"
-          >
-            {{#if this.canShowLoadMoreOptions}}
-              {{#if this.isLoadingMoreOptions}}
-                <AuLoader @hideMessage={{true}} />
-              {{else}}
-                <AuHelpText>Laad meer opties</AuHelpText>
-              {{/if}}
-            {{/if}}
-          </span>
-        {{else}}
-          <div class="au-u-flex au-u-flex--row au-u-flex-wrap">
-            {{#each form.values as |keyValue|}}
-              <span class="au-u-padding-right-small">
-                <AuHelpText>{{keyValue.key}}: </AuHelpText>
-                {{keyValue.value}}
-              </span>
-            {{/each}}
-          </div>
+        {{#if this.canShowLoadMoreOptions}}
+          {{#if this.isLoadingMoreOptions}}
+            <AuLoader @hideMessage={{true}} />
+          {{else}}
+            <AuHelpText>Laad meer opties</AuHelpText>
+          {{/if}}
         {{/if}}
-      </PowerSelectMultiple>
-    </c.content>
-  </AuCard>
+      </span>
+    {{else}}
+      <div class="au-u-flex au-u-flex--row au-u-flex-wrap">
+        {{#each form.values as |keyValue|}}
+          <span class="au-u-padding-right-small">
+            <AuHelpText>{{keyValue.key}}: </AuHelpText>
+            {{keyValue.value}}
+          </span>
+        {{/each}}
+      </div>
+    {{/if}}
+  </PowerSelectMultiple>
 </RdfInputFields::CustomFieldWrapper>

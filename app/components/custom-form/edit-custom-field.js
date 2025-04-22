@@ -18,7 +18,7 @@ export default class CustomFormEditCustomField extends Component {
   @tracked label;
   @tracked displayType;
   @tracked conceptScheme;
-  @tracked linkedFormTypeUri;
+  @tracked linkedFormTypeId;
   @tracked isRequired;
   @tracked isShownInSummary;
 
@@ -63,7 +63,7 @@ export default class CustomFormEditCustomField extends Component {
       this.selectedField.conceptScheme !== this.conceptScheme?.uri ||
       this.selectedField.isRequired !== this.isRequired ||
       this.selectedField.isShownInSummary !== this.isShownInSummary ||
-      this.selectedField.linkedFormTypeUri !== this.linkedFormTypeUri
+      this.selectedField.linkedFormTypeId !== this.linkedFormTypeId
     );
   }
 
@@ -72,7 +72,7 @@ export default class CustomFormEditCustomField extends Component {
     this.label = field?.label;
     this.isRequired = !!field?.isRequired;
     this.isShownInSummary = !!field?.isShownInSummary;
-    this.linkedFormTypeUri = field?.linkedFormTypeUri;
+    this.linkedFormTypeId = field?.linkedFormTypeUri;
     this.displayType = this.displayTypes.filter(
       (t) => t.uri === field?.displayType
     )?.[0];
@@ -101,8 +101,8 @@ export default class CustomFormEditCustomField extends Component {
   }
 
   @action
-  updateLinkedFormTypeUri(uri) {
-    this.linkedFormTypeUri = uri;
+  updateLinkedFormTypeId(id) {
+    this.linkedFormTypeId = id;
   }
 
   @action
@@ -127,7 +127,7 @@ export default class CustomFormEditCustomField extends Component {
         conceptSchemeUri: this.conceptScheme?.uri,
         isRequired: this.isRequired,
         isShownInSummary: this.isShownInSummary,
-        linkedFormTypeUri: this.linkedFormTypeUri,
+        linkedFormTypeUri: this.linkedFormTypeId,
         formUri: this.args.selectedField.formUri,
       }
     );

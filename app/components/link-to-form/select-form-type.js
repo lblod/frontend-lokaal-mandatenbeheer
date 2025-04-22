@@ -70,21 +70,17 @@ export default class LinkToFormSelectFormType extends Component {
   }
 
   get selectedFormType() {
-    if (!this.args.selectedFormTypeUri) {
+    if (!this.args.selectedFormTypeId) {
       return null;
     }
 
-    return this.formTypes.find((type) => {
-      if (!type.uri) {
-        return this.args.selectedFormTypeUri.startsWith(type.prefix);
-      }
-
-      return type.uri === this.args.selectedFormTypeUri;
-    });
+    return this.formTypes.find(
+      (type) => type.id === this.args.selectedFormTypeId
+    );
   }
 
   @action
   updateFormType(formTypeOption) {
-    this.args.onSelectedType?.(formTypeOption.uri || formTypeOption.prefix);
+    this.args.onSelectedType?.(formTypeOption.id);
   }
 }
