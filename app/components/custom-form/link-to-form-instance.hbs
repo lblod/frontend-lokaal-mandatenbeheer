@@ -14,13 +14,13 @@
     @search={{perform this.searchForm}}
     @allowClear={{false}}
     @placeholder="Selecteer instantie"
-    @selected={{this.forms}}
-    @onChange={{this.selectFormsOfType}}
-    @options={{this.formOptions}}
+    @selected={{this.selectedInstances}}
+    @onChange={{this.selectInstance}}
+    @options={{this.instancesAsOptions}}
     @onClose={{this.preventCloseOnLoadMoreOptions}}
-    as |form|
+    as |instance|
   >
-    {{#if (eq form.id "load-more-options")}}
+    {{#if (eq instance.id "load-more-options")}}
       <span
         class="au-u-flex au-u-flex--center au-u-padding-top-small au-u-padding-bottom-small"
       >
@@ -34,7 +34,7 @@
       </span>
     {{else}}
       <div class="au-u-flex au-u-flex--row au-u-flex-wrap">
-        {{#each form.values as |keyValue|}}
+        {{#each instance.option as |keyValue|}}
           <span class="au-u-padding-right-small">
             <AuHelpText>{{keyValue.key}}: </AuHelpText>
             {{keyValue.value}}
