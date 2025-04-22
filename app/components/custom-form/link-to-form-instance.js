@@ -18,35 +18,19 @@ import {
   INPUT_DEBOUNCE,
   JSON_API_TYPE,
 } from 'frontend-lmb/utils/constants';
-import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-
 export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @service store;
   @service semanticFormRepository;
 
   @consume('form-context') formContext;
 
-  @tracked formType;
   @tracked forms = A([]);
   @tracked formOptions = A([]);
-  @tracked formTypes = [];
   @tracked summaryLabels = [];
   @tracked pageToLoad = 0;
   @tracked searchFilter;
   @tracked isLoadingMoreOptions;
   @tracked canShowLoadMoreOptions = true;
-
-  @action
-  async selectFormType(type) {
-    this.formType = type;
-    replaceSingleFormValue(this.storeOptions, null);
-    this.forms.clear();
-    this.pageToLoad = 0;
-    this.searchFilter = null;
-    this.formOptions.clear();
-    this.canShowLoadMoreOptions = true;
-    await this.setFormOptions();
-  }
 
   @action
   async selectFormsOfType(forms) {
@@ -118,14 +102,13 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
       this.formOptions.clear();
     }
     this.searchFilter = input?.trim();
-
     await this.setFormOptions();
   });
 
   @action
   async fetchFormsForType(instanceUris = null) {
     const allLabels = await this.semanticFormRepository.getHeaderLabels(
-      this.formType.id
+      this.args.formTypeId
     );
     const summaryLabels = allLabels.filter((label) => label.isShownInSummary);
     const filterParams = {
@@ -140,7 +123,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
 
     const instances = [];
     const formInfo = await this.semanticFormRepository.fetchInstances(
-      { id: this.formType.id },
+      { id: this.args.formTypeId },
       filterParams
     );
     instances.push(...formInfo.instances);
@@ -178,48 +161,10 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   }
 
   async loadOptions() {
-    const response = await fetch(
-      `${API.FORM_CONTENT_SERVICE}/custom-form/form-type-options`
-    );
-    if (!response.ok) {
-      console.error('Er ging iets mis bij het ophalen van de formulier types');
-      return [];
-    }
-    const formTypes = await response.json();
-    const currentFormTypeId = this.formContext?.formDefinition?.id;
-    this.formTypes = [
-      {
-        groupName: 'Eigen types',
-        options: formTypes.customTypes.filter(
-          (t) => t.id !== currentFormTypeId
-        ),
-      },
-      {
-        groupName: 'Standaard types',
-        options: formTypes.defaultTypes,
-      },
-    ];
     const matches = triplesForPath(this.storeOptions);
     if (matches.values.length > 0) {
       const selectedFormUris = matches.values.map((v) => v.value);
-      this.formType = [
-        ...formTypes.customTypes,
-        ...formTypes.defaultTypes,
-      ].find((type) => {
-        const foundUsages = type.usageUris?.filter((usageUri) =>
-          selectedFormUris.includes(usageUri)
-        );
-        if (foundUsages?.length >= 1) {
-          return foundUsages[0];
-        } else {
-          const matches = selectedFormUris.filter((uri) =>
-            uri.startsWith(type.prefix)
-          );
-
-          return matches[0] || null;
-        }
-      });
-      if (this.formType) {
+      if (this.args.formTypeId) {
         await this.setFormOptions(selectedFormUris);
         this.forms.pushObjects(
           this.formOptions.filter((form) => selectedFormUris.includes(form.uri))
@@ -230,7 +175,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
 
   async fetchInstancesForUris(uris) {
     const response = await fetch(
-      `${API.FORM_CONTENT_SERVICE}/${this.formType.id}/get-instances-by-uri`,
+      `${API.FORM_CONTENT_SERVICE}/${this.args.formTypeId}/get-instances-by-uri`,
       {
         method: 'POST',
         headers: {

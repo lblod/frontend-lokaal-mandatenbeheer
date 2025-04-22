@@ -1,0 +1,16 @@
+<PowerSelect
+  @labelText="Formulier type"
+  @loadingMessage="Aan het laden..."
+  @noMatchesMessage="Geen resultaten"
+  @searchMessage="Typ om te zoeken"
+  @searchEnabled={{true}}
+  @allowClear={{false}}
+  @placeholder="Formulier"
+  @searchField="label"
+  @selected={{this.selectedFormType}}
+  @onChange={{this.updateFormType}}
+  @options={{this.groupedFormTypes}}
+  as |form|
+>
+  {{form.label}}
+</PowerSelect>

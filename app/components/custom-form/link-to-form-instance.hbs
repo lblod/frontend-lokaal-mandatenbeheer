@@ -7,22 +7,6 @@
 >
   <AuCard @standOut={{true}} as |c|>
     <c.content>
-      <PowerSelect
-        @labelText="Formulier type"
-        @loadingMessage="Aan het laden..."
-        @noMatchesMessage="Geen resultaten"
-        @searchMessage="Typ om te zoeken"
-        @searchEnabled={{true}}
-        @allowClear={{false}}
-        @placeholder="Type van het formulier"
-        @searchField="label"
-        @selected={{this.formType}}
-        @onChange={{this.selectFormType}}
-        @options={{this.formTypes}}
-        as |form|
-      >
-        {{form.label}}
-      </PowerSelect>
       <PowerSelectMultiple
         @disabled={{not this.formType}}
         @labelText="Formulier"

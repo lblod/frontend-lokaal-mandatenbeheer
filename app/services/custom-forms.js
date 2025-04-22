@@ -75,6 +75,7 @@ export default class CustomFormsService extends Service {
       conceptSchemeUri,
       isRequired,
       isShownInSummary,
+      linkedFormTypeUri,
       formUri,
     }
   ) {
@@ -91,6 +92,7 @@ export default class CustomFormsService extends Service {
           isRequired: !!isRequired,
           showInSummary: !!isShownInSummary,
           conceptScheme: conceptSchemeUri,
+          linkedFormTypeUri: linkedFormTypeUri,
         }),
       });
 
@@ -101,6 +103,7 @@ export default class CustomFormsService extends Service {
         isRequired: !!isRequired,
         showInSummary: !!isShownInSummary,
         conceptScheme: conceptSchemeUri,
+        linkedFormTypeUri: linkedFormTypeUri,
         formUri,
       };
     } catch (error) {
