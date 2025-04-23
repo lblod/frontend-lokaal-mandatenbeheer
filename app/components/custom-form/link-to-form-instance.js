@@ -11,6 +11,7 @@ import {
 } from '@lblod/submission-form-helpers';
 import { Literal } from 'rdflib';
 import { consume } from 'ember-provide-consume-context';
+import { task } from 'ember-concurrency';
 
 import { API, JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { EXT } from 'frontend-lmb/rdf/namespaces';
@@ -27,6 +28,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
 
   @tracked instanceObjectsOfOptions = [];
   @tracked extraInstanceUris = [];
+  @tracked instances = A([]);
   @tracked selectedInstances = A([]);
   @tracked instanceDisplayLabels = [];
   @tracked pageToLoad;
@@ -36,6 +38,11 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @tracked areAllInstancesFetched;
 
   LOAD_MORE_ID = 'load-more-instances';
+
+  constructor() {
+    super(...arguments);
+    this.getInstances.perform();
+  }
 
   get formTypeId() {
     return this.storeOptions.store.any(
@@ -50,10 +57,6 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     return this.getAllFormLabels?.value || [];
   }
 
-  get instances() {
-    return this.getInstances?.value || [];
-  }
-
   get initialSelectedInstances() {
     return this.getInitialSelectedInstances?.value || [];
   }
@@ -61,7 +64,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   get isFetchingInstances() {
     return (
       isTrackedFunctionFetchingData(this.getInitialSelectedInstances) ||
-      isTrackedFunctionFetchingData(this.getInstances)
+      this.getInstances.isRunning
     );
   }
 
@@ -86,15 +89,9 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
           };
         }),
         instance,
+        searchString: Object.values(instance).join(';'),
       });
     }
-
-    if (!this.areAllInstancesFetched) {
-      instances.push({
-        id: this.LOAD_MORE_ID,
-      });
-    }
-
     return instances;
   }
 
@@ -103,24 +100,10 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     if (matches.values.length > 0) {
       this.extraInstanceUris.push(...matches.values.map((v) => v.value));
     }
-    this.pageToLoad = 0;
   }
 
   @action
   async selectInstance(selectedInstances) {
-    if (
-      selectedInstances.filter((f) => f.id === this.LOAD_MORE_ID)?.length === 1
-    ) {
-      if (this.pageToLoad !== this.lastPageOfInstances) {
-        this.pageToLoad++;
-        this.instanceObjectsOfOptions = this.instancesAsOptions
-          .map((option) => option.instance)
-          .filter((hasInstance) => hasInstance);
-        this.getInstances.retry();
-      }
-      return;
-    }
-
     this.selectedInstances.clear();
     this.selectedInstances.pushObjects(selectedInstances);
     const matches = triplesForPath(this.storeOptions, true).values;
@@ -148,16 +131,6 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     }
   }
 
-  // searchForm = task({ restartable: true }, async (input) => {
-  //   await timeout(INPUT_DEBOUNCE);
-  //   if (this.searchFilter !== input?.trim()) {
-  //     this.pageToLoad = 0;
-  //     this.formOptions.clear();
-  //   }
-  //   this.searchFilter = input?.trim();
-  //   await this.setFormOptions();
-  // });
-
   async fetchInstancesForUris(uris) {
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/${this.formTypeId}/get-instances-by-uri`,
@@ -183,13 +156,16 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     return result.instances;
   }
 
-  getInstances = trackedFunction(this, async () => {
-    if (!this.formTypeId) {
-      return [];
+  getInstances = task({ enqueue: true }, async (page = -1, lastPage = 1) => {
+    if (!this.formTypeId || !lastPage || page >= lastPage) {
+      return;
     }
+
+    page++;
+
     const filterParams = {
       labels: this.labelsForFormType,
-      page: this.pageToLoad,
+      page,
       size: 20,
       filter: this.searchFilter,
     };
@@ -200,14 +176,13 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
       { id: this.formTypeId },
       filterParams
     );
-    const pagination = formInfo.instances.meta.pagination;
-    if (this.pageToLoad === pagination.last.number) {
-      this.areAllInstancesFetched = true;
-    }
-    this.lastPageOfInstances = pagination.last?.number || this.pageToLoad;
     this.instanceDisplayLabels = formInfo.labels;
+    this.instances.pushObjects(formInfo.instances);
 
-    return [...this.instanceObjectsOfOptions, ...formInfo.instances];
+    this.getInstances.perform(
+      page,
+      formInfo.instances.meta.pagination.last?.number
+    );
   });
 }
 
