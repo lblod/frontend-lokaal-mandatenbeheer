@@ -21,15 +21,16 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @service semanticFormRepository;
 
   @use(getAllFormLabels) getAllFormLabels;
-  @use(getInstances) getInstances;
   @use(getInitialSelectedInstances) getInitialSelectedInstances;
 
   @consume('form-context') formContext;
 
+  @tracked instanceObjectsOfOptions = [];
   @tracked extraInstanceUris = [];
   @tracked selectedInstances = A([]);
   @tracked instanceDisplayLabels = [];
-  @tracked pageToLoad = 0;
+  @tracked pageToLoad;
+  @tracked lastPageOfInstances;
   @tracked searchFilter;
   @tracked isLoadingMoreOptions;
   @tracked areAllInstancesFetched;
@@ -57,6 +58,13 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     return this.getInitialSelectedInstances?.value || [];
   }
 
+  get isFetchingInstances() {
+    return (
+      isTrackedFunctionFetchingData(this.getInitialSelectedInstances) ||
+      isTrackedFunctionFetchingData(this.getInstances)
+    );
+  }
+
   get instancesAsOptions() {
     const keysOfLabels = this.instanceDisplayLabels.map((label) => label.name);
     const uniqueInstanceIds = [];
@@ -77,7 +85,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
             value: instance[key],
           };
         }),
-        uri: instance.uri,
+        instance,
       });
     }
 
@@ -95,6 +103,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     if (matches.values.length > 0) {
       this.extraInstanceUris.push(...matches.values.map((v) => v.value));
     }
+    this.pageToLoad = 0;
   }
 
   @action
@@ -102,9 +111,13 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     if (
       selectedInstances.filter((f) => f.id === this.LOAD_MORE_ID)?.length === 1
     ) {
-      this.isLoadingMoreOptions = true;
-      // await this.setFormOptions();
-      this.isLoadingMoreOptions = false;
+      if (this.pageToLoad !== this.lastPageOfInstances) {
+        this.pageToLoad++;
+        this.instanceObjectsOfOptions = this.instancesAsOptions
+          .map((option) => option.instance)
+          .filter((hasInstance) => hasInstance);
+        this.getInstances.retry();
+      }
       return;
     }
 
@@ -113,20 +126,24 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     const matches = triplesForPath(this.storeOptions, true).values;
     matches
       .filter(
-        (m) => !selectedInstances.find((instance) => m.value === instance.uri)
+        (m) =>
+          !selectedInstances.find((option) => m.value === option.instance.uri)
       )
       .forEach((m) => updateSimpleFormValue(this.storeOptions, undefined, m));
     selectedInstances
-      .filter((instance) => !matches.find((m) => instance.uri === m.value))
+      .filter((option) => !matches.find((m) => option.instance.uri === m.value))
       .forEach((option) =>
-        updateSimpleFormValue(this.storeOptions, new Literal(option.uri))
+        updateSimpleFormValue(
+          this.storeOptions,
+          new Literal(option.instance.uri)
+        )
       );
     super.updateSelectedItems();
   }
 
   @action
   preventCloseOnLoadMoreOptions() {
-    if (this.isLoadingMoreOptions) {
+    if (this.isFetchingInstances) {
       return false;
     }
   }
@@ -165,14 +182,11 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     const result = await response.json();
     return result.instances;
   }
-}
 
-function getInstances() {
-  return trackedFunction(async () => {
+  getInstances = trackedFunction(this, async () => {
     if (!this.formTypeId) {
       return [];
     }
-
     const filterParams = {
       labels: this.labelsForFormType,
       page: this.pageToLoad,
@@ -187,17 +201,13 @@ function getInstances() {
       filterParams
     );
     const pagination = formInfo.instances.meta.pagination;
-    console.log({ pagination });
     if (this.pageToLoad === pagination.last.number) {
       this.areAllInstancesFetched = true;
     }
-    this.pageToLoad = pagination.next?.number || this.pageToLoad;
+    this.lastPageOfInstances = pagination.last?.number || this.pageToLoad;
     this.instanceDisplayLabels = formInfo.labels;
-    const instancesWithoutLoadMoreOption = this.instances.filter(
-      (i) => i.id !== this.LOAD_MORE_ID
-    );
 
-    return [...instancesWithoutLoadMoreOption, ...formInfo.instances];
+    return [...this.instanceObjectsOfOptions, ...formInfo.instances];
   });
 }
 
@@ -217,4 +227,12 @@ function getInitialSelectedInstances() {
     }
     return await this.fetchInstancesForUris(this.extraInstanceUris);
   });
+}
+
+function isTrackedFunctionFetchingData(trackedFunction) {
+  if (!trackedFunction) {
+    return false;
+  }
+
+  return trackedFunction.isLoading && !trackedFunction.isError;
 }
