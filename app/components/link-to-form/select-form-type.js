@@ -22,7 +22,7 @@ function getFormTypes() {
     const formTypesWithoutSelf = formTypes.customTypes.filter(
       (t) => t.id !== this.args.formDefintionId
     );
-    if (formTypesWithoutSelf.lenght >= 1) {
+    if (formTypesWithoutSelf.length >= 1) {
       options.push(
         ...formTypesWithoutSelf.map((o) => {
           return {
