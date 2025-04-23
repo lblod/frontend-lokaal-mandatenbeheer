@@ -12,11 +12,12 @@ import {
 import { Literal } from 'rdflib';
 import { consume } from 'ember-provide-consume-context';
 import { task } from 'ember-concurrency';
+import { trackedFunction } from 'reactiveweb/function';
+import { use } from 'ember-resources';
 
 import { API, JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { EXT } from 'frontend-lmb/rdf/namespaces';
-import { trackedFunction } from 'reactiveweb/function';
-import { use } from 'ember-resources';
+
 export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @service store;
   @service semanticFormRepository;
@@ -166,7 +167,6 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
           )
           .includes(option.instance?.id)
       );
-      console.log({ selectedOptions });
       this.selectedInstances.pushObjects(selectedOptions);
     }
   });
