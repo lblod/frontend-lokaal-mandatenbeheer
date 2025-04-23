@@ -92,6 +92,11 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
         searchString: Object.values(instance).join(';'),
       });
     }
+
+    if (this.isFetchingInstances) {
+      instances.push({ id: this.LOAD_MORE_ID, disabled: true });
+    }
+
     return instances;
   }
 
@@ -178,7 +183,6 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     );
     this.instanceDisplayLabels = formInfo.labels;
     this.instances.pushObjects(formInfo.instances);
-
     this.getInstances.perform(
       page,
       formInfo.instances.meta.pagination.last?.number
