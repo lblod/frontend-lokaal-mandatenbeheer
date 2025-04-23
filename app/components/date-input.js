@@ -8,7 +8,7 @@ import moment from 'moment';
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
 
-import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
+import { INPUT_DEBOUNCE, NULL_DATE } from 'frontend-lmb/utils/constants';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 
 function getWarningMessages() {
@@ -18,7 +18,10 @@ function getWarningMessages() {
     }
 
     const warnings = [];
-    if (!isDateInRange(this.args.value, this.minDate, this.maxDate)) {
+    if (
+      !isDateInRange(this.args.value, this.minDate, this.maxDate) &&
+      this.inputIsValidDate
+    ) {
       const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
       const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
       if (this.minDate && this.maxDate) {
@@ -27,7 +30,7 @@ function getWarningMessages() {
         );
       }
 
-      if (this.minDate && !this.maxDate && this.inputHasBeenFocused) {
+      if (this.minDate && !this.maxDate) {
         warnings.push(`Kies een datum vanaf ${formattedMinDate}`);
       }
 
@@ -59,11 +62,15 @@ export default class DateInputComponent extends Component {
     }
   }
 
+  get inputIsValidDate() {
+    return isValidDate(this.args.value);
+  }
+
   get warningMessages() {
     return this.getWarningMessages?.value || [];
   }
 
-  get hasWarnings() {
+  get showWarnings() {
     return this.warningMessages.length >= 1;
   }
 
@@ -101,7 +108,12 @@ export default class DateInputComponent extends Component {
 }
 
 export function isValidDate(date) {
-  return date && date instanceof Date && !isNaN(date);
+  return (
+    date &&
+    date instanceof Date &&
+    !isNaN(date) &&
+    !moment(date).isSame(moment(NULL_DATE))
+  );
 }
 
 export function isDateInRange(date, min, max) {

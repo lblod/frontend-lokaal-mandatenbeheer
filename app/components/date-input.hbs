@@ -3,7 +3,7 @@
     <AuLabel
       for={{or @id this.elementId}}
       @error={{or this.errorMessage}}
-      @warning={{this.hasWarnings}}
+      @warning={{this.showWarnings}}
       @required={{@isRequired}}
     >{{@label}}</AuLabel>
   {{/if}}
@@ -16,7 +16,7 @@
   {{else}}
     <AuInput
       @error={{or this.errorMessage}}
-      @warning={{this.hasWarnings}}
+      @warning={{this.showWarnings}}
       value={{this.dateInputString}}
       id={{or @id this.elementId}}
       placeholder="dd-mm-yyyy"
