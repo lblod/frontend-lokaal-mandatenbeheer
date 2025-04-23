@@ -22,12 +22,11 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @service semanticFormRepository;
 
   @use(getAllFormLabels) getAllFormLabels;
-  @use(getInitialSelectedInstances) getInitialSelectedInstances;
 
   @consume('form-context') formContext;
 
   @tracked instanceObjectsOfOptions = [];
-  @tracked extraInstanceUris = [];
+  @tracked initialSelectedInstances = A([]);
   @tracked instances = A([]);
   @tracked selectedInstances = A([]);
   @tracked instanceDisplayLabels = [];
@@ -42,6 +41,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   constructor() {
     super(...arguments);
     this.getInstances.perform();
+    this.isSettingInitialSelectedOptions.perform();
   }
 
   get formTypeId() {
@@ -57,13 +57,9 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     return this.getAllFormLabels?.value || [];
   }
 
-  get initialSelectedInstances() {
-    return this.getInitialSelectedInstances?.value || [];
-  }
-
   get isFetchingInstances() {
     return (
-      isTrackedFunctionFetchingData(this.getInitialSelectedInstances) ||
+      this.isSettingInitialSelectedOptions.isRunning ||
       this.getInstances.isRunning
     );
   }
@@ -89,7 +85,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
           };
         }),
         instance,
-        searchString: Object.values(instance).join(';'),
+        searchString: [...Object.values(instance), instance.id].join(';'),
       });
     }
 
@@ -100,18 +96,13 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     return instances;
   }
 
-  async loadOptions() {
-    const matches = triplesForPath(this.storeOptions);
-    if (matches.values.length > 0) {
-      this.extraInstanceUris.push(...matches.values.map((v) => v.value));
-    }
-  }
+  async loadOptions() {}
 
   @action
   async selectInstance(selectedInstances) {
     this.selectedInstances.clear();
     this.selectedInstances.pushObjects(selectedInstances);
-    const matches = triplesForPath(this.storeOptions, true).values;
+    const matches = triplesForPath(this.storeOptions).values;
     matches
       .filter(
         (m) =>
@@ -127,13 +118,6 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
         )
       );
     super.updateSelectedItems();
-  }
-
-  @action
-  preventCloseOnLoadMoreOptions() {
-    if (this.isFetchingInstances) {
-      return false;
-    }
   }
 
   async fetchInstancesForUris(uris) {
@@ -157,9 +141,35 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
       return null;
     }
 
-    const result = await response.json();
-    return result.instances;
+    return await response.json();
   }
+
+  isSettingInitialSelectedOptions = task(async () => {
+    const matches = triplesForPath(this.storeOptions);
+    if (matches.values.length > 0) {
+      const initialSelectedInstanceUris = matches.values.map((v) => v.value);
+      const formInfo = await this.fetchInstancesForUris(
+        initialSelectedInstanceUris
+      );
+      this.instanceDisplayLabels = formInfo.labels;
+
+      if (formInfo.instances.length === 0) {
+        return;
+      }
+
+      this.initialSelectedInstances.pushObjects(formInfo.instances);
+      const selectedOptions = this.instancesAsOptions.filter((option) =>
+        formInfo.instances
+          .map((i) => i.id)
+          .filter(
+            (isInstance) => isInstance && isInstance !== this.LOAD_MORE_ID
+          )
+          .includes(option.instance?.id)
+      );
+      console.log({ selectedOptions });
+      this.selectedInstances.pushObjects(selectedOptions);
+    }
+  });
 
   getInstances = task({ enqueue: true }, async (page = -1, lastPage = 1) => {
     if (!this.formTypeId || !lastPage || page >= lastPage) {
@@ -197,21 +207,4 @@ function getAllFormLabels() {
     );
     return allLabels.filter((label) => label.isShownInSummary);
   });
-}
-
-function getInitialSelectedInstances() {
-  return trackedFunction(async () => {
-    if (!this.formTypeId || this.extraInstanceUris.length === 0) {
-      return [];
-    }
-    return await this.fetchInstancesForUris(this.extraInstanceUris);
-  });
-}
-
-function isTrackedFunctionFetchingData(trackedFunction) {
-  if (!trackedFunction) {
-    return false;
-  }
-
-  return trackedFunction.isLoading && !trackedFunction.isError;
 }

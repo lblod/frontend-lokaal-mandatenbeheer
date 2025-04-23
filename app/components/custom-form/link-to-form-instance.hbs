@@ -17,7 +17,6 @@
     @selected={{this.selectedInstances}}
     @onChange={{this.selectInstance}}
     @options={{this.instancesAsOptions}}
-    @onClose={{this.preventCloseOnLoadMoreOptions}}
     as |instance|
   >
     {{#if (eq instance.id this.LOAD_MORE_ID)}}
