@@ -5,6 +5,8 @@
   @graphs={{@graphs}}
   @formStore={{@formStore}}
 >
+  <h1>can load more? {{this.areAllInstancesFetched}}</h1>
+  <h1>is load more? {{this.isLoadingMoreOptions}}</h1>
   <PowerSelectMultiple
     @labelText="Formulier"
     @loadingMessage="Aan het laden..."
@@ -20,16 +22,14 @@
     @onClose={{this.preventCloseOnLoadMoreOptions}}
     as |instance|
   >
-    {{#if (eq instance.id "load-more-options")}}
+    {{#if (eq instance.id this.LOAD_MORE_ID)}}
       <span
         class="au-u-flex au-u-flex--center au-u-padding-top-small au-u-padding-bottom-small"
       >
-        {{#if this.canShowLoadMoreOptions}}
-          {{#if this.isLoadingMoreOptions}}
-            <AuLoader @hideMessage={{true}} />
-          {{else}}
-            <AuHelpText>Laad meer opties</AuHelpText>
-          {{/if}}
+        {{#if this.isLoadingMoreOptions}}
+          <AuLoader @hideMessage={{true}} />
+        {{else}}
+          <AuHelpText>Laad meer opties</AuHelpText>
         {{/if}}
       </span>
     {{else}}
