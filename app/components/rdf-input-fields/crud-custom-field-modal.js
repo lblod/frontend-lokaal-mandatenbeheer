@@ -13,6 +13,7 @@ import { FIELD_OPTION, FORM, EXT, PROV } from 'frontend-lmb/rdf/namespaces';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import {
   LIBRARY_ENTREES,
+  LINK_TO_FORM_CUSTOM_DISPLAY_TYPE,
   TEXT_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
 import { Literal, NamedNode } from 'rdflib';
@@ -37,6 +38,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     name: 'Eigen veld',
   });
 
+  @tracked displayTypes = [];
+
   @tracked fieldName;
   @tracked libraryFieldType = this.customFieldEntry;
   @tracked displayType;
@@ -59,9 +62,17 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     }
     this.isFieldRequired = this.args.isRequiredField ?? false;
     this.isShownInSummary = this.originalIsShownInSummary;
-    this.displayTypes.then((displayTypes) => {
-      this.displayType = displayTypes.find((t) => t.uri === withValue);
-    });
+    this.store
+      .query('display-type', {
+        sort: 'label',
+      })
+      .then((displayTypes) => {
+        const allowedTypes = displayTypes.filter(
+          (type) => type.uri !== LINK_TO_FORM_CUSTOM_DISPLAY_TYPE
+        );
+        this.displayTypes = allowedTypes;
+        this.displayType = this.displayTypes.find((t) => t.uri === withValue);
+      });
   }
 
   async getConceptSchemeFromTtl() {
@@ -164,11 +175,10 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @action
   selectLibraryFieldType(libraryEntry) {
     this.libraryFieldType = libraryEntry;
-    this.displayTypes.then((types) => {
-      this.displayType =
-        types.find((t) => t?.uri === libraryEntry.get('displayType.uri')) ||
-        types.find((t) => t?.uri === TEXT_CUSTOM_DISPLAY_TYPE);
-    });
+    this.displayType =
+      this.displayTypes.find(
+        (t) => t?.uri === libraryEntry.get('displayType.uri')
+      ) || this.displayTypes.find((t) => t?.uri === TEXT_CUSTOM_DISPLAY_TYPE);
   }
 
   @action
@@ -208,12 +218,6 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @action
   closeModal() {
     this.args.onCloseModal();
-  }
-
-  get displayTypes() {
-    return this.store.query('display-type', {
-      sort: 'label',
-    });
   }
 
   get conceptSchemes() {
