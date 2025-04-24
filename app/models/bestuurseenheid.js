@@ -61,12 +61,4 @@ export default class Bestuurseenheid extends Model {
       this.classificatie.get('uri') === BESTUURSEENHEID_CLASSIFICATIECODE_OCMW
     );
   }
-
-  rdfaBindings = {
-    naam: 'http://www.w3.org/2004/02/skos/core#prefLabel',
-    class: 'http://data.vlaanderen.be/ns/besluit#Bestuurseenheid',
-    werkingsgebied: 'http://data.vlaanderen.be/ns/besluit#werkingsgebied',
-    bestuursorgaan: 'http://data.vlaanderen.be/ns/besluit#bestuurt',
-    classificatie: 'http://data.vlaanderen.be/ns/besluit#classificatie',
-  };
 }

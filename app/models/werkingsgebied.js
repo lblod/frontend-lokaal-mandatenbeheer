@@ -16,9 +16,4 @@ export default class WerkingsgebiedModel extends Model {
   get longName() {
     return `${this.naam} (${this.niveau})`;
   }
-
-  rdfaBindings = {
-    class: 'prov:Location',
-    naam: 'rdfs:label',
-  };
 }
