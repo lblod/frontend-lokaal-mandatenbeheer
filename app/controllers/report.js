@@ -16,8 +16,13 @@ export default class ReportController extends Controller {
   }
 
   get isEmptyResult() {
+    return !this.reportIsRunning && this.resultsByTargetClass.length === 0;
+  }
+
+  get reportIsRunning() {
     return (
-      !this.validatie.runningStatus && this.resultsByTargetClass.length === 0
+      this.validatie.isRunning ||
+      this.getResultsByClassForLatestValidationReport.isLoading
     );
   }
 }

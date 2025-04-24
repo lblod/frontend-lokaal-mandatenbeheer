@@ -1,0 +1,23 @@
+<td>
+  <LinkTo
+    @route={{@result.context.route}}
+    @model={{@result.context.modelId}}
+    class="au-c-link au-u-medium"
+  >
+    {{@result.label}}
+  </LinkTo>
+</td>
+<td>
+  <span>{{@result.message}}</span>
+  {{#if this.collapsed}}
+    <AuButton
+      @skin="link"
+      {{on "click" this.toggleCollapsed}}
+    >[detail]</AuButton>
+  {{else}}
+    <span class="au-u-muted">{{@result.detail}}</span>
+    <AuButton @skin="link" {{on "click" this.toggleCollapsed}}>[verberg detail]</AuButton>
+
+  {{/if}}
+</td>
+{{yield}}

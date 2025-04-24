@@ -6,18 +6,24 @@ import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 import { typeToEmberData } from 'frontend-lmb/utils/type-to-ember-data';
-import { showSuccessToast } from 'frontend-lmb/utils/toasts';
+import { timeout } from 'ember-concurrency';
+
+import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+import moment from 'moment';
 
 export default class ValidatieService extends Service {
   @service features;
   @service store;
   @service toaster;
   @service currentSession;
+  @service router;
 
   @tracked latestValidationReport;
   @tracked runningStatus;
   @tracked lastRunnningStatus;
   @tracked canShowReportIsGenerated;
+  @tracked warmingUp = false;
 
   async setup() {
     if (this.features.isEnabled('shacl-report')) {
@@ -153,6 +159,21 @@ export default class ValidatieService extends Service {
     )[0];
   }
 
+  async getCurrentReportStatus() {
+    return (
+      await this.store.query('report-status', {
+        sort: '-started-at',
+        page: {
+          size: 1,
+        },
+      })
+    )[0];
+  }
+
+  get isRunning() {
+    return this.warmingUp || this.runningStatus;
+  }
+
   async setRunningStatus() {
     const statuses = await this.store.query('report-status', {
       'filter[:has-no:finished-at]': true,
@@ -169,7 +190,9 @@ export default class ValidatieService extends Service {
       await this.setLastRunningStatus();
       await this.setLatestValidationReport();
       if (this.canShowReportIsGenerated) {
-        showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
+        if (this.router.currentRouteName !== 'report') {
+          showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
+        }
         this.canShowReportIsGenerated = false;
       }
     } else {
@@ -188,6 +211,63 @@ export default class ValidatieService extends Service {
   polling = task({ drop: true }, async () => {
     this.canShowReportIsGenerated = true;
     this.startedPolling = new Date();
+    await this.setRunningStatus();
     this.keepPolling.perform();
+    this.warmingUp = false;
   });
+
+  generateReport = task({ drop: true }, async (bestuurseenheid) => {
+    this.warmingUp = true;
+    const currentStatus = await this.getCurrentReportStatus();
+    const response = await fetch(`/validation-report-api/reports/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': JSON_API_TYPE,
+      },
+      body: JSON.stringify({
+        bestuurseenheidUri: bestuurseenheid.uri,
+      }),
+    });
+    if (!response.ok) {
+      showErrorToast(
+        this.toaster,
+        'Er is een fout opgetreden bij het genereren van het rapport.',
+        'Validatie rapport'
+      );
+      return;
+    }
+    let trackingNewReport = false;
+    while (!trackingNewReport) {
+      await timeout(1000);
+      const newReportStatus = await this.getCurrentReportStatus();
+      trackingNewReport = newReportStatus.id !== currentStatus.id;
+    }
+    this.polling.perform();
+    if (this.runningStatus && this.router.currentRouteName !== 'report') {
+      showSuccessToast(
+        this.toaster,
+        'Rapport wordt gegenereerd. Dit kan mogelijks een tijdje duren.',
+        'Validatie rapport'
+      );
+      return;
+    }
+  });
+
+  get lastValidationDuration() {
+    const lastStatus = this.lastRunnningStatus;
+    if (!lastStatus) {
+      return null;
+    }
+    if (!lastStatus.startedAt || !lastStatus.finishedAt) {
+      return null;
+    }
+    const startedAt = moment(lastStatus.startedAt);
+    const finishedAt = moment(lastStatus.finishedAt);
+    const duration = moment.duration(finishedAt.diff(startedAt));
+    const minutes = Math.floor(duration.asMinutes());
+    const textForMinutes = `${minutes} ${minutes === 1 ? 'minuut' : 'minuten'} en`;
+    const seconds = duration.seconds();
+
+    return `${minutes !== 0 ? textForMinutes : ''} ${seconds} seconde${seconds === 1 ? '' : 'n'}.`;
+  }
 }

@@ -2,15 +2,7 @@
   <div class="report-refresh-button au-u-flex">
     <AuPill @icon="clock-rewind">Laatste sync
       {{this.lastRefreshedDate}}</AuPill>
-    <Shared::Tooltip
-      @showTooltip={{and
-        this.isPreviousreportFound
-        this.tooltipLastSyncText
-        (not this.isGeneratingReport)
-      }}
-      @alignment="right"
-      @tooltipText={{this.tooltipLastSyncText}}
-    >
+    <Shared::Tooltip @alignment="right">
       <AuButton
         @disabled={{this.isGeneratingReport}}
         @skin="naked"
