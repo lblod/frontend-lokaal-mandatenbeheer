@@ -7,7 +7,7 @@
 
   </:title>
   <:body>
-    <div class="au-u-flex au-u-flex--column au-u-flex--spaced-tiny">
+    <div class="au-u-flex au-u-flex--column au-o-box au-o-flow">
       <div>
         <Mandataris::Edit::MandaatSelector
           @mandataris={{@mandataris}}
@@ -63,7 +63,7 @@
         {{/if}}
         <div>
           <Mandataris::Edit::DateInput
-            @label="Startdatum"
+            @label="Start"
             @value={{this.startDate}}
             @from={{@bestuursorgaanIT.bindingStart}}
             @to={{this.toStartDate}}
@@ -73,7 +73,7 @@
         </div>
         <div>
           <Mandataris::Edit::DateInput
-            @label="Einddatum"
+            @label="Einde"
             @value={{this.endDate}}
             @from={{this.fromEndDate}}
             @to={{@bestuursorgaanIT.bindingEinde}}
@@ -118,7 +118,7 @@
     </div>
   </:body>
   <:footer>
-    <AuToolbar as |Group|>
+    <AuToolbar @size="medium" as |Group|>
       <Group>
         <AuButtonGroup>
           <Shared::Tooltip
