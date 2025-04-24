@@ -8,6 +8,7 @@ import moment from 'moment';
 
 import { INPUT_DEBOUNCE, NULL_DATE } from 'frontend-lmb/utils/constants';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
+import { isDateInRange, isValidDate } from 'frontend-lmb/utils/date';
 
 export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
@@ -53,23 +54,6 @@ export default class DateInputComponent extends Component {
     this.args.onChange?.(date);
   });
 
-  isDateInRange(date, min, max) {
-    if (!date) {
-      return false;
-    }
-    if (!min && !max) {
-      return true;
-    }
-    if (!min && max) {
-      return moment(date).isSameOrBefore(moment(max));
-    }
-    if (!max && min) {
-      return moment(date).isSameOrAfter(moment(min));
-    }
-
-    return moment(date).isBetween(moment(min), moment(max), 'day', '[]');
-  }
-
   processDate(date) {
     if (this.args?.endOfDay) {
       date = endOfDay(date);
@@ -90,7 +74,7 @@ export default class DateInputComponent extends Component {
         ? this.args.to
         : null;
 
-    if (!this.isDateInRange(date, minDate, maxDate)) {
+    if (!isDateInRange(date, minDate, maxDate)) {
       const stringMinDate = isValidDate(minDate)
         ? moment(minDate).format('DD-MM-YYYY')
         : null;
@@ -128,25 +112,4 @@ export default class DateInputComponent extends Component {
   get errorMessages() {
     return `${this.invalidErrorMessage ?? ''} ${this.invalidErrorMessage ? '\n' : ''} ${this.errorMessage ?? ''}`;
   }
-}
-
-export function isValidDate(date) {
-  return date && date instanceof Date && !isNaN(date);
-}
-
-export function isDateInRange(date, min, max) {
-  if (!date) {
-    return false;
-  }
-  if (!min && !max) {
-    return true;
-  }
-  if (!min && max) {
-    return moment(date).isSameOrBefore(moment(max));
-  }
-  if (!max && min) {
-    return moment(date).isSameOrAfter(moment(min));
-  }
-
-  return moment(date).isBetween(moment(min), moment(max), 'day', '[]');
 }
