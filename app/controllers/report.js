@@ -8,29 +8,29 @@ import { use } from 'ember-resources';
 export default class ReportController extends Controller {
   @service validatie;
 
-  @use(getResultsByClassForLatestValidationReport)
-  getResultsByClassForLatestValidationReport;
+  @use(getFlattenedResultsForLatestValidationReport)
+  getFlattenedResultsForLatestValidation;
 
-  get resultsByTargetClass() {
-    return this.getResultsByClassForLatestValidationReport?.value || [];
+  get allValidationErrors() {
+    return this.getFlattenedResultsForLatestValidation?.value || [];
   }
 
   get isEmptyResult() {
-    return !this.reportIsRunning && this.resultsByTargetClass.length === 0;
+    return !this.reportIsRunning && this.allValidationErrors.length === 0;
   }
 
   get reportIsRunning() {
     return (
       this.validatie.isRunning ||
-      this.getResultsByClassForLatestValidationReport.isLoading
+      this.getFlattenedResultsForLatestValidation.isLoading
     );
   }
 }
 
-function getResultsByClassForLatestValidationReport() {
+function getFlattenedResultsForLatestValidationReport() {
   return trackedFunction(async () => {
     if (!this.validatie.runningStatus) {
-      return await this.validatie.getResultsByClass();
+      return await this.validatie.getResultsOrderedByClassAndInstance();
     }
   });
 }

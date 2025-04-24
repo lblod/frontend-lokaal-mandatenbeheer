@@ -128,13 +128,44 @@ export default class ValidatieService extends Service {
         const valuesWithAccessibleInstance = valuesWithInstance.filter(
           (result) => result
         );
+        valuesWithAccessibleInstance.sort((a, b) => {
+          const aValue = `${a.label}${a.message}${a.detail}`;
+          const bValue = `${b.label}${b.message}${b.detail}`;
+          if (aValue < bValue) {
+            return -1;
+          }
+          if (aValue > bValue) {
+            return 1;
+          }
+          return 0;
+        });
         enrichedInstancesPerType.push({
           class: { uri: key, label: emberDataMapping.classLabel },
           instances: valuesWithAccessibleInstance,
         });
       })
     );
+    enrichedInstancesPerType.sort((a, b) => {
+      if (a.class.label < b.class.label) {
+        return -1;
+      }
+      if (a.class.label > b.class.label) {
+        return 1;
+      }
+      return 0;
+    });
     return enrichedInstancesPerType;
+  }
+
+  async getResultsOrderedByClassAndInstance() {
+    const grouped = await this.getResultsByClass();
+    const flattened = [];
+    for (const group of grouped) {
+      for (const instance of group.instances) {
+        flattened.push({ group, instance });
+      }
+    }
+    return flattened;
   }
 
   async getContext(targetClass, instance) {
