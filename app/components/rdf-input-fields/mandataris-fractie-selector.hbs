@@ -23,6 +23,13 @@
         <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
       {{/each}}
     {{else}}
+      <AuLabel
+        for="fractie"
+        @error={{@hasErrors}}
+        @required={{this.isRequiredForBestuursorgaan}}
+      >
+        Fractie
+      </AuLabel>
       <p>Selecteer eerst een persoon</p>
     {{/if}}
   {{/unless}}
