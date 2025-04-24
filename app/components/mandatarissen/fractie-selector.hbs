@@ -1,28 +1,30 @@
-{{#if this.load.isRunning}}
-  <p class="skeleton-input-full au-u-margin-top"></p>
-{{else}}
+<div>
   <AuLabel for="fractie" @error={{@hasErrors}} @required={{@isRequired}}>
     {{this.title}}
   </AuLabel>
-  {{#if this.person}}
-    <PowerSelect
-      @loadingMessage="Aan het laden..."
-      @noMatchesMessage="Geen resultaten"
-      @searchMessage="Typ om te zoeken"
-      @searchEnabled={{true}}
-      @allowClear={{not @isRequired}}
-      @disabled={{@disabled}}
-      @placeholder="Zoek fractie"
-      @searchField="naam"
-      @selected={{this._fractie}}
-      @onChange={{this.select}}
-      @onClose={{@onClose}}
-      @options={{this.fractieOptions}}
-      as |fractie|
-    >
-      {{fractie.naam}}
-    </PowerSelect>
+  {{#if this.load.isRunning}}
+    <p class="skeleton-input-full au-u-margin-top"></p>
   {{else}}
-    <p>Selecteer eerst een persoon</p>
+    {{#if this.person}}
+      <PowerSelect
+        @loadingMessage="Aan het laden..."
+        @noMatchesMessage="Geen resultaten"
+        @searchMessage="Typ om te zoeken"
+        @searchEnabled={{true}}
+        @allowClear={{not @isRequired}}
+        @disabled={{@disabled}}
+        @placeholder="Zoek fractie"
+        @searchField="naam"
+        @selected={{this._fractie}}
+        @onChange={{this.select}}
+        @onClose={{@onClose}}
+        @options={{this.fractieOptions}}
+        as |fractie|
+      >
+        {{fractie.naam}}
+      </PowerSelect>
+    {{else}}
+      <p>Selecteer eerst een persoon</p>
+    {{/if}}
   {{/if}}
-{{/if}}
+</div>
