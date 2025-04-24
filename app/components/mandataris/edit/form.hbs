@@ -18,20 +18,6 @@
           @onValidate={{fn (mut this.mandaatError)}}
         />
       </div>
-      {{#if this.showRangordeField}}
-        <div>
-          <AuLabel>
-            Rangorde
-          </AuLabel>
-          <RangordeDropdown
-            id="mandataris-rangorde"
-            @selected={{this.rangorde}}
-            @placeholder={{this.rangordePlaceholder}}
-            @mandaatLabel={{this.mandaatLabel}}
-            @onNewRangorde={{this.updateRangorde}}
-          />
-        </div>
-      {{/if}}
       <div>
         <AuLabel @required={{true}}>
           Status
@@ -73,6 +59,20 @@
                 zichzelf.
               </AuAlert>
             {{/if}}
+          </div>
+        {{/if}}
+        {{#if this.showRangordeField}}
+          <div>
+            <AuLabel>
+              Rangorde
+            </AuLabel>
+            <RangordeDropdown
+              id="mandataris-rangorde"
+              @selected={{this.rangorde}}
+              @placeholder={{this.rangordePlaceholder}}
+              @mandaatLabel={{this.mandaatLabel}}
+              @onNewRangorde={{this.updateRangorde}}
+            />
           </div>
         {{/if}}
         {{#if this.load.isRunning}}
