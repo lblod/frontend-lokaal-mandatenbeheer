@@ -25,7 +25,11 @@ function getWarningMessages() {
     ) {
       const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
       const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
-      if (this.minDate && this.maxDate) {
+      if (
+        this.minDate &&
+        this.maxDate &&
+        moment(this.maxDate).isAfter(moment(this.minDate))
+      ) {
         warnings.push(
           `Kies een datum tussen ${formattedMinDate} en ${formattedMaxDate}.`
         );
