@@ -121,7 +121,7 @@ export default class MandatarisEditFormComponent extends Component {
     );
   }
 
-  get showFractieField() {
+  get hideFractieField() {
     return isDisabledForBestuursorgaan(this.args.bestuursorgaanIT);
   }
 

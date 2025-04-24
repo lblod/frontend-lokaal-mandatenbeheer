@@ -75,14 +75,7 @@
             />
           </div>
         {{/if}}
-        {{#if this.load.isRunning}}
-          <div>
-            <AuLabel for="input" class="skeleton-label au-u-margin-top" />
-            <p
-              class="skeleton-input-full au-u-margin-top au-u-margin-bottom"
-            ></p>
-          </div>
-        {{else if (not (await this.showFractieField))}}
+        {{#unless (await this.hideFractieField)}}
           <Mandatarissen::FractieSelector
             @fractie={{this.fractie}}
             @isRequired={{@isFractieRequired}}
@@ -93,7 +86,7 @@
             {{! TODO this should be generalised somehow }}
             @isUpdatingState={{true}}
           />
-        {{/if}}
+        {{/unless}}
         <div>
           <Mandataris::Edit::DateInput
             @label="Start"
