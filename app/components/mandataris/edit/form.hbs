@@ -18,6 +18,20 @@
           @onValidate={{fn (mut this.mandaatError)}}
         />
       </div>
+      {{#if this.showRangordeField}}
+        <div>
+          <AuLabel>
+            Rangorde
+          </AuLabel>
+          <RangordeDropdown
+            id="mandataris-rangorde"
+            @selected={{this.rangorde}}
+            @placeholder={{this.rangordePlaceholder}}
+            @mandaatLabel={{this.mandaatLabel}}
+            @onNewRangorde={{this.updateRangorde}}
+          />
+        </div>
+      {{/if}}
       <div>
         <AuLabel @required={{true}}>
           Nieuwe Status
@@ -62,6 +76,25 @@
           </div>
         {{/if}}
         <div>
+          {{#if this.load.isRunning}}
+            <AuLabel for="input" class="skeleton-label au-u-margin-top" />
+            <p
+              class="skeleton-input-full au-u-margin-top au-u-margin-bottom"
+            ></p>
+          {{else if (not (await this.showFractieSelector))}}
+            <Mandatarissen::FractieSelector
+              @fractie={{this.fractie}}
+              @isRequired={{@isFractieRequired}}
+              @onSelect={{this.updateFractie}}
+              @bestuurseenheid={{@bestuurseenheid}}
+              @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
+              @mandataris={{@mandataris}}
+              {{! TODO this should be generalised somehow }}
+              @isUpdatingState={{true}}
+            />
+          {{/if}}
+        </div>
+        <div>
           <Mandataris::Edit::DateInput
             @label="Start"
             @value={{this.startDate}}
@@ -80,39 +113,6 @@
             @onChange={{fn (mut this.endDate)}}
             @isRequired={{false}}
           />
-        </div>
-        {{#if this.showRangordeField}}
-          <div>
-            <AuLabel>
-              Rangorde
-            </AuLabel>
-            <RangordeDropdown
-              id="mandataris-rangorde"
-              @selected={{this.rangorde}}
-              @placeholder={{this.rangordePlaceholder}}
-              @mandaatLabel={{this.mandaatLabel}}
-              @onNewRangorde={{this.updateRangorde}}
-            />
-          </div>
-        {{/if}}
-        <div>
-          {{#if this.load.isRunning}}
-            <AuLabel for="input" class="skeleton-label au-u-margin-top" />
-            <p
-              class="skeleton-input-full au-u-margin-top au-u-margin-bottom"
-            ></p>
-          {{else if (not (await this.showFractieSelector))}}
-            <Mandatarissen::FractieSelector
-              @fractie={{this.fractie}}
-              @isRequired={{@isFractieRequired}}
-              @onSelect={{this.updateFractie}}
-              @bestuurseenheid={{@bestuurseenheid}}
-              @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
-              @mandataris={{@mandataris}}
-              {{! TODO this should be generalised somehow }}
-              @isUpdatingState={{true}}
-            />
-          {{/if}}
         </div>
       {{/unless}}
     </div>
