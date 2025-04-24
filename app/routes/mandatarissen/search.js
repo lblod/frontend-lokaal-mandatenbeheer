@@ -13,6 +13,8 @@ export default class MandatarissenSearchRoute extends Route {
   @service store;
   @service bestuursperioden;
   @service fractieApi;
+  @service features;
+  @service decretaleOrganen;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -92,6 +94,12 @@ export default class MandatarissenSearchRoute extends Route {
         'status',
       ].join(','),
     };
+
+    if (!this.features.isEnabled('custom-organen')) {
+      queryParams[
+        'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][classificatie][:id:]'
+      ] = this.decretaleOrganen.decretaleIds.join(',');
+    }
 
     if (params.filter && params.filter.length > 0) {
       queryParams['filter[is-bestuurlijke-alias-van]'] = params.filter;
