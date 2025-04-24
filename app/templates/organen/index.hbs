@@ -76,7 +76,9 @@
             >Beheer fracties
             </AuLink>
           {{/if}}
-          <AuButton {{on "click" this.toggleModal}}>Voeg orgaan toe</AuButton>
+          {{#if (is-feature-enabled "custom-organen")}}
+            <AuButton {{on "click" this.toggleModal}}>Voeg orgaan toe</AuButton>
+          {{/if}}
         </Group>
       </AuToolbar>
 
