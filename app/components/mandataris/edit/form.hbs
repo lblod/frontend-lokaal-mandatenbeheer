@@ -7,7 +7,7 @@
 
   </:title>
   <:body>
-    <div class="au-u-flex au-u-flex--column au-o-box au-o-flow">
+    <div class="au-u-flex au-u-flex--column au-o-flow">
       <div>
         <Mandataris::Edit::MandaatSelector
           @mandataris={{@mandataris}}
@@ -118,7 +118,7 @@
     </div>
   </:body>
   <:footer>
-    <AuToolbar @size="medium" as |Group|>
+    <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
           <Shared::Tooltip
@@ -130,7 +130,7 @@
               {{on "click" this.confirmMandatarisChanges}}
               @disabled={{this.disabled}}
             >
-              {{if this.hasChanges "Pas aan" "Onveranderd"}}
+              Pas aan
             </AuButton>
           </Shared::Tooltip>
           <AuButton {{on "click" this.cancel}} @skin="secondary">
