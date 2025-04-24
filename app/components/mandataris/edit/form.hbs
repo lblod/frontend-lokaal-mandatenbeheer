@@ -114,18 +114,12 @@
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
-          <Shared::Tooltip
-            @showTooltip={{this.disabled}}
-            @tooltipText={{this.toolTipText}}
-            @alignment="left"
+          <AuButton
+            {{on "click" this.confirmMandatarisChanges}}
+            @disabled={{this.disabled}}
           >
-            <AuButton
-              {{on "click" this.confirmMandatarisChanges}}
-              @disabled={{this.disabled}}
-            >
-              Pas aan
-            </AuButton>
-          </Shared::Tooltip>
+            {{if this.hasChanges "Pas aan" "Onveranderd"}}
+          </AuButton>
           <AuButton {{on "click" this.cancel}} @skin="secondary">
             Annuleer
           </AuButton>
