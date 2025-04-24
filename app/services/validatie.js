@@ -12,6 +12,7 @@ export default class ValidatieService extends Service {
   @service features;
   @service store;
   @service toaster;
+  @service currentSession;
 
   @tracked latestValidationReport;
   @tracked runningStatus;
@@ -76,14 +77,21 @@ export default class ValidatieService extends Service {
         const include = emberDataMapping.include;
         const query = {
           filter: {
-            id: value
-              .map((i) => {
-                return i.focusNodeId;
-              })
-              .join(','),
+            id: [
+              ...new Set(
+                value.map((i) => {
+                  return i.focusNodeId;
+                })
+              ),
+            ].join(','),
           },
           include,
         };
+        if (modelName === 'bestuursorgaan') {
+          query.filter['is-tijdsspecialisatie-van'] = {
+            bestuurseenheid: { id: this.currentSession.group.id },
+          };
+        }
 
         const instances = await this.store.query(modelName, query);
         if (instances.length === 0) {
@@ -97,13 +105,16 @@ export default class ValidatieService extends Service {
               (instance) => instance.uri === result.focusNode
             );
             if (instance) {
+              const value = result.value?.trim();
               return {
                 result,
+                message: result.resultMessage,
+                detail: value,
                 instance,
                 label: instance.validationText
                   ? await instance.validationText
                   : result.focusNode,
-                context: this.getContext(key, instance),
+                context: await this.getContext(key, instance),
               };
             }
           })
@@ -120,11 +131,12 @@ export default class ValidatieService extends Service {
     return enrichedInstancesPerType;
   }
 
-  getContext(targetClass, instance) {
+  async getContext(targetClass, instance) {
     const mapTargetClassToRoute = typeToEmberData;
+    let targetId = instance?.id;
     return {
       route: mapTargetClassToRoute[targetClass].route,
-      modelId: instance?.id,
+      modelId: targetId,
     };
   }
 
@@ -152,24 +164,30 @@ export default class ValidatieService extends Service {
     this.runningStatus = statuses[0] || null;
   }
 
-  polling = task({ drop: true }, async () => {
-    await this.setRunningStatus();
-
+  keepPolling = task({ drop: true }, async () => {
     if (!this.runningStatus) {
-      return;
-    }
-    this.canShowReportIsGenerated = true;
-    const interval = setInterval(async () => {
-      if (!this.runningStatus) {
-        clearInterval(interval);
-        await this.setLastRunningStatus();
-        await this.setLatestValidationReport();
-        if (this.canShowReportIsGenerated) {
-          showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
-          this.canShowReportIsGenerated = false;
-        }
+      await this.setLastRunningStatus();
+      await this.setLatestValidationReport();
+      if (this.canShowReportIsGenerated) {
+        showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
+        this.canShowReportIsGenerated = false;
       }
-      await this.setRunningStatus();
-    }, 10000);
+    } else {
+      const timeSinceStart =
+        new Date().getTime() - this.startedPolling.getTime();
+      setTimeout(
+        () => {
+          this.polling.perform();
+        },
+        timeSinceStart > 10000 ? 10000 : 1000
+      );
+    }
+    await this.setRunningStatus();
+  });
+
+  polling = task({ drop: true }, async () => {
+    this.canShowReportIsGenerated = true;
+    this.startedPolling = new Date();
+    this.keepPolling.perform();
   });
 }
