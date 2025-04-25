@@ -76,6 +76,7 @@ export default class RdfDateInputComponent extends InputFieldComponent {
 
     this.hasBeenFocused = true;
     super.updateValidations();
+    this.args.onInteractedWithField?.();
   }
 
   get title() {

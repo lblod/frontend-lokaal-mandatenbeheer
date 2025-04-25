@@ -24,6 +24,7 @@ export default class RdfInputFieldsNumericalInputComponent extends SimpleInputFi
       const number = literal(Number(this.value), this.datatype);
       super.updateValue(number);
     }
+    this.args.onInteractedWithField?.();
   }
 
   get datatype() {

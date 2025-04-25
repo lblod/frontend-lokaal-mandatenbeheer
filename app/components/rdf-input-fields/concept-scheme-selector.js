@@ -39,6 +39,12 @@ export default class RdfInputFieldsConceptSchemeSelectorComponent extends Concep
     }
 
     super.updateSelection();
+    this.args.onInteractedWithField?.();
+  }
+
+  @action onClose() {
+    this.hasBeenFocused = true;
+    this.args.onInteractedWithField?.();
   }
 
   get showLabel() {

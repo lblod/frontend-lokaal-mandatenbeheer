@@ -22,7 +22,7 @@
   lang="nl-BE"
   type="number"
   value={{this.value}}
-  {{on "change" this.updateValue}}
+  {{on "blur" this.updateValue}}
 />
 
 {{#each this.errors as |error|}}

@@ -5,7 +5,10 @@ import { tracked } from '@glimmer/tracking';
 
 import { consume } from 'ember-provide-consume-context';
 import { task } from 'ember-concurrency';
-import { validationsForFieldWithType } from '@lblod/submission-form-helpers';
+import {
+  validationsForFieldWithType,
+  validationResultsForField,
+} from '@lblod/submission-form-helpers';
 
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { ADRES_CUSTOM_DISPLAY_TYPE } from 'frontend-lmb/utils/well-known-uris';
@@ -15,6 +18,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
   @consume('form-state') formState;
 
   @tracked showModal;
+  @tracked hasErrors;
 
   get title() {
     return this.args.field?.label;
@@ -43,6 +47,18 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
     }
 
     return classes.join(' ');
+  }
+
+  @action
+  interactedWithField() {
+    this.hasErrors = this.errors.length;
+  }
+
+  get errors() {
+    return validationResultsForField(
+      this.args.field.uri,
+      this.storeOptions
+    ).filter((result) => !result.valid);
   }
 
   @action
