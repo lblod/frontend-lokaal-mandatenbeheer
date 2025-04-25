@@ -45,7 +45,7 @@ export default class Bestuurseenheid extends Model {
 
   @hasMany('bestuursorgaan', {
     async: true,
-    inverse: 'orginalBestuurseenheid',
+    inverse: 'originalBestuurseenheid',
   })
   fakeBestuursorganen;
 

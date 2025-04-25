@@ -2,27 +2,17 @@
   <div class="report-refresh-button au-u-flex">
     <AuPill @icon="clock-rewind">Laatste sync
       {{this.lastRefreshedDate}}</AuPill>
-    <Shared::Tooltip
-      @showTooltip={{and
-        this.isPreviousreportFound
-        this.tooltipLastSyncText
-        (not this.isGeneratingReport)
-      }}
-      @alignment="right"
-      @tooltipText={{this.tooltipLastSyncText}}
+    <AuButton
+      @disabled={{this.isGeneratingReport}}
+      @skin="naked"
+      class="refresh-button-next-to-pill"
+      {{on "click" this.refresh}}
     >
-      <AuButton
-        @disabled={{this.isGeneratingReport}}
-        @skin="naked"
-        class="refresh-button-next-to-pill"
-        {{on "click" this.refresh}}
-      >
-        <AuIcon
-          @icon="renew"
-          class={{if this.isGeneratingReport "rotate-element-360-degree"}}
-        />
-        Refresh</AuButton>
-    </Shared::Tooltip>
+      <AuIcon
+        @icon="renew"
+        class={{if this.isGeneratingReport "rotate-element-360-degree"}}
+      />
+      Refresh</AuButton>
   </div>
   <p class="au-u-flex au-u-flex-self-end au-u-padding-top-small">Meer weten over
     validatie fouten?</p>

@@ -12,7 +12,7 @@ export const typeToEmberData = {
     include: 'geboorte',
   },
   'http://data.vlaanderen.be/ns/besluit#Bestuursorgaan': {
-    route: 'organen.orgaan',
+    route: 'organen.orgaan.mandatarissen',
     model: 'bestuursorgaan',
     classLabel: 'Bestuursorganen',
     include: 'is-tijdsspecialisatie-van.classificatie,classificatie',

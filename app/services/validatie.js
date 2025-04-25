@@ -6,17 +6,24 @@ import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 import { typeToEmberData } from 'frontend-lmb/utils/type-to-ember-data';
-import { showSuccessToast } from 'frontend-lmb/utils/toasts';
+import { timeout } from 'ember-concurrency';
+
+import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+import moment from 'moment';
 
 export default class ValidatieService extends Service {
   @service features;
   @service store;
   @service toaster;
+  @service currentSession;
+  @service router;
 
   @tracked latestValidationReport;
   @tracked runningStatus;
   @tracked lastRunnningStatus;
   @tracked canShowReportIsGenerated;
+  @tracked warmingUp = false;
 
   async setup() {
     if (this.features.isEnabled('shacl-report')) {
@@ -76,14 +83,21 @@ export default class ValidatieService extends Service {
         const include = emberDataMapping.include;
         const query = {
           filter: {
-            id: value
-              .map((i) => {
-                return i.focusNodeId;
-              })
-              .join(','),
+            id: [
+              ...new Set(
+                value.map((i) => {
+                  return i.focusNodeId;
+                })
+              ),
+            ].join(','),
           },
           include,
         };
+        if (modelName === 'bestuursorgaan') {
+          query.filter['is-tijdsspecialisatie-van'] = {
+            bestuurseenheid: { id: this.currentSession.group.id },
+          };
+        }
 
         const instances = await this.store.query(modelName, query);
         if (instances.length === 0) {
@@ -97,13 +111,16 @@ export default class ValidatieService extends Service {
               (instance) => instance.uri === result.focusNode
             );
             if (instance) {
+              const value = result.value?.trim();
               return {
                 result,
+                message: result.resultMessage,
+                detail: value,
                 instance,
                 label: instance.validationText
                   ? await instance.validationText
                   : result.focusNode,
-                context: this.getContext(key, instance),
+                context: await this.getContext(key, instance),
               };
             }
           })
@@ -111,20 +128,52 @@ export default class ValidatieService extends Service {
         const valuesWithAccessibleInstance = valuesWithInstance.filter(
           (result) => result
         );
+        valuesWithAccessibleInstance.sort((a, b) => {
+          const aValue = `${a.label}${a.message}${a.detail}`;
+          const bValue = `${b.label}${b.message}${b.detail}`;
+          if (aValue < bValue) {
+            return -1;
+          }
+          if (aValue > bValue) {
+            return 1;
+          }
+          return 0;
+        });
         enrichedInstancesPerType.push({
           class: { uri: key, label: emberDataMapping.classLabel },
           instances: valuesWithAccessibleInstance,
         });
       })
     );
+    enrichedInstancesPerType.sort((a, b) => {
+      if (a.class.label < b.class.label) {
+        return -1;
+      }
+      if (a.class.label > b.class.label) {
+        return 1;
+      }
+      return 0;
+    });
     return enrichedInstancesPerType;
   }
 
-  getContext(targetClass, instance) {
+  async getResultsOrderedByClassAndInstance() {
+    const grouped = await this.getResultsByClass();
+    const flattened = [];
+    for (const group of grouped) {
+      for (const instance of group.instances) {
+        flattened.push({ group, instance });
+      }
+    }
+    return flattened;
+  }
+
+  async getContext(targetClass, instance) {
     const mapTargetClassToRoute = typeToEmberData;
+    let targetId = instance?.id;
     return {
       route: mapTargetClassToRoute[targetClass].route,
-      modelId: instance?.id,
+      modelId: targetId,
     };
   }
 
@@ -141,6 +190,21 @@ export default class ValidatieService extends Service {
     )[0];
   }
 
+  async getCurrentReportStatus() {
+    return (
+      await this.store.query('report-status', {
+        sort: '-started-at',
+        page: {
+          size: 1,
+        },
+      })
+    )[0];
+  }
+
+  get isRunning() {
+    return this.warmingUp || this.runningStatus;
+  }
+
   async setRunningStatus() {
     const statuses = await this.store.query('report-status', {
       'filter[:has-no:finished-at]': true,
@@ -152,24 +216,90 @@ export default class ValidatieService extends Service {
     this.runningStatus = statuses[0] || null;
   }
 
-  polling = task({ drop: true }, async () => {
-    await this.setRunningStatus();
-
+  keepPolling = task({ drop: true }, async () => {
     if (!this.runningStatus) {
+      await this.setLastRunningStatus();
+      await this.setLatestValidationReport();
+      if (this.canShowReportIsGenerated) {
+        if (this.router.currentRouteName !== 'report') {
+          showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
+        }
+        this.canShowReportIsGenerated = false;
+      }
+    } else {
+      const timeSinceStart =
+        new Date().getTime() - this.startedPolling.getTime();
+      setTimeout(
+        () => {
+          this.polling.perform();
+        },
+        timeSinceStart > 10000 ? 10000 : 1000
+      );
+    }
+    await this.setRunningStatus();
+  });
+
+  polling = task({ drop: true }, async () => {
+    this.canShowReportIsGenerated = true;
+    this.startedPolling = new Date();
+    await this.setRunningStatus();
+    this.keepPolling.perform();
+    this.warmingUp = false;
+  });
+
+  generateReport = task({ drop: true }, async (bestuurseenheid) => {
+    this.warmingUp = true;
+    const currentStatus = await this.getCurrentReportStatus();
+    const response = await fetch(`/validation-report-api/reports/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': JSON_API_TYPE,
+      },
+      body: JSON.stringify({
+        bestuurseenheidUri: bestuurseenheid.uri,
+      }),
+    });
+    if (!response.ok) {
+      showErrorToast(
+        this.toaster,
+        'Er is een fout opgetreden bij het genereren van het rapport.',
+        'Validatie rapport'
+      );
       return;
     }
-    this.canShowReportIsGenerated = true;
-    const interval = setInterval(async () => {
-      if (!this.runningStatus) {
-        clearInterval(interval);
-        await this.setLastRunningStatus();
-        await this.setLatestValidationReport();
-        if (this.canShowReportIsGenerated) {
-          showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
-          this.canShowReportIsGenerated = false;
-        }
-      }
-      await this.setRunningStatus();
-    }, 10000);
+    let trackingNewReport = false;
+    while (!trackingNewReport) {
+      await timeout(1000);
+      const newReportStatus = await this.getCurrentReportStatus();
+      trackingNewReport =
+        newReportStatus && newReportStatus.id !== currentStatus?.id;
+    }
+    this.polling.perform();
+    if (this.runningStatus && this.router.currentRouteName !== 'report') {
+      showSuccessToast(
+        this.toaster,
+        'Rapport wordt gegenereerd. Dit kan mogelijks een tijdje duren.',
+        'Validatie rapport'
+      );
+      return;
+    }
   });
+
+  get lastValidationDuration() {
+    const lastStatus = this.lastRunnningStatus;
+    if (!lastStatus) {
+      return null;
+    }
+    if (!lastStatus.startedAt || !lastStatus.finishedAt) {
+      return null;
+    }
+    const startedAt = moment(lastStatus.startedAt);
+    const finishedAt = moment(lastStatus.finishedAt);
+    const duration = moment.duration(finishedAt.diff(startedAt));
+    const minutes = Math.floor(duration.asMinutes());
+    const textForMinutes = `${minutes} ${minutes === 1 ? 'minuut' : 'minuten'} en`;
+    const seconds = duration.seconds();
+
+    return `${minutes !== 0 ? textForMinutes : ''} ${seconds} seconde${seconds === 1 ? '' : 'n'}.`;
+  }
 }

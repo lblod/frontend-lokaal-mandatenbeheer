@@ -19,16 +19,24 @@
             De data binnen deze bestuurseenheid is conform de validatieregels.
           </AuAlert>
         {{/if}}
-        {{#each this.resultsByTargetClass as |instanceGroup|}}
-          <div class="au-u-box au-u-margin-top no-pagination">
-            <AuHeading @skin="3" class="au-u-margin-bottom">
-              {{instanceGroup.class.label}}
-            </AuHeading>
-
+        {{#if this.reportIsRunning}}
+          <AuAlert @skin="info" @icon="clock">
+            <p>
+              Het validatierapport wordt gegenereerd. Dit kan even duren. Deze
+              pagina herlaadt automatisch wanneer het rapport klaar is. U kan
+              ondertussen de applicatie blijven gebruiken.
+            </p>
+            {{#if this.validatie.lastValidationDuration}}
+              <p>De vorige validatie duurde
+                {{this.validatie.lastValidationDuration}}</p>
+            {{/if}}
+          </AuAlert>
+        {{else}}
+          <div class="au-u-box no-pagination au-u-padding-bottom">
             <AuDataTable
-              @content={{instanceGroup.instances}}
+              @content={{this.allValidationErrors}}
               @noDataMessage="Geen validatieresultaten gevonden"
-              @size={{instanceGroup.instances.length}}
+              @size={{this.allValidationErrors.length}}
               as |t|
             >
               <t.content as |c|>
@@ -38,24 +46,12 @@
                 </c.header>
 
                 <c.body as |result|>
-                  <td>
-                    <LinkTo
-                      @route={{result.context.route}}
-                      @model={{result.context.modelId}}
-                      class="au-c-link au-u-medium"
-                    >
-                      {{result.label}}
-                    </LinkTo>
-                  </td>
-                  <td>
-                    {{result.result.resultMessage}}
-                  </td>
-
+                  <ValidationReportRow @result={{result.instance}} />
                 </c.body>
               </t.content>
             </AuDataTable>
           </div>
-        {{/each}}
+        {{/if}}
       </div>
     </AuBodyContainer>
   </main.content>
