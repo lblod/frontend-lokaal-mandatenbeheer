@@ -6,10 +6,6 @@ export default class MandatarissenTimeline extends Component {
   @service features;
   @service store;
 
-  get isFeatureEnabled() {
-    return this.features.isEnabled('timeline');
-  }
-
   get timelineEvents() {
     const sortedMandatarissen = [...this.args.mandatarissen].sort(
       (a, b) => a.start - b.start
