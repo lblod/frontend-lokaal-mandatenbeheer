@@ -37,7 +37,6 @@ module.exports = function (environment) {
       'show-forms-module': false,
       'show-codelijsten-module': false,
       'enable-mandataris-count-warnings': true,
-      timeline: false,
       politieraad: false,
       'editable-forms': false,
       'edit-mandataris-rework': false,
@@ -72,7 +71,6 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.features['editable-forms'] = true;
-    ENV.features['timeline'] = true;
     ENV.features['show-eigen-gegevens-module'] = true;
 
     ENV.features['shacl-report'] = true;
