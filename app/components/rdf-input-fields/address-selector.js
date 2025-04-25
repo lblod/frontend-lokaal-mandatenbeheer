@@ -42,30 +42,34 @@ export default class AddressSelectorComponent extends InputFieldComponent {
 
   @action
   async updateAddress(addressFields) {
-    this.onRequiredWithNoValueSelected(addressFields);
-    // we will create and destroy a lot of records here. This isn't a problem as the address seems to be a very
-    // fleeting concept already in the loket app. Addresses are created without checking for existence.
-    // This does mean that it will not be easy to find different instances using the same address though, but
-    // this already cannot be done using the loket data.
-    const newAddress = this.store.createRecord('adres', {
-      ...(addressFields || {}),
-    });
-    const addressWithUri = await newAddress.save();
-    const uri = addressWithUri.uri;
-    // TODO need a service to clean up unused address records since we're always creating a new one
-    replaceSingleFormValue(this.storeOptions, new NamedNode(uri));
+    if (addressFields?.adresRegisterUri) {
+      // we will create and destroy a lot of records here. This isn't a problem as the address seems to be a very
+      // fleeting concept already in the loket app. Addresses are created without checking for existence.
+      // This does mean that it will not be easy to find different instances using the same address though, but
+      // this already cannot be done using the loket data.
+      const newAddress = this.store.createRecord('adres', addressFields);
+      this.address = await newAddress.save();
+
+      // TODO need a service to clean up unused address records since we're always creating a new one
+      replaceSingleFormValue(
+        this.storeOptions,
+        new NamedNode(this.address.uri)
+      );
+    } else {
+      this.address = null;
+      replaceSingleFormValue(this.storeOptions, null);
+    }
+
     this.hasBeenFocused = true;
     super.updateValidations();
   }
 
   @action
-  onRequiredWithNoValueSelected(isValueSelected) {
-    if (!isValueSelected) {
+  triggerValidationForNullValue(addressSuggestion) {
+    if (!addressSuggestion?.fullAddress) {
       replaceSingleFormValue(this.storeOptions, null);
+      this.hasBeenFocused = true;
+      super.updateValidations();
     }
-
-    this.hasBeenFocused = true;
-
-    super.updateValidations();
   }
 }

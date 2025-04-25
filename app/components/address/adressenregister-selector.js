@@ -10,7 +10,6 @@ import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 export default class AdressenregisterSelectorComponent extends Component {
   @service addressregister;
 
-  @tracked address = null;
   @tracked addressSuggestion;
   @tracked addressesWithBusnumbers;
   @tracked addressWithBusnumber;
@@ -85,7 +84,7 @@ export default class AdressenregisterSelectorComponent extends Component {
   @action
   onClose() {
     if (this.args.isRequired) {
-      this.args.onCheckRequiredValidation(null);
+      this.args.addressSuggestionOnClose?.(this.addressSuggestion);
     }
   }
 }

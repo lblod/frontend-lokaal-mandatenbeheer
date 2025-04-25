@@ -10,7 +10,7 @@
     <Address::AdressenregisterSelector
       @address={{this.address}}
       @onChange={{this.updateAddress}}
-      @onCheckRequiredValidation={{this.onRequiredWithNoValueSelected}}
+      @addressSuggestionOnClose={{this.triggerValidationForNullValue}}
       @isRequired={{this.isRequired}}
       @hasErrors={{this.hasErrors}}
       @errors={{this.errors}}
