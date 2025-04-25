@@ -42,6 +42,7 @@ export default class AddressSelectorComponent extends InputFieldComponent {
 
   @action
   async updateAddress(addressFields) {
+    this.onRequiredWithNoValueSelected(addressFields);
     // we will create and destroy a lot of records here. This isn't a problem as the address seems to be a very
     // fleeting concept already in the loket app. Addresses are created without checking for existence.
     // This does mean that it will not be easy to find different instances using the same address though, but
@@ -54,6 +55,17 @@ export default class AddressSelectorComponent extends InputFieldComponent {
     // TODO need a service to clean up unused address records since we're always creating a new one
     replaceSingleFormValue(this.storeOptions, new NamedNode(uri));
     this.hasBeenFocused = true;
+    super.updateValidations();
+  }
+
+  @action
+  onRequiredWithNoValueSelected(isValueSelected) {
+    if (!isValueSelected) {
+      replaceSingleFormValue(this.storeOptions, null);
+    }
+
+    this.hasBeenFocused = true;
+
     super.updateValidations();
   }
 }

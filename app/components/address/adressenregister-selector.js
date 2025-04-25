@@ -81,4 +81,11 @@ export default class AdressenregisterSelectorComponent extends Component {
     this.addressWithBusnumber = address;
     this.args.onChange(address.adresProperties);
   }
+
+  @action
+  onClose() {
+    if (this.args.isRequired) {
+      this.args.onCheckRequiredValidation(null);
+    }
+  }
 }
