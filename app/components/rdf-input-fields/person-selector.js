@@ -90,7 +90,7 @@ export default class PersonSelectorComponent extends InputFieldComponent {
     this.hasBeenFocused = true;
     super.updateValidations();
     this.person = person;
-    if (this.person && this.onlyElected) {
+    if (this.person && this.onlyElected && this.bestuursorgaanIT) {
       const isElected = await this.verkiezingService.checkIfPersonIsElected(
         this.person.id,
         this.bestuursorgaanIT

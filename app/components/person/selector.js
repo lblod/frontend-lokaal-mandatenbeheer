@@ -35,10 +35,12 @@ export default class PersonSelectorComponent extends Component {
   async onSelectNewPerson({ instanceId }) {
     const persoon = await this.store.findRecord('persoon', instanceId);
     this.closeModal();
-    await this.persoonApi.putPersonInRightGraph(
-      instanceId,
-      this.args.bestuursorgaanIT.id
-    );
+    if (this.args.bestuursorgaanIT) {
+      await this.persoonApi.putPersonInRightGraph(
+        instanceId,
+        this.args.bestuursorgaanIT.id
+      );
+    }
     await this.args.onUpdate(persoon);
   }
 

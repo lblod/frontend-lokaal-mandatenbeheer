@@ -26,6 +26,7 @@ import RdfInputFieldsCustomTextInputComponent from 'frontend-lmb/components/rdf-
 import RdfInputFieldCustomConceptSchemeSelectorInput from 'frontend-lmb/components/rdf-input-fields/custom-concept-scheme-selector-input';
 import RdfInputFieldCustomConceptSchemeMultiSelectorInput from 'frontend-lmb/components/rdf-input-fields/custom-concept-scheme-multi-selector-input';
 import CustomFormLinkToFormInstance from 'frontend-lmb/components/custom-form/link-to-form-instance';
+import RdfInputFieldCustomPersonSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-input';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -154,6 +155,11 @@ export const registerCustomFormFields = () => {
       displayType:
         'http://lblod.data.gift/display-types/lmb/custom-link-to-form-selector-input',
       edit: CustomFormLinkToFormInstance,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/lmb/custom-person-input',
+      edit: RdfInputFieldCustomPersonSelector,
     },
   ]);
 };
