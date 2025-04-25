@@ -13,8 +13,6 @@ import {
 } from '@lblod/submission-form-helpers';
 import { consume } from 'ember-provide-consume-context';
 import { task } from 'ember-concurrency';
-import { trackedFunction } from 'reactiveweb/function';
-import { use } from 'ember-resources';
 
 import { API, JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 
@@ -24,26 +22,14 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
 
   formTypeId = 'persoon';
 
-  @use(getAllFormLabels) getAllFormLabels;
-
   @consume('form-context') formContext;
 
-  @tracked instanceObjectsOfOptions = [];
   @tracked selectedInstances = A([]);
   @tracked instanceDisplayLabels = ['Voornaam', 'Achternaam'];
-  @tracked pageToLoad;
-  @tracked lastPageOfInstances;
-  @tracked searchFilter;
-  @tracked isLoadingMoreOptions;
-  @tracked areAllInstancesFetched;
 
   constructor() {
     super(...arguments);
     this.getSelectedValues.perform();
-  }
-
-  get labelsForFormType() {
-    return this.getAllFormLabels?.value || [];
   }
 
   async fetchInstancesForUris(uris) {
@@ -55,7 +41,7 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
           'Content-Type': JSON_API_TYPE,
         },
         body: JSON.stringify({
-          labels: this.labelsForFormType,
+          labels: [], // use default
           uris,
         }),
       }
@@ -115,12 +101,4 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     super.updateValidations();
     this.getSelectedValues.perform();
   }
-}
-function getAllFormLabels() {
-  return trackedFunction(async () => {
-    const allLabels = await this.semanticFormRepository.getHeaderLabels(
-      this.formTypeId
-    );
-    return allLabels.filter((label) => label.isShownInSummary);
-  });
 }
