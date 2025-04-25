@@ -76,6 +76,8 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
       });
 
       this.selectedInstances = selected;
+    } else {
+      this.selectedInstances = [];
     }
   });
 
