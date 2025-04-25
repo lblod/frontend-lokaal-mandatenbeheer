@@ -271,7 +271,8 @@ export default class ValidatieService extends Service {
     while (!trackingNewReport) {
       await timeout(1000);
       const newReportStatus = await this.getCurrentReportStatus();
-      trackingNewReport = newReportStatus.id !== currentStatus.id;
+      trackingNewReport =
+        newReportStatus && newReportStatus.id !== currentStatus?.id;
     }
     this.polling.perform();
     if (this.runningStatus && this.router.currentRouteName !== 'report') {

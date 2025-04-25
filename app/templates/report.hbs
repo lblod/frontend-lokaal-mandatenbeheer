@@ -23,7 +23,7 @@
           <AuAlert @skin="info" @icon="clock">
             <p>
               Het validatierapport wordt gegenereerd. Dit kan even duren. Deze
-              pagina herlaadt automatisch wanneer het rapport klaar is en u kan
+              pagina herlaadt automatisch wanneer het rapport klaar is. U kan
               ondertussen de applicatie blijven gebruiken.
             </p>
             {{#if this.validatie.lastValidationDuration}}
@@ -32,7 +32,7 @@
             {{/if}}
           </AuAlert>
         {{else}}
-          <div class="au-u-box no-pagination">
+          <div class="au-u-box no-pagination au-u-padding-bottom">
             <AuDataTable
               @content={{this.allValidationErrors}}
               @noDataMessage="Geen validatieresultaten gevonden"
