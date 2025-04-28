@@ -439,7 +439,8 @@ main .au-c-main-container__content .au-u-wide-on-print {
     overflow: visible;
   }
 }
-.read-only-form {
+.read-only-form,
+.person-extra-info {
   .au-u-flex.au-u-flex--row.au-u-padding-small {
     padding: 0 !important;
   }

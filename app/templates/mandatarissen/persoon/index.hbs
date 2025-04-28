@@ -18,6 +18,12 @@
   <div class="au-o-box">
     <Person::Card @persoon={{@model.persoon}} />
   </div>
+  <div class="au-o-box">
+    <Persoon::ExtraInfoCard
+      @persoon={{@model.persoon}}
+      @form={{@model.personExtraInfoForm}}
+    />
+  </div>
 
   {{#if this.canShowUsage}}
     <div class="au-u-box au-u-padding">
@@ -50,4 +56,5 @@
         {{/each}}
       {{/if}}
     </div>
-  {{/if}}</div>
+  {{/if}}
+</div>

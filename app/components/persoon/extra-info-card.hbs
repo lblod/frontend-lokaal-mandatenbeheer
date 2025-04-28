@@ -1,0 +1,62 @@
+<AuToolbar @size="large" class="au-u-padding-none au-u-bottom-none" as |Group|>
+
+  <Group>
+    <AuHeading @skin="4">
+      Bijkomende informatie
+    </AuHeading>
+  </Group>
+  <Group>
+    <Shared::Tooltip
+      @showTooltip={{this.disabled}}
+      @tooltipText={{this.toolTipText}}
+      @alignment="right"
+    >
+      <AuButton
+        {{on "click" this.toggleModal}}
+        @disabled={{this.disabled}}
+      >Bewerk</AuButton>
+    </Shared::Tooltip>
+  </Group>
+</AuToolbar>
+
+<div class="au-o-box au-u-background-gray-100">
+  <div class="au-o-grid au-o-grid--small">
+    <div class="au-o-box au-u-padding-tiny person-extra-info">
+      <EditableForm
+        @isReadOnly={{true}}
+        @instanceId={{@persoon.id}}
+        @form={{@form}}
+        @onCancel={{this.noop}}
+        @onSave={{this.noop}}
+        @formInitialized={{fn (mut this.formInitialized) true}}
+        @customHistoryMessage={{true}}
+      />
+      {{#unless this.formInitialized}}
+        <Skeleton::Forms::MandatarisExtraInfo />
+      {{/unless}}
+      {{yield}}
+    </div>
+  </div>
+
+</div>
+
+<AuModal
+  @title="Bewerk bijkomende info persoon"
+  @modalOpen={{this.isModalActive}}
+  @closable={{true}}
+  @closeModal={{this.toggleModal}}
+>
+  <div class="au-o-box">
+    <EditableForm
+      @instanceId={{@persoon.id}}
+      @form={{@form}}
+      @onCancel={{this.toggleModal}}
+      @onSave={{this.onSave}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
+      @customHistoryMessage={{true}}
+    />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::MandatarisExtraInfo />
+    {{/unless}}
+  </div>
+</AuModal>
