@@ -311,7 +311,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       return (
         this.hasValidFieldName &&
         this.libraryFieldType &&
-        this.hasConceptSchemeSelected
+        this.hasConceptSchemeSelected &&
+        this.hasLinkToFormSelected
       );
     }
 
@@ -324,6 +325,14 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     }
 
     return this.conceptScheme;
+  }
+
+  get hasLinkToFormSelected() {
+    if (!this.displayType?.isLinkToForm) {
+      return true;
+    }
+
+    return this.linkedFormTypeId;
   }
 
   get fieldHasChanged() {
