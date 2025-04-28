@@ -63,7 +63,7 @@ export default class CustomFormEditCustomField extends Component {
       this.selectedField.conceptScheme !== this.conceptScheme?.uri ||
       this.selectedField.isRequired !== this.isRequired ||
       this.selectedField.isShownInSummary !== this.isShownInSummary ||
-      this.selectedField.linkedFormTypeId !== this.linkedFormTypeId
+      this.selectedField.linkedFormTypeUri !== this.linkedFormTypeId
     );
   }
 
