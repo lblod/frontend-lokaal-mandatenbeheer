@@ -67,10 +67,14 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         sort: 'label',
       })
       .then((displayTypes) => {
-        const allowedTypes = displayTypes.filter(
-          (type) => type.uri !== LINK_TO_FORM_CUSTOM_DISPLAY_TYPE
-        );
-        this.displayTypes = allowedTypes;
+        if (this.args.isForFormExtension) {
+          const allowedTypes = displayTypes.filter(
+            (type) => type.uri !== LINK_TO_FORM_CUSTOM_DISPLAY_TYPE
+          );
+          this.displayTypes = allowedTypes;
+        } else {
+          this.displayTypes = displayTypes;
+        }
         this.displayType = this.displayTypes.find((t) => t.uri === withValue);
       });
   }
