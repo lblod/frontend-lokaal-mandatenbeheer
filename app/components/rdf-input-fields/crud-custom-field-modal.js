@@ -45,7 +45,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @tracked displayType;
   @tracked conceptScheme;
   @tracked conceptSchemeOnLoad;
-  @tracked linkedFormTypeId;
+  @tracked linkedFormTypeUri;
 
   constructor() {
     super(...arguments);
@@ -117,8 +117,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   @action
-  updateLinkedFormTypeId(id) {
-    this.linkedFormTypeId = id;
+  updateLinkedFormTypeUri(uri) {
+    this.linkedFormTypeUri = uri;
   }
 
   @action
@@ -162,7 +162,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             isRequired: !!this.isFieldRequired,
             showInSummary: !!this.isShownInSummary,
             conceptScheme: this.conceptScheme?.uri,
-            linkedFormTypeUri: this.linkedFormTypeId,
+            linkedFormTypeUri: this.linkedFormTypeUri,
           }),
         }
       );
@@ -332,7 +332,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       return true;
     }
 
-    return this.linkedFormTypeId;
+    return this.linkedFormTypeUri;
   }
 
   get fieldHasChanged() {

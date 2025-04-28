@@ -70,17 +70,17 @@ export default class LinkToFormSelectFormType extends Component {
   }
 
   get selectedFormType() {
-    if (!this.args.selectedFormTypeId) {
+    if (!this.args.selectedFormTypeUri) {
       return null;
     }
 
     return this.formTypes.find(
-      (type) => type.id === this.args.selectedFormTypeId
+      (type) => type.uri === this.args.selectedFormTypeUri
     );
   }
 
   @action
   updateFormType(formTypeOption) {
-    this.args.onSelectedType?.(formTypeOption.id);
+    this.args.onSelectedType?.(formTypeOption.uri);
   }
 }

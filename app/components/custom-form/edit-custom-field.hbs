@@ -67,8 +67,8 @@
       {{#if this.displayType.isLinkToForm}}
         <LinkToForm::SelectFormType
           @formDefintionId={{@formDefinitionId}}
-          @selectedFormTypeId={{this.linkedFormTypeId}}
-          @onSelectedType={{this.updateLinkedFormTypeId}}
+          @selectedFormTypeUri={{this.linkedFormTypeUri}}
+          @onSelectedType={{this.updateLinkedFormTypeUri}}
         />
       {{/if}}
       <AuFormRow>
