@@ -48,7 +48,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   get formTypeId() {
     return this.storeOptions.store.any(
       this.args.field.uri,
-      EXT('targetTypeId'),
+      EXT('linkedFormType'),
       undefined,
       this.storeOptions.formGraph
     )?.value;
