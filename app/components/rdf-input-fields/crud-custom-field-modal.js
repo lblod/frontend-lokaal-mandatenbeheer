@@ -45,6 +45,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @tracked displayType;
   @tracked conceptScheme;
   @tracked conceptSchemeOnLoad;
+  @tracked linkedFormTypeId;
 
   constructor() {
     super(...arguments);
@@ -116,6 +117,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   @action
+  updateLinkedFormTypeId(id) {
+    this.linkedFormTypeId = id;
+  }
+
+  @action
   toggleIsRequired() {
     this.isFieldRequired = !this.isFieldRequired;
   }
@@ -156,6 +162,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             isRequired: !!this.isFieldRequired,
             showInSummary: !!this.isShownInSummary,
             conceptScheme: this.conceptScheme?.uri,
+            linkedFormTypeUri: this.linkedFormTypeId,
           }),
         }
       );

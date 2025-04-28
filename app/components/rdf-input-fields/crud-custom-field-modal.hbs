@@ -93,6 +93,17 @@
             </PowerSelect>
           </AuFormRow>
         {{/if}}
+        {{#if this.displayType.isLinkToForm}}
+          <AuFormRow class="au-form-row-full-width">
+            {{#if this.displayType.isLinkToForm}}
+              <LinkToForm::SelectFormType
+                @formDefintionId={{this.formContext.formDefinition.id}}
+                @selectedFormTypeId={{this.linkedFormTypeId}}
+                @onSelectedType={{this.updateLinkedFormTypeId}}
+              />
+            {{/if}}
+          </AuFormRow>
+        {{/if}}
         <AuFormRow>
           <AuToggleSwitch
             @disabled={{@show}}
