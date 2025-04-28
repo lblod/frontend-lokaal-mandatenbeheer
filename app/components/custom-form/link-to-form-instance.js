@@ -9,7 +9,7 @@ import {
   triplesForPath,
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
-import { Literal } from 'rdflib';
+import { NamedNode } from 'rdflib';
 import { consume } from 'ember-provide-consume-context';
 import { task } from 'ember-concurrency';
 import { trackedFunction } from 'reactiveweb/function';
@@ -103,7 +103,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   async selectInstance(selectedInstances) {
     this.selectedInstances.clear();
     this.selectedInstances.pushObjects(selectedInstances);
-    const matches = triplesForPath(this.storeOptions).values;
+    const matches = triplesForPath(this.storeOptions, true).values;
     matches
       .filter(
         (m) =>
@@ -115,7 +115,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
       .forEach((option) =>
         updateSimpleFormValue(
           this.storeOptions,
-          new Literal(option.instance.uri)
+          new NamedNode(option.instance.uri)
         )
       );
     super.updateSelectedItems();
@@ -146,7 +146,7 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   }
 
   isSettingInitialSelectedOptions = task(async () => {
-    const matches = triplesForPath(this.storeOptions);
+    const matches = triplesForPath(this.storeOptions, true);
     if (matches.values.length > 0) {
       const initialSelectedInstanceUris = matches.values.map((v) => v.value);
       const formInfo = await this.fetchInstancesForUris(
