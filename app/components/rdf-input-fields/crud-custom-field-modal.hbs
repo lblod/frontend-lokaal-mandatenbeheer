@@ -112,7 +112,7 @@
           >Maak veld verplicht
             <Shared::Tooltip
               @showTooltip={{true}}
-              @alignment="top-left"
+              @alignment="center"
               @tooltipText="Bij het aanmaken of aanpassen van items zal dit veld steeds ingevuld moeten worden."
             >
               <AuButton
@@ -120,9 +120,10 @@
                 @icon="circle-question"
                 @hideText={{true}}
                 @disabled={{true}}
-                class="au-u-padding-bottom-small au-u-padding-left-none"
+                class="au-u-padding-bottom-small au-u-padding-left-none au-u-padding-right-none"
               />
-            </Shared::Tooltip></AuToggleSwitch>
+            </Shared::Tooltip>
+          </AuToggleSwitch>
         </AuFormRow>
         {{#if this.isCustomForm}}
           <AuFormRow>
@@ -133,7 +134,7 @@
             >Toon in samenvatting
               <Shared::Tooltip
                 @showTooltip={{true}}
-                @alignment="top-left"
+                @alignment="center"
                 @tooltipText="Dit veld zal getoond worden in de samenvatting van een item, bijvoorbeeld bij het tonen van een lijst van items of bij een verwijzing naar een item."
               >
                 <AuButton
