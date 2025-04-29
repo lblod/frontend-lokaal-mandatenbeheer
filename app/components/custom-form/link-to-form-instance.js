@@ -82,6 +82,9 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
         }),
         instance,
         searchString: [...Object.values(instance), instance.id].join(';'),
+        disabled: this.selectedInstances.find(
+          (o) => o.instance.id === instance.id
+        ),
       });
     }
 
