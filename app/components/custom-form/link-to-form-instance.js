@@ -37,7 +37,6 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
 
   constructor() {
     super(...arguments);
-    this.getInstances.perform();
     this.isSettingInitialSelectedOptions.perform();
   }
 
@@ -89,6 +88,20 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     return instances;
   }
 
+  get filterInstancesParams() {
+    const params = {
+      page: this.pageToLoad,
+      size: 20,
+      filter: this.searchFilter,
+    };
+
+    if (!this.searchFilter) {
+      delete params.filter;
+    }
+
+    return params;
+  }
+
   async loadOptions() {}
 
   @action
@@ -114,8 +127,16 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   }
 
   async fetchInstancesForUris(instanceUris) {
+    const queryParamsMap = {
+      page: `page[number]=${this.filterInstancesParams.page}`,
+      size: `page[size]=${this.filterInstancesParams.size}`,
+      filter: `filter=${this.filterInstancesParams.filter}`,
+    };
+    const queryParams = Object.keys(this.filterInstancesParams)
+      .map((key) => queryParamsMap[key])
+      .join('&');
     const response = await fetch(
-      `${API.FORM_CONTENT_SERVICE}/instances/by-form-definition-uri?page[number]=${this.pageToLoad}`,
+      `${API.FORM_CONTENT_SERVICE}/instances/by-form-definition-uri?${queryParams}`,
       {
         method: 'POST',
         headers: {
@@ -163,22 +184,12 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     }
   });
 
-  getInstances = task({ enqueue: true }, async (page = -1, lastPage = 1) => {
-    if (!this.formTypeUri || !lastPage || page >= lastPage) {
+  getInstances = task({ enqueue: true }, async () => {
+    if (!this.formTypeUri) {
       return;
     }
 
-    page++;
-
-    const filterParams = {
-      page,
-      size: 20,
-      filter: this.searchFilter,
-    };
-    if (!this.searchFilter) {
-      delete filterParams.filter;
-    }
-    const formInfo = await this.fetchInstancesForUris([], filterParams);
+    const formInfo = await this.fetchInstancesForUris([]);
     this.instanceDisplayLabels = formInfo.labels;
     this.instances.pushObjects(formInfo.instances);
     // this.getInstances.perform(
