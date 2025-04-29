@@ -17,6 +17,7 @@
     @selected={{this.selectedInstances}}
     @onChange={{this.selectInstance}}
     @options={{this.instancesAsOptions}}
+    @onOpen={{this.onOpenSelector}}
     as |instance|
   >
     {{#if (eq instance.id this.LOAD_MORE_ID)}}

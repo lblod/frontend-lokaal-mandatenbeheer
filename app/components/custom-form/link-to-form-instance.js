@@ -28,8 +28,8 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   @tracked selectedInstances = A([]);
   @tracked instanceDisplayLabels = [];
   @tracked pageToLoad = 0;
+  @tracked currentPagination;
   @tracked lastPageOfInstances;
-  @tracked searchFilter;
   @tracked isLoadingMoreOptions;
   @tracked areAllInstancesFetched;
 
@@ -89,17 +89,10 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   }
 
   get filterInstancesParams() {
-    const params = {
+    return {
       page: this.pageToLoad,
       size: 20,
-      filter: this.searchFilter,
     };
-
-    if (!this.searchFilter) {
-      delete params.filter;
-    }
-
-    return params;
   }
 
   async loadOptions() {}
@@ -126,11 +119,19 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     super.updateSelectedItems();
   }
 
-  async fetchInstancesForUris(instanceUris) {
+  @action
+  onOpenSelector() {
+    if (this.isFetchingInstances || this.hasFetchedLastPage) {
+      return;
+    }
+
+    this.getInstances.perform();
+  }
+
+  async fetchInstancesForUris(instanceUris, setPagination = true) {
     const queryParamsMap = {
       page: `page[number]=${this.filterInstancesParams.page}`,
       size: `page[size]=${this.filterInstancesParams.size}`,
-      filter: `filter=${this.filterInstancesParams.filter}`,
     };
     const queryParams = Object.keys(this.filterInstancesParams)
       .map((key) => queryParamsMap[key])
@@ -154,8 +155,23 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
       );
       return null;
     }
+    const formInfo = await response.json();
+    if (!setPagination) {
+      return {
+        instances: formInfo.instances,
+        labels: formInfo.labels,
+      };
+    }
+    const enrichedInstances = this.addPaginationToInstances(
+      formInfo.instances,
+      response,
+      this.filterInstancesParams
+    );
 
-    return await response.json();
+    return {
+      instances: enrichedInstances,
+      labels: formInfo.labels,
+    };
   }
 
   isSettingInitialSelectedOptions = task(async () => {
@@ -163,7 +179,8 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     if (matches.values.length > 0) {
       const initialSelectedInstanceUris = matches.values.map((v) => v.value);
       const formInfo = await this.fetchInstancesForUris(
-        initialSelectedInstanceUris
+        initialSelectedInstanceUris,
+        false
       );
       this.instanceDisplayLabels = formInfo.labels;
 
@@ -185,16 +202,49 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
   });
 
   getInstances = task({ enqueue: true }, async () => {
-    if (!this.formTypeUri) {
+    if (!this.formTypeUri || isNaN(this.pageToLoad)) {
+      return;
+    }
+    if (
+      this.currentPagination &&
+      this.currentPagination.self.number > this.currentPagination.last.number
+    ) {
       return;
     }
 
     const formInfo = await this.fetchInstancesForUris([]);
     this.instanceDisplayLabels = formInfo.labels;
     this.instances.pushObjects(formInfo.instances);
-    // this.getInstances.perform(
-    //   page,
-    //   formInfo.instances.meta.pagination.last?.number
-    // );
+    this.getInstances.perform();
   });
+
+  addPaginationToInstances(_instances, response, options) {
+    const instances = [];
+    instances.push(..._instances);
+    instances.meta = instances.meta || {};
+    instances.meta.count = parseInt(response.headers.get('X-Total-Count'), 10);
+    instances.meta.pagination = {
+      first: {
+        number: 0,
+      },
+      self: {
+        number: options.page,
+        size: options.size,
+      },
+      last: {
+        number: Math.floor(instances.meta.count / options.size),
+      },
+    };
+    if (options.page * options.size < instances.meta.count) {
+      instances.meta.pagination.next = {
+        number: options.page + 1,
+        size: options.size,
+      };
+    }
+
+    this.currentPagination = instances.meta.pagination;
+    this.pageToLoad = this.currentPagination.next?.number;
+
+    return instances;
+  }
 }
