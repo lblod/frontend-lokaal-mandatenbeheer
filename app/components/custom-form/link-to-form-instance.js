@@ -60,6 +60,10 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
     const keysOfLabels = this.instanceDisplayLabels.map((label) => label.name);
     const uniqueInstanceIds = [];
     const instances = [];
+    if (this.isFetchingInstances) {
+      instances.push({ id: this.LOAD_MORE_ID, disabled: true });
+    }
+
     for (const instance of [
       ...this.instances,
       ...this.initialSelectedInstances,
@@ -79,10 +83,6 @@ export default class CustomFormLinkToFormInstance extends SelectorComponent {
         instance,
         searchString: [...Object.values(instance), instance.id].join(';'),
       });
-    }
-
-    if (this.isFetchingInstances) {
-      instances.push({ id: this.LOAD_MORE_ID, disabled: true });
     }
 
     return instances;
