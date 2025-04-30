@@ -9,8 +9,11 @@ import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
 
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
-import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
-import { isDateInRange, isValidDate } from 'frontend-lmb/utils/date';
+import {
+  endOfDay,
+  isDateInRange,
+  isValidDate,
+} from 'frontend-lmb/utils/date-manipulation';
 
 function getWarningMessages() {
   return trackedFunction(async () => {
