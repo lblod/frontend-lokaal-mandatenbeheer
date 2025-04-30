@@ -11,7 +11,11 @@ import {
 } from '@lblod/submission-form-helpers';
 
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
-import { ADRES_CUSTOM_DISPLAY_TYPE } from 'frontend-lmb/utils/well-known-uris';
+import {
+  ADRES_CUSTOM_DISPLAY_TYPE,
+  PERSON_CUSTOM_DISPLAY_TYPE,
+  PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
+} from 'frontend-lmb/utils/well-known-uris';
 
 export default class RdfInputFieldsCustomFieldWrapperComponent extends Component {
   @consume('form-context') formContext;
@@ -27,7 +31,11 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
   get isFieldReadOnly() {
     return (
       this.formState?.isReadOnly &&
-      ![ADRES_CUSTOM_DISPLAY_TYPE].includes(this.args.field.displayType)
+      ![
+        ADRES_CUSTOM_DISPLAY_TYPE,
+        PERSON_CUSTOM_DISPLAY_TYPE,
+        PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
+      ].includes(this.args.field.displayType)
     );
   }
 

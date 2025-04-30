@@ -28,6 +28,10 @@ import RdfInputFieldCustomConceptSchemeMultiSelectorInput from 'frontend-lmb/com
 import CustomFormLinkToFormInstance from 'frontend-lmb/components/custom-form/link-to-form-instance';
 import RdfInputFieldCustomPersonSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-input';
 import RdfInputFieldCustomPersonMultiSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-multi-input';
+import {
+  PERSON_CUSTOM_DISPLAY_TYPE,
+  PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
+} from './well-known-uris';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -158,13 +162,11 @@ export const registerCustomFormFields = () => {
       edit: CustomFormLinkToFormInstance,
     },
     {
-      displayType:
-        'http://lblod.data.gift/display-types/lmb/custom-person-input',
+      displayType: PERSON_CUSTOM_DISPLAY_TYPE,
       edit: RdfInputFieldCustomPersonSelector,
     },
     {
-      displayType:
-        'http://lblod.data.gift/display-types/lmb/custom-person-multi-input',
+      displayType: PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
       edit: RdfInputFieldCustomPersonMultiSelector,
     },
   ]);

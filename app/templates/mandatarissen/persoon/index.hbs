@@ -18,4 +18,14 @@
   <div class="au-o-box">
     <Person::Card @persoon={{@model.persoon}} />
   </div>
+  <div class="au-u-box au-u-padding">
+    {{#each this.model.usages as |usage|}}
+      <CustomForm::EditablePanel
+        @title={{usage.formLabel}}
+        @instanceId={{usage.instanceId}}
+        @form={{usage.form}}
+        @onSave={{this.onSave}}
+      />
+    {{/each}}
+  </div>
 </div>

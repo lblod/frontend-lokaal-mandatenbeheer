@@ -32,6 +32,10 @@ export default class CustomFormLinkToFormInstance extends InputFieldComponent {
     this.getSelectedValues.perform();
   }
 
+  get title() {
+    return this.args.field?.label || 'Persoon';
+  }
+
   async fetchInstancesForUris(uris) {
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/${this.formTypeId}/get-instances-by-uri`,
