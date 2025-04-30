@@ -83,13 +83,16 @@ export default class MandatarisEditDateInput extends Component {
   }
 
   get errorMessage() {
-    if (
-      !isValidDate(this.args.value) &&
-      this.args.isRequired &&
-      this.inputHasBeenFocused
-    ) {
-      return 'Dit is geen geldige datum';
+    if (this.inputHasBeenFocused) {
+      if (!this.args.value) {
+        return 'Dit veld is verplicht';
+      }
+
+      if (!isValidDate(this.args.value) && this.args.isRequired) {
+        return 'Dit is geen geldige datum';
+      }
     }
+
     return null;
   }
 
@@ -106,7 +109,10 @@ export default class MandatarisEditDateInput extends Component {
     this.inputHasBeenFocused = true;
     const inputValue = event.target?.value;
     this.dateInputString = inputValue;
-    const date = moment(inputValue, 'DD-MM-YYYY', true)?.toDate() ?? null;
+    let date = null;
+    if (inputValue?.trim() !== '') {
+      date = moment(inputValue, 'DD-MM-YYYY', true)?.toDate() ?? null;
+    }
     if (this.args?.endOfDay && date) {
       this.args.onChange?.(endOfDay(date));
     } else {
