@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { NULL_DATE } from '../constants';
 import { loadBestuursorgaanPeriodFromContext } from '../form-context/application-context-meta-ttl';
-import { isDateInRange } from '../date';
+import { isDateInRange } from '../date-manipulation';
 
 export const isValidMandatarisDate = ([dateLiteral], options) => {
   if (!dateLiteral) {
