@@ -1,0 +1,12 @@
+{{#if this.customTitle}}
+  <AuLink
+    @route={{this.customTitle.route}}
+    @model={{this.customTitle.id}}
+    class="au-u-bold"
+  >
+    {{this.customTitle.label}}
+  </AuLink>
+{{else}}
+  {{@usage.formLabel}}
+{{/if}}
+{{yield}}

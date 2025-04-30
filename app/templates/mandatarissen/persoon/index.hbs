@@ -39,11 +39,14 @@
       {{#if this.showUsage}}
         {{#each this.model.usages as |usage|}}
           <CustomForm::EditablePanel
-            @title={{usage.formLabel}}
             @instanceId={{usage.instanceId}}
             @form={{usage.form}}
             @onSave={{this.onSave}}
-          />
+          >
+            <:title>
+              <CustomForm::UsageTitle @usage={{usage}} />
+            </:title>
+          </CustomForm::EditablePanel>
         {{/each}}
       {{/if}}
     </div>
