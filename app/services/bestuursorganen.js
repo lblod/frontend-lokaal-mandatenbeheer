@@ -7,12 +7,14 @@ export default class BestuursorganenService extends Service {
   @service decretaleOrganen;
   @service bestuursperioden;
   @service features;
+  @service currentSession;
 
   async getAllRealPoliticalBestuursorganen() {
     return await this.store.query('bestuursorgaan', {
       'filter[:has-no:deactivated-at]': true,
       'filter[:has-no:is-tijdsspecialisatie-van]': true,
       'filter[:has-no:original-bestuurseenheid]': true,
+      'filter[bestuurseenheid][:id:]': this.currentSession.group.id,
       'filter[classificatie][id]':
         this.decretaleOrganen.classificatieIds.join(','), // only organs with a political mandate
       include: 'classificatie,heeft-tijdsspecialisaties',
