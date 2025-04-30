@@ -28,11 +28,7 @@ function getWarningMessages() {
     ) {
       const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
       const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
-      if (
-        this.minDate &&
-        this.maxDate &&
-        moment(this.maxDate).isAfter(moment(this.minDate))
-      ) {
+      if (this.minDate && this.maxDate) {
         warnings.push(
           `Kies een datum tussen ${formattedMinDate} en ${formattedMaxDate}.`
         );
@@ -96,12 +92,42 @@ export default class MandatarisEditDateInput extends Component {
     return null;
   }
 
-  get minDate() {
+  get hardMinDate() {
     return isValidDate(this.args.from) ? this.args.from : null;
   }
 
-  get maxDate() {
+  get hardMaxDate() {
     return isValidDate(this.args.to) ? this.args.to : null;
+  }
+
+  get dynamicTo() {
+    return isValidDate(this.args.dynamicTo) ? this.args.dynamicTo : null;
+  }
+
+  get dynamicFrom() {
+    return isValidDate(this.args.dynamicFrom) ? this.args.dynamicFrom : null;
+  }
+
+  get minDate() {
+    if (
+      this.dynamicFrom &&
+      moment(this.dynamicFrom).isSameOrAfter(moment(this.hardMinDate))
+    ) {
+      return this.dynamicFrom;
+    }
+
+    return this.hardMinDate;
+  }
+
+  get maxDate() {
+    if (
+      this.dynamicTo &&
+      moment(this.dynamicTo).isSameOrBefore(moment(this.hardMaxDate))
+    ) {
+      return this.dynamicTo;
+    }
+
+    return this.hardMaxDate;
   }
 
   onChange = restartableTask(async (event) => {

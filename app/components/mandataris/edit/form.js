@@ -133,14 +133,6 @@ export default class MandatarisEditFormComponent extends Component {
     return `Eerste ${this.mandaatLabel}`;
   }
 
-  get toStartDate() {
-    return this.endDate ?? this.args.bestuursorgaanIT.bindingEinde;
-  }
-
-  get fromEndDate() {
-    return this.startDate ?? this.args.bestuursorgaanIT.bindingStart;
-  }
-
   @action
   updateMandaat(mandaat) {
     this.mandaat = mandaat;

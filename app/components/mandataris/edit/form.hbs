@@ -92,7 +92,8 @@
             @label="Start"
             @value={{this.startDate}}
             @from={{@bestuursorgaanIT.bindingStart}}
-            @to={{this.toStartDate}}
+            @to={{@bestuursorgaanIT.bindingEinde}}
+            @dynamicTo={{this.endDate}}
             @onChange={{fn (mut this.startDate)}}
             @isRequired={{true}}
           />
@@ -101,8 +102,9 @@
           <Mandataris::Edit::DateInput
             @label="Einde"
             @value={{this.endDate}}
-            @from={{this.fromEndDate}}
+            @from={{@bestuursorgaanIT.bindingStart}}
             @to={{@bestuursorgaanIT.bindingEinde}}
+            @dynamicFrom={{this.startDate}}
             @onChange={{fn (mut this.endDate)}}
             @isRequired={{false}}
           />
