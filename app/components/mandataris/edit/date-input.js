@@ -80,11 +80,10 @@ export default class MandatarisEditDateInput extends Component {
 
   get errorMessage() {
     if (this.inputHasBeenFocused) {
-      if (!this.args.value) {
+      if (!this.args.value && this.args.isRequired) {
         return 'Dit veld is verplicht';
       }
-
-      if (!isValidDate(this.args.value) && this.args.isRequired) {
+      if (this.args.value && !isValidDate(this.args.value)) {
         return 'Dit is geen geldige datum';
       }
     }
