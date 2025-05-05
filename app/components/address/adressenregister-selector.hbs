@@ -1,9 +1,9 @@
 <div ...attributes>
-  <div>
+  <div class={{if @hasErrors "ember-power-select--error"}}>
     <AuLabel for="address">Adres</AuLabel>
     <PowerSelect
       @triggerId="address"
-      @allowClear={{true}}
+      @allowClear={{not @isRequired}}
       @disabled={{this.disabled}}
       @search={{perform this.search}}
       @selected={{this.addressSuggestion}}
@@ -12,10 +12,14 @@
       @searchEnabled={{true}}
       @noMatchesMessage="Geen resultaten"
       @searchMessage="Typ om te zoeken"
+      @onClose={{this.onClose}}
       as |suggestion|
     >
       {{suggestion.fullAddress}}
     </PowerSelect>
+    {{#each @errors as |error|}}
+      <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+    {{/each}}
   </div>
   <div class="au-u-margin-top">
     <AuLabel for="busnumber">Busnummer</AuLabel>
