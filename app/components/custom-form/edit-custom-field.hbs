@@ -64,6 +64,13 @@
           </PowerSelect>
         </AuFormRow>
       {{/if}}
+      {{#if this.displayType.isLinkToForm}}
+        <LinkToForm::SelectFormType
+          @formDefintionId={{@formDefinitionId}}
+          @selectedFormTypeUri={{this.linkedFormTypeUri}}
+          @onSelectedType={{this.updateLinkedFormTypeUri}}
+        />
+      {{/if}}
       <AuFormRow>
         <AuToggleSwitch
           @disabled={{not this.selectedField}}
@@ -80,9 +87,10 @@
               @icon="circle-question"
               @hideText={{true}}
               @disabled={{true}}
-              class="au-u-padding-bottom-small au-u-padding-left-none"
+              class="au-u-padding-bottom-small au-u-padding-left-none au-u-padding-right-none"
             />
-          </Shared::Tooltip></AuToggleSwitch>
+          </Shared::Tooltip>
+        </AuToggleSwitch>
       </AuFormRow>
       <AuFormRow>
         <AuToggleSwitch

@@ -32,6 +32,7 @@
         @onCloseModal={{this.formContext.onFormUpdate}}
         @form={{this.formContext.formDefinition}}
         @field={{@field}}
+        @isForFormExtension={{this.formContext.isForFormExtension}}
       />
     {{/if}}
     {{yield}}

@@ -93,6 +93,7 @@ export default class EditableFormComponent extends Component {
       onFieldClicked: (fieldModel) => this.setClickedField(fieldModel),
       formDefinition: this.currentForm,
       fieldsInForm: this.fields,
+      isForFormExtension: !!this.args.isForFormExtension,
     };
   }
 }

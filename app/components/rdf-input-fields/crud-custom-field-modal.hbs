@@ -93,6 +93,17 @@
             </PowerSelect>
           </AuFormRow>
         {{/if}}
+        {{#if this.displayType.isLinkToForm}}
+          <AuFormRow class="au-form-row-full-width">
+            {{#if this.displayType.isLinkToForm}}
+              <LinkToForm::SelectFormType
+                @formDefintionId={{this.formContext.formDefinition.id}}
+                @selectedFormTypeUri={{this.linkedFormTypeUri}}
+                @onSelectedType={{this.updateLinkedFormTypeUri}}
+              />
+            {{/if}}
+          </AuFormRow>
+        {{/if}}
         <AuFormRow>
           <AuToggleSwitch
             @disabled={{@show}}
@@ -101,7 +112,7 @@
           >Maak veld verplicht
             <Shared::Tooltip
               @showTooltip={{true}}
-              @alignment="top-left"
+              @alignment="center"
               @tooltipText="Bij het aanmaken of aanpassen van items zal dit veld steeds ingevuld moeten worden."
             >
               <AuButton
@@ -109,9 +120,10 @@
                 @icon="circle-question"
                 @hideText={{true}}
                 @disabled={{true}}
-                class="au-u-padding-bottom-small au-u-padding-left-none"
+                class="au-u-padding-bottom-small au-u-padding-left-none au-u-padding-right-none"
               />
-            </Shared::Tooltip></AuToggleSwitch>
+            </Shared::Tooltip>
+          </AuToggleSwitch>
         </AuFormRow>
         {{#if this.isCustomForm}}
           <AuFormRow>
@@ -122,7 +134,7 @@
             >Toon in samenvatting
               <Shared::Tooltip
                 @showTooltip={{true}}
-                @alignment="top-left"
+                @alignment="center"
                 @tooltipText="Dit veld zal getoond worden in de samenvatting van een item, bijvoorbeeld bij het tonen van een lijst van items of bij een verwijzing naar een item."
               >
                 <AuButton

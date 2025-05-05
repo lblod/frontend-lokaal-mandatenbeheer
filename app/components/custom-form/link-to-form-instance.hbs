@@ -1,0 +1,38 @@
+<RdfInputFields::CustomFieldWrapper
+  @inline={{true}}
+  @field={{@field}}
+  @form={{@form}}
+  @graphs={{@graphs}}
+  @formStore={{@formStore}}
+>
+  <PowerSelectMultiple
+    @labelText="Formulier"
+    @loadingMessage="Aan het laden..."
+    @noMatchesMessage="Geen resultaten"
+    @searchMessage="Typ om te zoeken"
+    @searchEnabled={{true}}
+    @searchField="searchString"
+    @allowClear={{false}}
+    @placeholder="Selecteer instantie"
+    @selected={{this.selectedInstances}}
+    @onChange={{this.selectInstance}}
+    @options={{this.instancesAsOptions}}
+    @onOpen={{this.onOpenSelector}}
+    as |instance|
+  >
+    {{#if (eq instance.id this.LOAD_MORE_ID)}}
+      <span class="au-u-flex au-u-flex--center">
+        <AuLoader @hideMessage={{true}} />
+      </span>
+    {{else}}
+      <div class="au-u-flex au-u-flex--row au-u-flex-wrap">
+        {{#each instance.option as |keyValue|}}
+          <span class="au-u-padding-right-small">
+            <AuHelpText>{{keyValue.key}}: </AuHelpText>
+            {{keyValue.value}}
+          </span>
+        {{/each}}
+      </div>
+    {{/if}}
+  </PowerSelectMultiple>
+</RdfInputFields::CustomFieldWrapper>
