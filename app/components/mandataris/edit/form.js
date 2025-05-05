@@ -134,6 +134,14 @@ export default class MandatarisEditFormComponent extends Component {
     return this.errorMap.get('replacement');
   }
 
+  get dynamicFromDateForEndDate() {
+    if (this.errorMap.get('startDate')) {
+      return null;
+    }
+
+    return this.startDate;
+  }
+
   @action
   updateMandaat(mandaat, { hasErrors }) {
     this.mandaat = mandaat;
