@@ -36,7 +36,6 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked mandaatError;
   @tracked status;
   @tracked replacement;
-  @tracked replacementError;
   @tracked startDate;
   @tracked endDate;
   @tracked fractie;
@@ -46,6 +45,7 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
   @tracked vanafDate;
   @tracked reasonForChange;
+  @tracked errorMap = new Map();
 
   @tracked correctedMandataris = false;
   @tracked updatedStateMandataris = false;
@@ -91,12 +91,8 @@ export default class MandatarisEditFormComponent extends Component {
     );
   }
 
-  get hasErrors() {
-    return this.replacementError || this.mandaatError;
-  }
-
   get disabled() {
-    return !this.hasChanges || this.hasErrors;
+    return !this.hasChanges || this.formHasErrors;
   }
 
   get toolTipText() {
@@ -133,28 +129,57 @@ export default class MandatarisEditFormComponent extends Component {
     return `Eerste ${this.mandaatLabel}`;
   }
 
+  get replacementError() {
+    return this.errorMap.get('replacement');
+  }
+
   @action
-  updateMandaat(mandaat) {
+  updateMandaat(mandaat, { hasErrors }) {
     this.mandaat = mandaat;
+    this.updateErrorList('mandaat', hasErrors);
   }
 
   @action
   updateStatus(status) {
     this.status = status;
+    this.updateErrorList('status', !status);
   }
 
   @action
   updateReplacement(newReplacement) {
-    if (this.args.mandataris.isBestuurlijkeAliasVan.id === newReplacement?.id) {
-      this.replacementError = true;
-    } else {
-      this.replacementError = false;
-    }
     this.replacement = newReplacement;
+    this.updateErrorList(
+      'replacement',
+      this.args.mandataris.isBestuurlijkeAliasVan.id === newReplacement?.id
+    );
   }
 
-  @action updateFractie(newFractie) {
+  @action updateFractie(newFractie, { hasErrors }) {
     this.fractie = newFractie;
+    this.updateErrorList('fractie', hasErrors);
+  }
+
+  @action
+  updateStartDate(date, { hasErrors }) {
+    this.startDate = date;
+    this.updateErrorList('startDate', hasErrors);
+  }
+
+  @action
+  updateEndDate(date, { hasErrors }) {
+    this.endDate = date;
+    this.updateErrorList('endDate', hasErrors);
+  }
+
+  updateErrorList(id, hasErrors) {
+    this.errorMap.set(id, !!hasErrors);
+    this.errorMap = new Map(this.errorMap);
+  }
+
+  get formHasErrors() {
+    const errorArray = Array.from(this.errorMap.values());
+
+    return errorArray.some((bool) => bool);
   }
 
   @action
