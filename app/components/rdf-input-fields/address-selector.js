@@ -62,6 +62,7 @@ export default class AddressSelectorComponent extends InputFieldComponent {
 
     this.hasBeenFocused = true;
     super.updateValidations();
+    this.args.onInteractedWithField?.();
   }
 
   @action
@@ -70,6 +71,7 @@ export default class AddressSelectorComponent extends InputFieldComponent {
       replaceSingleFormValue(this.storeOptions, null);
       this.hasBeenFocused = true;
       super.updateValidations();
+      this.args.onInteractedWithField?.();
     }
   }
 }

@@ -4,6 +4,7 @@
   @form={{@form}}
   @graphs={{@graphs}}
   @formStore={{@formStore}}
+  as |wrapper|
 >
   <RdfInputFields::RdfDateInput
     @inTable={{true}}
@@ -15,6 +16,7 @@
     @forceShowErrors={{@forceShowErrors}}
     @cacheConditionals={{@cacheConditionals}}
     @show={{@show}}
+    @onInteractedWithField={{wrapper.onInteractedWithField}}
   />
 
 </RdfInputFields::CustomFieldWrapper>

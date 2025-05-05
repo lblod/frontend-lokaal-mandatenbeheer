@@ -4,6 +4,7 @@
   @form={{@form}}
   @graphs={{@graphs}}
   @formStore={{@formStore}}
+  as |wrapper|
 >
   <RdfInputFields::ConceptSchemeMultiSelector
     @showLabel={{false}}
@@ -16,6 +17,7 @@
     @forceShowErrors={{@forceShowErrors}}
     @cacheConditionals={{@cacheConditionals}}
     @show={{@show}}
+    @onInteractedWithField={{wrapper.onInteractedWithField}}
   />
 
 </RdfInputFields::CustomFieldWrapper>
