@@ -52,6 +52,7 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked newMandataris;
 
   @tracked isRangordeModalOpen;
+  @tracked isSaving;
 
   @use(getStatusOptions) getStatusOptions;
 
@@ -200,6 +201,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   async saveForm() {
+    this.isSaving = true;
     if (this.reasonForChange == 'Corrigeer fouten') {
       await this.corrigeerFouten();
       this.correctedMandataris = true;
@@ -207,12 +209,14 @@ export default class MandatarisEditFormComponent extends Component {
       await this.updateState();
       this.updatedStateMandataris = true;
     } else {
+      this.isSaving = false;
       showErrorToast(
         this.toaster,
         'Geen geldige reden voor aanpassing geselecteerd'
       );
       return;
     }
+    this.isSaving = false;
     this.reasonForChange = null;
     this.isSecondModalOpen = false;
   }

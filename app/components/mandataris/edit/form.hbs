@@ -165,7 +165,11 @@
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton {{on "click" this.saveForm}}>
+          <AuButton
+            @loading={{this.isSaving}}
+            @loadingMessage="Aanpassingen worden bewaard"
+            {{on "click" this.saveForm}}
+          >
             Opslaan
           </AuButton>
           <AuButton {{on "click" this.goBackSecondModal}} @skin="secondary">
