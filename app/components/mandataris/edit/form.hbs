@@ -94,7 +94,7 @@
             @from={{@bestuursorgaanIT.bindingStart}}
             @to={{@bestuursorgaanIT.bindingEinde}}
             @dynamicTo={{this.endDate}}
-            @onChange={{fn (mut this.startDate)}}
+            @onChange={{this.updateStartDate}}
             @isRequired={{true}}
           />
         </div>
@@ -105,7 +105,7 @@
             @from={{@bestuursorgaanIT.bindingStart}}
             @to={{@bestuursorgaanIT.bindingEinde}}
             @dynamicFrom={{this.startDate}}
-            @onChange={{fn (mut this.endDate)}}
+            @onChange={{this.updateEndDate}}
             @isRequired={{false}}
           />
         </div>

@@ -138,10 +138,12 @@ export default class MandatarisEditDateInput extends Component {
     if (inputValue?.trim() !== '') {
       date = moment(inputValue, 'DD-MM-YYYY', true)?.toDate() ?? null;
     }
+    const hasErrors =
+      (!date && this.args.isRequired) || (date && !isValidDate(date));
     if (this.args?.endOfDay && date) {
-      this.args.onChange?.(endOfDay(date));
+      this.args.onChange?.(endOfDay(date), { hasErrors });
     } else {
-      this.args.onChange?.(date);
+      this.args.onChange?.(date, { hasErrors });
     }
   });
 }
