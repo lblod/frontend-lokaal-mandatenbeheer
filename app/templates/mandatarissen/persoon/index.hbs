@@ -18,4 +18,36 @@
   <div class="au-o-box">
     <Person::Card @persoon={{@model.persoon}} />
   </div>
-</div>
+
+  {{#if this.canShowUsage}}
+    <div class="au-u-box au-u-padding">
+      <AuHeading @skin="4" @level="2">
+        <div class="au-u-flex au-u-flex-row au-u-flex--between">
+          <div>Deze persoon wordt gebruikt in
+            {{this.model.usages.length}}
+            formulier{{if (eq this.model.usages.length 1) "" "en"}}</div>
+          <AuButton
+            @icon={{if this.showUsage "remove" "plus"}}
+            @skin="link"
+            {{on "click" this.toggleShowUsage}}
+            class="au-u-h6"
+          >
+            {{if this.showUsage "Verberg details" "Toon details"}}
+          </AuButton>
+        </div>
+      </AuHeading>
+      {{#if this.showUsage}}
+        {{#each this.model.usages as |usage|}}
+          <CustomForm::EditablePanel
+            @instanceId={{usage.instanceId}}
+            @form={{usage.form}}
+            @onSave={{this.onSave}}
+          >
+            <:title>
+              <CustomForm::UsageTitle @usage={{usage}} />
+            </:title>
+          </CustomForm::EditablePanel>
+        {{/each}}
+      {{/if}}
+    </div>
+  {{/if}}</div>

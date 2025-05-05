@@ -439,3 +439,18 @@ main .au-c-main-container__content .au-u-wide-on-print {
     overflow: visible;
   }
 }
+.read-only-form {
+  .au-u-flex.au-u-flex--row.au-u-padding-small {
+    padding: 0 !important;
+  }
+  .au-c-label {
+    color: $au-gray-600;
+  }
+  input.au-c-input.is-disabled {
+    border: none;
+    outline: none;
+    color: $au-gray-800;
+    padding: 0;
+    height: auto;
+  }
+}

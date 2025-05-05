@@ -26,6 +26,12 @@ import RdfInputFieldsCustomTextInputComponent from 'frontend-lmb/components/rdf-
 import RdfInputFieldCustomConceptSchemeSelectorInput from 'frontend-lmb/components/rdf-input-fields/custom-concept-scheme-selector-input';
 import RdfInputFieldCustomConceptSchemeMultiSelectorInput from 'frontend-lmb/components/rdf-input-fields/custom-concept-scheme-multi-selector-input';
 import CustomFormLinkToFormInstance from 'frontend-lmb/components/custom-form/link-to-form-instance';
+import RdfInputFieldCustomPersonSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-input';
+import RdfInputFieldCustomPersonMultiSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-multi-input';
+import {
+  PERSON_CUSTOM_DISPLAY_TYPE,
+  PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
+} from './well-known-uris';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -154,6 +160,14 @@ export const registerCustomFormFields = () => {
       displayType:
         'http://lblod.data.gift/display-types/lmb/custom-link-to-form-selector-input',
       edit: CustomFormLinkToFormInstance,
+    },
+    {
+      displayType: PERSON_CUSTOM_DISPLAY_TYPE,
+      edit: RdfInputFieldCustomPersonSelector,
+    },
+    {
+      displayType: PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
+      edit: RdfInputFieldCustomPersonMultiSelector,
     },
   ]);
 };

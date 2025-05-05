@@ -105,6 +105,10 @@ export const DATE_CUSTOM_DISPLAY_TYPE =
   'http://lblod.data.gift/display-types/lmb/custom-date-input';
 export const ADRES_CUSTOM_DISPLAY_TYPE =
   'http://lblod.data.gift/display-types/lmb/custom-address-input';
+export const PERSON_CUSTOM_DISPLAY_TYPE =
+  'http://lblod.data.gift/display-types/lmb/custom-person-input';
+export const PERSON_MULTI_CUSTOM_DISPLAY_TYPE =
+  'http://lblod.data.gift/display-types/lmb/custom-person-multi-input';
 export const CONCEPT_SCHEME_SELECTOR_CUSTOM_DISPLAY_TYPE =
   'http://lblod.data.gift/display-types/lmb/custom-concept-scheme-selector-input';
 export const CONCEPT_SCHEME_MULTI_SELECTOR_CUSTOM_DISPLAY_TYPE =

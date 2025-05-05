@@ -50,6 +50,19 @@ export default class CustomFormsService extends Service {
     };
   }
 
+  async getInstanceUsage(instanceUri) {
+    const response = await fetch(
+      `${API.FORM_CONTENT_SERVICE}/custom-form/find-usage?instanceUri=${encodeURIComponent(instanceUri)}`
+    );
+    const jsonResponse = await response.json();
+
+    if (!response.ok) {
+      console.error({ jsonResponse });
+    }
+
+    return jsonResponse.users;
+  }
+
   async removeFormDefinitionWithUsage(form) {
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/definition/${form.id}/usage`,
