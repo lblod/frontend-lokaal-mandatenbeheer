@@ -56,7 +56,7 @@ export default class CustomFormsService extends Service {
     );
     const jsonResponse = await response.json();
 
-    if (response.status !== STATUS_CODE.OK) {
+    if (!response.ok) {
       console.error({ jsonResponse });
     }
 

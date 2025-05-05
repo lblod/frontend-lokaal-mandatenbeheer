@@ -16,13 +16,11 @@ export default class UnrestrictedPersonSelectorComponent extends InputFieldCompo
   @service store;
   @service toaster;
   @service('verkiezing') verkiezingService;
-  @service multiUriFetcher;
 
   @tracked person = null;
 
   @tracked initialized = false;
   @tracked mandaatModel = null;
-  @tracked bestuursorgaanIT = null;
 
   constructor() {
     super(...arguments);
@@ -35,12 +33,12 @@ export default class UnrestrictedPersonSelectorComponent extends InputFieldCompo
 
   async load() {
     await this.loadProvidedValue();
-    this.initialized = true;
   }
 
   async loadProvidedValue() {
     const personTriples = triplesForPath(this.storeOptions, false).values;
     if (!personTriples.length) {
+      this.initialized = true;
       return;
     }
     const personUri = personTriples[0].value;
@@ -49,6 +47,7 @@ export default class UnrestrictedPersonSelectorComponent extends InputFieldCompo
       'filter[:uri:]': personUri,
     });
     this.person = matches.at(0);
+    this.initialized = true;
   }
 
   @action
