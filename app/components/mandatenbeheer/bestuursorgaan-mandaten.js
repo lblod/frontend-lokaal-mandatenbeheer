@@ -7,6 +7,7 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
+// TODO: this component needs cleanup of unused code*
 export default class MandatenbeheerBestuursorgaanMandatenComponent extends Component {
   @service store;
   @service toaster;
