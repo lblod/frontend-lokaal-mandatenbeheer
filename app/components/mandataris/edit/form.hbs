@@ -87,31 +87,15 @@
             @isUpdatingState={{false}}
           />
         {{/unless}}
-        <div>
-          {{! TODO own component }}
-          <Mandataris::Edit::DateInput
-            @label="Start"
-            @value={{this.startDate}}
-            @from={{@bestuursorgaanIT.bindingStart}}
-            @to={{@bestuursorgaanIT.bindingEinde}}
-            @dynamicTo={{this.endDate}}
-            @onChange={{this.updateStartDate}}
-            @onErrorStateUpdated={{this.updateErrorMap}}
-            @isRequired={{true}}
-          />
-        </div>
-        <div>
-          <Mandataris::Edit::DateInput
-            @label="Einde"
-            @value={{this.endDate}}
-            @from={{@bestuursorgaanIT.bindingStart}}
-            @to={{@bestuursorgaanIT.bindingEinde}}
-            @dynamicFrom={{this.dynamicFromDateForEndDate}}
-            @onChange={{this.updateEndDate}}
-            @onErrorStateUpdated={{this.updateErrorMap}}
-            @isRequired={{false}}
-          />
-        </div>
+
+        <Mandataris::Edit::StartEndDate
+          @startDate={{this.startDate}}
+          @endDate={{this.endDate}}
+          @from={{@bestuursorgaanIT.bindingStart}}
+          @to={{@bestuursorgaanIT.bindingEinde}}
+          @onUpdate={{this.updateStartEndDate}}
+          @onErrorStateUpdated={{this.updateErrorMap}}
+        />
       {{/unless}}
     </div>
   </:body>

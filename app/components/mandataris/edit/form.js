@@ -134,14 +134,6 @@ export default class MandatarisEditFormComponent extends Component {
     return this.errorMap.get('replacement');
   }
 
-  get dynamicFromDateForEndDate() {
-    if (this.errorMap.get('startDate')) {
-      return null;
-    }
-
-    return this.startDate;
-  }
-
   get formHasErrors() {
     const errorArray = Array.from(this.errorMap.values());
 
@@ -180,13 +172,9 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   @action
-  async updateStartDate(date) {
-    this.startDate = date;
-  }
-
-  @action
-  updateEndDate(date) {
-    this.endDate = date;
+  updateStartEndDate(startDate, endDate) {
+    this.startDate = startDate;
+    this.endDate = endDate;
   }
 
   @action
