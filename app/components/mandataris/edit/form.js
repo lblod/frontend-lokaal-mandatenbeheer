@@ -8,10 +8,10 @@ import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
 import { isDisabledForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 
-import moment from 'moment';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 
+import moment from 'moment';
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
 
@@ -142,53 +142,51 @@ export default class MandatarisEditFormComponent extends Component {
     return this.startDate;
   }
 
+  get formHasErrors() {
+    const errorArray = Array.from(this.errorMap.values());
+
+    return errorArray.some((bool) => bool);
+  }
+
   @action
-  updateMandaat(mandaat, { hasErrors }) {
+  updateErrorMap({ id, hasErrors }) {
+    this.errorMap.set(id, !!hasErrors);
+    this.errorMap = new Map(this.errorMap);
+    console.log(this.errorMap);
+  }
+
+  @action
+  updateMandaat(mandaat) {
     this.mandaat = mandaat;
-    this.updateErrorList('mandaat', hasErrors);
   }
 
   @action
   updateStatus(status) {
     this.status = status;
-    this.updateErrorList('status', !status);
   }
 
   @action
   updateReplacement(newReplacement) {
     this.replacement = newReplacement;
-    this.updateErrorList(
-      'replacement',
-      this.args.mandataris.isBestuurlijkeAliasVan.id === newReplacement?.id
-    );
+    this.updateErrorMap({
+      id: 'replacement',
+      hasErrors:
+        newReplacement?.id === this.args.mandataris.isBestuurlijkeAliasVan.id,
+    });
   }
 
-  @action updateFractie(newFractie, { hasErrors }) {
+  @action updateFractie(newFractie) {
     this.fractie = newFractie;
-    this.updateErrorList('fractie', hasErrors);
   }
 
   @action
-  updateStartDate(date, { hasErrors }) {
+  async updateStartDate(date) {
     this.startDate = date;
-    this.updateErrorList('startDate', hasErrors);
   }
 
   @action
-  updateEndDate(date, { hasErrors }) {
+  updateEndDate(date) {
     this.endDate = date;
-    this.updateErrorList('endDate', hasErrors);
-  }
-
-  updateErrorList(id, hasErrors) {
-    this.errorMap.set(id, !!hasErrors);
-    this.errorMap = new Map(this.errorMap);
-  }
-
-  get formHasErrors() {
-    const errorArray = Array.from(this.errorMap.values());
-
-    return errorArray.some((bool) => bool);
   }
 
   @action
