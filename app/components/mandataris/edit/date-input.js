@@ -32,10 +32,6 @@ export default class MandatarisEditDateInput extends Component {
     }
   }
 
-  get inputIsValidDate() {
-    return isValidDate(this.args.value);
-  }
-
   get hardMinDate() {
     return isValidDate(this.args.from) ? this.args.from : null;
   }
@@ -87,10 +83,7 @@ export default class MandatarisEditDateInput extends Component {
     if (date && !isValidDate(date)) {
       return 'Dit is geen geldige datum';
     }
-    if (
-      !isDateInRange(date, this.minDate, this.maxDate) &&
-      this.inputIsValidDate
-    ) {
+    if (!isDateInRange(date, this.minDate, this.maxDate) && isValidDate(date)) {
       const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
       const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
       if (this.minDate && this.maxDate) {
@@ -117,10 +110,7 @@ export default class MandatarisEditDateInput extends Component {
     if (inputValue?.trim() !== '') {
       date = moment(inputValue, 'DD-MM-YYYY', true)?.toDate() ?? null;
     }
-    const hasErrors =
-      this.getErrorMessage(date) ||
-      (!date && this.args.isRequired) ||
-      (date && !isValidDate(date));
+    const hasErrors = this.getErrorMessage(date);
     if (this.args?.endOfDay && date) {
       this.args.onChange?.(endOfDay(date), { hasErrors });
     } else {
