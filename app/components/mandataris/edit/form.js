@@ -227,6 +227,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.isSaving = false;
     this.reasonForChange = null;
     this.isSecondModalOpen = false;
+    await this.setInitialFormState();
   }
 
   @action
