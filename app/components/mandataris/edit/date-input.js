@@ -5,9 +5,6 @@ import { guidFor } from '@ember/object/internals';
 
 import { restartableTask, timeout } from 'ember-concurrency';
 import moment from 'moment';
-import { trackedFunction } from 'reactiveweb/function';
-import { use } from 'ember-resources';
-
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 import {
   endOfDay,
@@ -15,39 +12,8 @@ import {
   isValidDate,
 } from 'frontend-lmb/utils/date-manipulation';
 
-function getWarningMessages() {
-  return trackedFunction(async () => {
-    if (this.errorMessage) {
-      return [];
-    }
-
-    const warnings = [];
-    if (
-      !isDateInRange(this.args.value, this.minDate, this.maxDate) &&
-      this.inputIsValidDate
-    ) {
-      const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
-      const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
-      if (this.minDate && this.maxDate) {
-        warnings.push(
-          `Kies een datum tussen ${formattedMinDate} en ${formattedMaxDate}.`
-        );
-      }
-
-      if (this.minDate && !this.maxDate) {
-        warnings.push(`Kies een datum vanaf ${formattedMinDate}`);
-      }
-
-      if (!this.minDate && this.maxDate) {
-        warnings.push(`Kies een datum tot ${formattedMaxDate}`);
-      }
-    }
-    return warnings;
-  });
-}
 export default class MandatarisEditDateInput extends Component {
   elementId = `date-${guidFor(this)}`;
-  @use(getWarningMessages) getWarningMessages;
 
   @tracked dateInputString;
   @tracked inputHasBeenFocused;
@@ -68,14 +34,6 @@ export default class MandatarisEditDateInput extends Component {
 
   get inputIsValidDate() {
     return isValidDate(this.args.value);
-  }
-
-  get warningMessages() {
-    return this.getWarningMessages?.value || [];
-  }
-
-  get showWarnings() {
-    return this.warningMessages.length >= 1;
   }
 
   get errorMessage() {
@@ -127,6 +85,39 @@ export default class MandatarisEditDateInput extends Component {
     }
 
     return this.hardMaxDate;
+  }
+
+  get showWarnings() {
+    return this.warningMessages.length >= 1;
+  }
+
+  get warningMessages() {
+    if (this.errorMessage) {
+      return [];
+    }
+
+    const warnings = [];
+    if (
+      !isDateInRange(this.args.value, this.minDate, this.maxDate) &&
+      this.inputIsValidDate
+    ) {
+      const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
+      const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
+      if (this.minDate && this.maxDate) {
+        warnings.push(
+          `Kies een datum tussen ${formattedMinDate} en ${formattedMaxDate}.`
+        );
+      }
+
+      if (this.minDate && !this.maxDate) {
+        warnings.push(`Kies een datum vanaf ${formattedMinDate}`);
+      }
+
+      if (!this.minDate && this.maxDate) {
+        warnings.push(`Kies een datum tot ${formattedMaxDate}`);
+      }
+    }
+    return warnings;
   }
 
   onChange = restartableTask(async (event) => {
