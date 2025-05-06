@@ -36,19 +36,6 @@ export default class MandatarisEditDateInput extends Component {
     return isValidDate(this.args.value);
   }
 
-  get errorMessage() {
-    if (this.inputHasBeenFocused) {
-      if (!this.args.value && this.args.isRequired) {
-        return 'Dit veld is verplicht';
-      }
-      if (this.args.value && !isValidDate(this.args.value)) {
-        return 'Dit is geen geldige datum';
-      }
-    }
-
-    return null;
-  }
-
   get hardMinDate() {
     return isValidDate(this.args.from) ? this.args.from : null;
   }
@@ -87,37 +74,38 @@ export default class MandatarisEditDateInput extends Component {
     return this.hardMaxDate;
   }
 
-  get showWarnings() {
-    return this.warningMessages.length >= 1;
+  get errorMessage() {
+    return this.getErrorMessage(this.args.value);
   }
 
-  get warningMessages() {
-    if (this.errorMessage) {
-      return [];
+  getErrorMessage(date) {
+    if (this.inputHasBeenFocused) {
+      if (!date && this.args.isRequired) {
+        return 'Dit veld is verplicht';
+      }
     }
-
-    const warnings = [];
+    if (date && !isValidDate(date)) {
+      return 'Dit is geen geldige datum';
+    }
     if (
-      !isDateInRange(this.args.value, this.minDate, this.maxDate) &&
+      !isDateInRange(date, this.minDate, this.maxDate) &&
       this.inputIsValidDate
     ) {
       const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
       const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
       if (this.minDate && this.maxDate) {
-        warnings.push(
-          `Kies een datum tussen ${formattedMinDate} en ${formattedMaxDate}.`
-        );
+        return `Kies een datum tussen ${formattedMinDate} en ${formattedMaxDate}.`;
       }
 
       if (this.minDate && !this.maxDate) {
-        warnings.push(`Kies een datum vanaf ${formattedMinDate}`);
+        return `Kies een datum vanaf ${formattedMinDate}`;
       }
 
       if (!this.minDate && this.maxDate) {
-        warnings.push(`Kies een datum tot ${formattedMaxDate}`);
+        return `Kies een datum tot ${formattedMaxDate}`;
       }
     }
-    return warnings;
+    return null;
   }
 
   onChange = restartableTask(async (event) => {
@@ -130,7 +118,9 @@ export default class MandatarisEditDateInput extends Component {
       date = moment(inputValue, 'DD-MM-YYYY', true)?.toDate() ?? null;
     }
     const hasErrors =
-      (!date && this.args.isRequired) || (date && !isValidDate(date));
+      this.getErrorMessage(date) ||
+      (!date && this.args.isRequired) ||
+      (date && !isValidDate(date));
     if (this.args?.endOfDay && date) {
       this.args.onChange?.(endOfDay(date), { hasErrors });
     } else {
