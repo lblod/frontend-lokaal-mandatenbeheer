@@ -9,16 +9,6 @@
   <:body>
     <div class="au-u-flex au-u-flex--column au-o-flow">
       <div>
-        <Mandataris::Edit::MandaatSelector
-          @mandataris={{@mandataris}}
-          @mandaat={{this.mandaat}}
-          @required={{true}}
-          @currentBestuursorgaan={{@bestuursorgaanIT}}
-          @onUpdate={{this.updateMandaat}}
-          @onValidate={{fn (mut this.mandaatError)}}
-        />
-      </div>
-      <div>
         <AuLabel @required={{true}}>
           Status
         </AuLabel>

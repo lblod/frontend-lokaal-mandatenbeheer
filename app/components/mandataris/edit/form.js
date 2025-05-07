@@ -33,7 +33,6 @@ export default class MandatarisEditFormComponent extends Component {
   @service mandatarisApi;
 
   @tracked mandaat;
-  @tracked mandaatError;
   @tracked status;
   @tracked replacement;
   @tracked startDate;
@@ -82,7 +81,6 @@ export default class MandatarisEditFormComponent extends Component {
 
   get hasChanges() {
     return (
-      this.mandaat?.id !== this.args.mandataris.bekleedt?.id ||
       this.status?.id !== this.args.mandataris.status?.id ||
       !moment(this.startDate).isSame(moment(this.args.mandataris.start)) ||
       this.endDate !== this.args.mandataris.einde ||
@@ -144,11 +142,6 @@ export default class MandatarisEditFormComponent extends Component {
   updateErrorMap({ id, hasErrors }) {
     this.errorMap.set(id, !!hasErrors);
     this.errorMap = new Map(this.errorMap);
-  }
-
-  @action
-  updateMandaat(mandaat) {
-    this.mandaat = mandaat;
   }
 
   @action
@@ -231,7 +224,6 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   async corrigeerFouten() {
     try {
-      this.args.mandataris.bekleedt = this.mandaat;
       this.args.mandataris.status = this.status;
       this.args.mandataris.start = this.startDate;
       this.args.mandataris.einde = this.endDate;
