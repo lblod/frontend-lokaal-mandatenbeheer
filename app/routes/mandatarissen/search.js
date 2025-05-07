@@ -15,6 +15,7 @@ export default class MandatarissenSearchRoute extends Route {
   @service fractieApi;
   @service features;
   @service decretaleOrganen;
+  @service validatie;
 
   queryParams = {
     filter: { refreshModel: true },
@@ -116,6 +117,8 @@ export default class MandatarissenSearchRoute extends Route {
       queryParams['filter[:or:][:has-no:heeft-lidmaatschap]'] = true;
     }
     const mandatarissen = await this.store.query('mandataris', queryParams);
+    const validationResults =
+      await this.validatie.latestValidationReport?.validationresults;
     const persoonWithMandatarissen = new Map();
     const persoonIds = [];
     await Promise.all(
@@ -136,6 +139,9 @@ export default class MandatarissenSearchRoute extends Route {
 
             persoonWithMandatarissen.get(persoon.id).mandatarissen.push({
               mandataris,
+              hasValidationError:
+                this.features.isEnabled('shacl-report') &&
+                validationResults?.find((i) => i.focusNodeId == mandataris.id),
               isSubRow: persoonHasMoreThanOneMandataris,
               rowData: await this.getRowDataForMandataris(mandataris, persoon),
             });
@@ -155,6 +161,8 @@ export default class MandatarissenSearchRoute extends Route {
     const mandaat = await mandataris.bekleedt;
     const bestuursfunctie = await mandaat.bestuursfunctie;
     const bestuursorganenInTijd = await mandaat.bevatIn;
+    const validationResults =
+      await this.validatie.latestValidationReport?.validationresults;
     let bestuursorgaan = null;
     let fractieLabel = null;
 
@@ -170,6 +178,9 @@ export default class MandatarissenSearchRoute extends Route {
 
     return {
       mandataris: mandataris,
+      hasValidationError:
+        this.features.isEnabled('shacl-report') &&
+        validationResults?.find((i) => i.focusNodeId == mandataris.id),
       fractie: fractieLabel,
       bestuursorgaan: {
         label: bestuursorgaan?.naam,

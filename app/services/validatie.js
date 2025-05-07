@@ -201,6 +201,20 @@ export default class ValidatieService extends Service {
     )[0];
   }
 
+  async hasIssues(id) {
+    const issues = await this.getIssuesForId(id);
+    return issues.length > 0;
+  }
+
+  async getIssuesForId(id) {
+    const results = await this.latestValidationReport?.validationresults;
+    if (!results) {
+      return false;
+    }
+    const issues = results.filter((result) => result.focusNodeId === id);
+    return issues;
+  }
+
   get isRunning() {
     return this.warmingUp || this.runningStatus;
   }
@@ -231,7 +245,7 @@ export default class ValidatieService extends Service {
         new Date().getTime() - this.startedPolling.getTime();
       setTimeout(
         () => {
-          this.polling.perform();
+          this.keepPolling.perform();
         },
         timeSinceStart > 10000 ? 10000 : 1000
       );

@@ -10,6 +10,8 @@
 .report-refresh-button .au-c-pill {
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .refresh-button-next-to-pill,
@@ -21,4 +23,41 @@
   border-bottom-left-radius: 0px;
   border: 0.1rem solid var(--vl-grey-50);
   border-left: 0px;
+}
+
+.report-refresh-button.small .au-c-button {
+  height: 30px;
+  font-size: $au-tiny;
+}
+
+.validation-table {
+  .au-c-data-table .au-c-data-table__table tbody td,
+  th,
+  tr {
+    border: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border-top-color: transparent !important;
+    border-bottom-color: transparent !important;
+    border-left-color: transparent !important;
+    border-right-color: transparent !important;
+  }
+  .au-c-data-table__table th + th::after,
+  .au-c-data-table__table td + td::after {
+    border-left: none;
+  }
+  .au-c-data-table__wrapper {
+    border-top: none;
+  }
+
+  .error-icon {
+    background-color: var(--au-red-600);
+    color: white;
+    border-radius: 100%;
+    margin-bottom: -2px;
+  }
+  .au-c-data-table__table th:first-child,
+  .au-c-data-table__table td:first-child {
+    padding-left: 0;
+  }
 }

@@ -73,6 +73,16 @@
     >
       {{this.firstRow.rowData.mandaat.label}}
     </LinkTo>
+    {{#if this.firstRow.hasValidationError}}
+      <AuPill
+        @size="small"
+        @skin="warning"
+        class="au-u-margin-left-tiny"
+        @icon="alert-triangle"
+      >
+        Validatiefouten
+      </AuPill>
+    {{/if}}
   {{/if}}
 </td>
 
@@ -109,6 +119,16 @@
         >
           {{subRow.mandaat.label}}
         </LinkTo>
+        {{#if subRow.hasValidationError}}
+          <AuPill
+            @size="small"
+            @skin="warning"
+            class="au-u-margin-left-tiny"
+            @icon="alert-triangle"
+          >
+            Validatiefouten
+          </AuPill>
+        {{/if}}
       </td>
       <td>
         <Mandaat::MandatarisStatusPill @mandataris={{subRow.mandataris}} />

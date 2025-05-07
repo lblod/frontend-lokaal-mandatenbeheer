@@ -65,16 +65,28 @@
     </c.header>
 
     <c.body as |row|>
-      <td><LinkTo
-          @route={{@mandaatRoute}}
-          @models={{array
-            row.mandataris.isBestuurlijkeAliasVan.id
-            row.mandataris.id
-          }}
-          class="au-c-link"
-        >
-          {{row.mandataris.bekleedt.bestuursfunctie.label}}
-        </LinkTo></td>
+      <td>
+        <div class="au-u-flex au-u-flex--vertical-center">
+          <LinkTo
+            @route={{@mandaatRoute}}
+            @models={{array
+              row.mandataris.isBestuurlijkeAliasVan.id
+              row.mandataris.id
+            }}
+            class="au-c-link"
+          >
+            {{row.mandataris.bekleedt.bestuursfunctie.label}}
+          </LinkTo>
+          {{#if row.validationErrors}}
+            <AuPill
+              @skin="warning"
+              @size="tiny"
+              @icon="alert-triangle"
+              class="au-u-margin-left-tiny"
+            >Validatiefouten</AuPill>
+          {{/if}}
+        </div>
+      </td>
       <td><LinkTo
           @route={{@personRoute}}
           @model={{row.mandataris.isBestuurlijkeAliasVan.id}}

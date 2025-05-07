@@ -30,7 +30,7 @@ export default class RefreshValidationsButton extends Component {
       return 'Onbekend';
     }
     return moment(this.validatie.lastRunnningStatus.finishedAt).format(
-      'DD-MM-YYYY HH:mm:ss'
+      'DD-MM-YYYY HH:mm'
     );
   }
 
