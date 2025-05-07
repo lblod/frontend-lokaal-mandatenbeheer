@@ -5,12 +5,9 @@ import { guidFor } from '@ember/object/internals';
 
 import { restartableTask, timeout } from 'ember-concurrency';
 import moment from 'moment';
+
 import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
-import {
-  endOfDay,
-  isDateInRange,
-  isValidDate,
-} from 'frontend-lmb/utils/date-manipulation';
+import { endOfDay, isValidDate } from 'frontend-lmb/utils/date-manipulation';
 
 export default class MandatarisEditDateInput extends Component {
   elementId = `date-${guidFor(this)}`;
@@ -32,73 +29,8 @@ export default class MandatarisEditDateInput extends Component {
     }
   }
 
-  get hardMinDate() {
-    return isValidDate(this.args.from) ? this.args.from : null;
-  }
-
-  get hardMaxDate() {
-    return isValidDate(this.args.to) ? this.args.to : null;
-  }
-
-  get dynamicTo() {
-    return isValidDate(this.args.dynamicTo) ? this.args.dynamicTo : null;
-  }
-
-  get dynamicFrom() {
-    return isValidDate(this.args.dynamicFrom) ? this.args.dynamicFrom : null;
-  }
-
-  get minDate() {
-    if (
-      this.dynamicFrom &&
-      moment(this.dynamicFrom).isSameOrAfter(moment(this.hardMinDate))
-    ) {
-      return this.dynamicFrom;
-    }
-
-    return this.hardMinDate;
-  }
-
-  get maxDate() {
-    if (
-      this.dynamicTo &&
-      moment(this.dynamicTo).isSameOrBefore(moment(this.hardMaxDate))
-    ) {
-      return this.dynamicTo;
-    }
-
-    return this.hardMaxDate;
-  }
-
   get errorMessage() {
-    return this.getErrorMessage(this.args.value);
-  }
-
-  getErrorMessage(date) {
-    if (this.inputHasBeenFocused) {
-      if (!date && this.args.isRequired) {
-        return 'Dit veld is verplicht';
-      }
-    }
-    if (date && !isValidDate(date)) {
-      return 'Dit is geen geldige datum';
-    }
-    if (!isDateInRange(date, this.minDate, this.maxDate) && isValidDate(date)) {
-      const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
-      const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
-      if (this.minDate && this.maxDate) {
-        return `Kies een datum tussen ${formattedMinDate} en ${formattedMaxDate}.`;
-      }
-
-      if (this.minDate && !this.maxDate) {
-        return `Kies een datum vanaf ${formattedMinDate}`;
-      }
-
-      if (!this.minDate && this.maxDate) {
-        return `Kies een datum tot ${formattedMaxDate}`;
-      }
-    }
-    return null;
+    return this.args.errorMessage;
   }
 
   onChange = restartableTask(async (event) => {
@@ -110,10 +42,6 @@ export default class MandatarisEditDateInput extends Component {
     if (inputValue?.trim() !== '') {
       date = moment(inputValue, 'DD-MM-YYYY', true)?.toDate() ?? null;
     }
-    this.args.onErrorStateUpdated?.({
-      id: this.elementId,
-      hasErrors: this.getErrorMessage(date),
-    });
     if (this.args?.endOfDay && date) {
       this.args.onChange?.(endOfDay(date));
     } else {
