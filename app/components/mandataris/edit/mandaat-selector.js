@@ -62,7 +62,7 @@ export default class MandatarisMandaatSelector extends Component {
     this.mandaat = mandate;
     this.hasBeenFocused = true;
     await this.updateValidations();
-    this.args.onUpdate(mandate, { hasErrors: this.args.required && !mandate });
+    this.args.onUpdate(mandate);
   }
 
   async updateValidations() {
