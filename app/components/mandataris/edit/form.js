@@ -83,7 +83,7 @@ export default class MandatarisEditFormComponent extends Component {
     return (
       this.status?.id !== this.args.mandataris.status?.id ||
       !moment(this.startDate).isSame(moment(this.args.mandataris.start)) ||
-      this.endDate !== this.args.mandataris.einde ||
+      !moment(this.endDate).isSame(moment(this.args.mandataris.einde)) ||
       this.fractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
       this.rangorde !== this.args.mandataris.rangorde
