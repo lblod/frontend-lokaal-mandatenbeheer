@@ -29,10 +29,6 @@ export default class MandatarisEditDateInput extends Component {
     }
   }
 
-  get errorMessage() {
-    return this.args.errorMessage;
-  }
-
   onChange = restartableTask(async (event) => {
     await timeout(INPUT_DEBOUNCE);
     this.inputHasBeenFocused = true;
