@@ -1,1 +1,21 @@
-{{yield}}
+<div class="au-o-flow">
+  <Mandataris::Edit::DateInput
+    @label="Startdatum"
+    @isRequired={{true}}
+    @value={{@startDate}}
+    @from={{@bestuursorgaanIT.bindingStart}}
+    @to={{@bestuursorgaanIT.bindingEinde}}
+    @onChange={{fn this.updateDates this.startDateLabel}}
+    @errorMessage={{this.startErrorMessage}}
+  />
+  <Mandataris::Edit::DateInput
+    @label="Einddatum"
+    @isRequired={{false}}
+    @value={{@endDate}}
+    @from={{@bestuursorgaanIT.bindingStart}}
+    @to={{@bestuursorgaanIT.bindingEinde}}
+    @onChange={{fn this.updateDates this.endDateLabel}}
+    @errorMessage={{this.endErrorMessage}}
+    @endOfDay={{true}}
+  />
+</div>

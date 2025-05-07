@@ -144,7 +144,6 @@ export default class MandatarisEditFormComponent extends Component {
   updateErrorMap({ id, hasErrors }) {
     this.errorMap.set(id, !!hasErrors);
     this.errorMap = new Map(this.errorMap);
-    console.log(this.errorMap);
   }
 
   @action
