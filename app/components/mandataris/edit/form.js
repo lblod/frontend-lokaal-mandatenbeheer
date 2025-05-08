@@ -42,7 +42,6 @@ export default class MandatarisEditFormComponent extends Component {
 
   @tracked isSecondModalOpen = false;
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
-  @tracked vanafDate;
   @tracked reasonForChange;
   @tracked errorMap = new Map();
 
@@ -71,8 +70,6 @@ export default class MandatarisEditFormComponent extends Component {
     );
     this.rangorde = this.args.mandataris.rangorde;
     this.replacement = null;
-
-    this.vanafDate = new Date();
   }
 
   get statusOptions() {
@@ -267,19 +264,20 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   async endMandataris() {
-    this.args.mandataris.einde = endOfDay(this.vanafDate);
-    return await this.args.mandataris.save();
+    this.endDate = endOfDay(new Date());
+    this.args.mandataris.einde = this.endDate;
+    await this.args.mandataris.save();
+
+    return this.args.mandataris;
   }
 
   async changeMandatarisState() {
-    const endDate = this.args.mandataris.einde;
-    const dateOfAction = endOfDay(this.vanafDate);
-
+    const startDateOfNewMandataris = endOfDay(new Date());
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
-        start: dateOfAction,
-        einde: endDate,
+        start: startDateOfNewMandataris,
+        einde: this.endDate,
         status: this.status,
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
@@ -310,7 +308,7 @@ export default class MandatarisEditFormComponent extends Component {
         (await this.args.mandataris.vervangerVan) || [];
     }
 
-    this.args.mandataris.einde = dateOfAction;
+    this.args.mandataris.einde = startDateOfNewMandataris;
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
     await this.handleFractie(newMandataris);
