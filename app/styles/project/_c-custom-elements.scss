@@ -7,17 +7,25 @@
   }
 }
 
-.report-refresh-button .au-c-pill {
+.refresh-button-left,
+.refresh-button-left.is-disabled,
+.refresh-button-left.is-disabled:hover,
+.refresh-button-left:hover {
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
   overflow: hidden;
   white-space: nowrap;
+  cursor: pointer;
+  background-color: var(--au-gray-100);
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border: 0.1rem solid var(--vl-grey-50);
 }
 
-.refresh-button-next-to-pill,
-.refresh-button-next-to-pill.is-disabled,
-.refresh-button-next-to-pill.is-disabled:hover,
-.refresh-button-next-to-pill:hover {
+.refresh-button-right,
+.refresh-button-right.is-disabled,
+.refresh-button-right.is-disabled:hover,
+.refresh-button-right:hover {
   background-color: var(--au-gray-100);
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;

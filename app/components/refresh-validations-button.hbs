@@ -2,13 +2,19 @@
   <div
     class="report-refresh-button au-u-flex {{if (eq @size 'small') 'small'}}"
   >
-    <AuPill @icon="clock-rewind" @size={{@size}}>Laatste validatie
-      {{this.lastRefreshedDate}}</AuPill>
+    <AuLink
+      @icon="clock-rewind"
+      @size={{@size}}
+      @route="report"
+      @skin="button-naked"
+      class="refresh-button-left"
+    >Laatste validatie
+      {{this.lastRefreshedDate}}</AuLink>
     <AuButton
       @disabled={{this.isGeneratingReport}}
       @skin="naked"
       @size={{@size}}
-      class="refresh-button-next-to-pill"
+      class="refresh-button-right"
       {{on "click" this.refresh}}
     >
       <AuIcon

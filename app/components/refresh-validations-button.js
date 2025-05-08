@@ -9,16 +9,11 @@ export default class RefreshValidationsButton extends Component {
   @service validatie;
   @service currentSession;
   @service toaster;
+  @service router;
 
   constructor() {
     super(...arguments);
     this.validatie.setLastRunningStatus();
-  }
-
-  @action
-  async refresh() {
-    const bestuurseenheid = this.currentSession.group;
-    this.validatie.generateReport.perform(bestuurseenheid);
   }
 
   get isPreviousreportFound() {
@@ -36,5 +31,16 @@ export default class RefreshValidationsButton extends Component {
 
   get isGeneratingReport() {
     return this.validatie.isRunning;
+  }
+
+  @action
+  goToReportPage() {
+    this.router.transitionTo('report');
+  }
+
+  @action
+  async refresh() {
+    const bestuurseenheid = this.currentSession.group;
+    this.validatie.generateReport.perform(bestuurseenheid);
   }
 }
