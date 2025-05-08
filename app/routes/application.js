@@ -21,6 +21,7 @@ export default class ApplicationRoute extends Route {
   @service validatie;
   async beforeModel() {
     await this.session.setup();
+    await this._loadCurrentSession();
     await this.formReplacements.setup();
     await Promise.all([
       this.decretaleOrganen.setup(),
@@ -36,8 +37,6 @@ export default class ApplicationRoute extends Route {
     this.startAnalytics();
     registerCustomFormFields();
     registerCustomValidations();
-
-    return this._loadCurrentSession();
   }
 
   startAnalytics() {

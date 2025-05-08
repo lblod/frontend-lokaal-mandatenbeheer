@@ -117,8 +117,7 @@ export default class MandatarissenSearchRoute extends Route {
       queryParams['filter[:or:][:has-no:heeft-lidmaatschap]'] = true;
     }
     const mandatarissen = await this.store.query('mandataris', queryParams);
-    const validationResults =
-      await this.validatie.latestValidationReport?.validationresults;
+    const validationResults = await this.validatie.latestValidationResults;
     const persoonWithMandatarissen = new Map();
     const persoonIds = [];
     await Promise.all(
@@ -161,8 +160,7 @@ export default class MandatarissenSearchRoute extends Route {
     const mandaat = await mandataris.bekleedt;
     const bestuursfunctie = await mandaat.bestuursfunctie;
     const bestuursorganenInTijd = await mandaat.bevatIn;
-    const validationResults =
-      await this.validatie.latestValidationReport?.validationresults;
+    const validationResults = await this.validatie.latestValidationResults;
     let bestuursorgaan = null;
     let fractieLabel = null;
 

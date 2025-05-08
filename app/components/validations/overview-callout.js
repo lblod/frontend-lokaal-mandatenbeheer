@@ -25,6 +25,6 @@ export default class ValidationsOverviewCallout extends Component {
 
 function getValidationResults() {
   return trackedFunction(async () => {
-    return await this.validatie.latestValidationReport?.validationresults;
+    return await this.validatie.latestValidationResults;
   });
 }

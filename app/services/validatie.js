@@ -20,6 +20,7 @@ export default class ValidatieService extends Service {
   @service router;
 
   @tracked latestValidationReport;
+  @tracked latestValidationResults;
   @tracked runningStatus;
   @tracked lastRunnningStatus;
   @tracked canShowReportIsGenerated;
@@ -37,20 +38,41 @@ export default class ValidatieService extends Service {
       await this.store.query('report', {
         sort: '-created',
         page: { size: 1 },
-        include: 'validationresults',
       })
     )[0];
+
+    if (!this.latestValidationReport || !this.currentSession.group) {
+      this.latestValidationResults = [];
+      return;
+    }
+
+    const response = await fetch(
+      `/validation-report-api/reports/${this.latestValidationReport.id}/${this.currentSession.group.id}/issues`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+      }
+    );
+    if (!response.ok) {
+      showErrorToast(
+        this.toaster,
+        'Er is een fout opgetreden bij het ophalen van de validatieresultaten.',
+        'Validatie rapport'
+      );
+      return;
+    }
+    this.latestValidationResults = await response.json();
   }
 
   async getResultsByInstance(instance) {
-    const results =
-      (await this.latestValidationReport?.validationresults) ?? [];
+    const results = (await this.latestValidationResults) ?? [];
     return results.filter((result) => instance.uri === result.focusNode);
   }
 
   async getResultsByClass() {
-    const results =
-      (await this.latestValidationReport?.validationresults) ?? [];
+    const results = (await this.latestValidationResults) ?? [];
     const instancesPerType = new Map();
 
     for (const result of results) {
@@ -207,7 +229,7 @@ export default class ValidatieService extends Service {
   }
 
   async getIssuesForId(id) {
-    const results = await this.latestValidationReport?.validationresults;
+    const results = await this.latestValidationResults;
     if (!results) {
       return false;
     }

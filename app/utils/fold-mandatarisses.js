@@ -7,8 +7,7 @@ export const foldMandatarisses = async (params, mandatarisses, validatie) => {
 export async function fold(mandatarissen, validatie) {
   // 'persoonId-mandaatId' to foldedMandataris
   const persoonMandaatData = {};
-  const validationResults =
-    await validatie.latestValidationReport?.validationresults;
+  const validationResults = await validatie.latestValidationResults;
   await Promise.all(
     mandatarissen.map(async (mandataris) => {
       const personId = (await mandataris.isBestuurlijkeAliasVan).id;
