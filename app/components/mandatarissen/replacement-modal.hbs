@@ -57,6 +57,26 @@
         </AuAlert>
       {{/if}}
     </div>
+    <div>
+      <DateInput
+        @label="Startdatum"
+        @value={{this.startDate}}
+        @from={{@bestuursorgaanIT.bindingStart}}
+        @to={{@bestuursorgaanIT.bindingEinde}}
+        @onChange={{fn (mut this.startDate)}}
+        @isRequired={{true}}
+      />
+    </div>
+    <div>
+      <DateInput
+        @label="Einddatum"
+        @value={{this.endDate}}
+        @from={{@bestuursorgaanIT.bindingStart}}
+        @to={{@bestuursorgaanIT.bindingEinde}}
+        @onChange={{fn (mut this.endDate)}}
+        @isRequired={{false}}
+      />
+    </div>
   </:body>
   <:footer>
     <AuToolbar as |Group|>
