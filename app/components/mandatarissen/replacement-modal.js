@@ -7,8 +7,10 @@ import { service } from '@ember/service';
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 
 export default class MandatarissenReplacementModal extends Component {
-  @tracked replacement;
   @tracked modalOpen = false;
+  @tracked replacement;
+  @tracked startDate;
+  @tracked endDate;
 
   @service store;
   @service('mandataris') mandatarisService;
@@ -42,7 +44,8 @@ export default class MandatarissenReplacementModal extends Component {
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
-        start: new Date(),
+        start: this.startDate,
+        einde: this.endDate,
         rangorde: '',
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
