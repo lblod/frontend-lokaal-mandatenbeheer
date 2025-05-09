@@ -5,18 +5,32 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
+import {
+  isDisabledForBestuursorgaan,
+  isRequiredForBestuursorgaan,
+} from 'frontend-lmb/utils/is-fractie-selector-required';
 
 export default class MandatarissenReplacementModal extends Component {
   @tracked modalOpen = false;
   @tracked replacement;
   @tracked startDate;
   @tracked endDate;
+  @tracked fractie;
 
   @service store;
   @service('mandataris') mandatarisService;
+  @service fractieApi;
 
   get vervangersDoor() {
     return this.args.mandataris.uniqueVervangersDoor;
+  }
+
+  get isFractieRequired() {
+    return isRequiredForBestuursorgaan(this.args.bestuursorgaanIT);
+  }
+
+  get hideFractieField() {
+    return isDisabledForBestuursorgaan(this.args.bestuursorgaanIT);
   }
 
   @action
@@ -40,6 +54,11 @@ export default class MandatarissenReplacementModal extends Component {
   }
 
   @action
+  selectFractie(newFractie) {
+    this.fractie = newFractie;
+  }
+
+  @action
   async saveReplacement() {
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
@@ -59,6 +78,7 @@ export default class MandatarissenReplacementModal extends Component {
         newMandatarisProps
       );
     this.args.mandataris.tijdelijkeVervangingen = [replacementMandataris];
+    this.handleFractie(replacementMandataris);
 
     await this.args.mandataris.save();
     this.closeModal();
@@ -70,5 +90,14 @@ export default class MandatarissenReplacementModal extends Component {
     await this.args.mandataris.rollbackAttributes();
     this.replacement = null;
     this.closeModal();
+  }
+
+  async handleFractie(mandataris) {
+    await this.mandatarisService.createNewLidmaatschap(
+      mandataris,
+      this.fractie
+    );
+    await this.fractieApi.updateCurrentFractie(mandataris.id);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(mandataris.id);
   }
 }

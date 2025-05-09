@@ -57,26 +57,40 @@
         </AuAlert>
       {{/if}}
     </div>
-    <div>
-      <DateInput
-        @label="Startdatum"
-        @value={{this.startDate}}
-        @from={{@bestuursorgaanIT.bindingStart}}
-        @to={{@bestuursorgaanIT.bindingEinde}}
-        @onChange={{fn (mut this.startDate)}}
-        @isRequired={{true}}
-      />
-    </div>
-    <div>
-      <DateInput
-        @label="Einddatum"
-        @value={{this.endDate}}
-        @from={{@bestuursorgaanIT.bindingStart}}
-        @to={{@bestuursorgaanIT.bindingEinde}}
-        @onChange={{fn (mut this.endDate)}}
-        @isRequired={{false}}
-      />
-    </div>
+    {{#if this.replacement}}
+      <div>
+        <DateInput
+          @label="Startdatum"
+          @value={{this.startDate}}
+          @from={{@bestuursorgaanIT.bindingStart}}
+          @to={{@bestuursorgaanIT.bindingEinde}}
+          @onChange={{fn (mut this.startDate)}}
+          @isRequired={{true}}
+        />
+      </div>
+      <div>
+        <DateInput
+          @label="Einddatum"
+          @value={{this.endDate}}
+          @from={{@bestuursorgaanIT.bindingStart}}
+          @to={{@bestuursorgaanIT.bindingEinde}}
+          @onChange={{fn (mut this.endDate)}}
+          @isRequired={{false}}
+        />
+      </div>
+
+      {{#if (not (await this.hideFractieField))}}
+        <Mandatarissen::FractieSelector
+          @fractie={{this.fractie}}
+          @isRequired={{await this.isFractieRequired}}
+          @onSelect={{this.selectFractie}}
+          @bestuurseenheid={{@bestuurseenheid}}
+          @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
+          @person={{this.replacement}}
+          @limitPersonFractionsToCurrent={{true}}
+        />
+      {{/if}}
+    {{/if}}
   </:body>
   <:footer>
     <AuToolbar as |Group|>
