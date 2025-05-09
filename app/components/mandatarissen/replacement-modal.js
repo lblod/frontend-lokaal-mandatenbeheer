@@ -16,6 +16,7 @@ export default class MandatarissenReplacementModal extends Component {
   @tracked startDate;
   @tracked endDate;
   @tracked fractie;
+  @tracked overlappingMandate;
 
   @service store;
   @service('mandataris') mandatarisService;
@@ -33,6 +34,10 @@ export default class MandatarissenReplacementModal extends Component {
     return isDisabledForBestuursorgaan(this.args.bestuursorgaanIT);
   }
 
+  get showExtraFields() {
+    return this.replacement && !this.overlappingMandate;
+  }
+
   get disabled() {
     return !this.replacement;
   }
@@ -48,13 +53,14 @@ export default class MandatarissenReplacementModal extends Component {
   }
 
   @action
-  async selectReplacement(replacement) {
+  async selectReplacement(replacement, overlap) {
     if (replacement?.id === this.args.mandataris.isBestuurlijkeAliasVan.id) {
       this.replacementError = true;
     } else {
       this.replacementError = false;
     }
     this.replacement = replacement;
+    this.overlappingMandate = overlap;
   }
 
   @action
