@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
-import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarissenReplacementModal extends Component {
   @tracked replacement;
@@ -13,7 +12,6 @@ export default class MandatarissenReplacementModal extends Component {
   @tracked modalOpen = false;
 
   @service store;
-  @service toaster;
   @service('mandataris') mandatarisService;
 
   get vervangersDoor() {
@@ -32,13 +30,10 @@ export default class MandatarissenReplacementModal extends Component {
 
   @action
   async selectReplacement(replacement) {
-    if (replacement.id === this.args.mandataris.isBestuurlijkeAliasVan.id) {
-      showErrorToast(
-        this.toaster,
-        'Je hebt dezelfde persoon geselecteerd als de oorspronkelijke mandataris, het is niet mogelijk een mandataris te laten vervangen door zichzelf.'
-      );
-      this.replacement = null;
-      return;
+    if (replacement?.id === this.args.mandataris.isBestuurlijkeAliasVan.id) {
+      this.replacementError = true;
+    } else {
+      this.replacementError = false;
     }
     this.replacement = replacement;
     const newMandatarisProps = await this.mandatarisService.createNewProps(

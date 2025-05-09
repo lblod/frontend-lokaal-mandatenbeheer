@@ -39,15 +39,24 @@
 >
   <:title>Voeg vervanger toe</:title>
   <:body>
-    <Mandatarissen::ReplacementSelect
-      @showDelete={{false}}
-      @showEditAsIcon={{true}}
-      @nothingSelectedText="Voeg vervanger toe"
-      @selected={{this.replacement}}
-      @onSelect={{this.selectReplacement}}
-      @bestuursorgaanIT={{@bestuursorgaanIT}}
-      @inline={{true}}
-    />
+    <div>
+      <AuLabel>
+        Vervanger
+      </AuLabel>
+      <Mandatarissen::ReplacementSelect
+        @mandataris={{@mandataris}}
+        @selected={{this.replacement}}
+        @onSelect={{this.selectReplacement}}
+        @bestuursorgaanIT={{@bestuursorgaanIT}}
+        @inline={{true}}
+      />
+      {{#if this.replacementError}}
+        <AuAlert @skin="error" @icon="alert-triangle" class="au-u-margin-top">
+          Dit is dezelfde persoon als de oorspronkelijke mandataris, het is niet
+          mogelijk een mandataris te laten vervangen door zichzelf.
+        </AuAlert>
+      {{/if}}
+    </div>
   </:body>
   <:footer>
     <AuToolbar as |Group|>
