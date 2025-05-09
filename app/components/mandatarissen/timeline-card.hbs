@@ -19,10 +19,17 @@
     {{on "click" (fn this.selectEvent @event)}}
   >
 
-    <div class="au-u-flex au-u-flex--spaced-tiny">
+    <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--wrap">
       <AuPill>{{@event.type}}</AuPill>
       {{#if @event.active}}
         <AuPill @skin="success">Actief</AuPill>
+      {{/if}}
+      {{#if (and (not (eq @event.type "Einde")) this.hasValidationError.value)}}
+        <AuPill
+          @icon="alert-triangle"
+          @size="small"
+          @skin="warning"
+        >Validatiefout</AuPill>
       {{/if}}
     </div>
 

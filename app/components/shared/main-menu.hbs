@@ -40,6 +40,14 @@
           </AuNavigationLink>
         </li>
       {{/if}}
+      {{#if (is-feature-enabled "shacl-report")}}
+        <li class="au-c-list-navigation__item">
+          <AuNavigationLink @route="report">
+            <AuIcon @icon={{this.validationIcon}} @alignment="left" />
+            {{this.validationText}}
+          </AuNavigationLink>
+        </li>
+      {{/if}}
     </ul>
   </nav>
 {{/if}}
