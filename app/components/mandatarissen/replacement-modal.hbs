@@ -1,15 +1,34 @@
-<div>
-  <span class="au-u-muted au-u-flex--stretch flex-grow">Voeg vervanger toe</span>
-  <AuButton
-    {{on "click" this.openModal}}
-    @icon="pencil"
-    @skin="link-secondary"
-    @size="small"
-    class="au-u-maring-left-tiny"
-    @hideText={{true}}
-  >
-    Bewerk
-  </AuButton>
+<div class="au-c-description-label"><div>Vervangen door:</div></div>
+<div class="au-c-description-value replacement">
+  {{#if (not (await this.vervangersDoor))}}
+    <div>
+      <span class="au-u-muted au-u-flex--stretch flex-grow">Voeg vervanger toe</span>
+      <AuButton
+        {{on "click" this.openModal}}
+        @icon="pencil"
+        @skin="link-secondary"
+        @size="small"
+        class="au-u-maring-left-tiny"
+        @hideText={{true}}
+      >
+        Bewerk
+      </AuButton>
+    </div>
+  {{else}}
+    {{#each (await this.vervangersDoor) as |replacement index|}}
+      <AuLink
+        @route="mandatarissen.mandataris"
+        @model={{replacement.id}}
+        @skin="secondary"
+      >
+        {{replacement.isBestuurlijkeAliasVan.gebruikteVoornaam}}
+        {{replacement.isBestuurlijkeAliasVan.achternaam}}{{if
+          (lt index (sub this.vervangersDoor.length 1))
+          ","
+        }}
+      </AuLink>
+    {{/each}}
+  {{/if}}
 </div>
 
 <AuModal

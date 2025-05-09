@@ -124,29 +124,10 @@
         </div>
       {{/if}}
       <div class="au-o-grid__item au-u-1-2">
-        <div class="au-c-description-label"><div>Vervangen door:</div></div>
-        <div class="au-c-description-value replacement">
-          {{#if (not (await this.vervangersDoor))}}
-            <Mandatarissen::ReplacementModal
-              @mandataris={{@mandataris}}
-              @bestuursorgaanIT={{@bestuursorgaanIT}}
-            />
-          {{else}}
-            {{#each (await this.vervangersDoor) as |replacement index|}}
-              <AuLink
-                @route="mandatarissen.mandataris"
-                @model={{replacement.id}}
-                @skin="secondary"
-              >
-                {{replacement.isBestuurlijkeAliasVan.gebruikteVoornaam}}
-                {{replacement.isBestuurlijkeAliasVan.achternaam}}{{if
-                  (lt index (sub this.vervangersDoor.length 1))
-                  ","
-                }}
-              </AuLink>
-            {{/each}}
-          {{/if}}
-        </div>
+        <Mandatarissen::ReplacementModal
+          @mandataris={{@mandataris}}
+          @bestuursorgaanIT={{@bestuursorgaanIT}}
+        />
       </div>
     {{/if}}
   </div>

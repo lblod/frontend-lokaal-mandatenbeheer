@@ -15,6 +15,10 @@ export default class MandatarissenReplacementModal extends Component {
   @service toaster;
   @service('mandataris') mandatarisService;
 
+  get vervangersDoor() {
+    return this.args.mandataris.uniqueVervangersDoor;
+  }
+
   @action
   openModal() {
     this.modalOpen = true;
