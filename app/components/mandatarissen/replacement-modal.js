@@ -58,6 +58,7 @@ export default class MandatarissenReplacementModal extends Component {
     this.args.mandataris.tijdelijkeVervangingen = [replacementMandataris];
 
     await this.args.mandataris.save();
+    this.closeModal();
     this.args.actionWhenAddingReplacement();
   }
 
