@@ -272,11 +272,10 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   async changeMandatarisState() {
-    const startDateOfNewMandataris = endOfDay(new Date());
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
-        start: startDateOfNewMandataris,
+        start: this.startDate,
         einde: this.endDate,
         status: this.status,
         publicationStatus: await getNietBekrachtigdPublicationStatus(
@@ -308,7 +307,7 @@ export default class MandatarisEditFormComponent extends Component {
         (await this.args.mandataris.vervangerVan) || [];
     }
 
-    this.args.mandataris.einde = startDateOfNewMandataris;
+    this.args.mandataris.einde = this.endDate;
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
     await this.handleFractie(newMandataris);
