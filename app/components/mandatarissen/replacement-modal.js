@@ -8,7 +8,6 @@ import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mand
 
 export default class MandatarissenReplacementModal extends Component {
   @tracked replacement;
-  @tracked replacementMandataris;
   @tracked modalOpen = false;
 
   @service store;
@@ -36,26 +35,28 @@ export default class MandatarissenReplacementModal extends Component {
       this.replacementError = false;
     }
     this.replacement = replacement;
+  }
+
+  @action
+  async saveReplacement() {
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
         start: new Date(),
+        rangorde: '',
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
         ),
       }
     );
-    this.replacementMandataris =
+    const replacementMandataris =
       await this.mandatarisService.getOrCreateReplacement(
         this.args.mandataris,
-        replacement,
+        this.replacement,
         newMandatarisProps
       );
-    this.args.mandataris.tijdelijkeVervangingen = [this.replacementMandataris];
-  }
+    this.args.mandataris.tijdelijkeVervangingen = [replacementMandataris];
 
-  @action
-  async saveReplacement() {
     await this.args.mandataris.save();
     this.args.actionWhenAddingReplacement();
   }
@@ -63,7 +64,6 @@ export default class MandatarissenReplacementModal extends Component {
   @action
   async cancelReplacement() {
     await this.args.mandataris.rollbackAttributes();
-    this.replacementMandataris.destroyRecord();
     this.replacement = null;
     this.closeModal();
   }
