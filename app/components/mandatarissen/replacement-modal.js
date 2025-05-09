@@ -8,7 +8,8 @@ import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mand
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarissenReplacementModal extends Component {
-  @tracked selectedReplacement;
+  @tracked replacement;
+  @tracked replacementMandataris;
   @tracked modalOpen = false;
 
   @service store;
@@ -36,9 +37,10 @@ export default class MandatarissenReplacementModal extends Component {
         this.toaster,
         'Je hebt dezelfde persoon geselecteerd als de oorspronkelijke mandataris, het is niet mogelijk een mandataris te laten vervangen door zichzelf.'
       );
-      this.selectedReplacement = null;
+      this.replacement = null;
       return;
     }
+    this.replacement = replacement;
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
@@ -48,13 +50,13 @@ export default class MandatarissenReplacementModal extends Component {
         ),
       }
     );
-    this.selectedReplacement =
+    this.replacementMandataris =
       await this.mandatarisService.getOrCreateReplacement(
         this.args.mandataris,
         replacement,
         newMandatarisProps
       );
-    this.args.mandataris.tijdelijkeVervangingen = [this.selectedReplacement];
+    this.args.mandataris.tijdelijkeVervangingen = [this.replacementMandataris];
   }
 
   @action
@@ -66,7 +68,8 @@ export default class MandatarissenReplacementModal extends Component {
   @action
   async cancelReplacement() {
     await this.args.mandataris.rollbackAttributes();
-    this.selectedReplacement.destroyRecord();
+    this.replacementMandataris.destroyRecord();
+    this.replacement = null;
     this.closeModal();
   }
 }
