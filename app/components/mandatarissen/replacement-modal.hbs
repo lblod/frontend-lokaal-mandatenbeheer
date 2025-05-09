@@ -96,7 +96,10 @@
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton {{on "click" this.saveReplacement}}>Voeg toe</AuButton>
+          <AuButton
+            @disabled={{this.disabled}}
+            {{on "click" this.saveReplacement}}
+          >Voeg toe</AuButton>
           <AuButton
             @skin="secondary"
             {{on "click" this.cancelReplacement}}

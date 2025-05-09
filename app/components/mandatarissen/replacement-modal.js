@@ -33,6 +33,10 @@ export default class MandatarissenReplacementModal extends Component {
     return isDisabledForBestuursorgaan(this.args.bestuursorgaanIT);
   }
 
+  get disabled() {
+    return !this.replacement;
+  }
+
   @action
   openModal() {
     this.modalOpen = true;
