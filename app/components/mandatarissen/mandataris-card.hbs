@@ -127,14 +127,9 @@
         <div class="au-c-description-label"><div>Vervangen door:</div></div>
         <div class="au-c-description-value replacement">
           {{#if (not (await this.vervangersDoor))}}
-            <Mandatarissen::ReplacementSelect
-              @showDelete={{false}}
-              @showEditAsIcon={{true}}
-              @nothingSelectedText="Voeg vervanger toe"
-              @selected={{this.selectedVervanger}}
-              @onSelect={{perform this.addReplacement}}
+            <Mandatarissen::ReplacementModal
+              @mandataris={{@mandataris}}
               @bestuursorgaanIT={{@bestuursorgaanIT}}
-              @inline={{true}}
             />
           {{else}}
             {{#each (await this.vervangersDoor) as |replacement index|}}

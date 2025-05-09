@@ -1,0 +1,46 @@
+<div>
+  <span class="au-u-muted au-u-flex--stretch flex-grow">Voeg vervanger toe</span>
+  <AuButton
+    {{on "click" this.openModal}}
+    @icon="pencil"
+    @skin="link-secondary"
+    @size="small"
+    class="au-u-maring-left-tiny"
+    @hideText={{true}}
+  >
+    Bewerk
+  </AuButton>
+</div>
+
+<AuModal
+  ...attributes
+  @modalOpen={{this.modalOpen}}
+  @closable={{true}}
+  @closeModal={{this.cancelReplacement}}
+>
+  <:title>Voeg vervanger toe</:title>
+  <:body>
+    <Mandatarissen::ReplacementSelect
+      @showDelete={{false}}
+      @showEditAsIcon={{true}}
+      @nothingSelectedText="Voeg vervanger toe"
+      @selected={{this.selectedReplacement}}
+      @onSelect={{this.selectReplacement}}
+      @bestuursorgaanIT={{@bestuursorgaanIT}}
+      @inline={{true}}
+    />
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton {{on "click" this.saveReplacement}}>Voeg toe</AuButton>
+          <AuButton
+            @skin="secondary"
+            {{on "click" this.cancelReplacement}}
+          >Annuleer</AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
