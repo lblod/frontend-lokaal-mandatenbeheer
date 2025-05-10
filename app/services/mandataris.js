@@ -13,7 +13,7 @@ export default class MandatarisService extends Service {
   @service store;
   @service fractieApi;
 
-  async getOverlappingMandate(mandataris, person, endDate = null) {
+  async getOverlappingMandate(mandataris, person, startDate = null) {
     const mandate = await mandataris.bekleedt;
     const mandatarissen = await this.store.query('mandataris', {
       filter: {
@@ -28,12 +28,11 @@ export default class MandatarisService extends Service {
 
     const toCheck = mandatarissen.slice();
     let current;
-    const start = moment(mandataris.start);
-    const end = moment(endDate || mandataris.einde);
+    const start = startDate ? moment(startDate) : moment(mandataris.start);
     while ((current = toCheck.pop())) {
       if (
-        (!start || start.isSameOrBefore(current.einde)) &&
-        (!end || end.isSameOrAfter(current.start))
+        (!current.start || start.isSameOrAfter(current.start)) &&
+        (!current.einde || start.isSameOrBefore(current.einde))
       ) {
         return current;
       }
