@@ -307,7 +307,7 @@ export default class MandatarisEditFormComponent extends Component {
         (await this.args.mandataris.vervangerVan) || [];
     }
 
-    this.args.mandataris.einde = endOfDay(this.start);
+    this.args.mandataris.einde = endOfDay(this.startDate);
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
     await this.handleFractie(newMandataris);
