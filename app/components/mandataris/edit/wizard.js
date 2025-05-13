@@ -9,6 +9,7 @@ import { showErrorToast } from 'frontend-lmb/utils/toasts';
 export default class MandatarisEditWizard extends Component {
   @tracked activeStepIndex = 0;
   @tracked isMandatarisVerhinderd;
+  @tracked isMandatarisStepCompleted;
 
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
   @tracked reasonForChange;
@@ -23,16 +24,19 @@ export default class MandatarisEditWizard extends Component {
         label: this.mandatarisTitle,
         isMandatarisStep: true,
         isStepShown: true,
+        canContinueToNextStep: this.isMandatarisStepCompleted,
       },
       {
         label: 'Vervanger',
         isReplacementStep: true,
         isStepShown: this.isMandatarisVerhinderd,
+        canContinueToNextStep: true,
       },
       {
         label: 'Reden',
         isReasonStep: true,
         isStepShown: true,
+        canContinueToNextStep: this.reasonForChange,
       },
     ];
   }
@@ -95,6 +99,12 @@ export default class MandatarisEditWizard extends Component {
     alert('check if there are changes and show a popup that says are you sure');
     this.args.onCompleted?.();
     this.args.onAbort?.();
+  }
+
+  @action
+  updateMandatarisStepCompleted(isCompleted) {
+    console.log(`icom `, isCompleted);
+    this.isMandatarisStepCompleted = isCompleted;
   }
 
   @action
