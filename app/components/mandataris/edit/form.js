@@ -95,7 +95,7 @@ export default class MandatarisEditFormComponent extends Component {
     return 'Er zijn geen wijzigingen om op te slaan.';
   }
 
-  get showReplacement() {
+  get isStatusVerhinderd() {
     return (
       this.status.get('isVerhinderd') &&
       !this.args.mandataris.status.get('isVerhinderd')
