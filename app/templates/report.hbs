@@ -2,18 +2,18 @@
 
 <AuMainContainer as |main|>
   <main.content>
-    <AuToolbar @size="large" as |Group|>
-      <Group>
-        <AuHeading @skin="2">
-          Validatierapport
-        </AuHeading>
-      </Group>
-      <Group>
-        <RefreshValidationsButton />
-      </Group>
-    </AuToolbar>
-    <AuBodyContainer id="content">
-      <div class="au-c-body-container au-c-body-container--scroll au-u-padding">
+    <AuBodyContainer id="content" class="au-c-body-container--scroll">
+      <AuToolbar @size="large" as |Group|>
+        <Group>
+          <AuHeading @skin="2">
+            Validatierapport
+          </AuHeading>
+        </Group>
+        <Group>
+          <RefreshValidationsButton />
+        </Group>
+      </AuToolbar>
+      <div class="au-u-padding">
         {{#if this.isEmptyResult}}
           <AuAlert @skin="success" @icon="check">
             De data binnen deze bestuurseenheid is conform de validatieregels.
@@ -32,11 +32,12 @@
             {{/if}}
           </AuAlert>
         {{else}}
-          <div class="au-u-box no-pagination au-u-padding-bottom">
+          <div class="au-u-box au-u-padding-bottom">
             <AuDataTable
               @content={{this.allValidationErrors}}
               @noDataMessage="Geen validatieresultaten gevonden"
               @size={{this.allValidationErrors.length}}
+              @hidePagination={{true}}
               as |t|
             >
               <t.content as |c|>

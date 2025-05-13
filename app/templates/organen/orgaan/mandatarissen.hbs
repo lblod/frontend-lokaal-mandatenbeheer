@@ -95,11 +95,12 @@
     {{this.model.bestuursorgaan.naam}}
     {{this.model.selectedBestuursperiode.detailedViewLabel}}
   </AuHeading>
-  <ValidatieTable
-    @instance={{this.model.bestuursorgaanInTijd}}
-    class="au-u-1-2 au-u-margin-bottom-none"
-  />
+
 </div>
+<ValidatieTable
+  @instance={{this.model.bestuursorgaanInTijd}}
+  class="au-u-padding-bottom-none"
+/>
 <div
   class="au-o-box au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-flex--between"
 >
@@ -122,10 +123,12 @@
   </div>
 {{/if}}
 
-<MinMaxMandatarisWarning
-  @bestuursorgaanInTijd={{this.model.bestuursorgaanInTijd}}
-  @mandatarissen={{this.model.mandatarissen}}
-/>
+{{#unless (is-feature-enabled "shacl-report")}}
+  <MinMaxMandatarisWarning
+    @bestuursorgaanInTijd={{this.model.bestuursorgaanInTijd}}
+    @mandatarissen={{this.model.mandatarissen}}
+  />
+{{/unless}}
 
 <Organen::MandatarisTable
   @content={{@model.mandatarissen}}

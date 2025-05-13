@@ -43,6 +43,6 @@ export default class ValidatieTable extends Component {
 
 function getOwnValidationErrors() {
   return trackedFunction(async () => {
-    return this.validatie.getIssuesForId(this.instance.id);
+    return this.validatie.getIssuesForInstance(this.instance);
   });
 }

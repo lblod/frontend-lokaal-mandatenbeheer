@@ -57,8 +57,8 @@ function getValidationError() {
       return false;
     }
     if (this.args.event.mandataris) {
-      const issues = await this.validatie.getIssuesForId(
-        this.args.event.mandataris.id
+      const issues = await this.validatie.getIssuesForInstance(
+        this.args.event.mandataris
       );
       return issues.length > 0;
     }

@@ -39,6 +39,8 @@
 }
 
 .validation-table {
+  max-height: 10vh;
+  overflow-y: auto;
   .au-c-data-table .au-c-data-table__table tbody td,
   th,
   tr {
@@ -67,5 +69,11 @@
   .au-c-data-table__table th:first-child,
   .au-c-data-table__table td:first-child {
     padding-left: 0;
+  }
+}
+.stick-right-if-large {
+  @include mq($au-region-breakpoint) {
+    align-self: flex-end;
+    width: 960px;
   }
 }
