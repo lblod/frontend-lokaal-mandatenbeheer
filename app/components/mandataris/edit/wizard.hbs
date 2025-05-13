@@ -18,6 +18,7 @@
         @linkedMandataris={{@linkedMandataris}}
         @bestuursorganenTitle={{this.mandatarisTitle}}
         @isFractieRequired={{@isFractieRequired}}
+        @onFormIsValid={{this.updateMandatarisStepCompleted}}
       />
     {{/if}}
 
@@ -44,7 +45,10 @@
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton {{on "click" this.nextStep}}>
+          <AuButton
+            {{on "click" this.nextStep}}
+            @disabled={{not this.activeStep.canContinueToNextStep}}
+          >
             {{this.nextButtonText}}
           </AuButton>
           {{#unless this.activeStepIsFirstStep}}

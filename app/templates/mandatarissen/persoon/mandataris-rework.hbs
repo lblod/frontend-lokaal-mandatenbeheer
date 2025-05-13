@@ -96,14 +96,15 @@
   @replacement="true"
 />
 
-<Mandataris::Edit::Form
-  @isOpen={{this.isEditModalOpen}}
-  @toggleModal={{fn (mut this.isEditModalOpen)}}
+<Mandataris::Edit::Wizard
+  @startFlow={{this.isEditModalOpen}}
+  @mandatarisTitle={{this.bestuursorganenTitle}}
+  @onCompleted={{fn (mut this.isEditModalOpen)}}
+  @onAbort={{fn (mut this.isEditModalOpen)}}
   @bestuurseenheid={{@model.bestuurseenheid}}
   @bestuursorgaanIT={{get @model.bestuursorganen 0}}
   @mandataris={{@model.mandataris}}
   @linkedMandataris={{this.model.linkedMandataris}}
-  @bestuursorganenTitle={{this.bestuursorganenTitle}}
   @isFractieRequired={{this.model.isFractieRequired}}
 />
 

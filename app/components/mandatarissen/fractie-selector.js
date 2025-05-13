@@ -20,9 +20,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   constructor() {
     super(...arguments);
-    if (this.args.fractie) {
-      this._fractie = this.args.fractie;
-    }
     this.load.perform();
   }
 
@@ -122,8 +119,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     if (fractie?.isNew) {
       await fractie.save();
     }
-    this._fractie = fractie;
-    await this.args.onSelect(this._fractie);
+    await this.args.onSelect(fractie);
   }
 
   get title() {

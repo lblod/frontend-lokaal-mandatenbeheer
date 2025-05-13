@@ -1,86 +1,60 @@
-<AuModal @modalOpen={{@isOpen}} @closable={{true}} @closeModal={{this.cancel}}>
-  <:title>
-    Bewerk mandaat
-    <p class="au-u-h4 au-u-regular">
-      {{@bestuursorganenTitle}}
-    </p>
-
-  </:title>
-  <:body>
-    <div class="au-u-flex au-u-flex--column au-o-flow">
+<div class="au-u-flex au-u-flex--column au-o-flow">
+  <div>
+    <AuLabel @required={{true}}>
+      Status
+    </AuLabel>
+    <PowerSelect
+      @allowClear={{false}}
+      @selected={{this.status}}
+      @options={{this.statusOptions}}
+      @onChange={{this.updateStatus}}
+      @searchEnabled={{true}}
+      @searchField="label"
+      @noMatchesMessage="Geen resultaten"
+      as |status|
+    >
+      {{status.label}}
+    </PowerSelect>
+  </div>
+  {{#unless this.isTerminatingMandate}}
+    {{#if this.showRangordeField}}
       <div>
-        <AuLabel @required={{true}}>
-          Status
+        <AuLabel>
+          Rangorde
         </AuLabel>
-        <PowerSelect
-          @allowClear={{false}}
-          @selected={{this.status}}
-          @options={{this.statusOptions}}
-          @onChange={{this.updateStatus}}
-          @searchEnabled={{true}}
-          @searchField="label"
-          @noMatchesMessage="Geen resultaten"
-          as |status|
-        >
-          {{status.label}}
-        </PowerSelect>
-      </div>
-      {{#unless this.isTerminatingMandate}}
-        {{#if this.showRangordeField}}
-          <div>
-            <AuLabel>
-              Rangorde
-            </AuLabel>
-            <RangordeDropdown
-              id="mandataris-rangorde"
-              @selected={{this.rangorde}}
-              @placeholder={{this.rangordePlaceholder}}
-              @mandaatLabel={{this.mandaatLabel}}
-              @onNewRangorde={{this.updateRangorde}}
-            />
-          </div>
-        {{/if}}
-        {{#unless (await this.hideFractieField)}}
-          <Mandatarissen::FractieSelector
-            @fractie={{this.fractie}}
-            @isRequired={{@isFractieRequired}}
-            @onSelect={{this.updateFractie}}
-            @bestuurseenheid={{@bestuurseenheid}}
-            @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
-            @mandataris={{@mandataris}}
-            {{! TODO this should be generalised somehow }}
-            @isUpdatingState={{false}}
-          />
-        {{/unless}}
-        <Mandataris::Edit::StartEndDate
-          @startDate={{this.startDate}}
-          @endDate={{this.endDate}}
-          @from={{@bestuursorgaanIT.bindingStart}}
-          @to={{@bestuursorgaanIT.bindingEinde}}
-          @onChange={{this.updateStartEndDate}}
-          @onErrorStateUpdated={{this.updateErrorMap}}
+        <RangordeDropdown
+          id="mandataris-rangorde"
+          @selected={{this.rangorde}}
+          @placeholder={{this.rangordePlaceholder}}
+          @mandaatLabel={{this.mandaatLabel}}
+          @onNewRangorde={{this.updateRangorde}}
         />
-      {{/unless}}
-    </div>
-  </:body>
-  <:footer>
-    <AuToolbar as |Group|>
-      <Group>
-        <AuButtonGroup>
-          <AuButton
-            {{on "click" this.confirmMandatarisChanges}}
-            @disabled={{this.disabled}}
-          >
-            {{if this.hasChanges "Pas aan" "Onveranderd"}}
-          </AuButton>
-          <AuButton {{on "click" this.cancel}} @skin="secondary">
-            Annuleer
-          </AuButton>
-        </AuButtonGroup>
-      </Group>
-    </AuToolbar>
-  </:footer>
-</AuModal>
+      </div>
+    {{/if}}
+    {{#unless (await this.hideFractieField)}}
+      <Mandatarissen::FractieSelector
+        @fractie={{this.fractie}}
+        @isRequired={{@isFractieRequired}}
+        @onSelect={{this.updateFractie}}
+        @bestuurseenheid={{@bestuurseenheid}}
+        @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
+        @mandataris={{@mandataris}}
+        {{! TODO this should be generalised somehow }}
+        @isUpdatingState={{false}}
+      />
+    {{/unless}}
+    {{#if this.startDate}}
+      <Mandataris::Edit::StartEndDate
+        @startDate={{this.startDate}}
+        @endDate={{this.endDate}}
+        @from={{@bestuursorgaanIT.bindingStart}}
+        @to={{@bestuursorgaanIT.bindingEinde}}
+        @onChange={{this.updateStartEndDate}}
+        @onErrorStateUpdated={{this.updateErrorMap}}
+      />
+    {{/if}}
+  {{/unless}}
+</div>
 
 <AuModal
   @modalOpen={{this.isSecondModalOpen}}

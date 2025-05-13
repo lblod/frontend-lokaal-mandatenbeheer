@@ -97,18 +97,18 @@ export default class MandatarisEditFormComponent extends Component {
 
   get isStatusVerhinderd() {
     return (
-      this.status.get('isVerhinderd') &&
+      this.status?.get('isVerhinderd') &&
       !this.args.mandataris.status.get('isVerhinderd')
     );
   }
 
   get isTerminatingMandate() {
-    return this.status.get('isBeeindigd');
+    return this.status?.get('isBeeindigd');
   }
 
   get showRangordeField() {
     return (
-      this.mandaat.get('hasRangorde') &&
+      this.mandaat?.get('hasRangorde') &&
       this.status?.get('uri') !== MANDATARIS_VERHINDERD_STATE
     );
   }
@@ -139,11 +139,14 @@ export default class MandatarisEditFormComponent extends Component {
   updateErrorMap({ id, hasErrors }) {
     this.errorMap.set(id, !!hasErrors);
     this.errorMap = new Map(this.errorMap);
+
+    this.args.onFormIsValid?.(!this.formHasErrors && !this.disabled);
   }
 
   @action
   updateStatus(status) {
     this.status = status;
+    this.updateErrorMap({ id: 'status', hasErrors: false });
   }
 
   @action
@@ -158,6 +161,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action updateFractie(newFractie) {
     this.fractie = newFractie;
+    this.updateErrorMap({ id: 'fractie', hasErrors: false });
   }
 
   @action
@@ -169,6 +173,7 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   updateRangorde(rangordeAsString) {
     this.rangorde = rangordeAsString;
+    this.updateErrorMap({ id: 'rangorde', hasErrors: false });
   }
 
   @action
@@ -239,7 +244,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   async updateState() {
     let promise;
-    if (this.status.get('isBeeindigd')) {
+    if (this.status?.get('isBeeindigd')) {
       promise = this.endMandataris();
     } else {
       promise = this.changeMandatarisState();
@@ -330,7 +335,7 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   shouldOpenRangordeModal() {
-    if (!this.mandaat.get('hasRangorde')) {
+    if (!this.mandaat?.get('hasRangorde')) {
       return false;
     }
     if (this.status?.get('uri') !== MANDATARIS_VERHINDERD_STATE) {
