@@ -26,8 +26,11 @@
       {{this.persoon.gebruikteVoornaam}}
       {{this.persoon.achternaam}}
     </p>
+
   </div>
-  <div class="au-o-grid__item au-u-1-2 au-u-text-left">
+  <div
+    class="au-o-grid__item au-u-1-2 au-u-text-left au-u-padding-bottom-small"
+  >
     <div class="au-u-flex au-u-flex--end au-u-margin-bottom">
       {{#if this.notOwnedByUs}}
         <AuAlert
@@ -89,13 +92,16 @@
           </Shared::Tooltip>
         </AuDropdown>
       {{/if}}
-
     </div>
+    <ValidatieTable
+      @instance={{@model.mandataris}}
+      class="au-u-margin-bottom-none"
+    />
   </div>
 </div>
 
 <div class="au-c-body-container au-c-body-container--scroll">
-  <div class="au-o-box">
+  <div class="au-o-box au-u-padding-top-none">
     <Mandatarissen::MandatarisCard
       @mandataris={{@model.mandataris}}
       @bestuursorgaanIT={{get @model.bestuursorganen 0}}
@@ -124,9 +130,6 @@
     @form={{@model.mandatarisEditForm}}
   />
 
-  <div class="au-o-box">
-    <ValidatieTable @instance={{@model.mandataris}} />
-  </div>
 </div>
 
 <Mandatarissen::UpdateState

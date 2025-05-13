@@ -1,25 +1,37 @@
 <div class="au-u-flex au-u-flex--column">
-  <div class="report-refresh-button au-u-flex">
-    <AuPill @icon="clock-rewind">Laatste sync
-      {{this.lastRefreshedDate}}</AuPill>
+  <div
+    class="report-refresh-button au-u-flex {{if (eq @size 'small') 'small'}}"
+  >
+    <AuLink
+      @icon="clock-rewind"
+      @size={{@size}}
+      @route="report"
+      @skin="button-naked"
+      class="refresh-button-left"
+    >Laatste validatie
+      {{this.lastRefreshedDate}}</AuLink>
     <AuButton
       @disabled={{this.isGeneratingReport}}
       @skin="naked"
-      class="refresh-button-next-to-pill"
+      @size={{@size}}
+      class="refresh-button-right"
       {{on "click" this.refresh}}
     >
       <AuIcon
         @icon="renew"
+        @size={{@size}}
         class={{if this.isGeneratingReport "rotate-element-360-degree"}}
       />
-      Refresh</AuButton>
+      Valideer nu</AuButton>
   </div>
-  <p class="au-u-flex au-u-flex-self-end au-u-padding-top-small">Meer weten over
-    validatie fouten?</p>
-  <AuLinkExternal
-    class="au-u-flex au-u-flex-self-end"
-    href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer"
-  >
-    Bekijk de handleiding
-  </AuLinkExternal>
+  {{#unless @noMessage}}
+    <p class="au-u-flex au-u-flex-self-end au-u-padding-top-small">Meer weten
+      over validatie fouten?</p>
+    <AuLinkExternal
+      class="au-u-flex au-u-flex-self-end"
+      href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer"
+    >
+      Bekijk de handleiding
+    </AuLinkExternal>
+  {{/unless}}
 </div>

@@ -7,20 +7,10 @@
 
   </:title>
   <:body>
-    <div class="au-u-flex au-u-flex--column au-u-flex--spaced-tiny">
-      <div>
-        <Mandataris::Edit::MandaatSelector
-          @mandataris={{@mandataris}}
-          @mandaat={{this.mandaat}}
-          @required={{true}}
-          @currentBestuursorgaan={{@bestuursorgaanIT}}
-          @onUpdate={{this.updateMandaat}}
-          @onValidate={{fn (mut this.mandaatError)}}
-        />
-      </div>
+    <div class="au-u-flex au-u-flex--column au-o-flow">
       <div>
         <AuLabel @required={{true}}>
-          Nieuwe Status
+          Status
         </AuLabel>
         <PowerSelect
           @allowClear={{false}}
@@ -61,26 +51,6 @@
             {{/if}}
           </div>
         {{/if}}
-        <div>
-          <DateInput
-            @label="Startdatum"
-            @value={{this.startDate}}
-            @from={{@bestuursorgaanIT.bindingStart}}
-            @to={{@bestuursorgaanIT.bindingEinde}}
-            @onChange={{fn (mut this.startDate)}}
-            @isRequired={{true}}
-          />
-        </div>
-        <div>
-          <DateInput
-            @label="Einddatum"
-            @value={{this.endDate}}
-            @from={{@bestuursorgaanIT.bindingStart}}
-            @to={{@bestuursorgaanIT.bindingEinde}}
-            @onChange={{fn (mut this.endDate)}}
-            @isRequired={{false}}
-          />
-        </div>
         {{#if this.showRangordeField}}
           <div>
             <AuLabel>
@@ -95,25 +65,26 @@
             />
           </div>
         {{/if}}
-        <div>
-          {{#if this.load.isRunning}}
-            <AuLabel for="input" class="skeleton-label au-u-margin-top" />
-            <p
-              class="skeleton-input-full au-u-margin-top au-u-margin-bottom"
-            ></p>
-          {{else if (not (await this.showFractieSelector))}}
-            <Mandatarissen::FractieSelector
-              @fractie={{this.fractie}}
-              @isRequired={{@isFractieRequired}}
-              @onSelect={{this.updateFractie}}
-              @bestuurseenheid={{@bestuurseenheid}}
-              @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
-              @mandataris={{@mandataris}}
-              {{! TODO this should be generalised somehow }}
-              @isUpdatingState={{true}}
-            />
-          {{/if}}
-        </div>
+        {{#unless (await this.hideFractieField)}}
+          <Mandatarissen::FractieSelector
+            @fractie={{this.fractie}}
+            @isRequired={{@isFractieRequired}}
+            @onSelect={{this.updateFractie}}
+            @bestuurseenheid={{@bestuurseenheid}}
+            @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
+            @mandataris={{@mandataris}}
+            {{! TODO this should be generalised somehow }}
+            @isUpdatingState={{false}}
+          />
+        {{/unless}}
+        <Mandataris::Edit::StartEndDate
+          @startDate={{this.startDate}}
+          @endDate={{this.endDate}}
+          @from={{@bestuursorgaanIT.bindingStart}}
+          @to={{@bestuursorgaanIT.bindingEinde}}
+          @onChange={{this.updateStartEndDate}}
+          @onErrorStateUpdated={{this.updateErrorMap}}
+        />
       {{/unless}}
     </div>
   </:body>
@@ -121,18 +92,12 @@
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
-          <Shared::Tooltip
-            @showTooltip={{this.disabled}}
-            @tooltipText={{this.toolTipText}}
-            @alignment="left"
+          <AuButton
+            {{on "click" this.confirmMandatarisChanges}}
+            @disabled={{this.disabled}}
           >
-            <AuButton
-              {{on "click" this.confirmMandatarisChanges}}
-              @disabled={{this.disabled}}
-            >
-              {{if this.hasChanges "Pas aan" "Onveranderd"}}
-            </AuButton>
-          </Shared::Tooltip>
+            {{if this.hasChanges "Pas aan" "Onveranderd"}}
+          </AuButton>
           <AuButton {{on "click" this.cancel}} @skin="secondary">
             Annuleer
           </AuButton>
@@ -176,7 +141,11 @@
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton {{on "click" this.saveForm}}>
+          <AuButton
+            @loading={{this.isSaving}}
+            @loadingMessage="Aanpassingen worden bewaard"
+            {{on "click" this.saveForm}}
+          >
             Opslaan
           </AuButton>
           <AuButton {{on "click" this.goBackSecondModal}} @skin="secondary">

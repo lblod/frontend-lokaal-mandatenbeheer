@@ -40,6 +40,7 @@ module.exports = function (environment) {
       politieraad: false,
       'editable-forms': false,
       'edit-mandataris-rework': false,
+      'shacl-report': false,
     },
     lpdcUrl: '{{LPDC_URL}}',
     worshipDecisionsDatabaseUrl: '{{WORSHIP_DECISIONS_DATABASE_URL}}',
@@ -89,13 +90,11 @@ module.exports = function (environment) {
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
 
-    ENV.features['shacl-report'] = false;
     ENV.features['1234'] = true; // for testing purposes
   }
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
-    ENV.features['shacl-report'] = false;
   }
 
   ENV.features['show-iv-module'] = true;

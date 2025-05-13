@@ -8,6 +8,8 @@ import { MANDATARIS_NEW_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 export default class OrganenMandatarissenRoute extends Route {
   @service currentSession;
   @service store;
+  @service validatie;
+  @service features;
   @service installatievergadering;
   @service bestuursperioden;
   @service semanticFormRepository;
@@ -41,7 +43,11 @@ export default class OrganenMandatarissenRoute extends Route {
         bestuursorgaanInTijd
       );
     }
-    const folded = await foldMandatarisses(params, mandatarissen);
+    let validatie = null;
+    if (this.features.isEnabled('shacl-report')) {
+      validatie = this.validatie;
+    }
+    const folded = await foldMandatarisses(params, mandatarissen, validatie);
     const filtered = this.getFilteredMandatarissen(
       folded,
       params,

@@ -8,10 +8,10 @@ import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
 import { isDisabledForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 
-import moment from 'moment';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 
+import moment from 'moment';
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
 
@@ -33,10 +33,8 @@ export default class MandatarisEditFormComponent extends Component {
   @service mandatarisApi;
 
   @tracked mandaat;
-  @tracked mandaatError;
   @tracked status;
   @tracked replacement;
-  @tracked replacementError;
   @tracked startDate;
   @tracked endDate;
   @tracked fractie;
@@ -44,14 +42,15 @@ export default class MandatarisEditFormComponent extends Component {
 
   @tracked isSecondModalOpen = false;
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
-  @tracked vanafDate;
   @tracked reasonForChange;
+  @tracked errorMap = new Map();
 
   @tracked correctedMandataris = false;
   @tracked updatedStateMandataris = false;
   @tracked newMandataris;
 
   @tracked isRangordeModalOpen;
+  @tracked isSaving;
 
   @use(getStatusOptions) getStatusOptions;
 
@@ -71,8 +70,6 @@ export default class MandatarisEditFormComponent extends Component {
     );
     this.rangorde = this.args.mandataris.rangorde;
     this.replacement = null;
-
-    this.vanafDate = new Date();
   }
 
   get statusOptions() {
@@ -81,22 +78,17 @@ export default class MandatarisEditFormComponent extends Component {
 
   get hasChanges() {
     return (
-      this.mandaat?.id !== this.args.mandataris.bekleedt?.id ||
       this.status?.id !== this.args.mandataris.status?.id ||
       !moment(this.startDate).isSame(moment(this.args.mandataris.start)) ||
-      this.endDate !== this.args.mandataris.einde ||
+      !moment(this.endDate).isSame(moment(this.args.mandataris.einde)) ||
       this.fractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
       this.rangorde !== this.args.mandataris.rangorde
     );
   }
 
-  get hasErrors() {
-    return this.replacementError || this.mandaatError;
-  }
-
   get disabled() {
-    return !this.hasChanges || this.hasErrors;
+    return !this.hasChanges || this.formHasErrors;
   }
 
   get toolTipText() {
@@ -121,7 +113,7 @@ export default class MandatarisEditFormComponent extends Component {
     );
   }
 
-  get showFractieField() {
+  get hideFractieField() {
     return isDisabledForBestuursorgaan(this.args.bestuursorgaanIT);
   }
 
@@ -133,9 +125,20 @@ export default class MandatarisEditFormComponent extends Component {
     return `Eerste ${this.mandaatLabel}`;
   }
 
+  get replacementError() {
+    return this.errorMap.get('replacement');
+  }
+
+  get formHasErrors() {
+    const errorArray = Array.from(this.errorMap.values());
+
+    return errorArray.some((bool) => bool);
+  }
+
   @action
-  updateMandaat(mandaat) {
-    this.mandaat = mandaat;
+  updateErrorMap({ id, hasErrors }) {
+    this.errorMap.set(id, !!hasErrors);
+    this.errorMap = new Map(this.errorMap);
   }
 
   @action
@@ -145,16 +148,22 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   updateReplacement(newReplacement) {
-    if (this.args.mandataris.isBestuurlijkeAliasVan.id === newReplacement?.id) {
-      this.replacementError = true;
-    } else {
-      this.replacementError = false;
-    }
     this.replacement = newReplacement;
+    this.updateErrorMap({
+      id: 'replacement',
+      hasErrors:
+        newReplacement?.id === this.args.mandataris.isBestuurlijkeAliasVan.id,
+    });
   }
 
   @action updateFractie(newFractie) {
     this.fractie = newFractie;
+  }
+
+  @action
+  updateStartEndDate(startDate, endDate) {
+    this.startDate = startDate;
+    this.endDate = endDate;
   }
 
   @action
@@ -175,6 +184,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   async saveForm() {
+    this.isSaving = true;
     if (this.reasonForChange == 'Corrigeer fouten') {
       await this.corrigeerFouten();
       this.correctedMandataris = true;
@@ -182,14 +192,17 @@ export default class MandatarisEditFormComponent extends Component {
       await this.updateState();
       this.updatedStateMandataris = true;
     } else {
+      this.isSaving = false;
       showErrorToast(
         this.toaster,
         'Geen geldige reden voor aanpassing geselecteerd'
       );
       return;
     }
+    this.isSaving = false;
     this.reasonForChange = null;
     this.isSecondModalOpen = false;
+    await this.setInitialFormState();
   }
 
   @action
@@ -208,7 +221,6 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   async corrigeerFouten() {
     try {
-      this.args.mandataris.bekleedt = this.mandaat;
       this.args.mandataris.status = this.status;
       this.args.mandataris.start = this.startDate;
       this.args.mandataris.einde = this.endDate;
@@ -252,19 +264,19 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   async endMandataris() {
-    this.args.mandataris.einde = endOfDay(this.vanafDate);
-    return await this.args.mandataris.save();
+    this.endDate = endOfDay(new Date());
+    this.args.mandataris.einde = this.endDate;
+    await this.args.mandataris.save();
+
+    return this.args.mandataris;
   }
 
   async changeMandatarisState() {
-    const endDate = this.args.mandataris.einde;
-    const dateOfAction = endOfDay(this.vanafDate);
-
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
-        start: dateOfAction,
-        einde: endDate,
+        start: this.startDate,
+        einde: this.endDate,
         status: this.status,
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
@@ -295,7 +307,7 @@ export default class MandatarisEditFormComponent extends Component {
         (await this.args.mandataris.vervangerVan) || [];
     }
 
-    this.args.mandataris.einde = dateOfAction;
+    this.args.mandataris.einde = endOfDay(this.startDate);
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
     await this.handleFractie(newMandataris);

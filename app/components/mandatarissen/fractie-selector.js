@@ -15,6 +15,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service mandatarisApi;
 
   @tracked _fractie;
+  @tracked person;
   @tracked fractieOptions = [];
 
   constructor() {
@@ -31,12 +32,12 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   async loadFracties() {
     this.fractieOptions = [];
-    const person = await this.getPerson();
+    this.person = await this.getPerson();
 
     if (this.args.limitPersonFractionsToCurrent) {
       // The current fractie is always the only one you can select if it is set!
       const currentFractie = await this.persoonApi.getCurrentFractie(
-        person.id,
+        this.person.id,
         this.args.bestuursperiode.id
       );
       if (currentFractie) {
@@ -57,7 +58,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
       if (this.fractieOptions.length == 0) {
         const currentFractie = await this.persoonApi.getCurrentFractie(
-          person.id,
+          this.person.id,
           this.args.bestuursperiode.id
         );
         if (currentFractie) {
@@ -82,7 +83,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       // so now we can add a new onafhankelijke fractie
       let onafhankelijkeFractie =
         await this.fractieService.getOrCreateOnafhankelijkeFractie(
-          person,
+          this.person,
           this.args.bestuursperiode,
           this.args.bestuurseenheid
         );
@@ -97,7 +98,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       );
     let onafhankelijkeFractie =
       await this.fractieService.getOrCreateOnafhankelijkeFractie(
-        person,
+        this.person,
         this.args.bestuursperiode,
         this.args.bestuurseenheid
       );

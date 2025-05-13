@@ -51,6 +51,10 @@
       {{/if}}
 
     </div>
+    <ValidatieTable
+      @instance={{@model.mandataris}}
+      class="au-u-margin-bottom-none"
+    />
   </div>
 </div>
 
@@ -84,9 +88,6 @@
     @history={{@model.history}}
   />
 
-  <div class="au-o-box">
-    <ValidatieTable @instance={{@model.mandataris}} />
-  </div>
 </div>
 
 <Mandatarissen::Linked::Modal
