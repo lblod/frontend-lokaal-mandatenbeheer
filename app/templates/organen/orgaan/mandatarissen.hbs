@@ -122,10 +122,12 @@
   </div>
 {{/if}}
 
-<MinMaxMandatarisWarning
-  @bestuursorgaanInTijd={{this.model.bestuursorgaanInTijd}}
-  @mandatarissen={{this.model.mandatarissen}}
-/>
+{{#unless (is-feature-enabled "shacl-report")}}
+  <MinMaxMandatarisWarning
+    @bestuursorgaanInTijd={{this.model.bestuursorgaanInTijd}}
+    @mandatarissen={{this.model.mandatarissen}}
+  />
+{{/unless}}
 
 <Organen::MandatarisTable
   @content={{@model.mandatarissen}}

@@ -39,6 +39,8 @@
 }
 
 .validation-table {
+  max-height: 10vh;
+  overflow-y: auto;
   .au-c-data-table .au-c-data-table__table tbody td,
   th,
   tr {
