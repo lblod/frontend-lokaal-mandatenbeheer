@@ -7,13 +7,13 @@ export default class SharedMainMenuComponent extends Component {
   @service validatie;
 
   get validationText() {
-    return this.validatie.latestValidationResults.length > 0
-      ? `${this.validatie.latestValidationResults.length} validatiefouten`
+    return this.validatie.latestValidationResults?.length > 0
+      ? `${this.validatie.latestValidationResults?.length} validatiefouten`
       : 'Geen validatiefouten';
   }
 
   get validationIcon() {
-    return this.validatie.latestValidationResults.length > 0
+    return this.validatie.latestValidationResults?.length > 0
       ? 'alert-triangle'
       : 'circle-check';
   }

@@ -14,7 +14,7 @@
       {{this.persoon.achternaam}}
     </p>
   </div>
-  <div class="au-o-grid__item au-u-1-2 au-u-text-left">
+  <div class="au-o-grid__item au-u-1-2 au-u-text-left au-u-flex--wrap">
     <div class="au-u-flex au-u-flex--end au-u-margin-bottom">
       {{#if this.notOwnedByUs}}
         <AuAlert @skin="info" @icon="eye" @closable={{false}}>
@@ -51,15 +51,18 @@
       {{/if}}
 
     </div>
-    <ValidatieTable
-      @instance={{@model.mandataris}}
-      class="au-u-margin-bottom-none"
-    />
+
   </div>
 </div>
+<div
+  class="au-c-body-container au-c-body-container--scroll au-u-padding-top-none"
+>
+  <ValidatieTable
+    @instance={{@model.mandataris}}
+    class="au-u-margin-bottom-none"
+  />
 
-<div class="au-c-body-container au-c-body-container--scroll">
-  <div class="au-o-box">
+  <div class="au-o-box au-u-padding-top-none">
     <Mandatarissen::MandatarisCard
       @mandataris={{@model.mandataris}}
       @bestuursorgaanIT={{get @model.bestuursorganen 0}}

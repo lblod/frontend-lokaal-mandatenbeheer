@@ -71,3 +71,9 @@
     padding-left: 0;
   }
 }
+.stick-right-if-large {
+  @include mq($au-region-breakpoint) {
+    align-self: flex-end;
+    width: 960px;
+  }
+}
