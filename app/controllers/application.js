@@ -17,6 +17,13 @@ export default class ApplicationController extends Controller {
     return this.router.currentRouteName === 'index';
   }
 
+  get showSidebar() {
+    return (
+      this.router.currentRouteName === 'index' ||
+      this.router.currentRouteName === 'report'
+    );
+  }
+
   get notificationCount() {
     return this.systemNotifications.totalUnreadNotifications;
   }

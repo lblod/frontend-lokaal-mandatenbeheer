@@ -3,16 +3,15 @@
 <AuMainContainer as |main|>
   <main.content>
     <AuBodyContainer id="content" class="au-c-body-container--scroll">
-      <AuToolbar @size="large" as |Group|>
-        <Group>
+      <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
+        <Group class="au-u-flex au-u-flex--between au-u-1-1">
           <AuHeading @skin="2">
             Validatierapport
           </AuHeading>
-        </Group>
-        <Group>
-          <RefreshValidationsButton />
+          <RefreshValidationsButton @noMessage={{true}} @size="small" />
         </Group>
       </AuToolbar>
+      <Validations::OverviewCallout />
       <div class="au-u-padding">
         {{#if this.isEmptyResult}}
           <AuAlert @skin="success" @icon="check">

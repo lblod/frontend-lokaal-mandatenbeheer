@@ -7,7 +7,6 @@ import moment from 'moment';
 
 export default class RefreshValidationsButton extends Component {
   @service validatie;
-  @service currentSession;
   @service toaster;
   @service router;
 
@@ -40,7 +39,6 @@ export default class RefreshValidationsButton extends Component {
 
   @action
   async refresh() {
-    const bestuurseenheid = this.currentSession.group;
-    this.validatie.generateReport.perform(bestuurseenheid);
+    this.validatie.generateReport.perform();
   }
 }

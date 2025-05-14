@@ -6,10 +6,8 @@ export default class SharedMainMenuComponent extends Component {
   @service currentSession;
   @service validatie;
 
-  get validationText() {
-    return this.validatie.latestValidationResults?.length > 0
-      ? `${this.validatie.latestValidationResults?.length} validatiefouten`
-      : 'Geen validatiefouten';
+  get validationCount() {
+    return this.validatie.latestValidationResults?.length || 0;
   }
 
   get validationIcon() {
