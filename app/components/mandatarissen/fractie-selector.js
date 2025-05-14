@@ -14,7 +14,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service('fractie') fractieService;
   @service fractieApi;
   @service persoonApi;
-  @service mandatarisApi;
   @service toaster;
 
   @tracked _fractie;
