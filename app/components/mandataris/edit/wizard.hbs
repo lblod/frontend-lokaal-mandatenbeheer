@@ -1,7 +1,8 @@
 <AuModal
+  class="wizard-modal"
   @modalOpen={{@startFlow}}
   @closable={{true}}
-  @closeModal={{this.onCloseModal}}
+  @closeModal={{fn (mut this.isUnsavedChangesModalOpen) true}}
 >
   <:title>
     <p class="au-u-h4 au-u-regular">
@@ -54,15 +55,30 @@
     <AuToolbar as |Group|>
       <Group>
         <AuButtonGroup>
-          <AuButton
-            {{on "click" this.nextStep}}
-            @disabled={{not this.activeStep.canContinueToNextStep}}
-          >
-            {{this.nextButtonText}}
-          </AuButton>
+          {{#if this.activeStepIsFinalStep}}
+            <AuButton
+              {{on "click" this.onSaveChanges}}
+              @loading={{this.isSaving}}
+              @loadingMessage="Opslaan"
+              @disabled={{this.isSaveButtonDisabled}}
+            >
+              Pas aan
+            </AuButton>
+          {{else}}
+            <AuButton
+              {{on "click" this.nextStep}}
+              @disabled={{not this.activeStep.canContinueToNextStep}}
+            >
+              Volgende
+            </AuButton>
+          {{/if}}
           {{#unless this.activeStepIsFirstStep}}
-            <AuButton {{on "click" this.previousStep}} @skin="secondary">
-              Vorige stap
+            <AuButton
+              {{on "click" this.previousStep}}
+              @disabled={{this.isSaving}}
+              @skin="secondary"
+            >
+              Vorige
             </AuButton>
           {{/unless}}
         </AuButtonGroup>
@@ -70,3 +86,10 @@
     </AuToolbar>
   </:footer>
 </AuModal>
+
+<Shared::UnsavedChangesModal
+  @isModalOpen={{this.isUnsavedChangesModalOpen}}
+  @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onDiscard={{this.discardChanges}}
+/>

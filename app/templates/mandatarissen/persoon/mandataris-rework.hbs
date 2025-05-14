@@ -103,7 +103,7 @@
   @startFlow={{this.isEditModalOpen}}
   @mandatarisTitle={{this.bestuursorganenTitle}}
   @onCompleted={{fn (mut this.isEditModalOpen)}}
-  @onAbort={{fn (mut this.isEditModalOpen)}}
+  @onDiscardChanges={{fn (mut this.isEditModalOpen)}}
   @bestuurseenheid={{@model.bestuurseenheid}}
   @bestuursorgaanIT={{get @model.bestuursorganen 0}}
   @mandataris={{@model.mandataris}}
