@@ -43,8 +43,7 @@ export default class MandatarisService extends Service {
   async getOrCreateReplacement(
     toReplace,
     replacementPerson,
-    newMandatarisState,
-    { saveWhenCreated = true }
+    newMandatarisState
   ) {
     const mandatarisStatus = await this.store.findRecord(
       'mandataris-status-code',
@@ -73,17 +72,12 @@ export default class MandatarisService extends Service {
       status: mandatarisStatus,
       publicationStatus: await getNietBekrachtigdPublicationStatus(this.store),
     });
-    if (saveWhenCreated) {
-      await newMandataris.save();
-    }
+    await newMandataris.save();
+
     return newMandataris;
   }
 
-  async createNewLidmaatschap(
-    newMandataris,
-    fractie,
-    { saveWhenCreated = true }
-  ) {
+  async createNewLidmaatschap(newMandataris, fractie) {
     if (!fractie) {
       return;
     }
@@ -92,9 +86,7 @@ export default class MandatarisService extends Service {
       binnenFractie: fractie,
       lid: newMandataris,
     });
-    if (saveWhenCreated) {
-      await newLidmaatschap.save();
-    }
+    await newLidmaatschap.save();
 
     return newLidmaatschap;
   }
