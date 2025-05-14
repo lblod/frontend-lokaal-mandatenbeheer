@@ -57,7 +57,7 @@
         <AuButtonGroup>
           {{#if this.activeStepIsFinalStep}}
             <AuButton
-              {{on "click" this.onSaveChanges}}
+              {{on "click" this.saveChanges}}
               @loading={{this.isSaving}}
               @loadingMessage="Opslaan"
               @disabled={{this.isSaveButtonDisabled}}
@@ -92,4 +92,55 @@
   @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
   @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
   @onDiscard={{this.discardChanges}}
+/>
+
+<AuModal
+  @modalOpen={{this.isRangordeModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isRangordeModalOpen) false}}
+>
+  <:title>Rangorde vervanger</:title>
+  <:body>
+    <p>
+      U heeft een mandataris, die een rangorde heeft, verhinderd. Deze rangorde
+      kan niet automatisch overgenomen worden in de vervanger. Het toewijzen van
+      een rangorde kan namelijk gevolgen hebben op de rangorde van andere
+      mandatarissen. Wenst u dit nu aan te passen? Het is ook mogelijk dit op
+      een later tijdstip aan te passen in de wijzig rangorde pagina.
+    </p>
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuLink
+          @skin="button"
+          @route="organen.orgaan.edit-rangorde"
+          @model={{@bestuursorgaanIT.isTijdsspecialisatieVan.id}}
+          @query={{hash
+            bestuursperiode=@bestuursorgaanIT.heeftBestuursperiode.id
+          }}
+        >
+          Ja
+        </AuLink>
+        <AuButton
+          @skin="secondary"
+          {{on "click" (fn (mut this.isRangordeModalOpen) false)}}
+        >Nee</AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.replacement}}
+  @mandataris={{@mandataris.id}}
+  @replacement="true"
+/>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.isUpdateState}}
+  @mandataris={{@mandataris.id}}
+  @newMandataris={{this.newMandataris.id}}
+  @callback={{this.callbackAfterUpdate}}
+  @updateState="true"
 />
