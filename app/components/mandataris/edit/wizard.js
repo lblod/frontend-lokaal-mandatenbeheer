@@ -91,6 +91,10 @@ export default class MandatarisEditWizard extends Component {
     return this.currentSession.group;
   }
 
+  get startDateForReplacement() {
+    return this.updatedMandatarisProps?.einde;
+  }
+
   @action
   nextStep() {
     const nextStepIndex = this.activeStepIndex + 1;
