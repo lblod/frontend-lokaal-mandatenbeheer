@@ -350,4 +350,12 @@ export default class MandatarisEditFormComponent extends Component {
       );
     }
   }
+
+  get warningTextOCMWLinkToGemeente() {
+    return `Let op! Deze mandataris heeft een gelinkte mandataris in de gemeente.
+      Bij het aanpassen van deze gegevens wordt deze koppeling verbroken.
+      Het doorstromen van gegevens van de gemeente naar OCMW zal
+      hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
+      maken, gelieve dit te doen in de gemeente.`;
+  }
 }

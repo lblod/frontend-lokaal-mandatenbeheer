@@ -8,6 +8,17 @@
   </:title>
   <:body>
     <div class="au-u-flex au-u-flex--column au-o-flow">
+      {{#if @showOCMWLinkedMandatarisWarning}}
+        <AuAlert
+          @skin="warning"
+          @icon="alert-triangle"
+          @closable={{false}}
+          @size="small"
+          class="au-u-margin-left-small au-u-margin-right-small au-u-margin-bottom-small"
+        >
+          {{this.warningTextOCMWLinkToGemeente}}
+        </AuAlert>
+      {{/if}}
       <div>
         <AuLabel @required={{true}}>
           Status
