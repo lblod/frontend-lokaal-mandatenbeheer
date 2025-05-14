@@ -14,7 +14,6 @@ export default class MandatarisEditReplacementForm extends Component {
   @service store;
   @service('mandataris') mandatarisService;
 
-  @tracked person;
   @tracked startDate;
   @tracked endDate;
   @tracked fractie;
@@ -41,17 +40,6 @@ export default class MandatarisEditReplacementForm extends Component {
   }
 
   @action
-  async selectPerson(person, overlap) {
-    if (person?.id === this.args.mandataris.isBestuurlijkeAliasVan.id) {
-      this.hasReplacementError = true;
-    } else {
-      this.hasReplacementError = false;
-    }
-    this.person = person;
-    this.overlappingMandate = overlap;
-  }
-
-  @action
   selectFractie(fractie) {
     this.fractie = fractie;
     this.updateErrorMap({ id: 'fractie', hasErrors: !fractie });
@@ -74,13 +62,10 @@ export default class MandatarisEditReplacementForm extends Component {
     this.errorMap.set(id, !!hasErrors);
     this.errorMap = new Map(this.errorMap);
     this.args.onFormIsValid?.(!this.formHasErrors, {
-      person: this.person,
-      replacementProps: {
-        start: this.startDate,
-        einde: this.endDate,
-        fractie: this.fractie,
-        rangorde: null,
-      },
+      start: this.startDate,
+      einde: this.endDate,
+      fractie: this.fractie,
+      rangorde: null,
     });
   }
 }

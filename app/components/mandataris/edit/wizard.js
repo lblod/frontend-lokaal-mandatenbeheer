@@ -33,7 +33,8 @@ export default class MandatarisEditWizard extends Component {
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
   @tracked reasonForChange;
   @tracked updatedMandatarisProps;
-  @tracked replacement;
+  @tracked replacementPerson;
+  @tracked replacementMandataris;
   @tracked replacementProps;
   @tracked newMandataris;
 
@@ -52,7 +53,7 @@ export default class MandatarisEditWizard extends Component {
       {
         label: 'Vervanger',
         isReplacementStep: true,
-        isStepShown: this.isMandatarisVerhinderd,
+        isStepShown: this.isMandatarisVerhinderd && !this.replacementMandataris,
         canContinueToNextStep: this.isReplacementStepCompleted,
       },
       {
@@ -140,15 +141,16 @@ export default class MandatarisEditWizard extends Component {
     this.isMandatarisStepCompleted = isCompleted;
     if (isCompleted) {
       this.updatedMandatarisProps = formValues;
+      this.replacementPerson = formValues.replacementPerson;
+      this.replacementMandataris = formValues.replacementMandataris;
     }
     this.isMandatarisVerhinderd = formValues.status.isVerhinderd;
   }
 
   @action
-  updateReplacementStepCompleted(isCompleted, { person, replacementProps }) {
+  updateReplacementStepCompleted(isCompleted, replacementProps) {
     this.isReplacementStepCompleted = isCompleted;
     if (isCompleted) {
-      this.replacement = person;
       this.replacementProps = replacementProps;
     }
   }
@@ -175,7 +177,7 @@ export default class MandatarisEditWizard extends Component {
       return;
     }
     this.isSaving = false;
-    this.isReplacementAdded = this.replacement;
+    this.isReplacementAdded = this.replacementPerson;
     this.args.onCompleted?.();
     this.setWizardValuesToStepOne();
   }
@@ -187,9 +189,7 @@ export default class MandatarisEditWizard extends Component {
       this.args.mandataris.start = this.updatedMandatarisProps.start;
       this.args.mandataris.einde = this.updatedMandatarisProps.einde;
       this.args.mandataris.rangorde = this.updatedMandatarisProps.rangorde;
-      if (this.replacement) {
-        this.args.mandataris.tijdelijkeVervangingen = [this.replacement];
-      }
+      this.args.mandataris.tijdelijkeVervangingen = [this.replacementPerson]; // FIXME: Should be the mandataris right?
       await this.args.mandataris.save();
       await this.handleFractie(this.args.mandataris);
       showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
@@ -252,11 +252,11 @@ export default class MandatarisEditWizard extends Component {
       rangorde: this.rangorde,
     });
 
-    if (this.replacement) {
+    if (this.replacementPerson) {
       const replacementMandataris =
         await this.mandatarisService.getOrCreateReplacement(
           this.args.mandataris,
-          this.replacement,
+          this.replacementPerson,
           // passing these along because if we pass the model, relations will be
           // evaluated as of right now and we haven't saved yet
           this.replacementProps
@@ -301,7 +301,7 @@ export default class MandatarisEditWizard extends Component {
     ) {
       return false;
     }
-    if (this.replacement) {
+    if (this.replacementPerson) {
       this.isRangordeModalOpen = true;
     }
   }
