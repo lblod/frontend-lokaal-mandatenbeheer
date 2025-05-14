@@ -5,14 +5,16 @@ import { service } from '@ember/service';
 
 import { tracked } from '@glimmer/tracking';
 
-import { showErrorToast } from 'frontend-lmb/utils/toasts';
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarisEditWizard extends Component {
   @service currentSession;
+  @service toaster;
 
   @tracked activeStepIndex = 0;
   @tracked isMandatarisVerhinderd;
 
+  @tracked isUnsavedChangesModalOpen;
   @tracked isMandatarisStepCompleted;
   @tracked isReplacementStepCompleted;
 
@@ -67,12 +69,8 @@ export default class MandatarisEditWizard extends Component {
     return this.activeStepIndex === this.steps.length - 1;
   }
 
-  get nextButtonText() {
-    if (this.activeStepIsFinalStep) {
-      return 'Pas aan';
-    }
-
-    return 'Volgende stap';
+  get isSaveButtonDisabled() {
+    return !this.activeStep.canContinueToNextStep || this.isSaving;
   }
 
   get bestuurseenheid() {
@@ -106,11 +104,22 @@ export default class MandatarisEditWizard extends Component {
   }
 
   @action
-  onCloseModal() {
-    alert('check if there are changes and show a popup that says are you sure');
-    this.args.onCompleted?.();
-    this.args.onAbort?.();
+  discardChanges() {
+    this.isUnsavedChangesModalOpen = false;
+    this.args.mandataris.rollbackAttributes();
     this.activeStepIndex = 0;
+    this.isMandatarisStepCompleted = false;
+    this.isReplacementStepCompleted = false;
+    this.reasonForChange = null;
+    this.args.onDiscardChanges?.();
+  }
+
+  @action
+  onSaveChanges() {
+    this.isSaving = true;
+    this.isSaving = false;
+    showSuccessToast(this.toaster, 'Aanpassingen bewaard', 'Mandataris');
+    this.args.onCompleted?.();
   }
 
   @action
