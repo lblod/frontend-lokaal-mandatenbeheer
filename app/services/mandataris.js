@@ -28,11 +28,19 @@ export default class MandatarisService extends Service {
 
     const toCheck = mandatarissen.slice();
     let current;
-    const start = startDate ? moment(startDate) : moment(mandataris.start);
+    let dateToCompare;
+    if (startDate) {
+      dateToCompare = moment(startDate);
+    } else if (moment().isAfter(mandataris.start)) {
+      dateToCompare = moment();
+    } else {
+      dateToCompare = moment(mandataris.start);
+    }
+
     while ((current = toCheck.pop())) {
       if (
-        (!current.start || start.isSameOrAfter(current.start)) &&
-        (!current.einde || start.isSameOrBefore(current.einde))
+        (!current.start || dateToCompare.isSameOrAfter(current.start)) &&
+        (!current.einde || dateToCompare.isSameOrBefore(current.einde))
       ) {
         return current;
       }
