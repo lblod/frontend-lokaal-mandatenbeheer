@@ -83,7 +83,7 @@
             @onSelect={{this.updateFractie}}
             @bestuurseenheid={{@bestuurseenheid}}
             @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
-            @mandataris={{@mandataris}}
+            @person={{@mandataris.isBestuurlijkeAliasVan}}
           />
         {{/unless}}
         <Mandataris::Edit::StartEndDate
