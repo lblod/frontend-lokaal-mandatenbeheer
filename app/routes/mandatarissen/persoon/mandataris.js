@@ -16,18 +16,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
   @service currentSession;
   @service store;
   @service router;
-  @service features;
   @service semanticFormRepository;
   @service('mandatarissen') mandatarissenService;
-
-  beforeModel(transition) {
-    if (this.features.isEnabled('edit-mandataris-rework')) {
-      this.router.transitionTo(
-        'mandatarissen.persoon.mandataris-rework',
-        transition.to.params.mandataris_id
-      );
-    }
-  }
 
   async model(params) {
     const bestuurseenheid = this.currentSession.group;
