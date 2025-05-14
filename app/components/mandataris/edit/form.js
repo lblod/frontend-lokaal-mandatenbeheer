@@ -140,7 +140,13 @@ export default class MandatarisEditFormComponent extends Component {
     this.errorMap.set(id, !!hasErrors);
     this.errorMap = new Map(this.errorMap);
 
-    this.args.onFormIsValid?.(!this.formHasErrors && !this.disabled);
+    this.args.onFormIsValid?.(!this.formHasErrors && !this.disabled, {
+      status: this.status,
+      rangorde: this.rangorde,
+      fractie: this.fractie,
+      start: this.startDate,
+      end: this.endDate,
+    });
   }
 
   @action

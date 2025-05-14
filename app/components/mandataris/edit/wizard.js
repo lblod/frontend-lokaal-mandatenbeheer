@@ -102,9 +102,16 @@ export default class MandatarisEditWizard extends Component {
   }
 
   @action
-  updateMandatarisStepCompleted(isCompleted) {
-    console.log(`icom `, isCompleted);
+  updateMandatarisStepCompleted(isCompleted, formValues) {
     this.isMandatarisStepCompleted = isCompleted;
+    if (isCompleted) {
+      this.args.mandataris.status = formValues.status;
+      this.args.mandataris.rangorde = formValues.rangorde;
+      this.args.mandataris.fractie = formValues.fractie;
+      this.args.mandataris.start = formValues.start;
+      this.args.mandataris.end = formValues.end;
+    }
+    this.isMandatarisVerhinderd = formValues.status.isVerhinderd;
   }
 
   @action
