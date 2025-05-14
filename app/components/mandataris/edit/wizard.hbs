@@ -26,7 +26,7 @@
     {{#if this.activeStep.isReplacementStep}}
       <Mandataris::Edit::ReplacementForm
         @mandataris={{@mandataris}}
-        @startDate={{this.updatedMandatarisProps.start}}
+        @startDate={{this.startDateForReplacement}}
         @bestuursorgaanIT={{@bestuursorgaanIT}}
         @bestuurseenheid={{this.bestuurseenheid}}
         @onFormIsValid={{this.updateReplacementStepCompleted}}
