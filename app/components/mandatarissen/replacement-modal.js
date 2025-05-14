@@ -68,6 +68,11 @@ export default class MandatarissenReplacementModal extends Component {
   }
 
   @action
+  updateStartDate(date) {
+    this.startDate = date;
+  }
+
+  @action
   selectFractie(newFractie) {
     this.fractie = newFractie;
   }
