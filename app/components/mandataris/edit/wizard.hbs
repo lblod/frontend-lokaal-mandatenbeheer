@@ -23,7 +23,12 @@
     {{/if}}
 
     {{#if this.activeStep.isReplacementStep}}
-      <h1>SHOW isReplacementStep</h1>
+      <Mandataris::Edit::ReplacementForm
+        @mandataris={{@mandataris}}
+        @bestuursorgaanIT={{@bestuursorgaanIT}}
+        @bestuurseenheid={{this.bestuurseenheid}}
+        @onFormIsValid={{this.updateReplacementStepCompleted}}
+      />
     {{/if}}
 
     {{#if this.activeStep.isReasonStep}}

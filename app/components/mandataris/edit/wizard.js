@@ -1,15 +1,20 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 
 import { tracked } from '@glimmer/tracking';
 
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarisEditWizard extends Component {
+  @service currentSession;
+
   @tracked activeStepIndex = 0;
   @tracked isMandatarisVerhinderd;
+
   @tracked isMandatarisStepCompleted;
+  @tracked isReplacementStepCompleted;
 
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
   @tracked reasonForChange;
@@ -30,7 +35,7 @@ export default class MandatarisEditWizard extends Component {
         label: 'Vervanger',
         isReplacementStep: true,
         isStepShown: this.isMandatarisVerhinderd,
-        canContinueToNextStep: true,
+        canContinueToNextStep: this.isReplacementStepCompleted,
       },
       {
         label: 'Reden',
@@ -66,6 +71,10 @@ export default class MandatarisEditWizard extends Component {
     }
 
     return 'Volgende stap';
+  }
+
+  get bestuurseenheid() {
+    return this.currentSession.group;
   }
 
   @action
@@ -112,6 +121,15 @@ export default class MandatarisEditWizard extends Component {
       this.args.mandataris.end = formValues.end;
     }
     this.isMandatarisVerhinderd = formValues.status.isVerhinderd;
+  }
+
+  @action
+  updateReplacementStepCompleted(isCompleted, formValues) {
+    this.isReplacementStepCompleted = isCompleted;
+    if (isCompleted) {
+      console.log(`replacement values`, formValues);
+      alert(`set the replacement mandataris`);
+    }
   }
 
   @action

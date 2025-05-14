@@ -1,0 +1,42 @@
+<div class="au-u-flex au-u-flex--column au-o-flow">
+  <div>
+    <AuLabel>
+      Vervanger
+    </AuLabel>
+    <Mandatarissen::ReplacementSelect
+      @mandataris={{@mandataris}}
+      @selected={{this.person}}
+      @onSelect={{this.selectPerson}}
+      @bestuursorgaanIT={{@bestuursorgaanIT}}
+      @inline={{true}}
+    />
+    {{#if this.hasReplacementError}}
+      <AuAlert @skin="error" @icon="alert-triangle" class="au-u-margin-top">
+        Dit is dezelfde persoon als de oorspronkelijke mandataris, het is niet
+        mogelijk een mandataris te laten vervangen door zichzelf.
+      </AuAlert>
+    {{/if}}
+  </div>
+  {{#if this.showExtraFields}}
+    <Mandataris::Edit::StartEndDate
+      @startDate={{this.startDate}}
+      @endDate={{this.endDate}}
+      @from={{@mandataris.start}}
+      @to={{@bestuursorgaanIT.bindingEinde}}
+      @onChange={{this.updateStartEndDate}}
+      @onErrorStateUpdated={{this.updateErrorMap}}
+    />
+
+    {{#if (not (await this.hideFractieField))}}
+      <Mandatarissen::FractieSelector
+        @fractie={{this.fractie}}
+        @isRequired={{await this.isFractieRequired}}
+        @onSelect={{this.selectFractie}}
+        @bestuurseenheid={{@bestuurseenheid}}
+        @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
+        @person={{this.person}}
+        @limitPersonFractionsToCurrent={{true}}
+      />
+    {{/if}}
+  {{/if}}
+</div>
