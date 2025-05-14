@@ -22,6 +22,10 @@
       />
     {{/if}}
 
+    {{#if this.activeStep.isReplacementStep}}
+      <h1>SHOW isReplacementStep</h1>
+    {{/if}}
+
     {{#if this.activeStep.isReasonStep}}
       <div>
         <AuLabel @required={{true}}>
