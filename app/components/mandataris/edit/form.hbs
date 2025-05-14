@@ -16,6 +16,26 @@
       {{status.label}}
     </PowerSelect>
   </div>
+  {{#if this.isStatusVerhinderd}}
+    <div>
+      <AuLabel>
+        Vervanger
+      </AuLabel>
+      <Mandatarissen::ReplacementSelect
+        @mandataris={{@mandataris}}
+        @selected={{this.replacementPerson}}
+        @onSelect={{this.updateReplacement}}
+        @bestuursorgaanIT={{@bestuursorgaanIT}}
+        @inline={{true}}
+      />
+      {{#if this.hasReplacementError}}
+        <AuAlert @skin="error" @icon="alert-triangle" class="au-u-margin-top">
+          Dit is dezelfde persoon als de oorspronkelijke mandataris, het is niet
+          mogelijk een mandataris te laten vervangen door zichzelf.
+        </AuAlert>
+      {{/if}}
+    </div>
+  {{/if}}
   {{#unless this.isTerminatingMandate}}
     {{#if this.showRangordeField}}
       <div>

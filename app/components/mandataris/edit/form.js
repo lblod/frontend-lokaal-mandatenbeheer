@@ -29,6 +29,9 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked fractie;
   @tracked rangorde;
   @tracked person;
+  @tracked replacementMandataris;
+  @tracked replacementPerson;
+  @tracked overlappingMandateForReplacement;
 
   @tracked errorMap = new Map();
 
@@ -50,6 +53,10 @@ export default class MandatarisEditFormComponent extends Component {
     );
     this.rangorde = this.args.mandataris.rangorde;
     this.person = await this.args.mandataris.isBestuurlijkeAliasVan;
+    this.replacementMandataris =
+      (await this.args.mandataris.tijdelijkeVervangingen)?.[0] || null;
+    this.replacementPerson =
+      await this.replacementMandataris.isBestuurlijkeAliasVan;
   }
 
   get statusOptions() {
@@ -63,7 +70,8 @@ export default class MandatarisEditFormComponent extends Component {
       !moment(this.endDate).isSame(moment(this.args.mandataris.einde)) ||
       this.fractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
-      this.rangorde !== this.args.mandataris.rangorde
+      this.rangorde !== this.args.mandataris.rangorde ||
+      this.replacementPerson?.id !== this.person.id
     );
   }
 
@@ -77,7 +85,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   get isStatusVerhinderd() {
     return (
-      this.status?.get('isVerhinderd') &&
+      this.status?.get('isVerhinderd') ||
       !this.args.mandataris.status.get('isVerhinderd')
     );
   }
@@ -105,6 +113,10 @@ export default class MandatarisEditFormComponent extends Component {
     return `Eerste ${this.mandaatLabel}`;
   }
 
+  get hasReplacementError() {
+    return this.errorMap.get('replacement');
+  }
+
   get formHasErrors() {
     const errorArray = Array.from(this.errorMap.values());
 
@@ -124,6 +136,8 @@ export default class MandatarisEditFormComponent extends Component {
         fractie: this.fractie,
         start: this.startDate,
         einde: this.endDate,
+        replacementPerson: this.replacementPerson,
+        replacementMandataris: this.replacementMandataris,
       }
     );
   }
@@ -135,12 +149,12 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   @action
-  updateReplacement(newReplacement) {
-    this.replacement = newReplacement;
+  updateReplacement(person, overlappingMandate) {
+    this.replacementPerson = person;
+    this.overlappingMandateForReplacement = overlappingMandate;
     this.updateErrorMap({
       id: 'replacement',
-      hasErrors:
-        newReplacement?.id === this.args.mandataris.isBestuurlijkeAliasVan.id,
+      hasErrors: person?.id === this.args.mandataris.isBestuurlijkeAliasVan.id,
     });
   }
 
