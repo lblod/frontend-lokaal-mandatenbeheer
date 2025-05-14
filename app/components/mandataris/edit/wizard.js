@@ -18,6 +18,8 @@ export default class MandatarisEditWizard extends Component {
 
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
   @tracked reasonForChange;
+  @tracked replacementMandataris;
+  @tracked updatedMandatarisProps;
 
   get mandatarisTitle() {
     return this.args.mandatarisTitle || 'Mandataris';
@@ -108,27 +110,23 @@ export default class MandatarisEditWizard extends Component {
     alert('check if there are changes and show a popup that says are you sure');
     this.args.onCompleted?.();
     this.args.onAbort?.();
+    this.activeStepIndex = 0;
   }
 
   @action
   updateMandatarisStepCompleted(isCompleted, formValues) {
     this.isMandatarisStepCompleted = isCompleted;
     if (isCompleted) {
-      this.args.mandataris.status = formValues.status;
-      this.args.mandataris.rangorde = formValues.rangorde;
-      this.args.mandataris.fractie = formValues.fractie;
-      this.args.mandataris.start = formValues.start;
-      this.args.mandataris.end = formValues.end;
+      this.updatedMandatarisProps = formValues;
     }
     this.isMandatarisVerhinderd = formValues.status.isVerhinderd;
   }
 
   @action
-  updateReplacementStepCompleted(isCompleted, formValues) {
+  updateReplacementStepCompleted(isCompleted, newModels) {
     this.isReplacementStepCompleted = isCompleted;
     if (isCompleted) {
-      console.log(`replacement values`, formValues);
-      alert(`set the replacement mandataris`);
+      console.log({ newModels });
     }
   }
 
