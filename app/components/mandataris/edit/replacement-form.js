@@ -25,8 +25,7 @@ export default class MandatarisEditReplacementForm extends Component {
 
   constructor() {
     super(...arguments);
-    this.errorMap.set('startDate', true);
-    this.errorMap.set('fractie', true);
+    this.startDate = this.args.startDate;
   }
 
   get showExtraFields() {
@@ -74,6 +73,14 @@ export default class MandatarisEditReplacementForm extends Component {
   async updateErrorMap({ id, hasErrors }) {
     this.errorMap.set(id, !!hasErrors);
     this.errorMap = new Map(this.errorMap);
-    this.args.onFormIsValid?.(!this.formHasErrors, this.person);
+    this.args.onFormIsValid?.(!this.formHasErrors, {
+      person: this.person,
+      replacementProps: {
+        start: this.startDate,
+        einde: this.endDate,
+        fractie: this.fractie,
+        rangorde: null,
+      },
+    });
   }
 }

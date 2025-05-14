@@ -28,6 +28,7 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked endDate;
   @tracked fractie;
   @tracked rangorde;
+  @tracked person;
 
   @tracked errorMap = new Map();
 
@@ -48,6 +49,7 @@ export default class MandatarisEditFormComponent extends Component {
       'heeftLidmaatschap.binnenFractie'
     );
     this.rangorde = this.args.mandataris.rangorde;
+    this.person = await this.args.mandataris.isBestuurlijkeAliasVan;
   }
 
   get statusOptions() {
@@ -121,7 +123,7 @@ export default class MandatarisEditFormComponent extends Component {
         rangorde: this.rangorde,
         fractie: this.fractie,
         start: this.startDate,
-        end: this.endDate,
+        einde: this.endDate,
       }
     );
   }
