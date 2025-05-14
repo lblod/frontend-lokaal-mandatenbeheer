@@ -5,7 +5,7 @@
   {{#if this.load.isRunning}}
     <p class="skeleton-input-full au-u-margin-top"></p>
   {{else}}
-    {{#if this.person}}
+    {{#if @person}}
       <PowerSelect
         @loadingMessage="Aan het laden..."
         @noMatchesMessage="Geen resultaten"
