@@ -39,7 +39,11 @@ export default class MandatarissenReplacementModal extends Component {
   }
 
   get disabled() {
-    return !this.replacement;
+    return !this.replacement || !this.requiredFilledIn;
+  }
+
+  get requiredFilledIn() {
+    return this.startDate && (!this.isFractieRequired || this.fractie);
   }
 
   @action
