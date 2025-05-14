@@ -18,6 +18,8 @@ export default class MandatarissenReplacementModal extends Component {
   @tracked fractie;
   @tracked overlappingMandate;
 
+  @tracked startDateError;
+
   @service store;
   @service('mandataris') mandatarisService;
   @service fractieApi;
@@ -39,11 +41,15 @@ export default class MandatarissenReplacementModal extends Component {
   }
 
   get disabled() {
-    return !this.replacement || !this.requiredFilledIn;
+    return !this.replacement || !this.requiredFilledIn || this.hasErrors;
   }
 
   get requiredFilledIn() {
     return this.startDate && (!this.isFractieRequired || this.fractie);
+  }
+
+  get hasErrors() {
+    return this.startDateError;
   }
 
   @action
@@ -68,8 +74,9 @@ export default class MandatarissenReplacementModal extends Component {
   }
 
   @action
-  updateStartDate(date) {
+  updateStartDate(date, error) {
     this.startDate = date;
+    this.startDateError = error;
   }
 
   @action

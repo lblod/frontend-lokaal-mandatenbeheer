@@ -51,10 +51,10 @@ export default class DateInputComponent extends Component {
     }
 
     if (!isValidDate(date)) {
-      this.args.onChange?.(null);
+      this.args.onChange?.(null, this.invalidErrorMessage);
       return;
     }
-    this.args.onChange?.(date);
+    this.args.onChange?.(date, this.invalidErrorMessage);
   });
 
   processDate(date) {
