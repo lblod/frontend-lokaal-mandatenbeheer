@@ -28,6 +28,7 @@ export default class MandatarisEditWizard extends Component {
   @tracked isMandatarisStepCompleted;
   @tracked isReplacementStepCompleted;
   @tracked isUpdateState;
+  @tracked isReplacementAdded;
 
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
   @tracked reasonForChange;
@@ -170,6 +171,7 @@ export default class MandatarisEditWizard extends Component {
       return;
     }
     this.isSaving = false;
+    this.isReplacementAdded = this.replacement;
     this.args.onCompleted?.();
     this.setWizardValuesToStepOne();
   }
@@ -179,7 +181,7 @@ export default class MandatarisEditWizard extends Component {
     try {
       this.args.mandataris.status = this.updatedMandatarisProps.status;
       this.args.mandataris.start = this.updatedMandatarisProps.start;
-      this.args.mandataris.einde = this.updatedMandatarisProps.end;
+      this.args.mandataris.einde = this.updatedMandatarisProps.einde;
       this.args.mandataris.rangorde = this.updatedMandatarisProps.rangorde;
       if (this.replacement) {
         this.args.mandataris.tijdelijkeVervangingen = [this.replacement];
@@ -233,7 +235,7 @@ export default class MandatarisEditWizard extends Component {
       this.args.mandataris,
       {
         start: this.updatedMandatarisProps.start,
-        einde: this.updatedMandatarisProps.end,
+        einde: this.updatedMandatarisProps.einde,
         status: this.updatedMandatarisProps.status,
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
@@ -247,14 +249,13 @@ export default class MandatarisEditWizard extends Component {
     });
 
     if (this.replacement) {
-      newMandatarisProps.rangorde = '';
       const replacementMandataris =
         await this.mandatarisService.getOrCreateReplacement(
           this.args.mandataris,
           this.replacement,
           // passing these along because if we pass the model, relations will be
           // evaluated as of right now and we haven't saved yet
-          newMandatarisProps
+          this.replacementProps
         );
       newMandataris.tijdelijkeVervangingen = [replacementMandataris];
     } else {

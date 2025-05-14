@@ -26,6 +26,7 @@
     {{#if this.activeStep.isReplacementStep}}
       <Mandataris::Edit::ReplacementForm
         @mandataris={{@mandataris}}
+        @startDate={{this.updatedMandatarisProps.start}}
         @bestuursorgaanIT={{@bestuursorgaanIT}}
         @bestuurseenheid={{this.bestuurseenheid}}
         @onFormIsValid={{this.updateReplacementStepCompleted}}
@@ -132,7 +133,7 @@
 </AuModal>
 
 <Mandatarissen::Linked::Modal
-  @recentUpdate={{this.replacement}}
+  @recentUpdate={{this.isReplacementAdded}}
   @mandataris={{@mandataris.id}}
   @replacement="true"
 />
