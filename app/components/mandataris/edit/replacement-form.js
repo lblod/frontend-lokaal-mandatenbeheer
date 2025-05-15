@@ -24,7 +24,8 @@ export default class MandatarisEditReplacementForm extends Component {
 
   constructor() {
     super(...arguments);
-    this.startDate = this.args.startDate;
+    this.startDate = this.args.prefillStart;
+    this.endDate = this.args.prefillEinde;
   }
 
   get showExtraFields() {

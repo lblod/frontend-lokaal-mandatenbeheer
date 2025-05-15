@@ -95,7 +95,11 @@ export default class MandatarisEditWizard extends Component {
     return this.currentSession.group;
   }
 
-  get startDateForReplacement() {
+  get startForReplacement() {
+    return this.updatedMandatarisProps?.start;
+  }
+
+  get eindeForReplacement() {
     return this.updatedMandatarisProps?.einde;
   }
 
@@ -141,12 +145,12 @@ export default class MandatarisEditWizard extends Component {
 
   @action
   updateMandatarisStepCompleted(isCompleted, formValues) {
-    this.isMandatarisStepCompleted = isCompleted;
     if (isCompleted) {
       this.updatedMandatarisProps = formValues;
       this.replacementPerson = formValues.replacementPerson;
       this.replacementMandataris = formValues.replacementMandataris;
     }
+    this.isMandatarisStepCompleted = isCompleted;
     this.isMandatarisVerhinderd = formValues.status.isVerhinderd;
   }
 
