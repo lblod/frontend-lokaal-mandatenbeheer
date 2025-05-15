@@ -31,7 +31,6 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked person;
   @tracked replacementMandataris;
   @tracked replacementPerson;
-  @tracked overlappingMandateForReplacement;
 
   @tracked errorMap = new Map();
 
@@ -151,7 +150,7 @@ export default class MandatarisEditFormComponent extends Component {
   @action
   updateReplacement(person, overlappingMandate) {
     this.replacementPerson = person;
-    this.overlappingMandateForReplacement = overlappingMandate;
+    this.replacementMandataris = overlappingMandate;
     this.updateErrorMap({
       id: 'replacement',
       hasErrors: person?.id === this.args.mandataris.isBestuurlijkeAliasVan.id,
