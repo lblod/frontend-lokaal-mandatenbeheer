@@ -76,11 +76,14 @@ export default class MandatarisService extends Service {
       einde: newMandatarisState.einde,
       bekleedt: await toReplace.bekleedt,
       isBestuurlijkeAliasVan: replacementPerson,
-      beleidsdomein: await newMandatarisState.beleidsdomein,
+      beleidsdomein: newMandatarisState.beleidsdomein
+        ? await newMandatarisState.beleidsdomein
+        : [],
       status: mandatarisStatus,
       publicationStatus: await getNietBekrachtigdPublicationStatus(this.store),
     });
     await newMandataris.save();
+
     return newMandataris;
   }
 
@@ -94,6 +97,8 @@ export default class MandatarisService extends Service {
       lid: newMandataris,
     });
     await newLidmaatschap.save();
+
+    return newLidmaatschap;
   }
 
   async destroyLidmaatschap(mandataris) {
