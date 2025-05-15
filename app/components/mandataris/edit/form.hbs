@@ -63,15 +63,13 @@
         @isUpdatingState={{false}}
       />
     {{/unless}}
-    {{#if this.startDate}}
-      <Mandataris::Edit::StartEndDate
-        @startDate={{this.startDate}}
-        @endDate={{this.endDate}}
-        @from={{@bestuursorgaanIT.bindingStart}}
-        @to={{@bestuursorgaanIT.bindingEinde}}
-        @onChange={{this.updateStartEndDate}}
-        @onErrorStateUpdated={{this.updateErrorMap}}
-      />
-    {{/if}}
+    <Mandataris::Edit::StartEndDate
+      @startDate={{this.startDate}}
+      @endDate={{this.endDate}}
+      @from={{@bestuursorgaanIT.bindingStart}}
+      @to={{@bestuursorgaanIT.bindingEinde}}
+      @onChange={{this.updateStartEndDate}}
+      @onErrorStateUpdated={{this.updateErrorMap}}
+    />
   {{/unless}}
 </div>
