@@ -41,6 +41,12 @@ export default class MandatarisEditWizard extends Component {
     return this.args.mandatarisTitle || 'Mandataris';
   }
 
+  get replacementTitle() {
+    return this.replacementPerson
+      ? 'Mandataris voor vervanger ' + this.replacementPerson.naam
+      : 'Vervanger';
+  }
+
   get workingMandataris() {
     return this.args.workingMandataris;
   }
@@ -54,7 +60,7 @@ export default class MandatarisEditWizard extends Component {
         canContinueToNextStep: this.isMandatarisStepCompleted,
       },
       {
-        label: 'Vervanger',
+        label: this.replacementTitle,
         isReplacementStep: true,
         isStepShown:
           this.isMandatarisVerhinderd &&
