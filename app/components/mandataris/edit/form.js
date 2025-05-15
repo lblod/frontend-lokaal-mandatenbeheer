@@ -56,7 +56,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.replacementMandataris =
       (await this.args.mandataris.tijdelijkeVervangingen)?.[0] || null;
     this.replacementPerson =
-      await this.replacementMandataris.isBestuurlijkeAliasVan;
+      await this.replacementMandataris?.isBestuurlijkeAliasVan;
   }
 
   get statusOptions() {
@@ -86,7 +86,7 @@ export default class MandatarisEditFormComponent extends Component {
   get isStatusVerhinderd() {
     return (
       this.status?.get('isVerhinderd') ||
-      !this.args.mandataris.status.get('isVerhinderd')
+      this.args.mandataris.status.get('isVerhinderd')
     );
   }
 

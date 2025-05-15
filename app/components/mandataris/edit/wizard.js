@@ -53,7 +53,10 @@ export default class MandatarisEditWizard extends Component {
       {
         label: 'Vervanger',
         isReplacementStep: true,
-        isStepShown: this.isMandatarisVerhinderd && !this.replacementMandataris,
+        isStepShown:
+          this.isMandatarisVerhinderd &&
+          this.replacementPerson &&
+          !this.replacementMandataris,
         canContinueToNextStep: this.isReplacementStepCompleted,
       },
       {
@@ -189,7 +192,9 @@ export default class MandatarisEditWizard extends Component {
       this.args.mandataris.start = this.updatedMandatarisProps.start;
       this.args.mandataris.einde = this.updatedMandatarisProps.einde;
       this.args.mandataris.rangorde = this.updatedMandatarisProps.rangorde;
-      this.args.mandataris.tijdelijkeVervangingen = [this.replacementPerson]; // FIXME: Should be the mandataris right?
+      this.args.mandataris.tijdelijkeVervangingen = [
+        this.replacementMandataris,
+      ];
       await this.args.mandataris.save();
       await this.handleFractie(this.args.mandataris);
       showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
