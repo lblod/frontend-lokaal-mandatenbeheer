@@ -12,7 +12,7 @@
     id={{this.elementId}}
     placeholder="dd-mm-yyyy"
     {{au-inputmask options=(hash mask="99-99-9999" placeholder="_")}}
-    {{on "input" (perform this.onChange)}}
+    {{on "blur" (perform this.onChange)}}
     @disabled={{@disabled}}
   />
   <AuHelpText>
