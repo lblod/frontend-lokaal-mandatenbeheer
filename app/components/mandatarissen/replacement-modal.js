@@ -42,8 +42,8 @@ export default class MandatarissenReplacementModal extends Component {
 
   get disabled() {
     return (
-      !this.overlappingMandate &&
-      (!this.replacement || !this.requiredFilledIn || this.hasErrors)
+      !this.replacement ||
+      (!this.overlappingMandate && (!this.requiredFilledIn || this.hasErrors))
     );
   }
 
