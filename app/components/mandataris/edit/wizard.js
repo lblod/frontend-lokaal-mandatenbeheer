@@ -204,7 +204,10 @@ export default class MandatarisEditWizard extends Component {
         : [];
 
       await this.args.mandataris.save();
-      await this.handleFractie(this.args.mandataris);
+      await this.handleFractie(
+        this.args.mandataris,
+        this.workingMandataris.fractie
+      );
       this.isReplacementAdded = this.replacementPerson;
       showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
     } catch (error) {
@@ -278,6 +281,10 @@ export default class MandatarisEditWizard extends Component {
           // evaluated as of right now and we haven't saved yet
           this.replacementProps
         );
+      await this.handleFractie(
+        replacementMandataris,
+        this.replacementProps.fractie
+      );
       newMandataris.tijdelijkeVervangingen = [replacementMandataris];
     } else {
       newMandataris.tijdelijkeVervangingen =
@@ -289,7 +296,7 @@ export default class MandatarisEditWizard extends Component {
     this.args.mandataris.einde = endOfDay(this.startDate);
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
-    await this.handleFractie(newMandataris);
+    await this.handleFractie(newMandataris, this.workingMandataris.fractie);
 
     await this.mandatarisApi.copyOverNonDomainResourceProperties(
       this.args.mandataris.id,
@@ -299,11 +306,8 @@ export default class MandatarisEditWizard extends Component {
     return newMandataris;
   }
 
-  async handleFractie(mandataris) {
-    await this.mandatarisService.createNewLidmaatschap(
-      mandataris,
-      this.workingMandataris.fractie
-    );
+  async handleFractie(mandataris, fractie) {
+    await this.mandatarisService.createNewLidmaatschap(mandataris, fractie);
     await this.fractieApi.updateCurrentFractie(mandataris.id);
     await this.mandatarisService.removeDanglingFractiesInPeriod(mandataris.id);
   }
