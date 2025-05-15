@@ -44,14 +44,14 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   async setInitialFormState() {
-    this.mandaat = await this.args.mandataris.bekleedt;
-    this.status = await this.args.mandataris.status;
     this.startDate = this.args.mandataris.start;
     this.endDate = this.args.mandataris.einde;
+    this.rangorde = this.args.mandataris.rangorde;
+    this.mandaat = await this.args.mandataris.bekleedt;
+    this.status = await this.args.mandataris.status;
     this.fractie = await this.args.mandataris.get(
       'heeftLidmaatschap.binnenFractie'
     );
-    this.rangorde = this.args.mandataris.rangorde;
     this.person = await this.args.mandataris.isBestuurlijkeAliasVan;
     this.replacementMandataris =
       (await this.args.mandataris.tijdelijkeVervangingen)?.[0] || null;
