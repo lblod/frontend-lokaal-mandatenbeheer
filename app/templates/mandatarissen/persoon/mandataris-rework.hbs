@@ -32,7 +32,7 @@
           >
             <AuButton
               @disabled={{this.isDisabledBecauseLegislatuur}}
-              {{on "click" (fn (mut this.isEditModalOpen) true)}}
+              {{on "click" this.openWizard}}
             >Bewerk mandaat</AuButton>
           </Shared::Tooltip>
           <Shared::Tooltip
@@ -99,11 +99,12 @@
 <Mandataris::Edit::Wizard
   @startFlow={{this.isEditModalOpen}}
   @mandatarisTitle={{this.bestuursorganenTitle}}
-  @onCompleted={{fn (mut this.isEditModalOpen)}}
-  @onDiscardChanges={{fn (mut this.isEditModalOpen)}}
+  @onCompleted={{fn (mut this.isEditModalOpen) false}}
+  @onDiscardChanges={{this.onDiscardWizard}}
   @bestuurseenheid={{@model.bestuurseenheid}}
   @bestuursorgaanIT={{get @model.bestuursorganen 0}}
   @mandataris={{@model.mandataris}}
+  @workingMandataris={{this.workingMandataris}}
   @linkedMandataris={{this.model.linkedMandataris}}
   @isFractieRequired={{this.model.isFractieRequired}}
 />

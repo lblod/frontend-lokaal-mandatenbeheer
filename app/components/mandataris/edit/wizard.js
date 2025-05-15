@@ -32,7 +32,6 @@ export default class MandatarisEditWizard extends Component {
 
   @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
   @tracked reasonForChange;
-  @tracked updatedMandatarisProps;
   @tracked replacementPerson;
   @tracked replacementMandataris;
   @tracked replacementProps;
@@ -40,6 +39,10 @@ export default class MandatarisEditWizard extends Component {
 
   get mandatarisTitle() {
     return this.args.mandatarisTitle || 'Mandataris';
+  }
+
+  get workingMandataris() {
+    return this.args.workingMandataris;
   }
 
   get steps() {
@@ -96,11 +99,11 @@ export default class MandatarisEditWizard extends Component {
   }
 
   get startForReplacement() {
-    return this.updatedMandatarisProps?.start;
+    return this.workingMandataris?.start;
   }
 
   get eindeForReplacement() {
-    return this.updatedMandatarisProps?.einde;
+    return this.workingMandataris?.einde;
   }
 
   @action
@@ -130,28 +133,30 @@ export default class MandatarisEditWizard extends Component {
 
   @action
   discardChanges() {
-    this.args.mandataris.rollbackAttributes();
     this.setWizardValuesToStepOne();
     this.args.onDiscardChanges?.();
   }
 
   setWizardValuesToStepOne() {
+    this.args.mandataris.rollbackAttributes();
     this.isUnsavedChangesModalOpen = false;
     this.activeStepIndex = 0;
     this.isMandatarisStepCompleted = false;
     this.isReplacementStepCompleted = false;
     this.reasonForChange = null;
+    this.workingMandataris?.rollbackAttributes();
   }
 
   @action
-  updateMandatarisStepCompleted(isCompleted, formValues) {
+  async updateMandatarisStepCompleted(isCompleted, formValues) {
     if (isCompleted) {
-      this.updatedMandatarisProps = formValues;
       this.replacementPerson = formValues.replacementPerson;
       this.replacementMandataris = formValues.replacementMandataris;
     }
     this.isMandatarisStepCompleted = isCompleted;
-    this.isMandatarisVerhinderd = formValues.status.isVerhinderd;
+    this.isMandatarisVerhinderd = (
+      await this.workingMandataris.status
+    ).isVerhinderd;
   }
 
   @action
@@ -174,7 +179,6 @@ export default class MandatarisEditWizard extends Component {
       await this.corrigeerFouten();
     } else if (this.reasonForChange == 'Update state') {
       await this.updateState();
-      this.isUpdateState = true;
     } else {
       this.isSaving = false;
       showErrorToast(
@@ -184,7 +188,6 @@ export default class MandatarisEditWizard extends Component {
       return;
     }
     this.isSaving = false;
-    this.isReplacementAdded = this.replacementPerson;
     this.args.onCompleted?.();
     this.setWizardValuesToStepOne();
   }
@@ -192,15 +195,17 @@ export default class MandatarisEditWizard extends Component {
   @action
   async corrigeerFouten() {
     try {
-      this.args.mandataris.status = this.updatedMandatarisProps.status;
-      this.args.mandataris.start = this.updatedMandatarisProps.start;
-      this.args.mandataris.einde = this.updatedMandatarisProps.einde;
-      this.args.mandataris.rangorde = this.updatedMandatarisProps.rangorde;
-      this.args.mandataris.tijdelijkeVervangingen = [
-        this.replacementMandataris,
-      ];
+      this.args.mandataris.status = await this.workingMandataris.status;
+      this.args.mandataris.start = this.workingMandataris.start;
+      this.args.mandataris.einde = this.workingMandataris.einde;
+      this.args.mandataris.rangorde = this.workingMandataris.rangorde;
+      this.args.mandataris.tijdelijkeVervangingen = this.replacementMandataris
+        ? [this.replacementMandataris]
+        : [];
+
       await this.args.mandataris.save();
       await this.handleFractie(this.args.mandataris);
+      this.isReplacementAdded = this.replacementPerson;
       showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
     } catch (error) {
       showErrorToast(
@@ -212,7 +217,7 @@ export default class MandatarisEditWizard extends Component {
 
   async updateState() {
     let promise;
-    if (this.updatedMandatarisProps.status.isBeeindigd) {
+    if ((await this.workingMandataris.status).isBeeindigd) {
       promise = this.endMandataris();
     } else {
       promise = this.changeMandatarisState();
@@ -225,15 +230,18 @@ export default class MandatarisEditWizard extends Component {
           'Status van mandaat werd succesvol aangepast.'
         );
         this.newMandataris = newMandataris;
+        this.isReplacementAdded = this.replacementPerson;
+        this.isUpdateState = true;
+        this.shouldOpenRangordeModal();
       })
       .catch((e) => {
+        this.isSaving = false;
         console.log(e);
         showErrorToast(
           this.toaster,
           'Er ging iets mis bij het aanpassen van de status van het mandaat.'
         );
       });
-    await this.shouldOpenRangordeModal();
   }
 
   async endMandataris() {
@@ -247,9 +255,9 @@ export default class MandatarisEditWizard extends Component {
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
-        start: this.updatedMandatarisProps.start,
-        einde: this.updatedMandatarisProps.einde,
-        status: this.updatedMandatarisProps.status,
+        start: this.workingMandataris.start,
+        einde: this.workingMandataris.einde,
+        status: await this.workingMandataris.status,
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
         ),
@@ -294,20 +302,18 @@ export default class MandatarisEditWizard extends Component {
   async handleFractie(mandataris) {
     await this.mandatarisService.createNewLidmaatschap(
       mandataris,
-      this.updatedMandatarisProps.fractie
+      this.workingMandataris.fractie
     );
     await this.fractieApi.updateCurrentFractie(mandataris.id);
     await this.mandatarisService.removeDanglingFractiesInPeriod(mandataris.id);
   }
 
   async shouldOpenRangordeModal() {
-    const mandaat = await this.args.mandataris.bekleedt;
+    const mandaat = await this.newMandataris.bekleedt;
     if (!mandaat.hasRangorde) {
       return false;
     }
-    if (
-      this.updatedMandatarisProps.status.uri !== MANDATARIS_VERHINDERD_STATE
-    ) {
+    if ((await this.newMandataris.status).uri !== MANDATARIS_VERHINDERD_STATE) {
       return false;
     }
     if (this.replacementPerson) {

@@ -127,14 +127,22 @@ export default class MandatarisEditFormComponent extends Component {
     this.errorMap.set(id, !!hasErrors);
     this.errorMap = new Map(this.errorMap);
 
+    this.args.mandataris.start = this.startDate;
+    this.args.mandataris.einde = this.endDate;
+    this.args.mandataris.status = this.status;
+    this.args.mandataris.rangorde = this.rangorde;
+    this.args.mandataris.fractie = this.fractie; // None mandataris prop
+
+    if (this.replacementMandataris) {
+      this.args.mandataris.tijdelijkeVervangingen = [
+        this.replacementMandataris,
+      ];
+    }
+
     this.args.onFormIsValid?.(
       !this.formHasErrors && !this.disabled && this.hasChanges,
       {
-        status: this.status,
-        rangorde: this.rangorde,
-        fractie: this.fractie,
-        start: this.startDate,
-        einde: this.endDate,
+        mandataris: this.args.mandataris,
         replacementPerson: this.replacementPerson,
         replacementMandataris: this.replacementMandataris,
       }
