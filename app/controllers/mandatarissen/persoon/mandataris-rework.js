@@ -1,14 +1,17 @@
 import Controller from '@ember/controller';
 
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class MandatarissenPersoonMandatarisReworkController extends Controller {
   @service currentSession;
+  @service router;
 
   @tracked selectedReplacement = false;
   @tracked isDeleteModalOpen;
   @tracked isEditModalOpen;
+  @tracked workingMandataris;
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt
@@ -46,5 +49,17 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
         (eenheid) => eenheid.id == this.currentSession.group?.id
       )
     );
+  }
+
+  @action
+  async openWizard() {
+    this.workingMandataris = await this.model.mandataris.clone();
+    this.isEditModalOpen = true;
+  }
+
+  @action
+  onDiscardWizard() {
+    this.isEditModalOpen = false;
+    this.router.refresh();
   }
 }

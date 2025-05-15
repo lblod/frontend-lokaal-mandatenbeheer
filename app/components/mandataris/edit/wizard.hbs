@@ -15,7 +15,7 @@
         @toggleModal={{this.nextStep}}
         @bestuurseenheid={{@bestuurseenheid}}
         @bestuursorgaanIT={{@bestuursorgaanIT}}
-        @mandataris={{@mandataris}}
+        @mandataris={{this.workingMandataris}}
         @linkedMandataris={{@linkedMandataris}}
         @bestuursorganenTitle={{this.mandatarisTitle}}
         @isFractieRequired={{@isFractieRequired}}
@@ -26,7 +26,7 @@
     {{#if this.activeStep.isReplacementStep}}
       <Mandataris::Edit::ReplacementForm
         @person={{this.replacementPerson}}
-        @mandataris={{@mandataris}}
+        @mandataris={{this.workingMandataris}}
         @prefillStart={{this.startForReplacement}}
         @prefillEinde={{this.eindeForReplacement}}
         @bestuursorgaanIT={{@bestuursorgaanIT}}
