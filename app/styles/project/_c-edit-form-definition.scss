@@ -18,6 +18,13 @@
   border: 2px solid var(--au-gray-200);
   border-radius: 5px;
   background-color: var(--au-white);
+
+  .custom-form-field {
+    padding-left: $au-unit;
+  }
+  .add-custom-field {
+    margin: 0 $au-unit;
+  }
 }
 
 .edit-form-defintion--edit-panel {

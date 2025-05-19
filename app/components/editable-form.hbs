@@ -13,15 +13,17 @@
   >
     {{#if this.editableFormsEnabled}}
       {{#if this.formState.isAddFieldShownInForm}}
-        <AuButton
-          @skin="secondary"
-          @width="block"
-          @icon="plus"
-          {{on "click" (fn (mut this.showEditModal) true)}}
-          class="au-u-margin-bottom au-u-margin-top"
-        >
-          Voeg een veld toe
-        </AuButton>
+        <div class="add-custom-field">
+          <AuButton
+            @skin="secondary"
+            @width="block"
+            @icon="plus"
+            {{on "click" (fn (mut this.showEditModal) true)}}
+            class="au-u-margin-bottom au-u-margin-top"
+          >
+            Voeg een veld toe
+          </AuButton>
+        </div>
       {{/if}}
 
       {{yield}}
