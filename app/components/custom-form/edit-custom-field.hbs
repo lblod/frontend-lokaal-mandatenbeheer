@@ -94,7 +94,7 @@
       </AuFormRow>
       <AuFormRow>
         <AuToggleSwitch
-          @disabled={{not this.selectedField}}
+          @disabled={{this.isShowInSummaryToggleDisabled}}
           @checked={{this.isShownInSummary}}
           @onChange={{this.toggleShowInSummary}}
         >Toon in samenvatting

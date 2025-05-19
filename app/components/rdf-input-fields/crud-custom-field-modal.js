@@ -107,6 +107,10 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     return models.at(0) ?? null;
   }
 
+  get isShowInSummaryToggleDisabled() {
+    return this.args.show || this.displayType?.isLinkToForm;
+  }
+
   get deleteWillLoseData() {
     return this.libraryFieldType?.uri !== null;
   }
