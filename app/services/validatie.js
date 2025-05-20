@@ -329,9 +329,6 @@ export default class ValidatieService extends Service {
       await this.setLastRunningStatus();
       await this.setLatestValidationReport();
       if (this.canShowReportIsGenerated) {
-        if (this.router.currentRouteName !== 'report') {
-          showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
-        }
         this.canShowReportIsGenerated = false;
       }
     } else {
@@ -355,8 +352,9 @@ export default class ValidatieService extends Service {
     this.warmingUp = false;
   });
 
-  generateReport = task({ drop: true }, async (bestuurseenheid) => {
+  generateReport = task({ drop: true }, async () => {
     this.warmingUp = true;
+    const bestuurseenheid = this.currentSession.group;
     const currentStatus = await this.getCurrentReportStatus();
     const response = await fetch(`/validation-report-api/reports/generate`, {
       method: 'POST',
@@ -390,6 +388,15 @@ export default class ValidatieService extends Service {
         'Validatie rapport'
       );
       return;
+    }
+  });
+
+  queueValidatie = task({ restartable: true }, async () => {
+    await timeout(20000);
+    if (this.isRunning) {
+      this.queueValidatie.perform();
+    } else {
+      this.generateReport.perform();
     }
   });
 
