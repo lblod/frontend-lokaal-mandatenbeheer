@@ -67,6 +67,8 @@ export default class CustomFormsInstancesDefinitionController extends Controller
       this.selectedField = fields.filter(
         (f) => f.uri === this.selectedField.uri
       )[0];
+    } else {
+      this.selectedField = fields[0] || null;
     }
   }
 

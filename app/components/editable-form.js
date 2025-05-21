@@ -24,14 +24,10 @@ export default class EditableFormComponent extends Component {
   @service features;
 
   @tracked showEditModal;
-  @tracked clickedField;
 
   constructor() {
     super(...arguments);
     this.updateForm();
-    if (this.args.selectedField) {
-      this.clickedField = this.args.selectedField;
-    }
   }
 
   async updateForm() {
@@ -52,17 +48,18 @@ export default class EditableFormComponent extends Component {
     return this.getFieldsForForm?.value || [];
   }
 
+  get clickedField() {
+    return this.args.selectedField;
+  }
+
   @action
   async setClickedField(fieldModel) {
-    this.clickedField = fieldModel;
+    let field = fieldModel;
     if (this.args.onFieldSelected && fieldModel) {
       await this.getFieldsForForm.retry();
-      const field = this.fields.filter(
-        (f) => f.uri === fieldModel.uri?.value
-      )[0];
-      this.clickedField = field;
+      field = this.fields.filter((f) => f.uri === fieldModel.uri?.value)[0];
     }
-    this.args.onFieldSelected(this.clickedField);
+    this.args.onFieldSelected(field);
   }
 
   get editableFormsEnabled() {
