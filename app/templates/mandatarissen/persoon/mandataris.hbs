@@ -29,7 +29,7 @@
 
   </div>
   <div
-    class="au-o-grid__item au-u-1-2 au-u-text-left au-u-padding-bottom-small"
+    class="au-o-grid__item au-u-1-2 au-u-text-left au-u-padding-bottom-small au-u-flex--wrap"
   >
     <div class="au-u-flex au-u-flex--end au-u-margin-bottom">
       {{#if this.notOwnedByUs}}
@@ -93,14 +93,15 @@
         </AuDropdown>
       {{/if}}
     </div>
-    <ValidatieTable
-      @instance={{@model.mandataris}}
-      class="au-u-margin-bottom-none"
-    />
+
   </div>
 </div>
 
 <div class="au-c-body-container au-c-body-container--scroll">
+  <ValidatieTable
+    @instance={{@model.mandataris}}
+    class="au-u-margin-bottom-none"
+  />
   <div class="au-o-box au-u-padding-top-none">
     <Mandatarissen::MandatarisCard
       @mandataris={{@model.mandataris}}

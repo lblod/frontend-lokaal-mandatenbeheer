@@ -95,7 +95,7 @@ export default class MandatarisService extends Service {
 
   async destroyLidmaatschap(mandataris) {
     const lidmaatschap = await mandataris.heeftLidmaatschap;
-    lidmaatschap.destroyRecord();
+    lidmaatschap?.destroyRecord();
     mandataris.heeftLidmaatschap = null;
     await mandataris.save();
   }

@@ -17,10 +17,6 @@ export default class ValidationsOverviewCallout extends Component {
   get hasValidationErrors() {
     return this.validationErrorCount > 0;
   }
-
-  get show() {
-    return this.features.isEnabled('shacl-report') && this.hasValidationErrors;
-  }
 }
 
 function getValidationResults() {
