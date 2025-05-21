@@ -66,7 +66,9 @@
         class="au-u-padding-tiny au-u-margin-bottom-none au-u-margin-top-tiny au-u-para-small"
       >
         <p class="au-u-error"><AuIcon @icon="alert-triangle" />
-          Dit mandaat loopt door tot na de startdatum van het volgende mandaat.</p>
+          Dit mandaat loopt door tot
+          {{moment-format @event.mandataris.einde "DD-MM-YYYY"}}, dat is na de
+          startdatum van het volgende mandaat.</p>
       </AuAlert>
     {{/if}}
 
@@ -78,8 +80,9 @@
         class="au-u-padding-tiny au-u-margin-bottom-none au-u-margin-top-tiny au-u-para-small"
       >
         <p class="au-u-error"><AuIcon @icon="alert-triangle" />
-          Dit mandaat eindigt voor het begin van het volgende mandaat, op
-          {{moment-format @event.mandataris.einde "DD-MM-YYYY"}}.</p>
+          Dit mandaat eindigt op
+          {{moment-format @event.mandataris.einde "DD-MM-YYYY"}}, dat is voor
+          het begin van het volgende mandaat.</p>
       </AuAlert>
     {{/if}}
     {{yield}}
