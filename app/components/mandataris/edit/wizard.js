@@ -278,26 +278,7 @@ export default class MandatarisEditWizard extends Component {
       rangorde: this.rangorde,
     });
 
-    if (this.replacementPerson) {
-      const replacementMandataris =
-        await this.mandatarisService.getOrCreateReplacement(
-          this.args.mandataris,
-          this.replacementPerson,
-          // passing these along because if we pass the model, relations will be
-          // evaluated as of right now and we haven't saved yet
-          this.replacementProps
-        );
-      await this.handleFractie(
-        replacementMandataris,
-        this.replacementProps.fractie
-      );
-      newMandataris.tijdelijkeVervangingen = [replacementMandataris];
-    } else {
-      newMandataris.tijdelijkeVervangingen =
-        (await this.args.mandataris.tijdelijkeVervangingen) || [];
-      newMandataris.vervangerVan =
-        (await this.args.mandataris.vervangerVan) || [];
-    }
+    await this.handleReplacement(newMandataris);
 
     this.args.mandataris.einde = endOfDay(this.startDate);
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
@@ -310,6 +291,28 @@ export default class MandatarisEditWizard extends Component {
     );
 
     return newMandataris;
+  }
+
+  async handleReplacement(replacedMandataris) {
+    if (this.replacementPerson) {
+      const replacementMandataris =
+        await this.mandatarisService.getOrCreateReplacement(
+          this.args.mandataris,
+          this.replacementPerson,
+          this.replacementProps
+        );
+      await this.handleFractie(
+        replacementMandataris,
+        this.replacementProps.fractie
+      );
+      replacedMandataris.tijdelijkeVervangingen = [replacementMandataris];
+    } else {
+      replacedMandataris.tijdelijkeVervangingen =
+        (await this.args.mandataris.tijdelijkeVervangingen) || [];
+      replacedMandataris.vervangerVan =
+        (await this.args.mandataris.vervangerVan) || [];
+    }
+    return this.replacementMandataris;
   }
 
   async handleFractie(mandataris, fractie) {
