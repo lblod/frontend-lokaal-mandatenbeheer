@@ -65,11 +65,8 @@
   <div class="au-o-box au-u-padding-top-none">
     <Mandatarissen::MandatarisCard
       @mandataris={{@model.mandataris}}
-      @bestuurseenheid={{@model.bestuurseenheid}}
-      @bestuursorgaanIT={{get @model.bestuursorganen 0}}
       @legislatuurInBehandeling={{this.isDisabledBecauseLegislatuur}}
       @effectiefIsLastPublicationStatus={{this.model.effectiefIsLastPublicationStatus}}
-      @actionWhenAddingReplacement={{fn (mut this.selectedReplacement) true}}
       @canEdit={{not this.notOwnedByUs}}
     />
   </div>
@@ -92,12 +89,6 @@
   />
 
 </div>
-
-<Mandatarissen::Linked::Modal
-  @recentUpdate={{this.selectedReplacement}}
-  @mandataris={{this.model.mandataris.id}}
-  @replacement="true"
-/>
 
 <Mandataris::Edit::Wizard
   @startFlow={{this.isEditModalOpen}}
