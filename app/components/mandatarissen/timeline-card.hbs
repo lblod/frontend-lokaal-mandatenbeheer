@@ -69,7 +69,19 @@
           Dit mandaat loopt door tot na de startdatum van het volgende mandaat.</p>
       </AuAlert>
     {{/if}}
-    <Mandatarissen::TimelineCorrections @event={{@event}} />
+
+    {{#if this.hasGapUntilNext}}
+      <AuAlert
+        @skin="error"
+        @size="tiny"
+        @closable={{false}}
+        class="au-u-padding-tiny au-u-margin-bottom-none au-u-margin-top-tiny au-u-para-small"
+      >
+        <p class="au-u-error"><AuIcon @icon="alert-triangle" />
+          Dit mandaat eindigt voor het begin van het volgende mandaat, op
+          {{moment-format @event.mandataris.einde "DD-MM-YYYY"}}.</p>
+      </AuAlert>
+    {{/if}}
     {{yield}}
   </AuPanel>
 </div>
