@@ -12,6 +12,7 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   @tracked isEditFormModalOpen;
   @tracked isRefreshForm;
   @tracked selectedField;
+  @tracked isShownInSummaryAddedToFields;
 
   @action
   updateFormName(event) {
@@ -70,6 +71,9 @@ export default class CustomFormsInstancesDefinitionController extends Controller
     } else {
       this.selectedField = fields[0] || null;
     }
+    this.isShownInSummaryAddedToFields = fields.every(
+      (f) => !f.isShownInSummary
+    );
   }
 
   @action

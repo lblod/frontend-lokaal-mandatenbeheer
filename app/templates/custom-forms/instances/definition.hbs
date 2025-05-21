@@ -26,15 +26,25 @@
       </AuButtonGroup>
     </Group>
   </AuToolbar>
-  <AuToolbar
-    @size="large"
-    class="au-u-padding-bottom-none au-u-margin-bottom"
-    as |Group|
-  >
+  <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
     <Group>
       <p>{{this.model.form.description}}</p>
     </Group>
   </AuToolbar>
+  {{#if this.isShownInSummaryAddedToFields}}
+    <div class="au-o-box">
+      <AuAlert
+        @title="Toon in samenvatting"
+        @skin="warning"
+        @icon="alert-triangle"
+      >
+        Er werd geen veld aangeduid dat getoont zal worden in het overzicht.
+        Hierdoor vind je mogelijk instanties van dit formulier niet meer terug.
+        <br />
+        Zorg ervoor dat voor een van de velden in het formulier "Toon in
+        samenvatting" aan staat.</AuAlert>
+    </div>
+  {{/if}}
   <div class="edit-form-defintion">
     <div class="au-o-box edit-form-defintion--form">
       {{#if this.isRefreshForm}}
