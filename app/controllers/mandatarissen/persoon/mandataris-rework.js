@@ -6,7 +6,6 @@ import { tracked } from '@glimmer/tracking';
 
 export default class MandatarissenPersoonMandatarisReworkController extends Controller {
   @service currentSession;
-  @service router;
 
   @tracked isDeleteModalOpen;
   @tracked isEditModalOpen;
