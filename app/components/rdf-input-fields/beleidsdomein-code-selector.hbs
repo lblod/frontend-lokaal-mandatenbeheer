@@ -1,52 +1,65 @@
-{{#if @show}}
-  <AuLabel class="au-c-description-label">
-    {{@field.label}}
-  </AuLabel>
-  <p class="au-c-description-value">
-    {{#each this.selected as |beleidsdomein index|}}
-      {{beleidsdomein.label}}
-      {{#if (not-eq index (dec this.selected.length))}}
-        ,
-      {{/if}}
-    {{/each}}
-  </p>
-{{else}}
-  {{#if this.shouldRender}}
-    {{#unless @inTable}}
-      <AuLabel
-        @error={{this.hasErrors}}
-        @required={{this.isRequired}}
-        @warning={{this.hasWarnings}}
-        for={{this.inputId}}
-      >
-        {{@field.label}}
-      </AuLabel>
-    {{/unless}}
-    <div class={{if this.hasErrors "ember-power-select--error"}}>
-      <Mandatarissen::ConceptSelectorWithCreate
-        @multiple={{true}}
-        @type={{@field.options.type}}
-        @conceptScheme={{this.conceptScheme}}
-        @search={{this.search}}
-        @searchEnabled={{this.searchEnabled}}
-        @selected={{this.selected}}
-        @options={{this.options}}
-        @onClose={{fn (mut this.hasBeenFocused) true}}
-        @onChange={{this.updateSelection}}
-        @onCreate={{this.add}}
-        @disabled={{@show}}
-        as |concept|
-      >
-        {{concept.label}}
-      </Mandatarissen::ConceptSelectorWithCreate>
-    </div>
+<RdfInputFields::StandardFieldWrapper
+  @inline={{true}}
+  @field={{@field}}
+  @form={{@form}}
+  @graphs={{@graphs}}
+  @formStore={{@formStore}}
+  as |wrapper|
+>
+  {{#if @show}}
+    <AuLabel class="au-c-description-label">
+      {{@field.label}}
+    </AuLabel>
+    <p class="au-c-description-value">
+      {{#each this.selected as |beleidsdomein index|}}
+        {{beleidsdomein.label}}
+        {{#if (not-eq index (dec this.selected.length))}}
+          ,
+        {{/if}}
+      {{/each}}
+    </p>
+  {{else}}
+    {{#if this.shouldRender}}
+      <div class={{if this.hasErrors "ember-power-select--error"}}>
+        <Mandatarissen::ConceptSelectorWithCreate
+          @multiple={{true}}
+          @type={{@field.options.type}}
+          @conceptScheme={{this.conceptScheme}}
+          @search={{this.search}}
+          @searchEnabled={{this.searchEnabled}}
+          @selected={{this.selected}}
+          @options={{this.options}}
+          @onClose={{fn (mut this.hasBeenFocused) true}}
+          @onChange={{this.updateSelection}}
+          @onCreate={{this.add}}
+          @disabled={{@show}}
+          as |concept|
+        >
+          {{concept.label}}
+        </Mandatarissen::ConceptSelectorWithCreate>
+      </div>
 
-    {{#each this.errors as |error|}}
-      <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
-    {{/each}}
+      {{#each this.errors as |error|}}
+        <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+      {{/each}}
 
-    {{#each this.warnings as |warning|}}
-      <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
-    {{/each}}
+      {{#each this.warnings as |warning|}}
+        <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+      {{/each}}
+    {{else}}
+      <RdfInputFields::ConceptSchemeMultiSelector
+        @showLabel={{false}}
+        @showFieldLabel={{false}}
+        @field={{@field}}
+        @form={{@form}}
+        @formStore={{@formStore}}
+        @graphs={{@graphs}}
+        @sourceNode={{@sourceNode}}
+        @forceShowErrors={{@forceShowErrors}}
+        @cacheConditionals={{@cacheConditionals}}
+        @show={{@show}}
+        @onInteractedWithField={{wrapper.onInteractedWithField}}
+      />
+    {{/if}}
   {{/if}}
-{{/if}}
+</RdfInputFields::StandardFieldWrapper>

@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 
 import { consume } from 'ember-provide-consume-context';
 import { timeout } from 'ember-concurrency';
+import { isCustomDisplayType } from 'frontend-lmb/models/display-type';
 
 export default class CustomFormsInstancesDefinitionController extends Controller {
   @consume('form-context') formContext;
@@ -69,7 +70,9 @@ export default class CustomFormsInstancesDefinitionController extends Controller
         (f) => f.uri === this.selectedField.uri
       )[0];
     } else {
-      this.selectedField = fields[0] || null;
+      this.selectedField = fields.filter((f) =>
+        isCustomDisplayType(f.displayType)
+      )?.[0];
     }
     this.isShownInSummaryAddedToFields = fields.every(
       (f) => !f.isShownInSummary
