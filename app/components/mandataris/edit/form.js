@@ -184,9 +184,4 @@ export default class MandatarisEditFormComponent extends Component {
     this.args.toggleModal(false);
     this.isSecondModalOpen = true;
   }
-
-  @action
-  selectReasonForChange(reason) {
-    this.reasonForChange = reason;
-  }
 }
