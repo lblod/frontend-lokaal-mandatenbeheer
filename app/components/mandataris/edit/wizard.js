@@ -11,7 +11,6 @@ import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mand
 import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisEditWizard extends Component {
-  @service currentSession;
   @service toaster;
   @service router;
   @service store;
@@ -98,10 +97,6 @@ export default class MandatarisEditWizard extends Component {
 
   get isSaveButtonDisabled() {
     return !this.activeStep.canContinueToNextStep || this.isSaving;
-  }
-
-  get bestuurseenheid() {
-    return this.currentSession.group;
   }
 
   get startForReplacement() {
