@@ -5,9 +5,7 @@
   @closeModal={{this.closeWizardSafely}}
 >
   <:title>
-    <p class="au-u-h4 au-u-regular">
-      {{this.activeStep.label}}
-    </p>
+    {{this.activeStep.label}}
   </:title>
   <:body>
     {{#if this.activeStep.isMandatarisStep}}

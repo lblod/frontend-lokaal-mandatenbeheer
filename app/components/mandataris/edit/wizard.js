@@ -37,7 +37,7 @@ export default class MandatarisEditWizard extends Component {
   @tracked newMandataris;
 
   get mandatarisTitle() {
-    return this.args.mandatarisTitle || 'Mandataris';
+    return `Bewerk ${this.args.mandataris.bekleedt.get('bestuursfunctie').get('label')} - ${this.args.mandataris.isBestuurlijkeAliasVan.get('naam')}`;
   }
 
   get replacementTitle() {
