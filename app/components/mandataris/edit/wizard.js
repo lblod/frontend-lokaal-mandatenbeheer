@@ -280,7 +280,7 @@ export default class MandatarisEditWizard extends Component {
 
     await this.handleReplacement(newMandataris);
 
-    this.args.mandataris.einde = endOfDay(this.startDate);
+    this.args.mandataris.einde = endOfDay(this.workingMandataris.start);
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
     await this.handleFractie(newMandataris, this.workingMandataris.fractie);
