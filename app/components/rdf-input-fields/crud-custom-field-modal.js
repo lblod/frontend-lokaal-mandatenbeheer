@@ -13,7 +13,6 @@ import { FIELD_OPTION, FORM, EXT, PROV } from 'frontend-lmb/rdf/namespaces';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import {
   LIBRARY_ENTREES,
-  LINK_TO_FORM_CUSTOM_DISPLAY_TYPE,
   TEXT_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
 import { Literal, NamedNode } from 'rdflib';
@@ -68,14 +67,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         sort: 'label',
       })
       .then((displayTypes) => {
-        if (this.args.isForFormExtension) {
-          const allowedTypes = displayTypes.filter(
-            (type) => type.uri !== LINK_TO_FORM_CUSTOM_DISPLAY_TYPE
-          );
-          this.displayTypes = allowedTypes;
-        } else {
-          this.displayTypes = displayTypes;
-        }
+        this.displayTypes = displayTypes;
         this.displayType = this.displayTypes.find((t) => t.uri === withValue);
       });
   }
