@@ -1,6 +1,6 @@
 <AuModal
   class="wizard-modal"
-  @modalOpen={{@startFlow}}
+  @modalOpen={{@isWizardOpen}}
   @closable={{true}}
   @closeModal={{fn (mut this.isUnsavedChangesModalOpen) true}}
 >
