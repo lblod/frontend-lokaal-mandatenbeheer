@@ -91,7 +91,7 @@
 </div>
 
 <Mandataris::Edit::Wizard
-  @startFlow={{this.isEditModalOpen}}
+  @isWizardOpen={{this.isEditModalOpen}}
   @mandatarisTitle={{this.bestuursorganenTitle}}
   @onCompleted={{fn (mut this.isEditModalOpen) false}}
   @onDiscardChanges={{this.onDiscardWizard}}
