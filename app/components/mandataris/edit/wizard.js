@@ -133,7 +133,7 @@ export default class MandatarisEditWizard extends Component {
   }
 
   @action
-  discardChanges() {
+  closeWizard() {
     this.setWizardValuesToStepOne();
     this.args.closeWizard?.();
   }
@@ -189,8 +189,7 @@ export default class MandatarisEditWizard extends Component {
       return;
     }
     this.isSaving = false;
-    this.args.closeWizard?.();
-    this.setWizardValuesToStepOne();
+    this.closeWizard();
   }
 
   @action

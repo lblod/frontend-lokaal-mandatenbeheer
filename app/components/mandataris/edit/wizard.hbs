@@ -92,7 +92,7 @@
   @isModalOpen={{this.isUnsavedChangesModalOpen}}
   @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
   @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
-  @onDiscard={{this.discardChanges}}
+  @onDiscard={{this.closeWizard}}
 />
 
 <AuModal
