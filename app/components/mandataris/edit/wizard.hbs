@@ -2,7 +2,7 @@
   class="wizard-modal"
   @modalOpen={{@isWizardOpen}}
   @closable={{true}}
-  @closeModal={{fn (mut this.isUnsavedChangesModalOpen) true}}
+  @closeModal={{this.closeWizardSafely}}
 >
   <:title>
     <p class="au-u-h4 au-u-regular">

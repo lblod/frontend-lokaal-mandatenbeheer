@@ -133,6 +133,15 @@ export default class MandatarisEditWizard extends Component {
   }
 
   @action
+  closeWizardSafely() {
+    if (this.isMandatarisStepCompleted) {
+      this.isUnsavedChangesModalOpen = true;
+      return;
+    }
+    this.closeWizard();
+  }
+
+  @action
   closeWizard() {
     this.setWizardValuesToStepOne();
     this.args.closeWizard?.();
