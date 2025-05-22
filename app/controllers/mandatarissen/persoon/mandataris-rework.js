@@ -57,8 +57,8 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
   }
 
   @action
-  onDiscardWizard() {
+  closeWizard() {
+    this.workingMandataris = null;
     this.isEditModalOpen = false;
-    this.router.refresh();
   }
 }
