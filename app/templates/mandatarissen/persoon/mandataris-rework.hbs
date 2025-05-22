@@ -93,8 +93,7 @@
 <Mandataris::Edit::Wizard
   @isWizardOpen={{this.isEditModalOpen}}
   @mandatarisTitle={{this.bestuursorganenTitle}}
-  @onCompleted={{fn (mut this.isEditModalOpen) false}}
-  @onDiscardChanges={{this.onDiscardWizard}}
+  @closeWizard={{this.closeWizard}}
   @bestuurseenheid={{@model.bestuurseenheid}}
   @bestuursorgaanIT={{get @model.bestuursorganen 0}}
   @mandataris={{@model.mandataris}}
