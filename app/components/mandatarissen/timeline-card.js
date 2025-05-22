@@ -31,6 +31,19 @@ export default class MandatarissenTimelineCard extends Component {
     );
   }
 
+  get hasGapUntilNext() {
+    if (!this.args.event.nextMandataris) {
+      return false;
+    }
+    return moment(this.args.event.mandataris.einde || '3000-01-02')
+      .startOf('day')
+      .isBefore(
+        moment(this.args.event.nextMandataris.start || '3000-01-01').startOf(
+          'day'
+        )
+      );
+  }
+
   get beeindigdText() {
     const inTheFuture = moment(
       this.args.event.mandataris.einde || '3000-01-01'
