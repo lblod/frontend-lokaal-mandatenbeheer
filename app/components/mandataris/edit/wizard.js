@@ -275,7 +275,7 @@ export default class MandatarisEditWizard extends Component {
 
     const newMandataris = this.store.createRecord('mandataris', {
       ...newMandatarisProps,
-      rangorde: this.rangorde,
+      rangorde: this.workingMandataris.rangorde,
     });
 
     await this.handleReplacement(newMandataris);
