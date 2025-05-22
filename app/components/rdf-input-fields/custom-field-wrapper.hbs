@@ -12,14 +12,6 @@
               @required={{this.isRequired}}
               @error={{this.hasErrors}}
             >{{this.title}}</AuLabel>
-            <AuButton
-              @skin="link-secondary"
-              @icon="pencil"
-              @hideText={{true}}
-              {{on "click" (fn (mut this.showModal) true)}}
-            >
-              Pas aan
-            </AuButton>
           {{/unless}}
         </div>
         <div
@@ -37,34 +29,26 @@
           </div>
         </div>
       </div>
-      <div class="au-u-flex au-u-flex--column au-u-flex--vertical-center">
-        <AuButton
-          @skin="naked"
-          @icon="nav-up"
-          @hideText={{true}}
-          {{on "click" (perform this.moveField "up")}}
-        >
-          Naar boven
-        </AuButton>
-        <AuButton
-          @skin="naked"
-          @icon="nav-down"
-          @hideText={{true}}
-          {{on "click" (perform this.moveField "down")}}
-        >
-          Naar onder
-        </AuButton>
-      </div>
+      {{#if (and this.formState.isEditFormDefinitionForm this.isFieldSelected)}}
+        <div class="au-u-flex au-u-flex--column au-u-flex--vertical-center">
+          <AuButton
+            @skin="naked"
+            @icon="nav-up"
+            @hideText={{true}}
+            {{on "click" (perform this.moveField "up")}}
+          >
+            Naar boven
+          </AuButton>
+          <AuButton
+            @skin="naked"
+            @icon="nav-down"
+            @hideText={{true}}
+            {{on "click" (perform this.moveField "down")}}
+          >
+            Naar onder
+          </AuButton>
+        </div>
+      {{/if}}
     </div>
   </div>
 {{/unless}}
-
-<RdfInputFields::CrudCustomFieldModal
-  @isCreating={{false}}
-  @showModal={{this.showModal}}
-  @onCloseModal={{fn (mut this.showModal) false}}
-  @form={{@form}}
-  @field={{@field}}
-  @isRequiredField={{this.isRequired}}
-  @isShownInSummary={{this.isShownInSummary}}
-/>

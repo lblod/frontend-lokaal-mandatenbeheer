@@ -21,7 +21,6 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
   @consume('form-context') formContext;
   @consume('form-state') formState;
 
-  @tracked showModal;
   @tracked hasErrors;
 
   get title() {

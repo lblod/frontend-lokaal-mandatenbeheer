@@ -69,6 +69,8 @@ export default class EditableFormComponent extends Component {
   @provide('form-state')
   get formState() {
     return {
+      isEditFormDefinitionForm: !!this.args.isEditFormDefinitionForm,
+      canEditFormDefinition: !!this.args.canEditFormDefinition,
       canSelectField: !!this.args.canSelectField,
       clickedField: this.clickedField,
       isReadOnly: this.args.isReadOnly,

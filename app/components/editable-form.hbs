@@ -1,4 +1,17 @@
 {{#unless this.loading}}
+  {{#if this.formState.canEditFormDefinition}}
+    <div class="au-u-flex au-u-flex--end">
+      <AuLink
+        @model={{@form.id}}
+        @route="custom-forms.instances.definition"
+        @query={{hash fullScreenEdit=true}}
+        @icon="pencil"
+        class=""
+      >
+        Bewerk formulier definitie
+      </AuLink>
+    </div>
+  {{/if}}
   <SemanticForms::Instance
     @show={{@isReadOnly}}
     @instanceId={{@instanceId}}
@@ -12,7 +25,8 @@
     @saveTitle={{@saveTitle}}
   >
     {{#if this.editableFormsEnabled}}
-      {{#if this.formState.isAddFieldShownInForm}}
+      {{#if this.formState.isEditFormDefinitionForm}}
+        {{! TODO this would be handy if it was in the <CustomForm::EditCustomField> component }}
         <div class="add-custom-field">
           <AuButton
             @skin="secondary"
