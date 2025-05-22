@@ -39,7 +39,6 @@ module.exports = function (environment) {
       'enable-mandataris-count-warnings': true,
       politieraad: false,
       'editable-forms': false,
-      'edit-mandataris-rework': false,
       'shacl-report': false,
     },
     lpdcUrl: '{{LPDC_URL}}',
