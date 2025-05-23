@@ -95,12 +95,12 @@ function getFieldsForForm() {
         return [];
       }
 
-      const forkingStore = new ForkingStore();
-      forkingStore.parse(this.currentForm.formTtl, SOURCE_GRAPH, 'text/turtle');
-      const isCustomForm = forkingStore.any(null, EXT('isCustomForm'), true);
-      if (!isCustomForm) {
-        return [];
-      }
+      // const forkingStore = new ForkingStore();
+      // forkingStore.parse(this.currentForm.formTtl, SOURCE_GRAPH, 'text/turtle');
+      // const isCustomForm = forkingStore.any(null, EXT('isCustomForm'), true);
+      // if (!isCustomForm) {
+      //   return [];
+      // }
 
       const response = await fetch(
         `${API.FORM_CONTENT_SERVICE}/custom-form/${this.currentForm.id}/fields`

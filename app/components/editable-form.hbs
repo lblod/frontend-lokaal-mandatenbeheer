@@ -4,7 +4,7 @@
       <AuLink
         @model={{@form.id}}
         @route="custom-forms.instances.definition"
-        @query={{hash fullScreenEdit=true}}
+        @query={{hash fullScreenEdit=true isFormExtension=@isFormExtension instanceId=@instanceId}}
         @icon="pencil"
         class=""
       >
