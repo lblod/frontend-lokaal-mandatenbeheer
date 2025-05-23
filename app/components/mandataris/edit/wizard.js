@@ -319,6 +319,12 @@ export default class MandatarisEditWizard extends Component {
   }
 
   async handleFractie(mandataris, fractie) {
+    if (
+      mandataris.heeftLidmaatschap.get('binnenFractie').get('uri') ===
+      fractie.uri
+    ) {
+      return;
+    }
     await this.mandatarisService.createNewLidmaatschap(mandataris, fractie);
     await this.fractieApi.updateCurrentFractie(mandataris.id);
     await this.mandatarisService.removeDanglingFractiesInPeriod(mandataris.id);
