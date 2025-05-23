@@ -7,6 +7,8 @@ import { tracked, cached } from '@glimmer/tracking';
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
 
+import { LINK_TO_FORM_CUSTOM_DISPLAY_TYPE } from 'frontend-lmb/utils/well-known-uris';
+
 export default class CustomFormEditCustomField extends Component {
   @use(setSelectedField) setSelectedField;
   @use(getDisplayTypes) getDisplayTypes;
@@ -46,6 +48,13 @@ export default class CustomFormEditCustomField extends Component {
 
   get isValidLabel() {
     return this.label?.trim() !== '';
+  }
+
+  get isShowInSummaryToggleDisabled() {
+    return (
+      !this.selectedField ||
+      this.selectedField.displayType === LINK_TO_FORM_CUSTOM_DISPLAY_TYPE
+    );
   }
 
   get canSaveChanges() {
