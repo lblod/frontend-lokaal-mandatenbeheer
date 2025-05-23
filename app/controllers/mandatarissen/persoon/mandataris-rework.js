@@ -51,7 +51,21 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
 
   @action
   async openWizard() {
-    this.workingMandataris = await this.model.mandataris.clone();
+    this.workingMandataris = {
+      rangorde: this.model.mandataris.rangorde,
+      start: this.model.mandataris.start,
+      einde: this.model.mandataris.einde,
+      bekleedt: this.model.mandataris.bekleedt,
+      isBestuurlijkeAliasVan: this.model.mandataris.isBestuurlijkeAliasVan,
+      fractie:
+        await this.model.mandataris.heeftLidmaatschap.get('binnenFractie'),
+      status: this.model.mandataris.status,
+      tijdelijkeVervangingen:
+        (await this.model.mandataris.tijdelijkeVervangingen) || [],
+      vervangerVan: (await this.model.mandataris.vervangerVan) || [],
+      beleidsdomein: (await this.model.mandataris.beleidsdomein) || [],
+      contactPoints: (await this.model.mandataris.contactPoints) || [],
+    };
     this.isEditModalOpen = true;
   }
 
