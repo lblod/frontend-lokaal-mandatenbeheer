@@ -9,7 +9,7 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
 
   @tracked isDeleteModalOpen;
   @tracked isEditModalOpen;
-  @tracked workingMandataris;
+  @tracked mandatarisFormValues;
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt
@@ -51,7 +51,7 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
 
   @action
   async openWizard() {
-    this.workingMandataris = {
+    this.mandatarisFormValues = {
       rangorde: this.model.mandataris.rangorde,
       start: this.model.mandataris.start,
       einde: this.model.mandataris.einde,
@@ -71,7 +71,7 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
 
   @action
   closeWizard() {
-    this.workingMandataris = null;
+    this.mandatarisFormValues = null;
     this.isEditModalOpen = false;
   }
 }

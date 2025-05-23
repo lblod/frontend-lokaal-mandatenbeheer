@@ -46,10 +46,6 @@ export default class MandatarisEditWizard extends Component {
       : 'Vervanger';
   }
 
-  get workingMandataris() {
-    return this.args.workingMandataris;
-  }
-
   get steps() {
     return [
       {
@@ -100,11 +96,11 @@ export default class MandatarisEditWizard extends Component {
   }
 
   get startForReplacement() {
-    return this.workingMandataris?.start;
+    return this.args.mandatarisFormValues?.start;
   }
 
   get eindeForReplacement() {
-    return this.workingMandataris?.einde;
+    return this.args.mandatarisFormValues?.einde;
   }
 
   @action
@@ -164,7 +160,7 @@ export default class MandatarisEditWizard extends Component {
     }
     this.isMandatarisStepCompleted = isCompleted;
     this.isMandatarisVerhinderd = (
-      await this.workingMandataris.status
+      await this.args.mandatarisFormValues.status
     ).isVerhinderd;
   }
 
@@ -203,10 +199,10 @@ export default class MandatarisEditWizard extends Component {
   @action
   async corrigeerFouten() {
     try {
-      this.args.mandataris.status = await this.workingMandataris.status;
-      this.args.mandataris.start = this.workingMandataris.start;
-      this.args.mandataris.einde = this.workingMandataris.einde;
-      this.args.mandataris.rangorde = this.workingMandataris.rangorde;
+      this.args.mandataris.status = await this.args.mandatarisFormValues.status;
+      this.args.mandataris.start = this.args.mandatarisFormValues.start;
+      this.args.mandataris.einde = this.args.mandatarisFormValues.einde;
+      this.args.mandataris.rangorde = this.args.mandatarisFormValues.rangorde;
       this.args.mandataris.tijdelijkeVervangingen = this.replacementMandataris
         ? [this.replacementMandataris]
         : [];
@@ -214,7 +210,7 @@ export default class MandatarisEditWizard extends Component {
       await this.args.mandataris.save();
       await this.handleFractie(
         this.args.mandataris,
-        this.workingMandataris.fractie
+        this.args.mandatarisFormValues.fractie
       );
       this.isReplacementAdded = this.replacementPerson;
       showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
@@ -228,7 +224,7 @@ export default class MandatarisEditWizard extends Component {
 
   async updateState() {
     let promise;
-    if ((await this.workingMandataris.status).isBeeindigd) {
+    if ((await this.args.mandatarisFormValues.status).isBeeindigd) {
       promise = this.endMandataris();
     } else {
       promise = this.changeMandatarisState();
@@ -266,9 +262,9 @@ export default class MandatarisEditWizard extends Component {
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
-        start: this.workingMandataris.start,
-        einde: this.workingMandataris.einde,
-        status: await this.workingMandataris.status,
+        start: this.args.mandatarisFormValues.start,
+        einde: this.args.mandatarisFormValues.einde,
+        status: await this.args.mandatarisFormValues.status,
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
         ),
@@ -277,15 +273,18 @@ export default class MandatarisEditWizard extends Component {
 
     const newMandataris = this.store.createRecord('mandataris', {
       ...newMandatarisProps,
-      rangorde: this.workingMandataris.rangorde,
+      rangorde: this.args.mandatarisFormValues.rangorde,
     });
 
     await this.handleReplacement(newMandataris);
 
-    this.args.mandataris.einde = endOfDay(this.workingMandataris.start);
+    this.args.mandataris.einde = endOfDay(this.args.mandatarisFormValues.start);
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
-    await this.handleFractie(newMandataris, this.workingMandataris.fractie);
+    await this.handleFractie(
+      newMandataris,
+      this.args.mandatarisFormValues.fractie
+    );
 
     await this.mandatarisApi.copyOverNonDomainResourceProperties(
       this.args.mandataris.id,

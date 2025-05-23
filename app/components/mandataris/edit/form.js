@@ -14,7 +14,7 @@ import { use } from 'ember-resources';
 function getStatusOptions() {
   return trackedFunction(async () => {
     return await this.mandatarisStatus.getStatusOptionsForMandate(
-      this.args.mandataris.bekleedt
+      this.args.formValues.bekleedt
     );
   });
 }
@@ -43,15 +43,15 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   async setInitialFormState() {
-    this.startDate = this.args.mandataris.start;
-    this.endDate = this.args.mandataris.einde;
-    this.rangorde = this.args.mandataris.rangorde;
-    this.mandaat = await this.args.mandataris.bekleedt;
-    this.status = await this.args.mandataris.status;
-    this.fractie = await this.args.mandataris.fractie;
-    this.person = await this.args.mandataris.isBestuurlijkeAliasVan;
+    this.startDate = this.args.formValues.start;
+    this.endDate = this.args.formValues.einde;
+    this.rangorde = this.args.formValues.rangorde;
+    this.mandaat = await this.args.formValues.bekleedt;
+    this.status = await this.args.formValues.status;
+    this.fractie = await this.args.formValues.fractie;
+    this.person = await this.args.formValues.isBestuurlijkeAliasVan;
     this.replacementMandataris =
-      (await this.args.mandataris.tijdelijkeVervangingen)?.[0] || null;
+      (await this.args.formValues.tijdelijkeVervangingen)?.[0] || null;
     this.replacementPerson =
       await this.replacementMandataris?.isBestuurlijkeAliasVan;
   }
@@ -62,11 +62,11 @@ export default class MandatarisEditFormComponent extends Component {
 
   get hasChanges() {
     return (
-      this.status?.id !== this.args.mandataris.status?.id ||
-      !moment(this.startDate).isSame(moment(this.args.mandataris.start)) ||
-      !moment(this.endDate).isSame(moment(this.args.mandataris.einde)) ||
-      this.fractie?.id !== this.args.mandataris.fractie.id ||
-      this.rangorde !== this.args.mandataris.rangorde ||
+      this.status?.id !== this.args.formValues.status?.id ||
+      !moment(this.startDate).isSame(moment(this.args.formValues.start)) ||
+      !moment(this.endDate).isSame(moment(this.args.formValues.einde)) ||
+      this.fractie?.id !== this.args.formValues.fractie.id ||
+      this.rangorde !== this.args.formValues.rangorde ||
       this.replacementPerson?.id !== this.person.id
     );
   }
@@ -121,14 +121,14 @@ export default class MandatarisEditFormComponent extends Component {
     this.errorMap.set(id, !!hasErrors);
     this.errorMap = new Map(this.errorMap);
 
-    this.args.mandataris.start = this.startDate;
-    this.args.mandataris.einde = this.endDate;
-    this.args.mandataris.status = this.status;
-    this.args.mandataris.rangorde = this.rangorde;
-    this.args.mandataris.fractie = this.fractie;
+    this.args.formValues.start = this.startDate;
+    this.args.formValues.einde = this.endDate;
+    this.args.formValues.status = this.status;
+    this.args.formValues.rangorde = this.rangorde;
+    this.args.formValues.fractie = this.fractie;
 
     if (this.replacementMandataris) {
-      this.args.mandataris.tijdelijkeVervangingen = [
+      this.args.formValues.tijdelijkeVervangingen = [
         this.replacementMandataris,
       ];
     }
@@ -136,7 +136,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.args.onFormIsValid?.(
       !this.formHasErrors && !this.disabled && this.hasChanges,
       {
-        mandataris: this.args.mandataris,
+        mandataris: this.args.formValues,
         replacementPerson: this.replacementPerson,
         replacementMandataris: this.replacementMandataris,
       }
@@ -155,7 +155,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.replacementMandataris = overlappingMandate;
     this.updateErrorMap({
       id: 'replacement',
-      hasErrors: person?.id === this.args.mandataris.isBestuurlijkeAliasVan.id,
+      hasErrors: person?.id === this.args.formValues.isBestuurlijkeAliasVan.id,
     });
   }
 
