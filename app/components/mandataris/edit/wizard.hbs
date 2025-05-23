@@ -10,7 +10,6 @@
   <:body>
     {{#if this.activeStep.isMandatarisStep}}
       <Mandataris::Edit::Form
-        @toggleModal={{this.nextStep}}
         @bestuurseenheid={{@bestuurseenheid}}
         @bestuursorgaanIT={{@bestuursorgaanIT}}
         @mandataris={{this.workingMandataris}}

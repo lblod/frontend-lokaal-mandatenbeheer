@@ -178,10 +178,4 @@ export default class MandatarisEditFormComponent extends Component {
     this.rangorde = rangordeAsString;
     this.updateErrorMap({ id: 'rangorde', hasErrors: false });
   }
-
-  @action
-  confirmMandatarisChanges() {
-    this.args.toggleModal(false);
-    this.isSecondModalOpen = true;
-  }
 }
