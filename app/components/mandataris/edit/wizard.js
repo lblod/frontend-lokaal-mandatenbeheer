@@ -320,8 +320,8 @@ export default class MandatarisEditWizard extends Component {
 
   async handleFractie(mandataris, fractie) {
     if (
-      mandataris.heeftLidmaatschap.get('binnenFractie').get('uri') ===
-      fractie.uri
+      mandataris.heeftLidmaatschap?.get('binnenFractie')?.get('uri') ===
+      fractie?.uri
     ) {
       return;
     }
