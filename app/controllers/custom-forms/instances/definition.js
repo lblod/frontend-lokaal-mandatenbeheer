@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import { consume } from 'ember-provide-consume-context';
@@ -9,6 +10,8 @@ import { isCustomDisplayType } from 'frontend-lmb/models/display-type';
 
 export default class CustomFormsInstancesDefinitionController extends Controller {
   @consume('form-context') formContext;
+
+  @service router;
 
   @tracked isEditFormModalOpen;
   @tracked isRefreshForm;
@@ -90,5 +93,10 @@ export default class CustomFormsInstancesDefinitionController extends Controller
   cancelUpdateFormDetails() {
     this.model.form.rollbackAttributes();
     this.isEditFormModalOpen = false;
+  }
+
+  @action
+  goBackToLastRoute() {
+    this.router.location.history.back();
   }
 }

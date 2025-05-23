@@ -1,6 +1,24 @@
 {{page-title "Bewerk formulier definitie"}}
 <div class="au-c-body-container au-c-body-container--scroll">
-  {{#unless this.model.fullScreenEdit}}
+  {{#if this.model.fullScreenEdit}}
+    <AuToolbar
+      @size="large"
+      class="au-u-padding-bottom-none au-u-margin-bottom"
+      as |Group|
+    >
+      <Group>
+        {{! for styling }}
+      </Group>
+      <Group>
+        <AuButtonGroup>
+          <AuButton
+            @skin="secondary"
+            {{on "click" this.goBackToLastRoute}}
+          >Terug naar vorige pagina</AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  {{else}}
     <AuToolbar
       @size="large"
       class="au-u-padding-bottom-none au-u-margin-bottom"
@@ -47,7 +65,7 @@
           samenvatting" aan staat.</AuAlert>
       </div>
     {{/if}}
-  {{/unless}}
+  {{/if}}
   <div class="edit-form-defintion">
     <div class="au-o-box edit-form-defintion--form">
       {{#if this.isRefreshForm}}
