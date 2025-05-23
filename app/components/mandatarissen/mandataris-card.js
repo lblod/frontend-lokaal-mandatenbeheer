@@ -58,6 +58,10 @@ export default class MandatarisCardComponent extends Component {
     return this.args.mandataris.uniqueVervangersVan;
   }
 
+  get vervangersDoor() {
+    return this.args.mandataris.uniqueVervangersDoor;
+  }
+
   get lastStatusTooltipText() {
     if (this.args.legislatuurInBehandeling) {
       return 'De publicatiestatus kan niet aangepast worden als de legislatuur nog in behandeling is.';

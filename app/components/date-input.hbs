@@ -2,7 +2,7 @@
   {{#if @label}}
     <AuLabel
       for={{or @id this.elementId}}
-      @error={{or this.errorMessage this.invalidErrorMessage}}
+      @error={{this.errorMessage}}
       @warning={{this.warningMessage}}
       @required={{@isRequired}}
     >{{@label}}</AuLabel>
@@ -15,7 +15,7 @@
     />
   {{else}}
     <AuInput
-      @error={{or this.errorMessage this.invalidErrorMessage}}
+      @error={{this.errorMessage}}
       @warning={{this.warningMessage}}
       value={{this.dateInputString}}
       id={{or @id this.elementId}}
@@ -31,7 +31,7 @@
     </AuHelpText>
   {{/unless}}
 
-  {{#if (or this.errorMessage this.invalidErrorMessage)}}
+  {{#if this.errorMessage}}
     <AuHelpText @error={{true}}>{{this.errorMessages}}</AuHelpText>
   {{/if}}
   {{#if this.warningMessage}}

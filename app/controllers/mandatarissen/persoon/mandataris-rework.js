@@ -8,7 +8,6 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
   @service currentSession;
   @service router;
 
-  @tracked selectedReplacement = false;
   @tracked isDeleteModalOpen;
   @tracked isEditModalOpen;
   @tracked workingMandataris;
