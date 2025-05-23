@@ -22,7 +22,7 @@
         Vervanger
       </AuLabel>
       <Mandatarissen::ReplacementSelect
-        @mandataris={{@mandataris}}
+        @mandataris={{@formValues}}
         @selected={{this.replacementPerson}}
         @onSelect={{this.updateReplacement}}
         @bestuursorgaanIT={{@bestuursorgaanIT}}
@@ -58,7 +58,7 @@
         @onSelect={{this.updateFractie}}
         @bestuurseenheid={{@bestuurseenheid}}
         @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
-        @mandataris={{@mandataris}}
+        @mandataris={{@formValues}}
         {{! TODO this should be generalised somehow }}
         @isUpdatingState={{false}}
       />
