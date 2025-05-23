@@ -1,7 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
-import { service } from '@ember/service';
-
 import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
@@ -12,8 +10,6 @@ import {
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarisModel extends Model {
-  @service store;
-
   @attr rangorde;
   @attr('datetime') start;
   @attr('datetime') einde;
@@ -246,29 +242,5 @@ export default class MandatarisModel extends Model {
     this.deleteRecord();
     // give resources cache some time
     await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
-
-  async clone() {
-    return this.store.createRecord('mandataris', {
-      rangorde: this.rangorde,
-      start: this.start,
-      einde: this.einde,
-      duplicationReason: this.duplicationReason,
-      uri: this.uri,
-      linkToBesluit: this.linkToBesluit,
-      modified: this.modified,
-      bekleedt: await this.bekleedt,
-      isBestuurlijkeAliasVan: await this.isBestuurlijkeAliasVan,
-      heeftLidmaatschap: await this.heeftLidmaatschap,
-      status: await this.status,
-      publicationStatus: await this.publicationStatus,
-      duplicateOf: await this.duplicateOf,
-      aanstellingBekrachtigdDoor: await this.aanstellingBekrachtigdDoor,
-      ontslagBekrachtigdDoor: await this.ontslagBekrachtigdDoor,
-      tijdelijkeVervangingen: (await this.tijdelijkeVervangingen) || [],
-      vervangerVan: (await this.vervangerVan) || [],
-      beleidsdomein: (await this.beleidsdomein) || [],
-      contactPoints: (await this.contactPoints) || [],
-    });
   }
 }

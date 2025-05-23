@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 
 import { action } from '@ember/object';
-import { service } from '@ember/service';
-
 import { tracked } from '@glimmer/tracking';
 
 import {
@@ -11,25 +9,16 @@ import {
 } from 'frontend-lmb/utils/is-fractie-selector-required';
 
 export default class MandatarisEditReplacementForm extends Component {
-  @service store;
-  @service('mandataris') mandatarisService;
-
   @tracked startDate;
   @tracked endDate;
   @tracked fractie;
 
-  @tracked overlappingMandate;
-  @tracked hasReplacementError;
   @tracked errorMap = new Map();
 
   constructor() {
     super(...arguments);
     this.startDate = this.args.prefillStart;
     this.endDate = this.args.prefillEinde;
-  }
-
-  get showExtraFields() {
-    return this.person && !this.overlappingMandate;
   }
 
   get isFractieRequired() {

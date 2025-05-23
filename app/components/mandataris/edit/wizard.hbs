@@ -1,23 +1,18 @@
 <AuModal
   class="wizard-modal"
-  @modalOpen={{@startFlow}}
+  @modalOpen={{@isWizardOpen}}
   @closable={{true}}
-  @closeModal={{fn (mut this.isUnsavedChangesModalOpen) true}}
+  @closeModal={{this.closeWizardSafely}}
 >
   <:title>
-    <p class="au-u-h4 au-u-regular">
-      {{this.activeStep.label}}
-    </p>
+    {{this.activeStep.label}}
   </:title>
   <:body>
     {{#if this.activeStep.isMandatarisStep}}
       <Mandataris::Edit::Form
-        @toggleModal={{this.nextStep}}
         @bestuurseenheid={{@bestuurseenheid}}
         @bestuursorgaanIT={{@bestuursorgaanIT}}
-        @mandataris={{this.workingMandataris}}
-        @linkedMandataris={{@linkedMandataris}}
-        @bestuursorganenTitle={{this.mandatarisTitle}}
+        @formValues={{this.mandatarisFormValues}}
         @isFractieRequired={{@isFractieRequired}}
         @onFormIsValid={{this.updateMandatarisStepCompleted}}
       />
@@ -26,11 +21,10 @@
     {{#if this.activeStep.isReplacementStep}}
       <Mandataris::Edit::ReplacementForm
         @person={{this.replacementPerson}}
-        @mandataris={{this.workingMandataris}}
         @prefillStart={{this.startForReplacement}}
         @prefillEinde={{this.eindeForReplacement}}
         @bestuursorgaanIT={{@bestuursorgaanIT}}
-        @bestuurseenheid={{this.bestuurseenheid}}
+        @bestuurseenheid={{@bestuurseenheid}}
         @onFormIsValid={{this.updateReplacementStepCompleted}}
       />
     {{/if}}
@@ -94,7 +88,7 @@
   @isModalOpen={{this.isUnsavedChangesModalOpen}}
   @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
   @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
-  @onDiscard={{this.discardChanges}}
+  @onDiscard={{this.closeWizard}}
 />
 
 <AuModal

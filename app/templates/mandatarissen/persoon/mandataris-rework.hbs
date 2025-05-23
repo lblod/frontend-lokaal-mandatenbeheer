@@ -91,15 +91,12 @@
 </div>
 
 <Mandataris::Edit::Wizard
-  @startFlow={{this.isEditModalOpen}}
-  @mandatarisTitle={{this.bestuursorganenTitle}}
-  @onCompleted={{fn (mut this.isEditModalOpen) false}}
-  @onDiscardChanges={{this.onDiscardWizard}}
+  @isWizardOpen={{this.isEditModalOpen}}
+  @closeWizard={{this.closeWizard}}
   @bestuurseenheid={{@model.bestuurseenheid}}
   @bestuursorgaanIT={{get @model.bestuursorganen 0}}
   @mandataris={{@model.mandataris}}
-  @workingMandataris={{this.workingMandataris}}
-  @linkedMandataris={{this.model.linkedMandataris}}
+  @mandatarisFormValues={{this.mandatarisFormValues}}
   @isFractieRequired={{this.model.isFractieRequired}}
 />
 
