@@ -10,6 +10,9 @@ import { use } from 'ember-resources';
 
 import { API } from 'frontend-lmb/utils/constants';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
+import { EXT } from 'frontend-lmb/rdf/namespaces';
+import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
 
 export default class EditableFormComponent extends Component {
   @use(getFieldsForForm) getFieldsForForm;
@@ -100,27 +103,38 @@ export default class EditableFormComponent extends Component {
 
 function getFieldsForForm() {
   return trackedFunction(async () => {
-    if (this.args.onFieldsInForm || !this.currentForm) {
+    try {
+      if (this.args.onFieldsInForm || !this.currentForm) {
+        return [];
+      }
+
+      const forkingStore = new ForkingStore();
+      forkingStore.parse(this.currentForm.formTtl, SOURCE_GRAPH, 'text/turtle');
+      const isCustomForm = forkingStore.any(null, EXT('isCustomForm'), true);
+      if (!isCustomForm) {
+        return [];
+      }
+
+      const response = await fetch(
+        `${API.FORM_CONTENT_SERVICE}/custom-form/${this.currentForm.id}/fields`
+      );
+
+      if (!response.ok) {
+        showErrorToast(
+          this.toaster,
+          `Er liep iets mis bij het ophalen van de velden voor formulier met id: ${this.currentForm?.id}`,
+          'Formulier'
+        );
+      }
+
+      const result = await response.json();
+
+      if (this.args.onFieldsSet) {
+        this.args.onFieldsSet(result.fields);
+      }
+      return result.fields;
+    } catch (e) {
       return [];
     }
-
-    const response = await fetch(
-      `${API.FORM_CONTENT_SERVICE}/custom-form/${this.currentForm.id}/fields`
-    );
-
-    if (!response.ok) {
-      showErrorToast(
-        this.toaster,
-        `Er liep iets mis bij het ophalen van de velden voor formulier met id: ${this.currentForm?.id}`,
-        'Formulier'
-      );
-    }
-
-    const result = await response.json();
-
-    if (this.args.onFieldsSet) {
-      this.args.onFieldsSet(result.fields);
-    }
-    return result.fields;
   });
 }
