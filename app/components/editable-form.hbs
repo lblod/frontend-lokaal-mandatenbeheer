@@ -1,10 +1,14 @@
 {{#unless this.loading}}
-  {{#if this.formState.canEditFormDefinition}}
+  {{#if (and this.editableFormsEnabled this.formState.canEditFormDefinition)}}
     <div class="au-u-flex au-u-flex--end">
       <AuLink
         @model={{@form.id}}
         @route="custom-forms.instances.definition"
-        @query={{hash fullScreenEdit=true isFormExtension=@isFormExtension instanceId=@instanceId}}
+        @query={{hash
+          fullScreenEdit=true
+          isFormExtension=@isFormExtension
+          instanceId=@instanceId
+        }}
         @icon="pencil"
         class=""
       >
