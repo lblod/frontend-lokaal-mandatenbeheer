@@ -154,7 +154,6 @@ export default class MandatarisEditWizard extends Component {
     this.isMandatarisStepCompleted = false;
     this.isReplacementStepCompleted = false;
     this.reasonForChange = null;
-    this.workingMandataris?.rollbackAttributes();
   }
 
   @action

@@ -48,9 +48,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.rangorde = this.args.mandataris.rangorde;
     this.mandaat = await this.args.mandataris.bekleedt;
     this.status = await this.args.mandataris.status;
-    this.fractie = await this.args.mandataris.get(
-      'heeftLidmaatschap.binnenFractie'
-    );
+    this.fractie = await this.args.mandataris.fractie;
     this.person = await this.args.mandataris.isBestuurlijkeAliasVan;
     this.replacementMandataris =
       (await this.args.mandataris.tijdelijkeVervangingen)?.[0] || null;
@@ -67,8 +65,7 @@ export default class MandatarisEditFormComponent extends Component {
       this.status?.id !== this.args.mandataris.status?.id ||
       !moment(this.startDate).isSame(moment(this.args.mandataris.start)) ||
       !moment(this.endDate).isSame(moment(this.args.mandataris.einde)) ||
-      this.fractie?.id !==
-        this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
+      this.fractie?.id !== this.args.mandataris.fractie.id ||
       this.rangorde !== this.args.mandataris.rangorde ||
       this.replacementPerson?.id !== this.person.id
     );
@@ -128,7 +125,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.args.mandataris.einde = this.endDate;
     this.args.mandataris.status = this.status;
     this.args.mandataris.rangorde = this.rangorde;
-    this.args.mandataris.fractie = this.fractie; // None mandataris prop
+    this.args.mandataris.fractie = this.fractie;
 
     if (this.replacementMandataris) {
       this.args.mandataris.tijdelijkeVervangingen = [
