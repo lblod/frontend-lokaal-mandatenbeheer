@@ -18,7 +18,6 @@ export default class CustomFormsInstancesDefinitionRoute extends Route {
     let formInstanceId = form.id;
 
     if (isFormExtension && fullScreenEdit === 'true') {
-      console.log({ instanceId });
       formInstanceId = instanceId;
       const currentFormId = this.formReplacements.getReplacement(id);
       form = await this.semanticFormRepository.getFormDefinition(

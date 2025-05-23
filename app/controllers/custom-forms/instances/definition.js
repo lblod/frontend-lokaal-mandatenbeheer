@@ -46,6 +46,10 @@ export default class CustomFormsInstancesDefinitionController extends Controller
 
   @action
   setSelectedField(field) {
+    if (!field) {
+      return;
+    }
+
     this.selectedField = field;
   }
 
@@ -65,7 +69,10 @@ export default class CustomFormsInstancesDefinitionController extends Controller
 
   @action
   updateSelectedFieldData(fields) {
-    if (this.selectedField) {
+    if (
+      this.selectedField &&
+      fields.map((f) => f.uri).includes(this.selectedField.uri)
+    ) {
       this.selectedField = fields.filter(
         (f) => f.uri === this.selectedField.uri
       )[0];
