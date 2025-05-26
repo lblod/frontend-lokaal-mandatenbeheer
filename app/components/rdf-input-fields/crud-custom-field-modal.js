@@ -20,6 +20,7 @@ import { isCustomForm } from 'frontend-lmb/utils/form-properties';
 import { NamedNode } from 'rdflib';
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
+import LibraryEntryModel from 'frontend-lmb/models/library-entry';
 
 export default class RdfInputFieldCrudCustomFieldModalComponent extends Component {
   @consume('form-context') formContext;
@@ -35,14 +36,10 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @tracked isShownInSummary;
   @tracked wantsToRemove;
 
-  customFieldEntry = this.store.createRecord('library-entry', {
-    name: 'Eigen veld',
-  });
-
   @tracked displayTypes = [];
 
   @tracked fieldName;
-  @tracked libraryFieldType = this.customFieldEntry;
+  @tracked libraryFieldType;
   @tracked displayType;
   @tracked conceptScheme;
   @tracked conceptSchemeOnLoad;
@@ -50,6 +47,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   constructor() {
     super(...arguments);
+
+    this.libraryFieldType = LibraryEntryModel.ensureFakeEntry(this.store);
 
     let withValue = TEXT_CUSTOM_DISPLAY_TYPE;
     if (!this.args.isCreating) {
@@ -342,7 +341,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   get canSelectTypeForEntry() {
     if (this.args.isCreating) {
-      return this.libraryFieldType === this.customFieldEntry;
+      return this.libraryFieldType.isNew; // so the fake one we created
     }
 
     return !LIBRARY_ENTREES.includes(this.libraryEntryUri);
@@ -367,6 +366,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
 function getLibraryFieldOptions() {
   return trackedFunction(async () => {
+    const customFieldEntry = LibraryEntryModel.ensureFakeEntry(this.store);
     const allOptions = await this.store.query('library-entry', {
       sort: 'name',
       include: 'display-type',
@@ -377,6 +377,6 @@ function getLibraryFieldOptions() {
     const unused = allOptions.filter((entry) => {
       return entry.uri && usedOptions.indexOf(entry.uri) < 0;
     });
-    return [this.customFieldEntry, ...unused];
+    return [customFieldEntry, ...unused];
   });
 }
