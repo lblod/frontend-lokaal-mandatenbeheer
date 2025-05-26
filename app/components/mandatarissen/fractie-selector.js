@@ -148,7 +148,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   async isValidFractieForPerson(fractie) {
     try {
       const bestuurseenheid = this.currentSession.group;
-      if (!bestuurseenheid.isOCMW) {
+      if (!bestuurseenheid.isOCMW || !fractie) {
         return true;
       }
       const response = await fetch(
