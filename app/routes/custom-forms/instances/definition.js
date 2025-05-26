@@ -16,13 +16,17 @@ export default class CustomFormsInstancesDefinitionRoute extends Route {
   async model({ id, fullScreenEdit, isFormExtension, instanceId }) {
     let form = null;
     let formInstanceId = null;
+    const isFullScreenAsBool = !!(fullScreenEdit && fullScreenEdit === 'true');
+    const isFormExtensionAsBool = !!(
+      isFormExtension && isFormExtension === 'true'
+    );
 
-    if (!isFormExtension) {
+    if (!isFormExtensionAsBool) {
       form = await this.store.findRecord('form', id);
       formInstanceId = form.id;
     }
 
-    if (isFormExtension && fullScreenEdit === 'true') {
+    if (isFormExtensionAsBool && isFullScreenAsBool) {
       formInstanceId = instanceId;
       const currentFormId = this.formReplacements.getReplacement(id);
       form = await this.semanticFormRepository.getFormDefinition(
@@ -30,11 +34,12 @@ export default class CustomFormsInstancesDefinitionRoute extends Route {
         true
       );
     }
-
+    console.log(`ext?`, isFormExtensionAsBool);
     return {
       form,
       instanceId: formInstanceId,
-      fullScreenEdit: fullScreenEdit && fullScreenEdit === 'true',
+      fullScreenEdit: isFullScreenAsBool,
+      isFormExtension: isFormExtensionAsBool,
     };
   }
 }

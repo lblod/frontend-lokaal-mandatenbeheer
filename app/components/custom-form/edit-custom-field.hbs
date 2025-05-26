@@ -92,27 +92,29 @@
           </Shared::Tooltip>
         </AuToggleSwitch>
       </AuFormRow>
-      <AuFormRow>
-        <AuToggleSwitch
-          @disabled={{this.isShowInSummaryToggleDisabled}}
-          @checked={{this.isShownInSummary}}
-          @onChange={{this.toggleShowInSummary}}
-        >Toon in samenvatting
-          <Shared::Tooltip
-            @showTooltip={{true}}
-            @alignment="center"
-            @tooltipText="Dit veld zal getoond worden in de samenvatting van een item, bijvoorbeeld bij het tonen van een lijst van items of bij een verwijzing naar een item."
-          >
-            <AuButton
-              @skin="naked"
-              @icon="circle-question"
-              @hideText={{true}}
-              @disabled={{true}}
-              class="au-u-padding-bottom-small au-u-padding-left-none"
-            />
-          </Shared::Tooltip>
-        </AuToggleSwitch>
-      </AuFormRow>
+      {{#unless @canShowInSummaryButton}}
+        <AuFormRow>
+          <AuToggleSwitch
+            @disabled={{this.isShowInSummaryToggleDisabled}}
+            @checked={{this.isShownInSummary}}
+            @onChange={{this.toggleShowInSummary}}
+          >Toon in samenvatting
+            <Shared::Tooltip
+              @showTooltip={{true}}
+              @alignment="center"
+              @tooltipText="Dit veld zal getoond worden in de samenvatting van een item, bijvoorbeeld bij het tonen van een lijst van items of bij een verwijzing naar een item."
+            >
+              <AuButton
+                @skin="naked"
+                @icon="circle-question"
+                @hideText={{true}}
+                @disabled={{true}}
+                class="au-u-padding-bottom-small au-u-padding-left-none"
+              />
+            </Shared::Tooltip>
+          </AuToggleSwitch>
+        </AuFormRow>
+      {{/unless}}
       {{#if this.isDeleteWarningShown}}
         <div
           class="au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-flex--spaced-tiny warning-panel"
