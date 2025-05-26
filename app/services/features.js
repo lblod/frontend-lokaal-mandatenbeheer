@@ -31,6 +31,7 @@ export default class FeaturesService extends Service {
 
   setup(features) {
     this.#features = { ...features };
+    console.log(config);
     if (config.environment != 'production') {
       console.log('Feature flags:', this.#features);
     }
