@@ -34,9 +34,7 @@ module.exports = function (environment) {
     },
     features: {
       'custom-organen': false,
-      'show-forms-module': false,
-      'show-codelijsten-module': false,
-      'enable-mandataris-count-warnings': true,
+      'show-forms-module': false, // QUESTION: Can we just remove it from the menu's?
       politieraad: false,
       'editable-forms': false,
       'person-extra-info': false,
@@ -71,13 +69,6 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.features['editable-forms'] = true;
-    ENV.features['person-extra-info'] = true;
-    ENV.features['show-eigen-gegevens-module'] = true;
-
-    ENV.features['shacl-report'] = true;
-    ENV.features['politieraad'] = true;
-    ENV.features['custom-organen'] = true;
   }
 
   if (environment === 'test') {
@@ -97,8 +88,6 @@ module.exports = function (environment) {
   if (environment === 'production') {
     // here you can enable a production-specific feature
   }
-
-  ENV.features['show-iv-module'] = true;
 
   return ENV;
 };

@@ -50,7 +50,7 @@ The overriding will be saved in a cookie, so it will persist across page reloads
 The feature flags can be used in the application by injecting the `features` service and calling the `isEnabled` method.
 
 ```javascript
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
 
 export default class ExampleComponent extends Component {
   @service features;
@@ -79,10 +79,14 @@ Or in template files by using the `is-feature-enabled` helper:
 
 ### List of feature flags
 
-| Name                | Description                                                                                                               |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `show-forms-module` | Show the forms module in overview and navigation, the route remains functional, defaults to false.                        |
-| `show-iv-module`    | Show the `Opstart nieuwe legislatuur` module in overview and navigation, the route remains functional, defaults to false. |
+| Name                     | Description                                                                                             |
+| ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `custom-organen`         | Make the use of custom organen possible.                                                                |
+| `show-forms-module`      | Show the forms module in overview and navigation, the route remains functional, defaults to false.      |
+| `politieraad`            | Politieraad orgaan code will be added to the organen list (decretaleIds).                               |
+| `editable-forms`         | Creating/extending forms with the possibility for updating the form definition.                         |
+| `edit-mandataris-rework` | Use the mandataris wizard instead of the update/correct mandataris form.                                |
+| `shacl-report`           | Enable showing validation errors throught the app. Origin of the errors is the shacl validaiton report. |
 
 ## Environment variables
 
