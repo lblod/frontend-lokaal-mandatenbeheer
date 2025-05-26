@@ -5,6 +5,8 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 import { task } from 'ember-concurrency';
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
+import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 
 export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service store;
@@ -13,6 +15,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service fractieApi;
   @service persoonApi;
   @service mandatarisApi;
+  @service toaster;
 
   @tracked _fractie;
   @tracked person;
@@ -122,8 +125,41 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     if (fractie?.isNew) {
       await fractie.save();
     }
+    if (!(await this.isValidFractieForPerson(fractie))) {
+      showErrorToast(
+        this.toaster,
+        'Deze fractie komt niet overeen met de fractie van deze persoon aan de zijde van de gemeente. Doe je een correctie, pas dan eerst de fractie aan aan de zijde van de gemeente.'
+      );
+      return;
+    }
     this._fractie = fractie;
     await this.args.onSelect(this._fractie);
+  }
+
+  async isValidFractieForPerson(fractie) {
+    try {
+      const bestuurseenheid = this.currentSession.group;
+      if (!bestuurseenheid.isOCMW) {
+        return true;
+      }
+      const response = await fetch(
+        `/mandataris-api/personen/${this.person.id}/check-fraction`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': JSON_API_TYPE,
+          },
+          body: JSON.stringify({
+            bestuursperiodeId: this.args.bestuursperiode.id,
+            fractieId: fractie.id,
+          }),
+        }
+      );
+      return (await response.json()).ok;
+    } catch (e) {
+      console.error('Error checking fraction validity:', e);
+      return false;
+    }
   }
 
   get title() {
