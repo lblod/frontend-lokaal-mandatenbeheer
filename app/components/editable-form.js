@@ -8,12 +8,11 @@ import { provide } from 'ember-provide-consume-context';
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { NamedNode, Literal } from 'rdflib';
 
 import { API } from 'frontend-lmb/utils/constants';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
-import { EXT } from 'frontend-lmb/rdf/namespaces';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
+import { isCustomForm } from 'frontend-lmb/utils/form-properties';
 
 export default class EditableFormComponent extends Component {
   @use(getFieldsForForm) getFieldsForForm;
@@ -98,16 +97,7 @@ function getFieldsForForm() {
 
       const forkingStore = new ForkingStore();
       forkingStore.parse(this.currentForm.formTtl, SOURCE_GRAPH, 'text/turtle');
-      const isCustomForm = forkingStore.any(
-        null,
-        EXT('isCustomForm'),
-        new Literal(
-          'true',
-          null,
-          new NamedNode('http://www.w3.org/2001/XMLSchema#boolean')
-        )
-      );
-      if (!isCustomForm) {
+      if (!isCustomForm(forkingStore)) {
         return [];
       }
 

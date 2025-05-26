@@ -34,7 +34,7 @@ export default class CustomFormsInstancesDefinitionRoute extends Route {
         true
       );
     }
-    console.log(`ext?`, isFormExtensionAsBool);
+
     return {
       form,
       instanceId: formInstanceId,
