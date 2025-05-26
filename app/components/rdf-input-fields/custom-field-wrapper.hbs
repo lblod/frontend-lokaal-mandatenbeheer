@@ -13,6 +13,16 @@
               @error={{this.hasErrors}}
             >{{this.title}}</AuLabel>
           {{/unless}}
+          {{#if
+            (and
+              this.formState.isEditFormDefinitionForm this.isFieldShownInSummary
+            )
+          }}
+            <AuPill
+              class="au-u-margin-left-tiny au-u-margin-bottom-tiny"
+              @skin="link"
+            >In samenvatting</AuPill>
+          {{/if}}
         </div>
         <div
           class="au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny"

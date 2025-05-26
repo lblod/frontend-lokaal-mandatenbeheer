@@ -16,6 +16,7 @@ import {
   PERSON_CUSTOM_DISPLAY_TYPE,
   PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
+import { isFieldShownInSummmary } from 'frontend-lmb/utils/form-properties';
 
 export default class RdfInputFieldsCustomFieldWrapperComponent extends Component {
   @consume('form-context') formContext;
@@ -102,6 +103,13 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
       this.formContext.onFieldClicked(null);
     }
   });
+
+  get isFieldShownInSummary() {
+    return isFieldShownInSummmary(
+      this.storeOptions.store,
+      this.args.field?.uri
+    );
+  }
 
   // From ember-submission-form-fields component: input-field.js
   // We cannot access these properties as they are in the component itself and this is just a wrapper

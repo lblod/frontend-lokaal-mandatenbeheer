@@ -12,7 +12,9 @@ export const getFormProperty = (args, property) => {
 
 export const isCustomForm = (forkingStore) => {
   if (!forkingStore) {
-    console.warn('Forkingstore is undefined, returning false.');
+    console.warn(
+      'Forkingstore is undefined, returning false for ext:isCustomForm'
+    );
     return false;
   }
 
@@ -26,5 +28,26 @@ export const isCustomForm = (forkingStore) => {
         new NamedNode('http://www.w3.org/2001/XMLSchema#boolean')
       )
     ) || forkingStore.any(null, EXT('isCustomForm'), true)
+  );
+};
+
+export const isFieldShownInSummmary = (forkingStore, fieldNode) => {
+  if (!forkingStore) {
+    console.warn(
+      'Forkingstore is undefined, returning false for form:showInSummary'
+    );
+    return false;
+  }
+
+  return !!(
+    forkingStore.any(
+      fieldNode,
+      FORM('showInSummary'),
+      new Literal(
+        'true',
+        null,
+        new NamedNode('http://www.w3.org/2001/XMLSchema#boolean')
+      )
+    ) || forkingStore.any(fieldNode, FORM('showInSummary'), true)
   );
 };
