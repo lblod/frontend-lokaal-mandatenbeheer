@@ -77,3 +77,15 @@
     width: 960px;
   }
 }
+
+.select-error {
+  .ember-power-select-trigger:focus:not(
+      .ember-power-select-trigger[aria-disabled="true"]
+    ),
+  .ember-power-select-trigger--active:not(
+      .ember-power-select-trigger[aria-disabled="true"]
+    ) {
+    border-color: var(--au-red-600) !important;
+    box-shadow: inset 0 0 0 0.2rem var(--au-red-600) !important;
+  }
+}

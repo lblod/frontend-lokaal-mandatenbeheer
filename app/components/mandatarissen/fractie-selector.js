@@ -20,6 +20,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @tracked _fractie;
   @tracked person;
   @tracked fractieOptions = [];
+  @tracked showTempError = false;
 
   constructor() {
     super(...arguments);
@@ -130,10 +131,18 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         this.toaster,
         'Deze fractie komt niet overeen met de fractie van deze persoon aan de zijde van de gemeente. Doe je een correctie, pas dan eerst de fractie aan aan de zijde van de gemeente.'
       );
+      this.triggerTempError();
       return;
     }
     this._fractie = fractie;
     await this.args.onSelect(this._fractie);
+  }
+
+  triggerTempError() {
+    this.showTempError = true;
+    setTimeout(() => {
+      this.showTempError = false;
+    }, 3000);
   }
 
   async isValidFractieForPerson(fractie) {
