@@ -1,4 +1,4 @@
-<div>
+<div class={{if this.showTempError "select-error"}}>
   <AuLabel for="fractie" @error={{@hasErrors}} @required={{@isRequired}}>
     {{this.title}}
   </AuLabel>
