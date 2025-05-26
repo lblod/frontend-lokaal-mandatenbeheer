@@ -14,8 +14,13 @@ export default class CustomFormsInstancesDefinitionRoute extends Route {
   };
 
   async model({ id, fullScreenEdit, isFormExtension, instanceId }) {
-    let form = await this.store.findRecord('form', id);
-    let formInstanceId = form.id;
+    let form = null;
+    let formInstanceId = null;
+
+    if (!isFormExtension) {
+      form = await this.store.findRecord('form', id);
+      formInstanceId = form.id;
+    }
 
     if (isFormExtension && fullScreenEdit === 'true') {
       formInstanceId = instanceId;
