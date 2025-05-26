@@ -10,10 +10,8 @@
   </Group>
   <Group>
     <AuButtonGroup>
-      {{#if (is-feature-enabled "show-codelijsten-module")}}
-        <AuLink @route="codelijsten.overzicht" @skin="button-secondary">Beheer
-          codelijsten</AuLink>
-      {{/if}}
+      <AuLink @route="codelijsten.overzicht" @skin="button-secondary">Beheer
+        codelijsten</AuLink>
       <AuLink @route="custom-forms.new" @skin="button">Nieuw formulier aanmaken</AuLink>
     </AuButtonGroup>
   </Group>

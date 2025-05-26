@@ -120,7 +120,6 @@ export default class CurrentSessionService extends Service {
 
   get showLegislatuurModule() {
     return (
-      this.features.isEnabled('show-iv-module') &&
       !this.isDistrict &&
       !this.isProvincie &&
       !this.isPolitiezone &&
