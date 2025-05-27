@@ -9,7 +9,14 @@
       class="au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny au-u-margin-right-small"
     >
       <div class="flex-grow">
-        {{yield}}
+        {{#if this.isFieldReadOnly}}
+          <ReadOnlyFieldForDisplayType
+            @field={{@field}}
+            @storeOptions={{this.storeOptions}}
+          />
+        {{else}}
+          {{yield}}
+        {{/if}}
       </div>
     </div>
   </div>
