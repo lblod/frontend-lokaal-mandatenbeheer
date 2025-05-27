@@ -19,6 +19,7 @@ import RdfDateInputComponent from 'frontend-lmb/components/rdf-input-fields/rdf-
 import RDFGeboorteInput from 'frontend-lmb/components/rdf-input-fields/geboorte-input';
 import RDFGenderSelector from 'frontend-lmb/components/rdf-input-fields/gender-selector';
 import RdfInputFieldsCustomStringInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-string-input';
+import RdfInputFieldsStandardStringInputComponent from 'frontend-lmb/components/rdf-input-fields/standard-string-input';
 import RdfInputFieldsCustomAddressInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-address-input';
 import RdfInputFieldsCustomDateInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-date-input';
 import RdfInputFieldsCustomNumberInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-number-input';
@@ -127,6 +128,11 @@ export const registerCustomFormFields = () => {
       displayType:
         'http://lblod.data.gift/display-types/lmb/custom-string-input',
       edit: RdfInputFieldsCustomStringInputComponent,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/lmb/standard-string-input',
+      edit: RdfInputFieldsStandardStringInputComponent,
     },
     {
       displayType:

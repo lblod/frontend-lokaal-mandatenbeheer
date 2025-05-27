@@ -128,7 +128,7 @@
         {{#if this.isCustomForm}}
           <AuFormRow>
             <AuToggleSwitch
-              @disabled={{@show}}
+              @disabled={{this.isShowInSummaryToggleDisabled}}
               @checked={{this.isShownInSummary}}
               @onChange={{this.toggleShowInSummary}}
             >Toon in samenvatting

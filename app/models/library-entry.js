@@ -12,3 +12,13 @@ export default class LibraryEntryModel extends Model {
   })
   displayType;
 }
+
+LibraryEntryModel.ensureFakeEntry = (store) => {
+  if (LibraryEntryModel.fakeEntry) {
+    return LibraryEntryModel.fakeEntry;
+  }
+  LibraryEntryModel.fakeEntry = store.createRecord('library-entry', {
+    name: 'Eigen veld',
+  });
+  return LibraryEntryModel.fakeEntry;
+};

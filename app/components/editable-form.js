@@ -7,12 +7,12 @@ import { service } from '@ember/service';
 import { provide } from 'ember-provide-consume-context';
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
 
 import { API } from 'frontend-lmb/utils/constants';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
-import { EXT } from 'frontend-lmb/rdf/namespaces';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
-import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { isCustomForm } from 'frontend-lmb/utils/form-properties';
 
 export default class EditableFormComponent extends Component {
   @use(getFieldsForForm) getFieldsForForm;
@@ -24,14 +24,10 @@ export default class EditableFormComponent extends Component {
   @service features;
 
   @tracked showEditModal;
-  @tracked clickedField;
 
   constructor() {
     super(...arguments);
     this.updateForm();
-    if (this.args.selectedField) {
-      this.clickedField = this.args.selectedField;
-    }
   }
 
   async updateForm() {
@@ -52,17 +48,18 @@ export default class EditableFormComponent extends Component {
     return this.getFieldsForForm?.value || [];
   }
 
+  get clickedField() {
+    return this.args.selectedField;
+  }
+
   @action
   async setClickedField(fieldModel) {
-    this.clickedField = fieldModel;
+    let field = fieldModel;
     if (this.args.onFieldSelected && fieldModel) {
       await this.getFieldsForForm.retry();
-      const field = this.fields.filter(
-        (f) => f.uri === fieldModel.uri?.value
-      )[0];
-      this.clickedField = field;
+      field = this.fields.filter((f) => f.uri === fieldModel.uri?.value)[0];
     }
-    this.args.onFieldSelected(this.clickedField);
+    this.args.onFieldSelected(field);
   }
 
   get editableFormsEnabled() {
@@ -71,21 +68,12 @@ export default class EditableFormComponent extends Component {
 
   @provide('form-state')
   get formState() {
-    const canEditFieldsInlineInForm =
-      this.args.editFieldsInForm == undefined
-        ? true
-        : !!this.args.editFieldsInForm;
     return {
-      editFieldsInForm: canEditFieldsInlineInForm,
+      isEditFormDefinitionForm: !!this.args.isEditFormDefinitionForm,
+      canEditFormDefinition: !!this.args.canEditFormDefinition,
       canSelectField: !!this.args.canSelectField,
       clickedField: this.clickedField,
       isReadOnly: this.args.isReadOnly,
-      isFieldEditPencilShown:
-        canEditFieldsInlineInForm && !this.args.toReceiveUserInput,
-      isAddFieldShownInForm:
-        !this.args.toReceiveUserInput && !this.args.isReadOnly,
-      canMoveFieldsInForm:
-        !this.args.toReceiveUserInput && !this.args.isReadOnly,
     };
   }
 
@@ -96,7 +84,6 @@ export default class EditableFormComponent extends Component {
       onFieldClicked: (fieldModel) => this.setClickedField(fieldModel),
       formDefinition: this.currentForm,
       fieldsInForm: this.fields,
-      isForFormExtension: !!this.args.isForFormExtension,
     };
   }
 }
@@ -110,8 +97,7 @@ function getFieldsForForm() {
 
       const forkingStore = new ForkingStore();
       forkingStore.parse(this.currentForm.formTtl, SOURCE_GRAPH, 'text/turtle');
-      const isCustomForm = forkingStore.any(null, EXT('isCustomForm'), true);
-      if (!isCustomForm) {
+      if (!isCustomForm(forkingStore)) {
         return [];
       }
 

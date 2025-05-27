@@ -39,6 +39,7 @@ module.exports = function (environment) {
       'enable-mandataris-count-warnings': true,
       politieraad: false,
       'editable-forms': false,
+      'person-extra-info': false,
       'edit-mandataris-rework': false,
       'shacl-report': false,
     },
@@ -72,6 +73,7 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.features['editable-forms'] = true;
+    ENV.features['person-extra-info'] = true;
     ENV.features['show-eigen-gegevens-module'] = true;
 
     ENV.features['shacl-report'] = true;

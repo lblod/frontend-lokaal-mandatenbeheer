@@ -4,24 +4,19 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 import { consume } from 'ember-provide-consume-context';
-import { task } from 'ember-concurrency';
-import {
-  validationsForFieldWithType,
-  validationResultsForField,
-} from '@lblod/submission-form-helpers';
+import { validationsForFieldWithType } from '@lblod/submission-form-helpers';
 
-import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import {
   ADRES_CUSTOM_DISPLAY_TYPE,
   PERSON_CUSTOM_DISPLAY_TYPE,
   PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
-import { isFieldShownInSummmary } from 'frontend-lmb/utils/form-properties';
 
-export default class RdfInputFieldsCustomFieldWrapperComponent extends Component {
+export default class RdfInputFieldsStandardFieldWrapperComponent extends Component {
   @consume('form-context') formContext;
   @consume('form-state') formState;
 
+  @tracked showModal;
   @tracked hasErrors;
 
   get title() {
@@ -43,30 +38,9 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
     return this.formState?.clickedField?.uri === this.args.field.uri.value;
   }
 
-  get styleClassForMainContainer() {
-    if (!this.formState?.canSelectField) {
-      return '';
-    }
-
-    const classes = ['custom-form-field'];
-
-    if (this.isFieldSelected) {
-      classes.push('custom-form-field--selected');
-    }
-
-    return classes.join(' ');
-  }
-
   @action
   interactedWithField() {
     this.hasErrors = this.errors.length;
-  }
-
-  get errors() {
-    return validationResultsForField(
-      this.args.field.uri,
-      this.storeOptions
-    ).filter((result) => !result.valid);
   }
 
   @action
@@ -80,35 +54,6 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
       clickedField = this.args.field;
     }
     this.formContext.onFieldClicked(clickedField);
-  }
-
-  moveField = task(async (direction) => {
-    const result = await fetch(
-      `/form-content/${this.formContext.formDefinition.id}/fields/move`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': JSON_API_TYPE,
-        },
-        body: JSON.stringify({
-          fieldUri: this.args.field.uri.value,
-          formUri: this.args.form.uri,
-          direction,
-        }),
-      }
-    );
-
-    if (result.ok) {
-      this.formContext.onFormUpdate();
-      this.formContext.onFieldClicked(null);
-    }
-  });
-
-  get isFieldShownInSummary() {
-    return isFieldShownInSummmary(
-      this.storeOptions.store,
-      this.args.field?.uri
-    );
   }
 
   // From ember-submission-form-fields component: input-field.js
