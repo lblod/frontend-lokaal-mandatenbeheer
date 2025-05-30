@@ -57,6 +57,17 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
     return classes.join(' ');
   }
 
+  get styleClassForContainerAroundField() {
+    const base =
+      'au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny';
+
+    if (this.hasErrors && this.args.showErrorLineNextToField) {
+      return base + ' wrapped-field--error';
+    }
+
+    return base;
+  }
+
   @action
   interactedWithField() {
     this.hasErrors = this.errors.length;

@@ -33,6 +33,7 @@ import {
   PERSON_CUSTOM_DISPLAY_TYPE,
   PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
 } from './well-known-uris';
+import CustomFormLinkToFormWithModal from 'frontend-lmb/components/custom-form/link-to-form-with-modal';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -165,7 +166,8 @@ export const registerCustomFormFields = () => {
     {
       displayType:
         'http://lblod.data.gift/display-types/lmb/custom-link-to-form-selector-input',
-      edit: CustomFormLinkToFormInstance,
+      edit: CustomFormLinkToFormWithModal,
+      // edit: CustomFormLinkToFormInstance,
     },
     {
       displayType: PERSON_CUSTOM_DISPLAY_TYPE,
