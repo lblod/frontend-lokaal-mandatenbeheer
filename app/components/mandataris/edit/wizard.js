@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 
-import { action } from '@ember/object';
+import { action, get } from '@ember/object';
+import moment from 'moment';
 import { service } from '@ember/service';
 
 import { tracked } from '@glimmer/tracking';
@@ -13,6 +14,18 @@ import { timeout } from 'ember-concurrency';
 
 const UPDATE_STATE = 'update state';
 const CORRECT_MISTAKES = 'corrigeer fouten';
+
+const fieldsToDiff = [
+  { label: 'Status', path: 'status.label' },
+  {
+    label: 'Fractie',
+    path: 'heeftLidmaatschap.binnenFractie.naam',
+    formValuesPath: 'fractie.naam',
+  },
+  { label: 'Rangorde', path: 'rangorde' },
+  { label: 'Start', path: 'start', correctingOnly: true, date: true },
+  { label: 'Einde', path: 'einde', correctingOnly: true, date: true },
+];
 
 export default class MandatarisEditWizard extends Component {
   @service toaster;
@@ -123,55 +136,106 @@ export default class MandatarisEditWizard extends Component {
 
   async updateReasonOptions() {
     const newReasons = [];
+    let onlyCorrectionAllowed = false;
     const mandatarisStatus = await this.args.mandataris.status;
     const fractie = await this.args.mandataris.get(
       'heeftLidmaatschap.binnenFractie'
     );
-    if (this.formValues.status.isVerhinderd && !mandatarisStatus.isVerhinderd) {
-      newReasons.push({
-        label: 'De status van de mandataris is veranderd naar verhinderd',
-        type: UPDATE_STATE,
-      });
-    }
-    if (this.formValues.fractie != fractie && fractie.isOnafhankelijk) {
-      const availableFracties = await this.mandatarisApi.getMandatarisFracties(
-        this.args.mandataris.id
-      );
-      if (availableFracties.find((f) => f.id == this.formValues.fractie.id)) {
-        newReasons.push({
-          label: 'De mandataris keert terug naar de oorspronkelijke fractie',
-          type: UPDATE_STATE,
-        });
-      }
-    }
-    if (
-      this.formValues.fractie != fractie &&
-      this.formValues.fractie.isOnafhankelijk
-    ) {
-      newReasons.push({
-        label: 'De mandataris gaat verder als onafhankelijke',
-        type: UPDATE_STATE,
-      });
-    }
-    if (this.formValues.rangorde != this.args.mandataris.rangorde) {
-      newReasons.push({
-        label: 'De mandataris verandert van rangorde',
-        type: UPDATE_STATE,
-      });
-    }
     if (this.formValues.status.isBeeindigd) {
       newReasons.push({
         label: 'Het mandaat wordt beëindigd',
         type: CORRECT_MISTAKES,
       });
-    } else {
+      this.reasonForChangeOptions = newReasons;
+      this.reasonForChange = newReasons[0];
+      return;
+    }
+    if (this.formValues.fractie != fractie) {
+      const availableFracties = await this.mandatarisApi.getMandatarisFracties(
+        this.args.mandataris.id
+      );
+      if (
+        fractie.isOnafhankelijk &&
+        availableFracties.find((f) => f.id == this.formValues.fractie.id)
+      ) {
+        newReasons.push({
+          label: 'keert terug naar de oorspronkelijke fractie',
+          type: UPDATE_STATE,
+        });
+      } else if (this.formValues.fractie.isOnafhankelijk) {
+        newReasons.push({
+          label: 'gaat verder als onafhankelijke',
+          type: UPDATE_STATE,
+        });
+      } else {
+        // in this case, they changed the fraction to something different from before.
+        // This is only allowed if they do a correction and we should therefore only give
+        // them this option
+        onlyCorrectionAllowed = true;
+      }
+    }
+
+    if (this.formValues.rangorde != this.args.mandataris.rangorde) {
       newReasons.push({
-        label: 'Correctie van verkeerde gegevens over de mandataris',
-        type: CORRECT_MISTAKES,
+        label: 'verandert van rangorde',
+        type: UPDATE_STATE,
       });
     }
-    this.reasonForChangeOptions = newReasons;
-    this.reasonForChange = newReasons[0];
+    if (this.formValues.status.isVerhinderd && !mandatarisStatus.isVerhinderd) {
+      newReasons.push({
+        label: 'raakt verhinderd',
+        type: UPDATE_STATE,
+      });
+    }
+    const changedLabels = this.wizardDiffs.map((diff) => {
+      return diff.field.toLowerCase();
+    });
+    const changedText = this.joinStringWithCommaAndFinalAnd(changedLabels);
+
+    const was = changedLabels.length == 1 ? 'was' : 'waren';
+    const werd = changedLabels.length == 1 ? 'werd' : 'werden';
+    const correctionReason = {
+      label: `De ${changedText} van de mandataris ${was} verkeerd ingevuld en ${werd} gecorrigeerd`,
+      type: CORRECT_MISTAKES,
+    };
+
+    const mergedUpdateStateReasonTexts = newReasons
+      .filter((reason) => {
+        // this filter should already be ok, but it's probably best to be sure
+        return reason.type === UPDATE_STATE;
+      })
+      .map((reason) => {
+        return reason.label;
+      });
+    const updateReasonText = this.joinStringWithCommaAndFinalAnd(
+      mergedUpdateStateReasonTexts
+    );
+    if (onlyCorrectionAllowed || mergedUpdateStateReasonTexts.length === 0) {
+      this.reasonForChangeOptions = [correctionReason];
+      this.reasonForChange = null; // force user to select a reason and think about it
+      return;
+    }
+
+    this.reasonForChangeOptions = [
+      {
+        label: `De mandataris ${updateReasonText}`,
+        type: UPDATE_STATE,
+      },
+      correctionReason,
+    ];
+    this.reasonForChange = null; // force user to select a reason and think about it
+  }
+
+  joinStringWithCommaAndFinalAnd(string) {
+    if (!string || string.length === 0) {
+      return '';
+    }
+    if (string.length === 1) {
+      return string[0];
+    }
+    const head = string.slice(0, -1).join(', ');
+    const tail = string.slice(-1);
+    return `${head} en ${tail}`;
   }
 
   async checkMandatarisInput() {
@@ -421,6 +485,49 @@ export default class MandatarisEditWizard extends Component {
     if (this.replacementPerson) {
       this.isRangordeModalOpen = true;
     }
+  }
+
+  get wizardDiffs() {
+    if (!this.args.mandataris) {
+      return [];
+    }
+    const fieldDiffs = fieldsToDiff
+      .map((field) => {
+        let old = this.args.mandataris.get(field.path);
+        let current = get(this.formValues, field.formValuesPath || field.path);
+        if (field.date) {
+          old = old ? moment(old).format('DD-MM-YYYY') : null;
+          current = current ? moment(current).format('DD-MM-YYYY') : null;
+        }
+        if (old != current) {
+          return {
+            field: field.label,
+            correctingOnly: field.correctingOnly,
+            old,
+            current,
+          };
+        }
+      })
+      .filter((diff) => !!diff);
+
+    const oldReplacement = this.args.mandataris.get(
+      'tijdelijkeVervangingen[0].isBestuurlijkeAliasVan'
+    );
+    const newReplacement = this.replacementPerson;
+    if (oldReplacement != newReplacement) {
+      fieldDiffs.push({
+        field: 'Vervanger',
+        old: oldReplacement ? oldReplacement.naam : null,
+        current: newReplacement ? newReplacement.naam : null,
+      });
+    }
+    return fieldDiffs;
+  }
+
+  get getShownWizardDiffs() {
+    return this.wizardDiffs.filter((field) => {
+      return !field.correctingOnly || this.isCorrecting;
+    });
   }
 
   @action

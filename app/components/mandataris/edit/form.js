@@ -147,6 +147,10 @@ export default class MandatarisEditFormComponent extends Component {
   updateStatus(status) {
     this.status = status;
     this.updateErrorMap({ id: 'status', hasErrors: false });
+    this.args.onChange({
+      ...this.args.formValues,
+      status: status,
+    });
   }
 
   @action
