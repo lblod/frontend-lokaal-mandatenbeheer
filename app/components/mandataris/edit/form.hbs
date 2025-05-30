@@ -36,7 +36,17 @@
       {{/if}}
     </div>
   {{/if}}
-  {{#unless this.isTerminatingMandate}}
+  {{#if this.isTerminatingMandate}}
+    <Mandataris::Edit::StartEndDate
+      @startDate={{this.startDate}}
+      @hideStartDate={{true}}
+      @endDate={{this.endDate}}
+      @from={{@bestuursorgaanIT.bindingStart}}
+      @to={{@bestuursorgaanIT.bindingEinde}}
+      @onChange={{this.updateStartEndDate}}
+      @onErrorStateUpdated={{this.updateErrorMap}}
+    />
+  {{else}}
     {{#if this.showRangordeField}}
       <div>
         <AuLabel>
@@ -71,5 +81,5 @@
       @onChange={{this.updateStartEndDate}}
       @onErrorStateUpdated={{this.updateErrorMap}}
     />
-  {{/unless}}
+  {{/if}}
 </div>

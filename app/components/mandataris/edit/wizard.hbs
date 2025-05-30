@@ -12,7 +12,7 @@
       <Mandataris::Edit::Form
         @bestuurseenheid={{@bestuurseenheid}}
         @bestuursorgaanIT={{@bestuursorgaanIT}}
-        @formValues={{this.mandatarisFormValues}}
+        @formValues={{@mandatarisFormValues}}
         @isFractieRequired={{@isFractieRequired}}
         @onFormIsValid={{this.updateMandatarisStepCompleted}}
       />
@@ -40,10 +40,11 @@
           @options={{this.reasonForChangeOptions}}
           @onChange={{this.selectReasonForChange}}
           @searchEnabled={{true}}
+          @searchField="label"
           @noMatchesMessage="Geen resultaten"
           as |reason|
         >
-          {{reason}}
+          {{reason.label}}
         </PowerSelect>
       </div>
     {{/if}}
@@ -64,6 +65,8 @@
           {{else}}
             <AuButton
               {{on "click" this.nextStep}}
+              @loadingMessage="Aan het laden..."
+              @loading={{this.checkingMandatarisInput}}
               @disabled={{not this.activeStep.canContinueToNextStep}}
             >
               Volgende
@@ -140,4 +143,10 @@
   @newMandataris={{this.newMandataris.id}}
   @callback={{this.callbackAfterUpdate}}
   @updateState="true"
+/>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.correctedMandataris}}
+  @mandataris={{@mandataris.id}}
+  @correct="true"
 />
