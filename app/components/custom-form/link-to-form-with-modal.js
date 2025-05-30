@@ -49,8 +49,9 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   }
 
   @action
-  onCloseModal() {
+  onCloseModal(onInteractedWithField) {
     this.isModalOpen = false;
+    onInteractedWithField?.();
   }
 
   @action
