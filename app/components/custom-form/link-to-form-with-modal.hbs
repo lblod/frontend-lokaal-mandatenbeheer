@@ -5,7 +5,7 @@
   @graphs={{@graphs}}
   @formStore={{@formStore}}
 >
-  <div class="au-u-flex au-u-flex--between au-u-flex--vertical-center">
+  <div class="au-u-flex au-u-flex--column">
     {{#if this.hasSelectedOptions}}
       <AuTable>
         <:header>
@@ -26,7 +26,11 @@
     {{else}}
       <p>Selecteer een formulier</p>
     {{/if}}
-    <AuButton @skin="secondary" {{on "click" this.openModal}}>Voeg toe</AuButton>
+    <AuButton
+      class="au-u-padding-left-none au-u-margin-top-small"
+      @skin="link"
+      {{on "click" this.openModal}}
+    >Pas aan</AuButton>
   </div>
 </RdfInputFields::CustomFieldWrapper>
 

@@ -55,10 +55,12 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
 
   @action
   async selectInstance(option) {
-    // Retrieve options in store
     const matches = triplesForPath(this.storeOptions, true).values;
     if (option.isSelected) {
-      // remove
+      const toRemove = this.selectedInstances.find(
+        (o) => o.instance.uri == option.instance.uri
+      );
+      this.selectedInstances.removeObject(toRemove);
     } else {
       this.selectedInstances.pushObject(option);
     }
