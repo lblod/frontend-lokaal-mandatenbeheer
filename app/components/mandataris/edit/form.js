@@ -163,7 +163,10 @@ export default class MandatarisEditFormComponent extends Component {
     });
     this.args.onChange({
       ...this.args.formValues,
-      isBestuurlijkeAliasVan: person,
+    });
+    this.args.onReplacementChange({
+      replacementPerson: person,
+      replacementMandataris: overlappingMandate,
     });
   }
 

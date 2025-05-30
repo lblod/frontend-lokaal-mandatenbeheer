@@ -57,6 +57,7 @@ export default class MandatarisEditWizard extends Component {
   @tracked replacementMandataris;
   @tracked replacementProps;
   @tracked newMandataris;
+  @tracked originalReplacementPerson;
 
   constructor() {
     super(...arguments);
@@ -132,6 +133,10 @@ export default class MandatarisEditWizard extends Component {
 
   get isCorrecting() {
     return this.reasonForChange?.type === CORRECT_MISTAKES;
+  }
+
+  get hideCorrectionWarning() {
+    return this.reasonForChange.softCorrection;
   }
 
   async updateReasonOptions() {
@@ -211,6 +216,16 @@ export default class MandatarisEditWizard extends Component {
       mergedUpdateStateReasonTexts
     );
     if (onlyCorrectionAllowed || mergedUpdateStateReasonTexts.length === 0) {
+      if (
+        this.wizardDiffs.length === 1 &&
+        this.wizardDiffs[0].field === 'Vervanger'
+      ) {
+        // if the only change is the replacement, we should not use the generic text
+        // because it feels too scary to users
+        correctionReason.label = `De vervanger van de mandataris wordt aangepast`;
+        correctionReason.softCorrection = true;
+      }
+
       this.reasonForChangeOptions = [correctionReason];
       this.reasonForChange = null; // force user to select a reason and think about it
       return;
@@ -243,6 +258,11 @@ export default class MandatarisEditWizard extends Component {
     await timeout(300); // give date inputs time to update values
 
     await this.updateReasonOptions();
+    const originalReplacement = (
+      await this.args.mandataris.tijdelijkeVervangingen
+    )?.[0];
+    this.originalReplacementPerson =
+      await originalReplacement?.isBestuurlijkeAliasVan;
     this.checkingMandatarisInput = false;
     return this.activeStep.canContinueToNextStep;
   }
@@ -350,6 +370,8 @@ export default class MandatarisEditWizard extends Component {
   @action
   async corrigeerFouten() {
     try {
+      this.handleReplacement(this.args.mandataris);
+
       this.args.mandataris.status = await this.formValues.status;
       this.args.mandataris.start = this.formValues.start;
       this.args.mandataris.einde = this.formValues.einde;
@@ -510,9 +532,7 @@ export default class MandatarisEditWizard extends Component {
       })
       .filter((diff) => !!diff);
 
-    const oldReplacement = this.args.mandataris.get(
-      'tijdelijkeVervangingen[0].isBestuurlijkeAliasVan'
-    );
+    const oldReplacement = this.originalReplacementPerson;
     const newReplacement = this.replacementPerson;
     if (oldReplacement != newReplacement) {
       fieldDiffs.push({
@@ -543,5 +563,11 @@ export default class MandatarisEditWizard extends Component {
   @action
   updateMandatarisFormValues(newFormValues) {
     this.formValues = newFormValues;
+  }
+
+  @action
+  updateReplacement({ replacementPerson, replacementMandataris }) {
+    this.replacementPerson = replacementPerson;
+    this.replacementMandataris = replacementMandataris;
   }
 }
