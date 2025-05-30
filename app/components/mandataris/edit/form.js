@@ -157,22 +157,39 @@ export default class MandatarisEditFormComponent extends Component {
       id: 'replacement',
       hasErrors: person?.id === this.args.formValues.isBestuurlijkeAliasVan.id,
     });
+    this.args.onChange({
+      ...this.args.formValues,
+      isBestuurlijkeAliasVan: person,
+    });
   }
 
   @action updateFractie(newFractie) {
     this.fractie = newFractie;
     this.updateErrorMap({ id: 'fractie', hasErrors: false });
+    this.args.onChange({
+      ...this.args.formValues,
+      fractie: newFractie,
+    });
   }
 
   @action
   updateStartEndDate(startDate, endDate) {
     this.startDate = startDate;
     this.endDate = endDate;
+    this.args.onChange({
+      ...this.args.formValues,
+      start: startDate,
+      einde: endDate,
+    });
   }
 
   @action
   updateRangorde(rangordeAsString) {
     this.rangorde = rangordeAsString;
     this.updateErrorMap({ id: 'rangorde', hasErrors: false });
+    this.args.onChange({
+      ...this.args.formValues,
+      rangorde: rangordeAsString,
+    });
   }
 }

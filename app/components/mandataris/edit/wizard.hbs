@@ -15,6 +15,7 @@
         @formValues={{@mandatarisFormValues}}
         @isFractieRequired={{@isFractieRequired}}
         @onFormIsValid={{this.updateMandatarisStepCompleted}}
+        @onChange={{this.updateMandatarisFormValues}}
       />
     {{/if}}
 
@@ -47,6 +48,26 @@
           {{reason.label}}
         </PowerSelect>
       </div>
+
+      {{#if this.isCorrecting}}
+        <AuAlert @skin="info" @icon="alert-triangle" class="au-u-margin-top">
+          Bij een correctie worden de bestaande gegevens
+          <strong>overschreven</strong>
+          door de nieuwe informatie die je ingegeven hebt. Gebruik dit dus niet
+          als de mandataris een verandering doormaakt zoals een
+          fractiewijziging, maar enkel om gegevens te corrigeren die eerder
+          verkeerd ingegeven werden.
+        </AuAlert>
+      {{else}}
+        <div class="au-u-margin-top">
+          De nieuwe toestand voor deze mandataris geldt vanaf
+          <strong>{{moment-format this.formValues.start "DD-MM-YYYY"}}</strong>.
+          Als deze datum verkeerd is, pas dan de startdatum aan in de vorige
+          stap.
+        </div>
+
+      {{/if}}
+
     {{/if}}
   </:body>
   <:footer>
