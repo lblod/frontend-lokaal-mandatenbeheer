@@ -1,0 +1,149 @@
+<AuModal
+  class="wizard-modal"
+  @modalOpen={{@startFlow}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isUnsavedChangesModalOpen) true}}
+>
+  <:title>
+    <p class="au-u-h4 au-u-regular">
+      {{this.activeStep.label}}
+    </p>
+  </:title>
+  <:body>
+    {{#if this.activeStep.isMandatarisStep}}
+      <Mandataris::Edit::Form
+        @toggleModal={{this.nextStep}}
+        @bestuurseenheid={{@bestuurseenheid}}
+        @bestuursorgaanIT={{@bestuursorgaanIT}}
+        @mandataris={{this.workingMandataris}}
+        @linkedMandataris={{@linkedMandataris}}
+        @bestuursorganenTitle={{this.mandatarisTitle}}
+        @isFractieRequired={{@isFractieRequired}}
+        @onFormIsValid={{this.updateMandatarisStepCompleted}}
+      />
+    {{/if}}
+
+    {{#if this.activeStep.isReplacementStep}}
+      <Mandataris::Edit::ReplacementForm
+        @person={{this.replacementPerson}}
+        @mandataris={{this.workingMandataris}}
+        @prefillStart={{this.startForReplacement}}
+        @prefillEinde={{this.eindeForReplacement}}
+        @bestuursorgaanIT={{@bestuursorgaanIT}}
+        @bestuurseenheid={{this.bestuurseenheid}}
+        @onFormIsValid={{this.updateReplacementStepCompleted}}
+      />
+    {{/if}}
+
+    {{#if this.activeStep.isReasonStep}}
+      <div>
+        <AuLabel @required={{true}}>
+          Reden van aanpassing
+        </AuLabel>
+        <PowerSelect
+          @allowClear={{false}}
+          @selected={{this.reasonForChange}}
+          @options={{this.reasonForChangeOptions}}
+          @onChange={{this.selectReasonForChange}}
+          @searchEnabled={{true}}
+          @noMatchesMessage="Geen resultaten"
+          as |reason|
+        >
+          {{reason}}
+        </PowerSelect>
+      </div>
+    {{/if}}
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButtonGroup>
+          {{#if this.activeStepIsFinalStep}}
+            <AuButton
+              {{on "click" this.saveChanges}}
+              @loading={{this.isSaving}}
+              @loadingMessage="Opslaan"
+              @disabled={{this.isSaveButtonDisabled}}
+            >
+              Pas aan
+            </AuButton>
+          {{else}}
+            <AuButton
+              {{on "click" this.nextStep}}
+              @disabled={{not this.activeStep.canContinueToNextStep}}
+            >
+              Volgende
+            </AuButton>
+          {{/if}}
+          {{#unless this.activeStepIsFirstStep}}
+            <AuButton
+              {{on "click" this.previousStep}}
+              @disabled={{this.isSaving}}
+              @skin="secondary"
+            >
+              Vorige
+            </AuButton>
+          {{/unless}}
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+
+<Shared::UnsavedChangesModal
+  @isModalOpen={{this.isUnsavedChangesModalOpen}}
+  @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onDiscard={{this.discardChanges}}
+/>
+
+<AuModal
+  @modalOpen={{this.isRangordeModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isRangordeModalOpen) false}}
+>
+  <:title>Rangorde vervanger</:title>
+  <:body>
+    <p>
+      U heeft een mandataris, die een rangorde heeft, verhinderd. Deze rangorde
+      kan niet automatisch overgenomen worden in de vervanger. Het toewijzen van
+      een rangorde kan namelijk gevolgen hebben op de rangorde van andere
+      mandatarissen. Wenst u dit nu aan te passen? Het is ook mogelijk dit op
+      een later tijdstip aan te passen in de wijzig rangorde pagina.
+    </p>
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuLink
+          @skin="button"
+          @route="organen.orgaan.edit-rangorde"
+          @model={{@bestuursorgaanIT.isTijdsspecialisatieVan.id}}
+          @query={{hash
+            bestuursperiode=@bestuursorgaanIT.heeftBestuursperiode.id
+          }}
+        >
+          Ja
+        </AuLink>
+        <AuButton
+          @skin="secondary"
+          {{on "click" (fn (mut this.isRangordeModalOpen) false)}}
+        >Nee</AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.isReplacementAdded}}
+  @mandataris={{@mandataris.id}}
+  @replacement="true"
+/>
+
+<Mandatarissen::Linked::Modal
+  @recentUpdate={{this.isUpdateState}}
+  @mandataris={{@mandataris.id}}
+  @newMandataris={{this.newMandataris.id}}
+  @callback={{this.callbackAfterUpdate}}
+  @updateState="true"
+/>

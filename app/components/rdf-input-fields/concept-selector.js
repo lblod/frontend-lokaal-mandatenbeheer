@@ -2,48 +2,16 @@ import InputFieldComponent from '@lblod/ember-submission-form-fields/components/
 
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
-import { tracked, cached } from '@glimmer/tracking';
+import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
 import { NamedNode, Literal } from 'rdflib';
 import { hasValidFieldOptions } from '@lblod/ember-submission-form-fields/utils/has-valid-field-options';
 import { task, timeout } from 'ember-concurrency';
-import { trackedFunction } from 'reactiveweb/function';
-import { use } from 'ember-resources';
 
 import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { FIELD_OPTION } from 'frontend-lmb/rdf/namespaces';
 import { showWarningToast } from 'frontend-lmb/utils/toasts';
-
-function getOptions() {
-  return trackedFunction(async () => {
-    if (!this.conceptScheme) {
-      return [];
-    }
-
-    const queryParams = {
-      filter: {
-        label: this.searchData,
-        'concept-schemes': {
-          ':uri:': this.conceptScheme,
-        },
-      },
-      sort: 'label',
-      page: {
-        size: 9999,
-      },
-    };
-    if (this.searchData) {
-      queryParams['filter']['label'] = this.searchData;
-    }
-    const response = await this.store.query('concept', queryParams);
-
-    return response.map((m) => {
-      const subject = new NamedNode(m.uri);
-      return { subject: subject, label: m.label };
-    });
-  });
-}
 export default class ConceptSchemeSelectorComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
 
@@ -52,10 +20,9 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
 
   @tracked selected = null;
   @tracked searchEnabled = true;
-  @tracked searchData;
+  @tracked searchData = null;
   @tracked conceptScheme = null;
-
-  @use(getOptions) getOptions;
+  @tracked options = [];
 
   constructor() {
     super(...arguments);
@@ -66,6 +33,7 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
   async load() {
     this.loadOptions();
     await this.loadProvidedValue();
+    await this.fetchOptions();
   }
 
   loadOptions() {
@@ -98,12 +66,34 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
     }
   }
 
-  async loadProvidedValue() {}
+  async fetchOptions() {
+    if (!this.conceptScheme) {
+      return [];
+    }
 
-  @cached
-  get options() {
-    return this.getOptions?.value || [];
+    const queryParams = {
+      filter: {
+        'concept-schemes': {
+          ':uri:': this.conceptScheme,
+        },
+      },
+      sort: 'label',
+      page: {
+        size: 9999,
+      },
+    };
+    if (this.searchData && this.searchData.trim().length > 0) {
+      queryParams['filter']['label'] = this.searchData.trim();
+    }
+    const response = await this.store.query('concept', queryParams);
+
+    this.options = response.map((m) => {
+      const subject = new NamedNode(m.uri);
+      return { subject: subject, label: m.label };
+    });
   }
+
+  async loadProvidedValue() {}
 
   @action
   updateSelection() {
@@ -128,6 +118,8 @@ export default class ConceptSchemeSelectorComponent extends InputFieldComponent 
   search = task({ restartable: true }, async (searchData) => {
     await timeout(SEARCH_TIMEOUT);
     this.searchData = searchData;
+    await this.fetchOptions();
+    return this.options;
   });
 
   getFieldOptionsByPredicates() {

@@ -36,10 +36,10 @@ export function isDateInRange(date, min, max) {
     return true;
   }
   if (!min && max) {
-    return moment(date).isSameOrBefore(moment(max));
+    return moment(date).isSameOrBefore(moment(max), 'day');
   }
   if (!max && min) {
-    return moment(date).isSameOrAfter(moment(min));
+    return moment(date).isSameOrAfter(moment(min), 'day');
   }
 
   return moment(date).isBetween(moment(min), moment(max), 'day', '[]');

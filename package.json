@@ -97,7 +97,7 @@
     "ember-page-title": "^8.2.3",
     "ember-plausible": "^0.2.0",
     "ember-power-select": "^7.2.0",
-    "ember-power-select-with-create": "^1.0.0",
+    "ember-power-select-with-create": "^3.0.1",
     "ember-promise-helpers": "^2.0.0",
     "ember-promise-modals": "^4.0.0",
     "ember-provide-consume-context": "^0.6.1",

@@ -4,7 +4,7 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module(
-  'Integration | Component | min-max-mandataris-warning',
+  'Integration | Component | mandataris/edit/replacement-form',
   function (hooks) {
     setupRenderingTest(hooks);
 
@@ -12,16 +12,16 @@ module(
       // Set any properties with this.set('myProperty', 'value');
       // Handle any actions with this.set('myAction', function(val) { ... });
 
-      await render(hbs`<MinMaxMandatarisWarning />`);
+      await render(hbs`<Mandataris::Edit::ReplacementForm />`);
 
-      assert.dom(this.element).hasText('');
+      assert.dom().hasText('');
 
       // Template block usage:
-      await render(hbs`<MinMaxMandatarisWarning>
+      await render(hbs`<Mandataris::Edit::ReplacementForm>
   template block text
-</MinMaxMandatarisWarning>`);
+</Mandataris::Edit::ReplacementForm>`);
 
-      assert.dom(this.element).hasText('template block text');
+      assert.dom().hasText('template block text');
     });
   }
 );

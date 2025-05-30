@@ -133,17 +133,7 @@ export default class ValidatieService extends Service {
               (instance) => instance.uri === result.focusNode
             );
             if (instance) {
-              const value = result.value?.trim();
-              return {
-                result,
-                message: result.resultMessage,
-                detail: value,
-                instance,
-                label: instance.validationText
-                  ? await instance.validationText
-                  : result.focusNode,
-                context: await this.getContext(key, instance),
-              };
+              return this.processRawResult(result, key, instance);
             }
           })
         );
@@ -177,6 +167,87 @@ export default class ValidatieService extends Service {
       return 0;
     });
     return enrichedInstancesPerType;
+  }
+
+  async processRawResult(rawResult, classUri, instance) {
+    const value = rawResult.value?.trim();
+    if (
+      rawResult.sourceConstraintComponent ===
+      'http://www.w3.org/ns/shacl#DatatypeConstraintComponent'
+    ) {
+      let dataType = null;
+      try {
+        dataType = rawResult.resultMessage.split('<')[1].split('>')[0];
+      } catch (e) {
+        console.log('unrecognized data type', rawResult.resultMessage);
+      }
+      return {
+        result: rawResult,
+        message: 'Verkeerd datatype',
+        detail: `Verwacht datatype voor ${rawResult.resultPath}: ${dataType}, maar waarde was ${value}`,
+        instance,
+        label: instance.validationText
+          ? await instance.validationText
+          : rawResult.focusNode,
+        context: await this.getContext(classUri, instance),
+      };
+    }
+    if (
+      rawResult.sourceConstraintComponent ===
+      'http://www.w3.org/ns/shacl#MinCountConstraintComponent'
+    ) {
+      let minCount = null;
+      try {
+        minCount = rawResult.resultMessage.replace(/\D*/g, '');
+      } catch (e) {
+        console.log('unrecognized min count', rawResult.resultMessage);
+      }
+      return {
+        result: rawResult,
+        message: 'Niet voldoende waarden ingevuld',
+        detail: minCount
+          ? `Minimaal ${minCount} waarde${minCount === '1' ? '' : 'n'} vereist voor ${rawResult.resultPath}`
+          : '',
+        instance,
+        label: instance.validationText
+          ? await instance.validationText
+          : rawResult.focusNode,
+        context: await this.getContext(classUri, instance),
+      };
+    }
+    if (
+      rawResult.sourceConstraintComponent ===
+      'http://www.w3.org/ns/shacl#MaxCountConstraintComponent'
+    ) {
+      let maxCount = null;
+      try {
+        maxCount = rawResult.resultMessage.replace(/\D*/g, '');
+      } catch (e) {
+        console.log('unrecognized max count', rawResult.resultMessage);
+      }
+      return {
+        result: rawResult,
+        message: 'Te veel waarden ingevuld',
+        detail: maxCount
+          ? `Maximaal ${maxCount} waarde${maxCount === '1' ? '' : 'n'} vereist voor ${rawResult.resultPath}`
+          : '',
+        instance,
+        label: instance.validationText
+          ? await instance.validationText
+          : rawResult.focusNode,
+        context: await this.getContext(classUri, instance),
+      };
+    }
+    return {
+      result: rawResult,
+      message: rawResult.resultMessage,
+      detail: value,
+      instance,
+      label: instance.validationText
+        ? await instance.validationText
+        : rawResult.focusNode,
+      context: await this.getContext(classUri, instance),
+    };
   }
 
   async getResultsOrderedByClassAndInstance() {
@@ -223,17 +294,18 @@ export default class ValidatieService extends Service {
     )[0];
   }
 
-  async hasIssues(id) {
-    const issues = await this.getIssuesForId(id);
-    return issues.length > 0;
-  }
-
-  async getIssuesForId(id) {
+  async getIssuesForInstance(instance) {
     const results = await this.latestValidationResults;
     if (!results) {
       return false;
     }
-    const issues = results.filter((result) => result.focusNodeId === id);
+    const issues = await Promise.all(
+      results
+        .filter((result) => result.focusNodeId === instance.id)
+        .map((result) =>
+          this.processRawResult(result, result.targetClassOfFocusNode, instance)
+        )
+    );
     return issues;
   }
 
@@ -257,9 +329,6 @@ export default class ValidatieService extends Service {
       await this.setLastRunningStatus();
       await this.setLatestValidationReport();
       if (this.canShowReportIsGenerated) {
-        if (this.router.currentRouteName !== 'report') {
-          showSuccessToast(this.toaster, 'Rapport gereed', 'Validatie rapport');
-        }
         this.canShowReportIsGenerated = false;
       }
     } else {
@@ -283,8 +352,9 @@ export default class ValidatieService extends Service {
     this.warmingUp = false;
   });
 
-  generateReport = task({ drop: true }, async (bestuurseenheid) => {
+  generateReport = task({ drop: true }, async () => {
     this.warmingUp = true;
+    const bestuurseenheid = this.currentSession.group;
     const currentStatus = await this.getCurrentReportStatus();
     const response = await fetch(`/validation-report-api/reports/generate`, {
       method: 'POST',
@@ -318,6 +388,15 @@ export default class ValidatieService extends Service {
         'Validatie rapport'
       );
       return;
+    }
+  });
+
+  queueValidatie = task({ restartable: true }, async () => {
+    await timeout(20000);
+    if (this.isRunning) {
+      this.queueValidatie.perform();
+    } else {
+      this.generateReport.perform();
     }
   });
 

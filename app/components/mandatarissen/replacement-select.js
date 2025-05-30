@@ -15,6 +15,11 @@ export default class MandatarissenReplacementComponent extends Component {
   }
 
   async hasOverlappingMandate(replacement) {
+    if (!replacement) {
+      this.overlappingMandate = null;
+      return;
+    }
+
     if (replacement.id === this.args.mandataris.isBestuurlijkeAliasVan.id) {
       return;
     }

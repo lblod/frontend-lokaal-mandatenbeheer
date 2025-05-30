@@ -107,7 +107,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
   async loadBurgemeesterMandatarissen() {
     const burgemeesters = await this.burgemeesterMandate.bekleedDoor;
     const voorzitterVastBureau =
-      await this.voorzitterVastBureauMandate.bekleedDoor;
+      await this.voorzitterVastBureauMandate?.bekleedDoor;
 
     const targetMandatarisses = [];
 
@@ -120,7 +120,7 @@ export default class MandaatBurgemeesterSelectorComponent extends Component {
       this.aangewezenBurgemeester = burgemeesters[0];
       targetMandatarisses.push(burgemeesters[0]);
     }
-    if (voorzitterVastBureau.length === 0) {
+    if (!voorzitterVastBureau || voorzitterVastBureau.length === 0) {
       targetMandatarisses.push(
         await this.createMandataris(this.voorzitterVastBureauMandate)
       );

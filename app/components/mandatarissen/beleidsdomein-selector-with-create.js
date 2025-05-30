@@ -67,7 +67,7 @@ export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent exte
 
   @action
   select(beleidsdomeinen) {
-    this.selected.pushObjects(beleidsdomeinen);
+    this.selected = beleidsdomeinen;
     if (this.args.onSelect) {
       this.args.onSelect(this.selected);
     }

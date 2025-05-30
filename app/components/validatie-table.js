@@ -43,6 +43,9 @@ export default class ValidatieTable extends Component {
 
 function getOwnValidationErrors() {
   return trackedFunction(async () => {
-    return this.validatie.getIssuesForId(this.instance.id);
+    // entangle this property so the function reloads when it changes\
+    const _report = this.validatie.latestValidationReport;
+    // pass it along so it doesn't get optimized out, but the function ignores it
+    return this.validatie.getIssuesForInstance(this.instance, _report);
   });
 }
