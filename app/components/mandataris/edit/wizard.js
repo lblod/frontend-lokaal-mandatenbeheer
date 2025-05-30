@@ -9,6 +9,10 @@ import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
+import { timeout } from 'ember-concurrency';
+
+const UPDATE_STATE = 'update state';
+const CORRECT_MISTAKES = 'corrigeer fouten';
 
 export default class MandatarisEditWizard extends Component {
   @service toaster;
@@ -27,9 +31,13 @@ export default class MandatarisEditWizard extends Component {
   @tracked isMandatarisStepCompleted;
   @tracked isReplacementStepCompleted;
   @tracked isUpdateState;
+  @tracked correctedMandataris;
   @tracked isReplacementAdded;
 
-  @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
+  @tracked reasonForChangeOptions = [
+    { label: 'Update state', type: UPDATE_STATE },
+    { label: 'Corrigeer fouten', type: CORRECT_MISTAKES },
+  ];
   @tracked reasonForChange;
   @tracked replacementPerson;
   @tracked replacementMandataris;
@@ -103,18 +111,99 @@ export default class MandatarisEditWizard extends Component {
     return this.args.mandatarisFormValues?.einde;
   }
 
+  async updateReasonOptions() {
+    const newReasons = [];
+    const mandatarisStatus = await this.args.mandataris.status;
+    const fractie = await this.args.mandataris.get(
+      'heeftLidmaatschap.binnenFractie'
+    );
+    if (
+      this.args.mandatarisFormValues.status.isVerhinderd &&
+      !mandatarisStatus.isVerhinderd
+    ) {
+      newReasons.push({
+        label: 'De status van de mandataris is veranderd naar verhinderd',
+        type: UPDATE_STATE,
+      });
+    }
+    if (
+      this.args.mandatarisFormValues.fractie != fractie &&
+      fractie.isOnafhankelijk
+    ) {
+      const availableFracties = await this.mandatarisApi.getMandatarisFracties(
+        this.args.mandataris.id
+      );
+      if (
+        availableFracties.find(
+          (f) => f.id == this.args.mandatarisFormValues.fractie.id
+        )
+      ) {
+        newReasons.push({
+          label: 'De mandataris keert terug naar de oorspronkelijke fractie',
+          type: UPDATE_STATE,
+        });
+      }
+    }
+    if (
+      this.args.mandatarisFormValues.fractie != fractie &&
+      this.args.mandatarisFormValues.fractie.isOnafhankelijk
+    ) {
+      newReasons.push({
+        label: 'De mandataris gaat verder als onafhankelijke',
+        type: UPDATE_STATE,
+      });
+    }
+    if (
+      this.args.mandatarisFormValues.rangorde != this.args.mandataris.rangorde
+    ) {
+      newReasons.push({
+        label: 'De mandataris verandert van rangorde',
+        type: UPDATE_STATE,
+      });
+    }
+    if (this.args.mandatarisFormValues.status.isBeeindigd) {
+      newReasons.push({
+        label: 'Het mandaat wordt beëindigd',
+        type: CORRECT_MISTAKES,
+      });
+    } else {
+      newReasons.push({
+        label: 'Correctie van verkeerde gegevens over de mandataris',
+        type: CORRECT_MISTAKES,
+      });
+    }
+    this.reasonForChangeOptions = newReasons;
+    this.reasonForChange = newReasons[0];
+  }
+
+  async checkMandatarisInput() {
+    this.checkingMandatarisInput = true;
+    await timeout(300); // give date inputs time to update values
+
+    await this.updateReasonOptions();
+    this.checkingMandatarisInput = false;
+    return this.activeStep.canContinueToNextStep;
+  }
+
   @action
-  nextStep() {
-    const nextStepIndex = this.activeStepIndex + 1;
+  async nextStep() {
+    const canContinue = await this.checkMandatarisInput();
+    if (!canContinue) {
+      return null;
+    }
+    let nextStepIndex = this.activeStepIndex + 1;
     if (this.activeStepIsFinalStep) {
-      return;
+      return null;
+    }
+    while (
+      this.steps[nextStepIndex] &&
+      !this.steps[nextStepIndex].isStepShown
+    ) {
+      nextStepIndex++;
     }
     this.activeStepIndex = nextStepIndex;
-    if (this.steps[nextStepIndex]?.isStepShown) {
-      return this.steps[nextStepIndex];
-    } else {
-      this.nextStep();
-    }
+
+    return this.steps[nextStepIndex];
   }
 
   @action
@@ -180,9 +269,9 @@ export default class MandatarisEditWizard extends Component {
   @action
   async saveChanges() {
     this.isSaving = true;
-    if (this.reasonForChange == 'Corrigeer fouten') {
+    if (this.reasonForChange.type == CORRECT_MISTAKES) {
       await this.corrigeerFouten();
-    } else if (this.reasonForChange == 'Update state') {
+    } else if (this.reasonForChange.type == UPDATE_STATE) {
       await this.updateState();
     } else {
       this.isSaving = false;
@@ -213,6 +302,7 @@ export default class MandatarisEditWizard extends Component {
         this.args.mandatarisFormValues.fractie
       );
       this.isReplacementAdded = this.replacementPerson;
+      this.correctedMandataris = true;
       showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
     } catch (error) {
       showErrorToast(
