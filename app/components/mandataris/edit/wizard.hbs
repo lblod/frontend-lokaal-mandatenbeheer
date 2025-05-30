@@ -16,6 +16,7 @@
         @isFractieRequired={{@isFractieRequired}}
         @onFormIsValid={{this.updateMandatarisStepCompleted}}
         @onChange={{this.updateMandatarisFormValues}}
+        @onReplacementChange={{this.updateReplacement}}
       />
     {{/if}}
 
@@ -49,7 +50,7 @@
         </PowerSelect>
       </div>
 
-      {{#if this.isCorrecting}}
+      {{#if (and this.isCorrecting (not this.hideCorrectionWarning))}}
         <AuAlert @skin="info" @icon="alert-triangle" class="au-u-margin-top">
           Bij een correctie worden de bestaande gegevens
           <strong>overschreven</strong>
@@ -58,7 +59,7 @@
           rangorde of een verhindering, maar enkel om gegevens te corrigeren die
           eerder verkeerd ingegeven werden.
         </AuAlert>
-      {{else if this.reasonForChange}}
+      {{else if (and (not this.isCorrecting) this.reasonForChange)}}
         <div class="au-u-margin-top">
           De nieuwe toestand voor deze mandataris geldt vanaf
           <strong>{{moment-format this.formValues.start "DD-MM-YYYY"}}</strong>.
