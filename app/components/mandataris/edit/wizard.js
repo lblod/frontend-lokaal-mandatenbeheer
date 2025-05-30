@@ -25,6 +25,7 @@ export default class MandatarisEditWizard extends Component {
   @tracked activeStepIndex = 0;
   @tracked isMandatarisVerhinderd;
   @tracked isSaving;
+  @tracked formValues;
 
   @tracked isUnsavedChangesModalOpen;
   @tracked isRangordeModalOpen;
@@ -43,6 +44,11 @@ export default class MandatarisEditWizard extends Component {
   @tracked replacementMandataris;
   @tracked replacementProps;
   @tracked newMandataris;
+
+  constructor() {
+    super(...arguments);
+    this.formValues = this.args.mandatarisFormValues || {};
+  }
 
   get mandatarisTitle() {
     return `Bewerk ${this.args.mandataris.bekleedt.get('bestuursfunctie').get('label')} - ${this.args.mandataris.isBestuurlijkeAliasVan.get('naam')}`;
@@ -104,11 +110,15 @@ export default class MandatarisEditWizard extends Component {
   }
 
   get startForReplacement() {
-    return this.args.mandatarisFormValues?.start;
+    return this.formValues?.start;
   }
 
   get eindeForReplacement() {
-    return this.args.mandatarisFormValues?.einde;
+    return this.formValues?.einde;
+  }
+
+  get isCorrecting() {
+    return this.reasonForChange?.type === CORRECT_MISTAKES;
   }
 
   async updateReasonOptions() {
@@ -117,27 +127,17 @@ export default class MandatarisEditWizard extends Component {
     const fractie = await this.args.mandataris.get(
       'heeftLidmaatschap.binnenFractie'
     );
-    if (
-      this.args.mandatarisFormValues.status.isVerhinderd &&
-      !mandatarisStatus.isVerhinderd
-    ) {
+    if (this.formValues.status.isVerhinderd && !mandatarisStatus.isVerhinderd) {
       newReasons.push({
         label: 'De status van de mandataris is veranderd naar verhinderd',
         type: UPDATE_STATE,
       });
     }
-    if (
-      this.args.mandatarisFormValues.fractie != fractie &&
-      fractie.isOnafhankelijk
-    ) {
+    if (this.formValues.fractie != fractie && fractie.isOnafhankelijk) {
       const availableFracties = await this.mandatarisApi.getMandatarisFracties(
         this.args.mandataris.id
       );
-      if (
-        availableFracties.find(
-          (f) => f.id == this.args.mandatarisFormValues.fractie.id
-        )
-      ) {
+      if (availableFracties.find((f) => f.id == this.formValues.fractie.id)) {
         newReasons.push({
           label: 'De mandataris keert terug naar de oorspronkelijke fractie',
           type: UPDATE_STATE,
@@ -145,23 +145,21 @@ export default class MandatarisEditWizard extends Component {
       }
     }
     if (
-      this.args.mandatarisFormValues.fractie != fractie &&
-      this.args.mandatarisFormValues.fractie.isOnafhankelijk
+      this.formValues.fractie != fractie &&
+      this.formValues.fractie.isOnafhankelijk
     ) {
       newReasons.push({
         label: 'De mandataris gaat verder als onafhankelijke',
         type: UPDATE_STATE,
       });
     }
-    if (
-      this.args.mandatarisFormValues.rangorde != this.args.mandataris.rangorde
-    ) {
+    if (this.formValues.rangorde != this.args.mandataris.rangorde) {
       newReasons.push({
         label: 'De mandataris verandert van rangorde',
         type: UPDATE_STATE,
       });
     }
-    if (this.args.mandatarisFormValues.status.isBeeindigd) {
+    if (this.formValues.status.isBeeindigd) {
       newReasons.push({
         label: 'Het mandaat wordt beëindigd',
         type: CORRECT_MISTAKES,
@@ -288,19 +286,16 @@ export default class MandatarisEditWizard extends Component {
   @action
   async corrigeerFouten() {
     try {
-      this.args.mandataris.status = await this.args.mandatarisFormValues.status;
-      this.args.mandataris.start = this.args.mandatarisFormValues.start;
-      this.args.mandataris.einde = this.args.mandatarisFormValues.einde;
-      this.args.mandataris.rangorde = this.args.mandatarisFormValues.rangorde;
+      this.args.mandataris.status = await this.formValues.status;
+      this.args.mandataris.start = this.formValues.start;
+      this.args.mandataris.einde = this.formValues.einde;
+      this.args.mandataris.rangorde = this.formValues.rangorde;
       this.args.mandataris.tijdelijkeVervangingen = this.replacementMandataris
         ? [this.replacementMandataris]
         : [];
 
       await this.args.mandataris.save();
-      await this.handleFractie(
-        this.args.mandataris,
-        this.args.mandatarisFormValues.fractie
-      );
+      await this.handleFractie(this.args.mandataris, this.formValues.fractie);
       this.isReplacementAdded = this.replacementPerson;
       this.correctedMandataris = true;
       showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
@@ -314,7 +309,7 @@ export default class MandatarisEditWizard extends Component {
 
   async updateState() {
     let promise;
-    if ((await this.args.mandatarisFormValues.status).isBeeindigd) {
+    if ((await this.formValues.status).isBeeindigd) {
       promise = this.endMandataris();
     } else {
       promise = this.changeMandatarisState();
@@ -352,9 +347,9 @@ export default class MandatarisEditWizard extends Component {
     const newMandatarisProps = await this.mandatarisService.createNewProps(
       this.args.mandataris,
       {
-        start: this.args.mandatarisFormValues.start,
-        einde: this.args.mandatarisFormValues.einde,
-        status: await this.args.mandatarisFormValues.status,
+        start: this.formValues.start,
+        einde: this.formValues.einde,
+        status: await this.formValues.status,
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
         ),
@@ -363,18 +358,15 @@ export default class MandatarisEditWizard extends Component {
 
     const newMandataris = this.store.createRecord('mandataris', {
       ...newMandatarisProps,
-      rangorde: this.args.mandatarisFormValues.rangorde,
+      rangorde: this.formValues.rangorde,
     });
 
     await this.handleReplacement(newMandataris);
 
-    this.args.mandataris.einde = endOfDay(this.args.mandatarisFormValues.start);
+    this.args.mandataris.einde = endOfDay(this.formValues.start);
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
-    await this.handleFractie(
-      newMandataris,
-      this.args.mandatarisFormValues.fractie
-    );
+    await this.handleFractie(newMandataris, this.formValues.fractie);
 
     await this.mandatarisApi.copyOverNonDomainResourceProperties(
       this.args.mandataris.id,
@@ -439,5 +431,10 @@ export default class MandatarisEditWizard extends Component {
         this.newMandataris.id
       );
     }
+  }
+
+  @action
+  updateMandatarisFormValues(newFormValues) {
+    this.formValues = newFormValues;
   }
 }
