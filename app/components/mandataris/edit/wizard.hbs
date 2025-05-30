@@ -54,11 +54,11 @@
           Bij een correctie worden de bestaande gegevens
           <strong>overschreven</strong>
           door de nieuwe informatie die je ingegeven hebt. Gebruik dit dus niet
-          als de mandataris een verandering doormaakt zoals een
-          fractiewijziging, maar enkel om gegevens te corrigeren die eerder
-          verkeerd ingegeven werden.
+          als de mandataris een verandering doormaakt zoals een verandering van
+          rangorde of een verhindering, maar enkel om gegevens te corrigeren die
+          eerder verkeerd ingegeven werden.
         </AuAlert>
-      {{else}}
+      {{else if this.reasonForChange}}
         <div class="au-u-margin-top">
           De nieuwe toestand voor deze mandataris geldt vanaf
           <strong>{{moment-format this.formValues.start "DD-MM-YYYY"}}</strong>.
@@ -67,7 +67,11 @@
         </div>
 
       {{/if}}
-
+      <Mandatarissen::WizardDiff
+        @diffs={{this.getShownWizardDiffs}}
+        @isCorrecting={{this.isCorrecting}}
+        @replacement={{this.replacementPerson}}
+      />
     {{/if}}
   </:body>
   <:footer>
