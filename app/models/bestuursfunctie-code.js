@@ -67,4 +67,17 @@ export default class BestuursfunctieCodeModel extends Model {
       this.uri === MANDAAT_VOORZITTER_BCSD_CODE
     );
   }
+
+  get canMirrorToOCMW() {
+    return (
+      [
+        MANDAAT_GEMEENTERAADSLID_CODE,
+        MANDAAT_BURGEMEESTER_CODE,
+        MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
+        MANDAAT_VOORZITTER_GEMEENTERAAD_CODE,
+        MANDAAT_SCHEPEN_CODE,
+        MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE,
+      ].indexOf(this.uri) > -1
+    );
+  }
 }

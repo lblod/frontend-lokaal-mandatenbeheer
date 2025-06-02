@@ -53,22 +53,27 @@ export default class MandatarisService extends Service {
     replacementPerson,
     newMandatarisState
   ) {
-    const mandatarisStatus = await this.store.findRecord(
-      'mandataris-status-code',
-      MANDATARIS_WAARNEMEND_STATE_ID
-    );
-
     const existing = await this.getOverlappingMandate(
       toReplace,
       replacementPerson
     );
 
     if (existing) {
-      existing.status = mandatarisStatus;
-      existing.save();
-
       return existing;
     }
+
+    return this.createReplacement(
+      toReplace,
+      replacementPerson,
+      newMandatarisState
+    );
+  }
+
+  async createReplacement(toReplace, replacementPerson, newMandatarisState) {
+    const waarnemendStatus = await this.store.findRecord(
+      'mandataris-status-code',
+      MANDATARIS_WAARNEMEND_STATE_ID
+    );
 
     const newMandataris = this.store.createRecord('mandataris', {
       rangorde: newMandatarisState.rangorde,
@@ -79,11 +84,10 @@ export default class MandatarisService extends Service {
       beleidsdomein: newMandatarisState.beleidsdomein
         ? await newMandatarisState.beleidsdomein
         : [],
-      status: mandatarisStatus,
+      status: waarnemendStatus,
       publicationStatus: await getNietBekrachtigdPublicationStatus(this.store),
     });
     await newMandataris.save();
-
     return newMandataris;
   }
 

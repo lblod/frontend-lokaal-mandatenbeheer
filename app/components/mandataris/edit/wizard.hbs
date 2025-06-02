@@ -73,11 +73,12 @@
         @isCorrecting={{this.isCorrecting}}
         @replacement={{this.replacementPerson}}
       />
+
     {{/if}}
   </:body>
   <:footer>
     <AuToolbar as |Group|>
-      <Group>
+      <Group class="flex-grow">
         <AuButtonGroup>
           {{#if this.activeStepIsFinalStep}}
             <AuButton
@@ -108,6 +109,16 @@
             </AuButton>
           {{/unless}}
         </AuButtonGroup>
+        {{#if (and this.activeStepIsFinalStep this.canMirrorToOCMW)}}
+          <AuButtonGroup class="flex-grow au-u-flex--end">
+            <div class="au-u-margin-top">
+              <AuToggleSwitch
+                @checked={{this.mirrorToOCMW}}
+                @onChange={{this.toggleMirrorToOCMW}}
+              >Spiegel deze aanpassing naar OCMW</AuToggleSwitch>
+            </div>
+          </AuButtonGroup>
+        {{/if}}
       </Group>
     </AuToolbar>
   </:footer>
@@ -128,11 +139,12 @@
   <:title>Rangorde vervanger</:title>
   <:body>
     <p>
-      U heeft een mandataris, die een rangorde heeft, verhinderd. Deze rangorde
+      U heeft een mandataris die een rangorde heeft, verhinderd. Deze rangorde
       kan niet automatisch overgenomen worden in de vervanger. Het toewijzen van
       een rangorde kan namelijk gevolgen hebben op de rangorde van andere
       mandatarissen. Wenst u dit nu aan te passen? Het is ook mogelijk dit op
-      een later tijdstip aan te passen in de wijzig rangorde pagina.
+      een later tijdstip aan te passen via de "wijzig rangorde" functie in het
+      bestuursorgaan.
     </p>
   </:body>
   <:footer>
@@ -156,23 +168,3 @@
     </AuToolbar>
   </:footer>
 </AuModal>
-
-<Mandatarissen::Linked::Modal
-  @recentUpdate={{this.isReplacementAdded}}
-  @mandataris={{@mandataris.id}}
-  @replacement="true"
-/>
-
-<Mandatarissen::Linked::Modal
-  @recentUpdate={{this.isUpdateState}}
-  @mandataris={{@mandataris.id}}
-  @newMandataris={{this.newMandataris.id}}
-  @callback={{this.callbackAfterUpdate}}
-  @updateState="true"
-/>
-
-<Mandatarissen::Linked::Modal
-  @recentUpdate={{this.correctedMandataris}}
-  @mandataris={{@mandataris.id}}
-  @correct="true"
-/>

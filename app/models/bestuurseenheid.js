@@ -13,6 +13,7 @@ export default class Bestuurseenheid extends Model {
   @attr isTrialUser;
   @attr('boolean', { defaultValue: false }) hideLegislatuur;
   @attr('boolean', { defaultValue: false }) isLokaalBeheerd;
+  @attr('boolean', { defaultValue: false }) isFaciliteitenGemeente;
   @attr viewOnlyModules;
 
   @belongsTo('werkingsgebied', {

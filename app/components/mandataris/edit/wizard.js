@@ -33,6 +33,7 @@ export default class MandatarisEditWizard extends Component {
   @service store;
   @service('mandataris') mandatarisService;
   @service fractieApi;
+  @service currentSession;
   @service mandatarisApi;
 
   @tracked activeStepIndex = 0;
@@ -47,6 +48,9 @@ export default class MandatarisEditWizard extends Component {
   @tracked isUpdateState;
   @tracked correctedMandataris;
   @tracked isReplacementAdded;
+  @tracked mirrorToOCMW = false;
+  @tracked canMirrorToOCMW = false;
+  @tracked mandatarisHasDouble = undefined;
 
   @tracked reasonForChangeOptions = [
     { label: 'Update state', type: UPDATE_STATE },
@@ -253,16 +257,41 @@ export default class MandatarisEditWizard extends Component {
     return `${head} en ${tail}`;
   }
 
+  async checkIfCanMirrorToOCMW() {
+    const mandaatCanMirror = (
+      await this.args.mandataris.get('bekleedt.bestuursfunctie')
+    ).canMirrorToOCMW;
+    if (!mandaatCanMirror) {
+      this.canMirrorToOCMW = false;
+      return;
+    }
+    if (this.mandatarisHasDouble === undefined) {
+      const response = await fetch(
+        `/mandataris-api/mandatarissen/${this.args.mandataris.id}/check-possible-double`
+      );
+      const jsonResponse = await response.json();
+      this.mandatarisHasDouble = jsonResponse.hasDouble;
+    }
+    if (this.mandatarisHasDouble) {
+      this.canMirrorToOCMW = true;
+      this.mirrorToOCMW = !this.currentSession.group.isFaciliteitenGemeente;
+    } else {
+      this.canMirrorToOCMW = false;
+    }
+  }
+
   async checkMandatarisInput() {
     this.checkingMandatarisInput = true;
     await timeout(300); // give date inputs time to update values
 
-    await this.updateReasonOptions();
+    await this.checkIfCanMirrorToOCMW();
     const originalReplacement = (
       await this.args.mandataris.tijdelijkeVervangingen
     )?.[0];
     this.originalReplacementPerson =
       await originalReplacement?.isBestuurlijkeAliasVan;
+    await this.updateReasonOptions();
+
     this.checkingMandatarisInput = false;
     return this.activeStep.canContinueToNextStep;
   }
@@ -315,7 +344,6 @@ export default class MandatarisEditWizard extends Component {
   }
 
   setWizardValuesToStepOne() {
-    this.args.mandataris.rollbackAttributes();
     this.isUnsavedChangesModalOpen = false;
     this.activeStepIndex = 0;
     this.isMandatarisStepCompleted = false;
@@ -370,21 +398,39 @@ export default class MandatarisEditWizard extends Component {
   @action
   async corrigeerFouten() {
     try {
-      this.handleReplacement(this.args.mandataris);
+      const replacement = await this.handleReplacement(this.args.mandataris);
 
       this.args.mandataris.status = await this.formValues.status;
       this.args.mandataris.start = this.formValues.start;
       this.args.mandataris.einde = this.formValues.einde;
       this.args.mandataris.rangorde = this.formValues.rangorde;
-      this.args.mandataris.tijdelijkeVervangingen = this.replacementMandataris
-        ? [this.replacementMandataris]
+      this.args.mandataris.tijdelijkeVervangingen = replacement
+        ? [replacement]
         : [];
 
       await this.args.mandataris.save();
       await this.handleFractie(this.args.mandataris, this.formValues.fractie);
       this.isReplacementAdded = this.replacementPerson;
       this.correctedMandataris = true;
-      showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
+
+      let message = 'De mandataris werd succesvol aangepast.';
+
+      if (this.mirrorToOCMW) {
+        const response = await fetch(
+          `/mandataris-api/mandatarissen/${this.args.mandataris.id}/correct-linked-mandataris`,
+          { method: 'PUT' }
+        );
+        if (response.ok) {
+          message =
+            'De mandataris werd succesvol aangepast en gespiegeld in het OCMW.';
+        } else {
+          showErrorToast(
+            this.toaster,
+            'Er ging iets mis bij het aanpassen van het corresponderend mandaat in het OCMW.'
+          );
+        }
+      }
+      showSuccessToast(this.toaster, message);
     } catch (error) {
       showErrorToast(
         this.toaster,
@@ -401,12 +447,15 @@ export default class MandatarisEditWizard extends Component {
       promise = this.changeMandatarisState();
     }
 
+    let message = 'De status van het mandaat werd succesvol aangepast.';
+    if (this.mirrorToOCMW) {
+      message =
+        'De status van het mandaat werd succesvol aangepast en het corresponderend mandaat in het OCMW werd aangepast.';
+    }
+
     await promise
       .then((newMandataris) => {
-        showSuccessToast(
-          this.toaster,
-          'Status van mandaat werd succesvol aangepast.'
-        );
+        showSuccessToast(this.toaster, message);
         this.newMandataris = newMandataris;
         this.isReplacementAdded = this.replacementPerson;
         this.isUpdateState = true;
@@ -424,8 +473,25 @@ export default class MandatarisEditWizard extends Component {
 
   async endMandataris() {
     this.args.mandataris.einde = endOfDay(new Date());
+    let message = 'Het mandaat werd succesvol beëindigd.';
     await this.args.mandataris.save();
 
+    if (this.mirrorToOCMW) {
+      const response = await fetch(
+        `/mandataris-api/mandatarissen/${this.args.mandataris}/${this.args.newMandataris}/update-state-linked-mandataris`,
+        { method: 'PUT' }
+      );
+      if (response.ok) {
+        message =
+          'Het mandaat werd succesvol beëindigd en het corresponderend mandaat in het OCMW werd aangepast.';
+      } else {
+        showErrorToast(
+          this.toaster,
+          'Er ging iets mis bij het aanpassen van het corresponderend mandaat in het OCMW.'
+        );
+      }
+    }
+    showSuccessToast(this.toaster, message);
     return this.args.mandataris;
   }
 
@@ -447,9 +513,12 @@ export default class MandatarisEditWizard extends Component {
       rangorde: this.formValues.rangorde,
     });
 
-    await this.handleReplacement(newMandataris);
+    const replacement = await this.handleReplacement(newMandataris);
 
     this.args.mandataris.einde = endOfDay(this.formValues.start);
+    if (replacement) {
+      newMandataris.tijdelijkeVervangingen = [replacement];
+    }
     await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
 
     await this.handleFractie(newMandataris, this.formValues.fractie);
@@ -459,29 +528,70 @@ export default class MandatarisEditWizard extends Component {
       newMandataris.id
     );
 
+    if (this.mirrorToOCMW) {
+      const response = await fetch(
+        `/mandataris-api/mandatarissen/${this.args.mandataris.id}/${newMandataris.id}/update-state-linked-mandataris`,
+        { method: 'PUT' }
+      );
+      if (!response.ok) {
+        showErrorToast(
+          this.toaster,
+          'Er ging iets mis bij het aanpassen van het corresponderend mandaat in het OCMW.'
+        );
+      }
+    }
+
     return newMandataris;
   }
 
   async handleReplacement(replacedMandataris) {
-    if (this.replacementPerson) {
-      const replacementMandataris =
-        await this.mandatarisService.getOrCreateReplacement(
-          this.args.mandataris,
-          this.replacementPerson,
-          this.replacementProps
+    let replacer = null;
+    if (this.replacementMandataris) {
+      // the replacement mandataris was already chosen from a list of pre-existing mandatarissen. We can just connect to the existing one
+      if (this.mirrorToOCMW) {
+        const response = await fetch(
+          `/mandataris-api/mandatarissen/${this.replacementMandataris.id}/check-possible-double`
         );
-      await this.handleFractie(
-        replacementMandataris,
-        this.replacementProps.fractie
+        const jsonResponse = await response.json();
+        const isAvailableInOCMW = jsonResponse.hasDouble;
+        if (!isAvailableInOCMW) {
+          const createReplacementDoubleResponse = await fetch(
+            `/mandataris-api/mandatarissen/${this.replacementMandataris.id}/create-linked-mandataris`,
+            { method: 'POST' }
+          );
+          if (!createReplacementDoubleResponse.ok) {
+            throw new Error(
+              'Er ging iets mis bij het aanmaken van de vervanger in het OCMW.'
+            );
+          }
+        }
+      }
+      replacer = this.replacementMandataris;
+    } else if (this.replacementPerson) {
+      // we need to have a replacement created for the selected person
+      replacer = await this.mandatarisService.createReplacement(
+        this.args.mandataris,
+        this.replacementPerson,
+        this.replacementProps
       );
-      replacedMandataris.tijdelijkeVervangingen = [replacementMandataris];
+      await this.handleFractie(replacer, this.replacementProps.fractie);
+      if (this.mirrorToOCMW) {
+        const createReplacementDoubleResponse = await fetch(
+          `/mandataris-api/mandatarissen/${replacer.id}/create-linked-mandataris`,
+          { method: 'POST' }
+        );
+        if (!createReplacementDoubleResponse.ok) {
+          throw new Error(
+            'Er ging iets mis bij het aanmaken van de vervanger in het OCMW.'
+          );
+        }
+      }
     } else {
-      replacedMandataris.tijdelijkeVervangingen =
-        (await this.args.mandataris.tijdelijkeVervangingen) || [];
-      replacedMandataris.vervangerVan =
-        (await this.args.mandataris.vervangerVan) || [];
+      // no replacement selected
+      return null;
     }
-    return this.replacementMandataris;
+    replacer.tijdelijkeVervangingen = [replacedMandataris];
+    return replacer;
   }
 
   async handleFractie(mandataris, fractie) {
@@ -569,5 +679,10 @@ export default class MandatarisEditWizard extends Component {
   updateReplacement({ replacementPerson, replacementMandataris }) {
     this.replacementPerson = replacementPerson;
     this.replacementMandataris = replacementMandataris;
+  }
+
+  @action
+  toggleMirrorToOCMW() {
+    this.mirrorToOCMW = !this.mirrorToOCMW;
   }
 }
