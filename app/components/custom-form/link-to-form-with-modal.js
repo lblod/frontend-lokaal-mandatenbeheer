@@ -27,11 +27,11 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   @tracked selectedInstances = A([]);
   @tracked instanceDisplayLabels = [];
   @tracked pageToLoad = 0;
-  @tracked currentPagination;
   @tracked lastPageOfInstances;
   @tracked isLoadingMoreOptions;
   @tracked areAllInstancesFetched;
   @tracked searchValue;
+  @tracked instancesMetadata;
 
   constructor() {
     super(...arguments);
@@ -46,6 +46,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
       return;
     }
 
+    this.pageToLoad = 0;
     this.getInstances.perform();
   }
 
@@ -140,6 +141,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
         ),
       });
     }
+    instances.meta = this.instancesMetadata;
     return instances;
   }
 
@@ -154,21 +156,28 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
     };
   }
 
+  @action
+  fetchPreviousPage({ previousPage }) {
+    this.pageToLoad = previousPage;
+    console.log('previous:', this.pageToLoad);
+    this.getInstances.perform();
+  }
+
+  @action
+  fetchNextPage({ nextPage }) {
+    this.pageToLoad = nextPage;
+    console.log('next:', this.pageToLoad);
+    this.getInstances.perform();
+  }
+
   getInstances = task({ enqueue: true }, async () => {
     if (!this.formTypeUri || isNaN(this.pageToLoad)) {
       return;
     }
-    if (
-      this.currentPagination &&
-      this.currentPagination.self.number > this.currentPagination.last.number
-    ) {
-      return;
-    }
-
     const formInfo = await this.fetchInstancesForUris([]);
     this.instanceDisplayLabels = formInfo.labels;
+    this.instances.clear();
     this.instances.pushObjects(formInfo.instances);
-    this.getInstances.perform();
   });
 
   isSettingInitialSelectedOptions = task(async () => {
@@ -239,6 +248,8 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
       this.filterInstancesParams
     );
 
+    this.instancesMetadata = enrichedInstances.meta;
+
     return {
       instances: enrichedInstances,
       labels: formInfo.labels,
@@ -249,6 +260,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
     const instances = [];
     instances.push(..._instances);
     instances.meta = instances.meta || {};
+    console.log('instnaces', instances.meta);
     instances.meta.count = parseInt(response.headers.get('X-Total-Count'), 10);
     instances.meta.pagination = {
       first: {
@@ -269,8 +281,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
       };
     }
 
-    this.currentPagination = instances.meta.pagination;
-    this.pageToLoad = this.currentPagination.next?.number;
+    this.instancesMetadata = instances.meta;
 
     return instances;
   }

@@ -1,0 +1,28 @@
+<div class="au-u-flex au-u-flex--between au-u-flex--no-wrap au-u-padding-small">
+  <p class="au-u-muted">
+    <span class="au-u-medium">{{this.page}}</span>
+    van
+    {{this.totalItems}}
+  </p>
+  <AuList @direction="horizontal" @divider={{true}} as |Item|>
+    <Item>
+      <AuButton
+        @skin="link"
+        @icon="chevron-left"
+        {{on "click" this.onClickPrevious}}
+      >
+        vorige
+      </AuButton>
+    </Item>
+    <Item>
+      <AuButton
+        @skin="link"
+        @icon="chevron-right"
+        @iconAlignment="right"
+        {{on "click" this.onClickNext}}
+      >
+        volgende
+      </AuButton>
+    </Item>
+  </AuList>
+</div>
