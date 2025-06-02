@@ -78,6 +78,11 @@
             </c.body>
           </t.content>
         </AuDataTable>
+        <TablePagination
+          @metadata={{this.instancesMetadata}}
+          @onClickPrevious={{this.fetchPreviousPage}}
+          @onClickNext={{this.fetchNextPage}}
+        />
       </span>
     </:body>
     <:footer>
