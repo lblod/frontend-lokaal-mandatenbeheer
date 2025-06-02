@@ -31,6 +31,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   @tracked lastPageOfInstances;
   @tracked isLoadingMoreOptions;
   @tracked areAllInstancesFetched;
+  @tracked searchValue;
 
   constructor() {
     super(...arguments);
@@ -88,6 +89,11 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
     super.updateValidations();
   }
 
+  @action
+  filterResults(event) {
+    this.searchValue = event.target?.value;
+  }
+
   get hasSelectedOptions() {
     return this.selectedInstances?.length >= 1;
   }
@@ -129,7 +135,6 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
           };
         }),
         instance,
-        searchString: [...Object.values(instance), instance.id].join(';'),
         isSelected: !!this.selectedInstances.find(
           (o) => o.instance.id === instance.id
         ),
@@ -142,6 +147,10 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
     return {
       page: this.pageToLoad,
       size: 20,
+      filter:
+        this.searchValue && this.searchValue.trim() !== ''
+          ? this.searchValue
+          : null,
     };
   }
 
@@ -192,8 +201,10 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
     const queryParamsMap = {
       page: `page[number]=${this.filterInstancesParams.page}`,
       size: `page[size]=${this.filterInstancesParams.size}`,
+      filter: `filter=${this.filterInstancesParams.filter}`,
     };
     const queryParams = Object.keys(this.filterInstancesParams)
+      .filter((key) => this.filterInstancesParams[key])
       .map((key) => queryParamsMap[key])
       .join('&');
     const response = await fetch(

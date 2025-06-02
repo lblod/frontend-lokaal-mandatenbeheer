@@ -42,6 +42,13 @@
   >
     <:title>Link naar formulier</:title>
     <:body>
+      <AuLabel for="zoek-instantie">Zoek</AuLabel>
+      <AuInput
+        class="au-u-margin-bottom"
+        id="zoek-instantie"
+        @value={{this.searchValue}}
+        {{on "keyup" this.filterResults}}
+      />
       <span class="no-pagination">
         <AuDataTable
           @content={{this.instancesAsOptions}}
