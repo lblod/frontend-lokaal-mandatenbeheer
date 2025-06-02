@@ -150,7 +150,9 @@ export default class MandatarisEditWizard extends Component {
     const fractie = await this.args.mandataris.get(
       'heeftLidmaatschap.binnenFractie'
     );
-    if (this.formValues.status.isBeeindigd) {
+    const newStatus = await this.formValues.status;
+
+    if (newStatus.isBeeindigd) {
       newReasons.push({
         label: 'Het mandaat wordt beëindigd',
         type: CORRECT_MISTAKES,
@@ -190,7 +192,7 @@ export default class MandatarisEditWizard extends Component {
         type: UPDATE_STATE,
       });
     }
-    if (this.formValues.status.isVerhinderd && !mandatarisStatus.isVerhinderd) {
+    if (newStatus.isVerhinderd && !mandatarisStatus.isVerhinderd) {
       newReasons.push({
         label: 'raakt verhinderd',
         type: UPDATE_STATE,
@@ -430,6 +432,7 @@ export default class MandatarisEditWizard extends Component {
           );
         }
       }
+      this.router.refresh();
       showSuccessToast(this.toaster, message);
     } catch (error) {
       showErrorToast(
@@ -454,12 +457,18 @@ export default class MandatarisEditWizard extends Component {
     }
 
     await promise
-      .then((newMandataris) => {
+      .then(async (newMandataris) => {
         showSuccessToast(this.toaster, message);
         this.newMandataris = newMandataris;
         this.isReplacementAdded = this.replacementPerson;
         this.isUpdateState = true;
-        this.shouldOpenRangordeModal();
+        const waitForRangorde = await this.shouldOpenRangordeModal();
+        if (!waitForRangorde) {
+          this.router.transitionTo(
+            'mandatarissen.mandataris',
+            newMandataris.id
+          );
+        }
       })
       .catch((e) => {
         this.isSaving = false;
@@ -617,6 +626,7 @@ export default class MandatarisEditWizard extends Component {
     if (this.replacementPerson) {
       this.isRangordeModalOpen = true;
     }
+    return this.isRangordeModalOpen;
   }
 
   get wizardDiffs() {
@@ -684,5 +694,11 @@ export default class MandatarisEditWizard extends Component {
   @action
   toggleMirrorToOCMW() {
     this.mirrorToOCMW = !this.mirrorToOCMW;
+  }
+
+  @action
+  dontNavigateToRangorde() {
+    this.isRangordeModalOpen = false;
+    this.router.transitionTo('mandatarissen.mandataris', this.newMandataris.id);
   }
 }

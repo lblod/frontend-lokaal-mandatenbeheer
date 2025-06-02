@@ -162,7 +162,7 @@
         </AuLink>
         <AuButton
           @skin="secondary"
-          {{on "click" (fn (mut this.isRangordeModalOpen) false)}}
+          {{on "click" this.dontNavigateToRangorde}}
         >Nee</AuButton>
       </Group>
     </AuToolbar>
