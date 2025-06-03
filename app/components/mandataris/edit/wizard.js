@@ -666,9 +666,21 @@ export default class MandatarisEditWizard extends Component {
   }
 
   get getShownWizardDiffs() {
-    return this.wizardDiffs.filter((field) => {
+    const shown = this.wizardDiffs.filter((field) => {
       return !field.correctingOnly || this.isCorrecting;
     });
+    if (shown.length === 0) {
+      return this.wizardDiffs;
+    } else {
+      return shown;
+    }
+  }
+
+  get newStateDateWarning() {
+    return moment(this.args.mandataris.start).isSameOrAfter(
+      this.formValues.start,
+      'day'
+    );
   }
 
   @action

@@ -68,6 +68,19 @@
           stap.
         </div>
 
+        {{#if this.newStateDateWarning}}
+          <AuAlert
+            @skin="warning"
+            @icon="alert-triangle"
+            class="au-u-margin-top"
+          >
+            De startdatum van de nieuwe toestand is gelijk aan of eerder dan de
+            startdatum van de vorige toestand.
+            <strong>Dit is waarschijnlijk een fout.</strong>
+            Je kan de startdatum aanpassen in de eerste stap.
+          </AuAlert>
+        {{/if}}
+
       {{/if}}
       <Mandatarissen::WizardDiff
         @diffs={{this.getShownWizardDiffs}}
