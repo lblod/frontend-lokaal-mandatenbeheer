@@ -62,6 +62,9 @@ export default class MandatarisEditWizard extends Component {
   @tracked replacementProps;
   @tracked newMandataris;
   @tracked originalReplacementPerson;
+  @tracked startForReplacement;
+  @tracked endForReplacement;
+  @tracked fractieForReplacement;
 
   constructor() {
     super(...arguments);
@@ -125,14 +128,6 @@ export default class MandatarisEditWizard extends Component {
 
   get isSaveButtonDisabled() {
     return !this.activeStep.canContinueToNextStep || this.isSaving;
-  }
-
-  get startForReplacement() {
-    return this.formValues?.start;
-  }
-
-  get eindeForReplacement() {
-    return this.formValues?.einde;
   }
 
   get isCorrecting() {
@@ -295,6 +290,11 @@ export default class MandatarisEditWizard extends Component {
     await this.updateReasonOptions();
 
     this.checkingMandatarisInput = false;
+
+    this.startForReplacement =
+      this.startForReplacement || this.formValues?.start;
+    this.endForReplacement = this.endForReplacement || this.formValues?.einde;
+
     return this.activeStep.canContinueToNextStep;
   }
 
@@ -371,6 +371,9 @@ export default class MandatarisEditWizard extends Component {
     if (isCompleted) {
       this.replacementProps = replacementProps;
     }
+    this.startForReplacement = replacementProps.start;
+    this.endForReplacement = replacementProps.einde;
+    this.fractieForReplacement = replacementProps.fractie;
   }
 
   @action
