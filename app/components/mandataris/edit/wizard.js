@@ -532,11 +532,6 @@ export default class MandatarisEditWizard extends Component {
 
     await this.handleFractie(newMandataris, this.formValues.fractie);
 
-    await this.mandatarisApi.copyOverNonDomainResourceProperties(
-      this.args.mandataris.id,
-      newMandataris.id
-    );
-
     if (this.mirrorToOCMW) {
       const response = await fetch(
         `/mandataris-api/mandatarissen/${this.args.mandataris.id}/${newMandataris.id}/update-state-linked-mandataris`,
@@ -611,8 +606,11 @@ export default class MandatarisEditWizard extends Component {
       return;
     }
     await this.mandatarisService.createNewLidmaatschap(mandataris, fractie);
-    await this.fractieApi.updateCurrentFractie(mandataris.id);
-    await this.mandatarisService.removeDanglingFractiesInPeriod(mandataris.id);
+    await this.fractieApi.updateCurrentFractie(mandataris.id, true);
+    await this.mandatarisService.removeDanglingFractiesInPeriod(
+      mandataris.id,
+      true
+    );
   }
 
   async shouldOpenRangordeModal() {

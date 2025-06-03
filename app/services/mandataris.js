@@ -145,14 +145,17 @@ export default class MandatarisService extends Service {
     return status && status.uri !== MANDATARIS_BEEINDIGD_STATE;
   }
 
-  async removeDanglingFractiesInPeriod(mandatarisId) {
+  async removeDanglingFractiesInPeriod(mandatarisId, noTimeout = false) {
     const mandataris = await this.store.findRecord('mandataris', mandatarisId);
     const mandaat = await mandataris.bekleedt;
     const bestuursorganenInTijd = await mandaat.bevatIn;
     if (bestuursorganenInTijd.length >= 1) {
       const first = bestuursorganenInTijd.at(0);
       const periode = await first.heeftBestuursperiode;
-      await this.fractieApi.removeFractieWhenNoLidmaatschap(periode.id);
+      await this.fractieApi.removeFractieWhenNoLidmaatschap(
+        periode.id,
+        noTimeout
+      );
     }
   }
 }
