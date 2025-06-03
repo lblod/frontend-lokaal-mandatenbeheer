@@ -93,6 +93,8 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   @action
   filterResults(event) {
     this.searchValue = event.target?.value;
+    this.pageToLoad = 0;
+    this.getInstances.perform();
   }
 
   get hasSelectedOptions() {
@@ -119,10 +121,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
     const keysOfLabels = this.instanceDisplayLabels.map((label) => label.name);
     const uniqueInstanceIds = [];
     const instances = [];
-    for (const instance of [
-      ...this.instances,
-      ...this.initialSelectedInstances,
-    ]) {
+    for (const instance of this.instances) {
       if (uniqueInstanceIds.includes(instance.id)) {
         continue;
       } else {
