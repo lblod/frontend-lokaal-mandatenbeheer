@@ -22,9 +22,8 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   @tracked isModalOpen;
 
   @tracked instanceObjectsOfOptions = [];
-  @tracked initialSelectedInstances = A([]);
   @tracked instances = A([]);
-  @tracked selectedInstances = A([]);
+  @tracked selectedInstanceOptions = A([]);
   @tracked instanceDisplayLabels = [];
   @tracked pageToLoad = 0;
   @tracked lastPageOfInstances;
@@ -53,6 +52,8 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   @action
   onCloseModal(onInteractedWithField) {
     this.isModalOpen = false;
+    this.searchValue = null;
+    this.pageToLoad = 0;
     onInteractedWithField?.();
   }
 
@@ -60,24 +61,26 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   async selectInstance(option) {
     const matches = triplesForPath(this.storeOptions, true).values;
     if (option.isSelected) {
-      const toRemove = this.selectedInstances.find(
+      const toRemove = this.selectedInstanceOptions.find(
         (o) => o.instance.uri == option.instance.uri
       );
-      this.selectedInstances.removeObject(toRemove);
+      this.selectedInstanceOptions.removeObject(toRemove);
     } else {
-      this.selectedInstances.pushObject(option);
+      this.selectedInstanceOptions.pushObject(option);
     }
 
     // Cleanup
     matches
       .filter(
         (m) =>
-          !this.selectedInstances.find((opt) => m.value == opt.instance.uri)
+          !this.selectedInstanceOptions.find(
+            (opt) => m.value == opt.instance.uri
+          )
       )
       .forEach((m) => updateSimpleFormValue(this.storeOptions, undefined, m));
 
     // Insert
-    this.selectedInstances
+    this.selectedInstanceOptions
       .filter(
         (selected) => !matches.find((m) => selected.instance.uri == m.value)
       )
@@ -98,7 +101,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   }
 
   get hasSelectedOptions() {
-    return this.selectedInstances?.length >= 1;
+    return this.selectedInstanceOptions?.length >= 1;
   }
 
   get formTypeUri() {
@@ -118,10 +121,17 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   }
 
   get instancesAsOptions() {
+    const instances = this.instancesToOptions(this.instances);
+
+    instances.meta = this.instancesMetadata;
+    return instances;
+  }
+
+  instancesToOptions(_instances) {
     const keysOfLabels = this.instanceDisplayLabels.map((label) => label.name);
     const uniqueInstanceIds = [];
     const instances = [];
-    for (const instance of this.instances) {
+    for (const instance of _instances) {
       if (uniqueInstanceIds.includes(instance.id)) {
         continue;
       } else {
@@ -135,12 +145,12 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
           };
         }),
         instance,
-        isSelected: !!this.selectedInstances.find(
+        isSelected: !!this.selectedInstanceOptions.find(
           (o) => o.instance.id === instance.id
         ),
       });
     }
-    instances.meta = this.instancesMetadata;
+
     return instances;
   }
 
@@ -190,16 +200,9 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
         return;
       }
 
-      this.initialSelectedInstances.pushObjects(formInfo.instances);
-      const selectedOptions = this.instancesAsOptions.filter((option) =>
-        formInfo.instances
-          .map((i) => i.id)
-          .filter(
-            (isInstance) => isInstance && isInstance !== this.LOAD_MORE_ID
-          )
-          .includes(option.instance?.id)
+      this.selectedInstanceOptions.pushObjects(
+        this.instancesToOptions(formInfo.instances)
       );
-      this.selectedInstances.pushObjects(selectedOptions);
     }
   });
 
