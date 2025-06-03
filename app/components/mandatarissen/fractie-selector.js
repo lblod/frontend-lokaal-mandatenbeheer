@@ -24,9 +24,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
 
   constructor() {
     super(...arguments);
-    if (this.args.fractie) {
-      this._fractie = this.args.fractie;
-    }
     this.load.perform();
   }
 

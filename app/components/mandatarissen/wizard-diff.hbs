@@ -1,0 +1,21 @@
+<div class="timeline-diffs au-u-margin-top">
+  <p class="au-u-margin-bottom-small">De volgende eigenschappen zullen aangepast
+    worden:</p>
+  {{#each @diffs as |diff|}}
+    <div class="diff">
+      <div class="au-u-bold">Oude {{diff.field}}</div>
+      <div class={{unless diff.old "au-u-muted au-u-italic"}}>{{or
+          diff.old
+          "Niet beschikbaar"
+        }}</div>
+      <AuIcon @icon="arrow-down" />
+      <div class="au-u-bold">Nieuwe {{diff.field}}</div>
+      <div class={{unless diff.current "au-u-muted au-u-italic"}}>{{or
+          diff.current
+          "Niet beschikbaar"
+        }}</div>
+    </div>
+    <AuHr class="au-u-margin-top-tiny au-u-margin-bottom-tiny" />
+  {{/each}}
+  {{yield}}
+</div>

@@ -4,12 +4,8 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
 import { isDisabledForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
-
-import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
-import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 
 import moment from 'moment';
 import { trackedFunction } from 'reactiveweb/function';
@@ -18,39 +14,25 @@ import { use } from 'ember-resources';
 function getStatusOptions() {
   return trackedFunction(async () => {
     return await this.mandatarisStatus.getStatusOptionsForMandate(
-      this.args.mandataris.bekleedt
+      this.args.formValues.bekleedt
     );
   });
 }
 
 export default class MandatarisEditFormComponent extends Component {
-  @service store;
-  @service router;
-  @service toaster;
   @service mandatarisStatus;
-  @service('mandataris') mandatarisService;
-  @service fractieApi;
-  @service mandatarisApi;
 
   @tracked mandaat;
   @tracked status;
-  @tracked replacement;
   @tracked startDate;
   @tracked endDate;
   @tracked fractie;
   @tracked rangorde;
+  @tracked person;
+  @tracked replacementMandataris;
+  @tracked replacementPerson;
 
-  @tracked isSecondModalOpen = false;
-  @tracked reasonForChangeOptions = ['Update state', 'Corrigeer fouten'];
-  @tracked reasonForChange;
   @tracked errorMap = new Map();
-
-  @tracked correctedMandataris = false;
-  @tracked updatedStateMandataris = false;
-  @tracked newMandataris;
-
-  @tracked isRangordeModalOpen;
-  @tracked isSaving;
 
   @use(getStatusOptions) getStatusOptions;
 
@@ -61,15 +43,17 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   async setInitialFormState() {
-    this.mandaat = await this.args.mandataris.bekleedt;
-    this.status = await this.args.mandataris.status;
-    this.startDate = this.args.mandataris.start;
-    this.endDate = this.args.mandataris.einde;
-    this.fractie = await this.args.mandataris.get(
-      'heeftLidmaatschap.binnenFractie'
-    );
-    this.rangorde = this.args.mandataris.rangorde;
-    this.replacement = null;
+    this.startDate = this.args.formValues.start;
+    this.endDate = this.args.formValues.einde;
+    this.rangorde = this.args.formValues.rangorde;
+    this.mandaat = await this.args.formValues.bekleedt;
+    this.status = await this.args.formValues.status;
+    this.fractie = await this.args.formValues.fractie;
+    this.person = await this.args.formValues.isBestuurlijkeAliasVan;
+    this.replacementMandataris =
+      (await this.args.formValues.tijdelijkeVervangingen)?.[0] || null;
+    this.replacementPerson =
+      await this.replacementMandataris?.isBestuurlijkeAliasVan;
   }
 
   get statusOptions() {
@@ -78,12 +62,12 @@ export default class MandatarisEditFormComponent extends Component {
 
   get hasChanges() {
     return (
-      this.status?.id !== this.args.mandataris.status?.id ||
-      !moment(this.startDate).isSame(moment(this.args.mandataris.start)) ||
-      !moment(this.endDate).isSame(moment(this.args.mandataris.einde)) ||
-      this.fractie?.id !==
-        this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
-      this.rangorde !== this.args.mandataris.rangorde
+      this.status?.id !== this.args.formValues.status?.id ||
+      !moment(this.startDate).isSame(moment(this.args.formValues.start)) ||
+      !moment(this.endDate).isSame(moment(this.args.formValues.einde)) ||
+      this.fractie?.id !== this.args.formValues.fractie.id ||
+      this.rangorde !== this.args.formValues.rangorde ||
+      this.replacementPerson?.id !== this.person.id
     );
   }
 
@@ -95,20 +79,17 @@ export default class MandatarisEditFormComponent extends Component {
     return 'Er zijn geen wijzigingen om op te slaan.';
   }
 
-  get showReplacement() {
-    return (
-      this.status.get('isVerhinderd') &&
-      !this.args.mandataris.status.get('isVerhinderd')
-    );
+  get isStatusVerhinderd() {
+    return this.status?.get('isVerhinderd');
   }
 
   get isTerminatingMandate() {
-    return this.status.get('isBeeindigd');
+    return this.status?.get('isBeeindigd');
   }
 
   get showRangordeField() {
     return (
-      this.mandaat.get('hasRangorde') &&
+      this.mandaat?.get('hasRangorde') &&
       this.status?.get('uri') !== MANDATARIS_VERHINDERD_STATE
     );
   }
@@ -125,7 +106,7 @@ export default class MandatarisEditFormComponent extends Component {
     return `Eerste ${this.mandaatLabel}`;
   }
 
-  get replacementError() {
+  get hasReplacementError() {
     return this.errorMap.get('replacement');
   }
 
@@ -139,215 +120,83 @@ export default class MandatarisEditFormComponent extends Component {
   updateErrorMap({ id, hasErrors }) {
     this.errorMap.set(id, !!hasErrors);
     this.errorMap = new Map(this.errorMap);
+
+    this.args.formValues.start = this.startDate;
+    this.args.formValues.einde = this.endDate;
+    this.args.formValues.status = this.status;
+    this.args.formValues.rangorde = this.rangorde;
+    this.args.formValues.fractie = this.fractie;
+
+    if (this.replacementMandataris) {
+      this.args.formValues.tijdelijkeVervangingen = [
+        this.replacementMandataris,
+      ];
+    }
+
+    this.args.onFormIsValid?.(
+      !this.formHasErrors && !this.disabled && this.hasChanges,
+      {
+        mandataris: this.args.formValues,
+        replacementPerson: this.replacementPerson,
+        replacementMandataris: this.replacementMandataris,
+      }
+    );
   }
 
   @action
   updateStatus(status) {
     this.status = status;
+    this.updateErrorMap({ id: 'status', hasErrors: false });
+    this.args.onChange({
+      ...this.args.formValues,
+      status: status,
+    });
   }
 
   @action
-  updateReplacement(newReplacement) {
-    this.replacement = newReplacement;
+  updateReplacement(person, overlappingMandate) {
+    this.replacementPerson = person;
+    this.replacementMandataris = overlappingMandate;
     this.updateErrorMap({
       id: 'replacement',
-      hasErrors:
-        newReplacement?.id === this.args.mandataris.isBestuurlijkeAliasVan.id,
+      hasErrors: person?.id === this.args.formValues.isBestuurlijkeAliasVan.id,
+    });
+    this.args.onChange({
+      ...this.args.formValues,
+    });
+    this.args.onReplacementChange({
+      replacementPerson: person,
+      replacementMandataris: overlappingMandate,
     });
   }
 
   @action updateFractie(newFractie) {
     this.fractie = newFractie;
+    this.updateErrorMap({ id: 'fractie', hasErrors: false });
+    this.args.onChange({
+      ...this.args.formValues,
+      fractie: newFractie,
+    });
   }
 
   @action
   updateStartEndDate(startDate, endDate) {
     this.startDate = startDate;
     this.endDate = endDate;
+    this.args.onChange({
+      ...this.args.formValues,
+      start: startDate,
+      einde: endDate,
+    });
   }
 
   @action
   updateRangorde(rangordeAsString) {
     this.rangorde = rangordeAsString;
-  }
-
-  @action
-  confirmMandatarisChanges() {
-    this.args.toggleModal(false);
-    this.isSecondModalOpen = true;
-  }
-
-  @action
-  selectReasonForChange(reason) {
-    this.reasonForChange = reason;
-  }
-
-  @action
-  async saveForm() {
-    this.isSaving = true;
-    if (this.reasonForChange == 'Corrigeer fouten') {
-      await this.corrigeerFouten();
-      this.correctedMandataris = true;
-    } else if (this.reasonForChange == 'Update state') {
-      await this.updateState();
-      this.updatedStateMandataris = true;
-    } else {
-      this.isSaving = false;
-      showErrorToast(
-        this.toaster,
-        'Geen geldige reden voor aanpassing geselecteerd'
-      );
-      return;
-    }
-    this.isSaving = false;
-    this.reasonForChange = null;
-    this.isSecondModalOpen = false;
-    await this.setInitialFormState();
-  }
-
-  @action
-  cancel() {
-    this.setInitialFormState();
-    this.args.toggleModal(false);
-    this.isSecondModalOpen = false;
-  }
-
-  @action
-  goBackSecondModal() {
-    this.isSecondModalOpen = false;
-    this.args.toggleModal(true);
-  }
-
-  @action
-  async corrigeerFouten() {
-    try {
-      this.args.mandataris.status = this.status;
-      this.args.mandataris.start = this.startDate;
-      this.args.mandataris.einde = this.endDate;
-      this.args.mandataris.rangorde = this.rangorde;
-      this.args.mandataris.tijkdelijkeVervangingen = [this.replacement];
-      await this.args.mandataris.save();
-      await this.handleFractie(this.args.mandataris);
-      showSuccessToast(this.toaster, 'De mandataris werd succesvol aangepast');
-    } catch (error) {
-      showErrorToast(
-        this.toaster,
-        'Er ging iets mis bij het aanpassen van het mandaat.'
-      );
-    }
-  }
-
-  async updateState() {
-    let promise;
-    if (this.status.get('isBeeindigd')) {
-      promise = this.endMandataris();
-    } else {
-      promise = this.changeMandatarisState();
-    }
-
-    await promise
-      .then((newMandataris) => {
-        showSuccessToast(
-          this.toaster,
-          'Status van mandaat werd succesvol aangepast.'
-        );
-        this.newMandataris = newMandataris;
-        this.shouldOpenRangordeModal();
-      })
-      .catch((e) => {
-        console.log(e);
-        showErrorToast(
-          this.toaster,
-          'Er ging iets mis bij het aanpassen van de status van het mandaat.'
-        );
-      });
-  }
-
-  async endMandataris() {
-    this.endDate = endOfDay(new Date());
-    this.args.mandataris.einde = this.endDate;
-    await this.args.mandataris.save();
-
-    return this.args.mandataris;
-  }
-
-  async changeMandatarisState() {
-    const newMandatarisProps = await this.mandatarisService.createNewProps(
-      this.args.mandataris,
-      {
-        start: this.startDate,
-        einde: this.endDate,
-        status: this.status,
-        publicationStatus: await getNietBekrachtigdPublicationStatus(
-          this.store
-        ),
-      }
-    );
-
-    const newMandataris = this.store.createRecord('mandataris', {
-      ...newMandatarisProps,
-      rangorde: this.rangorde,
+    this.updateErrorMap({ id: 'rangorde', hasErrors: false });
+    this.args.onChange({
+      ...this.args.formValues,
+      rangorde: rangordeAsString,
     });
-
-    if (this.replacement) {
-      newMandatarisProps.rangorde = '';
-      const replacementMandataris =
-        await this.mandatarisService.getOrCreateReplacement(
-          this.args.mandataris,
-          this.replacement,
-          // passing these along because if we pass the model, relations will be
-          // evaluated as of right now and we haven't saved yet
-          newMandatarisProps
-        );
-      newMandataris.tijdelijkeVervangingen = [replacementMandataris];
-    } else {
-      newMandataris.tijdelijkeVervangingen =
-        (await this.args.mandataris.tijdelijkeVervangingen) || [];
-      newMandataris.vervangerVan =
-        (await this.args.mandataris.vervangerVan) || [];
-    }
-
-    this.args.mandataris.einde = endOfDay(this.startDate);
-    await Promise.all([newMandataris.save(), this.args.mandataris.save()]);
-
-    await this.handleFractie(newMandataris);
-
-    await this.mandatarisApi.copyOverNonDomainResourceProperties(
-      this.args.mandataris.id,
-      newMandataris.id
-    );
-
-    return newMandataris;
-  }
-
-  async handleFractie(mandataris) {
-    await this.mandatarisService.createNewLidmaatschap(
-      mandataris,
-      this.fractie
-    );
-    await this.fractieApi.updateCurrentFractie(mandataris.id);
-    await this.mandatarisService.removeDanglingFractiesInPeriod(mandataris.id);
-  }
-
-  shouldOpenRangordeModal() {
-    if (!this.mandaat.get('hasRangorde')) {
-      return false;
-    }
-    if (this.status?.get('uri') !== MANDATARIS_VERHINDERD_STATE) {
-      return false;
-    }
-    if (this.replacement) {
-      this.isRangordeModalOpen = true;
-    }
-  }
-
-  @action
-  callbackAfterUpdate() {
-    if (this.newMandataris != this.args.mandataris) {
-      this.router.transitionTo(
-        'mandatarissen.mandataris',
-        this.newMandataris.id
-      );
-    }
   }
 }

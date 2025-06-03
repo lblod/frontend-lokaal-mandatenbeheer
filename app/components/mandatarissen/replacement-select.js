@@ -1,29 +1,31 @@
 import Component from '@glimmer/component';
 
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 
-import { trackedFunction } from 'reactiveweb/function';
-import { use } from 'ember-resources';
+export default class MandatarissenReplacementComponent extends Component {
+  @tracked overlappingMandate;
+  @service mandataris;
 
-function getOverlappingMandate() {
-  return trackedFunction(async () => {
-    const replacement = this.args.selected;
+  @action
+  async selectPerson(person) {
+    await this.hasOverlappingMandate(person);
+    this.args.onSelect(person, this.overlappingMandate);
+  }
+
+  async hasOverlappingMandate(replacement) {
+    if (!replacement) {
+      this.overlappingMandate = null;
+      return;
+    }
+
     if (replacement.id === this.args.mandataris.isBestuurlijkeAliasVan.id) {
       return;
     }
-    return await this.mandataris.getOverlappingMandate(
+    this.overlappingMandate = await this.mandataris.getOverlappingMandate(
       this.args.mandataris,
       replacement
     );
-  });
-}
-
-export default class MandatarissenReplacementComponent extends Component {
-  @service mandataris;
-
-  @use(getOverlappingMandate) getOverlappingMandate;
-
-  get overlappingMandate() {
-    return this.getOverlappingMandate?.value;
   }
 }

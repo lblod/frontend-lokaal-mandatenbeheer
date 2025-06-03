@@ -19,7 +19,6 @@ export default class DateInputComponent extends Component {
   @tracked dateInputString;
   @tracked warningMessage;
   @tracked errorMessage;
-  @tracked invalidErrorMessage;
 
   constructor() {
     super(...arguments);
@@ -47,14 +46,14 @@ export default class DateInputComponent extends Component {
     );
 
     if (!this.args.isRequired && !isValidDate(date)) {
-      this.invalidErrorMessage = null;
+      this.errorMessage = null;
     }
 
     if (!isValidDate(date)) {
-      this.args.onChange?.(null);
+      this.args.onChange?.(null, this.errorMessage);
       return;
     }
-    this.args.onChange?.(date);
+    this.args.onChange?.(date, this.errorMessage);
   });
 
   processDate(date) {
@@ -62,13 +61,12 @@ export default class DateInputComponent extends Component {
       date = endOfDay(date);
     }
     if (!isValidDate(date)) {
-      this.invalidErrorMessage = `Datum is ongeldig.`;
-      this.errorMessage = null;
+      this.errorMessage = `Datum is ongeldig.`;
       this.warningMessage = null;
 
       return date;
     }
-    this.invalidErrorMessage = null;
+    this.errorMessage = null;
 
     const minDate = isValidDate(this.args.from) ? this.args.from : null;
     const maxDate =
@@ -113,6 +111,6 @@ export default class DateInputComponent extends Component {
   }
 
   get errorMessages() {
-    return `${this.invalidErrorMessage ?? ''} ${this.invalidErrorMessage ? '\n' : ''} ${this.errorMessage ?? ''}`;
+    return `${this.errorMessage ?? ''}`;
   }
 }

@@ -1,209 +1,85 @@
-<AuModal @modalOpen={{@isOpen}} @closable={{true}} @closeModal={{this.cancel}}>
-  <:title>
-    Bewerk mandaat
-    <p class="au-u-h4 au-u-regular">
-      {{@bestuursorganenTitle}}
-    </p>
-
-  </:title>
-  <:body>
-    <div class="au-u-flex au-u-flex--column au-o-flow">
-      <div>
-        <AuLabel @required={{true}}>
-          Status
-        </AuLabel>
-        <PowerSelect
-          @allowClear={{false}}
-          @selected={{this.status}}
-          @options={{this.statusOptions}}
-          @onChange={{this.updateStatus}}
-          @searchEnabled={{true}}
-          @searchField="label"
-          @noMatchesMessage="Geen resultaten"
-          as |status|
-        >
-          {{status.label}}
-        </PowerSelect>
-      </div>
-      {{#unless this.isTerminatingMandate}}
-        {{#if this.showReplacement}}
-          <div>
-            <AuLabel>
-              Vervanger
-            </AuLabel>
-            <Mandatarissen::ReplacementSelect
-              @mandataris={{@mandataris}}
-              @selected={{this.replacement}}
-              @onSelect={{this.updateReplacement}}
-              @bestuursorgaanIT={{@bestuursorgaanIT}}
-              @inline={{true}}
-            />
-            {{#if this.replacementError}}
-              <AuAlert
-                @skin="error"
-                @icon="alert-triangle"
-                class="au-u-margin-top"
-              >
-                Dit is dezelfde persoon als de oorspronkelijke mandataris, het
-                is niet mogelijk een mandataris te laten vervangen door
-                zichzelf.
-              </AuAlert>
-            {{/if}}
-          </div>
-        {{/if}}
-        {{#if this.showRangordeField}}
-          <div>
-            <AuLabel>
-              Rangorde
-            </AuLabel>
-            <RangordeDropdown
-              id="mandataris-rangorde"
-              @selected={{this.rangorde}}
-              @placeholder={{this.rangordePlaceholder}}
-              @mandaatLabel={{this.mandaatLabel}}
-              @onNewRangorde={{this.updateRangorde}}
-            />
-          </div>
-        {{/if}}
-        {{#unless (await this.hideFractieField)}}
-          <Mandatarissen::FractieSelector
-            @fractie={{this.fractie}}
-            @isRequired={{@isFractieRequired}}
-            @onSelect={{this.updateFractie}}
-            @bestuurseenheid={{@bestuurseenheid}}
-            @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
-            @mandataris={{@mandataris}}
-            {{! TODO this should be generalised somehow }}
-            @isUpdatingState={{false}}
-          />
-        {{/unless}}
-        <Mandataris::Edit::StartEndDate
-          @startDate={{this.startDate}}
-          @endDate={{this.endDate}}
-          @from={{@bestuursorgaanIT.bindingStart}}
-          @to={{@bestuursorgaanIT.bindingEinde}}
-          @onChange={{this.updateStartEndDate}}
-          @onErrorStateUpdated={{this.updateErrorMap}}
-        />
-      {{/unless}}
-    </div>
-  </:body>
-  <:footer>
-    <AuToolbar as |Group|>
-      <Group>
-        <AuButtonGroup>
-          <AuButton
-            {{on "click" this.confirmMandatarisChanges}}
-            @disabled={{this.disabled}}
-          >
-            {{if this.hasChanges "Pas aan" "Onveranderd"}}
-          </AuButton>
-          <AuButton {{on "click" this.cancel}} @skin="secondary">
-            Annuleer
-          </AuButton>
-        </AuButtonGroup>
-      </Group>
-    </AuToolbar>
-  </:footer>
-</AuModal>
-
-<AuModal
-  @modalOpen={{this.isSecondModalOpen}}
-  @closable={{true}}
-  @closeModal={{this.cancel}}
->
-  <:title>
-    Bewerk mandaat
-    <p class="au-u-h4 au-u-regular">
-      {{@bestuursorganenTitle}}
-    </p>
-
-  </:title>
-  <:body>
+<div class="au-u-flex au-u-flex--column au-o-flow">
+  <div>
+    <AuLabel @required={{true}}>
+      Status
+    </AuLabel>
+    <PowerSelect
+      @allowClear={{false}}
+      @selected={{this.status}}
+      @options={{this.statusOptions}}
+      @onChange={{this.updateStatus}}
+      @searchEnabled={{true}}
+      @searchField="label"
+      @noMatchesMessage="Geen resultaten"
+      as |status|
+    >
+      {{status.label}}
+    </PowerSelect>
+  </div>
+  {{#if this.isStatusVerhinderd}}
     <div>
-      <AuLabel @required={{true}}>
-        Reden van aanpassing
+      <AuLabel>
+        Vervanger
       </AuLabel>
-      <PowerSelect
-        @allowClear={{false}}
-        @selected={{this.reasonForChange}}
-        @options={{this.reasonForChangeOptions}}
-        @onChange={{this.selectReasonForChange}}
-        @searchEnabled={{true}}
-        @noMatchesMessage="Geen resultaten"
-        as |reason|
-      >
-        {{reason}}
-      </PowerSelect>
+      <Mandatarissen::ReplacementSelect
+        @mandataris={{@formValues}}
+        @selected={{this.replacementPerson}}
+        @onSelect={{this.updateReplacement}}
+        @bestuursorgaanIT={{@bestuursorgaanIT}}
+        @inline={{true}}
+      />
+      {{#if this.hasReplacementError}}
+        <AuAlert @skin="error" @icon="alert-triangle" class="au-u-margin-top">
+          Dit is dezelfde persoon als de oorspronkelijke mandataris, het is niet
+          mogelijk een mandataris te laten vervangen door zichzelf.
+        </AuAlert>
+      {{/if}}
     </div>
-  </:body>
-  <:footer>
-    <AuToolbar as |Group|>
-      <Group>
-        <AuButtonGroup>
-          <AuButton
-            @loading={{this.isSaving}}
-            @loadingMessage="Aanpassingen worden bewaard"
-            {{on "click" this.saveForm}}
-          >
-            Opslaan
-          </AuButton>
-          <AuButton {{on "click" this.goBackSecondModal}} @skin="secondary">
-            Ga terug
-          </AuButton>
-        </AuButtonGroup>
-      </Group>
-    </AuToolbar>
-  </:footer>
-</AuModal>
-
-<AuModal
-  @modalOpen={{this.isRangordeModalOpen}}
-  @closable={{true}}
-  @closeModal={{fn (mut this.isRangordeModalOpen) false}}
->
-  <:title>Rangorde vervanger</:title>
-  <:body>
-    <p>
-      U heeft een mandataris, die een rangorde heeft, verhinderd. Deze rangorde
-      kan niet automatisch overgenomen worden in de vervanger. Het toewijzen van
-      een rangorde kan namelijk gevolgen hebben op de rangorde van andere
-      mandatarissen. Wenst u dit nu aan te passen? Het is ook mogelijk dit op
-      een later tijdstip aan te passen in de wijzig rangorde pagina.
-    </p>
-  </:body>
-  <:footer>
-    <AuToolbar as |Group|>
-      <Group>
-        <AuLink
-          @skin="button"
-          @route="organen.orgaan.edit-rangorde"
-          @model={{@bestuursorgaanIT.isTijdsspecialisatieVan.id}}
-          @query={{hash
-            bestuursperiode=@bestuursorgaanIT.heeftBestuursperiode.id
-          }}
-        >
-          Ja
-        </AuLink>
-        <AuButton
-          @skin="secondary"
-          {{on "click" (fn (mut this.isRangordeModalOpen) false)}}
-        >Nee</AuButton>
-      </Group>
-    </AuToolbar>
-  </:footer>
-</AuModal>
-
-<Mandatarissen::Linked::Modal
-  @recentUpdate={{this.selectedReplacement}}
-  @mandataris={{@mandataris.id}}
-  @replacement="true"
-/>
-
-<Mandatarissen::Linked::Modal
-  @recentUpdate={{this.updatedStateMandataris}}
-  @mandataris={{@mandataris.id}}
-  @newMandataris={{this.newMandataris.id}}
-  @callback={{this.callbackAfterUpdate}}
-  @updateState="true"
-/>
+  {{/if}}
+  {{#if this.isTerminatingMandate}}
+    <Mandataris::Edit::StartEndDate
+      @startDate={{this.startDate}}
+      @hideStartDate={{true}}
+      @endDate={{this.endDate}}
+      @from={{@bestuursorgaanIT.bindingStart}}
+      @to={{@bestuursorgaanIT.bindingEinde}}
+      @onChange={{this.updateStartEndDate}}
+      @onErrorStateUpdated={{this.updateErrorMap}}
+    />
+  {{else}}
+    {{#if this.showRangordeField}}
+      <div>
+        <AuLabel>
+          Rangorde
+        </AuLabel>
+        <RangordeDropdown
+          id="mandataris-rangorde"
+          @selected={{this.rangorde}}
+          @placeholder={{this.rangordePlaceholder}}
+          @mandaatLabel={{this.mandaatLabel}}
+          @onNewRangorde={{this.updateRangorde}}
+        />
+      </div>
+    {{/if}}
+    {{#unless (await this.hideFractieField)}}
+      <Mandatarissen::FractieSelector
+        @fractie={{this.fractie}}
+        @isRequired={{@isFractieRequired}}
+        @onSelect={{this.updateFractie}}
+        @bestuurseenheid={{@bestuurseenheid}}
+        @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
+        @mandataris={{@formValues}}
+        {{! TODO this should be generalised somehow }}
+        @isUpdatingState={{false}}
+      />
+    {{/unless}}
+    <Mandataris::Edit::StartEndDate
+      @startDate={{this.startDate}}
+      @endDate={{this.endDate}}
+      @from={{@bestuursorgaanIT.bindingStart}}
+      @to={{@bestuursorgaanIT.bindingEinde}}
+      @onChange={{this.updateStartEndDate}}
+      @onErrorStateUpdated={{this.updateErrorMap}}
+    />
+  {{/if}}
+</div>

@@ -32,7 +32,7 @@
           >
             <AuButton
               @disabled={{this.isDisabledBecauseLegislatuur}}
-              {{on "click" (fn (mut this.isEditModalOpen) true)}}
+              {{on "click" this.openWizard}}
             >Bewerk mandaat</AuButton>
           </Shared::Tooltip>
           <Shared::Tooltip
@@ -65,10 +65,8 @@
   <div class="au-o-box au-u-padding-top-none">
     <Mandatarissen::MandatarisCard
       @mandataris={{@model.mandataris}}
-      @bestuursorgaanIT={{get @model.bestuursorganen 0}}
       @legislatuurInBehandeling={{this.isDisabledBecauseLegislatuur}}
       @effectiefIsLastPublicationStatus={{this.model.effectiefIsLastPublicationStatus}}
-      @actionWhenAddingReplacement={{fn (mut this.selectedReplacement) true}}
       @canEdit={{not this.notOwnedByUs}}
     />
   </div>
@@ -92,20 +90,13 @@
 
 </div>
 
-<Mandatarissen::Linked::Modal
-  @recentUpdate={{this.selectedReplacement}}
-  @mandataris={{this.model.mandataris.id}}
-  @replacement="true"
-/>
-
-<Mandataris::Edit::Form
-  @isOpen={{this.isEditModalOpen}}
-  @toggleModal={{fn (mut this.isEditModalOpen)}}
+<Mandataris::Edit::Wizard
+  @isWizardOpen={{this.isEditModalOpen}}
+  @closeWizard={{this.closeWizard}}
   @bestuurseenheid={{@model.bestuurseenheid}}
   @bestuursorgaanIT={{get @model.bestuursorganen 0}}
   @mandataris={{@model.mandataris}}
-  @linkedMandataris={{this.model.linkedMandataris}}
-  @bestuursorganenTitle={{this.bestuursorganenTitle}}
+  @mandatarisFormValues={{this.mandatarisFormValues}}
   @isFractieRequired={{this.model.isFractieRequired}}
 />
 
