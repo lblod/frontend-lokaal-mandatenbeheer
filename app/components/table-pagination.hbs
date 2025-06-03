@@ -5,24 +5,28 @@
     {{this.totalItems}}
   </p>
   <AuList @direction="horizontal" @divider={{true}} as |Item|>
-    <Item>
-      <AuButton
-        @skin="link"
-        @icon="chevron-left"
-        {{on "click" this.onClickPrevious}}
-      >
-        vorige
-      </AuButton>
-    </Item>
-    <Item>
-      <AuButton
-        @skin="link"
-        @icon="chevron-right"
-        @iconAlignment="right"
-        {{on "click" this.onClickNext}}
-      >
-        volgende
-      </AuButton>
-    </Item>
+    {{#unless this.isPreviousButtonHidden}}
+      <Item>
+        <AuButton
+          @skin="link"
+          @icon="chevron-left"
+          {{on "click" this.onClickPrevious}}
+        >
+          vorige
+        </AuButton>
+      </Item>
+    {{/unless}}
+    {{#unless this.isNextButtonHidden}}
+      <Item>
+        <AuButton
+          @skin="link"
+          @icon="chevron-right"
+          @iconAlignment="right"
+          {{on "click" this.onClickNext}}
+        >
+          volgende
+        </AuButton>
+      </Item>
+    {{/unless}}
   </AuList>
 </div>

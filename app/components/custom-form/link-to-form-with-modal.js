@@ -159,14 +159,12 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   @action
   fetchPreviousPage({ previousPage }) {
     this.pageToLoad = previousPage;
-    console.log('previous:', this.pageToLoad);
     this.getInstances.perform();
   }
 
   @action
   fetchNextPage({ nextPage }) {
     this.pageToLoad = nextPage;
-    console.log('next:', this.pageToLoad);
     this.getInstances.perform();
   }
 
@@ -248,8 +246,6 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
       this.filterInstancesParams
     );
 
-    this.instancesMetadata = enrichedInstances.meta;
-
     return {
       instances: enrichedInstances,
       labels: formInfo.labels,
@@ -260,7 +256,6 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
     const instances = [];
     instances.push(..._instances);
     instances.meta = instances.meta || {};
-    console.log('instnaces', instances.meta);
     instances.meta.count = parseInt(response.headers.get('X-Total-Count'), 10);
     instances.meta.pagination = {
       first: {
