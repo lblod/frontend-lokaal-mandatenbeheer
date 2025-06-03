@@ -103,6 +103,11 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
     this.getInstances.perform();
   });
 
+  get searchPlaceholderText() {
+    const labels = this.instanceDisplayLabels.map((d) => d.name);
+    return `Zoek op ${labels.join(', ')}`;
+  }
+
   get hasSelectedOptions() {
     return this.selectedInstanceOptions?.length >= 1;
   }
@@ -160,7 +165,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   get filterInstancesParams() {
     return {
       page: this.pageToLoad,
-      size: 20,
+      size: 10,
       filter:
         this.searchValue && this.searchValue.trim() !== ''
           ? this.searchValue
