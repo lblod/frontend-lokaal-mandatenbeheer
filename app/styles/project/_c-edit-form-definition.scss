@@ -4,6 +4,7 @@
   flex-direction: row;
   gap: 1rem;
   padding: 2rem;
+  height: 100%;
 }
 
 @media (max-width: 750px) {
@@ -17,6 +18,17 @@
   border: 2px solid var(--au-gray-200);
   border-radius: 5px;
   background-color: var(--au-white);
+
+  .custom-form-field {
+    padding-left: $au-unit;
+  }
+  .add-custom-field {
+    margin: 0 $au-unit;
+  }
+
+  .standard-form-field {
+    padding-left: $au-unit;
+  }
 }
 
 .edit-form-defintion--edit-panel {

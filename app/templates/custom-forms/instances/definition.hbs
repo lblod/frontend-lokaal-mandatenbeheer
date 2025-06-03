@@ -1,50 +1,81 @@
 {{page-title "Bewerk formulier definitie"}}
 <div class="au-c-body-container au-c-body-container--scroll">
-  <AuToolbar
-    @size="large"
-    class="au-u-padding-bottom-none au-u-margin-bottom"
-    as |Group|
-  >
-    <Group>
-      <AuHeading @skin="2">{{this.model.form.name}}
-        <AuButton
-          @skin="link-secondary"
-          @icon="pencil"
-          @hideText={{true}}
-          {{on "click" (fn (mut this.isEditFormModalOpen) true)}}
+  {{#if this.model.fullScreenEdit}}
+    <AuToolbar
+      @size="large"
+      class="au-u-padding-bottom-none au-u-margin-bottom"
+      as |Group|
+    >
+      <Group>
+        {{! for styling }}
+      </Group>
+      <Group>
+        <AuButtonGroup>
+          <AuButton
+            @skin="secondary"
+            {{on "click" this.goBackToLastRoute}}
+          >Terug naar vorige pagina</AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  {{else}}
+    <AuToolbar
+      @size="large"
+      class="au-u-padding-bottom-none au-u-margin-bottom"
+      as |Group|
+    >
+      <Group>
+        <AuHeading @skin="2">{{this.model.form.name}}
+          <AuButton
+            @skin="link-secondary"
+            @icon="pencil"
+            @hideText={{true}}
+            {{on "click" (fn (mut this.isEditFormModalOpen) true)}}
+          >
+            Pas aan
+          </AuButton></AuHeading>
+      </Group>
+      <Group>
+        <AuButtonGroup>
+          <AuLink
+            @route="custom-forms.instances.index"
+            @model={{this.model.form.id}}
+            @skin="button-secondary"
+          >Terug naar formulieren</AuLink>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+    <AuToolbar @size="large" class="au-u-padding-bottom-none" as |Group|>
+      <Group>
+        <p>{{this.model.form.description}}</p>
+      </Group>
+    </AuToolbar>
+    {{#if this.isShownInSummaryAddedToFields}}
+      <div class="au-o-box">
+        <AuAlert
+          @title="Toon in samenvatting"
+          @skin="warning"
+          @icon="alert-triangle"
         >
-          Pas aan
-        </AuButton></AuHeading>
-    </Group>
-    <Group>
-      <AuButtonGroup>
-        <AuLink
-          @route="custom-forms.instances.index"
-          @model={{this.model.form.id}}
-          @skin="button-secondary"
-        >Terug naar formulieren</AuLink>
-      </AuButtonGroup>
-    </Group>
-  </AuToolbar>
-  <AuToolbar
-    @size="large"
-    class="au-u-padding-bottom-none au-u-margin-bottom"
-    as |Group|
-  >
-    <Group>
-      <p>{{this.model.form.description}}</p>
-    </Group>
-  </AuToolbar>
+          Er werd geen veld aangeduid dat getoont zal worden in het overzicht.
+          Hierdoor vind je mogelijk instanties van dit formulier niet meer
+          terug.
+          <br />
+          Zorg ervoor dat voor een van de velden in het formulier "Toon in
+          samenvatting" aan staat.</AuAlert>
+      </div>
+    {{/if}}
+  {{/if}}
   <div class="edit-form-defintion">
     <div class="au-o-box edit-form-defintion--form">
       {{#if this.isRefreshForm}}
         <AuLoader @hideMessage={{true}} />
       {{else}}
         <EditableForm
-          @instanceId={{this.model.form.id}}
+          @instanceId={{this.model.instanceId}}
           @form={{this.model.form}}
           @customHistoryMessage={{true}}
-          @editFieldsInForm={{false}}
+          @isEditFormDefinitionForm={{true}}
           @canSelectField={{true}}
           @onFieldSelected={{this.setSelectedField}}
           @selectedField={{this.selectedField}}
@@ -58,6 +89,7 @@
         @onFieldUpdated={{this.updateFormContent}}
         @isLoading={{this.isRefreshForm}}
         @selectedField={{this.selectedField}}
+        @canShowInSummaryButton={{this.model.isFormExtension}}
       />
     </div>
   </div>

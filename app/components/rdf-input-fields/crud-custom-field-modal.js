@@ -13,12 +13,14 @@ import { FIELD_OPTION, FORM, EXT, PROV } from 'frontend-lmb/rdf/namespaces';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import {
   LIBRARY_ENTREES,
-  LINK_TO_FORM_CUSTOM_DISPLAY_TYPE,
   TEXT_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
-import { Literal, NamedNode } from 'rdflib';
+import { isCustomForm } from 'frontend-lmb/utils/form-properties';
+
+import { NamedNode } from 'rdflib';
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
+import LibraryEntryModel from 'frontend-lmb/models/library-entry';
 
 export default class RdfInputFieldCrudCustomFieldModalComponent extends Component {
   @consume('form-context') formContext;
@@ -34,14 +36,10 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @tracked isShownInSummary;
   @tracked wantsToRemove;
 
-  customFieldEntry = this.store.createRecord('library-entry', {
-    name: 'Eigen veld',
-  });
-
   @tracked displayTypes = [];
 
   @tracked fieldName;
-  @tracked libraryFieldType = this.customFieldEntry;
+  @tracked libraryFieldType;
   @tracked displayType;
   @tracked conceptScheme;
   @tracked conceptSchemeOnLoad;
@@ -49,6 +47,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   constructor() {
     super(...arguments);
+
+    this.libraryFieldType = LibraryEntryModel.ensureFakeEntry(this.store);
 
     let withValue = TEXT_CUSTOM_DISPLAY_TYPE;
     if (!this.args.isCreating) {
@@ -68,14 +68,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         sort: 'label',
       })
       .then((displayTypes) => {
-        if (this.args.isForFormExtension) {
-          const allowedTypes = displayTypes.filter(
-            (type) => type.uri !== LINK_TO_FORM_CUSTOM_DISPLAY_TYPE
-          );
-          this.displayTypes = allowedTypes;
-        } else {
-          this.displayTypes = displayTypes;
-        }
+        this.displayTypes = displayTypes;
         this.displayType = this.displayTypes.find((t) => t.uri === withValue);
       });
   }
@@ -105,6 +98,10 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     });
 
     return models.at(0) ?? null;
+  }
+
+  get isShowInSummaryToggleDisabled() {
+    return this.args.show || this.displayType?.isLinkToForm;
   }
 
   get deleteWillLoseData() {
@@ -277,15 +274,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   get isCustomForm() {
     const forkingStore = this.forkingStore;
     return (
-      forkingStore.any(
-        null,
-        EXT('isCustomForm'),
-        new Literal(
-          'true',
-          null,
-          new NamedNode('http://www.w3.org/2001/XMLSchema#boolean')
-        )
-      ) && !forkingStore.any(null, EXT('extendsForm'), null, SOURCE_GRAPH)
+      isCustomForm(forkingStore) &&
+      !forkingStore.any(null, EXT('extendsForm'), null, SOURCE_GRAPH)
     );
   }
 
@@ -351,7 +341,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   get canSelectTypeForEntry() {
     if (this.args.isCreating) {
-      return this.libraryFieldType === this.customFieldEntry;
+      return this.libraryFieldType.isNew; // so the fake one we created
     }
 
     return !LIBRARY_ENTREES.includes(this.libraryEntryUri);
@@ -376,6 +366,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
 function getLibraryFieldOptions() {
   return trackedFunction(async () => {
+    const customFieldEntry = LibraryEntryModel.ensureFakeEntry(this.store);
     const allOptions = await this.store.query('library-entry', {
       sort: 'name',
       include: 'display-type',
@@ -386,6 +377,6 @@ function getLibraryFieldOptions() {
     const unused = allOptions.filter((entry) => {
       return entry.uri && usedOptions.indexOf(entry.uri) < 0;
     });
-    return [this.customFieldEntry, ...unused];
+    return [customFieldEntry, ...unused];
   });
 }

@@ -56,7 +56,8 @@
       @onSave={{this.onSave}}
       @formInitialized={{fn (mut this.formInitialized) true}}
       @customHistoryMessage={{true}}
-      @isForFormExtension={{true}}
+      @canEditFormDefinition={{true}}
+      @isFormExtension={{true}}
     />
     {{#unless this.formInitialized}}
       <Skeleton::Forms::MandatarisExtraInfo />

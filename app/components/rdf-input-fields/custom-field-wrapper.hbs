@@ -12,17 +12,17 @@
               @required={{this.isRequired}}
               @error={{this.hasErrors}}
             >{{this.title}}</AuLabel>
-            {{#if this.formState.isFieldEditPencilShown}}
-              <AuButton
-                @skin="link-secondary"
-                @icon="pencil"
-                @hideText={{true}}
-                {{on "click" (fn (mut this.showModal) true)}}
-              >
-                Pas aan
-              </AuButton>
-            {{/if}}
           {{/unless}}
+          {{#if
+            (and
+              this.formState.isEditFormDefinitionForm this.isFieldShownInSummary
+            )
+          }}
+            <AuPill
+              class="au-u-margin-left-tiny au-u-margin-bottom-tiny"
+              @skin="link"
+            >In samenvatting</AuPill>
+          {{/if}}
         </div>
         <div
           class="au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny"
@@ -39,7 +39,7 @@
           </div>
         </div>
       </div>
-      {{#if this.formState.canMoveFieldsInForm}}
+      {{#if (and this.formState.isEditFormDefinitionForm this.isFieldSelected)}}
         <div class="au-u-flex au-u-flex--column au-u-flex--vertical-center">
           <AuButton
             @skin="naked"
@@ -62,14 +62,3 @@
     </div>
   </div>
 {{/unless}}
-
-<RdfInputFields::CrudCustomFieldModal
-  @isCreating={{false}}
-  @showModal={{this.showModal}}
-  @onCloseModal={{fn (mut this.showModal) false}}
-  @form={{@form}}
-  @field={{@field}}
-  @isRequiredField={{this.isRequired}}
-  @isShownInSummary={{this.isShownInSummary}}
-  @isForFormExtension={{this.formContext.isForFormExtension}}
-/>
