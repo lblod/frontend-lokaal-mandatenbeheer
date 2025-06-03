@@ -76,7 +76,7 @@ export default class MandatarisService extends Service {
     );
 
     const newMandataris = this.store.createRecord('mandataris', {
-      rangorde: newMandatarisState.rangorde,
+      rangorde: null,
       start: newMandatarisState.start,
       einde: newMandatarisState.einde,
       bekleedt: await toReplace.bekleedt,
