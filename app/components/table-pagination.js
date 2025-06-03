@@ -4,12 +4,15 @@ import { action } from '@ember/object';
 
 export default class TablePagination extends Component {
   get page() {
-    let items = this.currentPage * this.itemsPerPage;
-    if (items === 0) {
-      items = this.itemsPerPage;
+    const multiplierItems = this.currentPage + 1;
+    let topItems = multiplierItems * this.itemsPerPage;
+    const bottomItems = topItems - this.itemsPerPage;
+
+    if (topItems > this.totalItems) {
+      topItems = this.totalItems;
     }
 
-    return `${this.currentPage} - ${items}`;
+    return `${bottomItems} - ${topItems}`;
   }
 
   get totalItems() {
@@ -45,7 +48,15 @@ export default class TablePagination extends Component {
       return this.currentPage + 1;
     }
 
-    return this.lastPage;
+    return this.args.metadata?.pagination?.next?.number ?? this.lastPage;
+  }
+
+  get isPreviousButtonHidden() {
+    return this.currentPage === this.firstPage;
+  }
+
+  get isNextButtonHidden() {
+    return this.currentPage === this.lastPage;
   }
 
   @action
