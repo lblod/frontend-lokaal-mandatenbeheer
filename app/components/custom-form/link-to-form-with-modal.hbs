@@ -47,7 +47,7 @@
         class="au-u-margin-bottom"
         id="zoek-instantie"
         @value={{this.searchValue}}
-        {{on "keyup" this.filterResults}}
+        {{on "keyup" (perform this.filterResults)}}
       />
       <span class="no-pagination">
         <AuDataTable

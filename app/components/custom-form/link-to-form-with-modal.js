@@ -10,11 +10,14 @@ import {
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
 import { NamedNode } from 'rdflib';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 
-import { API, JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import {
+  API,
+  INPUT_DEBOUNCE,
+  JSON_API_TYPE,
+} from 'frontend-lmb/utils/constants';
 import { EXT } from 'frontend-lmb/rdf/namespaces';
-
 export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
   @service store;
   @service semanticFormRepository;
@@ -93,12 +96,12 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
     super.updateValidations();
   }
 
-  @action
-  filterResults(event) {
+  filterResults = task({ restartable: true }, async (event) => {
+    await timeout(INPUT_DEBOUNCE);
     this.searchValue = event.target?.value;
     this.pageToLoad = 0;
     this.getInstances.perform();
-  }
+  });
 
   get hasSelectedOptions() {
     return this.selectedInstanceOptions?.length >= 1;
