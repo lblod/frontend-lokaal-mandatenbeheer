@@ -16,7 +16,7 @@
           {{/each}}
         </:header>
         <:body>
-          {{#each this.selectedInstances as |instance|}}
+          {{#each this.selectedInstanceOptions as |instance|}}
             <tr>
               {{#each instance.option as |option|}}
                 <td>{{option.value}}</td>
