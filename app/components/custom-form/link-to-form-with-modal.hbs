@@ -42,9 +42,8 @@
   >
     <:title>Link naar formulier</:title>
     <:body>
-      <div class="au-u-padding-small">
-        <AuLabel class="au-u-padding-left-small" for="zoek-instantie">Zoek
-          formulier</AuLabel>
+      <div class="au-u-padding-small au-u-padding-left-none">
+        <AuLabel for="zoek-instantie">Zoek formulier</AuLabel>
         <AuInput
           id="zoek-instantie"
           placeholder={{this.searchPlaceholderText}}
@@ -53,11 +52,6 @@
           {{on "keyup" (perform this.filterResults)}}
         />
       </div>
-      <TablePagination
-        @metadata={{this.instancesMetadata}}
-        @onClickPrevious={{this.fetchPreviousPage}}
-        @onClickNext={{this.fetchNextPage}}
-      />
       <span class="no-pagination">
         <AuDataTable
           @content={{this.instancesAsOptions}}
@@ -84,6 +78,11 @@
             </c.body>
           </t.content>
         </AuDataTable>
+        <TablePagination
+          @metadata={{this.instancesMetadata}}
+          @onClickPrevious={{this.fetchPreviousPage}}
+          @onClickNext={{this.fetchNextPage}}
+        />
       </span>
     </:body>
     <:footer>
