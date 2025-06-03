@@ -105,7 +105,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
 
   get searchPlaceholderText() {
     const labels = this.instanceDisplayLabels.map((d) => d.name);
-    return `Zoek op ${labels.join(', ')}`;
+    return `Zoek op één van de eigenschappen van het formulier. Bv. ${labels.join(', ')}`;
   }
 
   get hasSelectedOptions() {
