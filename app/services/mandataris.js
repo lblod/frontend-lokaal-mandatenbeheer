@@ -81,8 +81,8 @@ export default class MandatarisService extends Service {
       einde: newMandatarisState.einde,
       bekleedt: await toReplace.bekleedt,
       isBestuurlijkeAliasVan: replacementPerson,
-      beleidsdomein: newMandatarisState.beleidsdomein
-        ? await newMandatarisState.beleidsdomein
+      beleidsdomein: toReplace.beleidsdomein
+        ? await toReplace.beleidsdomein
         : [],
       status: waarnemendStatus,
       publicationStatus: await getNietBekrachtigdPublicationStatus(this.store),

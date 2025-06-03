@@ -74,7 +74,7 @@ export default class MandatarisEditWizard extends Component {
 
   get replacementTitle() {
     return this.replacementPerson
-      ? 'Mandataris voor vervanger ' + this.replacementPerson.naam
+      ? `Gegevens voor ${this.replacementPerson.naam} (waarnemend), vervanger van ${this.args.mandataris.isBestuurlijkeAliasVan.get('naam')}`
       : 'Vervanger';
   }
 
@@ -96,7 +96,7 @@ export default class MandatarisEditWizard extends Component {
         canContinueToNextStep: this.isReplacementStepCompleted,
       },
       {
-        label: 'Reden',
+        label: 'Bevestigen van aanpassing',
         isReasonStep: true,
         isStepShown: true,
         canContinueToNextStep: this.reasonForChange,
@@ -204,9 +204,9 @@ export default class MandatarisEditWizard extends Component {
     const changedText = this.joinStringWithCommaAndFinalAnd(changedLabels);
 
     const was = changedLabels.length == 1 ? 'was' : 'waren';
-    const werd = changedLabels.length == 1 ? 'werd' : 'werden';
+    const wordt = changedLabels.length == 1 ? 'wordt' : 'worden';
     const correctionReason = {
-      label: `De ${changedText} van de mandataris ${was} verkeerd ingevuld en ${werd} gecorrigeerd`,
+      label: `De ${changedText} van de mandataris ${was} verkeerd ingevuld en ${wordt} gecorrigeerd`,
       type: CORRECT_MISTAKES,
     };
 
