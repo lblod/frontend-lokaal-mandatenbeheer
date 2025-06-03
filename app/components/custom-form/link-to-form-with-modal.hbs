@@ -42,19 +42,25 @@
   >
     <:title>Link naar formulier</:title>
     <:body>
-      <AuLabel for="zoek-instantie">Zoek</AuLabel>
-      <AuInput
-        class="au-u-margin-bottom"
-        id="zoek-instantie"
-        @value={{this.searchValue}}
-        {{on "keyup" (perform this.filterResults)}}
+      <div class="au-u-padding-small">
+        <AuLabel class="au-u-padding-left-small" for="zoek-instantie">Zoek
+          formulier</AuLabel>
+        <AuInput
+          id="zoek-instantie"
+          placeholder={{this.searchPlaceholderText}}
+          @width="block"
+          @value={{this.searchValue}}
+          {{on "keyup" (perform this.filterResults)}}
+        />
+      </div>
+      <TablePagination
+        @metadata={{this.instancesMetadata}}
+        @onClickPrevious={{this.fetchPreviousPage}}
+        @onClickNext={{this.fetchNextPage}}
       />
       <span class="no-pagination">
         <AuDataTable
           @content={{this.instancesAsOptions}}
-          @sort={{@sort}}
-          @page={{@page}}
-          @size={{@size}}
           @noDataMessage="Geen formulieren gevonden."
           as |t|
         >
@@ -78,11 +84,6 @@
             </c.body>
           </t.content>
         </AuDataTable>
-        <TablePagination
-          @metadata={{this.instancesMetadata}}
-          @onClickPrevious={{this.fetchPreviousPage}}
-          @onClickNext={{this.fetchNextPage}}
-        />
       </span>
     </:body>
     <:footer>
