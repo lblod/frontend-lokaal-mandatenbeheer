@@ -82,7 +82,6 @@ Or in template files by using the `is-feature-enabled` helper:
 | Name                     | Description                                                                                             |
 | ------------------------ | ------------------------------------------------------------------------------------------------------- |
 | `custom-organen`         | Make the use of custom organen possible.                                                                |
-| `show-forms-module`      | Show the forms module in overview and navigation, the route remains functional, defaults to false.      |
 | `politieraad`            | Politieraad orgaan code will be added to the organen list (decretaleIds).                               |
 | `editable-forms`         | Creating/extending forms with the possibility for updating the form definition.                         |
 | `edit-mandataris-rework` | Use the mandataris wizard instead of the update/correct mandataris form.                                |

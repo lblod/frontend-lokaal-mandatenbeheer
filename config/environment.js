@@ -34,7 +34,6 @@ module.exports = function (environment) {
     },
     features: {
       'custom-organen': false,
-      'show-forms-module': false, // QUESTION: Can we just remove it from the menu's?
       politieraad: false,
       'editable-forms': false,
       'person-extra-info': false,
