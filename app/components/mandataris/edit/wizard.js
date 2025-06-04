@@ -161,14 +161,14 @@ export default class MandatarisEditWizard extends Component {
         this.args.mandataris.id
       );
       if (
-        fractie.isOnafhankelijk &&
-        availableFracties.find((f) => f.id == this.formValues.fractie.id)
+        fractie?.isOnafhankelijk &&
+        availableFracties.find((f) => f.id == this.formValues.fractie?.id)
       ) {
         newReasons.push({
           label: 'keert terug naar de oorspronkelijke fractie',
           type: UPDATE_STATE,
         });
-      } else if (this.formValues.fractie.isOnafhankelijk) {
+      } else if (this.formValues.fractie?.isOnafhankelijk) {
         newReasons.push({
           label: 'gaat verder als onafhankelijke',
           type: UPDATE_STATE,
@@ -187,7 +187,7 @@ export default class MandatarisEditWizard extends Component {
         type: UPDATE_STATE,
       });
     }
-    if (newStatus.isVerhinderd && !mandatarisStatus.isVerhinderd) {
+    if (newStatus.isVerhinderd && !mandatarisStatus?.isVerhinderd) {
       newReasons.push({
         label: 'raakt verhinderd',
         type: UPDATE_STATE,
