@@ -53,6 +53,7 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
       }
 
       this.loadMandaat();
+      this.refreshPersonFromForm();
       this.checkIfShouldRender();
     };
     this.storeOptions.store.registerObserver(onFormUpdate);
@@ -83,7 +84,6 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
     return this.args.field?.label || 'Tijdelijk vervangen door';
   }
 
-  // todo need to watch store and refresh every time
   async loadMandaat() {
     const forkingStore = this.storeOptions.store;
     const mandaatUri = forkingStore.any(
@@ -100,6 +100,26 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
     this.mandaat = (
       await this.store.query('mandaat', {
         'filter[:uri:]': mandaatUri,
+      })
+    )[0];
+  }
+
+  async refreshPersonFromForm() {
+    const forkingStore = this.storeOptions.store;
+    const persoonUri = forkingStore.any(
+      this.storeOptions.sourceNode,
+      MANDAAT('isBestuurlijkeAliasVan'),
+      null,
+      this.storeOptions.sourceGraph
+    )?.value;
+
+    if (!persoonUri || this.mandatarisPerson?.uri === persoonUri) {
+      return;
+    }
+
+    this.mandatarisPerson = (
+      await this.store.query('persoon', {
+        'filter[:uri:]': persoonUri,
       })
     )[0];
   }
