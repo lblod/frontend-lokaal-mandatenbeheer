@@ -20,7 +20,7 @@ export default class CustomFormsInstancesInstanceRoute extends Route {
         this.toaster,
         `Er liep iets mis met het ophalen van de gegevens voor formulier met id: ${model.instanceId}`
       );
-      this.router.transitionTo('custom-forms.overview');
+      this.router.transitionTo('custom-forms');
     }
   }
 }

@@ -55,7 +55,7 @@ export default class CustomFormsNewController extends Controller {
     if (this.isValidName || this.description?.trim() !== '') {
       this.isUnsavedChangesModalOpen = true;
     } else {
-      this.router.transitionTo('custom-forms.overview');
+      this.router.transitionTo('custom-forms');
     }
   }
 
@@ -67,7 +67,7 @@ export default class CustomFormsNewController extends Controller {
     if (this.savedTransition) {
       this.savedTransition?.retry();
     } else {
-      this.router.transitionTo('custom-forms.overview');
+      this.router.transitionTo('custom-forms');
     }
   }
 
