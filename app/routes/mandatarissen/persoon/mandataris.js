@@ -3,6 +3,7 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
+import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 import {
   MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_EXTRA_INFO_FORM_ID,
@@ -15,19 +16,8 @@ import RSVP from 'rsvp';
 export default class MandatarissenPersoonMandatarisRoute extends Route {
   @service currentSession;
   @service store;
-  @service router;
-  @service features;
   @service semanticFormRepository;
   @service('mandatarissen') mandatarissenService;
-
-  beforeModel(transition) {
-    if (this.features.isEnabled('edit-mandataris-rework')) {
-      this.router.transitionTo(
-        'mandatarissen.persoon.mandataris-rework',
-        transition.to.params.mandataris_id
-      );
-    }
-  }
 
   async model(params) {
     const bestuurseenheid = this.currentSession.group;
@@ -38,9 +28,6 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const mandaat = await mandataris.bekleedt;
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);
 
-    const mandatarisEditForm = this.semanticFormRepository.getFormDefinition(
-      MANDATARIS_EDIT_FORM_ID
-    );
     const mandatarisExtraInfoForm =
       await this.semanticFormRepository.getFormDefinition(
         MANDATARIS_EXTRA_INFO_FORM_ID
@@ -81,10 +68,15 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
         },
       });
     }
+
+    const isFractieRequired = await isRequiredForBestuursorgaan(
+      bestuursorganen.at(0)
+    );
+
     const history = await this.fetchHistory(
       mandataris,
       mandatarissen,
-      mandatarisEditForm.id
+      MANDATARIS_EDIT_FORM_ID
     );
     const isMostRecentVersion =
       [...mandatarissen].sort((a, b) => b.start - a.start)[0].id ===
@@ -94,7 +86,6 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       bestuurseenheid,
       mandataris,
       mandatarissen,
-      mandatarisEditForm,
       mandatarisExtraInfoForm,
       history,
       isMostRecentVersion,
@@ -104,6 +95,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       linkedMandataris,
       owners,
       isDistrictEenheid: isDistrict,
+      isFractieRequired,
       effectiefIsLastPublicationStatus:
         await effectiefIsLastPublicationStatus(mandataris),
       showOCMWLinkedMandatarisWarning,
