@@ -37,7 +37,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
 
   constructor() {
     super(...arguments);
-    this.isSettingInitialSelectedOptions.perform();
+    this.setInitialSelectedOptions.perform();
   }
 
   @action
@@ -118,8 +118,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
 
   get isFetchingInstances() {
     return (
-      this.isSettingInitialSelectedOptions.isRunning ||
-      this.getInstances.isRunning
+      this.setInitialSelectedOptions.isRunning || this.getInstances.isRunning
     );
   }
 
@@ -190,7 +189,7 @@ export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
     this.instances.pushObjects(formInfo.instances);
   });
 
-  isSettingInitialSelectedOptions = task(async () => {
+  setInitialSelectedOptions = task(async () => {
     const matches = triplesForPath(this.storeOptions, true);
     if (matches.values.length > 0) {
       const initialSelectedInstanceUris = matches.values.map((v) => v.value);
