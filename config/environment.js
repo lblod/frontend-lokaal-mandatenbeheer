@@ -40,7 +40,6 @@ module.exports = function (environment) {
       politieraad: false,
       'editable-forms': false,
       'person-extra-info': false,
-      'edit-mandataris-rework': false,
       'shacl-report': false,
     },
     lpdcUrl: '{{LPDC_URL}}',
