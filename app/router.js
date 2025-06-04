@@ -56,15 +56,6 @@ Router.map(function () {
     this.route('installatievergadering');
   });
 
-  this.route('forms', function () {
-    this.route('form', { path: '/:id' }, function () {
-      this.route('new');
-      this.route('instances');
-      this.route('instance', { path: '/instance/:instance_id' });
-      this.route('edit');
-    });
-  });
-
   this.route('codelijsten', function () {
     this.route('overzicht');
     this.route('new');
