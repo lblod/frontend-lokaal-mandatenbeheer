@@ -13,7 +13,9 @@ export default class CustomFormsInstancesIndexRoute extends Route {
   }
 
   async model({ id }) {
-    const form = await this.store.findRecord('form', id);
+    const form = await this.store.findRecord('form', id).catch(() => {
+      return { id, name: id };
+    });
     const formDefinition =
       await this.semanticFormRepository.getFormDefinition(id);
     const usage = await this.customForms.getFormDefinitionUsageCount(id);
