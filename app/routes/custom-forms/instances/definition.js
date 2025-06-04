@@ -13,7 +13,9 @@ export default class CustomFormsInstancesDefinitionRoute extends Route {
     instanceId: {},
   };
 
-  async model({ id, fullScreenEdit, isFormExtension, instanceId }) {
+  async model({ fullScreenEdit, isFormExtension, instanceId }) {
+    const parent = this.modelFor('custom-forms.instances');
+    const id = parent.form.id;
     let form = null;
     let formInstanceId = null;
     const isFullScreenAsBool = !!(fullScreenEdit && fullScreenEdit === 'true');

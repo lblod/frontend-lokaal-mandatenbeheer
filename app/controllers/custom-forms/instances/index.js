@@ -80,7 +80,7 @@ export default class CustomFormsInstancesIndexController extends Controller {
         'Formulier definitie and instances succesvol verwijderd',
         'Formulier'
       );
-      this.router.transitionTo('custom-forms.overview');
+      this.router.transitionTo('custom-forms');
     } catch (error) {
       showErrorToast(
         this.toaster,

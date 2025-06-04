@@ -1,4 +1,5 @@
-{{page-title "Bewerk formulier definitie"}}
+{{breadcrumb "Definitie" route="custom-forms.instances.definition"}}
+
 <div class="au-c-body-container au-c-body-container--scroll">
   {{#if this.model.fullScreenEdit}}
     <AuToolbar
@@ -38,7 +39,7 @@
       <Group>
         <AuButtonGroup>
           <AuLink
-            @route="custom-forms.instances.index"
+            @route="custom-forms.instances"
             @model={{this.model.form.id}}
             @skin="button-secondary"
           >Terug naar formulieren</AuLink>

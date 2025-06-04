@@ -62,14 +62,14 @@ Router.map(function () {
     this.route('detail', { path: '/:id/detail' });
   });
 
-  this.route('custom-forms', { path: 'eigen-gegevens' }, function () {
+  this.route('custom-forms', { path: '/eigen-gegevens' }, function () {
+    this.route('index', { path: '/' });
     this.route('new');
-    this.route('overview', { path: 'overzicht' });
-    this.route('instances', function () {
-      this.route('index', { path: '/:id' });
-      this.route('instance', { path: '/:instance_id/instance' });
-      this.route('new', { path: '/:id/new' });
-      this.route('definition', { path: '/:id/bewerk-formulier-definitie' });
+    this.route('instances', { path: '/:id/instances' }, function () {
+      this.route('index', { path: '/' });
+      this.route('instance', { path: '/:instance_id' });
+      this.route('new');
+      this.route('definition', { path: '/bewerk-formulier-definitie' });
     });
   });
 
