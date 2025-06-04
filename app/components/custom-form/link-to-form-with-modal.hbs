@@ -26,7 +26,7 @@
         </:body>
       </AuTable>
     {{else}}
-      <p>Selecteer een formulier</p>
+      <p>Geen items geselecteerd</p>
     {{/if}}
     <AuButton
       class="au-u-padding-left-none au-u-margin-top-small"
@@ -48,7 +48,7 @@
         <AuLabel for="zoek-instantie">Zoek formulier</AuLabel>
         <AuInput
           id="zoek-instantie"
-          placeholder={{this.searchPlaceholderText}}
+          placeholder="Zoek op één van de eigenschappen van het formulier."
           @width="block"
           @value={{this.searchValue}}
           {{on "keyup" (perform this.filterResults)}}
