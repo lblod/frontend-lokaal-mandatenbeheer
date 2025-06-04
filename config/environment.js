@@ -37,7 +37,7 @@ module.exports = function (environment) {
       politieraad: false,
       'editable-forms': false,
       'person-extra-info': false,
-      'shacl-report': false,
+      'shacl-report': true,
     },
     lpdcUrl: '{{LPDC_URL}}',
     worshipDecisionsDatabaseUrl: '{{WORSHIP_DECISIONS_DATABASE_URL}}',
