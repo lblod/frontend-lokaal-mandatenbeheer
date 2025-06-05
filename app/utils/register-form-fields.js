@@ -28,11 +28,11 @@ import RdfInputFieldCustomConceptSchemeSelectorInput from 'frontend-lmb/componen
 import RdfInputFieldCustomConceptSchemeMultiSelectorInput from 'frontend-lmb/components/rdf-input-fields/custom-concept-scheme-multi-selector-input';
 import RdfInputFieldCustomPersonSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-input';
 import RdfInputFieldCustomPersonMultiSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-multi-input';
+import RdfInputFieldLinkToForm from 'frontend-lmb/components/rdf-input-fields/link-to-form';
 import {
   PERSON_CUSTOM_DISPLAY_TYPE,
   PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
 } from './well-known-uris';
-import CustomFormLinkToFormWithModal from 'frontend-lmb/components/custom-form/link-to-form-with-modal';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -165,7 +165,7 @@ export const registerCustomFormFields = () => {
     {
       displayType:
         'http://lblod.data.gift/display-types/lmb/custom-link-to-form-selector-input',
-      edit: CustomFormLinkToFormWithModal,
+      edit: RdfInputFieldLinkToForm,
     },
     {
       displayType: PERSON_CUSTOM_DISPLAY_TYPE,

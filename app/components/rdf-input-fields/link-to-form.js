@@ -18,7 +18,8 @@ import {
   JSON_API_TYPE,
 } from 'frontend-lmb/utils/constants';
 import { EXT } from 'frontend-lmb/rdf/namespaces';
-export default class CustomFormLinkToFormWithModal extends InputFieldComponent {
+
+export default class RdfInputFieldLinkToForm extends InputFieldComponent {
   @service store;
   @service semanticFormRepository;
 
