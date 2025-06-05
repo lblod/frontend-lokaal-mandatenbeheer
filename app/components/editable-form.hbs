@@ -17,6 +17,8 @@
     </div>
   {{/if}}
   <SemanticForms::Instance
+    {{! @formClass is needed so the fields do not have a max width}}
+    @formClass="au-u-flex"
     @show={{@isReadOnly}}
     @instanceId={{@instanceId}}
     @form={{this.formContext.formDefinition}}
