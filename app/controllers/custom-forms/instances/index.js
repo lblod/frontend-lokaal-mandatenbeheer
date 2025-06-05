@@ -94,6 +94,10 @@ export default class CustomFormsInstancesIndexController extends Controller {
   }
 
   get removeFormModalText() {
+    if (this.model.isUsedInCustomFormConfiguration) {
+      return 'Dit type formulier wordt gebruikt in de configuratie van een extensie of eigen formulier. Hierdoor kan je dit formulier niet verwijderen.';
+    }
+
     if (this.model.usage.hasUsage) {
       const postFix =
         'Door verder te gaan zal deze definitie met zijn implementaties definitief verwijderd worden.';
