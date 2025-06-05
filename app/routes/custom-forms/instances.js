@@ -19,11 +19,14 @@ export default class CustomFormsInstancesIndexRoute extends Route {
     const formDefinition =
       await this.semanticFormRepository.getFormDefinition(id);
     const usage = await this.customForms.getFormDefinitionUsageCount(id);
+    const isUsedInCustomFormConfiguration =
+      await this.customForms.isFormDefinitionUsedInCustomFormConfiguration(id);
 
     return {
       form,
       formDefinition,
       usage,
+      isUsedInCustomFormConfiguration,
     };
   }
 }

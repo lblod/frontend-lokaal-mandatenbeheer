@@ -57,7 +57,10 @@
     >
       <AuButton
         @alert={{true}}
-        @disabled={{this.isDeleting}}
+        @disabled={{or
+          this.isDeleting
+          this.model.isUsedInCustomFormConfiguration
+        }}
         @loading={{this.isDeleting}}
         @loadingMessage="Formulier en instanties worden verwijderd"
         {{on "click" this.deleteForm}}
