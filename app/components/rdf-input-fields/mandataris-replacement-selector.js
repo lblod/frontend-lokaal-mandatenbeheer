@@ -175,7 +175,8 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
 
     // Cleanup old value(s) in the store
     matches
-      .filter((m) => ![mandataris].find((opt) => m.value == opt.uri))
+      .filter((m) => mandataris.uri !== m.value )
+
       .forEach((m) => updateSimpleFormValue(this.storeOptions, undefined, m));
 
     // Insert new value in the store
