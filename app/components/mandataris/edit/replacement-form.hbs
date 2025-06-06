@@ -1,10 +1,9 @@
 <div class="au-u-flex au-u-flex--column au-o-flow">
-  {{! TODO show the current replacement }}
   <Mandataris::Edit::StartEndDate
     @startDate={{this.startDate}}
     @endDate={{this.endDate}}
-    @from={{@prefillStart}}
-    @to={{@bestuursorgaanIT.bindingEinde}}
+    @from={{@limitFrom}}
+    @to={{@limitTo}}
     @onChange={{this.updateStartEndDate}}
     @onErrorStateUpdated={{this.updateErrorMap}}
   />

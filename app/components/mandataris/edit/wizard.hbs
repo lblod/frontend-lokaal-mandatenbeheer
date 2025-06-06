@@ -1,6 +1,6 @@
 <AuModal
   class="wizard-modal"
-  @modalOpen={{@isWizardOpen}}
+  @modalOpen={{true}}
   @closable={{true}}
   @closeModal={{this.closeWizardSafely}}
 >
@@ -18,6 +18,8 @@
         @onChange={{this.updateMandatarisFormValues}}
         @onReplacementChange={{this.updateReplacement}}
         @mandataris={{@mandataris}}
+        @replacementPerson={{this.replacementPerson}}
+        @originalReplacementPerson={{this.originalReplacementPerson}}
       />
     {{/if}}
 
@@ -25,11 +27,14 @@
       <Mandataris::Edit::ReplacementForm
         @person={{this.replacementPerson}}
         @prefillStart={{this.startForReplacement}}
+        @limitFrom={{this.formValues.start}}
+        @limitTo={{this.replacementLimitTo}}
         @prefillEinde={{this.endForReplacement}}
         @prefillFractie={{this.fractieForReplacement}}
         @bestuursorgaanIT={{@bestuursorgaanIT}}
         @bestuurseenheid={{@bestuurseenheid}}
-        @onFormIsValid={{this.updateReplacementStepCompleted}}
+        @onFormIsValid={{this.updateReplacementStepValid}}
+        @onChange={{this.updateReplacementFormValues}}
       />
     {{/if}}
 

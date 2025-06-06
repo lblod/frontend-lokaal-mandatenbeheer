@@ -14,6 +14,35 @@ export default class MandatarisEditStartEndDate extends Component {
   @tracked startErrorMessage;
   @tracked endErrorMessage;
 
+  constructor() {
+    super(...arguments);
+    setTimeout(() => {
+      const oldStartErrorMessage = this.startErrorMessage;
+      const oldEndErrorMessage = this.endErrorMessage;
+      this.startErrorMessage = this.getErrorMessage(
+        this.args.startDate,
+        this.startDateLabel
+      );
+      this.endErrorMessage = this.getErrorMessage(
+        this.args.endDate,
+        this.endDateLabel
+      );
+      if (
+        oldStartErrorMessage !== this.startErrorMessage ||
+        oldEndErrorMessage !== this.endErrorMessage
+      ) {
+        this.args.onErrorStateUpdated?.({
+          id: 'startDate',
+          hasErrors: !!this.startErrorMessage,
+        });
+        this.args.onErrorStateUpdated?.({
+          id: 'endDate',
+          hasErrors: !!this.endErrorMessage,
+        });
+      }
+    });
+  }
+
   get hardMinDate() {
     return isValidDate(this.args.from) ? this.args.from : null;
   }

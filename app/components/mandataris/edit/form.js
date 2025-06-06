@@ -28,9 +28,9 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked endDate;
   @tracked fractie;
   @tracked rangorde;
-  @tracked person;
   @tracked replacementMandataris;
   @tracked replacementPerson;
+  @tracked originalReplacementPerson;
 
   @tracked errorMap = new Map();
 
@@ -49,7 +49,6 @@ export default class MandatarisEditFormComponent extends Component {
     this.mandaat = await this.args.formValues.bekleedt;
     this.status = await this.args.formValues.status;
     this.fractie = await this.args.formValues.fractie;
-    this.person = await this.args.formValues.isBestuurlijkeAliasVan;
     this.replacementMandataris =
       (await this.args.formValues.tijdelijkeVervangingen)?.[0] || null;
     this.replacementPerson =
@@ -62,12 +61,13 @@ export default class MandatarisEditFormComponent extends Component {
 
   get hasChanges() {
     return (
-      this.status?.id !== this.args.formValues.status?.id ||
-      !moment(this.startDate).isSame(moment(this.args.formValues.start)) ||
-      !moment(this.endDate).isSame(moment(this.args.formValues.einde)) ||
-      this.fractie?.id !== this.args.formValues.fractie?.id ||
-      this.rangorde !== this.args.formValues.rangorde ||
-      this.replacementPerson?.id !== this.person.id
+      this.status?.id !== this.args.mandataris.status?.id ||
+      !moment(this.startDate).isSame(moment(this.args.mandataris.start)) ||
+      !moment(this.endDate).isSame(moment(this.args.mandataris.einde)) ||
+      this.fractie?.id !==
+        this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
+      this.rangorde !== this.args.mandataris.rangorde ||
+      this.args.originalReplacementPerson?.id !== this.replacementPerson?.id
     );
   }
 
@@ -133,14 +133,11 @@ export default class MandatarisEditFormComponent extends Component {
       ];
     }
 
-    this.args.onFormIsValid?.(
-      !this.formHasErrors && !this.disabled && this.hasChanges,
-      {
-        mandataris: this.args.formValues,
-        replacementPerson: this.replacementPerson,
-        replacementMandataris: this.replacementMandataris,
-      }
-    );
+    this.args.onFormIsValid?.(!this.formHasErrors && !this.disabled, {
+      mandataris: this.args.formValues,
+      replacementPerson: this.replacementPerson,
+      replacementMandataris: this.replacementMandataris,
+    });
   }
 
   @action

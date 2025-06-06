@@ -97,7 +97,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         return true;
       }
       const response = await fetch(
-        `/mandataris-api/personen/${this.person.id}/check-fraction`,
+        `/mandataris-api/personen/${this.args.person.id}/check-fraction`,
         {
           method: 'POST',
           headers: {
