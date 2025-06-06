@@ -472,13 +472,7 @@ export default class MandatarisEditWizard extends Component {
         this.newMandataris = newMandataris;
         this.isReplacementAdded = this.replacementPerson;
         this.isUpdateState = true;
-        const waitForRangorde = await this.shouldOpenRangordeModal();
-        if (!waitForRangorde) {
-          this.router.transitionTo(
-            'mandatarissen.mandataris',
-            newMandataris.id
-          );
-        }
+        this.args.onFinish(this.args.mandataris, this.newMandataris);
       })
       .catch((e) => {
         this.isSaving = false;
@@ -626,20 +620,6 @@ export default class MandatarisEditWizard extends Component {
     );
   }
 
-  async shouldOpenRangordeModal() {
-    const mandaat = await this.newMandataris.bekleedt;
-    if (!mandaat.hasRangorde) {
-      return false;
-    }
-    if ((await this.newMandataris.status).uri !== MANDATARIS_VERHINDERD_STATE) {
-      return false;
-    }
-    if (this.replacementPerson) {
-      this.isRangordeModalOpen = true;
-    }
-    return this.isRangordeModalOpen;
-  }
-
   get wizardDiffs() {
     if (!this.args.mandataris) {
       return [];
@@ -721,11 +701,5 @@ export default class MandatarisEditWizard extends Component {
   @action
   toggleMirrorToOCMW() {
     this.mirrorToOCMW = !this.mirrorToOCMW;
-  }
-
-  @action
-  dontNavigateToRangorde() {
-    this.isRangordeModalOpen = false;
-    this.router.transitionTo('mandatarissen.mandataris', this.newMandataris.id);
   }
 }

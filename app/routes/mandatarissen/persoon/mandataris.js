@@ -82,6 +82,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       [...mandatarissen].sort((a, b) => b.start - a.start)[0].id ===
       mandataris.id;
 
+    const firstBestuursorgaanInTijd = bestuursorganen[0];
+
     return RSVP.hash({
       bestuurseenheid,
       mandataris,
@@ -90,6 +92,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       history,
       isMostRecentVersion,
       bestuursorganen,
+      firstBestuursorgaanInTijd,
       periodeHasLegislatuur,
       behandeldeVergaderingen,
       linkedMandataris,
@@ -230,5 +233,11 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
 
     const json = await result.json();
     return json.instances;
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.isRangordeModalOpen = false;
+    controller.newMandataris = null;
   }
 }

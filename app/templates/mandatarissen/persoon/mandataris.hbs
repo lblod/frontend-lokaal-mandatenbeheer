@@ -99,8 +99,48 @@
     @mandatarisFormValues={{this.mandatarisFormValues}}
     @isFractieRequired={{this.model.isFractieRequired}}
     @showOCMWLinkedMandatarisWarning={{this.showOCMWLinkedMandatarisWarning}}
+    @onFinish={{this.checkIfShouldOpenRangordeModal}}
   />
 {{/if}}
+
+{{#if this.isRangordeModalOpen}}
+  <AuModal
+    @modalOpen={{this.isRangordeModalOpen}}
+    @closable={{true}}
+    @closeModal={{fn (mut this.isRangordeModalOpen) false}}
+  >
+    <:title>Rangorde vervanger</:title>
+    <:body>
+      <p>
+        U heeft een mandataris die een rangorde heeft, verhinderd. Deze rangorde
+        kan niet automatisch overgenomen worden in de vervanger. Het toewijzen
+        van een rangorde kan namelijk gevolgen hebben op de rangorde van andere
+        mandatarissen. Wenst u dit nu aan te passen? Het is ook mogelijk dit op
+        een later tijdstip aan te passen via de "wijzig rangorde" functie in het
+        bestuursorgaan.
+      </p>
+    </:body>
+    <:footer>
+      <AuToolbar as |Group|>
+        <Group>
+          <AuLink
+            @skin="button"
+            @route="organen.orgaan.edit-rangorde"
+            @model={{this.model.firstBestuursorgaanInTijd.isTijdsspecialisatieVan.id}}
+            @query={{hash
+              bestuursperiode=this.model.firstBestuursorgaanInTijd.heeftBestuursperiode.id
+            }}
+          >
+            Ja
+          </AuLink>
+          <AuButton
+            @skin="secondary"
+            {{on "click" this.navigateToNewMandataris}}
+          >Nee</AuButton>
+        </Group>
+      </AuToolbar>
+    </:footer>
+  </AuModal>{{/if}}
 
 <Mandatarissen::DeleteModal
   @isOpen={{this.isDeleteModalOpen}}

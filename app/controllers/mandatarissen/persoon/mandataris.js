@@ -3,13 +3,17 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
 
 export default class MandatarissenPersoonMandatarisReworkController extends Controller {
   @service currentSession;
+  @service router;
 
   @tracked isDeleteModalOpen;
   @tracked isEditModalOpen;
   @tracked mandatarisFormValues;
+  @tracked newMandataris = null;
+  @tracked isRangordeModalOpen = false;
 
   get bestuursorganenTitle() {
     const bestuursfunctie = this.model.mandataris.bekleedt
@@ -73,5 +77,30 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
   closeWizard() {
     this.mandatarisFormValues = null;
     this.isEditModalOpen = false;
+  }
+
+  @action async checkIfShouldOpenRangordeModal(
+    originalMandataris,
+    newMandataris
+  ) {
+    this.newMandataris = newMandataris;
+    const mandaat = await newMandataris.bekleedt;
+    if (
+      mandaat.hasRangorde &&
+      (await newMandataris.status).uri === MANDATARIS_VERHINDERD_STATE &&
+      (await originalMandataris.status).uri !== MANDATARIS_VERHINDERD_STATE
+    ) {
+      this.isRangordeModalOpen = true;
+    } else {
+      this.navigateToNewMandataris();
+    }
+  }
+
+  @action
+  navigateToNewMandataris() {
+    const newMandataris = this.newMandataris;
+    this.newMandataris = null;
+    this.isRangordeModalOpen = false;
+    this.router.transitionTo('mandatarissen.mandataris', newMandataris.id);
   }
 }
