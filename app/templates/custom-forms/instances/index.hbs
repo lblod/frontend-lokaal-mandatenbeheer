@@ -50,6 +50,15 @@
 >
   <:body>
     <p>{{this.removeFormModalText}}</p>
+    {{#if this.formUsageLabels}}
+      <p class="au-u-margin-top">Verwijder eerst de link naar dit formulier uit
+        volgende formulieren:</p>
+      <ul>
+        {{#each this.formUsageLabels as |label|}}
+          <li>- {{label}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
   </:body>
   <:footer>
     <AuButtonGroup
@@ -59,7 +68,7 @@
         @alert={{true}}
         @disabled={{or
           this.isDeleting
-          this.model.isUsedInCustomFormConfiguration
+          this.model.customFormConfigurationUsage.hasUsage
         }}
         @loading={{this.isDeleting}}
         @loadingMessage="Formulier en instanties worden verwijderd"
