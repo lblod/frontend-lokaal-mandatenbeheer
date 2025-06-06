@@ -60,7 +60,10 @@ export default class CustomFormsService extends Service {
       console.error({ jsonResponse });
     }
 
-    return jsonResponse;
+    return {
+      hasUsage: !!jsonResponse.hasUsage,
+      formLabels: jsonResponse.formLabels,
+    };
   }
 
   async getInstanceUsage(instanceUri) {

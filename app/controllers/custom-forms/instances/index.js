@@ -93,9 +93,16 @@ export default class CustomFormsInstancesIndexController extends Controller {
     this.formToDelete = null;
   }
 
+  get formUsageLabels() {
+    if (this.model.customFormConfigurationUsage.hasUsage) {
+      return this.model.customFormConfigurationUsage.formLabels;
+    }
+    return null;
+  }
+
   get removeFormModalText() {
-    if (this.model.isUsedInCustomFormConfiguration) {
-      return 'Dit type formulier wordt gebruikt in de configuratie van een extensie of eigen formulier. Hierdoor kan je dit formulier niet verwijderen.';
+    if (this.model.customFormConfigurationUsage.hasUsage) {
+      return `Dit type formulier wordt gebruikt in de configuratie van een extensie of eigen formulier. Hierdoor kan je dit formulier niet verwijderen.`;
     }
 
     if (this.model.usage.hasUsage) {
