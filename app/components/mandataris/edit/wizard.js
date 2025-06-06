@@ -9,7 +9,6 @@ import { tracked } from '@glimmer/tracking';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
-import { MANDATARIS_VERHINDERD_STATE } from 'frontend-lmb/utils/well-known-uris';
 import { timeout } from 'ember-concurrency';
 
 const UPDATE_STATE = 'update state';
