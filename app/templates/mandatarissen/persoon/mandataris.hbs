@@ -90,16 +90,17 @@
 
 </div>
 
-<Mandataris::Edit::Wizard
-  @isWizardOpen={{this.isEditModalOpen}}
-  @closeWizard={{this.closeWizard}}
-  @bestuurseenheid={{@model.bestuurseenheid}}
-  @bestuursorgaanIT={{get @model.bestuursorganen 0}}
-  @mandataris={{@model.mandataris}}
-  @mandatarisFormValues={{this.mandatarisFormValues}}
-  @isFractieRequired={{this.model.isFractieRequired}}
-  @showOCMWLinkedMandatarisWarning={{this.showOCMWLinkedMandatarisWarning}}
-/>
+{{#if this.isEditModalOpen}}
+  <Mandataris::Edit::Wizard
+    @closeWizard={{this.closeWizard}}
+    @bestuurseenheid={{@model.bestuurseenheid}}
+    @bestuursorgaanIT={{get @model.bestuursorganen 0}}
+    @mandataris={{@model.mandataris}}
+    @mandatarisFormValues={{this.mandatarisFormValues}}
+    @isFractieRequired={{this.model.isFractieRequired}}
+    @showOCMWLinkedMandatarisWarning={{this.showOCMWLinkedMandatarisWarning}}
+  />
+{{/if}}
 
 <Mandatarissen::DeleteModal
   @isOpen={{this.isDeleteModalOpen}}

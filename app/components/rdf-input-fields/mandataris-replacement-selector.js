@@ -24,7 +24,7 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
   @service store;
   @service multiUriFetcher;
 
-  @tracked replacements = null;
+  @tracked replacement = null;
   @tracked initialized = false;
   @tracked mandaat = null;
   @tracked shouldRender = false;
@@ -74,9 +74,9 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
         new NamedNode(MANDATARIS_TITELVOEREND_STATE),
         this.storeOptions.sourceGraph
       );
-    if (!this.shouldRender && this.replacements?.length > 0) {
+    if (!this.shouldRender && this.replacement) {
       // without timeout, the form ttl doesn't update immediately
-      setTimeout(() => this.selectReplacement([]), 100);
+      setTimeout(() => this.selectReplacement(null), 100);
     }
   }
 
@@ -145,7 +145,7 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
       'mandataris',
       replacementUris
     );
-    this.replacements = matches;
+    this.replacement = matches?.[0];
   }
 
   search = task({ keepLatest: true }, async (searchData) => {
@@ -164,24 +164,22 @@ export default class MandatarisReplacementSelector extends InputFieldComponent {
   });
 
   @action
-  selectReplacement(mandatarises) {
+  selectReplacement(mandataris) {
     if (this.isDestroyed || this.isDestroying) {
       return;
     }
-    this.replacements = mandatarises;
+    this.replacement = mandataris;
 
     // Retrieve options in store
     const matches = triplesForPath(this.storeOptions, true).values;
 
     // Cleanup old value(s) in the store
     matches
-      .filter((m) => !mandatarises.find((opt) => m.value == opt.uri))
+      .filter((m) => ![mandataris].find((opt) => m.value == opt.uri))
       .forEach((m) => updateSimpleFormValue(this.storeOptions, undefined, m));
 
     // Insert new value in the store
-    mandatarises.forEach((mandataris) =>
-      updateSimpleFormValue(this.storeOptions, new NamedNode(mandataris.uri))
-    );
+    updateSimpleFormValue(this.storeOptions, new NamedNode(mandataris.uri));
 
     this.hasBeenFocused = true;
     super.updateValidations();

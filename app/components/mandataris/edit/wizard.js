@@ -40,6 +40,7 @@ export default class MandatarisEditWizard extends Component {
   @tracked isMandatarisVerhinderd;
   @tracked isSaving;
   @tracked formValues;
+  @tracked loading = true;
 
   @tracked isUnsavedChangesModalOpen;
   @tracked isRangordeModalOpen;
@@ -69,6 +70,15 @@ export default class MandatarisEditWizard extends Component {
   constructor() {
     super(...arguments);
     this.formValues = this.args.mandatarisFormValues || {};
+    setTimeout(async () => {
+      const originalReplacement = (
+        await this.args.mandataris.tijdelijkeVervangingen
+      )?.[0];
+      const person = await originalReplacement?.isBestuurlijkeAliasVan;
+      this.replacementPerson = person;
+      this.originalReplacementPerson = person;
+      this.loading = false;
+    });
   }
 
   get mandatarisTitle() {
@@ -95,6 +105,7 @@ export default class MandatarisEditWizard extends Component {
         isStepShown:
           this.isMandatarisVerhinderd &&
           this.replacementPerson &&
+          this.originalReplacementPerson != this.replacementPerson &&
           !this.replacementMandataris,
         canContinueToNextStep: this.isReplacementStepCompleted,
       },
@@ -108,6 +119,9 @@ export default class MandatarisEditWizard extends Component {
   }
 
   get activeStep() {
+    if (this.loading) {
+      return null;
+    }
     if (!this.steps[this.activeStepIndex]) {
       showErrorToast(
         this.toaster,
@@ -282,17 +296,12 @@ export default class MandatarisEditWizard extends Component {
     await timeout(300); // give date inputs time to update values
 
     await this.checkIfCanMirrorToOCMW();
-    const originalReplacement = (
-      await this.args.mandataris.tijdelijkeVervangingen
-    )?.[0];
-    this.originalReplacementPerson =
-      await originalReplacement?.isBestuurlijkeAliasVan;
     await this.updateReasonOptions();
 
     this.checkingMandatarisInput = false;
 
     this.startForReplacement =
-      this.startForReplacement || this.formValues?.start;
+      this.startForReplacement || this.formValues?.start || new Date();
     this.endForReplacement = this.endForReplacement || this.formValues?.einde;
 
     return this.activeStep.canContinueToNextStep;
@@ -354,11 +363,7 @@ export default class MandatarisEditWizard extends Component {
   }
 
   @action
-  async updateMandatarisStepCompleted(isCompleted, formValues) {
-    if (isCompleted) {
-      this.replacementPerson = formValues.replacementPerson;
-      this.replacementMandataris = formValues.replacementMandataris;
-    }
+  async updateMandatarisStepCompleted(isCompleted) {
     this.isMandatarisStepCompleted = isCompleted;
     this.isMandatarisVerhinderd = (
       await this.args.mandatarisFormValues.status
@@ -366,11 +371,13 @@ export default class MandatarisEditWizard extends Component {
   }
 
   @action
-  updateReplacementStepCompleted(isCompleted, replacementProps) {
-    this.isReplacementStepCompleted = isCompleted;
-    if (isCompleted) {
-      this.replacementProps = replacementProps;
-    }
+  updateReplacementStepValid(valid) {
+    this.isReplacementStepCompleted = valid;
+  }
+
+  @action
+  updateReplacementFormValues(replacementProps) {
+    this.replacementProps = replacementProps;
     this.startForReplacement = replacementProps.start;
     this.endForReplacement = replacementProps.einde;
     this.fractieForReplacement = replacementProps.fractie;
@@ -552,6 +559,9 @@ export default class MandatarisEditWizard extends Component {
   }
 
   async handleReplacement(replacedMandataris) {
+    if (this.replacementPerson === this.originalReplacementPerson) {
+      return;
+    }
     let replacer = null;
     if (this.replacementMandataris) {
       // the replacement mandataris was already chosen from a list of pre-existing mandatarissen. We can just connect to the existing one
@@ -681,6 +691,10 @@ export default class MandatarisEditWizard extends Component {
       this.formValues.start,
       'day'
     );
+  }
+
+  get replacementLimitTo() {
+    return this.formValues.einde || this.args.bestuursorgaanIT.bindingEinde;
   }
 
   @action
