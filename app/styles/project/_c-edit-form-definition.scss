@@ -4,7 +4,7 @@
   flex-direction: row;
   gap: 1rem;
   padding: 2rem;
-  height: 100%;
+  flex-grow: 1;
 }
 
 @media (max-width: 750px) {
