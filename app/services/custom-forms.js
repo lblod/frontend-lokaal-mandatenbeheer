@@ -50,6 +50,19 @@ export default class CustomFormsService extends Service {
     };
   }
 
+  async isFormDefinitionUsedInCustomFormConfiguration(formDefinitionId) {
+    const response = await fetch(
+      `${API.FORM_CONTENT_SERVICE}/definition/${formDefinitionId}/used-in-custom-form-configuration`
+    );
+    const jsonResponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error({ jsonResponse });
+    }
+
+    return jsonResponse;
+  }
+
   async getInstanceUsage(instanceUri) {
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/custom-form/find-usage?instanceUri=${encodeURIComponent(instanceUri)}`
