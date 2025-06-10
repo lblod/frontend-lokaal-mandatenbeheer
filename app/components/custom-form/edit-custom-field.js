@@ -8,6 +8,7 @@ import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
 
 import { LINK_TO_FORM_CUSTOM_DISPLAY_TYPE } from 'frontend-lmb/utils/well-known-uris';
+import { isCustomDisplayType } from 'frontend-lmb/models/display-type';
 
 export default class CustomFormEditCustomField extends Component {
   @use(setSelectedField) setSelectedField;
@@ -30,6 +31,10 @@ export default class CustomFormEditCustomField extends Component {
 
   get fields() {
     return this.getFieldsForForm?.value || [];
+  }
+
+  get isStandardField() {
+    return !isCustomDisplayType(this.args.selectedField?.displayType);
   }
 
   @cached

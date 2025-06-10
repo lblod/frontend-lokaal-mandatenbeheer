@@ -48,10 +48,10 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
       return '';
     }
 
-    const classes = ['custom-form-field'];
+    const classes = ['rdf-field'];
 
     if (this.isFieldSelected) {
-      classes.push('custom-form-field--selected');
+      classes.push('rdf-field--selected');
     }
 
     return classes.join(' ');

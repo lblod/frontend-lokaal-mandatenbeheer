@@ -30,6 +30,9 @@ export default class DisplayTypeModel extends Model {
 }
 
 export function isCustomDisplayType(uri) {
+  if (!uri) {
+    return false;
+  }
   return [
     TEXT_CUSTOM_DISPLAY_TYPE,
     DATE_CUSTOM_DISPLAY_TYPE,

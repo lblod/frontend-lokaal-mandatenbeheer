@@ -38,6 +38,20 @@ export default class RdfInputFieldsStandardFieldWrapperComponent extends Compone
     return this.formState?.clickedField?.uri === this.args.field.uri.value;
   }
 
+  get styleClassForMainContainer() {
+    if (!this.formState?.canSelectField) {
+      return '';
+    }
+
+    const classes = ['rdf-field'];
+
+    if (this.isFieldSelected) {
+      classes.push('rdf-field--selected');
+    }
+
+    return classes.join(' ');
+  }
+
   @action
   interactedWithField() {
     this.hasErrors = this.errors.length;

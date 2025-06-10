@@ -2,7 +2,13 @@
   {{#unless this.selectedField}}
     <p>Selecteer een veld om aan te passen</p>
   {{/unless}}
-  {{#if this.selectedField}}
+
+  {{#if (and this.selectedField this.isStandardField)}}
+    <p>Dit veld kan niet bewerkt worden doordat dit behoord tot de basis van het
+      formulier.</p>
+  {{/if}}
+
+  {{#if (and this.selectedField (not this.isStandardField))}}
     <form class="au-c-form au-o-flow">
       <AuFormRow @alignment="default">
         <AuLabel
