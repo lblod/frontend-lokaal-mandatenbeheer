@@ -23,6 +23,6 @@
   <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
 {{/each}}
 
-{{#each this.warnings as |warning|}}
+{{#each this.allWarnings as |warning|}}
   <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
 {{/each}}
