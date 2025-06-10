@@ -13,10 +13,24 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
 
   @service store;
   @tracked rijksregisternummer;
+  @tracked duplicateWarningMessage;
 
   constructor() {
     super(...arguments);
     this.loadProvidedValue();
+  }
+
+  get hasWarnings() {
+    return this.allWarnings.length >= 1;
+  }
+
+  get allWarnings() {
+    const warnings = [...this.warnings];
+
+    if (this.duplicateWarningMessage) {
+      warnings.push({ resultMessage: this.duplicateWarningMessage });
+    }
+    return warnings;
   }
 
   async loadProvidedValue() {
@@ -25,6 +39,7 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     if (matches.values.length > 0) {
       this.rijksregisternummer = matches.values[0].value;
       replaceSingleFormValue(this.storeOptions, this.rijksregisternummer);
+      await this.checkForDuplicates(this.rijksregisternummer);
     }
   }
 
@@ -41,8 +56,20 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
       rijksregisternummer ? rijksregisternummer : null
     );
 
+    await this.checkForDuplicates(this.rijksregisternummer);
     this.updateValidations();
 
     this.hasBeenFocused = true;
+  }
+
+  async checkForDuplicates(rrn) {
+    const duplicateRrns = await this.store.query('identificator', {
+      'filter[:exact:identificator]': rrn,
+    });
+    if (duplicateRrns.length >= 1) {
+      this.duplicateWarningMessage = `Er bestaat al een persoon met dit rijksregisternummer.`;
+    } else {
+      this.duplicateWarningMessage = null;
+    }
   }
 }
