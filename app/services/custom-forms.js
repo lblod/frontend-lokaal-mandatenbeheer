@@ -91,7 +91,6 @@ export default class CustomFormsService extends Service {
       const jsonResponse = await response.json();
       console.error({ jsonResponse });
     }
-    await form.destroyRecord();
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 
