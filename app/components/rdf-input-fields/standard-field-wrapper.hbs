@@ -2,26 +2,42 @@
   <div class={{this.styleClassForMainContainer}}>
     {{! template-lint-disable no-invalid-interactive }}
     <div
-      class="au-u-flex au-u-flex--column au-u-padding-small au-u-padding-left-none"
+      class="au-u-flex au-u-flex--row au-u-padding-small au-u-padding-left-none"
       {{on "click" this.passOnClickedField}}
     >
-      <div class="au-u-flex au-u-flex--row">
-        {{#unless this.formState.isReadOnly}}
-          <AuLabel @required={{this.isRequired}}>{{this.title}}</AuLabel>
-        {{/unless}}
-      </div>
-      <div
-        class="au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny au-u-margin-right-small"
-      >
-        <div class="flex-grow">
-          {{#if this.isFieldReadOnly}}
-            <ReadOnlyFieldForDisplayType
-              @field={{@field}}
-              @storeOptions={{this.storeOptions}}
-            />
-          {{else}}
-            {{yield}}
+      <div class="au-u-flex au-u-flex--column">
+        <div class="au-u-flex au-u-flex--row">
+          {{#unless this.formState.isReadOnly}}
+            <AuLabel @required={{this.isRequired}}>{{this.title}}</AuLabel>
+          {{/unless}}
+          {{#if (and this.formState.isEditFormDefinitionForm)}}
+            <Shared::Tooltip
+              @showTooltip={{true}}
+              role={{@role}}
+              @tooltipText="Dit veld kan niet bewerkt worden"
+            >
+              <AuButton
+                @hideText={{true}}
+                @skin="naked"
+                @icon="lock-closed"
+                class="au-u-padding-bottom-tiny au-u-muted"
+              />
+            </Shared::Tooltip>
           {{/if}}
+        </div>
+        <div
+          class="au-u-flex au-u-flex--between au-u-flex--vertical-start au-u-flex--spaced-tiny au-u-margin-right-small"
+        >
+          <div class="flex-grow">
+            {{#if this.isFieldReadOnly}}
+              <ReadOnlyFieldForDisplayType
+                @field={{@field}}
+                @storeOptions={{this.storeOptions}}
+              />
+            {{else}}
+              {{yield}}
+            {{/if}}
+          </div>
         </div>
       </div>
     </div>
