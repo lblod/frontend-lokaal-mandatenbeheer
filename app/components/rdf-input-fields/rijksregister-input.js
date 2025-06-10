@@ -62,7 +62,17 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     this.hasBeenFocused = true;
   }
 
+  get shouldCheckOnDuplicateRrn() {
+    return !!this.constraints.find(
+      (c) => c.type?.value === 'http://mu.semte.ch/vocabularies/ext/IsUniqueRrn'
+    );
+  }
+
   async checkForDuplicates(rrn) {
+    if (!this.shouldCheckOnDuplicateRrn) {
+      return;
+    }
+
     const duplicateRrns = await this.store.query('identificator', {
       'filter[:exact:identificator]': rrn,
     });
