@@ -130,3 +130,8 @@ export function parse(nrn) {
 
 export const rijksregisternummerValidation = (value) =>
   isValidRijksregisternummer(value.value);
+
+export const warnWhenInputIsDuplicateRrn = () => {
+  // validation itself is done in the component as we do not have access to the ember-store in here
+  return true;
+};
