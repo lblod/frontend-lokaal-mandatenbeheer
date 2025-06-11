@@ -57,6 +57,9 @@ export default class FeaturesService extends Service {
 
   // cookie has to start with 'feature-{{feature-name}}'
   #getCookieFeatures() {
+    if (config.environment === 'production') {
+      return {};
+    }
     const cookieFeatures = {};
     const cookies = document.cookie.split('; ');
 
@@ -91,6 +94,9 @@ export default class FeaturesService extends Service {
 
   //query param has to start with 'feature-{{feature-name}}'
   #getQueryParamsFeatures(queryParams) {
+    if (config.environment === 'production') {
+      return {};
+    }
     const queryFeatures = {};
 
     for (const [key, value] of queryParams.entries()) {
