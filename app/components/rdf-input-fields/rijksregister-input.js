@@ -38,8 +38,7 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
 
     if (matches.values.length > 0) {
       this.rijksregisternummer = matches.values[0].value;
-      replaceSingleFormValue(this.storeOptions, this.rijksregisternummer);
-      await this.checkForDuplicates(this.rijksregisternummer);
+      await this.setFormValue(this.rijksregisternummer);
     }
   }
 
@@ -50,13 +49,7 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     }
     const rijksregisternummer = event.target.value.trim();
     this.rijksregisternummer = rijksregisternummer;
-    let formValue = rijksregisternummer ? rijksregisternummer : null;
-
-    await this.checkForDuplicates(this.rijksregisternummer);
-    if (this.isDuplicate) {
-      formValue = null;
-    }
-    replaceSingleFormValue(this.storeOptions, formValue);
+    await this.setFormValue(this.rijksregisternummer);
 
     this.updateValidations();
     this.hasBeenFocused = true;
@@ -89,5 +82,15 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     } else {
       this.duplicateErrorMessage = null;
     }
+  }
+
+  async setFormValue(rijksregisternummer) {
+    let formValue = rijksregisternummer ? rijksregisternummer : null;
+
+    await this.checkForDuplicates(this.rijksregisternummer);
+    if (this.isDuplicate) {
+      formValue = null;
+    }
+    replaceSingleFormValue(this.storeOptions, formValue);
   }
 }
