@@ -1,7 +1,7 @@
 import { registerCustomValidation } from '@lblod/submission-form-helpers';
 import {
   rijksregisternummerValidation,
-  warnWhenInputIsDuplicateRrn,
+  errorWhenInputIsDuplicateRrn,
 } from './rijksregisternummer';
 import { isValidRangorde } from './mandataris-rangorde';
 import { isValidMandatarisDate } from './mandataris-date-in-bestuursperiod';
@@ -15,8 +15,8 @@ export const registerCustomValidations = () => {
     rijksregisternummerValidation
   );
   registerCustomValidation(
-    'http://mu.semte.ch/vocabularies/ext/IsUniqueRrn',
-    warnWhenInputIsDuplicateRrn
+    'http://mu.semte.ch/vocabularies/ext/RijksregisternummerIsDuplicate',
+    errorWhenInputIsDuplicateRrn
   );
   registerCustomValidation(
     'http://mu.semte.ch/vocabularies/ext/ValidRangorde',
