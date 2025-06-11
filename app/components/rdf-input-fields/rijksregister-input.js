@@ -13,24 +13,24 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
 
   @service store;
   @tracked rijksregisternummer;
-  @tracked duplicateWarningMessage;
+  @tracked duplicateErrorMessage;
 
   constructor() {
     super(...arguments);
     this.loadProvidedValue();
   }
 
-  get hasWarnings() {
-    return this.allWarnings.length >= 1;
-  }
-
-  get allWarnings() {
-    const warnings = [...this.warnings];
-
-    if (this.duplicateWarningMessage) {
-      warnings.push({ resultMessage: this.duplicateWarningMessage });
+  // Overwrite of InputfieldComponent
+  get errors() {
+    if (this.duplicateErrorMessage) {
+      return [
+        {
+          resultMessage: this.duplicateErrorMessage,
+        },
+      ];
     }
-    return warnings;
+
+    return super.errors;
   }
 
   async loadProvidedValue() {
@@ -50,26 +50,34 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     }
     const rijksregisternummer = event.target.value.trim();
     this.rijksregisternummer = rijksregisternummer;
-
-    replaceSingleFormValue(
-      this.storeOptions,
-      rijksregisternummer ? rijksregisternummer : null
-    );
+    let formValue = rijksregisternummer ? rijksregisternummer : null;
 
     await this.checkForDuplicates(this.rijksregisternummer);
-    this.updateValidations();
+    if (this.isDuplicate) {
+      formValue = null;
+    }
+    replaceSingleFormValue(this.storeOptions, formValue);
 
+    this.updateValidations();
     this.hasBeenFocused = true;
+  }
+
+  get isDuplicate() {
+    return !!this.duplicateErrorMessage;
   }
 
   get shouldCheckOnDuplicateRrn() {
     return !!this.constraints.find(
-      (c) => c.type?.value === 'http://mu.semte.ch/vocabularies/ext/IsUniqueRrn'
+      (c) =>
+        c.type?.value ===
+        'http://mu.semte.ch/vocabularies/ext/RijksregisternummerIsDuplicate'
     );
   }
 
   async checkForDuplicates(rrn) {
-    if (!this.shouldCheckOnDuplicateRrn) {
+    // When set the value to null in the form when it is a duplicate
+    // When the field is not required it will not block the user for saving the form
+    if (!this.shouldCheckOnDuplicateRrn && !this.isRequired) {
       return;
     }
 
@@ -77,9 +85,9 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
       'filter[:exact:identificator]': rrn,
     });
     if (duplicateRrns.length >= 1) {
-      this.duplicateWarningMessage = `Er bestaat al een persoon met dit rijksregisternummer.`;
+      this.duplicateErrorMessage = `Er bestaat al een persoon met dit rijksregisternummer.`;
     } else {
-      this.duplicateWarningMessage = null;
+      this.duplicateErrorMessage = null;
     }
   }
 }
