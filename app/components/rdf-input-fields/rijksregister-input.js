@@ -25,6 +25,7 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     if (matches.values.length > 0) {
       this.rijksregisternummer = matches.values[0].value;
       this.setFormValue(this.rijksregisternummer);
+      this.hasBeenFocused = true;
     }
   }
 
