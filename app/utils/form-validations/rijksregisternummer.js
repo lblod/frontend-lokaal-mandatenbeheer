@@ -135,11 +135,9 @@ export const rijksregisternummerValidation = (value) =>
   isValidRijksregisternummer(value.value);
 
 export const isUniqueRijksregisternummer = async (literal) => {
-  if (!literal) {
+  if (!literal && !isValidRijksregisternummer(literal.value)) {
     return true;
   }
-
-  await timeout(3000); // TODO: remove
 
   const duplicates = await ApplicationRoute.store.query('identificator', {
     'filter[:exact:identificator]': literal.value,
