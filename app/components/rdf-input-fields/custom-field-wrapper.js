@@ -77,7 +77,7 @@ export default class RdfInputFieldsCustomFieldWrapperComponent extends Component
     return validationResultsForField(
       this.args.field.uri,
       this.storeOptions
-    ).filter((result) => !result.valid);
+    ).then((results) => results.filter((result) => !result.valid));
   }
 
   @action
