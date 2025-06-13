@@ -50,6 +50,22 @@ export default class CustomFormsService extends Service {
     };
   }
 
+  async isFormDefinitionUsedInCustomFormConfiguration(formDefinitionId) {
+    const response = await fetch(
+      `${API.FORM_CONTENT_SERVICE}/definition/${formDefinitionId}/used-in-custom-form-configuration`
+    );
+    const jsonResponse = await response.json();
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error({ jsonResponse });
+    }
+
+    return {
+      hasUsage: !!jsonResponse.hasUsage,
+      formLabels: jsonResponse.formLabels,
+    };
+  }
+
   async getInstanceUsage(instanceUri) {
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/custom-form/find-usage?instanceUri=${encodeURIComponent(instanceUri)}`
@@ -75,7 +91,6 @@ export default class CustomFormsService extends Service {
       const jsonResponse = await response.json();
       console.error({ jsonResponse });
     }
-    await form.destroyRecord();
     await timeout(RESOURCE_CACHE_TIMEOUT);
   }
 
