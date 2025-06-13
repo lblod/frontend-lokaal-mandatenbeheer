@@ -54,12 +54,7 @@ export default class EditableFormComponent extends Component {
 
   @action
   async setClickedField(fieldModel) {
-    let field = fieldModel;
-    if (this.args.onFieldSelected && fieldModel) {
-      await this.getFieldsForForm.retry();
-      field = this.fields.filter((f) => f.uri === fieldModel.uri?.value)[0];
-    }
-    this.args.onFieldSelected(field);
+    this.args.onFieldSelected(fieldModel);
   }
 
   get editableFormsEnabled() {
