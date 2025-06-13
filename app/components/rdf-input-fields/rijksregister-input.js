@@ -13,10 +13,24 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
 
   @service store;
   @tracked rijksregisternummer;
+  @tracked duplicateErrorMessage;
 
   constructor() {
     super(...arguments);
     this.loadProvidedValue();
+  }
+
+  // Overwrite of InputfieldComponent
+  get errors() {
+    if (this.duplicateErrorMessage) {
+      return [
+        {
+          resultMessage: this.duplicateErrorMessage,
+        },
+      ];
+    }
+
+    return super.errors;
   }
 
   async loadProvidedValue() {
@@ -24,7 +38,7 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
 
     if (matches.values.length > 0) {
       this.rijksregisternummer = matches.values[0].value;
-      replaceSingleFormValue(this.storeOptions, this.rijksregisternummer);
+      await this.setFormValue(this.rijksregisternummer);
     }
   }
 
@@ -35,14 +49,48 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     }
     const rijksregisternummer = event.target.value.trim();
     this.rijksregisternummer = rijksregisternummer;
-
-    replaceSingleFormValue(
-      this.storeOptions,
-      rijksregisternummer ? rijksregisternummer : null
-    );
+    await this.setFormValue(this.rijksregisternummer);
 
     this.updateValidations();
-
     this.hasBeenFocused = true;
+  }
+
+  get isDuplicate() {
+    return !!this.duplicateErrorMessage;
+  }
+
+  get shouldCheckOnDuplicateRrn() {
+    return !!this.constraints.find(
+      (c) =>
+        c.type?.value ===
+        'http://mu.semte.ch/vocabularies/ext/RijksregisternummerIsDuplicate'
+    );
+  }
+
+  async checkForDuplicates(rrn) {
+    // When set the value to null in the form when it is a duplicate
+    // When the field is not required it will not block the user for saving the form
+    if (!this.shouldCheckOnDuplicateRrn && !this.isRequired) {
+      return;
+    }
+
+    const duplicateRrns = await this.store.query('identificator', {
+      'filter[:exact:identificator]': rrn,
+    });
+    if (duplicateRrns.length >= 1) {
+      this.duplicateErrorMessage = `Er bestaat al een persoon met dit rijksregisternummer.`;
+    } else {
+      this.duplicateErrorMessage = null;
+    }
+  }
+
+  async setFormValue(rijksregisternummer) {
+    let formValue = rijksregisternummer ? rijksregisternummer : null;
+
+    await this.checkForDuplicates(this.rijksregisternummer);
+    if (this.isDuplicate) {
+      formValue = null;
+    }
+    replaceSingleFormValue(this.storeOptions, formValue);
   }
 }

@@ -130,3 +130,8 @@ export function parse(nrn) {
 
 export const rijksregisternummerValidation = (value) =>
   isValidRijksregisternummer(value.value);
+
+export const errorWhenInputIsDuplicateRrn = () => {
+  // validation itself is done in the component as  validations are not asynchronious
+  return true;
+};
