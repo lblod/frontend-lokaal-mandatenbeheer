@@ -1,5 +1,4 @@
 import ApplicationRoute from 'frontend-lmb/routes/application';
-import { timeout } from 'ember-concurrency';
 
 /* MIT License - Copyright © 2022 Dieter Luypaert <dieterluypaert@gmail.com> from https://github.com/moeriki/be-nrn
 
