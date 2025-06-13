@@ -27,6 +27,7 @@ export default class EditableFormComponent extends Component {
 
   constructor() {
     super(...arguments);
+    this.setClickedField(null);
     this.updateForm();
   }
 
@@ -53,8 +54,10 @@ export default class EditableFormComponent extends Component {
   }
 
   @action
-  async setClickedField(fieldModel) {
-    this.args.onFieldSelected(fieldModel);
+  setClickedField(fieldModel) {
+    if (this.args.onFieldSelected) {
+      this.args.onFieldSelected(fieldModel);
+    }
   }
 
   get editableFormsEnabled() {
