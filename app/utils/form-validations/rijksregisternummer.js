@@ -133,13 +133,18 @@ export function parse(nrn) {
 export const rijksregisternummerValidation = (value) =>
   isValidRijksregisternummer(value.value);
 
-export const isUniqueRijksregisternummer = async (literal) => {
-  if (!literal && !isValidRijksregisternummer(literal.value)) {
+export const isUniqueRijksregisternummer = async (literals) => {
+  if (literals?.length === 0) {
+    return true;
+  }
+  const rrn = literals[0].value;
+  const isValidRrn = isValidRijksregisternummer(rrn);
+  if (!isValidRrn) {
     return true;
   }
 
   const duplicates = await ApplicationRoute.store.query('identificator', {
-    'filter[:exact:identificator]': literal.value,
+    'filter[:exact:identificator]': rrn,
   });
 
   return duplicates.length === 0;
