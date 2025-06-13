@@ -27,6 +27,7 @@ export default class EditableFormComponent extends Component {
 
   constructor() {
     super(...arguments);
+    this.setClickedField(null);
     this.updateForm();
   }
 
@@ -53,13 +54,10 @@ export default class EditableFormComponent extends Component {
   }
 
   @action
-  async setClickedField(fieldModel) {
-    let field = fieldModel;
-    if (this.args.onFieldSelected && fieldModel) {
-      await this.getFieldsForForm.retry();
-      field = this.fields.filter((f) => f.uri === fieldModel.uri?.value)[0];
+  setClickedField(fieldModel) {
+    if (this.args.onFieldSelected) {
+      this.args.onFieldSelected(fieldModel);
     }
-    this.args.onFieldSelected(field);
   }
 
   get editableFormsEnabled() {

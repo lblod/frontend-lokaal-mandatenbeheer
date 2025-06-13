@@ -49,10 +49,6 @@ export default class CustomFormsInstancesDefinitionController extends Controller
 
   @action
   setSelectedField(field) {
-    if (!field) {
-      return;
-    }
-
     this.selectedField = field;
   }
 

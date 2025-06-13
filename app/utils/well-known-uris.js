@@ -101,6 +101,10 @@ export const KANDIDATENLIJST_KAMER_VOLKSVERTEGENWOORDIGING =
 
 export const TEXT_CUSTOM_DISPLAY_TYPE =
   'http://lblod.data.gift/display-types/lmb/custom-string-input';
+export const LONG_TEXT_CUSTOM_DISPLAY_TYPE =
+  'http://lblod.data.gift/display-types/lmb/custom-text-input';
+export const NUMBER_CUSTOM_DISPLAY_TYPE =
+  'http://lblod.data.gift/display-types/lmb/custom-number-input';
 export const DATE_CUSTOM_DISPLAY_TYPE =
   'http://lblod.data.gift/display-types/lmb/custom-date-input';
 export const ADRES_CUSTOM_DISPLAY_TYPE =
