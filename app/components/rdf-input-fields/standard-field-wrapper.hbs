@@ -10,7 +10,7 @@
           {{#unless this.formState.isReadOnly}}
             <AuLabel @required={{this.isRequired}}>{{this.title}}</AuLabel>
           {{/unless}}
-          {{#if (and this.formState.isEditFormDefinitionForm)}}
+          {{#if this.formState.isEditFormDefinitionForm}}
             <Shared::Tooltip
               @showTooltip={{true}}
               role={{@role}}
