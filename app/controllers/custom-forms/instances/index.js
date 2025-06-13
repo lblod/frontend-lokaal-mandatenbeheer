@@ -107,16 +107,16 @@ export default class CustomFormsInstancesIndexController extends Controller {
 
     if (this.model.usage.hasUsage) {
       const postFix =
-        'Door verder te gaan zal deze definitie met zijn implementaties definitief verwijderd worden.';
-      let countText = `Er werd ${this.model.usage.count} implementatie gevonden. `;
+        'Door verder te gaan zullen alle formulieren definitief verwijderd worden.';
+      let countText = `Er werd ${this.model.usage.count} formulier(en) gevonden. `;
 
       if (this.model.usage.count > 1) {
-        countText = `Er werden ${this.model.usage.count} implementaties gevonden. `;
+        countText = `Er werden ${this.model.usage.count} formulier(en) gevonden. `;
       }
 
       return countText + postFix;
     }
 
-    return 'Door verder te gaan zal deze form-definitie definitief verwijderd worden.';
+    return 'Door verder te gaan zal dit formulier definitief verwijderd worden.';
   }
 }
