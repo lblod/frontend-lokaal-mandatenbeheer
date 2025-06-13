@@ -23,7 +23,6 @@ export default class CustomFormsInstancesIndexRoute extends Route {
     return {
       form,
       formDefinition,
-      headerLabels: await this.semanticFormRepository.getHeaderLabels(form.id),
       usage,
     };
   }
