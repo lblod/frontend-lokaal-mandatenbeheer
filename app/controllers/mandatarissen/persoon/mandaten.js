@@ -26,7 +26,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @tracked canBecomeOnafhankelijk;
   @tracked currentNonOnafhankelijkeMandatarissen = [];
   @tracked isIndependentModalOpen = false;
-  @tracked isModalOpen = false;
+  @tracked isCreatingModalOpen = false;
   @tracked isEndMandatesModalOpen = false;
   @tracked selectedBestuursorgaan = null;
   @tracked activeOnly = true;
@@ -35,12 +35,12 @@ export default class MandatarissenPersoonMandatenController extends Controller {
 
   @action
   toggleModal() {
-    this.isModalOpen = !this.isModalOpen;
+    this.isCreatingModalOpen = !this.isCreatingModalOpen;
   }
 
   @action
   closeModal() {
-    this.isModalOpen = false;
+    this.isCreatingModalOpen = false;
     this.isEndMandatesModalOpen = false;
     this.selectedBestuursorgaan = null;
   }
