@@ -219,7 +219,6 @@
         @value={{this.date}}
         @onChange={{fn (mut this.date)}}
         @isRequired={{true}}
-        @endOfDay={{true}}
       />
     </div>
   </Modal.Body>
@@ -257,4 +256,10 @@
     persoon zal niet langer tot een fractie behoren en zal in al zijn mandaten
     als onafhankelijk beschouwd worden.
   </div>
+  <DateInput
+    @label="Datum wijziging"
+    @value={{this.date}}
+    @onChange={{fn (mut this.date)}}
+    @isRequired={{true}}
+  />
 </Shared::ConfirmationModal>

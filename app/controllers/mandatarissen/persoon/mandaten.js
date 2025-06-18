@@ -30,7 +30,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @tracked isEndMandatesModalOpen = false;
   @tracked selectedBestuursorgaan = null;
   @tracked activeOnly = true;
-  @tracked date = endOfDay(new Date());
+  @tracked date = new Date();
   sort = 'is-bestuurlijke-alias-van.achternaam';
 
   @action
@@ -105,11 +105,10 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         );
       await onafhankelijkeFractie.save();
 
-      const dateNow = new Date();
       const newMandatarisProps = await this.mandatarisService.createNewProps(
         mandataris,
         {
-          start: dateNow,
+          start: this.date,
           publicationStatus: await getNietBekrachtigdPublicationStatus(
             this.store
           ),
@@ -131,7 +130,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         newMandataris.id
       );
 
-      mandataris.einde = endOfDay(dateNow);
+      mandataris.einde = endOfDay(this.date);
       await mandataris.save();
     }
 
