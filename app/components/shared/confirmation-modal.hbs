@@ -9,7 +9,7 @@
     <AuToolbar as |Group|>
       <Group class="flex-grow">
         <AuButtonGroup>
-          <AuButton {{on "click" @confirm}}>
+          <AuButton @loading={{@loading}} {{on "click" @confirm}}>
             Bevestig
           </AuButton>
           <AuButton @skin="secondary" {{on "click" @cancel}}>
