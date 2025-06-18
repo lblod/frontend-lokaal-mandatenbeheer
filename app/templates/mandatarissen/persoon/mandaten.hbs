@@ -35,7 +35,7 @@
         }}
         @loadingMessage="Onafhankelijk worden"
         @disabled={{not this.canBecomeOnafhankelijk}}
-        {{on "click" (perform this.becomeOnafhankelijk)}}
+        {{on "click" (fn (mut this.isIndependentModalOpen) true)}}
       >
         Onafhankelijk worden
       </AuButton>
@@ -240,4 +240,41 @@
       </Group>
     </AuToolbar>
   </Modal.Footer>
+</AuModal>
+
+<AuModal
+  @modalOpen={{this.isIndependentModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isIndependentModalOpen) false}}
+>
+  <:title>
+    Onafhankelijk worden
+  </:title>
+  <:body>
+    <div>
+      Ben je zeker dat je deze persoon onafhankelijk wil maken?
+    </div>
+    <div>
+      Dit betekent dat alle mandaten van deze persoon aangepast zullen worden.
+      De persoon zal niet langer tot een fractie behoren en zal in al zijn
+      mandaten als onafhankelijk beschouwd worden.
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group class="flex-grow">
+        <AuButtonGroup>
+          <AuButton {{on "click" (perform this.becomeOnafhankelijk)}}>
+            Bevestig
+          </AuButton>
+          <AuButton
+            @skin="secondary"
+            {{on "click" (fn (mut this.isIndependentModalOpen) false)}}
+          >
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </:footer>
 </AuModal>

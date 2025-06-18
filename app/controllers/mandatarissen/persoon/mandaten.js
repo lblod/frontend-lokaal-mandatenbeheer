@@ -25,6 +25,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @tracked size = 20;
   @tracked canBecomeOnafhankelijk;
   @tracked currentNonOnafhankelijkeMandatarissen = [];
+  @tracked isIndependentModalOpen = false;
   @tracked isModalOpen = false;
   @tracked isEndMandatesModalOpen = false;
   @tracked selectedBestuursorgaan = null;
