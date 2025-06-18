@@ -112,10 +112,10 @@ export default class MandatarissenPersoonMandatenController extends Controller {
           fractie: onafhankelijkeFractie,
         }
       );
-      const newMandataris = await this.store.createRecord(
-        'mandataris',
-        newMandatarisProps
-      );
+      const newMandataris = await this.store.createRecord('mandataris', {
+        ...newMandatarisProps,
+        rangorde: mandataris.rangorde,
+      });
       await newMandataris.save();
 
       await this.mandatarisService.createNewLidmaatschap(
