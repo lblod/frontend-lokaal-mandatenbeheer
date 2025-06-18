@@ -34,16 +34,18 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   sort = 'is-bestuurlijke-alias-van.achternaam';
 
   @action
-  closeModal() {
+  resetModals() {
     this.isCreatingModalOpen = false;
     this.isEndMandatesModalOpen = false;
+    this.isIndependentModalOpen = false;
     this.selectedBestuursorgaan = null;
+    this.date = new Date();
   }
 
   @action
   createMandataris() {
     const bestuursorgaan = this.selectedBestuursorgaan;
-    this.closeModal();
+    this.resetModals();
     this.router.transitionTo(
       'organen.orgaan.mandataris.new',
       bestuursorgaan.id,
@@ -129,7 +131,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       await mandataris.save();
     }
 
-    this.isIndependentModalOpen = false;
+    this.resetModals();
     this.router.refresh();
   });
 
@@ -143,7 +145,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       `Active mandatatarissen beëindigd voor ${this.model.persoon.naam}`
     );
     this.activeOnly = false;
-    this.isEndMandatesModalOpen = false;
+    this.resetModals();
     this.router.refresh();
   });
 

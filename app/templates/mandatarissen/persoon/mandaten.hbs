@@ -158,7 +158,7 @@
 <AuModal
   @title="Selecteer orgaan"
   @modalOpen={{this.isCreatingModalOpen}}
-  @closeModal={{this.closeModal}}
+  @closeModal={{this.resetModals}}
   as |Modal|
 >
   <Modal.Body>
@@ -191,7 +191,7 @@
         >
           Voeg nieuw mandaat toe
         </AuButton>
-        <AuButton @skin="secondary" {{on "click" this.closeModal}}>
+        <AuButton @skin="secondary" {{on "click" this.resetModals}}>
           Annuleer
         </AuButton>
       </Group>
@@ -202,7 +202,7 @@
 <AuModal
   @title="Beëindig actieve mandaten"
   @modalOpen={{this.isEndMandatesModalOpen}}
-  @closeModal={{this.closeModal}}
+  @closeModal={{this.resetModals}}
   as |Modal|
 >
   <Modal.Body>
@@ -233,7 +233,7 @@
         >
           Beëindig mandatarissen
         </AuButton>
-        <AuButton @skin="secondary" {{on "click" this.closeModal}}>
+        <AuButton @skin="secondary" {{on "click" this.resetModals}}>
           Annuleer
         </AuButton>
       </Group>
@@ -245,7 +245,7 @@
   @title="Onafhankelijk worden"
   @isModalOpen={{this.isIndependentModalOpen}}
   @confirm={{perform this.becomeOnafhankelijk}}
-  @cancel={{fn (mut this.isIndependentModalOpen) false}}
+  @cancel={{this.resetModals}}
   @loading={{this.becomeOnafhankelijk.isRunning}}
 >
   <div>
