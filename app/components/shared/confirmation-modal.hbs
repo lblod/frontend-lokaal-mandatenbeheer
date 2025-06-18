@@ -9,7 +9,11 @@
     <AuToolbar as |Group|>
       <Group class="flex-grow">
         <AuButtonGroup>
-          <AuButton @loading={{@loading}} {{on "click" @confirm}}>
+          <AuButton
+            @loading={{@loading}}
+            @loadingMessage="Opslaan"
+            {{on "click" @confirm}}
+          >
             Bevestig
           </AuButton>
           <AuButton @skin="secondary" {{on "click" @cancel}}>
