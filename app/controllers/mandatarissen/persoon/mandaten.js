@@ -135,6 +135,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       await mandataris.save();
     }
 
+    this.isIndependentModalOpen = false;
     this.router.refresh();
   });
 
