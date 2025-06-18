@@ -40,7 +40,7 @@
         Onafhankelijk worden
       </AuButton>
     </Shared::Tooltip>
-    <AuButton {{on "click" this.toggleModal}}>
+    <AuButton {{on "click" (fn (mut this.isCreatingModalOpen) true)}}>
       Voeg nieuw mandaat toe
     </AuButton>
   </Group>

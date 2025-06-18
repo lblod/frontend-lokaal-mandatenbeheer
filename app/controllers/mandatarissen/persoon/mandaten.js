@@ -34,11 +34,6 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   sort = 'is-bestuurlijke-alias-van.achternaam';
 
   @action
-  toggleModal() {
-    this.isCreatingModalOpen = !this.isCreatingModalOpen;
-  }
-
-  @action
   closeModal() {
     this.isCreatingModalOpen = false;
     this.isEndMandatesModalOpen = false;
