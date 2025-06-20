@@ -8,7 +8,7 @@ import { task } from 'ember-concurrency';
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
-import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
+import { startOfDay, endOfDay } from 'frontend-lmb/utils/date-manipulation';
 
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
@@ -105,7 +105,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       const newMandatarisProps = await this.mandatarisService.createNewProps(
         mandataris,
         {
-          start: this.date,
+          start: startOfDay(this.date),
           publicationStatus: await getNietBekrachtigdPublicationStatus(
             this.store
           ),
