@@ -25,6 +25,7 @@ export default class ValidatieService extends Service {
   @tracked lastRunnningStatus;
   @tracked canShowReportIsGenerated;
   @tracked warmingUp = false;
+  @tracked resultsOrderedByClassAndInstance = [];
 
   async setup() {
     if (this.features.isEnabled('shacl-report')) {
@@ -64,15 +65,17 @@ export default class ValidatieService extends Service {
       return;
     }
     this.latestValidationResults = await response.json();
+    this.resultsOrderedByClassAndInstance =
+      await this.computeResultsOrderedByClassAndInstance();
   }
 
-  async getResultsByInstance(instance) {
-    const results = (await this.latestValidationResults) ?? [];
+  getResultsByInstance(instance) {
+    const results = this.latestValidationResults ?? [];
     return results.filter((result) => instance.uri === result.focusNode);
   }
 
   async getResultsByClass() {
-    const results = (await this.latestValidationResults) ?? [];
+    const results = this.latestValidationResults ?? [];
     const instancesPerType = new Map();
 
     for (const result of results) {
@@ -189,7 +192,7 @@ export default class ValidatieService extends Service {
         label: instance.validationText
           ? await instance.validationText
           : rawResult.focusNode,
-        context: await this.getContext(classUri, instance),
+        context: this.getContext(classUri, instance),
       };
     }
     if (
@@ -212,7 +215,7 @@ export default class ValidatieService extends Service {
         label: instance.validationText
           ? await instance.validationText
           : rawResult.focusNode,
-        context: await this.getContext(classUri, instance),
+        context: this.getContext(classUri, instance),
       };
     }
     if (
@@ -235,7 +238,7 @@ export default class ValidatieService extends Service {
         label: instance.validationText
           ? await instance.validationText
           : rawResult.focusNode,
-        context: await this.getContext(classUri, instance),
+        context: this.getContext(classUri, instance),
       };
     }
     return {
@@ -246,11 +249,11 @@ export default class ValidatieService extends Service {
       label: instance.validationText
         ? await instance.validationText
         : rawResult.focusNode,
-      context: await this.getContext(classUri, instance),
+      context: this.getContext(classUri, instance),
     };
   }
 
-  async getResultsOrderedByClassAndInstance() {
+  async computeResultsOrderedByClassAndInstance() {
     const grouped = await this.getResultsByClass();
     const flattened = [];
     for (const group of grouped) {
@@ -261,7 +264,7 @@ export default class ValidatieService extends Service {
     return flattened;
   }
 
-  async getContext(targetClass, instance) {
+  getContext(targetClass, instance) {
     const mapTargetClassToRoute = typeToEmberData;
     let targetId = instance?.id;
     return {
@@ -295,7 +298,7 @@ export default class ValidatieService extends Service {
   }
 
   async getIssuesForInstance(instance) {
-    const results = await this.latestValidationResults;
+    const results = this.latestValidationResults || [];
     if (!results) {
       return false;
     }
