@@ -76,21 +76,20 @@ export default class ValidatieService extends Service {
 
   async getResultsByClass() {
     const results = this.latestValidationResults ?? [];
-    const instancesPerType = new Map();
+    const instancesPerType = {};
 
     for (const result of results) {
       const currentResult =
-        instancesPerType.get(result.targetClassOfFocusNode) ?? [];
-      instancesPerType.set(
-        result.targetClassOfFocusNode,
-        currentResult.concat(result)
-      );
+        instancesPerType[result.targetClassOfFocusNode] ?? [];
+      instancesPerType[result.targetClassOfFocusNode] =
+        currentResult.concat(result);
     }
 
     // [ {class: { uri: mandaat:Mandataris, label}, instances: [{instance?, result, context?, label}]}]
     const enrichedInstancesPerType = [];
     await Promise.all(
-      instancesPerType.entries().map(async ([key, value]) => {
+      Object.keys(instancesPerType).map(async (key) => {
+        const value = instancesPerType[key] || [];
         const emberDataMapping = typeToEmberData[key];
         if (!emberDataMapping) {
           enrichedInstancesPerType.push({
