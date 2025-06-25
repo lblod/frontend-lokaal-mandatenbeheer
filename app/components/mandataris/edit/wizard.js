@@ -206,6 +206,15 @@ export default class MandatarisEditWizard extends Component {
         type: UPDATE_STATE,
       });
     }
+    if (
+      mandatarisStatus.isVerhinderd &&
+      mandatarisStatus.uri !== newStatus.uri
+    ) {
+      newReasons.push({
+        label: `gaat van status Verhinderd naar ${newStatus.label}`,
+        type: UPDATE_STATE,
+      });
+    }
     const changedLabels = this.wizardDiffs.map((diff) => {
       return diff.field.toLowerCase();
     });
