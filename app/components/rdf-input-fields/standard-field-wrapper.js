@@ -35,7 +35,9 @@ export default class RdfInputFieldsStandardFieldWrapperComponent extends Compone
   }
 
   get isFieldSelected() {
-    return this.formState?.clickedField?.uri === this.args.field.uri.value;
+    return (
+      this.formState?.clickedField?.uri?.value === this.args.field.uri.value
+    );
   }
 
   get styleClassForMainContainer() {
