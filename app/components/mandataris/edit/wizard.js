@@ -206,6 +206,12 @@ export default class MandatarisEditWizard extends Component {
         type: UPDATE_STATE,
       });
     }
+    if (mandatarisStatus.isVerhinderd && newStatus?.isEffectief) {
+      newReasons.push({
+        label: `is niet langer verhinderd en neemt het mandaat terug op`,
+        type: UPDATE_STATE,
+      });
+    }
     const changedLabels = this.wizardDiffs.map((diff) => {
       return diff.field.toLowerCase();
     });
