@@ -1,6 +1,7 @@
 import Model, { attr } from '@ember-data/model';
 import {
   MANDATARIS_BEEINDIGD_STATE,
+  MANDATARIS_EFFECTIEF_STATE,
   MANDATARIS_TITELVOEREND_STATE,
   MANDATARIS_VERHINDERD_STATE,
 } from 'frontend-lmb/utils/well-known-uris';
@@ -17,5 +18,9 @@ export default class MandatarisStatusCodeModel extends Model {
 
   get isBeeindigd() {
     return this.uri === MANDATARIS_BEEINDIGD_STATE;
+  }
+
+  get isEffectief() {
+    return this.uri === MANDATARIS_EFFECTIEF_STATE;
   }
 }

@@ -206,12 +206,9 @@ export default class MandatarisEditWizard extends Component {
         type: UPDATE_STATE,
       });
     }
-    if (
-      mandatarisStatus.isVerhinderd &&
-      mandatarisStatus.uri !== newStatus.uri
-    ) {
+    if (mandatarisStatus.isVerhinderd && newStatus?.isEffectief) {
       newReasons.push({
-        label: `gaat van status Verhinderd naar ${newStatus.label}`,
+        label: `is niet langer verhinderd en neemt het mandaat terug op`,
         type: UPDATE_STATE,
       });
     }
