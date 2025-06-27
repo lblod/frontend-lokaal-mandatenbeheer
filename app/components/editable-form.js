@@ -10,10 +10,10 @@ import { use } from 'ember-resources';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 
 import { API } from 'frontend-lmb/utils/constants';
-import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { isCustomForm } from 'frontend-lmb/utils/form-properties';
 import { isCustomDisplayType } from 'frontend-lmb/models/display-type';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
 export default class EditableFormComponent extends Component {
   @use(getFieldsForForm) getFieldsForForm;
@@ -106,21 +106,16 @@ function getFieldsForForm() {
       const response = await fetch(
         `${API.FORM_CONTENT_SERVICE}/custom-form/${this.currentForm.id}/fields`
       );
-
-      if (!response.ok) {
-        showErrorToast(
-          this.toaster,
-          `Er liep iets mis bij het ophalen van de velden voor formulier met id: ${this.currentForm?.id}`,
-          'Formulier'
-        );
-      }
-
-      const result = await response.json();
+      const parsedResponse = await handleResponse(
+        response,
+        this.toaster,
+        `Er liep iets mis bij het ophalen van de velden voor formulier met id: ${this.currentForm?.id}`
+      );
 
       if (this.args.onFieldsSet) {
-        this.args.onFieldsSet(result.fields);
+        this.args.onFieldsSet(parsedResponse.fields);
       }
-      return result.fields;
+      return parsedResponse.fields;
     } catch (e) {
       return [];
     }
