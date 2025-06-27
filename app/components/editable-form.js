@@ -13,6 +13,7 @@ import { API } from 'frontend-lmb/utils/constants';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { isCustomForm } from 'frontend-lmb/utils/form-properties';
+import { isCustomDisplayType } from 'frontend-lmb/models/display-type';
 
 export default class EditableFormComponent extends Component {
   @use(getFieldsForForm) getFieldsForForm;
@@ -54,10 +55,13 @@ export default class EditableFormComponent extends Component {
   }
 
   @action
-  setClickedField(fieldModel) {
-    if (this.args.onFieldSelected) {
-      this.args.onFieldSelected(fieldModel);
+  async setClickedField(fieldModel) {
+    let field = fieldModel;
+    if (isCustomDisplayType(fieldModel?.displayType)) {
+      await this.getFieldsForForm.retry();
+      field = this.fields.filter((f) => f.uri === fieldModel.uri?.value)[0];
     }
+    this.args.onFieldSelected?.(field);
   }
 
   get editableFormsEnabled() {

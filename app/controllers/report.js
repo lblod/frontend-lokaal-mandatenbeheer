@@ -2,17 +2,11 @@ import Controller from '@ember/controller';
 
 import { service } from '@ember/service';
 
-import { trackedFunction } from 'reactiveweb/function';
-import { use } from 'ember-resources';
-
 export default class ReportController extends Controller {
   @service validatie;
 
-  @use(getFlattenedResultsForLatestValidationReport)
-  getFlattenedResultsForLatestValidation;
-
   get allValidationErrors() {
-    return this.getFlattenedResultsForLatestValidation?.value || [];
+    return this.validatie.resultsOrderedByClassAndInstance;
   }
 
   get isEmptyResult() {
@@ -20,17 +14,6 @@ export default class ReportController extends Controller {
   }
 
   get reportIsRunning() {
-    return (
-      this.validatie.isRunning ||
-      this.getFlattenedResultsForLatestValidation.isLoading
-    );
+    return this.validatie.isRunning;
   }
-}
-
-function getFlattenedResultsForLatestValidationReport() {
-  return trackedFunction(async () => {
-    if (!this.validatie.runningStatus) {
-      return await this.validatie.getResultsOrderedByClassAndInstance();
-    }
-  });
 }
