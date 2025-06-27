@@ -14,8 +14,5 @@ export default class ReportRoute extends Route {
     if (!this.features.isEnabled('shacl-report')) {
       this.router.replaceWith('index');
     }
-
-    await this.validatie.setup();
-    this.validatie.polling.perform();
   }
 }
