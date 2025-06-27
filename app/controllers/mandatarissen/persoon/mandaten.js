@@ -8,7 +8,7 @@ import { task } from 'ember-concurrency';
 import { getNietBekrachtigdPublicationStatus } from 'frontend-lmb/utils/get-mandataris-status';
 import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
-import { endOfDay } from 'frontend-lmb/utils/date-manipulation';
+import { startOfDay, endOfDay } from 'frontend-lmb/utils/date-manipulation';
 
 export default class MandatarissenPersoonMandatenController extends Controller {
   @service router;
@@ -25,29 +25,27 @@ export default class MandatarissenPersoonMandatenController extends Controller {
   @tracked size = 20;
   @tracked canBecomeOnafhankelijk;
   @tracked currentNonOnafhankelijkeMandatarissen = [];
-  @tracked isModalOpen = false;
+  @tracked isIndependentModalOpen = false;
+  @tracked isCreatingModalOpen = false;
   @tracked isEndMandatesModalOpen = false;
   @tracked selectedBestuursorgaan = null;
   @tracked activeOnly = true;
-  @tracked date = endOfDay(new Date());
+  @tracked date = new Date();
   sort = 'is-bestuurlijke-alias-van.achternaam';
 
   @action
-  toggleModal() {
-    this.isModalOpen = !this.isModalOpen;
-  }
-
-  @action
-  closeModal() {
-    this.isModalOpen = false;
+  resetModals() {
+    this.isCreatingModalOpen = false;
     this.isEndMandatesModalOpen = false;
+    this.isIndependentModalOpen = false;
     this.selectedBestuursorgaan = null;
+    this.date = new Date();
   }
 
   @action
   createMandataris() {
     const bestuursorgaan = this.selectedBestuursorgaan;
-    this.closeModal();
+    this.resetModals();
     this.router.transitionTo(
       'organen.orgaan.mandataris.new',
       bestuursorgaan.id,
@@ -104,21 +102,20 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         );
       await onafhankelijkeFractie.save();
 
-      const dateNow = new Date();
       const newMandatarisProps = await this.mandatarisService.createNewProps(
         mandataris,
         {
-          start: dateNow,
+          start: startOfDay(this.date),
           publicationStatus: await getNietBekrachtigdPublicationStatus(
             this.store
           ),
           fractie: onafhankelijkeFractie,
         }
       );
-      const newMandataris = await this.store.createRecord(
-        'mandataris',
-        newMandatarisProps
-      );
+      const newMandataris = await this.store.createRecord('mandataris', {
+        ...newMandatarisProps,
+        rangorde: mandataris.rangorde,
+      });
       await newMandataris.save();
 
       await this.mandatarisService.createNewLidmaatschap(
@@ -130,10 +127,11 @@ export default class MandatarissenPersoonMandatenController extends Controller {
         newMandataris.id
       );
 
-      mandataris.einde = endOfDay(dateNow);
+      mandataris.einde = endOfDay(this.date);
       await mandataris.save();
     }
 
+    this.resetModals();
     this.router.refresh();
   });
 
@@ -147,7 +145,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
       `Active mandatatarissen beëindigd voor ${this.model.persoon.naam}`
     );
     this.activeOnly = false;
-    this.isEndMandatesModalOpen = false;
+    this.resetModals();
     this.router.refresh();
   });
 
@@ -155,7 +153,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     return 'Deze persoon is reeds onafhankelijk.';
   }
 
-  get endMandatarissenDisabled() {
+  get noDateSelected() {
     return !this.date;
   }
 }

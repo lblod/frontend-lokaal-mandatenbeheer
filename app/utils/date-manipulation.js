@@ -1,6 +1,14 @@
 import moment from 'moment';
 import { NULL_DATE } from './constants';
 
+export function startOfDay(date) {
+  if (date) {
+    return moment(date).startOf('day').utc().toDate();
+  } else {
+    return moment().startOf('day').utc().toDate();
+  }
+}
+
 export function endOfDay(date) {
   if (date) {
     return moment(date)
