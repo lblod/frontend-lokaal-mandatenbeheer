@@ -7,6 +7,7 @@ import { API } from 'frontend-lmb/utils/constants';
 
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
+import { handleResponseSilently } from 'frontend-lmb/utils/handle-response';
 
 function getFormTypes() {
   return trackedFunction(async () => {
@@ -14,12 +15,11 @@ function getFormTypes() {
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/custom-form/form-type-options`
     );
-    if (!response.ok) {
-      console.error('Er ging iets mis bij het ophalen van de formulier types');
-      return [];
-    }
-    const formTypes = await response.json();
-    const formTypesWithoutSelf = formTypes.customTypes.filter(
+    const parsedResponse = await handleResponseSilently({
+      response,
+      defaultValue: [],
+    });
+    const formTypesWithoutSelf = parsedResponse.customTypes.filter(
       (t) => t.id !== this.args.formDefintionId
     );
     if (formTypesWithoutSelf.length >= 1) {
@@ -33,7 +33,7 @@ function getFormTypes() {
       );
     }
     options.push(
-      ...formTypes.defaultTypes.map((o) => {
+      ...parsedResponse.defaultTypes.map((o) => {
         return {
           ...o,
           isDefaultType: true,
