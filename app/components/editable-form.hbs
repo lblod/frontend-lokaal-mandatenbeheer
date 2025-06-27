@@ -1,26 +1,50 @@
 {{#unless this.loading}}
+  {{#if (and this.editableFormsEnabled this.formState.canEditFormDefinition)}}
+    <div class="au-u-flex au-u-flex--end">
+      <AuLink
+        @model={{@form.id}}
+        @route="custom-forms.instances.definition"
+        @query={{hash
+          fullScreenEdit=true
+          isFormExtension=@isFormExtension
+          instanceId=@instanceId
+        }}
+        @icon="pencil"
+        class=""
+      >
+        Bewerk formulier
+      </AuLink>
+    </div>
+  {{/if}}
   <SemanticForms::Instance
+    {{! @formClass is needed so the fields do not have a max width}}
+    @formClass="au-u-flex"
     @show={{@isReadOnly}}
     @instanceId={{@instanceId}}
     @form={{this.formContext.formDefinition}}
     @onCancel={{@onCancel}}
     @onSave={{@onSave}}
+    @beforeSave={{@beforeSave}}
     @formInitialized={{@formInitialized}}
     @customHistoryMessage={{@customHistoryMessage}}
     @buildMetaTtl={{@buildMetaTtl}}
     @saveTitle={{@saveTitle}}
   >
     {{#if this.editableFormsEnabled}}
-      {{#unless @isReadOnly}}
-        <AuButton
-          @skin="link"
-          @icon="plus"
-          {{on "click" (fn (mut this.showEditModal) true)}}
-          class="au-u-padding-left-none au-u-margin-bottom"
-        >
-          Voeg een veld toe
-        </AuButton>
-      {{/unless}}
+      {{#if this.formState.isEditFormDefinitionForm}}
+        {{! TODO this would be handy if it was in the <CustomForm::EditCustomField> component }}
+        <div class="add-custom-field">
+          <AuButton
+            @skin="secondary"
+            @width="block"
+            @icon="plus"
+            {{on "click" (fn (mut this.showEditModal) true)}}
+            class="au-u-margin-bottom au-u-margin-top"
+          >
+            Voeg een veld toe
+          </AuButton>
+        </div>
+      {{/if}}
 
       {{yield}}
 

@@ -1,6 +1,6 @@
 {
   "name": "frontend-lmb",
-  "version": "0.5.8",
+  "version": "0.8.4",
   "private": true,
   "description": "Frontend of Lokaal Mandatenbeheer",
   "repository": {
@@ -56,7 +56,7 @@
     "@lblod/ember-acmidm-login": "2.1.0",
     "@lblod/ember-environment-banner": "^0.6.0",
     "@lblod/ember-mock-login": "^0.10.2",
-    "@lblod/ember-submission-form-fields": "~2.23.0",
+    "@lblod/ember-submission-form-fields": "~2.26.2",
     "@lblod/submission-form-helpers": "~2.10.2",
     "@sentry/ember": "^7.54.0",
     "@zestia/ember-auto-focus": "^5.1.0",
@@ -97,7 +97,7 @@
     "ember-page-title": "^8.2.3",
     "ember-plausible": "^0.2.0",
     "ember-power-select": "^7.2.0",
-    "ember-power-select-with-create": "^1.0.0",
+    "ember-power-select-with-create": "^3.0.1",
     "ember-promise-helpers": "^2.0.0",
     "ember-promise-modals": "^4.0.0",
     "ember-provide-consume-context": "^0.6.1",
@@ -133,8 +133,9 @@
     "webpack": "^5.95.0"
   },
   "dependencies": {
-    "@lblod/ember-semantic-forms": "0.0.6",
-    "ember-data-table": "^2.1.0"
+    "@lblod/ember-semantic-forms": "0.1.2",
+    "ember-data-table": "^2.1.0",
+    "reactiveweb": "^1.4.0"
   },
   "engines": {
     "node": ">= 18"

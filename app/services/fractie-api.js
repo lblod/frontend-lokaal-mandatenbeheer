@@ -35,22 +35,26 @@ export default class FractieApiService extends Service {
     return fracties.filter((f) => f);
   }
 
-  async updateCurrentFractie(mandatarisId) {
+  async updateCurrentFractie(mandatarisId, noTimeout = false) {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/fracties/${mandatarisId}/current-fractie`,
       { method: 'PUT' }
     );
     await handleResponse({ response });
-    await timeout(RESOURCE_CACHE_TIMEOUT);
+    if (!noTimeout) {
+      await timeout(RESOURCE_CACHE_TIMEOUT);
+    }
   }
 
-  async removeFractieWhenNoLidmaatschap(bestuursperiodeId) {
+  async removeFractieWhenNoLidmaatschap(bestuursperiodeId, noTimeout = false) {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/fracties/cleanup/bestuursperiode/${bestuursperiodeId}`,
       { method: 'DELETE' }
     );
     const jsonResponse = await handleResponse({ response });
-    await timeout(RESOURCE_CACHE_TIMEOUT);
+    if (!noTimeout) {
+      await timeout(RESOURCE_CACHE_TIMEOUT);
+    }
     console.info(
       `Removed ${jsonResponse.fracties.length} dangling fractie(s).`
     );

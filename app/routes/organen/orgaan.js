@@ -16,13 +16,23 @@ export default class OrganenOrgaanRoute extends Route {
   async model(params) {
     const bestuursorgaanId = params.id;
 
-    const bestuursorgaan = await this.store.findRecord(
+    let bestuursorgaan = await this.store.findRecord(
       'bestuursorgaan',
       bestuursorgaanId,
       {
         include: 'classificatie,heeft-tijdsspecialisaties',
       }
     );
+
+    const bestuursorgaanWithoutT = await bestuursorgaan.isTijdsspecialisatieVan;
+    if (bestuursorgaanWithoutT) {
+      const bestuursperiode = await bestuursorgaan.heeftBestuursperiode;
+      return {
+        bestuursorgaan: bestuursorgaanWithoutT,
+        selectedBestuursperiode: bestuursperiode,
+        currentBestuursorgaan: bestuursorgaan,
+      };
+    }
 
     const bestuursPeriods = await this.store.query('bestuursperiode', {
       sort: 'label',

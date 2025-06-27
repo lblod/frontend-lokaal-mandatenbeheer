@@ -1,9 +1,11 @@
-<AuLabel
-  for="person"
-  @error={{this.hasErrors}}
-  @warning={{this.hasWarnings}}
-  @required={{this.isRequired}}
->{{this.title}}</AuLabel>
+{{#unless @inTable}}
+  <AuLabel
+    for="person"
+    @error={{this.hasErrors}}
+    @warning={{this.hasWarnings}}
+    @required={{this.isRequired}}
+  >{{this.title}}</AuLabel>
+{{/unless}}
 {{#if this.initialized}}
   {{#if (or this.isMandaatInForm this.person)}}
     <div class={{if this.hasErrors "ember-power-select--error"}}>

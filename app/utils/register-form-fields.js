@@ -19,10 +19,20 @@ import RdfDateInputComponent from 'frontend-lmb/components/rdf-input-fields/rdf-
 import RDFGeboorteInput from 'frontend-lmb/components/rdf-input-fields/geboorte-input';
 import RDFGenderSelector from 'frontend-lmb/components/rdf-input-fields/gender-selector';
 import RdfInputFieldsCustomStringInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-string-input';
+import RdfInputFieldsStandardStringInputComponent from 'frontend-lmb/components/rdf-input-fields/standard-string-input';
 import RdfInputFieldsCustomAddressInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-address-input';
 import RdfInputFieldsCustomDateInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-date-input';
 import RdfInputFieldsCustomNumberInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-number-input';
 import RdfInputFieldsCustomTextInputComponent from 'frontend-lmb/components/rdf-input-fields/custom-text-input';
+import RdfInputFieldCustomConceptSchemeSelectorInput from 'frontend-lmb/components/rdf-input-fields/custom-concept-scheme-selector-input';
+import RdfInputFieldCustomConceptSchemeMultiSelectorInput from 'frontend-lmb/components/rdf-input-fields/custom-concept-scheme-multi-selector-input';
+import RdfInputFieldCustomPersonSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-input';
+import RdfInputFieldCustomPersonMultiSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-multi-input';
+import RdfInputFieldLinkToForm from 'frontend-lmb/components/rdf-input-fields/link-to-form';
+import {
+  PERSON_CUSTOM_DISPLAY_TYPE,
+  PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
+} from './well-known-uris';
 
 export const registerCustomFormFields = () => {
   registerFormFields([
@@ -121,6 +131,11 @@ export const registerCustomFormFields = () => {
     },
     {
       displayType:
+        'http://lblod.data.gift/display-types/lmb/standard-string-input',
+      edit: RdfInputFieldsStandardStringInputComponent,
+    },
+    {
+      displayType:
         'http://lblod.data.gift/display-types/lmb/custom-address-input',
       edit: RdfInputFieldsCustomAddressInputComponent,
     },
@@ -136,6 +151,29 @@ export const registerCustomFormFields = () => {
     {
       displayType: 'http://lblod.data.gift/display-types/lmb/custom-text-input',
       edit: RdfInputFieldsCustomTextInputComponent,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/lmb/custom-concept-scheme-selector-input',
+      edit: RdfInputFieldCustomConceptSchemeSelectorInput,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/lmb/custom-concept-scheme-multi-selector-input',
+      edit: RdfInputFieldCustomConceptSchemeMultiSelectorInput,
+    },
+    {
+      displayType:
+        'http://lblod.data.gift/display-types/lmb/custom-link-to-form-selector-input',
+      edit: RdfInputFieldLinkToForm,
+    },
+    {
+      displayType: PERSON_CUSTOM_DISPLAY_TYPE,
+      edit: RdfInputFieldCustomPersonSelector,
+    },
+    {
+      displayType: PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
+      edit: RdfInputFieldCustomPersonMultiSelector,
     },
   ]);
 };

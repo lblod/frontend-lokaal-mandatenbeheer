@@ -1,0 +1,20 @@
+<RdfInputFields::CustomFieldWrapper
+  @inline={{true}}
+  @field={{@field}}
+  @form={{@form}}
+  @graphs={{@graphs}}
+  @formStore={{@formStore}}
+>
+  <RdfInputFields::UnrestrictedPersonSelector
+    @inTable={{this.hideLabel}}
+    @field={{@field}}
+    @form={{@form}}
+    @formStore={{@formStore}}
+    @graphs={{@graphs}}
+    @sourceNode={{@sourceNode}}
+    @forceShowErrors={{@forceShowErrors}}
+    @cacheConditionals={{@cacheConditionals}}
+    @show={{or @show this.isReadOnly}}
+  />
+
+</RdfInputFields::CustomFieldWrapper>

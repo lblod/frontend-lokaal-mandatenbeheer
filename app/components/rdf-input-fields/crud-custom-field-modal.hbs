@@ -3,6 +3,7 @@
   @closeModal={{this.closeModal}}
   @closable={{true}}
   @title={{this.title}}
+  class="overflow-visible"
 >
   <:body>
     {{#if this.wantsToRemove}}
@@ -39,7 +40,7 @@
               @searchEnabled={{true}}
               @loadingMessage="Aan het laden..."
               @noMatchesMessage="Geen velden gevonden"
-              @searchMessage="Type om te zoeken"
+              @searchMessage="Typ om te zoeken"
               @searchField="name"
               @options={{this.libraryFieldOptions}}
               @selected={{this.libraryFieldType}}
@@ -71,13 +72,82 @@
             {{selected.label}}
           </PowerSelect>
         </AuFormRow>
+        {{#if this.displayType.isConceptSchemeSelector}}
+          <AuFormRow class="au-form-row-full-width">
+            <AuLabel @required={{true}} for="display-type">Codelijst</AuLabel>
+            <PowerSelect
+              @allowClear={{false}}
+              @renderInPlace={{false}}
+              @searchEnabled={{true}}
+              @loadingMessage="Aan het laden..."
+              @noMatchesMessage="Geen codelijsten gevonden"
+              @searchMessage="Typ om te zoeken"
+              @searchField="displayLabel"
+              @options={{this.conceptSchemes}}
+              @selected={{this.conceptScheme}}
+              @onChange={{this.selectConceptScheme}}
+              id="concept-scheme"
+              as |selected|
+            >
+              {{selected.displayLabel}}
+            </PowerSelect>
+          </AuFormRow>
+        {{/if}}
+        {{#if this.displayType.isLinkToForm}}
+          <AuFormRow class="au-form-row-full-width">
+            {{#if this.displayType.isLinkToForm}}
+              <LinkToForm::SelectFormType
+                @formDefintionId={{this.formContext.formDefinition.id}}
+                @selectedFormTypeUri={{this.linkedFormTypeUri}}
+                @onSelectedType={{this.updateLinkedFormTypeUri}}
+              />
+            {{/if}}
+          </AuFormRow>
+        {{/if}}
         <AuFormRow>
           <AuToggleSwitch
             @disabled={{@show}}
             @checked={{this.isFieldRequired}}
             @onChange={{this.toggleIsRequired}}
-          >Maak veld verplicht</AuToggleSwitch>
+          >Maak veld verplicht
+            <Shared::Tooltip
+              @showTooltip={{true}}
+              @alignment="center"
+              @tooltipText="Bij het aanmaken of aanpassen van items zal dit veld steeds ingevuld moeten worden."
+            >
+              <AuButton
+                @skin="naked"
+                @icon="circle-question"
+                @hideText={{true}}
+                @disabled={{true}}
+                class="au-u-padding-bottom-small au-u-padding-left-none au-u-padding-right-none"
+              />
+            </Shared::Tooltip>
+          </AuToggleSwitch>
         </AuFormRow>
+        {{#if this.isCustomForm}}
+          <AuFormRow>
+            <AuToggleSwitch
+              @disabled={{this.isShowInSummaryToggleDisabled}}
+              @checked={{this.isShownInSummary}}
+              @onChange={{this.toggleShowInSummary}}
+            >Toon in samenvatting
+              <Shared::Tooltip
+                @showTooltip={{true}}
+                @alignment="center"
+                @tooltipText="Dit veld zal getoond worden in de samenvatting van een item, bijvoorbeeld bij het tonen van een lijst van items of bij een verwijzing naar een item."
+              >
+                <AuButton
+                  @skin="naked"
+                  @icon="circle-question"
+                  @hideText={{true}}
+                  @disabled={{true}}
+                  class="au-u-padding-bottom-small au-u-padding-left-none"
+                />
+              </Shared::Tooltip>
+            </AuToggleSwitch>
+          </AuFormRow>
+        {{/if}}
       </form>
     {{/if}}
 

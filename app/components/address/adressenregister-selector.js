@@ -10,7 +10,6 @@ import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 export default class AdressenregisterSelectorComponent extends Component {
   @service addressregister;
 
-  @tracked address = null;
   @tracked addressSuggestion;
   @tracked addressesWithBusnumbers;
   @tracked addressWithBusnumber;
@@ -36,7 +35,9 @@ export default class AdressenregisterSelectorComponent extends Component {
         const selectedAddress = addresses.find(
           (a) => a.busnumber == address.busnummer
         );
-        this.addressesWithBusnumbers = addresses.sortBy('busnumber');
+        this.addressesWithBusnumbers = [...addresses].sort(
+          (a, b) => a.busnumber - b.busnumber
+        );
         this.addressWithBusnumber = selectedAddress;
       } else {
         this.addressesWithBusnumbers = null;
@@ -56,7 +57,9 @@ export default class AdressenregisterSelectorComponent extends Component {
         this.args.onChange(addresses[0].adresProperties);
       } else {
         // selection of busnumber required
-        const sortedBusNumbers = addresses.sortBy('busnumber');
+        const sortedBusNumbers = [...addresses].sort(
+          (a, b) => a.busnumber - b.busnumber
+        );
         this.addressesWithBusnumbers = sortedBusNumbers;
         this.addressWithBusnumber = sortedBusNumbers[0];
         this.args.onChange(this.addressWithBusnumber.adresProperties);
@@ -76,5 +79,12 @@ export default class AdressenregisterSelectorComponent extends Component {
   selectAddressWithBusnumber(address) {
     this.addressWithBusnumber = address;
     this.args.onChange(address.adresProperties);
+  }
+
+  @action
+  onClose() {
+    if (this.args.isRequired) {
+      this.args.addressSuggestionOnClose?.(this.addressSuggestion);
+    }
   }
 }

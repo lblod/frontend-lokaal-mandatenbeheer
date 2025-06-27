@@ -13,6 +13,8 @@ import { showErrorToast, showWarningToast } from 'frontend-lmb/utils/toasts';
 import {
   CBS_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
+  MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
+  MANDAAT_BURGEMEESTER_CODE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 const CREATE_MODE = 'create';
@@ -30,6 +32,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @tracked isGeneratingRows;
   @tracked skeletonRowsOfMirror = null;
   @tracked mandatarissen = A();
+  @tracked burgemeesters = [];
+  @tracked aangewezenBurgemeesters = [];
 
   constructor() {
     super(...arguments);
@@ -65,6 +69,8 @@ export default class PrepareLegislatuurSectionComponent extends Component {
     }
     this.installatievergadering.addMandatarissen(this.mandatarissen);
     this.installatievergadering.forceRecomputeBCSD();
+    this.burgemeesters = await this.getBurgemeesters();
+    this.aangewezenBurgemeesters = await this.getAangewezenBurgemeesters();
   });
 
   @action
@@ -189,5 +195,37 @@ export default class PrepareLegislatuurSectionComponent extends Component {
   @action
   buildMetaTtl() {
     return getApplicationContextMetaTtl([this.args.bestuursorgaan]);
+  }
+
+  async getBurgemeesters() {
+    return await this.store.query('mandataris', {
+      filter: {
+        bekleedt: {
+          bestuursfunctie: {
+            ':uri:': MANDAAT_BURGEMEESTER_CODE,
+          },
+          'bevat-in': {
+            ':uri:': this.args.bestuursorgaan.uri,
+          },
+        },
+        ':has:is-bestuurlijke-alias-van': true,
+      },
+    });
+  }
+
+  async getAangewezenBurgemeesters() {
+    return await this.store.query('mandataris', {
+      filter: {
+        bekleedt: {
+          bestuursfunctie: {
+            ':uri:': MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
+          },
+          'bevat-in': {
+            ':uri:': this.args.bestuursorgaan.uri,
+          },
+        },
+        ':has:is-bestuurlijke-alias-van': true,
+      },
+    });
   }
 }

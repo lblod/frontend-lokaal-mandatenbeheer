@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 
+import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
@@ -22,7 +23,7 @@ export default class CodelijstenDetailRoute extends Route {
       include: 'concepts',
       reload: true,
     });
-    const concepten = (await codelijst?.concepts) ?? [];
+    const concepten = (await codelijst?.concepts) ?? A([]);
 
     let usages = null;
 

@@ -1,0 +1,91 @@
+.rotate-element-360-degree {
+  animation: rotation 2s infinite linear;
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(360deg);
+  }
+}
+
+.refresh-button-left,
+.refresh-button-left.is-disabled,
+.refresh-button-left.is-disabled:hover,
+.refresh-button-left:hover {
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: var(--au-gray-100);
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border: 0.1rem solid var(--vl-grey-50);
+}
+
+.refresh-button-right,
+.refresh-button-right.is-disabled,
+.refresh-button-right.is-disabled:hover,
+.refresh-button-right:hover {
+  background-color: var(--au-gray-100);
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border: 0.1rem solid var(--vl-grey-50);
+  border-left: 0px;
+}
+
+.report-refresh-button.small .au-c-button {
+  height: 30px;
+  font-size: $au-tiny;
+}
+
+.validation-table {
+  max-height: 10vh;
+  overflow-y: auto;
+  .au-c-data-table .au-c-data-table__table tbody td,
+  th,
+  tr {
+    border: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border-top-color: transparent !important;
+    border-bottom-color: transparent !important;
+    border-left-color: transparent !important;
+    border-right-color: transparent !important;
+  }
+  .au-c-data-table__table th + th::after,
+  .au-c-data-table__table td + td::after {
+    border-left: none;
+  }
+  .au-c-data-table__wrapper {
+    border-top: none;
+  }
+
+  .error-icon {
+    background-color: var(--au-red-600);
+    color: white;
+    border-radius: 100%;
+    margin-bottom: -2px;
+  }
+  .au-c-data-table__table th:first-child,
+  .au-c-data-table__table td:first-child {
+    padding-left: 0;
+  }
+}
+.stick-right-if-large {
+  @include mq($au-region-breakpoint) {
+    align-self: flex-end;
+    width: 960px;
+  }
+}
+
+.select-error {
+  .ember-power-select-trigger:focus:not(
+      .ember-power-select-trigger[aria-disabled="true"]
+    ),
+  .ember-power-select-trigger--active:not(
+      .ember-power-select-trigger[aria-disabled="true"]
+    ) {
+    border-color: var(--au-red-600) !important;
+    box-shadow: inset 0 0 0 0.2rem var(--au-red-600) !important;
+  }
+}

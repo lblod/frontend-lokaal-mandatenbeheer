@@ -20,12 +20,15 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   @service store;
   @service multiUriFetcher;
   @service persoonApi;
+  @service('verkiezing') verkiezingService;
 
   @tracked mandaat = null;
   @tracked isStrictBurgemeester = false;
   @tracked initialized = false;
   @tracked bestuursorganen = [];
   @tracked person;
+
+  @tracked mandaatOptions = null;
 
   constructor() {
     super(...arguments);
@@ -38,7 +41,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
 
       if (mustTrigger) {
         await this.findPerson();
-        await this.checkPersonMandates();
+        await this.updateValidations();
       }
     });
   }
@@ -46,7 +49,19 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
   async load() {
     this.person = await this.findPersonInForm();
     await Promise.all([this.loadProvidedValue(), this.loadBestuursorganen()]);
+    await this.loadMandaten();
     this.initialized = true;
+  }
+
+  async loadMandaten() {
+    const mandaten = await this.store.query('mandaat', {
+      sort: 'bestuursfunctie.label',
+      include: 'bestuursfunctie',
+      'filter[bevat-in][id]': this.bestuursorganen
+        .map((o) => o.get('id'))
+        .join(','),
+    });
+    this.mandaatOptions = mandaten;
   }
 
   async loadBestuursorganen() {
@@ -83,11 +98,22 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
     this.isStrictBurgemeester = mandate?.isStrictBurgemeester;
 
     replaceSingleFormValue(this.storeOptions, uri ? new NamedNode(uri) : null);
-    this.hasBeenFocused = true;
-    super.updateValidations();
-
     this.mandaat = mandate;
-    await this.checkPersonMandates();
+    await this.updateValidations();
+    this.hasBeenFocused = true;
+  }
+
+  async updateValidations() {
+    const extraWarning = await this.checkPersonMandates();
+    const extraWarning2 = await this.validatePerson();
+
+    await super.updateValidations();
+    if (extraWarning) {
+      this.warningValidations.push(extraWarning);
+    }
+    if (extraWarning2) {
+      this.warningValidations.push(extraWarning2);
+    }
   }
 
   async checkPersonMandates() {
@@ -96,7 +122,6 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
       val.validationType === EXT('hasDuplicateMandate');
     });
     if (!person || !this.mandaat) {
-      this.updateValidations();
       return;
     }
     const activeMandatees = await this.persoonApi.getPersonMandateesWithMandate(
@@ -109,17 +134,37 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
         (mand) => mand.uri === this.storeOptions.sourceNode.value
       )
     ) {
-      this.updateValidations();
       return;
     }
-    this.updateValidations();
-    this.warningValidations.push({
+    return {
       validationType: EXT('hasDuplicateMandate'),
       hasValidation: true,
       valid: false,
       resultMessage:
         'Deze persoon heeft dit mandaat al in deze bestuursperiode',
-    });
+    };
+  }
+
+  async validatePerson() {
+    if (
+      this.person &&
+      this.bestuursorganen.length >= 1 &&
+      !(await this.mandaat.allowsNonElectedPersons)
+    ) {
+      const isElected = await this.verkiezingService.checkIfPersonIsElected(
+        this.person.id,
+        this.bestuursorganen.at(0)
+      );
+      if (!isElected) {
+        return {
+          validationType: EXT('notElected'),
+          hasValidation: true,
+          valid: false,
+          resultMessage:
+            'De geselecteerde persoon is niet gevonden in de verkiezingslijst.',
+        };
+      }
+    }
   }
 
   async findPersonInForm() {

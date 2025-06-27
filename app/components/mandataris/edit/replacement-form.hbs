@@ -1,0 +1,22 @@
+<div class="au-u-flex au-u-flex--column au-o-flow">
+  <Mandataris::Edit::StartEndDate
+    @startDate={{this.startDate}}
+    @endDate={{this.endDate}}
+    @from={{@limitFrom}}
+    @to={{@limitTo}}
+    @onChange={{this.updateStartEndDate}}
+    @onErrorStateUpdated={{this.updateErrorMap}}
+  />
+
+  {{#if (not (await this.hideFractieField))}}
+    <Mandatarissen::FractieSelector
+      @fractie={{this.fractie}}
+      @isRequired={{await this.isFractieRequired}}
+      @onSelect={{this.selectFractie}}
+      @bestuurseenheid={{@bestuurseenheid}}
+      @bestuursperiode={{@bestuursorgaanIT.heeftBestuursperiode}}
+      @person={{@person}}
+      @limitPersonFractionsToCurrent={{true}}
+    />
+  {{/if}}
+</div>

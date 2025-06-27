@@ -1,0 +1,99 @@
+<RdfInputFields::CustomFieldWrapper
+  @inline={{true}}
+  @field={{@field}}
+  @form={{@form}}
+  @graphs={{@graphs}}
+  @formStore={{@formStore}}
+  @showErrorLineNextToField={{true}}
+  as |wrapper|
+>
+  <div class="au-u-flex au-u-flex--column">
+    {{#if this.hasSelectedOptions}}
+      <AuTable>
+        <:header>
+          {{#each this.instanceDisplayLabels as |label|}}
+            <th>{{label.name}}</th>
+          {{/each}}
+        </:header>
+        <:body>
+          {{#each this.selectedInstanceOptions as |instance|}}
+            <tr>
+              {{#each instance.option as |option|}}
+                <td>{{option.value}}</td>
+              {{/each}}
+            </tr>
+          {{/each}}
+        </:body>
+      </AuTable>
+    {{else}}
+      <p>Geen items geselecteerd</p>
+    {{/if}}
+    <AuButton
+      class="au-u-padding-left-none au-u-margin-top-small"
+      @skin="secondary"
+      @icon="pencil"
+      @width="block"
+      {{on "click" this.openModal}}
+    >Pas aan</AuButton>
+  </div>
+  <AuModal
+    ...attributes
+    @modalOpen={{this.isModalOpen}}
+    @closable={{true}}
+    @closeModal={{this.onCloseModal}}
+  >
+    <:title>Link naar formulier</:title>
+    <:body>
+      <div class="au-u-padding-small au-u-padding-left-none">
+        <AuLabel for="zoek-instantie">Zoek formulier</AuLabel>
+        <AuInput
+          id="zoek-instantie"
+          placeholder="Zoek op één van de eigenschappen van het formulier."
+          @width="block"
+          @value={{this.searchValue}}
+          {{on "keyup" (perform this.filterResults)}}
+        />
+      </div>
+      <span class="no-pagination">
+        <AuDataTable
+          @content={{this.instancesAsOptions}}
+          @noDataMessage="Geen formulieren gevonden."
+          as |t|
+        >
+          <t.content as |c|>
+            <c.header>
+              <th> {{! is selected}}</th>
+              {{#each this.instanceDisplayLabels as |label|}}
+                <th>{{label.name}}</th>
+              {{/each}}
+            </c.header>
+            <c.body as |instance|>
+              <td>
+                <AuCheckbox
+                  @checked={{instance.isSelected}}
+                  @onChange={{fn this.selectInstance instance}}
+                />
+              </td>
+              {{#each instance.option as |option|}}
+                <td>{{option.value}}</td>
+              {{/each}}
+            </c.body>
+          </t.content>
+        </AuDataTable>
+        <TablePagination
+          @metadata={{this.instancesMetadata}}
+          @onClickPrevious={{this.fetchPreviousPage}}
+          @onClickNext={{this.fetchNextPage}}
+        />
+      </span>
+    </:body>
+    <:footer>
+      <div class="au-u-flex au-u-flex--center">
+        <AuButton
+          @skin="secondary"
+          {{on "click" (fn this.onCloseModal wrapper.onInteractedWithField)}}
+        >Sluiten</AuButton>
+      </div>
+    </:footer>
+  </AuModal>
+</RdfInputFields::CustomFieldWrapper>

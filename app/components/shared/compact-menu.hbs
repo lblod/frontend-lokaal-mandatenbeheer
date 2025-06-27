@@ -20,10 +20,10 @@
         Opstart nieuwe legislatuur
       </AuLink>
     {{/if}}
-    {{#if (is-feature-enabled "show-forms-module")}}
-      <AuLink @route="forms" role="menuitem">
-        <AuIcon @icon="draft" @alignment="left" />
-        Forms
+    {{#if (is-feature-enabled "editable-forms")}}
+      <AuLink @route="custom-forms" role="menuitem">
+        <AuIcon @icon="folder" @alignment="left" />
+        Eigen gegevens
       </AuLink>
     {{/if}}
   </AuDropdown>

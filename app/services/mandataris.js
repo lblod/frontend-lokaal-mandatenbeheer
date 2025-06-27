@@ -13,7 +13,7 @@ export default class MandatarisService extends Service {
   @service store;
   @service fractieApi;
 
-  async getOverlappingMandate(mandataris, person, endDate = null) {
+  async getOverlappingMandate(mandataris, person, startDate = null) {
     const mandate = await mandataris.bekleedt;
     const mandatarissen = await this.store.query('mandataris', {
       filter: {
@@ -28,12 +28,19 @@ export default class MandatarisService extends Service {
 
     const toCheck = mandatarissen.slice();
     let current;
-    const start = moment(mandataris.start);
-    const end = moment(endDate || mandataris.einde);
+    let dateToCompare;
+    if (startDate) {
+      dateToCompare = moment(startDate);
+    } else if (moment().isAfter(mandataris.start)) {
+      dateToCompare = moment();
+    } else {
+      dateToCompare = moment(mandataris.start);
+    }
+
     while ((current = toCheck.pop())) {
       if (
-        (!start || start.isSameOrBefore(current.einde)) &&
-        (!end || end.isSameOrAfter(current.start))
+        (!current.start || dateToCompare.isSameOrAfter(current.start)) &&
+        (!current.einde || dateToCompare.isSameOrBefore(current.einde))
       ) {
         return current;
       }
@@ -46,31 +53,38 @@ export default class MandatarisService extends Service {
     replacementPerson,
     newMandatarisState
   ) {
-    const mandatarisStatus = await this.store.findRecord(
-      'mandataris-status-code',
-      MANDATARIS_WAARNEMEND_STATE_ID
-    );
-
     const existing = await this.getOverlappingMandate(
       toReplace,
       replacementPerson
     );
 
     if (existing) {
-      existing.status = mandatarisStatus;
-      existing.save();
-
       return existing;
     }
 
+    return this.createReplacement(
+      toReplace,
+      replacementPerson,
+      newMandatarisState
+    );
+  }
+
+  async createReplacement(toReplace, replacementPerson, newMandatarisState) {
+    const waarnemendStatus = await this.store.findRecord(
+      'mandataris-status-code',
+      MANDATARIS_WAARNEMEND_STATE_ID
+    );
+
     const newMandataris = this.store.createRecord('mandataris', {
-      rangorde: newMandatarisState.rangorde,
+      rangorde: null,
       start: newMandatarisState.start,
       einde: newMandatarisState.einde,
       bekleedt: await toReplace.bekleedt,
       isBestuurlijkeAliasVan: replacementPerson,
-      beleidsdomein: await newMandatarisState.beleidsdomein,
-      status: mandatarisStatus,
+      beleidsdomein: toReplace.beleidsdomein
+        ? await toReplace.beleidsdomein
+        : [],
+      status: waarnemendStatus,
       publicationStatus: await getNietBekrachtigdPublicationStatus(this.store),
     });
     await newMandataris.save();
@@ -87,11 +101,13 @@ export default class MandatarisService extends Service {
       lid: newMandataris,
     });
     await newLidmaatschap.save();
+
+    return newLidmaatschap;
   }
 
   async destroyLidmaatschap(mandataris) {
     const lidmaatschap = await mandataris.heeftLidmaatschap;
-    lidmaatschap.destroyRecord();
+    lidmaatschap?.destroyRecord();
     mandataris.heeftLidmaatschap = null;
     await mandataris.save();
   }
@@ -129,14 +145,17 @@ export default class MandatarisService extends Service {
     return status && status.uri !== MANDATARIS_BEEINDIGD_STATE;
   }
 
-  async removeDanglingFractiesInPeriod(mandatarisId) {
+  async removeDanglingFractiesInPeriod(mandatarisId, noTimeout = false) {
     const mandataris = await this.store.findRecord('mandataris', mandatarisId);
     const mandaat = await mandataris.bekleedt;
     const bestuursorganenInTijd = await mandaat.bevatIn;
     if (bestuursorganenInTijd.length >= 1) {
       const first = bestuursorganenInTijd.at(0);
       const periode = await first.heeftBestuursperiode;
-      await this.fractieApi.removeFractieWhenNoLidmaatschap(periode.id);
+      await this.fractieApi.removeFractieWhenNoLidmaatschap(
+        periode.id,
+        noTimeout
+      );
     }
   }
 }

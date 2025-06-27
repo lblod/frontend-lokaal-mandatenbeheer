@@ -1,0 +1,152 @@
+<AuModal
+  class="wizard-modal"
+  @modalOpen={{true}}
+  @closable={{true}}
+  @closeModal={{this.closeWizardSafely}}
+>
+  <:title>
+    {{this.activeStep.label}}
+  </:title>
+  <:body>
+    {{#if this.activeStep.isMandatarisStep}}
+      <Mandataris::Edit::Form
+        @bestuurseenheid={{@bestuurseenheid}}
+        @bestuursorgaanIT={{@bestuursorgaanIT}}
+        @formValues={{@mandatarisFormValues}}
+        @isFractieRequired={{@isFractieRequired}}
+        @onFormIsValid={{this.updateMandatarisStepCompleted}}
+        @onChange={{this.updateMandatarisFormValues}}
+        @onReplacementChange={{this.updateReplacement}}
+        @mandataris={{@mandataris}}
+        @replacementPerson={{this.replacementPerson}}
+        @originalReplacementPerson={{this.originalReplacementPerson}}
+      />
+    {{/if}}
+
+    {{#if this.activeStep.isReplacementStep}}
+      <Mandataris::Edit::ReplacementForm
+        @person={{this.replacementPerson}}
+        @prefillStart={{this.startForReplacement}}
+        @limitFrom={{this.formValues.start}}
+        @limitTo={{this.replacementLimitTo}}
+        @prefillEinde={{this.endForReplacement}}
+        @prefillFractie={{this.fractieForReplacement}}
+        @bestuursorgaanIT={{@bestuursorgaanIT}}
+        @bestuurseenheid={{@bestuurseenheid}}
+        @onFormIsValid={{this.updateReplacementStepValid}}
+        @onChange={{this.updateReplacementFormValues}}
+      />
+    {{/if}}
+
+    {{#if this.activeStep.isReasonStep}}
+      <div>
+        <AuLabel @required={{true}}>
+          Reden van aanpassing
+        </AuLabel>
+        <PowerSelect
+          @allowClear={{false}}
+          @selected={{this.reasonForChange}}
+          @options={{this.reasonForChangeOptions}}
+          @onChange={{this.selectReasonForChange}}
+          @searchEnabled={{true}}
+          @searchField="label"
+          @noMatchesMessage="Geen resultaten"
+          as |reason|
+        >
+          {{reason.label}}
+        </PowerSelect>
+      </div>
+
+      {{#if (and this.isCorrecting (not this.hideCorrectionWarning))}}
+        <AuAlert @skin="info" @icon="alert-triangle" class="au-u-margin-top">
+          Bij een correctie worden de bestaande gegevens
+          <strong>overschreven</strong>
+          door de nieuwe informatie die je ingegeven hebt. Gebruik dit dus niet
+          als de mandataris een verandering doormaakt zoals een verandering van
+          rangorde of een verhindering, maar enkel om gegevens te corrigeren die
+          eerder verkeerd ingegeven werden.
+        </AuAlert>
+      {{else if (and (not this.isCorrecting) this.reasonForChange)}}
+        <div class="au-u-margin-top">
+          De nieuwe toestand voor deze mandataris geldt vanaf
+          <strong>{{moment-format this.formValues.start "DD-MM-YYYY"}}</strong>.
+          Als deze datum verkeerd is, pas dan de startdatum aan in de vorige
+          stap.
+        </div>
+
+        {{#if this.newStateDateWarning}}
+          <AuAlert
+            @skin="warning"
+            @icon="alert-triangle"
+            class="au-u-margin-top"
+          >
+            De startdatum van de nieuwe toestand is gelijk aan of eerder dan de
+            startdatum van de vorige toestand.
+            <strong>Dit is waarschijnlijk een fout.</strong>
+            Je kan de startdatum aanpassen in de eerste stap.
+          </AuAlert>
+        {{/if}}
+
+      {{/if}}
+      <Mandatarissen::WizardDiff
+        @diffs={{this.getShownWizardDiffs}}
+        @isCorrecting={{this.isCorrecting}}
+        @replacement={{this.replacementPerson}}
+      />
+
+    {{/if}}
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group class="flex-grow">
+        <AuButtonGroup>
+          {{#if this.activeStepIsFinalStep}}
+            <AuButton
+              {{on "click" this.saveChanges}}
+              @loading={{this.isSaving}}
+              @loadingMessage="Opslaan"
+              @disabled={{this.isSaveButtonDisabled}}
+            >
+              Pas aan
+            </AuButton>
+          {{else}}
+            <AuButton
+              {{on "click" this.nextStep}}
+              @loadingMessage="Aan het laden..."
+              @loading={{this.checkingMandatarisInput}}
+              @disabled={{not this.activeStep.canContinueToNextStep}}
+            >
+              Volgende
+            </AuButton>
+          {{/if}}
+          {{#unless this.activeStepIsFirstStep}}
+            <AuButton
+              {{on "click" this.previousStep}}
+              @disabled={{this.isSaving}}
+              @skin="secondary"
+            >
+              Vorige
+            </AuButton>
+          {{/unless}}
+        </AuButtonGroup>
+        {{#if (and this.activeStepIsFinalStep this.canMirrorToOCMW)}}
+          <AuButtonGroup class="flex-grow au-u-flex--end">
+            <div class="au-u-margin-top">
+              <AuToggleSwitch
+                @checked={{this.mirrorToOCMW}}
+                @onChange={{this.toggleMirrorToOCMW}}
+              >Spiegel deze aanpassing naar OCMW</AuToggleSwitch>
+            </div>
+          </AuButtonGroup>
+        {{/if}}
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+
+<Shared::UnsavedChangesModal
+  @isModalOpen={{this.isUnsavedChangesModalOpen}}
+  @closeModal={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onCancel={{fn (mut this.isUnsavedChangesModalOpen) false}}
+  @onDiscard={{this.closeWizard}}
+/>

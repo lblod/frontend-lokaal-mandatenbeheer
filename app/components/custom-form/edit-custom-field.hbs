@@ -1,0 +1,175 @@
+<div class="au-o-box edit-form-defintion--edit-panel-containter">
+  {{#unless this.selectedField}}
+    <p>Selecteer een veld om aan te passen</p>
+  {{/unless}}
+
+  {{#if (and this.selectedField this.isStandardField)}}
+    <p>Dit veld kan niet bewerkt worden doordat dit een standaardveld is in het
+      formulier.</p>
+  {{/if}}
+
+  {{#if (and this.selectedField (not this.isStandardField))}}
+    <form class="au-c-form au-o-flow">
+      <AuFormRow @alignment="default">
+        <AuLabel
+          @required={{true}}
+          @error={{not this.isValidLabel}}
+          for="fieldName"
+        >Naam</AuLabel>
+        <AuInput
+          @error={{not this.isValidLabel}}
+          @disabled={{not this.selectedField}}
+          @width="block"
+          @iconAlignment="left"
+          value={{this.label}}
+          id="fieldName"
+          {{on "input" this.updateFieldName}}
+        />
+        {{#unless this.isValidLabel}}
+          <AuHelpText @error={{true}}>Label is verplicht</AuHelpText>
+        {{/unless}}
+      </AuFormRow>
+      <AuFormRow class="au-form-row-full-width">
+        <AuLabel @required={{true}} for="display-type">Type</AuLabel>
+        <PowerSelect
+          @allowClear={{false}}
+          @disabled={{not this.selectedField}}
+          @renderInPlace={{false}}
+          @searchEnabled={{true}}
+          @loadingMessage="Aan het laden..."
+          @noMatchesMessage="Geen types gevonden"
+          @searchMessage="Typ om te zoeken"
+          @searchField="label"
+          @options={{this.displayTypes}}
+          @selected={{this.displayType}}
+          @onChange={{this.updateSelectedDisplayType}}
+          id="display-type"
+          as |selected|
+        >
+          {{selected.label}}
+        </PowerSelect>
+      </AuFormRow>
+      {{#if this.displayType.isConceptSchemeSelector}}
+        <AuFormRow class="au-form-row-full-width">
+          <AuLabel @required={{true}} for="display-type">Codelijst</AuLabel>
+          <PowerSelect
+            @allowClear={{false}}
+            @renderInPlace={{false}}
+            @searchEnabled={{true}}
+            @loadingMessage="Aan het laden..."
+            @noMatchesMessage="Geen codelijsten gevonden"
+            @searchMessage="Typ om te zoeken"
+            @searchField="displayLabel"
+            @options={{this.conceptSchemes}}
+            @selected={{this.conceptScheme}}
+            @onChange={{this.updateSelectedConceptScheme}}
+            id="concept-scheme"
+            as |selected|
+          >
+            {{selected.displayLabel}}
+          </PowerSelect>
+        </AuFormRow>
+      {{/if}}
+      {{#if this.displayType.isLinkToForm}}
+        <LinkToForm::SelectFormType
+          @formDefintionId={{@formDefinitionId}}
+          @selectedFormTypeUri={{this.linkedFormTypeUri}}
+          @onSelectedType={{this.updateLinkedFormTypeUri}}
+        />
+      {{/if}}
+      <AuFormRow>
+        <AuToggleSwitch
+          @disabled={{not this.selectedField}}
+          @checked={{this.isRequired}}
+          @onChange={{this.toggleIsRequired}}
+        >Maak veld verplicht
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @alignment="center"
+            @tooltipText="Bij het aanmaken of aanpassen van items zal dit veld steeds ingevuld moeten worden."
+          >
+            <AuButton
+              @skin="naked"
+              @icon="circle-question"
+              @hideText={{true}}
+              @disabled={{true}}
+              class="au-u-padding-bottom-small au-u-padding-left-none au-u-padding-right-none"
+            />
+          </Shared::Tooltip>
+        </AuToggleSwitch>
+      </AuFormRow>
+      {{#unless @canShowInSummaryButton}}
+        <AuFormRow>
+          <AuToggleSwitch
+            @disabled={{this.isShowInSummaryToggleDisabled}}
+            @checked={{this.isShownInSummary}}
+            @onChange={{this.toggleShowInSummary}}
+          >Toon in samenvatting
+            <Shared::Tooltip
+              @showTooltip={{true}}
+              @alignment="center"
+              @tooltipText="Dit veld zal getoond worden in de samenvatting van een item, bijvoorbeeld bij het tonen van een lijst van items of bij een verwijzing naar een item."
+            >
+              <AuButton
+                @skin="naked"
+                @icon="circle-question"
+                @hideText={{true}}
+                @disabled={{true}}
+                class="au-u-padding-bottom-small au-u-padding-left-none"
+              />
+            </Shared::Tooltip>
+          </AuToggleSwitch>
+        </AuFormRow>
+      {{/unless}}
+      {{#if this.isDeleteWarningShown}}
+        <div
+          class="au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-flex--spaced-tiny warning-panel"
+        >
+          <AuBadge @icon="alert-triangle" @skin="error" @size="small" />
+          <span>Dit veld zal verwijderd worden voor
+            <strong>alle items</strong>
+            die bewerkt worden door dit formulier! Dit betekent dat u de
+            <strong>gegevens zal verliezen</strong>
+            die opgeslagen werd in dit veld! Wilt u nog steeds doorgaan?</span>
+        </div>
+      {{/if}}
+      <AuFormRow class="au-u-flex au-u-flex--between au-u-flex--row">
+        {{#if this.isDeleteWarningShown}}
+          <AuButton
+            @disabled={{this.isDeleting}}
+            @skin="secondary"
+            {{on "click" (fn (mut this.isDeleteWarningShown) false)}}
+          >
+            Annuleer
+          </AuButton>
+          <AuButton
+            @disabled={{or this.isDeleting this.isSaving}}
+            @alert={{true}}
+            @loading={{this.isDeleting}}
+            @loadingMessage="Verwijderen"
+            {{on "click" this.removeFormField}}
+          >
+            Definitief verwijderen
+          </AuButton>
+        {{else}}
+          <AuButton
+            @disabled={{or (not this.canSaveChanges) this.isSaving}}
+            @loading={{this.isSaving}}
+            @loadingMessage="Bewaren"
+            {{on "click" this.saveFieldChanges}}
+          >
+            Pas aan
+          </AuButton>
+          <AuButton
+            @disabled={{or this.isDeleting this.isSaving}}
+            @alert={{true}}
+            @skin="secondary"
+            {{on "click" (fn (mut this.isDeleteWarningShown) true)}}
+          >
+            Verwijder
+          </AuButton>
+        {{/if}}
+      </AuFormRow>
+    </form>
+  {{/if}}
+</div>

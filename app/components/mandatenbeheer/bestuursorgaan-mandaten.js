@@ -7,6 +7,7 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
+// TODO: this component needs cleanup of unused code*
 export default class MandatenbeheerBestuursorgaanMandatenComponent extends Component {
   @service store;
   @service toaster;
@@ -24,8 +25,7 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
 
   constructor() {
     super(...arguments);
-    this.selectedBestuursfunctie =
-      this.args.availableBestuursfuncties.firstObject;
+    this.selectedBestuursfunctie = this.args.availableBestuursfuncties[0];
     this.showMinMax = this.args.orderedMandaten.some(
       (obj) => obj.minAantalHouders !== undefined
     );

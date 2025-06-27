@@ -24,11 +24,42 @@
           </AuNavigationLink>
         </li>
       {{/if}}
-      {{#if (is-feature-enabled "show-forms-module")}}
+      {{#if (is-feature-enabled "editable-forms")}}
         <li class="au-c-list-navigation__item">
-          <AuNavigationLink @route="forms">
-            <AuIcon @icon="draft" @alignment="left" />
-            Forms
+          <AuNavigationLink @route="custom-forms">
+            <AuIcon @icon="folder" @alignment="left" />
+            Eigen gegevens
+          </AuNavigationLink>
+        </li>
+      {{/if}}
+      {{#if (is-feature-enabled "shacl-report")}}
+        <li class="au-c-list-navigation__item">
+
+          <AuNavigationLink @route="report">
+            <div>
+              {{#if (gt this.validationCount 0)}}
+                <AuPill
+                  @skin="warning"
+                  @size="small"
+                  @icon="alert-triangle"
+                  class="au-u-margin-bottom-tiny"
+                >
+                  {{this.validationCount}}
+                  Validatiefouten
+                </AuPill>
+
+              {{/if}}
+              <div class="au-u-flex">
+                <AuIcon
+                  @icon={{this.validationIcon}}
+                  @alignment="left"
+                  class="au-u-margin-top-tiny"
+                />
+                <span>
+                  Validatierapport
+                </span>
+              </div>
+            </div>
           </AuNavigationLink>
         </li>
       {{/if}}

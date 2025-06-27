@@ -1,29 +1,58 @@
 {{#if
   (and this.isFeatureEnabled (and this.isLoaded (gt this.results.length 0)))
 }}
-  <div data-test-validatie-table>
-    <AuHeading @level="3" @skin="4">
-      Validatieresultaten
-    </AuHeading>
-    <ul class="au-c-list-vertical no-pagination">
-      <AuDataTable
-        @content={{this.results}}
-        @noDataMessage="Geen validatieresultaten gevonden"
-        @size={{or this.results.length 0}}
-        as |t|
-      >
-        <t.content as |c|>
-          <c.header>
-            <th class="au-u-padding-small">Boodschap</th>
-          </c.header>
-
-          <c.body as |result|>
-            <td>
-              {{result.resultMessage}}
-            </td>
-          </c.body>
-        </t.content>
-      </AuDataTable>
-    </ul>
+  <div
+    class="au-o-box au-u-padding-top-none stick-right-if-large"
+    ...attributes
+  >
+    <AuAlert @skin="warning" @size="small">
+      <div class="au-u-flex au-u-flex-between au-u-flex--vertical-center">
+        <AuHeading @level="3" @skin="5" class="flex-grow">
+          <AuIcon
+            @icon="alert-triangle"
+            class="au-u-warning au-u-padding-top-tiny content-box"
+            @size="large"
+          />
+          {{#if this.isValidating}}
+            We zoeken naar validatiefouten...{{else}}
+            {{this.results.length}}
+            validatiefout{{if (eq this.results.length 1) "" "en"}}
+            gevonden
+          {{/if}}
+        </AuHeading>
+        <RefreshValidationsButton @size="small" @noMessage={{true}} />
+        <AuButton
+          @icon={{if this.collapsed "chevron-down" "chevron-up"}}
+          @skin="naked"
+          @size="small"
+          @hideText="true"
+          {{on "click" this.toggleCollapsed}}
+        >
+          Toon details
+        </AuButton>
+      </div>
+      {{#unless this.collapsed}}
+        <ul class="au-c-list-vertical no-pagination validation-table">
+          <AuDataTable
+            @content={{this.results}}
+            @noDataMessage="Geen validatieresultaten gevonden"
+            @size={{or this.results.length 0}}
+            as |t|
+          >
+            <t.content as |c|>
+              <c.body as |result|>
+                <td>
+                  <AuIcon @icon="cross" class="error-icon" />
+                  {{result.message}}
+                </td>
+                <td class="au-u-muted">
+                  {{result.detail}}
+                </td>
+              </c.body>
+            </t.content>
+          </AuDataTable>
+        </ul>
+      {{/unless}}
+    </AuAlert>
   </div>
 {{/if}}

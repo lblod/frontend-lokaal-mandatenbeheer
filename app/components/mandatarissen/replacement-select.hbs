@@ -1,7 +1,7 @@
-<div {{did-update this.checkIfMandateAlreadyExists @selected}}>
+<div>
   <Person::Selector
     @person={{@selected}}
-    @onUpdate={{@onSelect}}
+    @onUpdate={{this.selectPerson}}
     @inline={{@inline}}
     @onlyElected={{not (await @mandataris.bekleedt.allowsNonElectedPersons)}}
     @showDelete={{@showDelete}}

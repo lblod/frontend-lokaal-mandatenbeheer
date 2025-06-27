@@ -8,7 +8,7 @@ module.exports = function (environment) {
     locationType: 'history',
     environmentName: '{{ENVIRONMENT_NAME}}',
     EmberENV: {
-      // EXTEND_PROTOTYPES: false, // TODO: lmb-1332
+      EXTEND_PROTOTYPES: false,
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
@@ -33,10 +33,11 @@ module.exports = function (environment) {
       switchRedirectUrl: '{{ACMIDM_SWITCH_REDIRECT_URL}}',
     },
     features: {
-      'show-forms-module': false,
-      'show-codelijsten-module': false,
-      'enable-mandataris-count-warnings': true,
+      'custom-organen': false,
       politieraad: false,
+      'editable-forms': false,
+      'person-extra-info': false,
+      'shacl-report': true,
     },
     lpdcUrl: '{{LPDC_URL}}',
     worshipDecisionsDatabaseUrl: '{{WORSHIP_DECISIONS_DATABASE_URL}}',
@@ -59,7 +60,6 @@ module.exports = function (environment) {
     },
   };
 
-  ENV.features['editable-forms'] = false;
   if (environment === 'development') {
     ENV.APP.DISABLE_RELOAD_WARNINGS = true;
     ENV.APP.SHOW_FORM_CONTENT = true;
@@ -68,10 +68,6 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.features['editable-forms'] = true;
-
-    ENV.features['shacl-report'] = true;
-    ENV.features['politieraad'] = true;
   }
 
   if (environment === 'test') {
@@ -85,15 +81,12 @@ module.exports = function (environment) {
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
 
-    ENV.features['shacl-report'] = false;
+    ENV.features['1234'] = true; // for testing purposes
   }
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
-    ENV.features['shacl-report'] = false;
   }
-
-  ENV.features['show-iv-module'] = true;
 
   return ENV;
 };

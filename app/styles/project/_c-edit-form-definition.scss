@@ -1,0 +1,56 @@
+.edit-form-defintion {
+  background-color: var(--au-blue-100);
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 2rem;
+  flex-grow: 1;
+}
+
+@media (max-width: 750px) {
+  .edit-form-defintion {
+    flex-direction: column-reverse;
+  }
+}
+
+.edit-form-defintion--form {
+  min-width: 70vw;
+  border: 2px solid var(--au-gray-200);
+  border-radius: 5px;
+  background-color: var(--au-white);
+
+  .rdf-field {
+    padding-left: $au-unit;
+  }
+
+  .rdf-field:hover,
+  .rdf-field--selected {
+    border-radius: 2px;
+    background-color: var(--au-blue-200);
+    outline: 2px solid var(--au-blue-300);
+  }
+
+  .add-custom-field {
+    margin: 0 $au-unit;
+  }
+}
+
+.edit-form-defintion--edit-panel {
+  width: 100%;
+}
+
+.edit-form-defintion--edit-panel-containter {
+  border: 2px solid var(--au-gray-200);
+  border-radius: 5px;
+  background-color: var(--au-white);
+  width: 100%;
+}
+
+.edit-form-defintion .semantic-forms-instance .au-c-toolbar {
+  display: none;
+}
+
+.wrapped-field--error {
+  border-left: 2px solid var(--au-red-600);
+  padding-left: 1rem !important;
+}

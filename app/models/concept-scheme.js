@@ -28,4 +28,12 @@ export default class ConceptSchemeModel extends Model {
     }
     return moment(this.createdAt).format('DD-MM-YYYY h:mm:ss');
   }
+
+  get displayLabel() {
+    if (!this.label || this.label.trim() === '') {
+      return this.uri;
+    }
+
+    return this.label;
+  }
 }

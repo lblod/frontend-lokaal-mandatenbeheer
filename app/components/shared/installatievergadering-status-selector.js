@@ -8,7 +8,8 @@ export default class SharedInstallatievergaderingStatusSelectorComponent extends
 
   constructor() {
     super(...arguments);
-    this._options = this.args.options?.sortBy('label') || [];
+    this._options =
+      [...this.args.options].sort((a, b) => a.label - b.label) || [];
   }
 
   @action

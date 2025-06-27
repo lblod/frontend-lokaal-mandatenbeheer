@@ -1,10 +1,9 @@
 import Component from '@glimmer/component';
 
-import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { action } from '@ember/object';
 
-import { task } from 'ember-concurrency';
+import { trackedFunction } from 'reactiveweb/function';
+import { use } from 'ember-resources';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import {
@@ -14,12 +13,8 @@ import {
   MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 
-export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
-  @service store;
-
-  @tracked errorMessage;
-
-  isVoorzitterAlsoSchepen = task(async () => {
+function getErrorMessage() {
+  return trackedFunction(async () => {
     const bcsdMandatarissen = this.args.mandatarissen;
     const mapping = await Promise.all(
       bcsdMandatarissen.map(async (mandataris) => {
@@ -44,13 +39,21 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
         ]
       );
       if (!schepen) {
-        this.errorMessage =
-          'Kon geen burgemeester of schepen mandataris vinden voor aangeduide voorzitter.';
-      } else {
-        this.errorMessage = null;
+        return 'Kon geen burgemeester of schepen mandataris vinden voor aangeduide voorzitter.';
       }
     }
+
+    return null;
   });
+}
+
+export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component {
+  @service store;
+  @use(getErrorMessage) getErrorMessage;
+
+  get errorMessage() {
+    return this.getErrorMessage?.value;
+  }
 
   async findMandatarisForOneOfBestuursfunctieCodes(
     voorzitter,
@@ -62,12 +65,5 @@ export default class VerkiezingenBcsdVoorzitterAlertComponent extends Component 
       'filter[is-bestuurlijke-alias-van][:uri:]': voorzitter.uri,
       'filter[bekleedt][bestuursfunctie][:id:]': bestuursfunctieCodes.join(','),
     });
-  }
-
-  @action
-  async mandatarissenUpdated() {
-    if (!this.isVoorzitterAlsoSchepen.isRunning) {
-      await this.isVoorzitterAlsoSchepen.perform();
-    }
   }
 }

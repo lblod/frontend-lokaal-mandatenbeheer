@@ -7,6 +7,7 @@ import { handleResponseSilently } from 'frontend-lmb/utils/handle-response';
 
 import { queryRecord } from 'frontend-lmb/utils/query-record';
 import { POLITIERAAD_CODE_ID } from 'frontend-lmb/utils/well-known-ids';
+import moment from 'moment';
 import {
   BCSD_BESTUURSORGAAN_URI,
   BURGEMEESTER_BESTUURSORGAAN_URI,
@@ -49,7 +50,7 @@ export default class BestuursorgaanModel extends Model {
     async: true,
     inverse: 'fakeBestuursorganen',
   })
-  orginalBestuurseenheid;
+  originalBestuurseenheid;
 
   @belongsTo('bestuursorgaan-classificatie-code', {
     async: true,
@@ -200,22 +201,15 @@ export default class BestuursorgaanModel extends Model {
     });
   }
 
-  rdfaBindings = {
-    naam: 'http://www.w3.org/2004/02/skos/core#prefLabel',
-    class: 'http://data.vlaanderen.be/ns/besluit#Bestuursorgaan',
-    bindingStart: 'http://data.vlaanderen.be/ns/mandaat#bindingStart',
-    bindingEinde: 'http://data.vlaanderen.be/ns/mandaat#bindingEinde',
-    bestuurseenheid: 'http://data.vlaanderen.be/ns/besluit#bestuurt',
-    classificatie: 'http://data.vlaanderen.be/ns/besluit#classificatie',
-    isTijdsspecialisatieVan:
-      'http://data.vlaanderen.be/ns/mandaat#isTijdspecialisatieVan',
-    bevat: 'http://www.w3.org/ns/org#hasPost',
-  };
-
   get validationText() {
     const org = this.isTijdsspecialisatieVan;
     if (org) {
-      return `${org.get('classificatie.label')} ${this.bindingStart} - ${this.bindingEinde}`;
+      const start = moment(this.bindingStart).format('DD-MM-YYYY');
+      if (this.bindingEinde) {
+        const einde = moment(this.bindingEinde).format('DD-MM-YYYY');
+        return `${org.get('classificatie.label')} (${start} - ${einde})`;
+      }
+      return `${org.get('classificatie.label')} (${start} - )`;
     } else {
       // eslint-disable-next-line ember/no-get, ember/classic-decorator-no-classic-methods
       return this.get('classificatie.label');
@@ -224,5 +218,14 @@ export default class BestuursorgaanModel extends Model {
 
   get isPolitieraad() {
     return this.classificatie?.id == POLITIERAAD_CODE_ID;
+  }
+
+  async hasElections() {
+    let org = this;
+    const orgWithoutTijd = await this.isTijdsspecialisatieVan;
+    if (orgWithoutTijd) {
+      org = orgWithoutTijd;
+    }
+    return org.isDecretaal;
   }
 }

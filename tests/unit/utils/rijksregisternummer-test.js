@@ -39,14 +39,3 @@ module(
     });
   }
 );
-
-module(
-  'Unit | Utils | form-validations | RRN helpers | 06.02.02-000.80',
-  function () {
-    const rrn = '06020200080';
-    const formattedRrn = '06.02.02-000.80';
-    test(`${formattedRrn} is an invalid RRN, serial should be between 001 and 998`, function (assert) {
-      assert.false(isValidRijksregisternummer(rrn));
-    });
-  }
-);

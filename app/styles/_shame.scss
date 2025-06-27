@@ -433,3 +433,32 @@ main .au-c-main-container__content .au-u-wide-on-print {
 .power-select--min-width {
   min-width: 20rem;
 }
+.au-c-modal.overflow-visible {
+  overflow: visible;
+  .au-c-modal__body {
+    overflow: visible;
+  }
+}
+.read-only-form,
+.person-extra-info {
+  .au-u-flex.au-u-flex--row.au-u-padding-small {
+    padding: 0 !important;
+  }
+  .au-c-label {
+    color: $au-gray-600;
+  }
+  input.au-c-input.is-disabled {
+    border: none;
+    outline: none;
+    color: $au-gray-800;
+    padding: 0;
+    height: auto;
+  }
+}
+.content-box {
+  box-sizing: content-box;
+}
+
+.wizard-modal {
+  min-height: 50%;
+}

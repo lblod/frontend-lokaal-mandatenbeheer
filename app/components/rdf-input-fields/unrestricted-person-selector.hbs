@@ -1,0 +1,28 @@
+{{#unless @inTable}}
+  <AuLabel
+    for="person"
+    @error={{this.hasErrors}}
+    @warning={{this.hasWarnings}}
+    @required={{this.isRequired}}
+  >{{this.title}}</AuLabel>
+{{/unless}}
+{{#if this.initialized}}
+  <div class={{if this.hasErrors "ember-power-select--error"}}>
+    <Person::Selector
+      @person={{this.person}}
+      @onUpdate={{this.onUpdate}}
+      @onlyElected={{this.onlyElected}}
+      @bestuursorgaanIT={{this.bestuursorgaanIT}}
+      @readOnly={{@show}}
+    />
+  </div>
+  {{#each this.errors as |error|}}
+    <AuHelpText @error={{true}}>{{error.resultMessage}}</AuHelpText>
+  {{/each}}
+
+  {{#each this.warnings as |warning|}}
+    <AuHelpText @warning={{true}}>{{warning.resultMessage}}</AuHelpText>
+  {{/each}}
+{{else}}
+  <p class="skeleton-input-full au-u-margin-top"></p>
+{{/if}}

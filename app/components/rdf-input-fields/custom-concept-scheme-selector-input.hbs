@@ -1,0 +1,23 @@
+<RdfInputFields::CustomFieldWrapper
+  @inline={{true}}
+  @field={{@field}}
+  @form={{@form}}
+  @graphs={{@graphs}}
+  @formStore={{@formStore}}
+  as |wrapper|
+>
+  <RdfInputFields::ConceptSchemeSelector
+    @inTable={{true}}
+    @showFieldLabel={{false}}
+    @field={{@field}}
+    @form={{@form}}
+    @formStore={{@formStore}}
+    @graphs={{@graphs}}
+    @sourceNode={{@sourceNode}}
+    @forceShowErrors={{@forceShowErrors}}
+    @cacheConditionals={{@cacheConditionals}}
+    @show={{@show}}
+    @onInteractedWithField={{wrapper.onInteractedWithField}}
+  />
+
+</RdfInputFields::CustomFieldWrapper>

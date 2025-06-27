@@ -1,0 +1,31 @@
+<div class="au-u-box au-u-padding">
+  <div class="au-u-flex au-u-flex--between au-u-margin-bottom-small">
+    <AuHeading
+      @skin="5"
+      @level="2"
+      class="au-u-margin-bottom-tiny au-u-margin-bottom-none"
+    >{{this.validationErrorCount}}
+      validatiefout{{if (eq this.validationErrorCount 1) "" "en"}}
+      gevonden</AuHeading>
+  </div>
+  <div class="au-u-flex au-u-flex--start au-u-flex--spaced-tiny">
+    <p>Validatiefouten zijn mogelijke inconsistenties die we hebben gevonden in
+      de ingevulde gegevens. Deze validaties worden kort na elke aanpassing
+      uitgevoerd, maar je kan ze ook handmatig starten.
+    </p>
+
+  </div>
+  <div class="au-u-flex au-u-flex--start au-u-flex--spaced-tiny">
+
+    <p class="au-u-flex au-u-flex-self-end au-u-padding-top-small">Meer weten
+      over validatie fouten?</p>
+    <AuLinkExternal
+      class="au-u-flex au-u-flex-self-end"
+      href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer"
+    >
+      Bekijk de handleiding
+    </AuLinkExternal>
+  </div>
+
+  {{yield}}
+</div>

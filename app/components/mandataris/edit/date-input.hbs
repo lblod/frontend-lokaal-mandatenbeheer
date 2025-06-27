@@ -1,0 +1,25 @@
+<div ...attributes>
+  {{#if @label}}
+    <AuLabel
+      for={{this.elementId}}
+      @error={{@errorMessage}}
+      @required={{@isRequired}}
+    >{{@label}}</AuLabel>
+  {{/if}}
+  <AuInput
+    @error={{or @errorMessage}}
+    value={{this.dateInputString}}
+    id={{this.elementId}}
+    placeholder="dd-mm-yyyy"
+    {{au-inputmask options=(hash mask="99-99-9999" placeholder="_")}}
+    {{on "blur" (perform this.onChange)}}
+    @disabled={{@disabled}}
+  />
+  <AuHelpText>
+    Datum formaat: DD-MM-JJJJ
+  </AuHelpText>
+
+  {{#if @errorMessage}}
+    <AuHelpText @error={{true}}>{{@errorMessage}}</AuHelpText>
+  {{/if}}
+</div>

@@ -10,6 +10,8 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
   @service bestuursorganen;
   @service bestuursperioden;
   @service currentSession;
+  @service features;
+  @service decretaleOrganen;
   @service('persoon-api') persoonApi;
 
   queryParams = {
@@ -93,6 +95,11 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
         'status',
       ].join(','),
     };
+    if (!this.features.isEnabled('custom-organen')) {
+      queryParams[
+        'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][classificatie][:id:]'
+      ] = this.decretaleOrganen.decretaleIds.join(',');
+    }
 
     return await this.store.query('mandataris', queryParams);
   }

@@ -31,7 +31,9 @@ export default class FeaturesService extends Service {
 
   setup(features) {
     this.#features = { ...features };
-    console.log('Feature flags:', this.#features);
+    if (config.environmentName != 'PROD') {
+      console.log('Feature flags:', this.#features);
+    }
   }
 
   isEnabled(feature) {
@@ -55,6 +57,9 @@ export default class FeaturesService extends Service {
 
   // cookie has to start with 'feature-{{feature-name}}'
   #getCookieFeatures() {
+    if (config.environmentName === 'PROD') {
+      return {};
+    }
     const cookieFeatures = {};
     const cookies = document.cookie.split('; ');
 
@@ -89,6 +94,9 @@ export default class FeaturesService extends Service {
 
   //query param has to start with 'feature-{{feature-name}}'
   #getQueryParamsFeatures(queryParams) {
+    if (config.environmentName === 'PROD') {
+      return {};
+    }
     const queryFeatures = {};
 
     for (const [key, value] of queryParams.entries()) {

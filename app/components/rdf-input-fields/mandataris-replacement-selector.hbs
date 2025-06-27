@@ -2,12 +2,12 @@
   <div>
     <AuLabel for="replacement">{{this.title}}</AuLabel>
     {{#if this.initialized}}
-      <PowerSelectMultiple
+      <PowerSelect
         @triggerId="replacement"
         @allowClear={{true}}
         @disabled={{this.disabled}}
         @search={{perform this.search}}
-        @selected={{this.replacements}}
+        @selected={{this.replacement}}
         @onChange={{this.selectReplacement}}
         @loadingMessage="Aan het laden..."
         @searchEnabled={{true}}
@@ -26,7 +26,7 @@
             {{moment-format mandataris.displayEinde "DD-MM-YYYY"}}
           {{/if}}
         </span>
-      </PowerSelectMultiple>
+      </PowerSelect>
     {{else}}
       <p class="skeleton-input-full au-u-margin-top"></p>
     {{/if}}

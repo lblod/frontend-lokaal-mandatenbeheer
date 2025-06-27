@@ -6,12 +6,15 @@ export default class BestuursorganenService extends Service {
   @service store;
   @service decretaleOrganen;
   @service bestuursperioden;
+  @service features;
+  @service currentSession;
 
   async getAllRealPoliticalBestuursorganen() {
     return await this.store.query('bestuursorgaan', {
       'filter[:has-no:deactivated-at]': true,
       'filter[:has-no:is-tijdsspecialisatie-van]': true,
       'filter[:has-no:original-bestuurseenheid]': true,
+      'filter[bestuurseenheid][:id:]': this.currentSession.group.id,
       'filter[classificatie][id]':
         this.decretaleOrganen.classificatieIds.join(','), // only organs with a political mandate
       include: 'classificatie,heeft-tijdsspecialisaties',
@@ -48,7 +51,11 @@ export default class BestuursorganenService extends Service {
     if (queryParams.activeOrgans) {
       queryOptions['filter[:has-no:deactivated-at]'] = true;
     }
-    const types = queryParams.selectedTypes.map((type) => {
+    let filteredTypes = ['decretaleIds'];
+    if (this.features.isEnabled('custom-organen')) {
+      filteredTypes = queryParams.selectedTypes;
+    }
+    const types = filteredTypes.map((type) => {
       return this.decretaleOrganen.get(type).join(',');
     });
     queryOptions['filter[classificatie][:id:]'] = types.join(',');

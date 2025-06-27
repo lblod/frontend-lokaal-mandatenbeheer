@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 
+import { A } from '@ember/array';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
@@ -11,7 +12,7 @@ import { BELEIDSDOMEIN_CODES_CONCEPT_SCHEME } from 'frontend-lmb/utils/well-know
 export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent extends Component {
   @service store;
 
-  @tracked selected = [];
+  @tracked selected = A([]);
   @tracked options = [];
   conceptScheme = BELEIDSDOMEIN_CODES_CONCEPT_SCHEME;
 
@@ -66,7 +67,7 @@ export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent exte
 
   @action
   select(beleidsdomeinen) {
-    this.selected.setObjects(beleidsdomeinen);
+    this.selected = beleidsdomeinen;
     if (this.args.onSelect) {
       this.args.onSelect(this.selected);
     }

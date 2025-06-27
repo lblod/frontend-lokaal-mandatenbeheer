@@ -11,10 +11,8 @@
         <th>Naam</th>
         {{#if this.showMinMax}}
           <th>Min aantal houders</th>
-          <th>Max aantal houders</th>
         {{/if}}
-        <th>Aantal houders</th>
-        <th></th>
+        <th>Max Aantal houders</th>
       </c.header>
       <c.body as |mandaat|>
         <td class="au-u-visible-small-up">
@@ -23,9 +21,6 @@
         {{#if this.showMinMax}}
           <td class="au-u-visible-small-up">
             {{if mandaat.minAantalHouders mandaat.minAantalHouders "Onbepaald"}}
-          </td>
-          <td class="au-u-visible-small-up">
-            {{if mandaat.maxAantalHouders mandaat.maxAantalHouders "Onbepaald"}}
           </td>
         {{/if}}
         <td class="au-u-visible-small-up">
@@ -45,34 +40,6 @@
             {{/if}}
           {{else}}
             {{mandaat.aantalHouders}}
-          {{/if}}
-        </td>
-        <td>
-          {{#if (eq this.editMandaat.id mandaat.id)}}
-            <AuButtonGroup>
-              <Shared::Tooltip
-                @showTooltip={{this.disabled}}
-                @tooltipText={{this.toolTipText}}
-              >
-                <AuButton
-                  {{on "click" this.saveMandaat}}
-                  @disabled={{this.disabled}}
-                >
-                  Bewaar
-                </AuButton>
-              </Shared::Tooltip>
-              <AuButton @skin="secondary" {{on "click" this.cancelEditMandaat}}>
-                Annuleer
-              </AuButton>
-            </AuButtonGroup>
-          {{else}}
-            <AuButton
-              @skin="link"
-              @icon="pencil"
-              {{on "click" (fn this.startEditMandaat mandaat)}}
-            >
-              Bewerk
-            </AuButton>
           {{/if}}
         </td>
       </c.body>

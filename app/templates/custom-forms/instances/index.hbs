@@ -1,0 +1,86 @@
+{{outlet}}
+
+<AuMainContainer as |main|>
+  <main.content>
+    <AuBodyContainer id="content">
+      <div class="au-c-body-container au-c-body-container--scroll">
+        <SemanticForms::InstanceTable
+          @title={{this.model.form.name}}
+          @description={{this.model.form.description}}
+          @newFormRoute="custom-forms.instances.new"
+          @sort={{this.sort}}
+          @page={{this.page}}
+          @size={{this.size}}
+          @filter={{this.filter}}
+          @showDownloadButton={{true}}
+          @search={{this.search}}
+          @form={{this.model.form}}
+          @formDefinition={{this.model.formDefinition}}
+          @onRemoveInstance={{this.onRemoveInstance}}
+          @editRoute="custom-forms.instances.instance"
+          @onTableLoaded={{this.onTableLoaded}}
+        >
+          <:extraActions>
+            {{! template-lint-disable require-context-role }}
+            <AuButton
+              role="menuitem"
+              @skin="link"
+              {{on "click" this.goToEditFormDefinition}}
+            >
+              Bewerk formulier
+            </AuButton>
+            <AuButton
+              role="menuitem"
+              @alert={{true}}
+              @skin="link"
+              {{on "click" this.openDeleteFormModal}}
+            >Verwijder formulier</AuButton>
+          </:extraActions>
+        </SemanticForms::InstanceTable>
+      </div>
+    </AuBodyContainer>
+  </main.content>
+</AuMainContainer>
+
+<AuModal
+  @title="Verwijder formulier"
+  @modalOpen={{this.isDeleteModalOpen}}
+  @closable={{true}}
+  @closeModal={{fn (mut this.isDeleteModalOpen) false}}
+>
+  <:body>
+    <p>{{this.removeFormModalText}}</p>
+    {{#if this.formUsageLabels}}
+      <p class="au-u-margin-top">Verwijder eerst de link naar dit formulier uit
+        volgende formulieren:</p>
+      <ul>
+        {{#each this.formUsageLabels as |label|}}
+          <li>- {{label}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  </:body>
+  <:footer>
+    <AuButtonGroup
+      class="au-u-flex au-u-flex--between au-u-padding-left au-u-padding-right"
+    >
+      <AuButton
+        @alert={{true}}
+        @disabled={{or
+          this.isDeleting
+          this.model.customFormConfigurationUsage.hasUsage
+        }}
+        @loading={{this.isDeleting}}
+        @loadingMessage="Formulieren worden verwijderd"
+        {{on "click" this.deleteForm}}
+      >Verwijder</AuButton>
+      <AuButton
+        @skin="secondary"
+        @disabled={{this.isDeleting}}
+        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+      >Annuleer</AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>
+
+{{outlet}}

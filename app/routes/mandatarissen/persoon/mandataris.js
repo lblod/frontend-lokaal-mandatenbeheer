@@ -5,11 +5,14 @@ import { service } from '@ember/service';
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
 import { handleResponse } from 'frontend-lmb/utils/handle-response';
 
+import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 import {
   MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_EXTRA_INFO_FORM_ID,
   POLITIERAAD_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
+import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
+
 import RSVP from 'rsvp';
 
 export default class MandatarissenPersoonMandatarisRoute extends Route {
@@ -27,17 +30,24 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const mandaat = await mandataris.bekleedt;
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);
 
-    const mandatarisEditForm = this.semanticFormRepository.getFormDefinition(
-      MANDATARIS_EDIT_FORM_ID
-    );
     const mandatarisExtraInfoForm =
       await this.semanticFormRepository.getFormDefinition(
         MANDATARIS_EXTRA_INFO_FORM_ID
       );
 
     const bestuursorganen = await mandaat.bevatIn;
-    const selectedBestuursperiode = (await bestuursorganen)[0]
-      .heeftBestuursperiode;
+    const selectedBestuursperiode =
+      await bestuursorganen[0]?.heeftBestuursperiode;
+    const periodeHasLegislatuur =
+      (await selectedBestuursperiode.installatievergaderingen)?.length >= 1;
+    const behandeldeVergaderingen = await this.store.query(
+      'installatievergadering',
+      {
+        'filter[status][:uri:]': INSTALLATIEVERGADERING_BEHANDELD_STATUS,
+        'filter[bestuursperiode][:id:]': selectedBestuursperiode.id,
+      }
+    );
+
     const isDistrict = this.currentSession.isDistrict;
     const linkedMandataris = await this.linkedMandataris(params.mandataris_id);
     const showOCMWLinkedMandatarisWarning =
@@ -61,17 +71,36 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       });
     }
 
+    const isFractieRequired = await isRequiredForBestuursorgaan(
+      bestuursorganen.at(0)
+    );
+
+    const history = await this.fetchHistory(
+      mandataris,
+      mandatarissen,
+      MANDATARIS_EDIT_FORM_ID
+    );
+    const isMostRecentVersion =
+      [...mandatarissen].sort((a, b) => b.start - a.start)[0].id ===
+      mandataris.id;
+
+    const firstBestuursorgaanInTijd = bestuursorganen[0];
+
     return RSVP.hash({
       bestuurseenheid,
       mandataris,
       mandatarissen,
-      mandatarisEditForm,
       mandatarisExtraInfoForm,
+      history,
+      isMostRecentVersion,
       bestuursorganen,
-      selectedBestuursperiode,
+      firstBestuursorgaanInTijd,
+      periodeHasLegislatuur,
+      behandeldeVergaderingen,
       linkedMandataris,
       owners,
       isDistrictEenheid: isDistrict,
+      isFractieRequired,
       effectiefIsLastPublicationStatus:
         await effectiefIsLastPublicationStatus(mandataris),
       showOCMWLinkedMandatarisWarning,
@@ -137,5 +166,75 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     }
 
     return hasLinkedMandataris;
+  }
+
+  async fetchHistory(mandataris, allMandatarissen, formId) {
+    const newHistory = await Promise.all(
+      allMandatarissen.map(async (m) => {
+        let corrections = await this.fetchHistoryForMandataris(m, formId);
+        const historyEntry = {
+          mandataris: m,
+          corrections,
+          selected: mandataris?.id === m.id,
+        };
+        return historyEntry;
+      })
+    );
+
+    const userIdsInHistory = new Set();
+    newHistory.forEach((h) => {
+      h.corrections.forEach((c) => {
+        userIdsInHistory.add(c.creator);
+      });
+    });
+
+    let users = [];
+    if (userIdsInHistory.size !== 0) {
+      users = await this.store.query('gebruiker', {
+        filter: {
+          id: Array.from(userIdsInHistory).join(','),
+        },
+      });
+    }
+
+    const userIdToUser = {};
+    users.forEach((u) => {
+      userIdToUser[u.id] = u;
+    });
+
+    return newHistory
+      .map((h) => {
+        return {
+          ...h,
+          corrections: h.corrections.map((c) => ({
+            ...c,
+            creator: userIdToUser[c.creator],
+          })),
+        };
+      })
+      .sort((a, b) => {
+        if (!b?.mandataris?.start) {
+          return -1;
+        }
+        if (!a?.mandataris?.start) {
+          return 1;
+        }
+        return b.mandataris.start.getTime() - a.mandataris.start.getTime();
+      });
+  }
+
+  async fetchHistoryForMandataris(mandataris, formId) {
+    const result = await fetch(
+      `/form-content/${formId}/instances/${mandataris.id}/history`
+    );
+
+    const json = await result.json();
+    return json.instances;
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.isRangordeModalOpen = false;
+    controller.newMandataris = null;
   }
 }
