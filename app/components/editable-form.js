@@ -106,11 +106,11 @@ function getFieldsForForm() {
       const response = await fetch(
         `${API.FORM_CONTENT_SERVICE}/custom-form/${this.currentForm.id}/fields`
       );
-      const parsedResponse = await handleResponse(
+      const parsedResponse = await handleResponse({
         response,
-        this.toaster,
-        `Er liep iets mis bij het ophalen van de velden voor formulier met id: ${this.currentForm?.id}`
-      );
+        toaster: this.toaster,
+        errorMessage: `Er liep iets mis bij het ophalen van de velden voor formulier met id: ${this.currentForm?.id}`,
+      });
 
       if (this.args.onFieldsSet) {
         this.args.onFieldsSet(parsedResponse.fields);
