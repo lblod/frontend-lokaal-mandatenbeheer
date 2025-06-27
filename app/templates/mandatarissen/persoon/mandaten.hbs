@@ -199,47 +199,27 @@
   </Modal.Footer>
 </AuModal>
 
-<AuModal
+<Shared::ConfirmationModal
   @title="Beëindig actieve mandaten"
-  @modalOpen={{this.isEndMandatesModalOpen}}
-  @closeModal={{this.resetModals}}
-  as |Modal|
+  @isModalOpen={{this.isEndMandatesModalOpen}}
+  @confirm={{perform this.endActiveMandaten}}
+  @cancel={{this.resetModals}}
+  @loading={{this.endActiveMandaten.isRunning}}
+  @disabled={{this.noDateSelected}}
 >
-  <Modal.Body>
-    <div class="au-o-box au-o-flow">
-      <div>
-        Door verder te gaan, worden de einddatums van de actieve mandaten van
-        deze persoon, in de huidige bestuursperiode aangepast, waardoor deze
-        mandaten beëindigd worden. Opgelet dit geld ook voor verhinderde
-        mandaten, hun einddatum wordt dan ook aangepast naar de ingevoerde
-        datum.
-      </div>
-      <DateInput
-        @label="Einddatum"
-        @value={{this.date}}
-        @onChange={{fn (mut this.date)}}
-        @isRequired={{true}}
-      />
-    </div>
-  </Modal.Body>
-  <Modal.Footer>
-    <AuToolbar as |Group|>
-      <Group>
-        <AuButton
-          @loading={{this.endActiveMandaten.isRunning}}
-          @loadingMessage="Actieve mandaten worden beëindigd"
-          @disabled={{this.endMandatarissenDisabled}}
-          {{on "click" (perform this.endActiveMandaten)}}
-        >
-          Beëindig mandatarissen
-        </AuButton>
-        <AuButton @skin="secondary" {{on "click" this.resetModals}}>
-          Annuleer
-        </AuButton>
-      </Group>
-    </AuToolbar>
-  </Modal.Footer>
-</AuModal>
+  <div>
+    Door verder te gaan, worden de einddatums van de actieve mandaten van deze
+    persoon, in de huidige bestuursperiode aangepast, waardoor deze mandaten
+    beëindigd worden. Opgelet dit geld ook voor verhinderde mandaten, hun
+    einddatum wordt dan ook aangepast naar de ingevoerde datum.
+  </div>
+  <DateInput
+    @label="Einddatum"
+    @value={{this.date}}
+    @onChange={{fn (mut this.date)}}
+    @isRequired={{true}}
+  />
+</Shared::ConfirmationModal>
 
 <Shared::ConfirmationModal
   @title="Onafhankelijk worden"

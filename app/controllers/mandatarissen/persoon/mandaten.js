@@ -153,7 +153,7 @@ export default class MandatarissenPersoonMandatenController extends Controller {
     return 'Deze persoon is reeds onafhankelijk.';
   }
 
-  get endMandatarissenDisabled() {
+  get noDateSelected() {
     return !this.date;
   }
 }
