@@ -1,0 +1,27 @@
+<AuModal @modalOpen={{@isModalOpen}} @closable={{true}} @closeModal={{@cancel}}>
+  <:title>
+    {{@title}}
+  </:title>
+  <:body>
+    {{yield}}
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group class="flex-grow">
+        <AuButtonGroup>
+          <AuButton
+            @loading={{@loading}}
+            @loadingMessage="Opslaan"
+            @disabled={{@disabled}}
+            {{on "click" @confirm}}
+          >
+            Bevestig
+          </AuButton>
+          <AuButton @skin="secondary" {{on "click" @cancel}}>
+            Annuleer
+          </AuButton>
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
