@@ -4,13 +4,10 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-import { consume } from 'ember-provide-consume-context';
 import { timeout } from 'ember-concurrency';
 import { isCustomDisplayType } from 'frontend-lmb/models/display-type';
 
 export default class CustomFormsInstancesDefinitionController extends Controller {
-  @consume('form-context') formContext;
-
   @service router;
 
   @tracked isEditFormModalOpen;
