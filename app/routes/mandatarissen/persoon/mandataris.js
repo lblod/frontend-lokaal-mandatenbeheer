@@ -3,6 +3,8 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
+import { handleResponse } from 'frontend-lmb/utils/handle-response';
+
 import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 import {
   MANDATARIS_EDIT_FORM_ID,
@@ -149,16 +151,11 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const response = await fetch(
       `/mandataris-api/mandatarissen/${mandataris}/check-possible-double`
     );
-    const jsonResponse = await response.json();
-
-    if (response.status !== 200) {
-      throw jsonResponse.message;
-    }
-    const hasDouble = !!jsonResponse.hasDouble;
+    const parsedResponse = await handleResponse({ response });
 
     return {
-      duplicateMandate: jsonResponse.duplicateMandate ?? null,
-      hasDouble,
+      duplicateMandate: parsedResponse.duplicateMandate ?? null,
+      hasDouble: !!parsedResponse.hasDouble,
     };
   }
 

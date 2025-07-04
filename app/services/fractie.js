@@ -16,7 +16,7 @@ export default class FractieService extends Service {
   // ---------------------  WARNING ----------------
   async createOnafhankelijkeFractie(bestuursperiode, bestuurseenheid) {
     if (!bestuurseenheid) {
-      throw `Could not create onafhankelijke fractie`;
+      throw new Error('Could not create onafhankelijke fractie');
     }
     const bestuursorganen =
       await this.bestuursperioden.getRelevantTijdsspecialisaties(
