@@ -191,8 +191,7 @@ export default class CustomFormEditCustomField extends Component {
   @action
   async saveFieldChanges() {
     this.isSaving = true;
-
-    if (this.isLinkFormTypeSelected) {
+    if (this.displayType?.get('isLinkToForm')) {
       this.isShownInSummary = false;
     }
 
