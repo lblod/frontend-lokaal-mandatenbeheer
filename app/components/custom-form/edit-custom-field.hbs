@@ -32,6 +32,7 @@
       <AuFormRow class="au-form-row-full-width">
         <AuLabel @required={{true}} for="library-entry">Uit bibliotheek</AuLabel>
         <PowerSelect
+          @disabled={{this.isLoadingLibraryFieldType}}
           @allowClear={{false}}
           @renderInPlace={{false}}
           @searchEnabled={{true}}
@@ -52,7 +53,10 @@
         <AuLabel @required={{true}} for="display-type">Type</AuLabel>
         <PowerSelect
           @allowClear={{false}}
-          @disabled={{not this.canSelectTypeForEntry}}
+          @disabled={{or
+            (not this.canSelectTypeForEntry)
+            this.isLoadingLibraryFieldType
+          }}
           @renderInPlace={{false}}
           @searchEnabled={{true}}
           @loadingMessage="Aan het laden..."

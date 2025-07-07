@@ -70,6 +70,10 @@ export default class CustomFormEditCustomField extends Component {
     return this.getLibraryFieldType?.value || this.fakeLibraryEntry;
   }
 
+  get isLoadingLibraryFieldType() {
+    return !this.getLibraryFieldType?.isFinished;
+  }
+
   @cached
   get conceptSchemes() {
     return this.getConceptSchemes?.value || [];
@@ -260,13 +264,14 @@ function setSelectedField() {
 
 function getLibraryFieldType() {
   return trackedFunction(async () => {
+    let fieldType = this.fakeLibraryEntry;
     if (this.libraryEntryUri) {
-      return queryRecord(this.store, 'library-entry', {
+      fieldType = queryRecord(this.store, 'library-entry', {
         'filter[:uri:]': this.libraryEntryUri,
       });
-    } else {
-      return this.fakeLibraryEntry;
     }
+
+    return fieldType;
   });
 }
 
