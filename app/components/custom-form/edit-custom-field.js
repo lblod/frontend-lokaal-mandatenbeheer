@@ -21,13 +21,13 @@ export default class CustomFormEditCustomField extends Component {
   @use(setSelectedField) setSelectedField;
   @use(getDisplayTypes) getDisplayTypes;
   @use(getConceptSchemes) getConceptSchemes;
+  @use(getLibraryFieldType) getLibraryFieldType;
   @use(getLibraryFieldOptions) getLibraryFieldOptions;
 
   @service store;
   @service customForms;
 
   @tracked label;
-  @tracked libraryFieldType;
   @tracked libraryEntryUri;
   @tracked displayType;
   @tracked conceptScheme;
@@ -44,7 +44,6 @@ export default class CustomFormEditCustomField extends Component {
   constructor() {
     super(...arguments);
     this.fakeLibraryEntry = LibraryEntryModel.ensureFakeEntry(this.store);
-    this.libraryFieldType = this.fakeLibraryEntry;
   }
 
   get isStandardField() {
@@ -65,6 +64,10 @@ export default class CustomFormEditCustomField extends Component {
       this.libraryFieldType?.isNew &&
       !LIBRARY_ENTREES.includes(this.libraryEntryUri)
     );
+  }
+
+  get libraryFieldType() {
+    return this.getLibraryFieldType?.value || this.fakeLibraryEntry;
   }
 
   @cached
@@ -132,18 +135,9 @@ export default class CustomFormEditCustomField extends Component {
     )?.[0];
 
     this.libraryEntryUri = field.libraryEntryUri;
-
-    if (this.libraryEntryUri) {
-      this.libraryFieldType = await this.getLibraryEntryForUri(
-        field.libraryEntryUri
-      );
-      this.displayType = this.libraryFieldType?.displayType;
-    } else {
-      this.libraryFieldType = this.fakeLibraryEntry;
-      this.displayType = this.displayTypes.filter(
-        (t) => t.uri === field?.displayType
-      )?.[0];
-    }
+    this.displayType = this.displayTypes.filter(
+      (t) => t.uri === field?.displayType
+    )?.[0];
 
     this.isSaving = false;
     this.isDeleteWarningShown = false;
@@ -168,16 +162,6 @@ export default class CustomFormEditCustomField extends Component {
       this.displayTypes.find(
         (t) => t?.uri === libraryEntry.get('displayType.uri')
       ) || this.displayTypes.find((t) => t?.uri === TEXT_CUSTOM_DISPLAY_TYPE);
-  }
-
-  async getLibraryEntryForUri(libraryEntryUri) {
-    if (!libraryEntryUri) {
-      return this.fakeLibraryEntry;
-    }
-
-    return queryRecord(this.store, 'library-entry', {
-      'filter[:uri:]': libraryEntryUri,
-    });
   }
 
   @action
@@ -271,6 +255,18 @@ function setSelectedField() {
     await this.updateSelectedField(this.args.selectedField);
 
     return this.args.selectedField;
+  });
+}
+
+function getLibraryFieldType() {
+  return trackedFunction(async () => {
+    if (this.libraryEntryUri) {
+      return queryRecord(this.store, 'library-entry', {
+        'filter[:uri:]': this.libraryEntryUri,
+      });
+    } else {
+      return this.fakeLibraryEntry;
+    }
   });
 }
 
