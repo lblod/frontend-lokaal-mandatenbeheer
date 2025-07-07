@@ -117,7 +117,7 @@ export default class CustomFormsService extends Service {
         body: JSON.stringify({
           field: fieldUri,
           displayType: displayTypeUri,
-          libraryEntryUri: libraryEntryUri,
+          libraryEntryUri,
           name: label,
           isRequired: !!isRequired,
           showInSummary: !!isShownInSummary,

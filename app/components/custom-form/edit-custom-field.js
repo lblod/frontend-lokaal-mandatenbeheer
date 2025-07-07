@@ -265,7 +265,7 @@ function getLibraryFieldType() {
   return trackedFunction(async () => {
     let fieldType = this.fakeLibraryEntry;
     if (this.libraryEntryUri) {
-      fieldType = queryRecord(this.store, 'library-entry', {
+      fieldType = await queryRecord(this.store, 'library-entry', {
         'filter[:uri:]': this.libraryEntryUri,
       });
     }
