@@ -156,8 +156,8 @@ export default class CustomFormEditCustomField extends Component {
 
   @action
   updateLibraryFieldType(libraryEntry) {
-    this.libraryFieldType = libraryEntry;
     this.libraryEntryUri = libraryEntry?.uri;
+    this.getLibraryFieldType.retry(); // Should have triggerd the tracked function, not sure why not..
     this.displayType =
       this.displayTypes.find(
         (t) => t?.uri === libraryEntry.get('displayType.uri')
