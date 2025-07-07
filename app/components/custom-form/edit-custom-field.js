@@ -202,7 +202,7 @@ export default class CustomFormEditCustomField extends Component {
       {
         label: this.label,
         displayTypeUri: this.displayType?.get('uri'),
-        libraryEntryUri: this.libraryEntryUri?.uri,
+        libraryEntryUri: this.libraryEntryUri,
         conceptSchemeUri: this.conceptScheme?.uri,
         isRequired: this.isRequired,
         isShownInSummary: this.isShownInSummary,

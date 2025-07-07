@@ -99,6 +99,7 @@ export default class CustomFormsService extends Service {
     fieldUri,
     {
       label,
+      libraryEntryUri,
       displayTypeUri,
       conceptSchemeUri,
       isRequired,
@@ -116,6 +117,7 @@ export default class CustomFormsService extends Service {
         body: JSON.stringify({
           field: fieldUri,
           displayType: displayTypeUri,
+          libraryEntryUri: libraryEntryUri,
           name: label,
           isRequired: !!isRequired,
           showInSummary: !!isShownInSummary,
