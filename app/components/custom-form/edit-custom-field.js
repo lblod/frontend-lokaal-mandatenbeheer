@@ -290,11 +290,14 @@ function getLibraryFieldOptions() {
         sort: 'name',
         include: 'display-type',
       });
+      const availableOptions = allOptions.filter((o) => {
+        if (this.args.selectedField?.libraryEntryUri === o.uri) {
+          return true;
+        }
+        return !fieldsLibraryEntryUris.includes(o?.uri);
+      });
 
-      return [
-        customFieldEntry,
-        ...allOptions.filter((o) => !fieldsLibraryEntryUris.includes(o?.uri)),
-      ];
+      return [customFieldEntry, ...availableOptions];
     }
 
     return [customFieldEntry];
