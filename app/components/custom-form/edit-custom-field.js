@@ -6,6 +6,7 @@ import { tracked, cached } from '@glimmer/tracking';
 
 import { trackedFunction } from 'reactiveweb/function';
 import { use } from 'ember-resources';
+import { task } from 'ember-concurrency';
 
 import {
   LIBRARY_ENTREES,
@@ -22,7 +23,6 @@ export default class CustomFormEditCustomField extends Component {
   @use(getDisplayTypes) getDisplayTypes;
   @use(getConceptSchemes) getConceptSchemes;
   @use(getLibraryFieldType) getLibraryFieldType;
-  @use(getLibraryFieldOptions) getLibraryFieldOptions;
 
   @service store;
   @service customForms;
@@ -39,11 +39,23 @@ export default class CustomFormEditCustomField extends Component {
   @tracked isDeleteWarningShown;
   @tracked isDeleting;
 
+  @tracked allLibraryEntryOptions = [];
+  @tracked libraryFieldOptions = [];
+
   fakeLibraryEntry;
 
   constructor() {
     super(...arguments);
     this.fakeLibraryEntry = LibraryEntryModel.ensureFakeEntry(this.store);
+    this.store
+      .query('library-entry', {
+        sort: 'name',
+        include: 'display-type',
+      })
+      .then((options) => {
+        this.allLibraryEntryOptions = options;
+        this.getLibraryFieldOptions.perform();
+      });
   }
 
   get isStandardField() {
@@ -53,10 +65,6 @@ export default class CustomFormEditCustomField extends Component {
   @cached
   get displayTypes() {
     return this.getDisplayTypes?.value || [];
-  }
-
-  get libraryFieldOptions() {
-    return this.getLibraryFieldOptions?.value || [];
   }
 
   get canSelectTypeForEntry() {
@@ -70,8 +78,11 @@ export default class CustomFormEditCustomField extends Component {
     return this.getLibraryFieldType?.value || this.fakeLibraryEntry;
   }
 
-  get isLoadingLibraryFieldType() {
-    return !this.getLibraryFieldType?.isFinished;
+  get isLoadingLibraryEntries() {
+    return (
+      !this.getLibraryFieldType?.isFinished ||
+      this.getLibraryFieldOptions.isRunning
+    );
   }
 
   @cached
@@ -96,7 +107,7 @@ export default class CustomFormEditCustomField extends Component {
   }
 
   get isLinkFormTypeSelected() {
-    if (!this.displayType?.get('isLinkToForm')) {
+    if (!this.displayType?.isLinkToForm) {
       return true;
     }
 
@@ -120,7 +131,7 @@ export default class CustomFormEditCustomField extends Component {
     return (
       this.selectedField.label !== this.label ||
       this.selectedField.libraryEntryUri !== this.libraryEntryUri ||
-      this.selectedField.displayType !== this.displayType?.get('uri') ||
+      this.selectedField.displayType !== this.displayType?.uri ||
       this.selectedField.conceptScheme !== this.conceptScheme?.uri ||
       this.selectedField.isRequired !== this.isRequired ||
       this.selectedField.isShownInSummary !== this.isShownInSummary ||
@@ -129,7 +140,7 @@ export default class CustomFormEditCustomField extends Component {
   }
 
   @action
-  async updateSelectedField(field) {
+  updateSelectedField(field) {
     this.label = field?.label;
     this.isRequired = !!field?.isRequired;
     this.isShownInSummary = !!field?.isShownInSummary;
@@ -146,6 +157,7 @@ export default class CustomFormEditCustomField extends Component {
     this.isSaving = false;
     this.isDeleteWarningShown = false;
     this.isDeleting = false;
+    this.getLibraryFieldOptions.perform();
   }
 
   @action
@@ -191,7 +203,7 @@ export default class CustomFormEditCustomField extends Component {
   @action
   async saveFieldChanges() {
     this.isSaving = true;
-    if (this.displayType?.get('isLinkToForm')) {
+    if (this.displayType?.isLinkToForm) {
       this.isShownInSummary = false;
     }
 
@@ -200,7 +212,7 @@ export default class CustomFormEditCustomField extends Component {
       this.selectedField.uri,
       {
         label: this.label,
-        displayTypeUri: this.displayType?.get('uri'),
+        displayTypeUri: this.displayType?.uri,
         libraryEntryUri: this.libraryEntryUri,
         conceptSchemeUri: this.conceptScheme?.uri,
         isRequired: this.isRequired,
@@ -229,6 +241,29 @@ export default class CustomFormEditCustomField extends Component {
       this.args.onFieldUpdated(null);
     }
   }
+
+  getLibraryFieldOptions = task({ restartable: true }, async () => {
+    const response = await fetch(
+      `${API.FORM_CONTENT_SERVICE}/custom-form/${this.args.formDefinitionId}/fields`
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+      const fieldsLibraryEntryUris = result.fields
+        ?.map((f) => f.libraryEntryUri)
+        .filter((hasLibraryEntry) => hasLibraryEntry);
+      const availableOptions = this.allLibraryEntryOptions.filter((o) => {
+        if (this.args.selectedField?.libraryEntryUri === o.uri) {
+          return true;
+        }
+        return !fieldsLibraryEntryUris.includes(o?.uri);
+      });
+
+      this.libraryFieldOptions = [this.fakeLibraryEntry, ...availableOptions];
+    } else {
+      this.libraryFieldOptions = [this.fakeLibraryEntry];
+    }
+  });
 }
 
 function getDisplayTypes() {
@@ -255,7 +290,7 @@ function getConceptSchemes() {
 
 function setSelectedField() {
   return trackedFunction(async () => {
-    await this.updateSelectedField(this.args.selectedField);
+    this.updateSelectedField(this.args.selectedField);
 
     return this.args.selectedField;
   });
@@ -271,35 +306,5 @@ function getLibraryFieldType() {
     }
 
     return fieldType;
-  });
-}
-
-function getLibraryFieldOptions() {
-  return trackedFunction(async () => {
-    const customFieldEntry = LibraryEntryModel.ensureFakeEntry(this.store);
-    const response = await fetch(
-      `${API.FORM_CONTENT_SERVICE}/custom-form/${this.args.formDefinitionId}/fields`
-    );
-
-    if (response.ok) {
-      const result = await response.json();
-      const fieldsLibraryEntryUris = result.fields
-        ?.map((f) => f.libraryEntryUri)
-        .filter((hasLibraryEntry) => hasLibraryEntry);
-      const allOptions = await this.store.query('library-entry', {
-        sort: 'name',
-        include: 'display-type',
-      });
-      const availableOptions = allOptions.filter((o) => {
-        if (this.args.selectedField?.libraryEntryUri === o.uri) {
-          return true;
-        }
-        return !fieldsLibraryEntryUris.includes(o?.uri);
-      });
-
-      return [customFieldEntry, ...availableOptions];
-    }
-
-    return [customFieldEntry];
   });
 }
