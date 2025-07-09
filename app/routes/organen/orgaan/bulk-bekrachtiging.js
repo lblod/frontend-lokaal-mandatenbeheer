@@ -34,7 +34,7 @@ export default class BulkBekrachtigingRoute extends Route {
       );
       mandatarissenMap = await Promise.all(
         mandatarissen.map(async (mandataris) => {
-          const uri = (await mandataris.publicationStatus).uri;
+          const uri = (await mandataris.publicationStatus)?.uri;
           let canShowCheckbox = true;
           if (
             effectiefIsLastStatus &&
