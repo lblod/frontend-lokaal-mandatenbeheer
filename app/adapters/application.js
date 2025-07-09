@@ -46,15 +46,30 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
     };
     let retries = 3;
     let response = null;
+    let abortionTimeout = null;
     while (retries > 0 && !response?.ok) {
       if (retries > 1) {
-        newOptions.signal = AbortSignal.timeout(timeout[newOptions.method]);
+        response = null;
+        const aborter = new AbortController();
+        newOptions.signal = aborter.signal;
+        // need to do manual timeout handling because we don't want the body to
+        // be cancelled if it's not been read yet but the request has succeeded
+        // this is the default behavior of AbortSignal.timeout
+        abortionTimeout = setTimeout(() => {
+          if (!response) {
+            aborter.abort();
+          }
+        }, timeout[newOptions.method] || 1000);
       } else {
         // if it's our last shot, try without timeout
         newOptions.signal = undefined;
       }
       try {
         response = await originalFetch(url, newOptions);
+        if (abortionTimeout) {
+          clearTimeout(abortionTimeout);
+        }
+
         if (response.ok) {
           return response;
         } else {
