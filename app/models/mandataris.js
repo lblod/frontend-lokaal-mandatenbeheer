@@ -3,6 +3,7 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import moment from 'moment';
 import { MANDATARIS_EDIT_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
+import { endOfDay, startOfDay } from 'frontend-lmb/utils/date-manipulation';
 import {
   MANDAAT_BURGEMEESTER_CODE,
   MANDATARIS_DRAFT_PUBLICATION_STATE,
@@ -105,8 +106,25 @@ export default class MandatarisModel extends Model {
     return approvedStatussen.includes(this.publicationStatus?.get('uri'));
   }
 
+  // Why is this here?
   get displayEinde() {
     return this.einde;
+  }
+
+  get mandatarisEndDate() {
+    if (!this.einde) {
+      return null;
+    }
+
+    return endOfDay(this.einde);
+  }
+
+  get mandatarisStartDate() {
+    if (!this.start) {
+      return null;
+    }
+
+    return startOfDay(this.start);
   }
 
   get isActive() {
@@ -115,7 +133,7 @@ export default class MandatarisModel extends Model {
     }
 
     const today = moment(new Date());
-    if (this.einde > today) {
+    if (this.mandatarisEndDate > today) {
       return true;
     }
     return false;
@@ -123,18 +141,20 @@ export default class MandatarisModel extends Model {
 
   get isCurrentlyActive() {
     const now = moment();
-    const start = moment(this.start);
-    const end = this.einde ? moment(this.einde) : moment('3000-01-01');
+    const start = moment(this.mandatarisStartDate);
+    const end = this.einde
+      ? moment(this.mandatarisEndDate)
+      : moment('3000-01-01');
     return now.isBetween(start, end);
   }
 
   isActiveAt(date) {
     if (!this.einde) {
-      return moment(this.start).isSameOrBefore(date);
+      return moment(this.mandatarisStartDate).isSameOrBefore(date);
     }
     return (
-      moment(this.start).isSameOrBefore(date) &&
-      moment(this.einde).isAfter(date)
+      moment(this.mandatarisStartDate).isSameOrBefore(date) &&
+      moment(this.mandatarisEndDate).isAfter(date)
     );
   }
 
@@ -197,6 +217,12 @@ export default class MandatarisModel extends Model {
     const creating = !this.id;
     if (!this.isDeleted) {
       this.modified = new Date();
+    }
+    if (this.start) {
+      this.start = this.mandatarisStartDate;
+    }
+    if (this.einde) {
+      this.einde = this.mandatarisEndDate;
     }
     const result = await super.save(...arguments);
     if (creating) {
