@@ -11,6 +11,7 @@ import {
   PERSON_CUSTOM_DISPLAY_TYPE,
   PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
   TEXT_CUSTOM_DISPLAY_TYPE,
+  URL_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class DisplayTypeModel extends Model {
@@ -46,5 +47,6 @@ export function isCustomDisplayType(uri) {
     CONCEPT_SCHEME_SELECTOR_CUSTOM_DISPLAY_TYPE,
     CONCEPT_SCHEME_MULTI_SELECTOR_CUSTOM_DISPLAY_TYPE,
     LINK_TO_FORM_CUSTOM_DISPLAY_TYPE,
+    URL_CUSTOM_DISPLAY_TYPE,
   ].includes(uri);
 }

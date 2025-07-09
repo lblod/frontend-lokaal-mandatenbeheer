@@ -29,9 +29,11 @@ import RdfInputFieldCustomConceptSchemeMultiSelectorInput from 'frontend-lmb/com
 import RdfInputFieldCustomPersonSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-input';
 import RdfInputFieldCustomPersonMultiSelector from 'frontend-lmb/components/rdf-input-fields/custom-person-multi-input';
 import RdfInputFieldLinkToForm from 'frontend-lmb/components/rdf-input-fields/link-to-form';
+import RdfInputFieldCustomUrlInput from 'frontend-lmb/components/rdf-input-fields/custom-url-input';
 import {
   PERSON_CUSTOM_DISPLAY_TYPE,
   PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
+  URL_CUSTOM_DISPLAY_TYPE,
 } from './well-known-uris';
 
 export const registerCustomFormFields = () => {
@@ -174,6 +176,10 @@ export const registerCustomFormFields = () => {
     {
       displayType: PERSON_MULTI_CUSTOM_DISPLAY_TYPE,
       edit: RdfInputFieldCustomPersonMultiSelector,
+    },
+    {
+      displayType: URL_CUSTOM_DISPLAY_TYPE,
+      edit: RdfInputFieldCustomUrlInput,
     },
   ]);
 };
