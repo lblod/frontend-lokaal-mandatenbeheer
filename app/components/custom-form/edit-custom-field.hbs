@@ -30,10 +30,10 @@
         {{/unless}}
       </AuFormRow>
       <AuFormRow class="au-form-row-full-width">
-        <AuLabel @required={{true}} for="display-type">Type</AuLabel>
+        <AuLabel for="display-type">Type</AuLabel>
         <PowerSelect
           @allowClear={{false}}
-          @disabled={{not this.selectedField}}
+          @disabled={{this.isDisplayTypeDisabled}}
           @renderInPlace={{false}}
           @searchEnabled={{true}}
           @loadingMessage="Aan het laden..."
