@@ -70,6 +70,7 @@ export default class OrganenMandatarissenRoute extends Route {
       mandatarissen: filtered,
       bestuursorgaan,
       bestuursorgaanInTijd,
+      isEigenOrgaan: !(await bestuursorgaan.isDecretaal),
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
       legislatuurInBehandeling: isDistrict ? false : legislatuurInBehandeling,
