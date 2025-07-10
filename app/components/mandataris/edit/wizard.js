@@ -435,7 +435,7 @@ export default class MandatarisEditWizard extends Component {
       if (this.mirrorToOCMW) {
         const response = await fetch(
           `/mandataris-api/mandatarissen/${this.args.mandataris.id}/correct-linked-mandataris`,
-          { method: 'PUT' }
+          { method: 'POST' }
         );
         if (response.ok) {
           message =
@@ -497,7 +497,7 @@ export default class MandatarisEditWizard extends Component {
     if (this.mirrorToOCMW) {
       const response = await fetch(
         `/mandataris-api/mandatarissen/${this.args.mandataris}/${this.args.newMandataris}/update-state-linked-mandataris`,
-        { method: 'PUT' }
+        { method: 'POST' }
       );
       if (response.ok) {
         message =
@@ -544,7 +544,7 @@ export default class MandatarisEditWizard extends Component {
     if (this.mirrorToOCMW) {
       const response = await fetch(
         `/mandataris-api/mandatarissen/${this.args.mandataris.id}/${newMandataris.id}/update-state-linked-mandataris`,
-        { method: 'PUT' }
+        { method: 'POST' }
       );
       if (!response.ok) {
         showErrorToast(

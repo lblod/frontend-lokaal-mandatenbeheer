@@ -110,21 +110,21 @@ export default class MandatarissenLinkedModal extends Component {
     } else if (this.args.correct) {
       response = await fetch(
         `/mandataris-api/mandatarissen/${this.args.mandataris}/correct-linked-mandataris`,
-        { method: 'PUT' }
+        { method: 'POST' }
       );
       message =
         'Corresponderend mandaat in het OCMW werd succesvol gecorrigeerd.';
     } else if (this.args.updateState) {
       response = await fetch(
         `/mandataris-api/mandatarissen/${this.args.mandataris}/${this.args.newMandataris}/update-state-linked-mandataris`,
-        { method: 'PUT' }
+        { method: 'POST' }
       );
       message =
         'Status corresponderend mandaat in het OCMW werd succesvol aangepast.';
     } else if (this.args.replacement) {
       response = await fetch(
         `/mandataris-api/mandatarissen/${this.args.mandataris}/add-linked-replacement`,
-        { method: 'PUT' }
+        { method: 'POST' }
       );
       message =
         'Vervanger werd succesvol toegevoegd aan het corresponderend mandaat in het OCMW.';
