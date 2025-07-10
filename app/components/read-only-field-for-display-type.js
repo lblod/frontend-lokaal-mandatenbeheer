@@ -7,6 +7,7 @@ import moment from 'moment';
 import {
   DATE_CUSTOM_DISPLAY_TYPE,
   LINK_TO_FORM_CUSTOM_DISPLAY_TYPE,
+  URL_CUSTOM_DISPLAY_TYPE,
 } from 'frontend-lmb/utils/well-known-uris';
 
 export default class ReadOnlyFieldForDisplayType extends Component {
@@ -27,6 +28,10 @@ export default class ReadOnlyFieldForDisplayType extends Component {
 
   get displayType() {
     return this.args.field?.displayType;
+  }
+
+  get isUrlValue() {
+    return this.args.field?.displayType === URL_CUSTOM_DISPLAY_TYPE;
   }
 
   formatLiteral(literal) {
