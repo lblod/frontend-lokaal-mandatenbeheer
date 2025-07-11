@@ -2,7 +2,11 @@ import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
 
-import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
+import {
+  BESTUURSORGAAN_EXTRA_INFO_FORM_ID,
+  BESTUURSORGAAN_FORM_ID,
+} from 'frontend-lmb/utils/well-known-ids';
+
 import RSVP from 'rsvp';
 
 export default class OrganenOrgaanIndexRoute extends Route {
@@ -24,11 +28,18 @@ export default class OrganenOrgaanIndexRoute extends Route {
         BESTUURSORGAAN_FORM_ID
       );
 
+    const bestuursorgaanExtraInfoForm =
+      await this.semanticFormRepository.getFormDefinition(
+        BESTUURSORGAAN_EXTRA_INFO_FORM_ID,
+        true
+      );
+
     return RSVP.hash({
       bestuursorgaanFormDefinition,
       mandaten,
       orderedMandaten,
       availableBestuursfuncties,
+      bestuursorgaanExtraInfoForm,
       ...parentModel,
     });
   }

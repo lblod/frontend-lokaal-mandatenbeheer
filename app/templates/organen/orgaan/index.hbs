@@ -54,6 +54,15 @@
       @availableBestuursfuncties={{this.model.availableBestuursfuncties}}
       @bestuursorgaanIT={{this.model.currentBestuursorgaan}}
     />
+
+    {{#if (is-feature-enabled "editable-forms")}}
+      <div class="au-u-margin-top">
+        <Organen::ExtraInfoCard
+          @bestuursorgaan={{this.model.currentBestuursorgaan}}
+          @form={{@model.bestuursorgaanExtraInfoForm}}
+        />
+      </div>
+    {{/if}}
   </div>
 </div>
 

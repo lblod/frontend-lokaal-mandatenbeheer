@@ -6,6 +6,7 @@ export const MANDAAT_FORM_ID = 'mandaat';
 export const MANDATARIS_EDIT_FORM_ID = 'mandataris-edit';
 export const MANDATARIS_EXTRA_INFO_FORM_ID = 'mandataris-extra-info';
 export const PERSON_EXTRA_INFO_FORM_ID = 'persoon-extra-info';
+export const BESTUURSORGAAN_EXTRA_INFO_FORM_ID = 'bestuursorgaan-extra-info';
 export const MANDATARIS_NEW_FORM_ID = 'mandataris-new';
 export const MANDATARIS_EXTENDED_FORM = 'mandataris-ext';
 export const CONTACTINFO_FORM_ID = 'contactinfo';
