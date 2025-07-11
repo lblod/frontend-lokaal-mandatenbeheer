@@ -42,6 +42,12 @@ export default class CustomFormEditCustomField extends Component {
     return this.getDisplayTypes?.value || [];
   }
 
+  get isDisplayTypeDisabled() {
+    // We do not allow the user to change the displaytype
+    // They are forced to remove the field when they want to change it
+    return true;
+  }
+
   @cached
   get conceptSchemes() {
     return this.getConceptSchemes?.value || [];

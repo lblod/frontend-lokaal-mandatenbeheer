@@ -28,7 +28,6 @@ export default class EditableFormComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.setClickedField(null);
     this.updateForm();
   }
 

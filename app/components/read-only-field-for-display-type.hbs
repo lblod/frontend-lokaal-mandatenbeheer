@@ -3,6 +3,16 @@
     <AuLabel class="au-c-description-label">
       {{@field.label}}
     </AuLabel>
-    <p class="au-c-description-value">{{or this.value "Onbekend"}}</p>
+    {{#if (and this.isUrlValue this.value)}}
+      <AuLinkExternal
+        class="au-c-description-value"
+        href={{this.value}}
+        @newTab={{true}}
+      >
+        {{this.value}}
+      </AuLinkExternal>
+    {{else}}
+      <p class="au-c-description-value">{{or this.value "Onbekend"}}</p>
+    {{/if}}
   </div>
 </span>

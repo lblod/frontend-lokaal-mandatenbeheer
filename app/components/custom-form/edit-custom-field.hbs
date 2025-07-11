@@ -30,10 +30,25 @@
         {{/unless}}
       </AuFormRow>
       <AuFormRow class="au-form-row-full-width">
-        <AuLabel @required={{true}} for="display-type">Type</AuLabel>
+        <div class="au-u-flex au-u-flex-row au-u-flex--vertical-center">
+          <AuLabel for="display-type">Type</AuLabel>
+          <Shared::Tooltip
+            @showTooltip={{true}}
+            @alignment="center"
+            @tooltipText="Het type veld kan niet aangepast worden. Verwijder het veld als je dit wil veranderen."
+          >
+            <AuButton
+              @skin="naked"
+              @icon="alert-triangle"
+              @hideText={{true}}
+              @disabled={{true}}
+              class="au-u-padding-bottom-tiny au-u-margin-left-tiny au-u-padding-left-none au-u-padding-right-none"
+            />
+          </Shared::Tooltip>
+        </div>
         <PowerSelect
           @allowClear={{false}}
-          @disabled={{not this.selectedField}}
+          @disabled={{this.isDisplayTypeDisabled}}
           @renderInPlace={{false}}
           @searchEnabled={{true}}
           @loadingMessage="Aan het laden..."

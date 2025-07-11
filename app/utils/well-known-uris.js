@@ -119,6 +119,8 @@ export const CONCEPT_SCHEME_MULTI_SELECTOR_CUSTOM_DISPLAY_TYPE =
   'http://lblod.data.gift/display-types/lmb/custom-concept-scheme-multi-selector-input';
 export const LINK_TO_FORM_CUSTOM_DISPLAY_TYPE =
   'http://lblod.data.gift/display-types/lmb/custom-link-to-form-selector-input';
+export const URL_CUSTOM_DISPLAY_TYPE =
+  'http://lblod.data.gift/display-types/lmb/custom-url-input';
 
 export const LIBRARY_ENTREES = [
   'http://data.lblod.info/id/lmb/form-library-entries/095d1329-a9fa-4d72-8c49-eb52aaf893de', // Verblijfsplaats
