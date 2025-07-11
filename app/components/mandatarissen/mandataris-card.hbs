@@ -17,44 +17,46 @@
         />
       </div>
     </div>
-    <div class="au-o-grid__item au-u-1-2">
-      <div class="au-c-description-label">Publicatie status</div>
-      <div class="au-c-description-value au-u-margin-top-tiny">
-        {{#if this.editingStatus}}
-          <Mandatarissen::Mandataris::PublicationStatusSelector
-            @mandataris={{@mandataris}}
-            @onUpdate={{this.stopEditingStatus}}
-          />
-        {{else}}
-          <Shared::Tooltip
-            @showTooltip={{not this.canEditPublicationStatus}}
-            @tooltipText={{this.lastStatusTooltipText}}
-            @alignment="left"
-          >
-            <div class="au-u-flex">
-              <Mandaat::PublicatieStatusPill
-                @mandataris={{@mandataris}}
-                @showInfoText={{true}}
-                @showBekijkBewijs={{true}}
-              />
-              {{#if this.showEditPublicationStatus}}
-                <AuButton
-                  {{on "click" this.editStatus}}
-                  @icon="pencil"
-                  @skin="link-secondary"
-                  @size="small"
-                  class="au-u-margin-left-tiny"
-                  @hideText={{true}}
-                  @disabled={{not this.canEditPublicationStatus}}
-                >
-                  edit
-                </AuButton>
-              {{/if}}
-            </div>
-          </Shared::Tooltip>
-        {{/if}}
+    {{#unless @hidePublicationStatus}}
+      <div class="au-o-grid__item au-u-1-2">
+        <div class="au-c-description-label">Publicatie status</div>
+        <div class="au-c-description-value au-u-margin-top-tiny">
+          {{#if this.editingStatus}}
+            <Mandatarissen::Mandataris::PublicationStatusSelector
+              @mandataris={{@mandataris}}
+              @onUpdate={{this.stopEditingStatus}}
+            />
+          {{else}}
+            <Shared::Tooltip
+              @showTooltip={{not this.canEditPublicationStatus}}
+              @tooltipText={{this.lastStatusTooltipText}}
+              @alignment="left"
+            >
+              <div class="au-u-flex">
+                <Mandaat::PublicatieStatusPill
+                  @mandataris={{@mandataris}}
+                  @showInfoText={{true}}
+                  @showBekijkBewijs={{true}}
+                />
+                {{#if this.showEditPublicationStatus}}
+                  <AuButton
+                    {{on "click" this.editStatus}}
+                    @icon="pencil"
+                    @skin="link-secondary"
+                    @size="small"
+                    class="au-u-margin-left-tiny"
+                    @hideText={{true}}
+                    @disabled={{not this.canEditPublicationStatus}}
+                  >
+                    edit
+                  </AuButton>
+                {{/if}}
+              </div>
+            </Shared::Tooltip>
+          {{/if}}
+        </div>
       </div>
-    </div>
+    {{/unless}}
     {{#if @mandataris.bekleedt.hasRangorde}}
       <div class="au-o-grid__item au-u-1-2">
         <div class="au-c-description-label">Rangorde</div>

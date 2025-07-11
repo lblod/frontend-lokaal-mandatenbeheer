@@ -22,6 +22,15 @@ export default class MandatarisEditReplacementForm extends Component {
     this.fractie = this.args.prefillFractie;
   }
 
+  willDestroy() {
+    this.args.onChange({
+      start: this.startDate,
+      einde: this.endDate,
+      fractie: this.fractie,
+    });
+    super.willDestroy(...arguments);
+  }
+
   get isFractieRequired() {
     return isRequiredForBestuursorgaan(this.args.bestuursorgaanIT);
   }

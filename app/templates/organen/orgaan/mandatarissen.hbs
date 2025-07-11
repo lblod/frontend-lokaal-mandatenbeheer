@@ -43,30 +43,32 @@
           </Shared::Tooltip>
         {{/if}}
       {{/if}}
-      {{#if this.isDisabled}}
-        <Shared::Tooltip
-          @showTooltip={{true}}
-          role="menuitem"
-          @tooltipText="Het is niet mogelijk mandatarissen te bekrachtingen in een bestuursperiode waarvan de voorbereiding van de legislatuur nog actief is."
-        >
-          <AuButton @disabled={{true}} @skin="link" role="menuitem">
-            Bekrachtig mandatarissen
-          </AuButton>
-        </Shared::Tooltip>
-      {{else}}
-        <Shared::Tooltip
-          role="menuitem"
-          @showTooltip={{true}}
-          @tooltipText="Bekrachtig meerdere mandatarissen tegelijkertijd."
-        >
-          <AuLink
+      {{#unless this.model.isEigenOrgaan}}
+        {{#if this.isDisabled}}
+          <Shared::Tooltip
+            @showTooltip={{true}}
             role="menuitem"
-            @skin="link"
-            @route="organen.orgaan.bulk-bekrachtiging"
-          >Bekrachtig mandatarissen
-          </AuLink>
-        </Shared::Tooltip>
-      {{/if}}
+            @tooltipText="Het is niet mogelijk mandatarissen te bekrachtingen in een bestuursperiode waarvan de voorbereiding van de legislatuur nog actief is."
+          >
+            <AuButton @disabled={{true}} @skin="link" role="menuitem">
+              Bekrachtig mandatarissen
+            </AuButton>
+          </Shared::Tooltip>
+        {{else}}
+          <Shared::Tooltip
+            role="menuitem"
+            @showTooltip={{true}}
+            @tooltipText="Bekrachtig meerdere mandatarissen tegelijkertijd."
+          >
+            <AuLink
+              role="menuitem"
+              @skin="link"
+              @route="organen.orgaan.bulk-bekrachtiging"
+            >Bekrachtig mandatarissen
+            </AuLink>
+          </Shared::Tooltip>
+        {{/if}}
+      {{/unless}}
       <DownloadMandatarissenFromTable
         @bestuursperiode={{@model.selectedBestuursperiode}}
         @activeOnly={{this.activeFilter}}

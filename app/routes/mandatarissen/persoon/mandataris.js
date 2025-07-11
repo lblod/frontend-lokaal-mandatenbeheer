@@ -93,6 +93,7 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       isMostRecentVersion,
       bestuursorganen,
       firstBestuursorgaanInTijd,
+      isInEigenOrgaan: !(await firstBestuursorgaanInTijd.isDecretaal),
       periodeHasLegislatuur,
       behandeldeVergaderingen,
       linkedMandataris,
