@@ -1,3 +1,5 @@
+import ApplicationRoute from 'frontend-lmb/routes/application';
+
 /* MIT License - Copyright © 2022 Dieter Luypaert <dieterluypaert@gmail.com> from https://github.com/moeriki/be-nrn
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -130,3 +132,20 @@ export function parse(nrn) {
 
 export const rijksregisternummerValidation = (value) =>
   isValidRijksregisternummer(value.value);
+
+export const isUniqueRijksregisternummer = async (literals) => {
+  if (literals?.length === 0) {
+    return true;
+  }
+  const rrn = literals[0].value;
+  const isValidRrn = isValidRijksregisternummer(rrn);
+  if (!isValidRrn) {
+    return true;
+  }
+
+  const duplicates = await ApplicationRoute.store.query('identificator', {
+    'filter[:exact:identificator]': rrn,
+  });
+
+  return duplicates.length === 0;
+};
