@@ -49,7 +49,7 @@ export default class FractieApiService extends Service {
   async updateCurrentFractie(mandatarisId, noTimeout = false) {
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/fracties/${mandatarisId}/current-fractie`,
-      { method: 'PUT' }
+      { method: 'POST' }
     );
 
     if (response.status !== STATUS_CODE.OK) {

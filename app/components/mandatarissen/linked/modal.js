@@ -87,12 +87,6 @@ export default class MandatarissenLinkedModal extends Component {
     U heeft zonet de status van een mandataris met het mandaat ${currentMandate} gewijzigd.
     Deze mandataris heeft ook een corresponderend mandaat ${duplicateMandate}.
     Wenst u de wijzigingen ook door te voeren in dit mandaat?`;
-    } else if (this.args.replacement) {
-      this.doubleMandateTitle = `Voeg vervanger toe voor mandaat ${duplicateMandate}`;
-      this.doubleMandateText = `
-    U heeft zonet een vervanger toegevoegd aan een mandataris met het mandaat ${currentMandate}.
-    Deze mandataris heeft ook een corresponderend mandaat ${duplicateMandate}.
-    Wenst u de vervanger ook toe te voegen in dit mandaat?`;
     }
   }
 
@@ -110,24 +104,17 @@ export default class MandatarissenLinkedModal extends Component {
     } else if (this.args.correct) {
       response = await fetch(
         `/mandataris-api/mandatarissen/${this.args.mandataris}/correct-linked-mandataris`,
-        { method: 'PUT' }
+        { method: 'POST' }
       );
       message =
         'Corresponderend mandaat in het OCMW werd succesvol gecorrigeerd.';
     } else if (this.args.updateState) {
       response = await fetch(
         `/mandataris-api/mandatarissen/${this.args.mandataris}/${this.args.newMandataris}/update-state-linked-mandataris`,
-        { method: 'PUT' }
+        { method: 'POST' }
       );
       message =
         'Status corresponderend mandaat in het OCMW werd succesvol aangepast.';
-    } else if (this.args.replacement) {
-      response = await fetch(
-        `/mandataris-api/mandatarissen/${this.args.mandataris}/add-linked-replacement`,
-        { method: 'PUT' }
-      );
-      message =
-        'Vervanger werd succesvol toegevoegd aan het corresponderend mandaat in het OCMW.';
     }
 
     const jsonResponse = await response.json();
