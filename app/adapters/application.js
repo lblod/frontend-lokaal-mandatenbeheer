@@ -43,6 +43,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
     const timeout = {
       GET: 3000,
       PATCH: 1000,
+      PUT: 3000,
     };
     let retries = 3;
     let response = null;
