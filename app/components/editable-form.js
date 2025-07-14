@@ -49,6 +49,10 @@ export default class EditableFormComponent extends Component {
     return this.getFieldsForForm?.value || [];
   }
 
+  get hasFormFields() {
+    return this.fields.length >= 1;
+  }
+
   get clickedField() {
     return this.args.selectedField;
   }

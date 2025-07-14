@@ -16,6 +16,13 @@
       </AuLink>
     </div>
   {{/if}}
+
+  {{#if (and @isReadOnly (not this.hasFormFields))}}
+    <p class="au-u-muted au-u-padding-top-small au-u-padding-bottom-small">
+      Er zijn nog geen velden toegevoegd om extra informatie te bewaren
+    </p>
+  {{/if}}
+
   <SemanticForms::Instance
     {{! @formClass is needed so the fields do not have a max width}}
     @formClass="au-u-flex"
