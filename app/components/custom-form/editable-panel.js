@@ -9,10 +9,6 @@ export default class CustomFormEditablePanel extends Component {
   @tracked formInitialized = false;
   @tracked isModalActive = false;
 
-  @action
-  noop() {
-    return;
-  }
   @action toggleModal() {
     this.isModalActive = !this.isModalActive;
   }
