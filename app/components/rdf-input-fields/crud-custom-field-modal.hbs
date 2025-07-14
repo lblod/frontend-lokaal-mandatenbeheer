@@ -104,6 +104,12 @@
             {{/if}}
           </AuFormRow>
         {{/if}}
+        <AuFormRow class="au-form-row-full-width">
+          <PredicaatInput
+            @value={{this.predicateUri}}
+            @onUpdate={{this.updatePredicateUri}}
+          />
+        </AuFormRow>
         <AuFormRow>
           <AuToggleSwitch
             @disabled={{@show}}

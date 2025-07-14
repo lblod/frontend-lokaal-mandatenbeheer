@@ -44,6 +44,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @tracked conceptScheme;
   @tracked conceptSchemeOnLoad;
   @tracked linkedFormTypeUri;
+  @tracked predicateUri;
 
   constructor() {
     super(...arguments);
@@ -116,6 +117,12 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @action
   updateLinkedFormTypeUri(uri) {
     this.linkedFormTypeUri = uri;
+  }
+
+  @action
+  updatePredicateUri(uri) {
+    this.predicateUri = uri;
+    console.log(`predicate uri in PARENT`, this.predicateUri);
   }
 
   @action
