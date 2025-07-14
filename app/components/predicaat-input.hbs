@@ -1,0 +1,16 @@
+<div ...attributes>
+  <AuLabel @required={{true}} for="fieldName">Predicaat</AuLabel>
+  <AuInput
+    @width="block"
+    @iconAlignment="left"
+    value={{@value}}
+    id="fieldName"
+    {{on "input" this.onUpdate}}
+  />
+  {{#unless this.isValid}}
+    <AuHelpText @error={{true}}>Geef een geldige URI op</AuHelpText>
+  {{/unless}}
+  {{#if this.isBlockedUri}}
+    <AuHelpText @error={{true}}>Deze URI is niet toegestaan</AuHelpText>
+  {{/if}}
+</div>
