@@ -19,7 +19,7 @@
     <Person::Card @persoon={{@model.persoon}} />
   </div>
 
-  {{#if (is-feature-enabled "person-extra-info")}}
+  {{#if (is-feature-enabled "editable-forms")}}
     <div class="au-o-box">
       <Persoon::ExtraInfoCard
         @persoon={{@model.persoon}}

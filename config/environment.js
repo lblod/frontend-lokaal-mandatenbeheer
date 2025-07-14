@@ -36,7 +36,6 @@ module.exports = function (environment) {
       'custom-organen': false,
       politieraad: false,
       'editable-forms': false,
-      'person-extra-info': false,
       'shacl-report': true,
     },
     lpdcUrl: '{{LPDC_URL}}',
