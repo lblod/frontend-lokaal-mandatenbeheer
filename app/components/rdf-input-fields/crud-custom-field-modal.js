@@ -111,13 +111,24 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     return this.libraryFieldType?.uri !== null;
   }
 
+  get isLibraryFieldType() {
+    if (this.libraryFieldType?.uri) {
+      return LIBRARY_ENTREES.includes(this.libraryFieldType?.uri); // TODO update uris
+    }
+    return false;
+  }
+
   get advancedPropertiesForCreateField() {
-    if (this.isShowingAdvancedOptions) {
+    if (this.isAdvancedConfigShown) {
       return {
         path: this.predicateUri,
       };
     }
     return {};
+  }
+
+  get isAdvancedConfigShown() {
+    return this.isShowingAdvancedOptions && !this.isLibraryFieldType;
   }
 
   @action
@@ -131,7 +142,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   @action
-  toggleAdvancedoptions() {
+  toggleAdvancedOptions() {
     this.isShowingAdvancedOptions = !this.isShowingAdvancedOptions;
   }
 
@@ -343,7 +354,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   get hasPredicaatUriSet() {
-    if (!this.isShowingAdvancedOptions) {
+    if (!this.isAdvancedConfigShown) {
       return true;
     }
 
@@ -377,7 +388,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
       return this.libraryFieldType.isNew; // so the fake one we created
     }
 
-    return !LIBRARY_ENTREES.includes(this.libraryEntryUri);
+    return !this.isLibraryFieldType;
   }
 
   get saveTooltipText() {

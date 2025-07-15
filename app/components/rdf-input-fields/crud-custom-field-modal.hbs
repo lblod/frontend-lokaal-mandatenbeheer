@@ -104,7 +104,7 @@
             {{/if}}
           </AuFormRow>
         {{/if}}
-        {{#if this.isShowingAdvancedOptions}}
+        {{#if this.isAdvancedConfigShown}}
           <fieldset class="au-o-box">
             <legend>Geavanceerd</legend>
             <AuFormRow class="au-form-row-full-width">
@@ -161,9 +161,9 @@
         {{/if}}
         <AuFormRow>
           <AuToggleSwitch
-            @disabled={{@show}}
-            @checked={{this.isShowingAdvancedOptions}}
-            @onChange={{this.toggleAdvancedoptions}}
+            @disabled={{this.isLibraryFieldType}}
+            @checked={{this.isAdvancedConfigShown}}
+            @onChange={{this.toggleAdvancedOptions}}
           >Geavanceerde configuratie
             <Shared::Tooltip
               @showTooltip={{true}}
