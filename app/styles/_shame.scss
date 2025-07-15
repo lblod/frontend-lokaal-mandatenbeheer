@@ -462,3 +462,21 @@ main .au-c-main-container__content .au-u-wide-on-print {
 .wizard-modal {
   min-height: 50%;
 }
+
+fieldset {
+  display: block;
+  min-inline-size: min-content;
+  margin-inline: 2px;
+  border-radius: 5px;
+  border-width: 2px !important;
+  border-style: groove !important;
+  border-color: var(--au-gray-300) !important;
+  border-image: initial !important;
+  padding-block: 0.35em 0.625em;
+  padding-inline: 0.75em;
+
+  legend {
+    color: var(--au-gray-500);
+    font-weight: var(--au-medium);
+  }
+}

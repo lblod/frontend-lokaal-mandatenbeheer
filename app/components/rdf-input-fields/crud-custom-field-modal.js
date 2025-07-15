@@ -35,6 +35,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @tracked isFieldRequired;
   @tracked isShownInSummary;
   @tracked wantsToRemove;
+  @tracked isShowingAdvancedOptions;
 
   @tracked displayTypes = [];
 
@@ -117,6 +118,11 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @action
   updateLinkedFormTypeUri(uri) {
     this.linkedFormTypeUri = uri;
+  }
+
+  @action
+  toggleAdvancedoptions() {
+    this.isShowingAdvancedOptions = !this.isShowingAdvancedOptions;
   }
 
   @action

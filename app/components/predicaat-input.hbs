@@ -1,10 +1,9 @@
 <div ...attributes>
-  <AuLabel @required={{true}} for="fieldName">Predicaat</AuLabel>
+  <AuLabel @required={{true}}>Predicaat</AuLabel>
   <AuInput
     @width="block"
     @iconAlignment="left"
     value={{@value}}
-    id="fieldName"
     {{on "input" this.onUpdate}}
   />
   {{#unless this.isValid}}
