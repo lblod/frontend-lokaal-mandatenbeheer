@@ -56,9 +56,7 @@ export default class PredicaatInput extends Component {
   @action
   onUpdate(event) {
     this.uri = event.target?.value;
-
-    if (this.isValid && !this.isBlockedUri) {
-      this.args.onUpdate?.(this.uri);
-    }
+    const isValid = this.isValid && !this.isBlockedUri;
+    this.args.onUpdate?.(this.uri, isValid);
   }
 }

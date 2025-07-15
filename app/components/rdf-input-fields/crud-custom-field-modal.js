@@ -36,6 +36,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @tracked isShownInSummary;
   @tracked wantsToRemove;
   @tracked isShowingAdvancedOptions;
+  @tracked isPredicateUriValid;
 
   @tracked displayTypes = [];
 
@@ -110,6 +111,15 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     return this.libraryFieldType?.uri !== null;
   }
 
+  get advancedPropertiesForCreateField() {
+    if (this.isShowingAdvancedOptions) {
+      return {
+        pathPredicate: this.predicateUri,
+      };
+    }
+    return {};
+  }
+
   @action
   updateFieldName(event) {
     this.fieldName = event.target?.value;
@@ -126,9 +136,9 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   }
 
   @action
-  updatePredicateUri(uri) {
+  updatePredicateUri(uri, isValid) {
     this.predicateUri = uri;
-    console.log(`predicate uri in PARENT`, this.predicateUri);
+    this.isPredicateUriValid = isValid;
   }
 
   @action
@@ -173,6 +183,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
             showInSummary: !!this.isShownInSummary,
             conceptScheme: this.conceptScheme?.uri,
             linkedFormTypeUri: this.linkedFormTypeUri,
+            ...this.advancedPropertiesForCreateField,
           }),
         }
       );
@@ -315,7 +326,8 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
         this.hasValidFieldName &&
         this.libraryFieldType &&
         this.hasConceptSchemeSelected &&
-        this.hasLinkToFormSelected
+        this.hasLinkToFormSelected &&
+        this.hasPredicaatUriSet
       );
     }
 
@@ -328,6 +340,14 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     }
 
     return this.conceptScheme;
+  }
+
+  get hasPredicaatUriSet() {
+    if (!this.isShowingAdvancedOptions) {
+      return true;
+    }
+
+    return this.predicateUri && this.isPredicateUriValid;
   }
 
   get hasLinkToFormSelected() {
