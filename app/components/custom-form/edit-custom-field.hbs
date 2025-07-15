@@ -64,6 +64,14 @@
           {{selected.label}}
         </PowerSelect>
       </AuFormRow>
+      {{#if this.selectedField.path}}
+        <AuFormRow class="au-form-row-full-width">
+          <PredicaatInput
+            @value={{this.predicateUri}}
+            @onUpdate={{this.updatePredicateUri}}
+          />
+        </AuFormRow>
+      {{/if}}
       {{#if this.displayType.isConceptSchemeSelector}}
         <AuFormRow class="au-form-row-full-width">
           <AuLabel @required={{true}} for="display-type">Codelijst</AuLabel>
