@@ -114,7 +114,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   get advancedPropertiesForCreateField() {
     if (this.isShowingAdvancedOptions) {
       return {
-        pathPredicate: this.predicateUri,
+        path: this.predicateUri,
       };
     }
     return {};
