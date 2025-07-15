@@ -4,12 +4,12 @@
     @width="block"
     @iconAlignment="left"
     value={{@value}}
-    {{on "input" this.onUpdate}}
+    {{on "input" (perform this.onUpdate)}}
   />
-  {{#unless this.isValid}}
+  {{#unless this.isValidUri}}
     <AuHelpText @error={{true}}>Geef een geldige URI op</AuHelpText>
   {{/unless}}
-  {{#if this.isBlockedUri}}
+  {{#unless this.isAllowed}}
     <AuHelpText @error={{true}}>Deze URI is niet toegestaan</AuHelpText>
-  {{/if}}
+  {{/unless}}
 </div>
