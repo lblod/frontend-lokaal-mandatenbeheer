@@ -37,6 +37,7 @@ Router.map(function () {
       this.route('mandataris', function () {
         this.route('new');
       });
+      this.route('mandaten');
     });
     this.route('fracties');
   });
