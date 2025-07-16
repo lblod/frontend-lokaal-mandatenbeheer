@@ -176,7 +176,6 @@ export default class CustomFormEditCustomField extends Component {
     if (this.displayType?.isLinkToForm) {
       this.isShownInSummary = false;
     }
-
     const updatedField = await this.customForms.updateCustomFormField(
       this.args.formDefinitionId,
       this.selectedField.uri,
@@ -188,6 +187,7 @@ export default class CustomFormEditCustomField extends Component {
         isShownInSummary: this.isShownInSummary,
         linkedFormTypeUri: this.linkedFormTypeUri,
         formUri: this.args.selectedField.formUri,
+        path: this.predicateUri,
       }
     );
     this.isSaving = false;

@@ -105,6 +105,7 @@ export default class CustomFormsService extends Service {
       isShownInSummary,
       linkedFormTypeUri,
       formUri,
+      path,
     }
   ) {
     try {
@@ -121,6 +122,7 @@ export default class CustomFormsService extends Service {
           showInSummary: !!isShownInSummary,
           conceptScheme: conceptSchemeUri,
           linkedFormTypeUri: linkedFormTypeUri,
+          path,
         }),
       });
 
