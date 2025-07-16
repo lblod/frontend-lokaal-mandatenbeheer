@@ -16,16 +16,21 @@
 <div class="au-o-box au-u-background-gray-100">
   <div class="au-o-grid au-o-grid--small">
     <div class="au-o-box au-u-padding-tiny person-extra-info">
-      <EditableForm
-        @isReadOnly={{true}}
-        @instanceId={{@model.id}}
-        @form={{@form}}
-        @formInitialized={{fn (mut this.formInitialized) true}}
-        @customHistoryMessage={{true}}
-      />
+      {{#if this.isModalActive}}
+        <Skeleton::Forms::MandatarisExtraInfo />
+      {{else}}
+        <EditableForm
+          @isReadOnly={{true}}
+          @instanceId={{@model.id}}
+          @form={{@form}}
+          @formInitialized={{fn (mut this.formInitialized) true}}
+          @customHistoryMessage={{true}}
+        />
+      {{/if}}
       {{#unless this.formInitialized}}
         <Skeleton::Forms::MandatarisExtraInfo />
       {{/unless}}
+
       {{yield}}
     </div>
   </div>

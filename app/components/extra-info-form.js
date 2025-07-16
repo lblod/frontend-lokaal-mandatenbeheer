@@ -15,7 +15,6 @@ export default class ExtraInfoForm extends Component {
   }
   @action onSave() {
     this.isModalActive = false;
-    this.args.onFormUpdated?.();
   }
 
   get editModalTitle() {
