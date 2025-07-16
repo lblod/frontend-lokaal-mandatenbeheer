@@ -10,6 +10,17 @@ export default class OrganenOrgaanMandatenRoute extends Route {
   async model() {
     const parentModel = this.modelFor('organen.orgaan');
     const mandaten = await parentModel.currentBestuursorgaan.bevat;
+    const currentIsCBS = await parentModel.currentBestuursorgaan.isCBS;
+    const mandatenFilter = (mandaat) => {
+      if (currentIsCBS) {
+        // CBS has all mandaten that burgemeester has. We only show the ones that are not in burgemeester orgaan
+        const isBurgemeesterMandaat = mandaat.get('isBurgemeester');
+        return isBurgemeesterMandaat ? null : mandaat;
+      }
+
+      return mandaat;
+    };
+
     const mandaatExtraInfoForm =
       await this.semanticFormRepository.getFormDefinition(
         MANDAAT_EXTRA_INFO_FORM_ID,
@@ -18,7 +29,7 @@ export default class OrganenOrgaanMandatenRoute extends Route {
 
     return {
       mandaatExtraInfoForm,
-      mandaten,
+      mandaten: mandaten.filter(mandatenFilter),
     };
   }
 }
