@@ -12,7 +12,7 @@
 </AuToolbar>
 
 <div class="au-o-box au-o-flow au-u-flex au-u-flex--column au-u-flex--wrap">
-  {{#each this.model.mandaten as |mandaat|}}
+  {{#each @model.mandaten as |mandaat|}}
     <div>
       <AuToolbar
         @size="large"
@@ -30,7 +30,7 @@
         <ExtraInfoForm
           @modalTitle="Bewerk bijkomende info mandaat"
           @canEdit={{true}}
-          @form={{this.model.mandaatExtraInfoForm}}
+          @form={{@model.mandaatExtraInfoForm}}
           @model={{mandaat}}
         />
       </div>

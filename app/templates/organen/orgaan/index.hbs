@@ -57,9 +57,11 @@
 
     {{#if (is-feature-enabled "editable-forms")}}
       <div class="au-u-margin-top">
-        <Organen::ExtraInfoCard
-          @bestuursorgaan={{this.model.currentBestuursorgaan}}
+        <ExtraInfoForm
+          @model={{@model.currentBestuursorgaan}}
           @form={{@model.bestuursorgaanExtraInfoForm}}
+          @modalTitle="Bewerk bijkomende info orgaan"
+          @canEdit={{true}}
         />
       </div>
     {{/if}}
