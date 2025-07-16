@@ -1,9 +1,10 @@
 import Component from '@glimmer/component';
+
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
-export default class CustomFormEditablePanel extends Component {
+export default class OrganenExtraInfoCard extends Component {
   @service router;
 
   @tracked formInitialized = false;
@@ -14,8 +15,6 @@ export default class CustomFormEditablePanel extends Component {
   }
   @action onSave() {
     this.isModalActive = false;
-    if (this.args.onSave) {
-      this.args.onSave();
-    }
+    this.router.refresh();
   }
 }

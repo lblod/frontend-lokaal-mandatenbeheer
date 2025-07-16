@@ -1,8 +1,8 @@
 <AuToolbar @size="large" class="au-u-padding-none au-u-bottom-none" as |Group|>
 
   <Group>
-    <AuHeading @level="2" @skin="6">
-      {{yield to="title"}}
+    <AuHeading @skin="4">
+      Bijkomende informatie
     </AuHeading>
   </Group>
   <Group>
@@ -21,10 +21,10 @@
 
 <div class="au-o-box au-u-background-gray-100">
   <div class="au-o-grid au-o-grid--small">
-    <div class="au-o-box au-u-padding-tiny read-only-form">
+    <div class="au-o-box au-u-padding-tiny person-extra-info">
       <EditableForm
         @isReadOnly={{true}}
-        @instanceId={{@instanceId}}
+        @instanceId={{@bestuursorgaan.id}}
         @form={{@form}}
         @formInitialized={{fn (mut this.formInitialized) true}}
         @customHistoryMessage={{true}}
@@ -39,19 +39,21 @@
 </div>
 
 <AuModal
-  @title="Bewerk bijkomende info persoon"
+  @title="Bewerk bijkomende info orgaan"
   @modalOpen={{this.isModalActive}}
   @closable={{true}}
   @closeModal={{this.toggleModal}}
 >
   <div class="au-o-box">
     <EditableForm
-      @instanceId={{@instanceId}}
+      @instanceId={{@bestuursorgaan.id}}
       @form={{@form}}
       @onCancel={{this.toggleModal}}
       @onSave={{this.onSave}}
       @formInitialized={{fn (mut this.formInitialized) true}}
       @customHistoryMessage={{true}}
+      @canEditFormDefinition={{true}}
+      @isFormExtension={{true}}
     />
     {{#unless this.formInitialized}}
       <Skeleton::Forms::MandatarisExtraInfo />

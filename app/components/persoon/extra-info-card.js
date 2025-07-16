@@ -9,10 +9,6 @@ export default class PersoonExtraInfoCard extends Component {
   @tracked formInitialized = false;
   @tracked isModalActive = false;
 
-  @action
-  noop() {
-    return;
-  }
   @action toggleModal() {
     this.isModalActive = !this.isModalActive;
   }
