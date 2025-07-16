@@ -14,6 +14,7 @@ import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import { SOURCE_GRAPH } from 'frontend-lmb/utils/constants';
 import { isCustomForm } from 'frontend-lmb/utils/form-properties';
 import { isCustomDisplayType } from 'frontend-lmb/models/display-type';
+import { FORM, RDF } from 'frontend-lmb/rdf/namespaces';
 
 export default class EditableFormComponent extends Component {
   @use(getFieldsForForm) getFieldsForForm;
@@ -50,7 +51,16 @@ export default class EditableFormComponent extends Component {
   }
 
   get hasFormFields() {
-    return this.fields.length >= 1;
+    const forkingStore = new ForkingStore();
+    forkingStore.parse(this.currentForm.formTtl, SOURCE_GRAPH, 'text/turtle');
+
+    const fieldMatches = forkingStore.match(
+      undefined,
+      RDF('type'),
+      FORM('Field')
+    );
+
+    return fieldMatches.length >= 1;
   }
 
   get clickedField() {
