@@ -110,6 +110,7 @@
             <AuFormRow class="au-form-row-full-width">
               <PredicaatInput
                 @value={{this.predicateUri}}
+                @formId={{this.formContext.formDefinition.id}}
                 @onUpdate={{this.updatePredicateUri}}
               />
             </AuFormRow>

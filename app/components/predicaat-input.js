@@ -34,6 +34,8 @@ export default class PredicaatInput extends Component {
         },
         body: JSON.stringify({
           uri: this.uri,
+          formId: this.args.formId,
+          fieldUri: this.args.fieldUri,
         }),
       }
     );

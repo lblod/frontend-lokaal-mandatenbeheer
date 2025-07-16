@@ -92,6 +92,14 @@
           @onSelectedType={{this.updateLinkedFormTypeUri}}
         />
       {{/if}}
+      {{#if (and this.selectedField.path (not this.isStandardField))}}
+        <PredicaatInput
+          @value={{this.predicateUri}}
+          @formId={{@formDefinitionId}}
+          @fieldUri={{this.selectedField.uri}}
+          @onUpdate={{this.updatePredicateUri}}
+        />
+      {{/if}}
       <AuFormRow>
         <AuToggleSwitch
           @disabled={{not this.selectedField}}
@@ -188,12 +196,3 @@
     </form>
   {{/if}}
 </div>
-{{#if (and this.selectedField.path (not this.isStandardField))}}
-  <div class="au-o-box edit-form-defintion--edit-panel-containter">
-    <AuHeading @skin="5" class="au-u-margin-bottom">Geavanceerd</AuHeading>
-    <PredicaatInput
-      @value={{this.predicateUri}}
-      @onUpdate={{this.updatePredicateUri}}
-    />
-  </div>
-{{/if}}
