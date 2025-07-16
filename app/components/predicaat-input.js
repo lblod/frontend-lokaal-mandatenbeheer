@@ -13,8 +13,7 @@ import { task, timeout } from 'ember-concurrency';
 
 export default class PredicaatInput extends Component {
   @tracked uri;
-  @tracked isValidUri = true;
-  @tracked isAllowed = true;
+  @tracked errorMessage;
 
   get predicaatUri() {
     return this.uri || this.args.value;
@@ -23,6 +22,13 @@ export default class PredicaatInput extends Component {
   onUpdate = task({ restartable: true }, async (event) => {
     this.uri = event.target?.value;
     this.args.onUpdate?.(this.uri, false);
+
+    if (!this.uri) {
+      this.errorMessage = 'Dit veld is verplicht';
+      this.args.onUpdate?.(this.uri, false);
+      return;
+    }
+
     await timeout(INPUT_DEBOUNCE);
 
     const response = await fetch(
@@ -44,9 +50,8 @@ export default class PredicaatInput extends Component {
       console.error({ jsonResponse });
     }
 
-    this.isValidUri = jsonResponse?.isValidUri;
-    this.isAllowed = this.isValidUri ? jsonResponse?.isAllowed : true;
+    this.errorMessage = jsonResponse?.errorMessage;
 
-    this.args.onUpdate?.(this.uri, this.isValidUri && this.isAllowed);
+    this.args.onUpdate?.(this.uri, jsonResponse?.isValid);
   });
 }

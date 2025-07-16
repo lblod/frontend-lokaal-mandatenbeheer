@@ -1,15 +1,13 @@
 <div ...attributes>
-  <AuLabel @required={{true}}>Predicaat</AuLabel>
+  <AuLabel @required={{true}} @error={{this.errorMessage}}>Predicaat</AuLabel>
   <AuInput
+    @error={{this.errorMessage}}
     @width="block"
     @iconAlignment="left"
     value={{@value}}
-    {{on "input" (perform this.onUpdate)}}
+    {{on "keyup" (perform this.onUpdate)}}
   />
-  {{#unless this.isValidUri}}
-    <AuHelpText @error={{true}}>Geef een geldige URI op</AuHelpText>
-  {{/unless}}
-  {{#unless this.isAllowed}}
-    <AuHelpText @error={{true}}>Deze URI is niet toegestaan</AuHelpText>
-  {{/unless}}
+  {{#if this.errorMessage}}
+    <AuHelpText @error={{true}}>{{this.errorMessage}}</AuHelpText>
+  {{/if}}
 </div>
