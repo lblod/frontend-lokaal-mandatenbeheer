@@ -1,0 +1,56 @@
+<AuToolbar @size="large" class="au-u-padding-none au-u-bottom-none" as |Group|>
+
+  <Group>
+    <AuHeading @skin="4">
+      Bijkomende informatie
+    </AuHeading>
+  </Group>
+  <Group>
+    <AuButton
+      {{on "click" this.toggleModal}}
+      @disabled={{not @canEdit}}
+    >Bewerk</AuButton>
+  </Group>
+</AuToolbar>
+
+<div class="au-o-box au-u-background-gray-100">
+  <div class="au-o-grid au-o-grid--small">
+    <div class="au-o-box au-u-padding-tiny person-extra-info">
+      <EditableForm
+        @isReadOnly={{true}}
+        @instanceId={{@model.id}}
+        @form={{@form}}
+        @formInitialized={{fn (mut this.formInitialized) true}}
+        @customHistoryMessage={{true}}
+      />
+      {{#unless this.formInitialized}}
+        <Skeleton::Forms::MandatarisExtraInfo />
+      {{/unless}}
+      {{yield}}
+    </div>
+  </div>
+
+</div>
+
+<AuModal
+  @title={{this.editModalTitle}}
+  @modalOpen={{this.isModalActive}}
+  @closable={{true}}
+  @closeModal={{this.toggleModal}}
+>
+  <div class="au-o-box">
+    <EditableForm
+      @instanceId={{@model.id}}
+      @form={{@form}}
+      @onCancel={{this.toggleModal}}
+      @onSave={{this.onSave}}
+      @formInitialized={{fn (mut this.formInitialized) true}}
+      @customHistoryMessage={{true}}
+      @canEditFormDefinition={{true}}
+      @isFormExtension={{true}}
+    />
+    {{#unless this.formInitialized}}
+      <Skeleton::Forms::MandatarisExtraInfo />
+    {{/unless}}
+  </div>
+</AuModal>
