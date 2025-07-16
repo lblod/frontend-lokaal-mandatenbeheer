@@ -113,7 +113,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
   get isLibraryFieldType() {
     if (this.libraryFieldType?.uri) {
-      return LIBRARY_ENTREES.includes(this.libraryFieldType?.uri); // TODO update uris
+      return LIBRARY_ENTREES.includes(this.libraryFieldType?.uri);
     }
     return false;
   }
