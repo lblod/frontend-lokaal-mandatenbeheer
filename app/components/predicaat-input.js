@@ -20,16 +20,14 @@ export default class PredicaatInput extends Component {
   }
 
   onUpdate = task({ restartable: true }, async (event) => {
-    this.uri = event.target?.value;
-    this.args.onUpdate?.(this.uri, false);
+    await timeout(INPUT_DEBOUNCE);
+    const inputUri = event.target?.value;
 
-    if (!this.uri) {
+    if (!inputUri) {
       this.errorMessage = 'Dit veld is verplicht';
-      this.args.onUpdate?.(this.uri, false);
+      this.args.onUpdate?.(inputUri, false);
       return;
     }
-
-    await timeout(INPUT_DEBOUNCE);
 
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/custom-form/field/is-uri-allowed-as-path`,
@@ -39,7 +37,7 @@ export default class PredicaatInput extends Component {
           'Content-Type': JSON_API_TYPE,
         },
         body: JSON.stringify({
-          uri: this.uri,
+          uri: inputUri.trim(),
           formId: this.args.formId,
           fieldUri: this.args.fieldUri,
         }),
@@ -51,7 +49,10 @@ export default class PredicaatInput extends Component {
     }
 
     this.errorMessage = jsonResponse?.errorMessage;
-
-    this.args.onUpdate?.(this.uri, jsonResponse?.isValid);
+    const isValid = jsonResponse?.isValid;
+    if (isValid) {
+      this.uri = inputUri.trim();
+    }
+    this.args.onUpdate?.(isValid ? this.uri : inputUri, isValid);
   });
 }
