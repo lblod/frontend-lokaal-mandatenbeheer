@@ -1,9 +1,10 @@
 import Component from '@glimmer/component';
+
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
-export default class PersoonExtraInfoCard extends Component {
+export default class ExtraInfoForm extends Component {
   @service router;
 
   @tracked formInitialized = false;
@@ -14,6 +15,9 @@ export default class PersoonExtraInfoCard extends Component {
   }
   @action onSave() {
     this.isModalActive = false;
-    this.router.refresh();
+  }
+
+  get editModalTitle() {
+    return this.args.modalTitle || 'Bewerk bijkomende info';
   }
 }

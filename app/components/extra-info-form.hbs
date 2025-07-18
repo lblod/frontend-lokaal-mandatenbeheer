@@ -6,32 +6,31 @@
     </AuHeading>
   </Group>
   <Group>
-    <Shared::Tooltip
-      @showTooltip={{this.disabled}}
-      @tooltipText={{this.toolTipText}}
-      @alignment="right"
-    >
-      <AuButton
-        {{on "click" this.toggleModal}}
-        @disabled={{this.disabled}}
-      >Bewerk</AuButton>
-    </Shared::Tooltip>
+    <AuButton
+      {{on "click" this.toggleModal}}
+      @disabled={{not @canEdit}}
+    >Bewerk</AuButton>
   </Group>
 </AuToolbar>
 
 <div class="au-o-box au-u-background-gray-100">
   <div class="au-o-grid au-o-grid--small">
     <div class="au-o-box au-u-padding-tiny person-extra-info">
-      <EditableForm
-        @isReadOnly={{true}}
-        @instanceId={{@bestuursorgaan.id}}
-        @form={{@form}}
-        @formInitialized={{fn (mut this.formInitialized) true}}
-        @customHistoryMessage={{true}}
-      />
+      {{#if this.isModalActive}}
+        <Skeleton::Forms::MandatarisExtraInfo />
+      {{else}}
+        <EditableForm
+          @isReadOnly={{true}}
+          @instanceId={{@model.id}}
+          @form={{@form}}
+          @formInitialized={{fn (mut this.formInitialized) true}}
+          @customHistoryMessage={{true}}
+        />
+      {{/if}}
       {{#unless this.formInitialized}}
         <Skeleton::Forms::MandatarisExtraInfo />
       {{/unless}}
+
       {{yield}}
     </div>
   </div>
@@ -39,14 +38,14 @@
 </div>
 
 <AuModal
-  @title="Bewerk bijkomende info orgaan"
+  @title={{this.editModalTitle}}
   @modalOpen={{this.isModalActive}}
   @closable={{true}}
   @closeModal={{this.toggleModal}}
 >
   <div class="au-o-box">
     <EditableForm
-      @instanceId={{@bestuursorgaan.id}}
+      @instanceId={{@model.id}}
       @form={{@form}}
       @onCancel={{this.toggleModal}}
       @onSave={{this.onSave}}

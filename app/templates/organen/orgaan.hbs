@@ -17,6 +17,13 @@
               Detail
             </AuNavigationLink>
           </li>
+          {{#if (is-feature-enabled "editable-forms")}}
+            <li class="au-c-list-navigation__item">
+              <AuNavigationLink @route="organen.orgaan.mandaten">
+                Mandaten
+              </AuNavigationLink>
+            </li>
+          {{/if}}
           <li class="au-c-list-navigation__item">
             <AuNavigationLink @route="organen.orgaan.mandatarissen">
               Mandatarissen

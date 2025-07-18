@@ -21,9 +21,11 @@
 
   {{#if (is-feature-enabled "editable-forms")}}
     <div class="au-o-box">
-      <Persoon::ExtraInfoCard
-        @persoon={{@model.persoon}}
+      <ExtraInfoForm
+        @model={{@model.persoon}}
         @form={{@model.personExtraInfoForm}}
+        @modalTitle="Bewerk bijkomende info persoon"
+        @canEdit={{true}}
       />
     </div>
   {{/if}}
