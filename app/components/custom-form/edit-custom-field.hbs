@@ -92,6 +92,15 @@
           @onSelectedType={{this.updateLinkedFormTypeUri}}
         />
       {{/if}}
+      {{#if (and this.selectedField.path (not this.isStandardField))}}
+        <PredicaatInput
+          @value={{this.predicateUri}}
+          @formId={{@formDefinitionId}}
+          @fieldUri={{this.selectedField.uri}}
+          @originalPathUri={{this.selectedField.path}}
+          @onUpdate={{this.updatePredicateUri}}
+        />
+      {{/if}}
       <AuFormRow>
         <AuToggleSwitch
           @disabled={{not this.selectedField}}

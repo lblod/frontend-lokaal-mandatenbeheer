@@ -126,6 +126,7 @@ export const LIBRARY_ENTREES = [
   'http://data.lblod.info/id/lmb/form-library-entries/095d1329-a9fa-4d72-8c49-eb52aaf893de', // Verblijfsplaats
   'http://data.lblod.info/id/lmb/form-library-entries/31004e04-1b1a-4fda-80ae-612d67a14b5e', // Geboorteplaats
   'http://data.lblod.info/id/lmb/form-library-entries/8991472a-db3f-4f61-b070-5da7883be37d', // Telefoonnummer
+  'http://data.lblod.info/id/lmb/form-library-entries/0bdd360b-c6e5-46d9-9a31-8645a4c5774c', // Sterfdatum
 ];
 
 export const OVERIGE_BESTUURSPERIODE =

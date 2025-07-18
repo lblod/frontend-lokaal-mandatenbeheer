@@ -24,10 +24,12 @@ export default class CustomFormEditCustomField extends Component {
   @tracked linkedFormTypeUri;
   @tracked isRequired;
   @tracked isShownInSummary;
+  @tracked predicateUri;
 
   @tracked isSaving;
   @tracked isDeleteWarningShown;
   @tracked isDeleting;
+  @tracked isPredicateUriValid = true;
 
   get fields() {
     return this.getFieldsForForm?.value || [];
@@ -77,12 +79,21 @@ export default class CustomFormEditCustomField extends Component {
     return this.linkedFormTypeUri;
   }
 
+  get hasPredicaatUriSet() {
+    if (!this.selectedField?.path) {
+      return true;
+    }
+
+    return this.predicateUri && this.isPredicateUriValid;
+  }
+
   get canSaveChanges() {
     return (
       this.isChanged &&
       this.isValidLabel &&
       this.displayType &&
-      this.isLinkFormTypeSelected
+      this.isLinkFormTypeSelected &&
+      this.hasPredicaatUriSet
     );
   }
 
@@ -97,7 +108,9 @@ export default class CustomFormEditCustomField extends Component {
       this.selectedField.conceptScheme !== this.conceptScheme?.uri ||
       this.selectedField.isRequired !== this.isRequired ||
       this.selectedField.isShownInSummary !== this.isShownInSummary ||
-      this.selectedField.linkedFormTypeUri !== this.linkedFormTypeUri
+      this.selectedField.linkedFormTypeUri !== this.linkedFormTypeUri ||
+      (this.selectedField.path !== this.predicateUri &&
+        this.isPredicateUriValid)
     );
   }
 
@@ -110,6 +123,7 @@ export default class CustomFormEditCustomField extends Component {
     this.displayType = this.displayTypes.filter(
       (t) => t.uri === field?.displayType
     )?.[0];
+    this.predicateUri = field?.path;
     this.conceptScheme = this.conceptSchemes.filter(
       (cs) => cs.uri === field?.conceptScheme
     )?.[0];
@@ -127,6 +141,12 @@ export default class CustomFormEditCustomField extends Component {
   @action
   updateSelectedDisplayType(displayType) {
     this.displayType = displayType;
+  }
+
+  @action
+  updatePredicateUri(uri, isValid) {
+    this.predicateUri = uri;
+    this.isPredicateUriValid = isValid;
   }
 
   @action
@@ -156,7 +176,6 @@ export default class CustomFormEditCustomField extends Component {
     if (this.displayType?.isLinkToForm) {
       this.isShownInSummary = false;
     }
-
     const updatedField = await this.customForms.updateCustomFormField(
       this.args.formDefinitionId,
       this.selectedField.uri,
@@ -168,6 +187,7 @@ export default class CustomFormEditCustomField extends Component {
         isShownInSummary: this.isShownInSummary,
         linkedFormTypeUri: this.linkedFormTypeUri,
         formUri: this.args.selectedField.formUri,
+        path: this.predicateUri,
       }
     );
     this.isSaving = false;

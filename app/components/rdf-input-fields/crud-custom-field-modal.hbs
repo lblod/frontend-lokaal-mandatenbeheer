@@ -20,7 +20,7 @@
           Wilt u nog steeds doorgaan?</span>
       </div>
     {{else}}
-      <form class="au-c-form au-o-box au-o-flow">
+      <form class="au-c-form au-o-flow">
         <AuFormRow @alignment="default">
           <AuLabel @required={{true}} for="fieldName">Naam</AuLabel>
           <AuInput
@@ -104,6 +104,18 @@
             {{/if}}
           </AuFormRow>
         {{/if}}
+        {{#if this.isAdvancedConfigShown}}
+          <fieldset class="au-o-box">
+            <legend>Geavanceerd</legend>
+            <AuFormRow class="au-form-row-full-width">
+              <PredicaatInput
+                @value={{this.predicateUri}}
+                @formId={{this.formContext.formDefinition.id}}
+                @onUpdate={{this.updatePredicateUri}}
+              />
+            </AuFormRow>
+          </fieldset>
+        {{/if}}
         <AuFormRow>
           <AuToggleSwitch
             @disabled={{@show}}
@@ -148,6 +160,27 @@
             </AuToggleSwitch>
           </AuFormRow>
         {{/if}}
+        <AuFormRow>
+          <AuToggleSwitch
+            @disabled={{this.isLibraryFieldType}}
+            @checked={{this.isAdvancedConfigShown}}
+            @onChange={{this.toggleAdvancedOptions}}
+          >Geavanceerde configuratie
+            <Shared::Tooltip
+              @showTooltip={{true}}
+              @alignment="center"
+              @tooltipText="Ik wil een gedetaileerd configuratie van het veld"
+            >
+              <AuButton
+                @skin="naked"
+                @icon="circle-question"
+                @hideText={{true}}
+                @disabled={{true}}
+                class="au-u-padding-bottom-small au-u-padding-left-none au-u-padding-right-none"
+              />
+            </Shared::Tooltip>
+          </AuToggleSwitch>
+        </AuFormRow>
       </form>
     {{/if}}
 

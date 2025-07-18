@@ -1,0 +1,13 @@
+<div ...attributes>
+  <AuLabel @required={{true}} @error={{this.errorMessage}}>Predicaat</AuLabel>
+  <AuInput
+    @error={{this.errorMessage}}
+    @width="block"
+    @iconAlignment="left"
+    value={{@value}}
+    {{on "keyup" (perform this.onUpdate)}}
+  />
+  {{#if this.errorMessage}}
+    <AuHelpText @error={{true}}>{{this.errorMessage}}</AuHelpText>
+  {{/if}}
+</div>
