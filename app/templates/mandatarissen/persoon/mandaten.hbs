@@ -99,9 +99,11 @@
           <th>
             Status
           </th>
-          <th>
-            Publicatie Status
-          </th>
+          {{#unless @model.isPublicationStatusHidden}}
+            <th>
+              Publicatie Status
+            </th>
+          {{/unless}}
         </c.header>
 
         <c.body as |row|>
@@ -146,9 +148,11 @@
           <td>
             <Mandaat::MandatarisStatusPill @mandataris={{row.mandataris}} />
           </td>
-          <td>
-            <Mandaat::PublicatieStatusPill @mandataris={{row.mandataris}} />
-          </td>
+          {{#unless @model.isPublicationStatusHidden}}
+            <td>
+              <Mandaat::PublicatieStatusPill @mandataris={{row.mandataris}} />
+            </td>
+          {{/unless}}
         </c.body>
       </t.content>
     </AuDataTable>

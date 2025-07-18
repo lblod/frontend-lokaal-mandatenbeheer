@@ -10,6 +10,7 @@ import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandat
 export default class OrganenMandatarissenController extends Controller {
   @service router;
   @service store;
+  @service currentSession;
 
   @service fractieApi;
   @service toaster;
@@ -95,5 +96,13 @@ export default class OrganenMandatarissenController extends Controller {
       (mandataris) => mandataris.mandataris.isBestuurlijkeAliasVan?.id
     );
     return new Set(personIds).size;
+  }
+
+  get bekrachtigMandatarissenTooltip() {
+    if (this.currentSession.group.isOCMW) {
+      return 'Mandatarissen in het OCMW kunnen niet bekrachtigd worden';
+    }
+
+    return 'Bekrachtig meerdere mandatarissen tegelijkertijd.';
   }
 }
