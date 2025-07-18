@@ -58,7 +58,6 @@ export default class MandatarissenPersoonMandatenRoute extends Route {
       mandatarissen: filteredMandatarissen,
       bestuurseenheid,
       bestuursorganen,
-      isPublicationStatusHidden: this.currentSession.group.isOCMW,
     };
   }
 
