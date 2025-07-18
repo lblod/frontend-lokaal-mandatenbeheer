@@ -151,6 +151,10 @@ export default class MandatarisEditWizard extends Component {
     return this.reasonForChange.softCorrection;
   }
 
+  get isReplacementSameAsOrginal() {
+    return this.replacementPerson === this.originalReplacementPerson;
+  }
+
   async updateReasonOptions() {
     const newReasons = [];
     let onlyCorrectionAllowed = false;
@@ -421,10 +425,11 @@ export default class MandatarisEditWizard extends Component {
       this.args.mandataris.start = this.formValues.start;
       this.args.mandataris.einde = this.formValues.einde;
       this.args.mandataris.rangorde = this.formValues.rangorde;
-      this.args.mandataris.tijdelijkeVervangingen = replacement
-        ? [replacement]
-        : [];
-
+      if (!this.isReplacementSameAsOrginal) {
+        this.args.mandataris.tijdelijkeVervangingen = replacement
+          ? [replacement]
+          : [];
+      }
       await this.args.mandataris.save();
       await this.handleFractie(this.args.mandataris, this.formValues.fractie);
       this.isReplacementAdded = this.replacementPerson;
@@ -558,9 +563,13 @@ export default class MandatarisEditWizard extends Component {
   }
 
   async handleReplacement(replacedMandataris) {
-    if (this.replacementPerson === this.originalReplacementPerson) {
-      return;
+    if (!this.replacementMandataris && !this.replacementPerson) {
+      return null; // No replacement selected
     }
+    if (this.isReplacementSameAsOrginal) {
+      return this.originalReplacementPerson;
+    }
+
     let replacer = null;
     if (this.replacementMandataris) {
       // the replacement mandataris was already chosen from a list of pre-existing mandatarissen. We can just connect to the existing one
@@ -602,10 +611,8 @@ export default class MandatarisEditWizard extends Component {
           );
         }
       }
-    } else {
-      // no replacement selected
-      return null;
     }
+
     replacer.tijdelijkeVervangingen = [replacedMandataris];
     return replacer;
   }
