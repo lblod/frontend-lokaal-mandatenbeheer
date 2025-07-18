@@ -10,7 +10,6 @@ import { buildNewMandatarisSourceTtl } from 'frontend-lmb/utils/build-new-mandat
 export default class OrganenMandatarissenController extends Controller {
   @service router;
   @service store;
-  @service currentSession;
 
   @service fractieApi;
   @service toaster;
@@ -99,7 +98,7 @@ export default class OrganenMandatarissenController extends Controller {
   }
 
   get bekrachtigMandatarissenTooltip() {
-    if (this.currentSession.group.isOCMW) {
+    if (!this.model.isPublicationStatusEditable) {
       return 'Mandatarissen in het OCMW kunnen niet bekrachtigd worden';
     }
 
