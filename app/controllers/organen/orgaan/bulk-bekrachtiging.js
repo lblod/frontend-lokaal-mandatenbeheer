@@ -9,7 +9,6 @@ import { isValidUri } from 'frontend-lmb/utils/is-valid-uri';
 export default class BulkBekrachtigingController extends Controller {
   @service mandatarisApi;
   @service router;
-  @service currentSession;
 
   queryParams = ['size', 'page', 'sort'];
 
@@ -41,7 +40,7 @@ export default class BulkBekrachtigingController extends Controller {
   }
 
   get openModalDisabled() {
-    if (this.currentSession.group.isOCMW) {
+    if (this.model.hidePublicationStatus) {
       return true;
     }
     if (this.setSize == 0) {
@@ -51,8 +50,8 @@ export default class BulkBekrachtigingController extends Controller {
   }
 
   get tooltipText() {
-    if (this.currentSession.group?.isOCMW) {
-      return 'Mandatarissen in het OCMW kunnen niet bekrachtigd worden';
+    if (this.model.hidePublicationStatus) {
+      return 'Mandatarissen in het OCMW kunnen niet bekrachtigd worden.';
     }
     if (this.hasMandatarissenToEdit) {
       return 'Gelieve mandatarissen te selecteren.';

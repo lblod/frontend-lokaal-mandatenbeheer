@@ -31,8 +31,9 @@
   {{this.model.selectedBestuursperiode.label}}
 </AuHeading>
 <AuAlert @icon="info-circle" @closable={{false}}>
-  {{#if this.currentSession.group.isOCMW}}
-    Mandatarissen binnen een OCMW kunnen niet bekrachtigd worden.
+  {{#if @model.hidePublicationStatus}}
+    Mandatarissen binnen een OCMW kunnen niet bekrachtigd worden tenzij in
+    "Bijzonder Comité voor de Sociale Dienst"
   {{else}}
     De publicatiestatus
     <strong>bekrachtigd</strong>
