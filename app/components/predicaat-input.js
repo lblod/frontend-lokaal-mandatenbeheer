@@ -28,7 +28,13 @@ export default class PredicaatInput extends Component {
       this.args.onUpdate?.(inputUri, false);
       return;
     }
-
+    if (
+      this.args.originalPathUri &&
+      inputUri.trim() === this.args.originalPathUri
+    ) {
+      this.args.onUpdate?.(this.args.originalPathUri, true);
+      return;
+    }
     const response = await fetch(
       `${API.FORM_CONTENT_SERVICE}/custom-form/field/is-uri-allowed-as-path`,
       {
