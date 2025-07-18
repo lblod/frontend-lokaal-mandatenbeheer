@@ -83,8 +83,10 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       mandataris.id;
 
     const firstBestuursorgaanInTijd = bestuursorganen[0];
+    const isBcsdOrgaan = await firstBestuursorgaanInTijd.isBCSD;
     const isPublicationStatusHidden =
-      !(await firstBestuursorgaanInTijd.isDecretaal) || bestuurseenheid.isOCMW;
+      !(await firstBestuursorgaanInTijd.isDecretaal) ||
+      (bestuurseenheid.isOCMW && !isBcsdOrgaan);
 
     return RSVP.hash({
       bestuurseenheid,
