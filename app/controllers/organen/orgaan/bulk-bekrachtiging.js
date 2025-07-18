@@ -40,6 +40,9 @@ export default class BulkBekrachtigingController extends Controller {
   }
 
   get openModalDisabled() {
+    if (this.model.hidePublicationStatus) {
+      return true;
+    }
     if (this.setSize == 0) {
       return true;
     }
@@ -47,6 +50,9 @@ export default class BulkBekrachtigingController extends Controller {
   }
 
   get tooltipText() {
+    if (this.model.hidePublicationStatus) {
+      return 'Mandatarissen in het OCMW kunnen niet bekrachtigd worden.';
+    }
     if (this.hasMandatarissenToEdit) {
       return 'Gelieve mandatarissen te selecteren.';
     }

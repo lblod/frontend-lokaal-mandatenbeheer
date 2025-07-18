@@ -96,4 +96,12 @@ export default class OrganenMandatarissenController extends Controller {
     );
     return new Set(personIds).size;
   }
+
+  get bekrachtigMandatarissenTooltip() {
+    if (!this.model.isPublicationStatusEditable) {
+      return 'Mandatarissen in het OCMW kunnen niet bekrachtigd worden';
+    }
+
+    return 'Bekrachtig meerdere mandatarissen tegelijkertijd.';
+  }
 }
