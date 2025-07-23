@@ -14,7 +14,7 @@ export default class EditRangordeController extends Controller {
   @tracked loading = false;
   @tracked modalOpen = false;
   @tracked correcting = false;
-  @tracked date = new Date();
+  @tracked date = null;
   @tracked orderedMandatarissen = [];
   @tracked interceptedTransition = null;
 
