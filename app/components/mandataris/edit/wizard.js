@@ -567,7 +567,11 @@ export default class MandatarisEditWizard extends Component {
       return null; // No replacement selected
     }
     if (this.isReplacementSameAsOrginal) {
-      return null;
+      const originalReplacementMandataris = (
+        await this.args.mandataris.tijdelijkeVervangingen
+      )[0];
+
+      return originalReplacementMandataris;
     }
 
     let replacer = null;
