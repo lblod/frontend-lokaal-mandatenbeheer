@@ -567,7 +567,7 @@ export default class MandatarisEditWizard extends Component {
       return null; // No replacement selected
     }
     if (this.isReplacementSameAsOrginal) {
-      return this.originalReplacementPerson;
+      return null;
     }
 
     let replacer = null;
