@@ -76,8 +76,7 @@ export default class OrganenMandatarissenRoute extends Route {
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
       legislatuurInBehandeling: isDistrict ? false : legislatuurInBehandeling,
-      isPublicationStatusEditable:
-        !bestuurseenheid.isOCMW || (bestuurseenheid.isOCMW && isBcsdOrgaan),
+      isPublicationStatusEditable: isBcsdOrgaan || !bestuurseenheid.isOCMW,
     };
   }
 
