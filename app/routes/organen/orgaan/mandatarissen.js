@@ -64,6 +64,8 @@ export default class OrganenMandatarissenRoute extends Route {
         parentModel.selectedBestuursperiode
       );
     const isDistrict = this.currentSession.isDistrict;
+    const isBcsdOrgaan = await bestuursorgaanInTijd.isBCSD;
+
     return {
       bestuurseenheid,
       hasRangorde,
@@ -74,6 +76,7 @@ export default class OrganenMandatarissenRoute extends Route {
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       mandatarisNewForm: mandatarisNewForm,
       legislatuurInBehandeling: isDistrict ? false : legislatuurInBehandeling,
+      isPublicationStatusEditable: isBcsdOrgaan || !bestuurseenheid.isOCMW,
     };
   }
 

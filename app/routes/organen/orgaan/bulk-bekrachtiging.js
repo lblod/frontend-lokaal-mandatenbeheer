@@ -10,6 +10,7 @@ import {
 export default class BulkBekrachtigingRoute extends Route {
   @service store;
   @service installatievergadering;
+  @service currentSession;
   @service('mandatarissen') mandatarissenService;
 
   queryParams = {
@@ -60,6 +61,8 @@ export default class BulkBekrachtigingRoute extends Route {
     const publicationStatussen = await this.store.findAll(
       'mandataris-publication-status-code'
     );
+    const isBcsdOrgaan = await parentModel.bestuursorgaan.isBCSD;
+
     return {
       mandatarissenMap,
       mandatarissen,
@@ -68,6 +71,7 @@ export default class BulkBekrachtigingRoute extends Route {
       selectedBestuursperiode: parentModel.selectedBestuursperiode,
       currentBestuursorgaan: currentBestuursorgaan,
       publicationStatussen,
+      hidePublicationStatus: this.currentSession.group.isOCMW && !isBcsdOrgaan,
     };
   }
 }

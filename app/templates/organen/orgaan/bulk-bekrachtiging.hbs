@@ -31,13 +31,19 @@
   {{this.model.selectedBestuursperiode.label}}
 </AuHeading>
 <AuAlert @icon="info-circle" @closable={{false}}>
-  De publicatiestatus
-  <strong>bekrachtigd</strong>
-  is definitief. Je kan mandatarissen met deze status niet terugzetten naar
-  effectief. Als je de status van zo'n mandataris wil aanpassen moet je de
-  <AuLinkExternal
-    href="mailto:lokaalmandatenbeheer@vlaanderen.be?subject=Bekrachtiging terugtrekken - Lokaal Mandatenbeheer"
-  >technische dienst contacteren</AuLinkExternal>
+  {{#if @model.hidePublicationStatus}}
+    Mandatarissen binnen een OCMW kunnen niet bekrachtigd worden tenzij in het
+    "Bijzonder Comité voor de Sociale Dienst"
+  {{else}}
+    De publicatiestatus
+    <strong>bekrachtigd</strong>
+    is definitief. Je kan mandatarissen met deze status niet terugzetten naar
+    effectief. Als je de status van zo'n mandataris wil aanpassen moet je de
+    <AuLinkExternal
+      href="mailto:lokaalmandatenbeheer@vlaanderen.be?subject=Bekrachtiging terugtrekken - Lokaal Mandatenbeheer"
+    >technische dienst contacteren</AuLinkExternal>
+  {{/if}}
+
 </AuAlert>
 <Organen::BekrachtigMandatarisTable
   @content={{@model.mandatarissenMap}}
