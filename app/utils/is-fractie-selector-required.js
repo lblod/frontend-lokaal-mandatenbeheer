@@ -18,5 +18,9 @@ export async function isDisabledForBestuursorgaan(bestuursorgaanInTijd) {
   }
 
   const bestuursorgaan = await bestuursorgaanInTijd.isTijdsspecialisatieVan;
-  return bestuursorgaan.isPolitieraad;
+  const [isPolitieraad, isBCSD] = await Promise.all([
+    bestuursorgaan.isPolitieraad,
+    bestuursorgaan.isBCSD,
+  ]);
+  return isPolitieraad || isBCSD;
 }

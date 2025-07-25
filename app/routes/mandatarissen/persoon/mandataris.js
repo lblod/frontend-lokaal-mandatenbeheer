@@ -3,7 +3,10 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
-import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
+import {
+  isDisabledForBestuursorgaan,
+  isRequiredForBestuursorgaan,
+} from 'frontend-lmb/utils/is-fractie-selector-required';
 import {
   MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_EXTRA_INFO_FORM_ID,
@@ -34,8 +37,10 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       );
 
     const bestuursorganen = await mandaat.bevatIn;
-    const selectedBestuursperiode =
-      await bestuursorganen[0]?.heeftBestuursperiode;
+    const periodes = await Promise.all(
+      bestuursorganen.map((o) => o.heeftBestuursperiode)
+    );
+    const selectedBestuursperiode = periodes.filter((isValue) => isValue)[0];
     const periodeHasLegislatuur =
       (await selectedBestuursperiode.installatievergaderingen)?.length >= 1;
     const behandeldeVergaderingen = await this.store.query(
@@ -98,6 +103,9 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       bestuursorganen,
       firstBestuursorgaanInTijd,
       isPublicationStatusHidden,
+      isFractieHidden: await isDisabledForBestuursorgaan(
+        firstBestuursorgaanInTijd
+      ),
       periodeHasLegislatuur,
       behandeldeVergaderingen,
       linkedMandataris,
