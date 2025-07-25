@@ -50,10 +50,6 @@ export default class EditRangordeController extends Controller {
     return !this.hasChanges;
   }
 
-  get tooltipText() {
-    return 'Er werden nog geen wijzigingen gevonden.';
-  }
-
   get confirmDisabled() {
     return !this.correcting && !this.date;
   }
