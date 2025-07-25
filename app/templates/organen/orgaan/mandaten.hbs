@@ -1,0 +1,39 @@
+{{breadcrumb "Mandaten" route="organen.orgaan.mandaten"}}
+<AuToolbar
+  @size="large"
+  class="au-u-padding-bottom-none au-u-margin-bottom-none"
+  as |Group|
+>
+  <Group class="au-u-margin-bottom-none">
+    <AuHeading @skin="2">
+      Mandaten
+    </AuHeading>
+  </Group>
+</AuToolbar>
+
+<div class="au-o-box au-o-flow au-u-flex au-u-flex--column au-u-flex--wrap">
+  {{#each @model.mandaten as |mandaat|}}
+    <div>
+      <AuToolbar
+        @size="large"
+        @border="bottom"
+        class="au-u-padding-bottom-none au-u-margin-bottom-none"
+        as |Group|
+      >
+        <Group class="au-u-margin-bottom-none">
+          <AuHeading @skin="4">
+            {{mandaat.bestuursfunctie.label}}
+          </AuHeading>
+        </Group>
+      </AuToolbar>
+      <div class="au-u-padding-left au-u-margin-top">
+        <ExtraInfoForm
+          @modalTitle="Bewerk bijkomende info mandaat"
+          @canEdit={{true}}
+          @form={{@model.mandaatExtraInfoForm}}
+          @model={{mandaat}}
+        />
+      </div>
+    </div>
+  {{/each}}
+</div>
