@@ -72,6 +72,7 @@ export default class BulkBekrachtigingRoute extends Route {
       currentBestuursorgaan: currentBestuursorgaan,
       publicationStatussen,
       hidePublicationStatus: this.currentSession.group.isOCMW && !isBcsdOrgaan,
+      isFractieColumnHidden: await parentModel.bestuursorgaan.isBCSD,
     };
   }
 }
