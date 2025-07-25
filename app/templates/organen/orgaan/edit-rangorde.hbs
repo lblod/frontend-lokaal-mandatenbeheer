@@ -55,14 +55,16 @@
   />
 </div>
 
-<Organen::EditMandatarisRangordeTable
-  @mandatarissen={{@model.mandatarisStruct}}
-  @orderedMandatarissen={{this.orderedMandatarissen}}
-  @updateMandatarisList={{this.updateOrderedMandatarisList}}
-  @bestuursperiode={{@model.selectedBestuursperiode}}
-/>
+{{#if this.date}}
+  <Organen::EditMandatarisRangordeTable
+    @mandatarissen={{@model.mandatarisStruct}}
+    @orderedMandatarissen={{this.orderedMandatarissen}}
+    @updateMandatarisList={{this.updateOrderedMandatarisList}}
+    @bestuursperiode={{@model.selectedBestuursperiode}}
+  />
 
-{{outlet}}
+  {{outlet}}
+{{/if}}
 
 <AuModal
   @title={{this.modalTitle}}
