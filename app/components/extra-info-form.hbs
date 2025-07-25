@@ -17,7 +17,7 @@
   <div class="au-o-grid au-o-grid--small">
     <div class="au-o-box au-u-padding-tiny person-extra-info">
       {{#if this.isModalActive}}
-        <Skeleton::Forms::MandatarisExtraInfo />
+        <Skeleton::Forms::ExtraInfoForm />
       {{else}}
         <EditableForm
           @isReadOnly={{true}}
@@ -28,7 +28,7 @@
         />
       {{/if}}
       {{#unless this.formInitialized}}
-        <Skeleton::Forms::MandatarisExtraInfo />
+        <Skeleton::Forms::ExtraInfoForm />
       {{/unless}}
 
       {{yield}}
@@ -55,7 +55,7 @@
       @isFormExtension={{true}}
     />
     {{#unless this.formInitialized}}
-      <Skeleton::Forms::MandatarisExtraInfo />
+      <Skeleton::Forms::ExtraInfoForm />
     {{/unless}}
   </div>
 </AuModal>

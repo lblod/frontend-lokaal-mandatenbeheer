@@ -30,7 +30,7 @@
         @customHistoryMessage={{true}}
       />
       {{#unless this.formInitialized}}
-        <Skeleton::Forms::MandatarisExtraInfo />
+        <Skeleton::Forms::ExtraInfoForm />
       {{/unless}}
       {{yield}}
     </div>
@@ -54,7 +54,7 @@
       @customHistoryMessage={{true}}
     />
     {{#unless this.formInitialized}}
-      <Skeleton::Forms::MandatarisExtraInfo />
+      <Skeleton::Forms::ExtraInfoForm />
     {{/unless}}
   </div>
 </AuModal>
