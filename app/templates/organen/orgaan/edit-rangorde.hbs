@@ -36,28 +36,17 @@
 <div class="au-u-padding au-u-padding-top-none">
   <p class="au-u-margin-bottom">
     Deze pagina laat je toe om de rangorde van de mandatarissen aan te passen.
-    Selecteer hier de datum waarop je de rangorde wil aanpassen.
   </p>
-  <DateInput
-    @label="Datum van aanpassing"
-    @value={{this.momentizedDate}}
-    @from={{this.model.bestuursorgaanInTijd.bindingStart}}
-    @to={{this.model.bestuursorgaanInTijd.bindingEinde}}
-    @onChange={{fn (mut this.date)}}
-    @isRequired={{true}}
-  />
 </div>
 
-{{#if this.date}}
-  <Organen::EditMandatarisRangordeTable
-    @mandatarissen={{@model.mandatarisStruct}}
-    @orderedMandatarissen={{this.orderedMandatarissen}}
-    @updateMandatarisList={{this.updateOrderedMandatarisList}}
-    @bestuursperiode={{@model.selectedBestuursperiode}}
-  />
+<Organen::EditMandatarisRangordeTable
+  @mandatarissen={{@model.mandatarisStruct}}
+  @orderedMandatarissen={{this.orderedMandatarissen}}
+  @updateMandatarisList={{this.updateOrderedMandatarisList}}
+  @bestuursperiode={{@model.selectedBestuursperiode}}
+/>
 
-  {{outlet}}
-{{/if}}
+{{outlet}}
 
 <AuModal
   @title={{this.modalTitle}}
@@ -124,7 +113,20 @@
             Als dit niet de aanpassing is die je wil doen, maar je een fout wil
             rechtzetten, gebruik dan
             <strong>corrigeer rangorde</strong>.
+
           </p>
+          <p>
+            Vul een datum in waarop de wijziging van de rangorde dient in
+            werking te treden.
+          </p>
+          <DateInput
+            @label="Datum van aanpassing"
+            @value={{this.momentizedDate}}
+            @from={{this.model.bestuursorgaanInTijd.bindingStart}}
+            @to={{this.model.bestuursorgaanInTijd.bindingEinde}}
+            @onChange={{fn (mut this.date)}}
+            @isRequired={{true}}
+          />
         </div>
       {{/if}}
       <AuToolbar class="au-u-margin-top" as |Group|>
