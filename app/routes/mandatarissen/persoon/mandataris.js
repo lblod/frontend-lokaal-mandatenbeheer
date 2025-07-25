@@ -37,8 +37,10 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       );
 
     const bestuursorganen = await mandaat.bevatIn;
-    const selectedBestuursperiode =
-      await bestuursorganen[0]?.heeftBestuursperiode;
+    const periodes = await Promise.all(
+      bestuursorganen.map((o) => o.heeftBestuursperiode)
+    );
+    const selectedBestuursperiode = periodes.filter((isValue) => isValue)[0];
     const periodeHasLegislatuur =
       (await selectedBestuursperiode.installatievergaderingen)?.length >= 1;
     const behandeldeVergaderingen = await this.store.query(
