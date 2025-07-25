@@ -13,6 +13,7 @@ export default class EditRangordeController extends Controller {
 
   @tracked loading = false;
   @tracked modalOpen = false;
+  @tracked initial = false;
   @tracked correcting = false;
   @tracked date = null;
   @tracked orderedMandatarissen = [];
@@ -35,10 +36,14 @@ export default class EditRangordeController extends Controller {
   }
 
   get modalTitle() {
-    if (this.correcting) {
-      return 'Corrigeer Rangorde';
+    if (this.initial) {
+      return 'Pas rangorde aan';
     } else {
-      return 'Wijzig Rangorde';
+      if (this.correcting) {
+        return 'Corrigeer Rangorde';
+      } else {
+        return 'Wijzig Rangorde';
+      }
     }
   }
 
@@ -86,13 +91,23 @@ export default class EditRangordeController extends Controller {
   @action cancelLoseChanges() {
     this.interceptedTransition = null;
   }
-  @action startCorrectingRangorde() {
+
+  @action openModal() {
     this.modalOpen = true;
+    this.initial = true;
+  }
+
+  @action goBack() {
+    this.initial = true;
+  }
+
+  @action startCorrectingRangorde() {
+    this.initial = false;
     this.correcting = true;
   }
 
   @action startChangeRangorde() {
-    this.modalOpen = true;
+    this.initial = false;
     this.correcting = false;
   }
 }

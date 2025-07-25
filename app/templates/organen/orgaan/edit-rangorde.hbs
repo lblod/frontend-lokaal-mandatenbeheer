@@ -19,18 +19,10 @@
       @tooltipText="Er werden nog geen wijzigingen gevonden."
     >
       <AuButton
-        @skin="secondary"
-        @alert={{true}}
-        @disabled={{this.openModalDisabled}}
-        {{on "click" this.startCorrectingRangorde}}
-      >
-        Corrigeer rangorde
-      </AuButton>
-      <AuButton
-        {{on "click" this.startChangeRangorde}}
+        {{on "click" this.openModal}}
         @disabled={{this.openModalDisabled}}
       >
-        Wijzig rangorde
+        Pas rangorde aan
       </AuButton>
     </Shared::Tooltip>
   </Group>
@@ -74,52 +66,93 @@
   @closeModal={{this.closeModal}}
 >
   <div class="au-o-box au-o-flow">
-    {{#if this.correcting}}
+    {{#if this.initial}}
       <div>
-        Een
-        <strong>correctie</strong>
-        van de rangorde betekent dat de rangorde van deze mandatarissen verkeerd
-        ingevuld stond. Je aanpassing corrigeert dan deze mandatarissen. Als er
-        een
-        <strong>wissel is in de rangordes van verschillende mandatarissen</strong>
-        gebruik dan
+        Is de aanpassing het resultaat van een mandatenwissel, waardoor de
+        rangorde van verschillende mandatarissen aangepast is, ga dan verder met
         <strong>wijzig rangorde</strong>.
+        <br />
+        Is de data foutief en wens je fouten te corrigeren dan dien je
+        <strong>corrigeer rangorde</strong>te gebruiken.
       </div>
-
+      <AuToolbar class="au-u-margin-top" as |Group|>
+        <Group>
+          <AuButtonGroup>
+            <AuButton
+              @loading={{this.loading}}
+              @loadingMessage="Bezig met opslaan"
+              {{on "click" this.startChangeRangorde}}
+            >
+              Wijzig rangorde
+            </AuButton>
+            <AuButton
+              @alert={{true}}
+              @loading={{this.loading}}
+              @loadingMessage="Bezig met opslaan"
+              {{on "click" this.startCorrectingRangorde}}
+            >
+              Corrigeer rangorde
+            </AuButton>
+            <AuButton {{on "click" this.closeModal}} @skin="secondary">
+              Annuleer
+            </AuButton>
+          </AuButtonGroup>
+        </Group>
+      </AuToolbar>
     {{else}}
-      <div>
-        <p>
-          Een
-          <strong>wijziging</strong>
+      {{#if this.correcting}}
+        <div>
+          <strong>correctie</strong>
           van de rangorde betekent dat de rangorde van deze mandatarissen
-          <strong>doorheen de bestuursperiode</strong>
-          aangepast moet worden, bijvoorbeeld nadat een mandataris verhinderd
-          werd en er een vervanger werd aangesteld met een andere rangorde.</p>
-        <p>
-          Als dit niet de aanpassing is die je wil doen, maar je een fout wil
-          rechtzetten, gebruik dan
-          <strong>corrigeer rangorde</strong>.
-        </p>
-      </div>
-    {{/if}}
+          verkeerd ingevuld stond. Je aanpassing corrigeert dan deze
+          mandatarissen. Als er een
+          <strong>wissel is in de rangordes van verschillende mandatarissen</strong>
+          gebruik dan
+          <strong>wijzig rangorde</strong>.
+        </div>
 
-    <AuToolbar class="au-u-margin-top" as |Group|>
-      <Group>
-        <AuButtonGroup>
-          <AuButton
-            @loading={{this.loading}}
-            @loadingMessage="Bezig met opslaan"
-            {{on "click" this.changeRangorde}}
-            @disabled={{this.confirmDisabled}}
-          >
-            Bevestig
-          </AuButton>
-          <AuButton {{on "click" this.closeModal}} @skin="secondary">
-            Annuleer
-          </AuButton>
-        </AuButtonGroup>
-      </Group>
-    </AuToolbar>
+      {{else}}
+        <div>
+          <p>
+            Een
+            <strong>wijziging</strong>
+            van de rangorde betekent dat de rangorde van deze mandatarissen
+            <strong>doorheen de bestuursperiode</strong>
+            aangepast moet worden, bijvoorbeeld nadat een mandataris verhinderd
+            werd en er een vervanger werd aangesteld met een andere rangorde.</p>
+          <p>
+            Als dit niet de aanpassing is die je wil doen, maar je een fout wil
+            rechtzetten, gebruik dan
+            <strong>corrigeer rangorde</strong>.
+          </p>
+        </div>
+      {{/if}}
+      <AuToolbar class="au-u-margin-top" as |Group|>
+        <Group>
+          <AuButtonGroup>
+            <AuButton
+              @skin="secondary"
+              @loading={{this.loading}}
+              @loadingMessage="Bezig met opslaan"
+              {{on "click" this.goBack}}
+            >
+              Ga terug
+            </AuButton>
+            <AuButton
+              @loading={{this.loading}}
+              @loadingMessage="Bezig met opslaan"
+              {{on "click" this.changeRangorde}}
+              @disabled={{this.confirmDisabled}}
+            >
+              Bevestig
+            </AuButton>
+            <AuButton {{on "click" this.closeModal}} @skin="secondary">
+              Annuleer
+            </AuButton>
+          </AuButtonGroup>
+        </Group>
+      </AuToolbar>
+    {{/if}}
   </div>
 </AuModal>
 
