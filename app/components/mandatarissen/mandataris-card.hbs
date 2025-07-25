@@ -76,15 +76,17 @@
         {{moment-format @mandataris.start "DD-MM-YYYY"}}
       </div>
     </div>
-    <div class="au-o-grid__item au-u-1-2">
-      <div class="au-c-description-label">Fractie</div>
-      <div
-        class="au-c-description-value au-u-margin-top-tiny
-          {{unless this.fractie 'au-u-muted'}}"
-      >
-        {{if this.fractie this.fractie "Niet beschikbaar"}}
+    {{#unless @isFractieHidden}}
+      <div class="au-o-grid__item au-u-1-2">
+        <div class="au-c-description-label">Fractie</div>
+        <div
+          class="au-c-description-value au-u-margin-top-tiny
+            {{unless this.fractie 'au-u-muted'}}"
+        >
+          {{if this.fractie this.fractie "Niet beschikbaar"}}
+        </div>
       </div>
-    </div>
+    {{/unless}}
     <div class="au-o-grid__item au-u-1-2">
       <div class="au-c-description-label">Einde periode</div>
       <div class="au-c-description-value au-u-margin-top-tiny">

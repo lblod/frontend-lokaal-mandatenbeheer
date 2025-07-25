@@ -3,7 +3,10 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 import { effectiefIsLastPublicationStatus } from 'frontend-lmb/utils/effectief-is-last-publication-status';
-import { isRequiredForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
+import {
+  isDisabledForBestuursorgaan,
+  isRequiredForBestuursorgaan,
+} from 'frontend-lmb/utils/is-fractie-selector-required';
 import {
   MANDATARIS_EDIT_FORM_ID,
   MANDATARIS_EXTRA_INFO_FORM_ID,
@@ -98,6 +101,9 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       bestuursorganen,
       firstBestuursorgaanInTijd,
       isPublicationStatusHidden,
+      isFractieHidden: await isDisabledForBestuursorgaan(
+        firstBestuursorgaanInTijd
+      ),
       periodeHasLegislatuur,
       behandeldeVergaderingen,
       linkedMandataris,
