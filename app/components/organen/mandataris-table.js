@@ -6,7 +6,12 @@ export default class OrganenMandatarisTableComponent extends Component {
   @service currentSession;
 
   get showFractie() {
-    return this.args.bestuursorgaan.containsPoliticalMandates;
+    return Promise.all([
+      this.args.bestuursorgaan.containsPoliticalMandates,
+      this.args.bestuursorgaan.isBCSD,
+    ]).then(([isPolitical, isBCSD]) => {
+      return isPolitical && !isBCSD;
+    });
   }
   get hidePublicationStatus() {
     return Promise.all([
