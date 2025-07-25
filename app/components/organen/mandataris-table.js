@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { isDisabledForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 
 import { service } from '@ember/service';
 
@@ -8,9 +9,9 @@ export default class OrganenMandatarisTableComponent extends Component {
   get showFractie() {
     return Promise.all([
       this.args.bestuursorgaan.containsPoliticalMandates,
-      this.args.bestuursorgaan.isBCSD,
-    ]).then(([isPolitical, isBCSD]) => {
-      return isPolitical && !isBCSD;
+      isDisabledForBestuursorgaan(this.args.bestuursorgaanInTijd),
+    ]).then(([isPolitical, isFractieDisabled]) => {
+      return isPolitical && !isFractieDisabled;
     });
   }
   get hidePublicationStatus() {

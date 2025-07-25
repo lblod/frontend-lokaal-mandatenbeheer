@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
+import { isDisabledForBestuursorgaan } from 'frontend-lmb/utils/is-fractie-selector-required';
 
 import {
   MANDATARIS_BEKRACHTIGD_PUBLICATION_STATE,
@@ -72,7 +73,9 @@ export default class BulkBekrachtigingRoute extends Route {
       currentBestuursorgaan: currentBestuursorgaan,
       publicationStatussen,
       hidePublicationStatus: this.currentSession.group.isOCMW && !isBcsdOrgaan,
-      isFractieColumnHidden: await parentModel.bestuursorgaan.isBCSD,
+      isFractieColumnHidden: await isDisabledForBestuursorgaan(
+        currentBestuursorgaan
+      ),
     };
   }
 }
