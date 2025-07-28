@@ -28,11 +28,13 @@
         @currentSorting={{@sort}}
         @label="Familienaam"
       />
-      <AuDataTableThSortable
-        @field="heeftLidmaatschap.binnenFractie.naam"
-        @currentSorting={{@sort}}
-        @label="Fractie"
-      />
+      {{#unless @isFractieColumnHidden}}
+        <AuDataTableThSortable
+          @field="heeftLidmaatschap.binnenFractie.naam"
+          @currentSorting={{@sort}}
+          @label="Fractie"
+        />
+      {{/unless}}
       <AuDataTableThSortable
         @field="status.label"
         @currentSorting={{@sort}}
@@ -73,13 +75,15 @@
       <td>
         {{row.mandataris.isBestuurlijkeAliasVan.achternaam}}
       </td>
-      <td>
-        {{if
-          row.mandataris.heeftLidmaatschap.binnenFractie
-          row.mandataris.heeftLidmaatschap.binnenFractie.naam
-          "Niet beschikbaar"
-        }}
-      </td>
+      {{#unless @isFractieColumnHidden}}
+        <td>
+          {{if
+            row.mandataris.heeftLidmaatschap.binnenFractie
+            row.mandataris.heeftLidmaatschap.binnenFractie.naam
+            "Niet beschikbaar"
+          }}
+        </td>
+      {{/unless}}
       <td>
         <Mandaat::MandatarisStatusPill @mandataris={{row.mandataris}} />
       </td>
