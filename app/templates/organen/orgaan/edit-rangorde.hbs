@@ -36,7 +36,16 @@
 <div class="au-u-padding au-u-padding-top-none">
   <p class="au-u-margin-bottom">
     Deze pagina laat je toe om de rangorde van de mandatarissen aan te passen.
+    Selecteer hier de datum waarop je de rangorde wil aanpassen.
   </p>
+  <DateInput
+    @label="Datum van aanpassing"
+    @value={{this.momentizedDate}}
+    @from={{this.model.bestuursorgaanInTijd.bindingStart}}
+    @to={{this.model.bestuursorgaanInTijd.bindingEinde}}
+    @onChange={{fn (mut this.date)}}
+    @isRequired={{true}}
+  />
 </div>
 
 <Organen::EditMandatarisRangordeTable
