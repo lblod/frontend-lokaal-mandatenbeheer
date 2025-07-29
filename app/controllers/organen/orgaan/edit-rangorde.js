@@ -16,6 +16,7 @@ export default class EditRangordeController extends Controller {
   @tracked initial = false;
   @tracked correcting = false;
   @tracked date = null;
+  @tracked dateOfChange = null;
   @tracked orderedMandatarissen = [];
   @tracked interceptedTransition = null;
 
@@ -56,7 +57,7 @@ export default class EditRangordeController extends Controller {
   }
 
   get confirmDisabled() {
-    return !this.correcting && !this.date;
+    return !this.correcting && !this.dateOfChange;
   }
 
   get changedEntries() {
@@ -75,7 +76,11 @@ export default class EditRangordeController extends Controller {
   async changeRangorde() {
     this.loading = true;
     const diff = this.changedEntries;
-    await this.rangordeApi.updateRangordes(diff, this.correcting, this.date);
+    await this.rangordeApi.updateRangordes(
+      diff,
+      this.correcting,
+      this.dateOfChange
+    );
     this.closeModal();
     this.loading = false;
     // so we can tell the route it's ok to refresh now
