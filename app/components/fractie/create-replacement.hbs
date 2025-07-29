@@ -1,0 +1,44 @@
+<div>
+  <form class="au-c-form au-o-flow">
+    <AuFormRow @alignment="default">
+      <AuLabel
+        @required={{true}}
+        @error={{this.errorMessage}}
+        for="fieldName"
+      >Naam</AuLabel>
+      <AuInput
+        @error={{this.errorMessage}}
+        @width="block"
+        @iconAlignment="left"
+        value={{this.label}}
+        id="fractieLabel"
+        {{on "keyup" this.updateLabel}}
+      />
+      {{#if this.errorMessage}}
+        <AuHelpText @error={{true}}>{{this.errorMessage}}</AuHelpText>
+      {{/if}}
+      {{#if this.isSameAsOriginal}}
+        <AuHelpText @warning={{true}}>Je hebt de huidige naam van de fractie
+          ingegeven</AuHelpText>
+      {{/if}}
+    </AuFormRow>
+  </form>
+
+  <AuToolbar class="au-u-margin-top" as |Group|>
+    <Group class="flex-grow">
+      <AuButtonGroup>
+        <AuButton
+          @loading={{this.isLoading}}
+          @loadingMessage="Opslaan"
+          @disabled={{this.isDisabled}}
+          {{on "click" this.createReplacement}}
+        >
+          Pas aan
+        </AuButton>
+        <AuButton @skin="secondary" {{on "click" @onCancel}}>
+          Annuleer
+        </AuButton>
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
+</div>

@@ -87,4 +87,24 @@ export default class FractieApiService extends Service {
       `Removed ${jsonResponse.fracties.length} dangling fractie(s).`
     );
   }
+
+  async createReplacement(fractieId, bestuursperiodeId) {
+    if (!fractieId || bestuursperiodeId) {
+      throw new Error('Fractie id of bestuursperiode id is niet meegegeven');
+    }
+
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/fracties/${fractieId}/${bestuursperiodeId}/create-replacement`,
+      { method: 'POST' }
+    );
+
+    if (response.status !== STATUS_CODE.OK) {
+      const jsonResponse = await response.json();
+      console.error(jsonResponse.message);
+      throw {
+        status: response.status,
+        message: jsonResponse.message,
+      };
+    }
+  }
 }
