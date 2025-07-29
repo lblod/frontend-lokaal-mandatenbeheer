@@ -5,6 +5,7 @@ import { timeout } from 'ember-concurrency';
 
 import {
   API,
+  JSON_API_TYPE,
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
@@ -88,14 +89,23 @@ export default class FractieApiService extends Service {
     );
   }
 
-  async createReplacement(fractieId, bestuursperiodeId) {
+  async createReplacement(fractieId, bestuursperiodeId, label) {
     if (!fractieId || !bestuursperiodeId) {
       throw new Error('Fractie id of bestuursperiode id is niet meegegeven');
     }
 
     const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/fracties/${fractieId}/${bestuursperiodeId}/create-replacement`,
-      { method: 'POST' }
+      `${API.MANDATARIS_SERVICE}/fracties/${fractieId}/create-replacement`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          bestuursperiodeId,
+          label,
+        }),
+      }
     );
 
     if (response.status !== STATUS_CODE.CREATED) {
