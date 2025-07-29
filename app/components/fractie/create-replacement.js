@@ -25,7 +25,8 @@ export default class FractieCreateReplacement extends Component {
     try {
       await this.fractieApi.createReplacement(
         this.args.fractieId,
-        this.args.bestuursperiode?.id
+        this.args.bestuursperiode?.id,
+        this.label?.trim()
       );
       this.isLoading = false;
       showSuccessToast(
