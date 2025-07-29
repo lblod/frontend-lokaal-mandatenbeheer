@@ -89,7 +89,7 @@ export default class FractieApiService extends Service {
   }
 
   async createReplacement(fractieId, bestuursperiodeId) {
-    if (!fractieId || bestuursperiodeId) {
+    if (!fractieId || !bestuursperiodeId) {
       throw new Error('Fractie id of bestuursperiode id is niet meegegeven');
     }
 
@@ -98,7 +98,7 @@ export default class FractieApiService extends Service {
       { method: 'POST' }
     );
 
-    if (response.status !== STATUS_CODE.OK) {
+    if (response.status !== STATUS_CODE.CREATED) {
       const jsonResponse = await response.json();
       console.error(jsonResponse.message);
       throw {

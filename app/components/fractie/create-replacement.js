@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { showErrorToast } from 'frontend-lmb/utils/toasts';
+import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class FractieCreateReplacement extends Component {
   @service toaster;
@@ -28,6 +28,11 @@ export default class FractieCreateReplacement extends Component {
         this.args.bestuursperiode?.id
       );
       this.isLoading = false;
+      showSuccessToast(
+        this.toaster,
+        'De nieuwe fractie werd aangemaakt',
+        'Fractie'
+      );
       this.args.onCompleted?.();
     } catch (error) {
       this.isLoading = false;
