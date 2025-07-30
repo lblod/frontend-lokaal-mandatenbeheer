@@ -6,6 +6,7 @@ export default class FractieModel extends Model {
   @attr('uri-set') generatedFrom;
   @attr('datetime') modified;
   @attr('datetime') endDate;
+  @attr('datetime') startDate;
 
   @belongsTo('fractietype', {
     async: true,
