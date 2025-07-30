@@ -4,6 +4,7 @@ import { service } from '@ember/service';
 
 export default class LoketSessionService extends SessionService {
   @service currentSession;
+  @service validatie;
 
   get isMockLoginSession() {
     return this.isAuthenticated
@@ -14,6 +15,7 @@ export default class LoketSessionService extends SessionService {
   async handleAuthentication(routeAfterAuthentication) {
     // We wait for the currentSession to load before navigating. This fixes the empty index page since the data might not be loaded yet.
     await this.currentSession.load();
+    await this.validatie.setup();
     super.handleAuthentication(routeAfterAuthentication);
   }
 
