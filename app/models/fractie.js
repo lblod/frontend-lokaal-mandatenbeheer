@@ -5,6 +5,7 @@ export default class FractieModel extends Model {
   @attr naam;
   @attr('uri-set') generatedFrom;
   @attr('datetime') modified;
+  @attr('datetime') endDate;
 
   @belongsTo('fractietype', {
     async: true,
@@ -29,6 +30,12 @@ export default class FractieModel extends Model {
     inverse: 'resulterendeFracties',
   })
   origineleKandidatenlijst;
+
+  @belongsTo('fractie', {
+    async: true,
+    inverse: null,
+  })
+  replacement;
 
   get isOnafhankelijk() {
     return this.fractietype.get('isOnafhankelijk');
