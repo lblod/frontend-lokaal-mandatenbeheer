@@ -4,7 +4,7 @@
       <AuLabel
         @required={{true}}
         @error={{this.errorMessage}}
-        for="fieldName"
+        for="fractieLabel"
       >Naam</AuLabel>
       <AuInput
         @error={{this.errorMessage}}
@@ -21,6 +21,15 @@
         <AuHelpText @warning={{true}}>Je hebt de huidige naam van de fractie
           ingegeven</AuHelpText>
       {{/if}}
+    </AuFormRow>
+    <AuFormRow>
+      <DateInput
+        @label="Startdatum"
+        @isRequired={{true}}
+        @value={{this.endDate}}
+        @onChange={{this.updateEndDate}}
+        @from={{this.today}}
+      />
     </AuFormRow>
   </form>
 

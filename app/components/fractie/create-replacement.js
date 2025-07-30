@@ -10,8 +10,17 @@ export default class FractieCreateReplacement extends Component {
   @service fractieApi;
 
   @tracked label;
+  @tracked endDate;
+  @tracked today;
+
   @tracked isInteractedWithField;
   @tracked isLoading;
+
+  constructor() {
+    super(...arguments);
+    this.today = new Date();
+    this.endDate = this.today;
+  }
 
   @action
   updateLabel(event) {
@@ -20,13 +29,18 @@ export default class FractieCreateReplacement extends Component {
   }
 
   @action
+  updateEndDate(date) {
+    this.endDate = date;
+  }
+
+  @action
   async createReplacement() {
     this.isLoading = true;
     try {
       await this.fractieApi.createReplacement(
         this.args.fractieId,
-        this.args.bestuursperiode?.id,
-        this.label?.trim()
+        this.label?.trim(),
+        this.endDate
       );
       this.isLoading = false;
       showSuccessToast(
@@ -70,7 +84,9 @@ export default class FractieCreateReplacement extends Component {
   }
 
   get isDisabled() {
-    return !this.label || this.isSameAsOriginal || this.errorMessage;
+    return (
+      !this.label || this.isSameAsOriginal || this.errorMessage || !this.endDate
+    );
   }
 
   get isSameAsOriginal() {
