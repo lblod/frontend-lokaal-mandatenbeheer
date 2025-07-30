@@ -89,9 +89,9 @@ export default class FractieApiService extends Service {
     );
   }
 
-  async createReplacement(fractieId, bestuursperiodeId, label) {
-    if (!fractieId || !bestuursperiodeId) {
-      throw new Error('Fractie id of bestuursperiode id is niet meegegeven');
+  async createReplacement(fractieId, label, endDate) {
+    if (!fractieId || !endDate) {
+      throw new Error('Fractie id of startdatum is niet meegegeven');
     }
 
     const response = await fetch(
@@ -102,8 +102,8 @@ export default class FractieApiService extends Service {
           'Content-Type': JSON_API_TYPE,
         },
         body: JSON.stringify({
-          bestuursperiodeId,
           label,
+          endDate,
         }),
       }
     );
