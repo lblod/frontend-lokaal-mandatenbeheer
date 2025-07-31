@@ -13,8 +13,17 @@
         @currentSorting={{@sort}}
         @label="Fractienaam"
       />
-      <th>Bestuursperiode</th>
-      <th></th>
+      <AuDataTableThSortable
+        @field="startDate"
+        @currentSorting={{@sort}}
+        @label="Start"
+      />
+      <AuDataTableThSortable
+        @field="endDate"
+        @currentSorting={{@sort}}
+        @label="Einde"
+      />
+      <th>{{!action}}</th>
     </c.header>
 
     <c.body as |row|>
@@ -22,7 +31,10 @@
         <strong>{{row.naam}}</strong>
       </td>
       <td>
-        {{@selectedPeriod.label}}
+        {{row.startDateLabel}}
+      </td>
+      <td>
+        {{row.endDateLabel}}
       </td>
       <td>
         <AuButton @skin="link" {{on "click" (fn @edit row.id)}}>

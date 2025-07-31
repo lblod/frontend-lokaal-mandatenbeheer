@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import moment from 'moment';
 
 export default class FractieModel extends Model {
   @attr uri;
@@ -55,5 +56,21 @@ export default class FractieModel extends Model {
 
   get validationText() {
     return this.naam;
+  }
+
+  get startDateLabel() {
+    if (!this.startDate) {
+      return 'Onbekend';
+    }
+
+    return moment(this.startDate).format('DD-MM-YYYY');
+  }
+
+  get endDateLabel() {
+    if (!this.endDate) {
+      return 'Heden';
+    }
+
+    return moment(this.endDate).format('DD-MM-YYYY');
   }
 }
