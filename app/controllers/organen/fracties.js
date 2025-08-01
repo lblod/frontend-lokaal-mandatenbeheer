@@ -32,6 +32,7 @@ export default class FractiesController extends Controller {
   closeModal() {
     this.modal = null;
     this.formInitialized = false;
+    this.router.refresh();
   }
   @action
   saveModal() {

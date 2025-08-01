@@ -37,9 +37,19 @@
         {{row.endDateLabel}}
       </td>
       <td>
-        <AuButton @skin="link" {{on "click" (fn @edit row.id)}}>
-          <AuIcon @icon="pencil" @alignment="left" />
-          Bewerk</AuButton>
+
+        <Shared::Tooltip
+          @showTooltip={{row.endDate}}
+          role={{@role}}
+          @tooltipText="Deze fractie is al beëindigd"
+        >
+          <AuButton
+            @disabled={{row.endDate}}
+            @skin="link"
+            {{on "click" (fn @edit row.id)}}
+          >
+            Bewerk</AuButton>
+        </Shared::Tooltip>
       </td>
     </c.body>
   </t.content>
