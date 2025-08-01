@@ -19,12 +19,13 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     this.loadProvidedValue();
   }
 
-  async loadProvidedValue() {
+  loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
 
     if (matches.values.length > 0) {
       this.rijksregisternummer = matches.values[0].value;
-      replaceSingleFormValue(this.storeOptions, this.rijksregisternummer);
+      this.setFormValue(this.rijksregisternummer);
+      this.hasBeenFocused = true;
     }
   }
 
@@ -35,14 +36,14 @@ export default class RDFRijksRegisterInput extends InputFieldComponent {
     }
     const rijksregisternummer = event.target.value.trim();
     this.rijksregisternummer = rijksregisternummer;
+    this.setFormValue(this.rijksregisternummer);
 
-    replaceSingleFormValue(
-      this.storeOptions,
-      rijksregisternummer ? rijksregisternummer : null
-    );
-
-    this.updateValidations();
-
+    await super.updateValidations();
     this.hasBeenFocused = true;
+  }
+
+  setFormValue(rijksregisternummer) {
+    let formValue = rijksregisternummer ? rijksregisternummer : null;
+    replaceSingleFormValue(this.storeOptions, formValue);
   }
 }

@@ -19,6 +19,8 @@ export default class ApplicationRoute extends Route {
   @service mandatarisStatus;
   @service formReplacements;
   @service validatie;
+  @service store;
+
   async beforeModel() {
     await this.session.setup();
     await this._loadCurrentSession();
@@ -33,7 +35,7 @@ export default class ApplicationRoute extends Route {
     moment.setLocale('nl-be');
     moment.setTimeZone('Europe/Brussels');
     moment.set('defaultFormat', 'DD MMM YYYY, HH:mm');
-
+    ApplicationRoute.store = this.store;
     this.startAnalytics();
     registerCustomFormFields();
     registerCustomValidations();

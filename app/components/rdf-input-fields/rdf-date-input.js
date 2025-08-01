@@ -37,18 +37,18 @@ export default class RdfDateInputComponent extends InputFieldComponent {
       this.date = new Date(datestring);
     }
 
-    const errorValidations = validationResultsForField(this.args.field.uri, {
-      severity: SHACL('Violation'),
-      ...this.storeOptions,
-    });
-    const warningValidations = validationResultsForField(this.args.field.uri, {
-      severity: SHACL('Warning'),
-      ...this.storeOptions,
-    });
-    const hasMandatarisDateValidation = [
-      ...errorValidations,
-      ...warningValidations,
-    ].some(
+    const results = await Promise.all([
+      validationResultsForField(this.args.field.uri, {
+        severity: SHACL('Violation'),
+        ...this.storeOptions,
+      }),
+      validationResultsForField(this.args.field.uri, {
+        severity: SHACL('Warning'),
+        ...this.storeOptions,
+      }),
+    ]);
+
+    const hasMandatarisDateValidation = [...results[0], ...results[1]].some(
       (validation) =>
         validation.validationType === EXT('ValidMandatarisDate').value
     );
