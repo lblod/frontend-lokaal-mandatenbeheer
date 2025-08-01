@@ -12,9 +12,13 @@
         {{#if (gt index 0)}}
           <span class="au-u-muted"> - </span>
         {{/if}}
+        <span>{{part.label}}</span>
+
         <AuLink
           @route="organen.orgaan.mandatarissen"
+          @icon="link"
           @model={{part.id}}
+          @hideText={{true}}
           class="au-c-link au-u-medium au-u-inline au-u-no-underline"
         >{{part.label}}</AuLink>
       {{/each}}
