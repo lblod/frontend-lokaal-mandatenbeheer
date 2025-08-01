@@ -8,7 +8,7 @@ export async function fold(mandatarissen, validatie) {
   // 'persoonId-mandaatId' to foldedMandataris
   const persoonMandaatData = {};
   const validationResults = validatie
-    ? await validatie.latestValidationResults
+    ? await validatie.activeLatestValidationResults
     : [];
   await Promise.all(
     mandatarissen.map(async (mandataris) => {

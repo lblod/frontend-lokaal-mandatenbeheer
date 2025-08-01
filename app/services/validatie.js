@@ -11,6 +11,7 @@ import { timeout } from 'ember-concurrency';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 import moment from 'moment';
+import SilencedValidationModel from 'frontend-lmb/models/silenced-validation';
 
 export default class ValidatieService extends Service {
   @service features;
@@ -47,15 +48,18 @@ export default class ValidatieService extends Service {
       return;
     }
 
-    const response = await fetch(
-      `/validation-report-api/reports/${this.latestValidationReport.id}/${this.currentSession.group.id}/issues`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': JSON_API_TYPE,
-        },
-      }
-    );
+    const [response, silenced] = await Promise.all([
+      fetch(
+        `/validation-report-api/reports/${this.latestValidationReport.id}/${this.currentSession.group.id}/issues`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': JSON_API_TYPE,
+          },
+        }
+      ),
+      this.store.query('silenced-validation', {}),
+    ]);
     if (!response.ok) {
       showErrorToast(
         this.toaster,
@@ -65,8 +69,24 @@ export default class ValidatieService extends Service {
       return;
     }
     this.latestValidationResults = await response.json();
+    this.linkResultsToSilencers(silenced);
+
     this.resultsOrderedByClassAndInstance =
       await this.computeResultsOrderedByClassAndInstance();
+  }
+
+  linkResultsToSilencers(silenced) {
+    const silencedMapping = {};
+    silenced.forEach((silencedItem) => {
+      silencedMapping[silencedItem.validationKey] = silencedItem;
+    });
+    this.latestValidationResults.map((result) => {
+      const key = SilencedValidationModel.buildKey(result);
+      const silencedItem = silencedMapping[key];
+      if (silencedItem) {
+        result.silencer = silencedItem;
+      }
+    });
   }
 
   getResultsByInstance(instance) {
@@ -296,8 +316,16 @@ export default class ValidatieService extends Service {
     )[0];
   }
 
+  get activeLatestValidationResults() {
+    return (
+      this.latestValidationResults?.filter((result) => {
+        return !result.silencer;
+      }) || []
+    );
+  }
+
   async getIssuesForInstance(instance) {
-    const results = this.latestValidationResults || [];
+    const results = this.activeLatestValidationResults;
     if (!results) {
       return false;
     }
@@ -418,5 +446,13 @@ export default class ValidatieService extends Service {
     const seconds = duration.seconds();
 
     return `${minutes !== 0 ? textForMinutes : ''} ${seconds} seconde${seconds === 1 ? '' : 'n'}.`;
+  }
+
+  get activeValidationErrorCount() {
+    return (
+      this.latestValidationResults?.filter((result) => {
+        return !result.silencer;
+      })?.length || 0
+    );
   }
 }

@@ -28,12 +28,15 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
         arguments[1] &&
         arguments[1].method != 'GET' &&
         [
-          'validation-report-api/reports/generate',
+          '/validation-report-api/reports/generate',
+          '/silenced-validations',
           '/mock/sessions',
           '/mock/sessions/current',
           '/sessions/current',
           '/sessions',
-        ].indexOf(arguments[0]) < 0 &&
+        ].find((ignored) => {
+          arguments[0].startsWith(ignored);
+        }) &&
         arguments[0].indexOf('http') !== 0
       ) {
         validatie.queueValidatie.perform();
