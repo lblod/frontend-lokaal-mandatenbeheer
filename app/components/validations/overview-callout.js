@@ -1,26 +1,19 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
-import { use } from 'ember-resources';
-import { trackedFunction } from 'reactiveweb/function';
 
 export default class ValidationsOverviewCallout extends Component {
   @service validatie;
   @service features;
 
-  @use(getValidationResults)
-  validationResults;
+  get validationResults() {
+    return this.validatie.latestValidationResults;
+  }
 
   get validationErrorCount() {
-    return (this.validationResults?.value || []).length;
+    return this.validatie.activeValidationErrorCount;
   }
 
   get hasValidationErrors() {
     return this.validationErrorCount > 0;
   }
-}
-
-function getValidationResults() {
-  return trackedFunction(async () => {
-    return await this.validatie.latestValidationResults;
-  });
 }

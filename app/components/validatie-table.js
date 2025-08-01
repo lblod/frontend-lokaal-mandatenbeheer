@@ -23,6 +23,12 @@ export default class ValidatieTable extends Component {
     return this.ownValidationErrors?.value || [];
   }
 
+  get nonSilencedResults() {
+    return this.results.filter((result) => {
+      return !result.result.silencer;
+    });
+  }
+
   get isFeatureEnabled() {
     return this.features.isEnabled('shacl-report');
   }

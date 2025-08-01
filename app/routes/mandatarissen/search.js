@@ -117,7 +117,8 @@ export default class MandatarissenSearchRoute extends Route {
       queryParams['filter[:or:][:has-no:heeft-lidmaatschap]'] = true;
     }
     const mandatarissen = await this.store.query('mandataris', queryParams);
-    const validationResults = await this.validatie.latestValidationResults;
+    const validationResults =
+      await this.validatie.activeLatestValidationResults;
     const persoonWithMandatarissen = new Map();
     const persoonIds = [];
     await Promise.all(

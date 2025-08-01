@@ -15,8 +15,8 @@
           />
           {{#if this.isValidating}}
             We zoeken naar validatiefouten...{{else}}
-            {{this.results.length}}
-            validatiefout{{if (eq this.results.length 1) "" "en"}}
+            {{this.nonSilencedResults.length}}
+            validatiefout{{if (eq this.nonSilencedResults.length 1) "" "en"}}
             gevonden
           {{/if}}
         </AuHeading>
