@@ -60,11 +60,6 @@ export default class FractieCreateReplacement extends Component {
       this.args.onCompleted?.();
     } catch (error) {
       this.isLoading = false;
-      showErrorToast(
-        this.toaster,
-        'Er liep iets mis bij het updaten van de fractie',
-        'Fractie'
-      );
     }
   }
 

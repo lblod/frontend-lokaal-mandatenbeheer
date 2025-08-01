@@ -9,9 +9,11 @@ import {
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class FractieApiService extends Service {
   @service store;
+  @service toaster;
 
   async samenwerkingForBestuursperiode(bestuursperiodeId) {
     return await this.forBestuursperiode(bestuursperiodeId, false);
@@ -111,10 +113,15 @@ export default class FractieApiService extends Service {
     if (response.status !== STATUS_CODE.CREATED) {
       const jsonResponse = await response.json();
       console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
+
+      showErrorToast(
+        this.toaster,
+        jsonResponse.message ??
+          'Er liep iets mis bij het updaten van de fractie',
+        'Fractie'
+      );
+
+      throw new Error(jsonResponse.message);
     }
   }
 }
