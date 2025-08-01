@@ -16,15 +16,12 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
   @tracked isRangordeModalOpen = false;
 
   get bestuursorganenTitle() {
-    const bestuursfunctie = this.model.mandataris.bekleedt
-      .get('bestuursfunctie')
-      .get('label');
-    return (
-      `${bestuursfunctie}, ` +
-      this.model.bestuursorganen
-        .map((elem) => elem.isTijdsspecialisatieVan.get('naam'))
-        .join(' - ')
-    );
+    return this.model.bestuursorganen.map((elem) => {
+      return {
+        id: elem.isTijdsspecialisatieVan.id,
+        label: elem.isTijdsspecialisatieVan.get('naam'),
+      };
+    });
   }
 
   get persoon() {
