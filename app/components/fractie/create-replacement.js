@@ -5,21 +5,30 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
+import moment from 'moment';
 export default class FractieCreateReplacement extends Component {
   @service toaster;
   @service fractieApi;
 
   @tracked label;
   @tracked endDate;
-  @tracked today;
+  @tracked minDate;
 
   @tracked isInteractedWithField;
   @tracked isLoading;
 
   constructor() {
     super(...arguments);
-    this.today = new Date();
-    this.endDate = this.today;
+    this.minDate = new Date();
+    this.endDate = new Date();
+    const currentModel = this.args.fracties?.find(
+      (f) => f.id === this.args.fractieId
+    );
+    this.minDate = moment(currentModel?.startDate).add(1, 'days').toDate();
+
+    if (moment(this.minDate).isAfter(new Date())) {
+      this.endDate = this.minDate;
+    }
   }
 
   @action
