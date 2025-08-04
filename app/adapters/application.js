@@ -29,6 +29,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
         arguments[1].method != 'GET' &&
         [
           '/validation-report-api/reports/generate',
+          '/eigen-gegevens/',
           '/silenced-validations',
           '/mock/sessions',
           '/mock/sessions/current',

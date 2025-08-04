@@ -40,7 +40,7 @@
             weten over validatie fouten?</p>
           <AuLinkExternal
             class="au-u-flex au-u-flex-self-end"
-            href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer"
+            href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer/handleiding-voor-mandatenbeheerders/overzicht/validatierapporten"
           >
             Bekijk de handleiding
           </AuLinkExternal>
@@ -78,14 +78,16 @@
           </AuAlert>
         {{else}}
           <div class="au-u-box au-u-padding-bottom">
-            <div class="au-u-flex au-u-flex--end au-u-padding-small">
-              <AuToggleSwitch
-                @checked={{this.showSilencedResults}}
-                @onChange={{this.toggleShowSilencedResults}}
-                @label="Toon genegeerde validatiefouten"
-                @size="small"
-              >Toon verborgen validatiefouten</AuToggleSwitch>
-            </div>
+            {{#if (gt this.countSilencedResults 0)}}
+              <div class="au-u-flex au-u-flex--end au-u-padding-small">
+                <AuToggleSwitch
+                  @checked={{this.showSilencedResults}}
+                  @onChange={{this.toggleShowSilencedResults}}
+                  @label="Toon genegeerde validatiefouten"
+                  @size="small"
+                >Toon verborgen validatiefouten</AuToggleSwitch>
+              </div>
+            {{/if}}
             <AuDataTable
               @content={{this.allValidationErrors}}
               @noDataMessage="Geen validatieresultaten gevonden"

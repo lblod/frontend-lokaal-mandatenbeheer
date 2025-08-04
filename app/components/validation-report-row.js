@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import SilencedValidationModel from 'frontend-lmb/models/silenced-validation';
+import moment from 'moment';
 
 export default class ValidationReportRow extends Component {
   @tracked collapsed = true;
@@ -25,7 +26,7 @@ export default class ValidationReportRow extends Component {
         bestuurseenheid: this.currentSession.group,
         sourceShape: result.result.sourceShape,
         focusNodeId: result.result.focusNodeId,
-        silencedAt: new Date(),
+        silencedAt: moment().toDate(),
         validationKey: SilencedValidationModel.buildKey(result.result),
       });
       await ignorer.save();
