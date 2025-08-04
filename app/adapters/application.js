@@ -27,7 +27,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
       if (
         arguments[1] &&
         arguments[1].method != 'GET' &&
-        [
+        ![
           '/validation-report-api/reports/generate',
           '/eigen-gegevens/',
           '/silenced-validations',
@@ -36,7 +36,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
           '/sessions/current',
           '/sessions',
         ].find((ignored) => {
-          arguments[0].startsWith(ignored);
+          return arguments[0].startsWith(ignored);
         }) &&
         arguments[0].indexOf('http') !== 0
       ) {
