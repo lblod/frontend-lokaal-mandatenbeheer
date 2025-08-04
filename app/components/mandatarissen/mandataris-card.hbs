@@ -162,5 +162,21 @@
         </div>
       </div>
     {{/if}}
+    <div class="au-o-grid__item au-u-1-2">
+      <div class="au-c-description-label">Orgaan:</div>
+      <div class="au-c-description-value au-u-margin-top-tiny">
+        {{#each @mandataris.bekleedt.bevatIn as |orgaan index|}}
+          <AuLink
+            @route="organen.orgaan.mandatarissen"
+            @skin="primary"
+            @model={{orgaan.id}}
+            class="au-c-link au-u-no-underline"
+          >{{orgaan.isTijdsspecialisatieVan.classificatie.label}}{{if
+              (lt index (sub @mandataris.bekleedt.bevatIn.length 1))
+              ","
+            }}</AuLink>
+        {{/each}}
+      </div>
+    </div>
   </div>
 </div>
