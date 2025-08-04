@@ -74,13 +74,11 @@
   </div>
 
   <div class="au-o-box">
-    <Mandatarissen::MandatarisExtraInfoCard
-      @mandataris={{@model.mandataris}}
+    <ExtraInfoForm
+      @model={{@model.mandataris}}
       @form={{@model.mandatarisExtraInfoForm}}
-      @canEdit={{and
-        (not this.isDisabledBecauseLegislatuur)
-        (not this.notOwnedByUs)
-      }}
+      @modalTitle="Bewerk bijkomende info mandataris"
+      @canEdit={{true}}
     />
   </div>
 
