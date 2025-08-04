@@ -97,8 +97,24 @@
         {{/if}}
       </div>
     </div>
+    <div class="au-o-grid__item au-u-1-2">
+      <div class="au-c-description-label">Orgaan:</div>
+      <div class="au-c-description-value au-u-margin-top-tiny">
+        {{#each @mandataris.bekleedt.bevatIn as |orgaan index|}}
+          <AuLink
+            @route="organen.orgaan.mandatarissen"
+            @skin="secondary"
+            @model={{orgaan.id}}
+            class="au-c-link"
+          >{{orgaan.isTijdsspecialisatieVan.naam}}{{if
+              (lt index (sub @mandataris.bekleedt.bevatIn.length 1))
+              ","
+            }}</AuLink>
+        {{/each}}
+      </div>
+    </div>
     {{#if (await this.vervangersVan)}}
-      <div class="au-o-grid__item au-u-5-6">
+      <div class="au-o-grid__item au-u-1-2">
         <div class="au-c-description-label"><div>Vervanger van:</div></div>
         <div class="au-c-description-value au-u-margin-top-tiny">
           {{#each (await this.vervangersVan) as |replaced index|}}
@@ -118,15 +134,6 @@
       </div>
     {{/if}}
     {{#if (await @mandataris.status.isVerhinderd)}}
-      {{#if
-        (not (or (await this.vervangersVan) @mandataris.bekleedt.isSchepen))
-      }}
-        <div class="au-o-grid__item au-u-1-2">
-          <div class="au-c-description-label"></div>
-          <div class="au-c-description-value au-u-margin-top-tiny">
-          </div>
-        </div>
-      {{/if}}
       <div class="au-o-grid__item au-u-1-2">
         <div class="au-c-description-label">
           <div>Vervangen door:</div>
