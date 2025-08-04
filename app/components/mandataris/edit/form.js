@@ -31,6 +31,7 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked replacementMandataris;
   @tracked replacementPerson;
   @tracked originalReplacementPerson;
+  @tracked beleidsdomeinCodes = [];
 
   @tracked errorMap = new Map();
 
@@ -39,6 +40,9 @@ export default class MandatarisEditFormComponent extends Component {
   constructor() {
     super(...arguments);
     this.setInitialFormState();
+    this.args.mandataris.beleidsdomein?.then((codes) => {
+      this.initialBeleidsdomeinCodes = codes;
+    });
   }
 
   @action
@@ -53,6 +57,7 @@ export default class MandatarisEditFormComponent extends Component {
       (await this.args.formValues.tijdelijkeVervangingen)?.[0] || null;
     this.replacementPerson =
       await this.replacementMandataris?.isBestuurlijkeAliasVan;
+    this.beleidsdomeinCodes = (await this.args.formValues.beleidsdomein) || [];
   }
 
   get statusOptions() {
@@ -67,7 +72,8 @@ export default class MandatarisEditFormComponent extends Component {
       this.fractie?.id !==
         this.args.mandataris.get('heeftLidmaatschap.binnenFractie.id') ||
       this.rangorde !== this.args.mandataris.rangorde ||
-      this.args.originalReplacementPerson?.id !== this.replacementPerson?.id
+      this.args.originalReplacementPerson?.id !== this.replacementPerson?.id ||
+      this.isBeleidsdomeinenChanged
     );
   }
 
@@ -106,6 +112,21 @@ export default class MandatarisEditFormComponent extends Component {
     return `Eerste ${this.mandaatLabel}`;
   }
 
+  get isBeleidsdomeinenChanged() {
+    if (
+      this.initialBeleidsdomeinCodes?.length !== this.beleidsdomeinCodes.length
+    ) {
+      return true;
+    }
+
+    const initialIds =
+      this.initialBeleidsdomeinCodes?.map((code) => code.id) || [];
+    return (
+      this.beleidsdomeinCodes?.filter((code) => !initialIds.includes(code.id))
+        ?.length >= 1
+    );
+  }
+
   get hasReplacementError() {
     return this.errorMap.get('replacement');
   }
@@ -126,6 +147,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.args.formValues.status = this.status;
     this.args.formValues.rangorde = this.rangorde;
     this.args.formValues.fractie = this.fractie;
+    this.args.formValues.beleidsdomein = this.beleidsdomeinCodes;
 
     if (this.replacementMandataris) {
       this.args.formValues.tijdelijkeVervangingen = [
@@ -194,6 +216,16 @@ export default class MandatarisEditFormComponent extends Component {
     this.args.onChange({
       ...this.args.formValues,
       rangorde: rangordeAsString,
+    });
+  }
+
+  @action
+  updateBeleidsdomeinen(beleidsdomeinenCodes) {
+    this.beleidsdomeinCodes = beleidsdomeinenCodes;
+    this.updateErrorMap({ id: 'beleidsdomein', hasErrors: false });
+    this.args.onChange({
+      ...this.args.formValues,
+      beleidsdomein: beleidsdomeinenCodes,
     });
   }
 
