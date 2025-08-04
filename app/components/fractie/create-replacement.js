@@ -3,7 +3,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
+
+import { showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 import moment from 'moment';
 export default class FractieCreateReplacement extends Component {
