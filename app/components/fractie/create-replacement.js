@@ -15,6 +15,8 @@ export default class FractieCreateReplacement extends Component {
   @tracked endDate;
   @tracked minDate;
 
+  @tracked currentFractieModel;
+
   @tracked isInteractedWithField;
   @tracked isLoading;
 
@@ -22,10 +24,12 @@ export default class FractieCreateReplacement extends Component {
     super(...arguments);
     this.minDate = new Date();
     this.endDate = new Date();
-    const currentModel = this.args.fracties?.find(
+    this.currentFractieModel = this.args.fracties?.find(
       (f) => f.id === this.args.fractieId
     );
-    this.minDate = moment(currentModel?.startDate).add(1, 'days').toDate();
+    this.minDate = moment(this.currentFractieModel?.startDate)
+      .add(1, 'days')
+      .toDate();
 
     if (moment(this.minDate).isAfter(new Date())) {
       this.endDate = this.minDate;
