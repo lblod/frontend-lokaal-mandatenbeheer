@@ -127,6 +127,14 @@ export default class MandatarisEditFormComponent extends Component {
     );
   }
 
+  get canHaveBeleidsdomeinen() {
+    if (this.mandaat?.isBurgemeester || this.mandaat?.isSchepen) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   get hasReplacementError() {
     return this.errorMap.get('replacement');
   }

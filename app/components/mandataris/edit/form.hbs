@@ -82,15 +82,17 @@
         @person={{@mandataris.isBestuurlijkeAliasVan}}
       />
     {{/unless}}
-    <div>
-      <AuLabel>
-        Beleidsdomeinen
-      </AuLabel>
-      <Mandatarissen::BeleidsdomeinSelectorWithCreate
-        @onSelect={{this.updateBeleidsdomeinen}}
-        @beleidsdomeinen={{this.beleidsdomeinCodes}}
-      />
-    </div>
+    {{#if this.canHaveBeleidsdomeinen}}
+      <div>
+        <AuLabel>
+          Beleidsdomeinen
+        </AuLabel>
+        <Mandatarissen::BeleidsdomeinSelectorWithCreate
+          @onSelect={{this.updateBeleidsdomeinen}}
+          @beleidsdomeinen={{this.beleidsdomeinCodes}}
+        />
+      </div>
+    {{/if}}
     <Mandataris::Edit::StartEndDate
       @startDate={{this.startDate}}
       @endDate={{this.endDate}}
