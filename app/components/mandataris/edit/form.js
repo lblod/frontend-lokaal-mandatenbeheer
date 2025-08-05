@@ -237,7 +237,7 @@ export default class MandatarisEditFormComponent extends Component {
     this.updateErrorMap({ id: 'beleidsdomein', hasErrors: false });
     this.args.onChange({
       ...this.args.formValues,
-      beleidsdomein: beleidsdomeinenCodes.toArray(),
+      beleidsdomein: beleidsdomeinenCodes,
     });
   }
 

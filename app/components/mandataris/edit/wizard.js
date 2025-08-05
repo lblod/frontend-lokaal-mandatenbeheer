@@ -425,6 +425,7 @@ export default class MandatarisEditWizard extends Component {
       this.args.mandataris.start = this.formValues.start;
       this.args.mandataris.einde = this.formValues.einde;
       this.args.mandataris.rangorde = this.formValues.rangorde;
+      this.args.mandataris.beleidsdomein = this.formValues.beleidsdomein ?? [];
       if (!this.isReplacementSameAsOrginal) {
         this.args.mandataris.tijdelijkeVervangingen = replacement
           ? [replacement]
@@ -528,6 +529,7 @@ export default class MandatarisEditWizard extends Component {
         publicationStatus: await getNietBekrachtigdPublicationStatus(
           this.store
         ),
+        beleidsdomein: this.formValues.beleidsdomein ?? [],
       }
     );
 
