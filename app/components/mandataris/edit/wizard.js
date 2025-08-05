@@ -221,6 +221,12 @@ export default class MandatarisEditWizard extends Component {
         type: UPDATE_STATE,
       });
     }
+    if (this.isBeleidsdomeinenChanged) {
+      newReasons.push({
+        label: `heeft nieuwe beleidsdomeinen`,
+        type: UPDATE_STATE,
+      });
+    }
     const changedLabels = this.wizardDiffs.map((diff) => {
       return diff.field.toLowerCase();
     });
