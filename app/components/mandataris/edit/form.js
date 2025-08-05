@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 
+import { A } from '@ember/array';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
@@ -31,7 +32,7 @@ export default class MandatarisEditFormComponent extends Component {
   @tracked replacementMandataris;
   @tracked replacementPerson;
   @tracked originalReplacementPerson;
-  @tracked beleidsdomeinCodes = [];
+  @tracked beleidsdomeinCodes = A([]);
 
   @tracked errorMap = new Map();
 
@@ -57,7 +58,9 @@ export default class MandatarisEditFormComponent extends Component {
       (await this.args.formValues.tijdelijkeVervangingen)?.[0] || null;
     this.replacementPerson =
       await this.replacementMandataris?.isBestuurlijkeAliasVan;
-    this.beleidsdomeinCodes = (await this.args.formValues.beleidsdomein) || [];
+    this.beleidsdomeinCodes.addObjects(
+      (await this.args.formValues.beleidsdomein) || []
+    );
   }
 
   get statusOptions() {
@@ -229,11 +232,12 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action
   updateBeleidsdomeinen(beleidsdomeinenCodes) {
-    this.beleidsdomeinCodes = beleidsdomeinenCodes;
+    this.beleidsdomeinCodes.clear();
+    this.beleidsdomeinCodes.addObjects(beleidsdomeinenCodes);
     this.updateErrorMap({ id: 'beleidsdomein', hasErrors: false });
     this.args.onChange({
       ...this.args.formValues,
-      beleidsdomein: beleidsdomeinenCodes,
+      beleidsdomein: beleidsdomeinenCodes.toArray(),
     });
   }
 
