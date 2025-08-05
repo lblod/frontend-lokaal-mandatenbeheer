@@ -235,10 +235,15 @@ export default class MandatarisEditFormComponent extends Component {
     this.beleidsdomeinCodes.clear();
     this.beleidsdomeinCodes.addObjects(beleidsdomeinenCodes);
     this.updateErrorMap({ id: 'beleidsdomein', hasErrors: false });
-    this.args.onChange({
-      ...this.args.formValues,
-      beleidsdomein: beleidsdomeinenCodes,
-    });
+    this.args.onChange(
+      {
+        ...this.args.formValues,
+        beleidsdomein: beleidsdomeinenCodes,
+      },
+      {
+        isBeleidsdomeinenChanged: this.isBeleidsdomeinenChanged,
+      }
+    );
   }
 
   get warningTextOCMWLinkToGemeente() {

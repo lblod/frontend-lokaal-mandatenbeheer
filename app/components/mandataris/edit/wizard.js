@@ -51,6 +51,8 @@ export default class MandatarisEditWizard extends Component {
   @tracked mirrorToOCMW = false;
   @tracked canMirrorToOCMW = false;
   @tracked mandatarisHasDouble = undefined;
+  @tracked originalBeleidsdomeinCodes;
+  @tracked isBeleidsdomeinenChanged;
 
   @tracked reasonForChangeOptions = [
     { label: 'Update state', type: UPDATE_STATE },
@@ -69,6 +71,9 @@ export default class MandatarisEditWizard extends Component {
   constructor() {
     super(...arguments);
     this.formValues = this.args.mandatarisFormValues || {};
+    this.args.mandataris
+      .get('beleidsdomein')
+      .then((codes) => (this.originalBeleidsdomeinCodes = codes || []));
     setTimeout(async () => {
       const originalReplacement = (
         await this.args.mandataris.tijdelijkeVervangingen
@@ -670,6 +675,18 @@ export default class MandatarisEditWizard extends Component {
         current: newReplacement ? newReplacement.naam : null,
       });
     }
+
+    if (this.isBeleidsdomeinenChanged) {
+      fieldDiffs.push({
+        field: 'beleidsdomeinen',
+        old: this.originalBeleidsdomeinCodes
+          ?.map((code) => code.label)
+          .join(', '),
+        current: this.formValues.beleidsdomein
+          ?.map((code) => code.label)
+          .join(', '),
+      });
+    }
     return fieldDiffs;
   }
 
@@ -706,8 +723,9 @@ export default class MandatarisEditWizard extends Component {
   }
 
   @action
-  updateMandatarisFormValues(newFormValues) {
+  updateMandatarisFormValues(newFormValues, options = {}) {
     this.formValues = newFormValues;
+    this.isBeleidsdomeinenChanged = !!options.isBeleidsdomeinenChanged;
   }
 
   @action
