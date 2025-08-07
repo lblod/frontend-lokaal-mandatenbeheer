@@ -22,6 +22,7 @@
       placeholder="dd-mm-yyyy"
       {{au-inputmask options=(hash mask="99-99-9999" placeholder="_")}}
       {{on "blur" (perform this.onChange)}}
+      {{on "input" this.onInput}}
       @disabled={{@disabled}}
     />
   {{/if}}

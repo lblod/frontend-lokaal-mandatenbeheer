@@ -65,6 +65,8 @@ export default class EditRangordeRoute extends Route {
     ) {
       controller.interceptedTransition = transition;
       transition.abort();
+    } else if (transition.to.name != 'organen.orgaan.edit-rangorde') {
+      controller.date = null;
     }
   }
 }

@@ -12,6 +12,7 @@ import {
   isDateInRange,
   isValidDate,
 } from 'frontend-lmb/utils/date-manipulation';
+import { action } from '@ember/object';
 
 export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
@@ -112,5 +113,16 @@ export default class DateInputComponent extends Component {
 
   get errorMessages() {
     return `${this.errorMessage ?? ''}`;
+  }
+
+  @action
+  onInput(event) {
+    // format is 31-01-2025 but can have placeolders as _ so 31-0_-____
+    if (
+      event.target?.value &&
+      event.target.value.split('_').join('').length === 10
+    ) {
+      this.onChange.perform(event);
+    }
   }
 }
