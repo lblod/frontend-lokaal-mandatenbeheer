@@ -73,17 +73,6 @@
     />
   </div>
 
-  <div class="au-o-box">
-    <Mandatarissen::MandatarisExtraInfoCard
-      @mandataris={{@model.mandataris}}
-      @form={{@model.mandatarisExtraInfoForm}}
-      @canEdit={{and
-        (not this.isDisabledBecauseLegislatuur)
-        (not this.notOwnedByUs)
-      }}
-    />
-  </div>
-
   <Mandatarissen::Timeline
     @mandataris={{@model.mandataris}}
     @mandatarissen={{@model.mandatarissen}}

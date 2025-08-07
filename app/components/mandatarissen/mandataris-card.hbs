@@ -148,5 +148,19 @@
         </div>
       </div>
     {{/if}}
+    {{#if
+      (and this.canHaveBeleidsdomeinen (gt @mandataris.beleidsdomein.length 0))
+    }}
+      <div class="au-o-grid__item">
+        <div class="au-c-description-label">Beleidsdomein</div>
+        <div class="au-c-description-value au-u-margin-top-tiny">
+          {{#each @mandataris.beleidsdomein as |domeinCode|}}
+            <AuPill
+              class="au-u-margin-bottom-tiny"
+            >{{domeinCode.label}}</AuPill>
+          {{/each}}
+        </div>
+      </div>
+    {{/if}}
   </div>
 </div>

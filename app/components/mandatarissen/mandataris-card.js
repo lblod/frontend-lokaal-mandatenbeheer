@@ -62,6 +62,17 @@ export default class MandatarisCardComponent extends Component {
     return this.args.mandataris.uniqueVervangersDoor;
   }
 
+  get canHaveBeleidsdomeinen() {
+    if (
+      this.args.mandataris.get('bekleedt').get('isBurgemeester') ||
+      this.args.mandataris.get('bekleedt').get('isSchepen')
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   get lastStatusTooltipText() {
     if (this.args.legislatuurInBehandeling) {
       return 'De publicatiestatus kan niet aangepast worden als de legislatuur nog in behandeling is.';
