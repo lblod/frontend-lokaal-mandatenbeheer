@@ -9,7 +9,6 @@ import {
 } from 'frontend-lmb/utils/is-fractie-selector-required';
 import {
   MANDATARIS_EDIT_FORM_ID,
-  MANDATARIS_EXTRA_INFO_FORM_ID,
   POLITIERAAD_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
@@ -19,7 +18,6 @@ import RSVP from 'rsvp';
 export default class MandatarissenPersoonMandatarisRoute extends Route {
   @service currentSession;
   @service store;
-  @service semanticFormRepository;
   @service('mandatarissen') mandatarissenService;
 
   async model(params) {
@@ -30,11 +28,6 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const mandataris = await this.getMandataris(params.mandataris_id);
     const mandaat = await mandataris.bekleedt;
     const mandatarissen = await this.getMandatarissen(persoon, mandaat);
-
-    const mandatarisExtraInfoForm =
-      await this.semanticFormRepository.getFormDefinition(
-        MANDATARIS_EXTRA_INFO_FORM_ID
-      );
 
     const bestuursorganen = await mandaat.bevatIn;
     const periodes = await Promise.all(
@@ -97,7 +90,6 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       bestuurseenheid,
       mandataris,
       mandatarissen,
-      mandatarisExtraInfoForm,
       history,
       isMostRecentVersion,
       bestuursorganen,
