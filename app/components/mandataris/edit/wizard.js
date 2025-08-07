@@ -101,7 +101,8 @@ export default class MandatarisEditWizard extends Component {
         label: this.mandatarisTitle,
         isMandatarisStep: true,
         isStepShown: true,
-        canContinueToNextStep: this.isMandatarisStepCompleted,
+        canContinueToNextStep:
+          this.isMandatarisStepCompleted && this.wizardDiffs.length > 0,
       },
       {
         label: this.replacementTitle,
@@ -234,8 +235,11 @@ export default class MandatarisEditWizard extends Component {
 
     const was = changedLabels.length == 1 ? 'was' : 'waren';
     const wordt = changedLabels.length == 1 ? 'wordt' : 'worden';
+    const fixedChangedText = changedText
+      .replace('einde', 'einddatum')
+      .replace('start', 'startdatum');
     const correctionReason = {
-      label: `De ${changedText} van de mandataris ${was} verkeerd ingevuld en ${wordt} gecorrigeerd`,
+      label: `De ${fixedChangedText} van de mandataris ${was} verkeerd ingevuld en ${wordt} gecorrigeerd`,
       type: CORRECT_MISTAKES,
     };
 
@@ -729,9 +733,11 @@ export default class MandatarisEditWizard extends Component {
   }
 
   @action
-  updateMandatarisFormValues(newFormValues, options = {}) {
+  updateMandatarisFormValues(newFormValues, options) {
     this.formValues = newFormValues;
-    this.isBeleidsdomeinenChanged = !!options.isBeleidsdomeinenChanged;
+    if (options) {
+      this.isBeleidsdomeinenChanged = !!options.isBeleidsdomeinenChanged;
+    }
   }
 
   @action
