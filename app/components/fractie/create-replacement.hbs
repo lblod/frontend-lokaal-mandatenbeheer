@@ -1,0 +1,58 @@
+<div>
+  <p class="au-u-margin-bottom">Al de huidige mandaten met fractie
+    <AuPill @skin="warning">{{this.currentFractieModel.naam}}</AuPill>
+    worden beëindigd op de ingegeven startdatum en er worden mandaten aangemaakt
+    met de nieuwe fractie.
+  </p>
+  <form class="au-c-form au-o-flow">
+    <AuFormRow @alignment="default">
+      <AuLabel
+        @required={{true}}
+        @error={{this.errorMessage}}
+        for="fractieLabel"
+      >Naam</AuLabel>
+      <AuInput
+        @error={{this.errorMessage}}
+        @width="block"
+        @iconAlignment="left"
+        value={{this.label}}
+        id="fractieLabel"
+        {{on "keyup" this.updateLabel}}
+      />
+      {{#if this.errorMessage}}
+        <AuHelpText @error={{true}}>{{this.errorMessage}}</AuHelpText>
+      {{/if}}
+      {{#if this.isSameAsOriginal}}
+        <AuHelpText @warning={{true}}>Je hebt de huidige naam van de fractie
+          ingegeven</AuHelpText>
+      {{/if}}
+    </AuFormRow>
+    <AuFormRow>
+      <DateInput
+        @label="Startdatum"
+        @isRequired={{true}}
+        @value={{this.endDate}}
+        @onChange={{this.updateEndDate}}
+        @from={{this.minDate}}
+      />
+    </AuFormRow>
+  </form>
+
+  <AuToolbar class="au-u-margin-top" as |Group|>
+    <Group class="flex-grow">
+      <AuButtonGroup>
+        <AuButton
+          @loading={{this.isLoading}}
+          @loadingMessage="Opslaan"
+          @disabled={{this.isDisabled}}
+          {{on "click" this.createReplacement}}
+        >
+          Pas aan
+        </AuButton>
+        <AuButton @skin="secondary" {{on "click" @onCancel}}>
+          Annuleer
+        </AuButton>
+      </AuButtonGroup>
+    </Group>
+  </AuToolbar>
+</div>

@@ -66,7 +66,8 @@ export default class FractiesRoute extends Route {
     });
 
     const fracties = await this.fractieApi.samenwerkingForBestuursperiode(
-      selectedPeriod.id
+      selectedPeriod.id,
+      params.sort
     );
 
     const form =

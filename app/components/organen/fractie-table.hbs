@@ -13,8 +13,17 @@
         @currentSorting={{@sort}}
         @label="Fractienaam"
       />
-      <th>Bestuursperiode</th>
-      <th></th>
+      <AuDataTableThSortable
+        @field="startDate"
+        @currentSorting={{@sort}}
+        @label="Start"
+      />
+      <AuDataTableThSortable
+        @field="endDate"
+        @currentSorting={{@sort}}
+        @label="Einde"
+      />
+      <th>{{!action}}</th>
     </c.header>
 
     <c.body as |row|>
@@ -22,12 +31,25 @@
         <strong>{{row.naam}}</strong>
       </td>
       <td>
-        {{@selectedPeriod.label}}
+        {{row.startDateLabel}}
       </td>
       <td>
-        <AuButton @skin="link" {{on "click" (fn @edit row.id)}}>
-          <AuIcon @icon="pencil" @alignment="left" />
-          Bewerk</AuButton>
+        {{row.endDateLabel}}
+      </td>
+      <td>
+
+        <Shared::Tooltip
+          @showTooltip={{row.endDate}}
+          role={{@role}}
+          @tooltipText="Deze fractie is al beëindigd"
+        >
+          <AuButton
+            @disabled={{row.endDate}}
+            @skin="link"
+            {{on "click" (fn @edit row.id)}}
+          >
+            Hernoem Fractie</AuButton>
+        </Shared::Tooltip>
       </td>
     </c.body>
   </t.content>

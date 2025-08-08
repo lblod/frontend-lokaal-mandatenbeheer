@@ -5,22 +5,25 @@ import { timeout } from 'ember-concurrency';
 
 import {
   API,
+  JSON_API_TYPE,
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
+import { showErrorToast } from 'frontend-lmb/utils/toasts';
 
 export default class FractieApiService extends Service {
   @service store;
+  @service toaster;
 
-  async samenwerkingForBestuursperiode(bestuursperiodeId) {
-    return await this.forBestuursperiode(bestuursperiodeId, false);
+  async samenwerkingForBestuursperiode(bestuursperiodeId, sort = null) {
+    return await this.forBestuursperiode(bestuursperiodeId, false, sort);
   }
 
   async onafhankelijkForBestuursperiode(bestuursperiodeId) {
     return await this.forBestuursperiode(bestuursperiodeId, true);
   }
 
-  async forBestuursperiode(bestuursperiodeId, onafhankelijk) {
+  async forBestuursperiode(bestuursperiodeId, onafhankelijk, sort = null) {
     const type = onafhankelijk ? 'onafhankelijk' : 'samenwerking';
     const response = await fetch(
       `${API.MANDATARIS_SERVICE}/fracties/${type}/${bestuursperiodeId}/bestuursperiode`
@@ -41,6 +44,7 @@ export default class FractieApiService extends Service {
 
     const fracties = await this.store.query('fractie', {
       'filter[:id:]': jsonResponse.fracties.join(','),
+      sort: sort,
     });
 
     return fracties.filter((f) => f);
@@ -86,5 +90,39 @@ export default class FractieApiService extends Service {
     console.info(
       `Removed ${jsonResponse.fracties.length} dangling fractie(s).`
     );
+  }
+
+  async createReplacement(fractieId, label, endDate) {
+    if (!fractieId || !endDate) {
+      throw new Error('Fractie id of startdatum is niet meegegeven');
+    }
+
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/fracties/${fractieId}/create-replacement`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': JSON_API_TYPE,
+        },
+        body: JSON.stringify({
+          label,
+          endDate,
+        }),
+      }
+    );
+
+    if (response.status !== STATUS_CODE.CREATED) {
+      const jsonResponse = await response.json();
+      console.error(jsonResponse.message);
+
+      showErrorToast(
+        this.toaster,
+        jsonResponse.message ??
+          'Er liep iets mis bij het updaten van de fractie',
+        'Fractie'
+      );
+
+      throw new Error(jsonResponse.message);
+    }
   }
 }
