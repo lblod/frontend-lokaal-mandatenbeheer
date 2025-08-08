@@ -7,7 +7,13 @@
 <div class="au-o-grid au-u-padding">
   <div class="au-o-grid__item au-u-1-2">
     <p class="au-u-h2 au-u-medium">
-      {{this.bestuursorganenTitle}}
+      <span>{{this.model.mandataris.bekleedt.bestuursfunctie.label}}</span>
+      {{#each this.bestuursorganenTitle as |part index|}}
+        {{#if (gt index 0)}}
+          <span class="au-u-muted"> - </span>
+        {{/if}}
+        <span>{{part.label}}</span>
+      {{/each}}
     </p>
     <p class="au-u-h3">
       {{this.persoon.gebruikteVoornaam}}
