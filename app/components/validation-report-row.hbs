@@ -1,3 +1,13 @@
+<td class="au-u-padding-small au-u-text-center">
+  <AuButton
+    @icon={{if this.activeSilencer "not-visible" "eye"}}
+    @skin="naked"
+    @size="large"
+    @hideText="true"
+    {{on "click" this.toggleHidden}}
+  >Verberg</AuButton>
+
+</td>
 <td>
   <LinkTo
     @route={{@result.context.route}}

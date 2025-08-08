@@ -11,11 +11,57 @@
           <RefreshValidationsButton @noMessage={{true}} @size="small" />
         </Group>
       </AuToolbar>
-      <Validations::OverviewCallout />
+      <div class="au-u-box au-u-padding">
+        <div class="au-u-flex au-u-flex--between au-u-margin-bottom-small">
+          <AuHeading
+            @skin="5"
+            @level="2"
+            class="au-u-margin-bottom-tiny au-u-margin-bottom-none"
+          >{{this.validationErrorCount}}
+            actieve validatiefout{{if (eq this.validationErrorCount 1) "" "en"}}
+            gevonden</AuHeading>
+        </div>
+        <div>
+          <p>Validatiefouten zijn mogelijke inconsistenties die we hebben
+            gevonden in de ingevulde gegevens. Deze validaties worden kort na
+            elke aanpassing uitgevoerd, maar je kan ze ook handmatig starten.
+          </p>
+          <p>
+            Het is mogelijk dat een validatiefout niet relevant is voor jouw
+            bestuurseenheid, bijvoorbeeld omdat het gaat om een fout uit het
+            verleden die op een andere manier is rechtgezet. In dat geval kan je
+            de fout negeren door op het oog-icoon te klikken.
+          </p>
+
+        </div>
+        <div class="au-u-flex au-u-flex--start au-u-flex--spaced-tiny">
+
+          <p class="au-u-flex au-u-flex-self-end au-u-padding-top-small">Meer
+            weten over validatie fouten?</p>
+          <AuLinkExternal
+            class="au-u-flex au-u-flex-self-end"
+            href="https://abb-vlaanderen.gitbook.io/handleiding-lokaal-mandatenbeheer/handleiding-voor-mandatenbeheerders/overzicht/validatierapporten"
+          >
+            Bekijk de handleiding
+          </AuLinkExternal>
+        </div>
+
+      </div>
       <div class="au-u-padding">
-        {{#if this.isEmptyResult}}
+        {{#if (and (eq this.countSilencedResults 0) this.isEmptyResult)}}
           <AuAlert @skin="success" @icon="check">
             De data binnen deze bestuurseenheid is conform de validatieregels.
+          </AuAlert>
+        {{else if this.isEmptyResult}}
+          <AuAlert @skin="success" @icon="check">
+            Er zijn geen actieve validatiefouten gevonden. Er
+            {{if (eq 1 this.countSilencedResults) "is" "zijn"}}
+            {{this.countSilencedResults}}
+            genegeerde validatiefout{{if
+              (eq 1 this.countSilencedResults)
+              ""
+              "en"
+            }}.
           </AuAlert>
         {{/if}}
         {{#if this.reportIsRunning}}
@@ -32,6 +78,16 @@
           </AuAlert>
         {{else}}
           <div class="au-u-box au-u-padding-bottom">
+            {{#if (gt this.countSilencedResults 0)}}
+              <div class="au-u-flex au-u-flex--end au-u-padding-small">
+                <AuToggleSwitch
+                  @checked={{this.showSilencedResults}}
+                  @onChange={{this.toggleShowSilencedResults}}
+                  @label="Toon genegeerde validatiefouten"
+                  @size="small"
+                >Toon verborgen validatiefouten</AuToggleSwitch>
+              </div>
+            {{/if}}
             <AuDataTable
               @content={{this.allValidationErrors}}
               @noDataMessage="Geen validatieresultaten gevonden"
@@ -41,6 +97,11 @@
             >
               <t.content as |c|>
                 <c.header>
+                  <th class="au-u-padding-small">
+                    <div class="au-u-text-center">
+                      <AuIcon @icon="eye" @size="large" />
+                    </div>
+                  </th>
                   <th class="au-u-padding-small">Entiteit</th>
                   <th class="au-u-padding-small">Boodschap</th>
                 </c.header>

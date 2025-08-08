@@ -7,12 +7,10 @@ export default class SharedMainMenuComponent extends Component {
   @service validatie;
 
   get validationCount() {
-    return this.validatie.latestValidationResults?.length || 0;
+    return this.validatie.activeValidationErrorCount;
   }
 
   get validationIcon() {
-    return this.validatie.latestValidationResults?.length > 0
-      ? 'alert-triangle'
-      : 'circle-check';
+    return this.validationCount > 0 ? 'alert-triangle' : 'circle-check';
   }
 }
