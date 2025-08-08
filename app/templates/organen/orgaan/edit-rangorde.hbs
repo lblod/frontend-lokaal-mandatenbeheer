@@ -53,14 +53,22 @@
     @onChange={{fn (mut this.date)}}
     @isRequired={{true}}
   />
+
 </div>
 
-<Organen::EditMandatarisRangordeTable
-  @mandatarissen={{@model.mandatarisStruct}}
-  @orderedMandatarissen={{this.orderedMandatarissen}}
-  @updateMandatarisList={{this.updateOrderedMandatarisList}}
-  @bestuursperiode={{@model.selectedBestuursperiode}}
-/>
+{{#if this.momentizedDate}}
+  <Organen::EditMandatarisRangordeTable
+    @mandatarissen={{@model.mandatarisStruct}}
+    @orderedMandatarissen={{this.orderedMandatarissen}}
+    @updateMandatarisList={{this.updateOrderedMandatarisList}}
+    @bestuursperiode={{@model.selectedBestuursperiode}}
+  />
+{{else}}
+  <div class="au-u-padding au-u-padding-top-none">
+    <p>Voor je de rangordes kan aanpassen moet je eerst de datum kiezen waarop
+      je de wijziging wil laten ingaan!</p>
+  </div>
+{{/if}}
 
 {{outlet}}
 
