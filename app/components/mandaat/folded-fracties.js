@@ -33,10 +33,14 @@ export default class MandaatFoldedFractiesComponent extends Component {
     const mandatarissen =
       this.args.mandatarissen ?? (await this.getMandatarissen(this.persoon));
 
-    const { latestFracties, allFracties } =
+    const { latestFracties, allFracties, kieslijst } =
       await this.getFoldedFracties(mandatarissen);
 
-    this.fractiesText = this.fractiesToString(latestFracties, allFracties);
+    this.fractiesText = this.fractiesToString(
+      latestFracties,
+      allFracties,
+      kieslijst
+    );
   });
 
   async getMandatarissen(persoon) {
@@ -73,7 +77,7 @@ export default class MandaatFoldedFractiesComponent extends Component {
       return null;
     }
     const fractie = await lidmaatschap.binnenFractie;
-    return fractie ? fractie.naam : null;
+    return fractie;
   }
 
   async getFoldedFracties(mandatarissen) {
@@ -91,7 +95,8 @@ export default class MandaatFoldedFractiesComponent extends Component {
           latestFracties.add(fractie);
         } else if (
           !mandataris.einde ||
-          moment(mandataris.einde).isAfter(latestMandataris.einde)
+          (latestMandataris.einde &&
+            moment(mandataris.einde).isAfter(latestMandataris.einde))
         ) {
           latestMandataris = mandataris;
           latestFracties.clear();
@@ -99,14 +104,27 @@ export default class MandaatFoldedFractiesComponent extends Component {
         }
       })
     );
-
+    let kieslijst = null;
+    if (
+      [...latestFracties].find((fractie) => fractie.naam === 'Onafhankelijk')
+    ) {
+      const kieslijsten = await Promise.all(
+        [...allFracties].map((fractie) => {
+          return fractie.origineleKandidatenlijst;
+        })
+      );
+      kieslijst = kieslijsten.find(
+        (kieslijst) => kieslijst && kieslijst.lijstnaam
+      );
+    }
     return {
-      latestFracties: Array.from(latestFracties),
-      allFracties: Array.from(allFracties),
+      latestFracties: Array.from(latestFracties).map((fractie) => fractie.naam),
+      allFracties: Array.from(allFracties).map((fractie) => fractie.naam),
+      kieslijst,
     };
   }
 
-  fractiesToString(latestFracties, allFracties) {
+  fractiesToString(latestFracties, allFracties, kieslijst) {
     const currentFracties = latestFracties
       .filter(Boolean)
       .toSorted((a, b) => a.localeCompare(b));
@@ -120,7 +138,7 @@ export default class MandaatFoldedFractiesComponent extends Component {
       .filter((fractie) => fractie != 'Onafhankelijk')
       .toSorted((a, b) => a.localeCompare(b));
     return otherFracties.length
-      ? `${currentFractiesString} (${toUserReadableListing(otherFracties)})`
+      ? `${currentFractiesString}${kieslijst ? ' (verkozen op ' + kieslijst.lijstnaam + ')' : ''}`
       : currentFractiesString;
   }
 }
