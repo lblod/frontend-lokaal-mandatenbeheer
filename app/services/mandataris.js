@@ -31,10 +31,10 @@ export default class MandatarisService extends Service {
     let dateToCompare;
     if (startDate) {
       dateToCompare = moment(startDate);
-    } else if (moment().isAfter(mandataris.start)) {
-      dateToCompare = moment();
-    } else {
+    } else if (mandataris.start) {
       dateToCompare = moment(mandataris.start);
+    } else {
+      dateToCompare = moment();
     }
 
     while ((current = toCheck.pop())) {
