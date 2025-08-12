@@ -10,7 +10,11 @@ const fieldsToDiff = [
   {
     label: 'beleidsdomeinen',
     path: 'beleidsdomein',
-    valueFormatter: (codes) => codes.map((code) => code.label).join(', '),
+    valueFormatter: (codes) => {
+      const sortedCodes = [...(codes || [])];
+      sortedCodes.sort((a, b) => (a.id > b.id ? -1 : 1));
+      return sortedCodes.map((code) => code.label).join(', ');
+    },
   },
 ];
 
