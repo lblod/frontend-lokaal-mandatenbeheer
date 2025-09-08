@@ -105,7 +105,7 @@ export default class MandaatFoldedFractiesComponent extends Component {
     );
     let kieslijst = null;
     if (
-      [...latestFracties].find((fractie) => fractie.naam === 'Onafhankelijk')
+      [...latestFracties].find((fractie) => fractie?.naam === 'Onafhankelijk')
     ) {
       const kieslijsten = await Promise.all(
         [...allFracties].map((fractie) => {
@@ -117,8 +117,10 @@ export default class MandaatFoldedFractiesComponent extends Component {
       );
     }
     return {
-      latestFracties: Array.from(latestFracties).map((fractie) => fractie.naam),
-      allFracties: Array.from(allFracties).map((fractie) => fractie.naam),
+      latestFracties: Array.from(latestFracties).map(
+        (fractie) => fractie?.naam
+      ),
+      allFracties: Array.from(allFracties).map((fractie) => fractie?.naam),
       kieslijst,
     };
   }
