@@ -28,11 +28,18 @@ export async function fold(mandatarissen, validatie) {
     })
   );
   return Object.values(persoonMandaatData).map(
-    ({ foldedStart, foldedEnd, mandataris, validationErrors }) => {
+    ({
+      foldedStart,
+      foldedEnd,
+      mandataris,
+      validationErrors,
+      publicationStatus,
+    }) => {
       return {
         foldedStart,
         foldedEnd,
         mandataris,
+        publicationStatus,
         validationErrors,
       };
     }
@@ -107,6 +114,7 @@ function updateFoldedMandataris(
 ) {
   updateFoldedStart(mandataris, foldedMandataris);
   updateFoldedEnd(mandataris, foldedMandataris);
+  updatePublicationStatus(mandataris, foldedMandataris);
   updateMandataris(mandataris, foldedMandataris);
   if (validationResults && !foldedMandataris.validationErrors) {
     const hasIssues = !!validationResults.find(
@@ -128,6 +136,7 @@ function buildFoldedMandataris(mandataris, validationResults) {
   return {
     foldedStart: mandataris.start,
     foldedEnd: mandataris.displayEinde,
+    publicationStatus: mandataris.publicationStatus,
     validationErrors,
     mandataris,
   };
@@ -163,5 +172,14 @@ function updateMandataris(mandataris, foldedMandataris) {
     !mandataris.einde
   ) {
     foldedMandataris.mandataris = mandataris;
+  }
+}
+
+function updatePublicationStatus(mandataris, foldedMandataris) {
+  if (
+    !mandataris.publicationStatus ||
+    !mandataris.get('publicationStatus.isBekrachtigd')
+  ) {
+    foldedMandataris.publicationStatus = mandataris.publicationStatus;
   }
 }

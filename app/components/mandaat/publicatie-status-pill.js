@@ -18,7 +18,9 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
   }
 
   get status() {
-    return this.args.mandataris.publicationStatus;
+    return (
+      this.args.publicationStatus || this.args.mandataris.publicationStatus
+    );
   }
 
   async getSkinForPill(statusPromise) {
