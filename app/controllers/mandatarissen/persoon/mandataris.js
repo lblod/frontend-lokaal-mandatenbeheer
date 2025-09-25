@@ -50,6 +50,12 @@ export default class MandatarissenPersoonMandatarisReworkController extends Cont
     );
   }
 
+  get canDeleteMandataris() {
+    return (
+      this.currentSession.isAdmin || this.model.mandataris.isApprovedForDeletion
+    );
+  }
+
   @action
   async openWizard() {
     this.mandatarisFormValues = {
