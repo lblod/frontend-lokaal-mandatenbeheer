@@ -60,12 +60,12 @@
     <Mandatarissen::TimelineDiff @event={{@event}} />
     {{#if this.hasOverlapWithNext}}
       <AuAlert
-        @skin="error"
+        @skin="warning"
         @size="tiny"
         @closable={{false}}
         class="au-u-padding-tiny au-u-margin-bottom-none au-u-margin-top-tiny au-u-para-small"
       >
-        <p class="au-u-error"><AuIcon @icon="alert-triangle" />
+        <p class="au-u-warning"><AuIcon @icon="alert-triangle" />
           Dit mandaat loopt door tot
           {{moment-format @event.mandataris.einde "DD-MM-YYYY"}}, dat is na de
           startdatum van het volgende mandaat.</p>
@@ -74,12 +74,12 @@
 
     {{#if this.hasGapUntilNext}}
       <AuAlert
-        @skin="error"
+        @skin="warning"
         @size="tiny"
         @closable={{false}}
         class="au-u-padding-tiny au-u-margin-bottom-none au-u-margin-top-tiny au-u-para-small"
       >
-        <p class="au-u-error"><AuIcon @icon="alert-triangle" />
+        <p class="au-u-warning"><AuIcon @icon="alert-triangle" />
           Dit mandaat eindigt op
           {{moment-format @event.mandataris.einde "DD-MM-YYYY"}}, dat is voor
           het begin van het volgende mandaat.</p>
