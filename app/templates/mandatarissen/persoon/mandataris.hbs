@@ -42,11 +42,11 @@
             >Bewerk mandaat</AuButton>
           </Shared::Tooltip>
           <Shared::Tooltip
-            @showTooltip={{not this.model.mandataris.isApprovedForDeletion}}
+            @showTooltip={{not this.canDeleteMandataris}}
             @tooltipText="Mandatarissen die bekrachtigd zijn kunnen niet verwijderd worden."
           >
             <AuButton
-              @disabled={{not this.model.mandataris.isApprovedForDeletion}}
+              @disabled={{not this.canDeleteMandataris}}
               @skin="secondary"
               @icon="bin"
               @alert={{true}}
