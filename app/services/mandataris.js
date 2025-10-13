@@ -113,9 +113,13 @@ export default class MandatarisService extends Service {
   }
 
   async createNewProps(mandataris, overwrites) {
+    let endDate = mandataris.einde;
+    if ('einde' in overwrites && endDate !== overwrites.einde) {
+      endDate = overwrites.einde;
+    }
     return {
       start: overwrites.start ?? mandataris.start,
-      einde: overwrites.einde ?? mandataris.einde,
+      einde: endDate,
       bekleedt: overwrites.bekleedt ?? (await mandataris.bekleedt),
       isBestuurlijkeAliasVan:
         overwrites.isBestuurlijkeAliasVan ??
