@@ -13,7 +13,7 @@ export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent exte
   @service store;
 
   @tracked selected = A([]);
-  @tracked options = [];
+  @tracked options = A([]);
   conceptScheme = BELEIDSDOMEIN_CODES_CONCEPT_SCHEME;
 
   constructor() {
@@ -55,7 +55,7 @@ export default class MandatenbeheerBeleidsdomeinSelectorWithCreateComponent exte
     if (searchData) {
       queryParams['filter']['label'] = searchData;
     }
-    return await this.store.query('concept', queryParams);
+    return A([...(await this.store.query('concept', queryParams))]);
   }
 
   search = task({ restartable: true }, async (searchData) => {
