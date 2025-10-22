@@ -49,7 +49,10 @@
         }}
       </td>
       <td>
-        <Mandaat::MandatarisStatusPill @mandataris={{row.mandataris}} />
+        <Mandaat::MandatarisStatusPill
+          @mandataris={{row.mandataris}}
+          @showStatusDependingOnDate={{false}}
+        />
       </td>
       <td class={{if (is-in-past row.mandataris.einde) "au-u-muted"}}>
         {{moment-format row.mandataris.start "DD-MM-YYYY"}}</td>
