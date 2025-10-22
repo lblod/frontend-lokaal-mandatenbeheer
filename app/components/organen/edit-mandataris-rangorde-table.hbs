@@ -51,7 +51,7 @@
       <td>
         <Mandaat::MandatarisStatusPill
           @mandataris={{row.mandataris}}
-          @setStatusDependingOnDate={{false}}
+          @showStatusDependingOnDate={{false}}
         />
       </td>
       <td class={{if (is-in-past row.mandataris.einde) "au-u-muted"}}>

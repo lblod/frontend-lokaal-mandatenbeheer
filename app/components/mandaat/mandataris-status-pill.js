@@ -35,7 +35,7 @@ export default class MandatarisStatusPillComponent extends Component {
   }
 
   get isBeeindigd() {
-    if (!this.setStatusDependingOnDate) {
+    if (!this.showStatusDependingOnDate) {
       return false;
     }
 
@@ -52,7 +52,7 @@ export default class MandatarisStatusPillComponent extends Component {
     return statusText;
   }
 
-  get setStatusDependingOnDate() {
-    return this.args.setStatusDependingOnDate !== false;
+  get showStatusDependingOnDate() {
+    return this.args.showStatusDependingOnDate !== false;
   }
 }
