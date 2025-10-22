@@ -35,6 +35,10 @@ export default class MandatarisStatusPillComponent extends Component {
   }
 
   get isBeeindigd() {
+    if (!this.setStatusDependingOnDate) {
+      return false;
+    }
+
     const now = new Date();
     return this.args.mandataris.get('einde')?.getTime() < now.getTime();
   }
@@ -46,5 +50,9 @@ export default class MandatarisStatusPillComponent extends Component {
     const status = this.args.mandataris.get('status.label');
     const statusText = status || 'Niet beschikbaar';
     return statusText;
+  }
+
+  get setStatusDependingOnDate() {
+    return this.args.setStatusDependingOnDate !== false;
   }
 }
