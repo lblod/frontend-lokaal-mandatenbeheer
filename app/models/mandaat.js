@@ -18,9 +18,12 @@ const identity = Boolean;
 export default class MandaatModel extends Model {
   @attr uri;
   @attr aantalHouders;
-  @attr minAantalHouders;
 
   get maxAantalHouders() {
+    return this.aantalHouders;
+  }
+
+  get minAantalHouders() {
     return this.aantalHouders;
   }
 
