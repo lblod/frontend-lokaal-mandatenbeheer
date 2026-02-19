@@ -6,7 +6,7 @@ export default class SharedNavigationBarComponent extends Component {
   @service router;
 
   get isVisible() {
-    const notVisibleOnRoutes = ['index'];
+    const notVisibleOnRoutes = ['index', 'login', 'mock-login', 'switch-login'];
     return !notVisibleOnRoutes.includes(this.router.currentRouteName);
   }
 }
