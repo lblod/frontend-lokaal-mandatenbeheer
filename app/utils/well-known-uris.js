@@ -42,6 +42,10 @@ export const VAST_BUREAU_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000008';
 export const BCSD_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000009';
+export const DISTRICTS_COLLEGE_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e00000b';
+export const DISTRICTSRAAD_BESTUURSORGAAN_URI =
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e00000a';
 
 export const MANDAAT_GEMEENTERAADSLID_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000011';

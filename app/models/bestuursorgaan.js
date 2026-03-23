@@ -11,6 +11,8 @@ import {
   BCSD_BESTUURSORGAAN_URI,
   BURGEMEESTER_BESTUURSORGAAN_URI,
   CBS_BESTUURSORGAAN_URI,
+  DISTRICTS_COLLEGE_BESTUURSORGAAN_URI,
+  DISTRICTSRAAD_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
   RMW_BESTUURSORGAAN_URI,
   VAST_BUREAU_BESTUURSORGAAN_URI,
@@ -142,6 +144,18 @@ export default class BestuursorgaanModel extends Model {
     return this.hasBestuursorgaanClassificatie(CBS_BESTUURSORGAAN_URI);
   }
 
+  get isDistrictsCollege() {
+    return this.hasBestuursorgaanClassificatie(
+      DISTRICTS_COLLEGE_BESTUURSORGAAN_URI
+    );
+  }
+
+  get isDistrictsraad() {
+    return this.hasBestuursorgaanClassificatie(
+      DISTRICTSRAAD_BESTUURSORGAAN_URI
+    );
+  }
+
   get isRMW() {
     return this.hasBestuursorgaanClassificatie(RMW_BESTUURSORGAAN_URI);
   }
@@ -155,7 +169,12 @@ export default class BestuursorgaanModel extends Model {
   }
 
   get hasRangorde() {
-    return Promise.all([this.isCBS, this.isGR]).then((promise) => {
+    return Promise.all([
+      this.isCBS,
+      this.isGR,
+      this.isDistrictsCollege,
+      this.isDistrictsraad,
+    ]).then((promise) => {
       return promise.some((value) => value);
     });
   }
