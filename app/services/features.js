@@ -1,35 +1,37 @@
 import Service from '@ember/service';
 
-import { assert } from '@ember/debug';
+import { service } from '@ember/service';
+
 import config from '../config/environment';
 
 export default class FeaturesService extends Service {
+  @service store;
+
   static PREFIX = 'feature-';
   #features = {};
 
-  constructor() {
-    super();
+  async setup() {
     const queryParams = this.#getQueryParams();
     if (queryParams.get('clear-feature-overrides') === 'true') {
       this.#clearCookieFeatures();
     }
-
     const configFeatures = this.#getConfigFeatures();
     const cookieFeatures = this.#getCookieFeatures();
     const queryFeatures = this.#getQueryParamsFeatures(queryParams);
-    this.setup({
+    const dbFeatures = await this.#getDatabaseFeatures();
+    this.assignFlags({
       ...configFeatures,
       ...cookieFeatures,
+      ...dbFeatures,
       ...queryFeatures,
     });
-
-    // save query params in cookie
     if (Object.keys(queryFeatures).length > 0) {
       this.#setCookieFeatures(queryFeatures);
     }
+    // save query params in cookie
   }
 
-  setup(features) {
+  assignFlags(features) {
     this.#features = { ...features };
     if (config.environmentName != 'PROD') {
       console.log('Feature flags:', this.#features);
@@ -37,10 +39,10 @@ export default class FeaturesService extends Service {
   }
 
   isEnabled(feature) {
-    assert(
-      `The "${feature}" feature is not defined. Make sure the feature is defined in the "features" object in the config/environment.js file and that there are no typos in the name.`,
-      feature in this.#features
-    );
+    // assert(
+    //   `The "${feature}" feature is not defined. Make sure the feature is defined in the "features" object in the config/environment.js file and that there are no typos in the name.`,
+    //   feature in this.#features
+    // );
 
     return this.#features[feature] ?? false;
   }
@@ -114,5 +116,22 @@ export default class FeaturesService extends Service {
       return key.replace(FeaturesService.PREFIX, '');
     }
     return null;
+  }
+
+  async #getDatabaseFeatures() {
+    try {
+      const features = {};
+      const dbFeatures = await this.store.findAll('feature-flag', {
+        reload: true,
+      });
+      dbFeatures?.map((feature) => {
+        features[feature.name] = feature.isActive;
+      });
+      console.log('database features:', features);
+      return features;
+    } catch (error) {
+      console.error('Could not fetch database feature flags', error);
+      return {};
+    }
   }
 }
