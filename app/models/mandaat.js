@@ -5,6 +5,7 @@ import {
   MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
   MANDAAT_BURGEMEESTER_CODE,
   MANDAAT_DISTRICT_BURGEMEESTER_CODE,
+  MANDAAT_DISTRICT_RAADSLID_CODE,
   MANDAAT_DISTRICT_SCHEPEN_CODE,
   MANDAAT_GEDEPUTEERDE_CODE,
   MANDAAT_GEMEENTERAADSLID_CODE,
@@ -87,6 +88,11 @@ export default class MandaatModel extends Model {
       this.bestuursfunctie.get('uri')
     );
   }
+  get isDistrictsraadslid() {
+    return [MANDAAT_DISTRICT_RAADSLID_CODE].includes(
+      this.bestuursfunctie.get('uri')
+    );
+  }
 
   get isVoorzitter() {
     return this.bestuursfunctie.get('isVoorzitter');
@@ -97,7 +103,9 @@ export default class MandaatModel extends Model {
   }
 
   get hasRangorde() {
-    return this.isSchepen || this.isGemeenteraadslid;
+    return (
+      this.isSchepen || this.isGemeenteraadslid || this.isDistrictsraadslid
+    );
   }
 
   get allowsNonElectedPersons() {
