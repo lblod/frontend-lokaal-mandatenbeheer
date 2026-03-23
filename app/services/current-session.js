@@ -68,6 +68,7 @@ export default class CurrentSessionService extends Service {
   }
 
   async fetchDataOnSessionLoaded() {
+    await this.features.setup();
     await this.systemNotifications.getNotificationsForFilter(
       { isUnRead: true },
       {}
