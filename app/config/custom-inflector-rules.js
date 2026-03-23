@@ -74,3 +74,4 @@ irregular('report', 'reports');
 irregular('validationresult', 'validationresults');
 irregular('report-status', 'report-statuses');
 irregular('form', 'forms');
+irregular('feature-flag', 'feature-flags');
