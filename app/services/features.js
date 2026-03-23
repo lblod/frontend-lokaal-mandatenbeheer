@@ -1,10 +1,8 @@
 import Service from '@ember/service';
 
 import { service } from '@ember/service';
-import { assert } from '@ember/debug';
 
 import config from '../config/environment';
-import { w } from '@ember/string';
 
 export default class FeaturesService extends Service {
   @service store;
