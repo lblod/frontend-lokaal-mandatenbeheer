@@ -13,6 +13,7 @@
           <th>Min aantal houders</th>
         {{/if}}
         <th>Max Aantal houders</th>
+        <th></th>
       </c.header>
       <c.body as |mandaat|>
         <td class="au-u-visible-small-up">
@@ -40,6 +41,29 @@
             {{/if}}
           {{else}}
             {{mandaat.aantalHouders}}
+          {{/if}}
+        </td>
+        <td>
+          {{#if (eq this.editMandaat.id mandaat.id)}}
+            <AuButton
+              {{on "click" this.saveMandaat}}
+              @disabled={{not this.aantalHouders}}
+            >
+              Bewaar
+            </AuButton>
+            <AuButton @skin="secondary" {{on "click" this.cancelEditMandaat}}>
+              Annuleer
+            </AuButton>
+          {{else}}
+            {{#unless (await @bestuursorgaanIT.isDecretaal)}}
+              <AuButton
+                @skin="link"
+                @icon="pencil"
+                {{on "click" (fn this.startEditMandaat mandaat)}}
+              >
+                Bewerk
+              </AuButton>
+            {{/unless}}
           {{/if}}
         </td>
       </c.body>

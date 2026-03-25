@@ -147,7 +147,18 @@
             <Mandaat::MandatarisStatusPill @mandataris={{row.mandataris}} />
           </td>
           <td>
-            <Mandaat::PublicatieStatusPill @mandataris={{row.mandataris}} />
+            {{#if row.isDecretaal}}
+              <Mandaat::PublicatieStatusPill @mandataris={{row.mandataris}} />
+            {{else}}
+              <Shared::Tooltip
+                @showTooltip={{true}}
+                role={{@role}}
+                @tooltipText="Niet van toepassing op eigen organen"
+              >
+                <AuPill @skin="info" @size="regular" @hideText={{false}}>Niet
+                  beschikbaar</AuPill>
+              </Shared::Tooltip>
+            {{/if}}
           </td>
         </c.body>
       </t.content>
