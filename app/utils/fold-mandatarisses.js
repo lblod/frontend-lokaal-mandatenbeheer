@@ -14,6 +14,7 @@ export async function fold(mandatarissen, validatie) {
     mandatarissen.map(async (mandataris) => {
       const personId = (await mandataris.isBestuurlijkeAliasVan).id;
       const mandaatId = (await mandataris.bekleedt).id;
+      const isDecretaal = await (await mandataris.bekleedt).isDecretaal;
       const key = `${personId}-${mandaatId}`;
       const existing = persoonMandaatData[key];
 
@@ -25,6 +26,7 @@ export async function fold(mandatarissen, validatie) {
         mandataris,
         validationResults
       );
+      persoonMandaatData[key]['isDecretaal'] = isDecretaal;
     })
   );
   return Object.values(persoonMandaatData).map(
@@ -34,6 +36,7 @@ export async function fold(mandatarissen, validatie) {
       mandataris,
       validationErrors,
       publicationStatus,
+      isDecretaal,
     }) => {
       return {
         foldedStart,
@@ -41,6 +44,7 @@ export async function fold(mandatarissen, validatie) {
         mandataris,
         publicationStatus,
         validationErrors,
+        isDecretaal,
       };
     }
   );
@@ -138,6 +142,7 @@ function buildFoldedMandataris(mandataris, validationResults) {
     foldedEnd: mandataris.displayEinde,
     publicationStatus: mandataris.publicationStatus,
     validationErrors,
+    isDecretaal: mandataris.bekleedt.get('isDecretaal'),
     mandataris,
   };
 }
