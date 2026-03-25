@@ -48,6 +48,6 @@ export default class RdfInputFieldsConceptSchemeSelectorComponent extends Concep
   }
 
   get showLabel() {
-    return !!this.args.showFieldLabel || true;
+    return !!this.args.showFieldLabel;
   }
 }
