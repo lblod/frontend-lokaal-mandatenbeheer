@@ -6,6 +6,7 @@ import config from './config/environment';
 import './config/custom-inflector-rules';
 import { setupSentry } from 'frontend-lmb/utils/sentry';
 import { silenceEmptySyncRelationshipWarnings } from './utils/ember-data';
+import setupInspector from '@embroider/legacy-inspector-support/ember-source-4.12';
 
 setupSentry();
 silenceEmptySyncRelationshipWarnings();
@@ -14,6 +15,8 @@ export default class App extends Application {
   modulePrefix = config.modulePrefix;
   podModulePrefix = config.podModulePrefix;
   Resolver = Resolver;
+
+  inspector = setupInspector(this);
 }
 
 browserUpdate({
