@@ -79,6 +79,17 @@
     />
   </div>
 
+  {{#if (is-feature-enabled "editable-forms")}}
+    <div class="au-o-box">
+      <ExtraInfoForm
+        @model={{@model.mandataris}}
+        @form={{@model.mandatarisCustomFieldsForm}}
+        @modalTitle="Bewerk bijkomende info"
+        @canEdit={{true}}
+      />
+    </div>
+  {{/if}}
+
   <Mandatarissen::Timeline
     @mandataris={{@model.mandataris}}
     @mandatarissen={{@model.mandatarissen}}
