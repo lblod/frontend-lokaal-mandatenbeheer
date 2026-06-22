@@ -128,6 +128,14 @@ export default class BestuursorgaanModel extends Model {
     });
   }
 
+  get hasCustomBestuursorgaanClassificatie() {
+    return this.classificatieUri().then((uri) => {
+      return uri.startsWith(
+        'http://data.lblod.info/id/lb-orgaan-classificatiecode/'
+      );
+    });
+  }
+
   get nbMembers() {
     return this.getNbMembers();
   }
@@ -174,6 +182,7 @@ export default class BestuursorgaanModel extends Model {
       this.isGR,
       this.isDistrictsCollege,
       this.isDistrictsraad,
+      this.hasCustomBestuursorgaanClassificatie,
     ]).then((promise) => {
       return promise.some((value) => value);
     });
