@@ -9,7 +9,7 @@ import {
 } from 'frontend-lmb/utils/is-fractie-selector-required';
 import {
   MANDATARIS_EDIT_FORM_ID,
-  MANDATARIS_CUSTOM_FIELDS_FORM_ID,
+  MANDATARIS_CUSTOM_FIELDS_FORM_ID as PERSOON_MANDAAT_INFO_FORM_ID,
   POLITIERAAD_CODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 import { INSTALLATIEVERGADERING_BEHANDELD_STATUS } from 'frontend-lmb/utils/well-known-uris';
@@ -88,11 +88,29 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       !(await firstBestuursorgaanInTijd.isDecretaal) ||
       (bestuurseenheid.isOCMW && !isBcsdOrgaan);
 
-    const mandatarisCustomFieldsForm =
+    const persoonMandaatInfoForm =
       await this.semanticFormRepository.getFormDefinition(
-        MANDATARIS_CUSTOM_FIELDS_FORM_ID,
+        PERSOON_MANDAAT_INFO_FORM_ID,
         true
       );
+    const mandatarisExtraInfoModels = await this.store.query(
+      'persoon-mandaat-info',
+      {
+        'filter[is-bestuurlijke-alias-van][id]':
+          await mandataris.isBestuurlijkeAliasVan.id,
+        'filter[bekleedt][id]': await mandataris.bekleedt.id,
+        page: { size: 1 },
+      }
+    );
+    let persoonMandaatInfo = mandatarisExtraInfoModels?.[0];
+
+    if (!persoonMandaatInfo) {
+      persoonMandaatInfo = this.store.createRecord('persoon-mandaat-info', {
+        isBestuurlijkeAliasVan: await mandataris.isBestuurlijkeAliasVan,
+        bekleedt: await mandataris.bekleedt,
+      });
+      await persoonMandaatInfo.save();
+    }
 
     return RSVP.hash({
       bestuurseenheid,
@@ -115,7 +133,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
       effectiefIsLastPublicationStatus:
         await effectiefIsLastPublicationStatus(mandataris),
       showOCMWLinkedMandatarisWarning,
-      mandatarisCustomFieldsForm,
+      persoonMandaatInfo,
+      persoonMandaatInfoForm: persoonMandaatInfoForm,
     });
   }
 

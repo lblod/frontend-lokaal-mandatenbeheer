@@ -75,3 +75,4 @@ irregular('validationresult', 'validationresults');
 irregular('report-status', 'report-statuses');
 irregular('form', 'forms');
 irregular('feature-flag', 'feature-flags');
+irregular('persoon-mandaat-info', 'persoon-mandaat-info');

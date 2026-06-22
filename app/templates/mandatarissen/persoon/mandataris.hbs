@@ -79,11 +79,11 @@
     />
   </div>
 
-  {{#if (is-feature-enabled "editable-forms")}}
+  {{#if (and (is-feature-enabled "editable-forms") @model.persoonMandaatInfo)}}
     <div class="au-o-box">
       <ExtraInfoForm
-        @model={{@model.mandataris}}
-        @form={{@model.mandatarisCustomFieldsForm}}
+        @model={{@model.persoonMandaatInfo}}
+        @form={{@model.persoonMandaatInfoForm}}
         @modalTitle="Bewerk bijkomende info"
         @canEdit={{true}}
       />
