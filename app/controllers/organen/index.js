@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import {
+  LOKAAL_MANDAAT_CLASSIFICATIE_CODE_SCHEME_ID,
   MANDAAT_TYPE_LID_ID,
   MANDAAT_TYPE_VOORZITER_ID,
 } from 'frontend-lmb/utils/well-known-ids';
@@ -11,6 +12,7 @@ import moment from 'moment';
 export default class OrganenIndexController extends Controller {
   queryParams = ['sort', 'activeOrgans', 'selectedTypes', 'bestuursperiode'];
   @service store;
+  @service currentSession;
   @service decretaleOrganen;
   @service router;
 
@@ -114,18 +116,40 @@ export default class OrganenIndexController extends Controller {
   }
 
   async createDefaultMandaten(bestuursorgaanInTijd) {
-    const [lid, voorzitter] = await Promise.all([
+    const bestuursfunctieCodes = await Promise.all([
       this.store.findRecord('bestuursfunctie-code', MANDAAT_TYPE_LID_ID),
       this.store.findRecord('bestuursfunctie-code', MANDAAT_TYPE_VOORZITER_ID),
     ]);
-    const lidMandaat = this.store.createRecord('mandaat', {
-      bestuursfunctie: lid,
-      bevatIn: [bestuursorgaanInTijd],
-    });
-    const voorzitterMandaat = this.store.createRecord('mandaat', {
-      bestuursfunctie: voorzitter,
-      bevatIn: [bestuursorgaanInTijd],
-    });
-    await Promise.all([lidMandaat.save(), voorzitterMandaat.save()]);
+
+    if (this.currentSession.isProvincie) {
+      const scheme = await this.store.findRecord(
+        'concept-scheme',
+        LOKAAL_MANDAAT_CLASSIFICATIE_CODE_SCHEME_ID,
+        {
+          include: 'top-concepts',
+        }
+      );
+      const concepts = scheme ? await scheme.topConcepts : [];
+      if (concepts.length >= 1) {
+        const codes = await this.store.query('bestuursfunctie-code', {
+          'filter[:id:]': concepts.map((c) => c.id).join(','),
+          page: { size: 200 },
+        });
+
+        const codesWithoutDefault = codes.filter(
+          (code) =>
+            ![MANDAAT_TYPE_LID_ID, MANDAAT_TYPE_VOORZITER_ID].includes(code.id)
+        );
+        bestuursfunctieCodes.push(...codesWithoutDefault);
+      }
+    }
+
+    const newMandates = bestuursfunctieCodes.map((code) =>
+      this.store.createRecord('mandaat', {
+        bestuursfunctie: code,
+        bevatIn: [bestuursorgaanInTijd],
+      })
+    );
+    await Promise.all(newMandates.map(async (m) => await m.save()));
   }
 }
