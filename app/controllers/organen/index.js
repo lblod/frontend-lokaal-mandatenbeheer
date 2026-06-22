@@ -147,9 +147,12 @@ export default class OrganenIndexController extends Controller {
     const newMandates = bestuursfunctieCodes.map((code) =>
       this.store.createRecord('mandaat', {
         bestuursfunctie: code,
-        bevatIn: [bestuursorgaanInTijd],
       })
     );
-    await Promise.all(newMandates.map(async (m) => await m.save()));
+    await Promise.all(newMandates.map((m) => m.save()));
+
+    const bevat = await bestuursorgaanInTijd.bevat;
+    newMandates.forEach((m) => bevat.push(m));
+    await bestuursorgaanInTijd.save();
   }
 }
