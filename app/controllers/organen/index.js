@@ -133,7 +133,7 @@ export default class OrganenIndexController extends Controller {
       if (concepts.length >= 1) {
         const codes = await this.store.query('bestuursfunctie-code', {
           'filter[:id:]': concepts.map((c) => c.id).join(','),
-          page: { size: 200 },
+          page: { size: 999 },
         });
 
         const codesWithoutDefault = codes.filter(
