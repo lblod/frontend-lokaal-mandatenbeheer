@@ -96,9 +96,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
     const mandatarisExtraInfoModels = await this.store.query(
       'persoon-mandaat-info',
       {
-        'filter[is-bestuurlijke-alias-van][id]':
-          await mandataris.isBestuurlijkeAliasVan.id,
-        'filter[bekleedt][id]': await mandataris.bekleedt.id,
+        'filter[persoon][id]': await mandataris.isBestuurlijkeAliasVan.id,
+        'filter[mandaat][id]': await mandataris.bekleedt.id,
         page: { size: 1 },
       }
     );
@@ -106,8 +105,8 @@ export default class MandatarissenPersoonMandatarisRoute extends Route {
 
     if (!persoonMandaatInfo) {
       persoonMandaatInfo = this.store.createRecord('persoon-mandaat-info', {
-        isBestuurlijkeAliasVan: await mandataris.isBestuurlijkeAliasVan,
-        bekleedt: await mandataris.bekleedt,
+        persoon: await mandataris.isBestuurlijkeAliasVan,
+        mandaat: await mandataris.bekleedt,
       });
       await persoonMandaatInfo.save();
     }
