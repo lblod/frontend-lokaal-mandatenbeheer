@@ -35,6 +35,8 @@ export const MANDATARIS_WAARNEMEND_STATE_ID =
   'e1ca6edd-55e1-4288-92a5-53f4cf71946a';
 export const MANDAAT_TYPE_VOORZITER_ID = '22da4572-4818-454b-bbd4-28a9ea97856c';
 export const MANDAAT_TYPE_LID_ID = '28d0ed76-e1a3-4c90-89df-4d11587390b3';
+export const LOKAAL_MANDAAT_CLASSIFICATIE_CODE_SCHEME_ID =
+  '9cc74e02-1b0b-4625-91f4-d9642dfeeefc';
 export const MANDAAT_SCHEPEN_CODE_ID = '5ab0e9b8a3b2ca7c5e000014';
 export const MANDAAT_TOEGEVOEGDE_SCHEPEN_CODE_ID =
   '59a90e03-4f22-4bb9-8c91-132618db4b38';
@@ -70,3 +72,11 @@ export const VB_ORGANEN_VOEREN_EN_RAND = [
   'c6f3a5c34ffa6f5abee00361cfac0c72db0b7f40382846f539335328a2997e6f',
 ];
 export const POLITIERAAD_CODE_ID = '1afce932-53c1-46d8-8aab-90dcc331e67d';
+
+export const CUSTOM_ORGAAN_MANDAAT_IDS_WITH_RANGORDE = [
+  '28d0ed76-e1a3-4c90-89df-4d11587390b3', // Lid
+  '22da4572-4818-454b-bbd4-28a9ea97856c', // Voorzitter
+  '9f4dbcea-f543-4b63-8b23-b5d543933ee1', // Ondervoorzitter
+  'c5506328-6187-4986-960c-38f87fe9fa7d', // Secretaris
+  '9e8110c8-7c98-42ad-ab96-6cc33cfd10cd', // Plaatsvervangend lid
+];

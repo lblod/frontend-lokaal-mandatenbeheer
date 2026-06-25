@@ -55,6 +55,7 @@ export default class MandatarisMandaatSelector extends InputFieldComponent {
 
   async loadMandaten() {
     const mandaten = await this.store.query('mandaat', {
+      page: { size: 999 },
       sort: 'bestuursfunctie.label',
       include: 'bestuursfunctie',
       'filter[bevat-in][id]': this.bestuursorganen
