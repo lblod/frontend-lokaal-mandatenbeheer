@@ -7,6 +7,10 @@ import {
   placeholderNietBeschikbaar,
   placeholderOnafhankelijk,
 } from 'frontend-lmb/utils/constants';
+import {
+  ALLE_BESTUURSPERIODE_ID,
+  OVERIGE_BESTUURSPERIODE_ID,
+} from 'frontend-lmb/utils/well-known-ids';
 
 export default class MandatarissenSearchRoute extends Route {
   @service currentSession;
@@ -43,11 +47,9 @@ export default class MandatarissenSearchRoute extends Route {
     const { personenWithMandatarissen, persoonIds } =
       await this.getPersoonWithMandatarissen(params, selectedPeriod);
     const allBestuursfunctieCodes = [];
-    const mandatenVoorPeriode = await this.store.query('mandaat', {
-      'filter[bevat-in][heeft-bestuursperiode][:id:]': selectedPeriod.id,
-      'filter[bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
-      include: ['bevat-in', 'bevat-in.heeft-bestuursperiode'].join(','),
-    });
+    const mandatenVoorPeriode = await this.getMandatenForPeriod(
+      selectedPeriod.id
+    );
     for (const mandaat of mandatenVoorPeriode) {
       allBestuursfunctieCodes.push(await mandaat.bestuursfunctie);
     }
@@ -75,6 +77,22 @@ export default class MandatarissenSearchRoute extends Route {
     };
   }
 
+  async getMandatenForPeriod(bestuursperiodeId) {
+    const queryParams = {
+      'filter[bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
+      include: ['bevat-in', 'bevat-in.heeft-bestuursperiode'].join(','),
+    };
+    if (bestuursperiodeId === ALLE_BESTUURSPERIODE_ID) {
+      queryParams['filter[bevat-in][heeft-bestuursperiode][:not:id]'] =
+        OVERIGE_BESTUURSPERIODE_ID;
+    } else {
+      queryParams['filter[bevat-in][heeft-bestuursperiode][:id:]'] =
+        bestuursperiodeId;
+    }
+
+    return await this.store.query('mandaat', queryParams);
+  }
+
   async getPersoonWithMandatarissen(params, bestuursperiode) {
     const queryParams = {
       sort: params.sort,
@@ -82,8 +100,6 @@ export default class MandatarissenSearchRoute extends Route {
         number: 0,
         size: 1000,
       },
-      'filter[bekleedt][bevat-in][heeft-bestuursperiode][:id:]':
-        bestuursperiode.id,
       'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
       include: [
         'is-bestuurlijke-alias-van',
@@ -95,6 +111,15 @@ export default class MandatarissenSearchRoute extends Route {
         'status',
       ].join(','),
     };
+
+    if (bestuursperiode?.id === ALLE_BESTUURSPERIODE_ID) {
+      queryParams[
+        'filter[bekleedt][bevat-in][heeft-bestuursperiode][:not:id]'
+      ] = OVERIGE_BESTUURSPERIODE_ID;
+    } else {
+      queryParams['filter[bekleedt][bevat-in][heeft-bestuursperiode][:id:]'] =
+        bestuursperiode.id;
+    }
 
     if (!this.features.isEnabled('custom-organen')) {
       queryParams[
