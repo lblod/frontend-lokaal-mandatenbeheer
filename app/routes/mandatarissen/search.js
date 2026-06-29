@@ -19,17 +19,16 @@ export default class MandatarissenSearchRoute extends Route {
   @service fractieApi;
   @service features;
   @service decretaleOrganen;
-  @service validatie;
 
   queryParams = {
-    filter: { refreshModel: true },
-    sort: { refreshModel: true },
+    filter: { refreshModel: false },
+    sort: { refreshModel: false },
     bestuursperiode: { refreshModel: true },
-    bestuursfunctie: { refreshModel: true },
-    binnenFractie: { refreshModel: true },
-    onafhankelijkeFractie: { refreshModel: true },
-    fractieNietBeschikbaar: { refreshModel: true },
-    activeMandatarissen: { refreshModel: true },
+    bestuursfunctie: { refreshModel: false },
+    binnenFractie: { refreshModel: false },
+    onafhankelijkeFractie: { refreshModel: false },
+    fractieNietBeschikbaar: { refreshModel: false },
+    activeMandatarissen: { refreshModel: false },
   };
 
   async model(params) {
@@ -47,12 +46,11 @@ export default class MandatarissenSearchRoute extends Route {
       label: 'Alle',
     });
 
-    let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
+    const selectedPeriod = this.bestuursperioden.getRelevantPeriod(
       periods,
-      params.bestuursperiode ?? FAKE_ALLE_BESTUURSPERIODE_ID
+      params.bestuursperiode
     );
-    const { personenWithMandatarissen, persoonIds } =
-      await this.getPersoonWithMandatarissen(params, selectedPeriod);
+
     const allBestuursfunctieCodes = [];
     const mandatenVoorPeriode = await this.getMandatenForPeriod(
       selectedPeriod.id
@@ -65,10 +63,7 @@ export default class MandatarissenSearchRoute extends Route {
       await this.fractieApi.samenwerkingForBestuursperiode(selectedPeriod.id);
 
     return {
-      personenWithMandatarissen,
-      persoonIds: persoonIds,
       allBestuursperiodes: periods,
-      selectedPeriod,
       bestuursfuncties: [...new Set(allBestuursfunctieCodes)],
       selectedBestuursfunctieIds: params.bestuursfunctie,
       fracties: [
@@ -77,10 +72,6 @@ export default class MandatarissenSearchRoute extends Route {
         placeholderNietBeschikbaar,
       ],
       selectedFracties: params.binnenFractie,
-      page: {
-        number: 0,
-        size: personenWithMandatarissen.length,
-      },
     };
   }
 
@@ -104,149 +95,27 @@ export default class MandatarissenSearchRoute extends Route {
     return await this.store.query('mandaat', queryParams);
   }
 
-  async getPersoonWithMandatarissen(params, bestuursperiode) {
-    const queryParams = {
-      sort: params.sort,
-      page: {
-        number: 0,
-        size: 1000,
-      },
-      'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
-      include: [
-        'is-bestuurlijke-alias-van',
-        'bekleedt',
-        'bekleedt.bestuursfunctie',
-        'bekleedt.bevat-in.heeft-bestuursperiode',
-        'heeft-lidmaatschap',
-        'heeft-lidmaatschap.binnen-fractie',
-        'status',
-      ].join(','),
-    };
-
-    if (bestuursperiode?.id === FAKE_ALLE_BESTUURSPERIODE_ID) {
-      queryParams[
-        'filter[bekleedt][bevat-in][heeft-bestuursperiode][:not:id]'
-      ] = OVERIGE_BESTUURSPERIODE_ID;
-    } else {
-      queryParams['filter[bekleedt][bevat-in][heeft-bestuursperiode][:id:]'] =
-        bestuursperiode.id;
-    }
-
-    if (!this.features.isEnabled('custom-organen')) {
-      queryParams[
-        'filter[bekleedt][bevat-in][is-tijdsspecialisatie-van][classificatie][:id:]'
-      ] = this.decretaleOrganen.decretaleIds.join(',');
-    }
-
-    if (params.filter && params.filter.length > 0) {
-      queryParams['filter[is-bestuurlijke-alias-van]'] = params.filter;
-    }
-    if (params.bestuursfunctie) {
-      queryParams['filter[bekleedt][bestuursfunctie][:id:]'] =
-        params.bestuursfunctie;
-    }
-    if (params.binnenFractie !== null) {
-      queryParams['filter[:or:][heeft-lidmaatschap][binnen-fractie][:id:]'] =
-        params.binnenFractie;
-    }
-    if (params.fractieNietBeschikbaar) {
-      queryParams['filter[:or:][:has-no:heeft-lidmaatschap]'] = true;
-    }
-    const mandatarissen = await this.store.query('mandataris', queryParams);
-    const validationResults =
-      await this.validatie.activeLatestValidationResults;
-    const persoonWithMandatarissen = new Map();
-    const persoonIds = [];
-    await Promise.all(
-      mandatarissen.map(async (mandataris) => {
-        if (!params.activeMandatarissen || mandataris.isActive) {
-          const persoon = await mandataris.get('isBestuurlijkeAliasVan');
-          if (persoon) {
-            persoonIds.push(persoon.id);
-            if (!persoonWithMandatarissen.has(persoon.id)) {
-              persoonWithMandatarissen.set(persoon.id, {
-                persoon,
-                mandatarissen: [],
-              });
-            }
-            const persoonHasMoreThanOneMandataris =
-              persoonWithMandatarissen.get(persoon.id).mandatarissen.length >=
-              1;
-
-            persoonWithMandatarissen.get(persoon.id).mandatarissen.push({
-              mandataris,
-              hasValidationError:
-                this.features.isEnabled('shacl-report') &&
-                validationResults?.find((i) => i.focusNodeId == mandataris.id),
-              isSubRow: persoonHasMoreThanOneMandataris,
-              rowData: await this.getRowDataForMandataris(
-                mandataris,
-                persoon,
-                bestuursperiode?.id === FAKE_ALLE_BESTUURSPERIODE_ID
-              ),
-            });
-          }
+  setupController(controller, model) {
+    super.setupController(controller, model);
+    if (!controller.hasInitialized) {
+      controller.hasInitialized = true;
+      if (!controller.bestuursperiode) {
+        const relevantPeriod = this.bestuursperioden.getClosestPeriod(
+          model.allBestuursperiodes
+        );
+        if (relevantPeriod) {
+          controller.bestuursperiode = relevantPeriod.id;
         }
-      })
-    );
-
-    return {
-      persoonIds: Array.from(new Set(persoonIds)),
-      personenWithMandatarissen: Array.from(persoonWithMandatarissen.values()),
-    };
+      }
+    }
   }
 
-  async getRowDataForMandataris(
-    mandataris,
-    persoon,
-    showMandaatPeriodPill = false
-  ) {
-    const lidmaatschap = await mandataris.heeftLidmaatschap;
-    const mandaat = await mandataris.bekleedt;
-    const bestuursfunctie = await mandaat.bestuursfunctie;
-    const bestuursorganenInTijd = await mandaat.bevatIn;
-    const validationResults = await this.validatie.latestValidationResults;
-    let bestuursorgaan = null;
-    let bestuursorgaanInTijdPeriod = null;
-    let periodeLabel = null;
-    let fractieLabel = null;
-
-    if (bestuursorganenInTijd.length >= 1) {
-      const bestuursorgaanInTijd = bestuursorganenInTijd.at(0);
-      bestuursorgaanInTijdPeriod =
-        await bestuursorgaanInTijd.heeftBestuursperiode;
-      bestuursorgaan = await bestuursorgaanInTijd.isTijdsspecialisatieVan;
+  resetController(controller, isExiting) {
+    super.resetController(controller, isExiting);
+    if (isExiting) {
+      controller.hasInitialized = false;
+      controller.bestuursperiode = null;
     }
-    if (!lidmaatschap) {
-      fractieLabel = 'Niet beschikbaar';
-    } else {
-      fractieLabel = (await lidmaatschap.binnenFractie)?.naam;
-    }
-    if (showMandaatPeriodPill && bestuursorgaanInTijdPeriod?.label) {
-      periodeLabel = bestuursorgaanInTijdPeriod.label;
-    }
-
-    return {
-      mandataris: mandataris,
-      hasValidationError:
-        this.features.isEnabled('shacl-report') &&
-        validationResults?.find((i) => i.focusNodeId == mandataris.id),
-      fractie: fractieLabel,
-      bestuursorgaan: {
-        label: bestuursorgaan?.naam,
-        routeModelId: bestuursorgaan?.id,
-        periodeLabel,
-      },
-      mandaat: {
-        label: bestuursfunctie.label,
-        routeModelIds: [persoon.id, mandataris.id],
-      },
-    };
-  }
-
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.searchData = this.paramsFor('mandatarissen.search')['filter'];
   }
 
   @action

@@ -10,7 +10,7 @@
             <div class="au-c-label">Bestuursperiode</div>
             <PowerSelect
               @renderInPlace={{true}}
-              @selected={{this.model.selectedPeriod}}
+              @selected={{this.selectedPeriod}}
               @options={{this.model.allBestuursperiodes}}
               class="is-optional"
               @onChange={{this.selectPeriod}}
@@ -93,9 +93,9 @@
         </Group>
         <Group>
           <DownloadMandatarissenFromTable
-            @bestuursperiode={{@model.selectedPeriod}}
+            @bestuursperiode={{this.selectedPeriod}}
             @activeOnly={{this.activeMandatarissen}}
-            @persoonIds={{@model.persoonIds}}
+            @persoonIds={{this.personenWithMandatarissen.value.persoonIds}}
             @fracties={{this.selectedFracties}}
             @bestuursFunctieCodes={{this.selectedBestuursfuncties}}
             @sort={{this.sort}}
@@ -112,10 +112,11 @@
         </Group>
       </AuToolbar>
       <Mandatarissen::PersoonTable
-        @content={{@model.personenWithMandatarissen}}
+        @content={{this.personenWithMandatarissen.value.personenWithMandatarissen}}
+        @isLoading={{this.personenWithMandatarissen.isRunning}}
         @sort={{this.sort}}
-        @page={{@model.page.number}}
-        @size={{@model.page.size}}
+        @page={{0}}
+        @size={{this.personenWithMandatarissen.value.personenWithMandatarissen.length}}
       />
     </AuBodyContainer>
   </main.content>
