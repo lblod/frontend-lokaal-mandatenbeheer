@@ -8,7 +8,7 @@ import {
   placeholderOnafhankelijk,
 } from 'frontend-lmb/utils/constants';
 import {
-  ALLE_BESTUURSPERIODE_ID,
+  FAKE_ALLE_BESTUURSPERIODE_ID,
   OVERIGE_BESTUURSPERIODE_ID,
 } from 'frontend-lmb/utils/well-known-ids';
 
@@ -33,6 +33,7 @@ export default class MandatarissenSearchRoute extends Route {
   };
 
   async model(params) {
+    const periods = [];
     const allBestuursperiodes = await this.store.query('bestuursperiode', {
       sort: 'label',
       include: [
@@ -40,8 +41,14 @@ export default class MandatarissenSearchRoute extends Route {
         'installatievergaderingen.status',
       ].join(','),
     });
+    periods.push(...allBestuursperiodes);
+    periods.push({
+      id: FAKE_ALLE_BESTUURSPERIODE_ID,
+      label: 'Alle',
+    });
+
     let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
-      allBestuursperiodes,
+      periods,
       params.bestuursperiode
     );
     const { personenWithMandatarissen, persoonIds } =
@@ -60,7 +67,7 @@ export default class MandatarissenSearchRoute extends Route {
     return {
       personenWithMandatarissen,
       persoonIds: persoonIds,
-      allBestuursperiodes,
+      allBestuursperiodes: periods,
       selectedPeriod,
       bestuursfuncties: [...new Set(allBestuursfunctieCodes)],
       selectedBestuursfunctieIds: params.bestuursfunctie,
@@ -82,7 +89,7 @@ export default class MandatarissenSearchRoute extends Route {
       'filter[bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
       include: ['bevat-in', 'bevat-in.heeft-bestuursperiode'].join(','),
     };
-    if (bestuursperiodeId === ALLE_BESTUURSPERIODE_ID) {
+    if (bestuursperiodeId === FAKE_ALLE_BESTUURSPERIODE_ID) {
       queryParams['filter[bevat-in][heeft-bestuursperiode][:not:id]'] =
         OVERIGE_BESTUURSPERIODE_ID;
     } else {
@@ -112,7 +119,7 @@ export default class MandatarissenSearchRoute extends Route {
       ].join(','),
     };
 
-    if (bestuursperiode?.id === ALLE_BESTUURSPERIODE_ID) {
+    if (bestuursperiode?.id === FAKE_ALLE_BESTUURSPERIODE_ID) {
       queryParams[
         'filter[bekleedt][bevat-in][heeft-bestuursperiode][:not:id]'
       ] = OVERIGE_BESTUURSPERIODE_ID;
@@ -171,7 +178,7 @@ export default class MandatarissenSearchRoute extends Route {
               rowData: await this.getRowDataForMandataris(
                 mandataris,
                 persoon,
-                bestuursperiode?.id === ALLE_BESTUURSPERIODE_ID
+                bestuursperiode?.id === FAKE_ALLE_BESTUURSPERIODE_ID
               ),
             });
           }

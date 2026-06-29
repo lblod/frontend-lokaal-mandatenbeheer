@@ -3,10 +3,7 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 
-import {
-  ALLE_BESTUURSPERIODE_ID,
-  BESTUURSORGAAN_FORM_ID,
-} from 'frontend-lmb/utils/well-known-ids';
+import { BESTUURSORGAAN_FORM_ID } from 'frontend-lmb/utils/well-known-ids';
 import RSVP from 'rsvp';
 
 export default class OrganenIndexRoute extends Route {
@@ -31,7 +28,6 @@ export default class OrganenIndexRoute extends Route {
     const parentModel = this.modelFor('organen');
 
     const bestuursPeriods = await this.store.query('bestuursperiode', {
-      'filter[:not:id]': ALLE_BESTUURSPERIODE_ID,
       sort: 'label',
     });
     let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
