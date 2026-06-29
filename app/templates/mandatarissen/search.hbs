@@ -34,6 +34,8 @@
             <div class="au-c-label">Mandaat</div>
             <PowerSelectMultiple
               @allowClear={{true}}
+              @searchEnabled={{true}}
+              @searchField="label"
               @placeholder="Kies een of meerdere mandaten"
               @selected={{this.selectedBestuursfuncties}}
               @options={{this.model.bestuursfuncties}}
@@ -48,6 +50,8 @@
             <div class="au-c-label">Fractie</div>
             <PowerSelectMultiple
               @allowClear={{true}}
+              @searchEnabled={{true}}
+              @searchField="naam"
               @placeholder="Kies een of meerdere fracties"
               @selected={{this.selectedFracties}}
               @options={{this.model.fracties}}

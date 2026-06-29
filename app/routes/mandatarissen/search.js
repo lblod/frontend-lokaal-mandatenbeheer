@@ -49,7 +49,7 @@ export default class MandatarissenSearchRoute extends Route {
 
     let selectedPeriod = this.bestuursperioden.getRelevantPeriod(
       periods,
-      params.bestuursperiode
+      params.bestuursperiode ?? FAKE_ALLE_BESTUURSPERIODE_ID
     );
     const { personenWithMandatarissen, persoonIds } =
       await this.getPersoonWithMandatarissen(params, selectedPeriod);
@@ -87,7 +87,11 @@ export default class MandatarissenSearchRoute extends Route {
   async getMandatenForPeriod(bestuursperiodeId) {
     const queryParams = {
       'filter[bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
-      include: ['bevat-in', 'bevat-in.heeft-bestuursperiode'].join(','),
+      include: [
+        'bevat-in',
+        'bevat-in.heeft-bestuursperiode',
+        'bestuursfunctie',
+      ].join(','),
     };
     if (bestuursperiodeId === FAKE_ALLE_BESTUURSPERIODE_ID) {
       queryParams['filter[bevat-in][heeft-bestuursperiode][:not:id]'] =
