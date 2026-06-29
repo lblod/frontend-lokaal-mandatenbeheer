@@ -3,10 +3,8 @@ import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
-import { task } from 'ember-concurrency';
-
 import { typeToEmberData } from 'frontend-lmb/utils/type-to-ember-data';
-import { timeout } from 'ember-concurrency';
+import { timeout, task } from 'ember-concurrency';
 
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
@@ -28,12 +26,12 @@ export default class ValidatieService extends Service {
   @tracked warmingUp = false;
   @tracked resultsOrderedByClassAndInstance = [];
 
-  async setup() {
+  setup = task({ restartable: true }, async () => {
     if (this.features.isEnabled('shacl-report')) {
       await this.setLastRunningStatus();
       await this.setLatestValidationReport();
     }
-  }
+  });
 
   async setLatestValidationReport() {
     this.latestValidationReport = (

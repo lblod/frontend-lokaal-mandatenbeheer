@@ -24,12 +24,10 @@ export default class ApplicationRoute extends Route {
   async beforeModel() {
     await this.session.setup();
     await this._loadCurrentSession();
-    await this.formReplacements.setup();
-    await Promise.all([
-      this.decretaleOrganen.setup(),
-      this.mandatarisStatus.loadStatusOptions(),
-      this.validatie.setup(),
-    ]);
+    await this.decretaleOrganen.setup();
+    this.validatie.setup.perform();
+    this.mandatarisStatus.load.perform();
+    this.formReplacements.setup.perform();
 
     const moment = this.moment;
     moment.setLocale('nl-be');
