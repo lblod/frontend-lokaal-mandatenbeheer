@@ -30,6 +30,7 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   @service toaster;
   @service formReplacements;
   @service customForms;
+  @service features;
 
   @tracked isRemovingField;
   @tracked isFieldRequired;
@@ -51,7 +52,9 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
   constructor() {
     super(...arguments);
 
-    this.libraryFieldType = LibraryEntryModel.ensureFakeEntry(this.store);
+    if (this.canCreateCustomField) {
+      this.libraryFieldType = LibraryEntryModel.ensureFakeEntry(this.store);
+    }
 
     let withValue = TEXT_CUSTOM_DISPLAY_TYPE;
     if (!this.args.isCreating) {
@@ -383,7 +386,15 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
     return this.fieldName && this.fieldName.trim().length > 1;
   }
 
+  get canCreateCustomField() {
+    return this.features.isEnabled('can-create-custom-form-field');
+  }
+
   get canSelectTypeForEntry() {
+    if (!this.canCreateCustomField) {
+      return false;
+    }
+
     if (this.args.isCreating) {
       return this.libraryFieldType.isNew; // so the fake one we created
     }
@@ -410,7 +421,6 @@ export default class RdfInputFieldCrudCustomFieldModalComponent extends Componen
 
 function getLibraryFieldOptions() {
   return trackedFunction(async () => {
-    const customFieldEntry = LibraryEntryModel.ensureFakeEntry(this.store);
     const allOptions = await this.store.query('library-entry', {
       sort: 'name',
       include: 'display-type',
@@ -418,9 +428,15 @@ function getLibraryFieldOptions() {
     const usedOptions = this.forkingStore
       .match(null, PROV('wasDerivedFrom'), null, SOURCE_GRAPH)
       .map((triple) => triple.object.value);
-    const unused = allOptions.filter((entry) => {
+    const unusedFields = allOptions.filter((entry) => {
       return entry.uri && usedOptions.indexOf(entry.uri) < 0;
     });
-    return [customFieldEntry, ...unused];
+
+    if (this.features.isEnabled('can-create-custom-form-field')) {
+      const customFieldEntry = LibraryEntryModel.ensureFakeEntry(this.store);
+      return [customFieldEntry, ...unusedFields];
+    } else {
+      return unusedFields;
+    }
   });
 }
