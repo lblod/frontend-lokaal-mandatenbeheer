@@ -168,7 +168,11 @@ export default class MandatarissenSearchRoute extends Route {
                 this.features.isEnabled('shacl-report') &&
                 validationResults?.find((i) => i.focusNodeId == mandataris.id),
               isSubRow: persoonHasMoreThanOneMandataris,
-              rowData: await this.getRowDataForMandataris(mandataris, persoon),
+              rowData: await this.getRowDataForMandataris(
+                mandataris,
+                persoon,
+                bestuursperiode?.id === ALLE_BESTUURSPERIODE_ID
+              ),
             });
           }
         }
@@ -181,23 +185,34 @@ export default class MandatarissenSearchRoute extends Route {
     };
   }
 
-  async getRowDataForMandataris(mandataris, persoon) {
+  async getRowDataForMandataris(
+    mandataris,
+    persoon,
+    showMandaatPeriodPill = false
+  ) {
     const lidmaatschap = await mandataris.heeftLidmaatschap;
     const mandaat = await mandataris.bekleedt;
     const bestuursfunctie = await mandaat.bestuursfunctie;
     const bestuursorganenInTijd = await mandaat.bevatIn;
     const validationResults = await this.validatie.latestValidationResults;
     let bestuursorgaan = null;
+    let bestuursorgaanInTijdPeriod = null;
+    let periodeLabel = null;
     let fractieLabel = null;
 
     if (bestuursorganenInTijd.length >= 1) {
       const bestuursorgaanInTijd = bestuursorganenInTijd.at(0);
+      bestuursorgaanInTijdPeriod =
+        await bestuursorgaanInTijd.heeftBestuursperiode;
       bestuursorgaan = await bestuursorgaanInTijd.isTijdsspecialisatieVan;
     }
     if (!lidmaatschap) {
       fractieLabel = 'Niet beschikbaar';
     } else {
       fractieLabel = (await lidmaatschap.binnenFractie)?.naam;
+    }
+    if (showMandaatPeriodPill && bestuursorgaanInTijdPeriod?.label) {
+      periodeLabel = bestuursorgaanInTijdPeriod.label;
     }
 
     return {
@@ -209,6 +224,7 @@ export default class MandatarissenSearchRoute extends Route {
       bestuursorgaan: {
         label: bestuursorgaan?.naam,
         routeModelId: bestuursorgaan?.id,
+        periodeLabel,
       },
       mandaat: {
         label: bestuursfunctie.label,
