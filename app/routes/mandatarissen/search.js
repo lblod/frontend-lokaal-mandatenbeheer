@@ -78,16 +78,16 @@ export default class MandatarissenSearchRoute extends Route {
   async getMandatenForPeriod(bestuursperiodeId) {
     const queryParams = {
       'filter[bevat-in][is-tijdsspecialisatie-van][:has-no:original-bestuurseenheid]': true,
+      'filter[bevat-in][is-tijdsspecialisatie-van][bestuurseenheid][id]':
+        this.currentSession.group.id,
+      page: { size: 200 },
       include: [
         'bevat-in',
         'bevat-in.heeft-bestuursperiode',
         'bestuursfunctie',
       ].join(','),
     };
-    if (bestuursperiodeId === FAKE_ALLE_BESTUURSPERIODE_ID) {
-      queryParams['filter[bevat-in][heeft-bestuursperiode][:not:id]'] =
-        OVERIGE_BESTUURSPERIODE_ID;
-    } else {
+    if (bestuursperiodeId !== FAKE_ALLE_BESTUURSPERIODE_ID) {
       queryParams['filter[bevat-in][heeft-bestuursperiode][:id:]'] =
         bestuursperiodeId;
     }
