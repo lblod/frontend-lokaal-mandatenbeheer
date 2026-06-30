@@ -41,8 +41,6 @@ export default class MandatarissenSearchController extends Controller {
   @tracked searchData;
   @tracked activeMandatarissen = false;
 
-  hasInitialized = false;
-
   @tracked filter = '';
   @tracked sort = 'is-bestuurlijke-alias-van.achternaam';
 
@@ -56,6 +54,21 @@ export default class MandatarissenSearchController extends Controller {
       this.model.allBestuursperiodes,
       this.bestuursperiode ?? FAKE_ALLE_BESTUURSPERIODE_ID
     );
+  }
+
+  @action
+  clearFilters() {
+    this.bestuursperiode = this.bestuursperioden.getRelevantPeriod(
+      this.model.allBestuursperiodes,
+      null
+    )?.id;
+    this.bestuursfunctie = null;
+    this.binnenFractie = null;
+    this.onafhankelijkeFractie = null;
+    this.fractieNietBeschikbaar = null;
+    this.filter = null;
+    this.searchData = null;
+    this.activeMandatarissen = false;
   }
 
   @action

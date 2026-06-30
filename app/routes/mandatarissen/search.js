@@ -7,10 +7,7 @@ import {
   placeholderNietBeschikbaar,
   placeholderOnafhankelijk,
 } from 'frontend-lmb/utils/constants';
-import {
-  FAKE_ALLE_BESTUURSPERIODE_ID,
-  OVERIGE_BESTUURSPERIODE_ID,
-} from 'frontend-lmb/utils/well-known-ids';
+import { FAKE_ALLE_BESTUURSPERIODE_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class MandatarissenSearchRoute extends Route {
   @service currentSession;
@@ -95,26 +92,10 @@ export default class MandatarissenSearchRoute extends Route {
     return await this.store.query('mandaat', queryParams);
   }
 
-  setupController(controller, model) {
-    super.setupController(controller, model);
-    if (!controller.hasInitialized) {
-      controller.hasInitialized = true;
-      if (!controller.bestuursperiode) {
-        const relevantPeriod = this.bestuursperioden.getClosestPeriod(
-          model.allBestuursperiodes
-        );
-        if (relevantPeriod) {
-          controller.bestuursperiode = relevantPeriod.id;
-        }
-      }
-    }
-  }
-
   resetController(controller, isExiting) {
     super.resetController(controller, isExiting);
     if (isExiting) {
-      controller.hasInitialized = false;
-      controller.bestuursperiode = null;
+      controller.clearFilters();
     }
   }
 
