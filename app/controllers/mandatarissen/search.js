@@ -184,9 +184,11 @@ export default class MandatarissenSearchController extends Controller {
         'bekleedt',
         'bekleedt.bestuursfunctie',
         'bekleedt.bevat-in.heeft-bestuursperiode',
+        'bekleedt.bevat-in.is-tijdsspecialisatie-van',
         'heeft-lidmaatschap',
         'heeft-lidmaatschap.binnen-fractie',
         'status',
+        'publication-status',
       ].join(','),
     };
 
