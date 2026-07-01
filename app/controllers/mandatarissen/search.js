@@ -120,6 +120,10 @@ export default class MandatarissenSearchController extends Controller {
     this.binnenFractie = cleanFracties.map((fractie) => fractie.id).join(',');
   }
 
+  get selectedFractieModels() {
+    return Object.values(this.selectedFracties).flatMap((f) => f.models ?? f);
+  }
+
   get selectedFracties() {
     let fracties = [];
     if (this.onafhankelijkeFractie) {
