@@ -58,13 +58,24 @@ export default class MandatarissenSearchRoute extends Route {
 
     const samenWerkendFracties =
       await this.fractieApi.samenwerkingForBestuursperiode(selectedPeriod.id);
+    const uniqueFracties = {};
+    for (const fractie of samenWerkendFracties) {
+      if (uniqueFracties[fractie.naam]) {
+        uniqueFracties[fractie.naam].models.push(fractie);
+      } else {
+        uniqueFracties[fractie.naam] = {
+          naam: fractie.naam,
+          models: [fractie],
+        };
+      }
+    }
 
     return {
       allBestuursperiodes: periods,
       bestuursfuncties: [...new Set(allBestuursfunctieCodes)],
       selectedBestuursfunctieIds: params.bestuursfunctie,
       fracties: [
-        ...samenWerkendFracties,
+        ...Object.values(uniqueFracties),
         placeholderOnafhankelijk,
         placeholderNietBeschikbaar,
       ],

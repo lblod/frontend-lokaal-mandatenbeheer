@@ -89,7 +89,8 @@ export default class MandatarissenSearchController extends Controller {
   }
 
   @action
-  async updateFilterWithFractie(fracties) {
+  async updateFilterWithFractie(_fracties) {
+    const fracties = Object.values(_fracties).flatMap((f) => f.models ?? f);
     this.fractieNietBeschikbaar = fracties.find(
       (fractie) => fractie.id === placeholderNietBeschikbaar.id
     )
@@ -133,13 +134,22 @@ export default class MandatarissenSearchController extends Controller {
     }
 
     const fractieIds = [...new Set(this.binnenFractie.split(','))];
-    fracties = fracties.concat(
-      fractieIds.map((id) =>
-        this.model.fracties.find((fractie) => fractie.id == id)
+    const matchedGroups = fractieIds
+      .map((id) =>
+        this.model.fracties.find((groupedFractie) =>
+          groupedFractie.models
+            ? groupedFractie.models.some((model) => model.id == id)
+            : groupedFractie.id == id
+        )
       )
-    );
+      .filter((fractie) => fractie);
 
-    return fracties.filter((fractie) => fractie);
+    const uniqueGroups = [
+      ...new Map(matchedGroups.map((f) => [f.naam, f])).values(),
+    ];
+
+    fracties.push(...uniqueGroups);
+    return fracties;
   }
 
   get selectedBestuursfuncties() {
