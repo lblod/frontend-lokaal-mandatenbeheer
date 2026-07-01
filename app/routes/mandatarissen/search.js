@@ -80,7 +80,7 @@ export default class MandatarissenSearchRoute extends Route {
         placeholderNietBeschikbaar,
       ],
       selectedFracties: params.binnenFractie,
-      persoonFilterValue: params.filter,
+      params: params,
     };
   }
 
@@ -113,7 +113,11 @@ export default class MandatarissenSearchRoute extends Route {
 
   setupController(controller, model) {
     super.setupController(controller, model);
-    controller.searchData = model.persoonFilterValue;
+    controller.searchData = model.params?.filter;
+    controller.bestuursperiode = this.bestuursperioden.getRelevantPeriod(
+      model.allBestuursperiodes,
+      model.params?.bestuursperiode ?? null
+    )?.id;
   }
 
   @action
