@@ -10,7 +10,7 @@
             <div class="au-c-label">Bestuursperiode</div>
             <PowerSelect
               @renderInPlace={{true}}
-              @selected={{this.model.selectedPeriod}}
+              @selected={{this.selectedPeriod}}
               @options={{this.model.allBestuursperiodes}}
               class="is-optional"
               @onChange={{this.selectPeriod}}
@@ -34,6 +34,8 @@
             <div class="au-c-label">Mandaat</div>
             <PowerSelectMultiple
               @allowClear={{true}}
+              @searchEnabled={{true}}
+              @searchField="label"
               @placeholder="Kies een of meerdere mandaten"
               @selected={{this.selectedBestuursfuncties}}
               @options={{this.model.bestuursfuncties}}
@@ -48,6 +50,8 @@
             <div class="au-c-label">Fractie</div>
             <PowerSelectMultiple
               @allowClear={{true}}
+              @searchEnabled={{true}}
+              @searchField="naam"
               @placeholder="Kies een of meerdere fracties"
               @selected={{this.selectedFracties}}
               @options={{this.model.fracties}}
@@ -89,10 +93,10 @@
         </Group>
         <Group>
           <DownloadMandatarissenFromTable
-            @bestuursperiode={{@model.selectedPeriod}}
+            @bestuursperiode={{this.selectedPeriod}}
             @activeOnly={{this.activeMandatarissen}}
-            @persoonIds={{@model.persoonIds}}
-            @fracties={{this.selectedFracties}}
+            @persoonIds={{this.personenWithMandatarissen.value.persoonIds}}
+            @fracties={{this.selectedFractieModels}}
             @bestuursFunctieCodes={{this.selectedBestuursfuncties}}
             @sort={{this.sort}}
             @skin="button-secondary"
@@ -108,10 +112,11 @@
         </Group>
       </AuToolbar>
       <Mandatarissen::PersoonTable
-        @content={{@model.personenWithMandatarissen}}
+        @content={{this.personenWithMandatarissen.value.personenWithMandatarissen}}
+        @isLoading={{this.personenWithMandatarissen.isRunning}}
         @sort={{this.sort}}
-        @page={{@model.page.number}}
-        @size={{@model.page.size}}
+        @page={{0}}
+        @size={{this.personenWithMandatarissen.value.personenWithMandatarissen.length}}
       />
     </AuBodyContainer>
   </main.content>

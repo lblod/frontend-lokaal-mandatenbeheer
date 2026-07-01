@@ -6,13 +6,19 @@ import {
   placeholderNietBeschikbaar,
   placeholderOnafhankelijk,
 } from 'frontend-lmb/utils/constants';
+import { FAKE_ALLE_BESTUURSPERIODE_ID } from 'frontend-lmb/utils/well-known-ids';
 
 export default class DownloadMandatarissenFromTableComponent extends Component {
   @service('mandataris-api') mandatarisApi;
 
   get downloadLink() {
+    let bestuursperiodeId = this.args.bestuursperiode?.id;
+    if (bestuursperiodeId === FAKE_ALLE_BESTUURSPERIODE_ID) {
+      bestuursperiodeId = null;
+    }
+
     return this.mandatarisApi.getDownLoadUrl({
-      bestuursperiodeId: this.args.bestuursperiode?.id,
+      bestuursperiodeId: bestuursperiodeId,
       activeOnly: this.args.activeOnly,
       bestuursorgaanId: this.args.bestuursorgaanInTijdId ?? null,
       persoonIds: this.persoonIds,

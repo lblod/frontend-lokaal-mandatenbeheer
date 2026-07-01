@@ -49,7 +49,10 @@ export default class MandaatFoldedFractiesComponent extends Component {
           ':id:': persoon.id,
         },
       },
-      include: 'heeft-lidmaatschap.binnen-fractie',
+      include: [
+        'heeft-lidmaatschap.binnen-fractie',
+        'heeft-lidmaatschap.binnen-fractie.originele-kandidatenlijst',
+      ].join(','),
     };
 
     if (this.bestuursperiode) {
@@ -108,9 +111,11 @@ export default class MandaatFoldedFractiesComponent extends Component {
       [...latestFracties].find((fractie) => fractie?.naam === 'Onafhankelijk')
     ) {
       const kieslijsten = await Promise.all(
-        [...allFracties].map((fractie) => {
-          return fractie.origineleKandidatenlijst;
-        })
+        [...allFracties]
+          .filter((f) => f)
+          .map((fractie) => {
+            return fractie.origineleKandidatenlijst;
+          })
       );
       kieslijst = kieslijsten.find(
         (kieslijst) => kieslijst && kieslijst.lijstnaam

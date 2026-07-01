@@ -80,3 +80,8 @@ export const CUSTOM_ORGAAN_MANDAAT_IDS_WITH_RANGORDE = [
   'c5506328-6187-4986-960c-38f87fe9fa7d', // Secretaris
   '9e8110c8-7c98-42ad-ab96-6cc33cfd10cd', // Plaatsvervangend lid
 ];
+
+export const OVERIGE_BESTUURSPERIODE_ID =
+  '9486222f-2696-4811-bde1-fef9dc4b5f68';
+export const FAKE_ALLE_BESTUURSPERIODE_ID =
+  '3faeb4c3-c4d7-47ea-b449-61579092a200';

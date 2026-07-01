@@ -110,6 +110,11 @@
         >
           {{subRow.bestuursorgaan.label}}
         </LinkTo>
+        {{#if subRow.bestuursorgaan.periodeLabel}}
+          <AuPill @size="small" @skin="border" class="au-u-margin-left-small">
+            {{subRow.bestuursorgaan.periodeLabel}}
+          </AuPill>
+        {{/if}}
       </td>
       <td>
         <LinkTo
