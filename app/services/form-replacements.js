@@ -1,13 +1,11 @@
 import Service from '@ember/service';
-
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
 
 export default class FormReplacementsService extends Service {
   @tracked formReplacements = null;
 
-  setup = task({ restartable: true }, async () => {
+  async setup() {
     const result = await fetch(`/form-content/form-replacements`, {
       method: 'GET',
       headers: {
@@ -21,7 +19,7 @@ export default class FormReplacementsService extends Service {
       mapping[replacement.standardId] = replacement.replacementId;
     }
     this.formReplacements = mapping;
-  });
+  }
 
   setReplacement(standardId, replacementId) {
     const newFormReplacements = { ...this.formReplacements };
