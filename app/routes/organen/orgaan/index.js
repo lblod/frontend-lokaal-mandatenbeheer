@@ -17,7 +17,11 @@ export default class OrganenOrgaanIndexRoute extends Route {
     const parentModel = this.modelFor('organen.orgaan');
 
     const currentBestuursorgaan = await parentModel.currentBestuursorgaan;
-    const mandaten = await currentBestuursorgaan.bevat;
+    const mandaten = await this.store.query(`mandaat`, {
+      'filter[bevat-in][id]': currentBestuursorgaan.id,
+      page: { size: 100 },
+      sort: 'bestuursfunctie.label',
+    });
     const [orderedMandaten, availableBestuursfuncties] = await Promise.all([
       this.orderMandaten(mandaten),
       this.computeBestuursfuncties(mandaten),
