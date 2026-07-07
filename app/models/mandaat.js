@@ -20,6 +20,7 @@ const identity = Boolean;
 export default class MandaatModel extends Model {
   @attr uri;
   @attr aantalHouders;
+  @attr('boolean') withRangorde;
 
   get maxAantalHouders() {
     return this.aantalHouders;
@@ -110,12 +111,18 @@ export default class MandaatModel extends Model {
   }
 
   get hasRangorde() {
-    return (
-      this.isSchepen ||
-      this.isGemeenteraadslid ||
-      this.isDistrictsraadslid ||
-      this.isCustomOrgaanMandaatWithRangorde
-    );
+    const defaultMandatesWithRangorde = [
+      this.isSchepen,
+      this.isGemeenteraadslid,
+      this.isDistrictsraadslid,
+      this.isCustomOrgaanMandaatWithRangorde,
+    ];
+
+    if (defaultMandatesWithRangorde.some((hasRangorde) => hasRangorde)) {
+      return true;
+    }
+
+    return this.withRangorde;
   }
 
   get allowsNonElectedPersons() {
