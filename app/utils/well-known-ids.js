@@ -73,14 +73,6 @@ export const VB_ORGANEN_VOEREN_EN_RAND = [
 ];
 export const POLITIERAAD_CODE_ID = '1afce932-53c1-46d8-8aab-90dcc331e67d';
 
-export const CUSTOM_ORGAAN_MANDAAT_IDS_WITH_RANGORDE = [
-  '28d0ed76-e1a3-4c90-89df-4d11587390b3', // Lid
-  '22da4572-4818-454b-bbd4-28a9ea97856c', // Voorzitter
-  '9f4dbcea-f543-4b63-8b23-b5d543933ee1', // Ondervoorzitter
-  'c5506328-6187-4986-960c-38f87fe9fa7d', // Secretaris
-  '9e8110c8-7c98-42ad-ab96-6cc33cfd10cd', // Plaatsvervangend lid
-];
-
 export const OVERIGE_BESTUURSPERIODE_ID =
   '9486222f-2696-4811-bde1-fef9dc4b5f68';
 export const FAKE_ALLE_BESTUURSPERIODE_ID =
