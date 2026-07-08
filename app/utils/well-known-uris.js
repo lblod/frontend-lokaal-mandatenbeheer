@@ -46,6 +46,13 @@ export const DISTRICTS_COLLEGE_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e00000b';
 export const DISTRICTSRAAD_BESTUURSORGAAN_URI =
   'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e00000a';
+// These lb-orgaan-classificatie uris are also in the custom orgaan list but they have a known uri
+export const LB_ORGAAN_CLASSIFICATIE_URIS = [
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5733254e-73ff-4844-8d43-7afb7ec726e8', // Directiecomité
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/b52094ff-21a2-4da8-8dbe-f513365d1528', // Algemene vergadering
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/013cc838-173a-4657-b1ae-b00c048df943', // Raad van bestuur
+  'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/17e76b36-64a1-4db1-8927-def3064b4bf1', // Regionaal bestuurscomité
+];
 
 export const MANDAAT_GEMEENTERAADSLID_CODE =
   'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000011';
