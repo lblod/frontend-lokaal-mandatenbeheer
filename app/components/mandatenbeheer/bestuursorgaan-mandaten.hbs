@@ -13,6 +13,9 @@
           <th>Min aantal houders</th>
         {{/if}}
         <th>Max Aantal houders</th>
+        {{#unless (await @bestuursorgaanIT.isDecretaal)}}
+          <th>Heeft rangorde?</th>
+        {{/unless}}
         <th></th>
       </c.header>
       <c.body as |mandaat|>
@@ -43,11 +46,27 @@
             {{mandaat.aantalHouders}}
           {{/if}}
         </td>
+        {{#unless (await @bestuursorgaanIT.isDecretaal)}}
+          <td>
+            {{#if (eq this.editMandaat.id mandaat.id)}}
+              <AuToggleSwitch
+                @checked={{this.withRangorde}}
+                @onChange={{this.updateWithRangorde}}
+              >{{this.label}}</AuToggleSwitch>
+            {{else}}
+              {{#if mandaat.withRangorde}}
+                Ja
+              {{else}}
+                Nee
+              {{/if}}
+            {{/if}}
+          </td>
+        {{/unless}}
         <td>
           {{#if (eq this.editMandaat.id mandaat.id)}}
             <AuButton
               {{on "click" this.saveMandaat}}
-              @disabled={{not this.aantalHouders}}
+              @disabled={{this.disabled}}
             >
               Bewaar
             </AuButton>

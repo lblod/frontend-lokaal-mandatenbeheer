@@ -14,6 +14,7 @@ import {
   DISTRICTS_COLLEGE_BESTUURSORGAAN_URI,
   DISTRICTSRAAD_BESTUURSORGAAN_URI,
   GEMEENTERAAD_BESTUURSORGAAN_URI,
+  LB_ORGAAN_CLASSIFICATIE_URIS,
   RMW_BESTUURSORGAAN_URI,
   VAST_BUREAU_BESTUURSORGAAN_URI,
 } from 'frontend-lmb/utils/well-known-uris';
@@ -130,9 +131,14 @@ export default class BestuursorgaanModel extends Model {
 
   get hasCustomBestuursorgaanClassificatie() {
     return this.classificatieUri().then((uri) => {
-      return uri.startsWith(
+      const isStartingWithCustomUri = uri.startsWith(
         'http://data.lblod.info/id/lb-orgaan-classificatiecode/'
       );
+      if (isStartingWithCustomUri) {
+        return true;
+      }
+
+      return LB_ORGAAN_CLASSIFICATIE_URIS.includes(uri);
     });
   }
 
@@ -183,8 +189,8 @@ export default class BestuursorgaanModel extends Model {
       this.isDistrictsCollege,
       this.isDistrictsraad,
       this.hasCustomBestuursorgaanClassificatie,
-    ]).then((promise) => {
-      return promise.some((value) => value);
+    ]).then((values) => {
+      return values.some((value) => value);
     });
   }
 

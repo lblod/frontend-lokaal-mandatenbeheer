@@ -1,7 +1,6 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { service } from '@ember/service';
 
-import { CUSTOM_ORGAAN_MANDAAT_IDS_WITH_RANGORDE } from 'frontend-lmb/utils/well-known-ids';
 import {
   MANDAAT_AANGEWEZEN_BURGEMEESTER_CODE,
   MANDAAT_BURGEMEESTER_CODE,
@@ -20,6 +19,7 @@ const identity = Boolean;
 export default class MandaatModel extends Model {
   @attr uri;
   @attr aantalHouders;
+  @attr('boolean') withRangorde;
 
   get maxAantalHouders() {
     return this.aantalHouders;
@@ -103,19 +103,18 @@ export default class MandaatModel extends Model {
     return this.bestuursfunctie.get('uri') == MANDAAT_GOUVERNEUR_CODE;
   }
 
-  get isCustomOrgaanMandaatWithRangorde() {
-    return CUSTOM_ORGAAN_MANDAAT_IDS_WITH_RANGORDE.includes(
-      this.bestuursfunctie.get('id')
-    );
-  }
-
   get hasRangorde() {
-    return (
-      this.isSchepen ||
-      this.isGemeenteraadslid ||
-      this.isDistrictsraadslid ||
-      this.isCustomOrgaanMandaatWithRangorde
-    );
+    const defaultMandatesWithRangorde = [
+      this.isSchepen,
+      this.isGemeenteraadslid,
+      this.isDistrictsraadslid,
+    ];
+
+    if (defaultMandatesWithRangorde.some((hasRangorde) => hasRangorde)) {
+      return true;
+    }
+
+    return this.withRangorde;
   }
 
   get allowsNonElectedPersons() {

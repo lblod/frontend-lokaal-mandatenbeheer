@@ -19,6 +19,7 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
   @tracked removingMandaatId = null;
 
   @tracked editMandaat = null;
+  @tracked withRangorde = null;
   @tracked aantalHouders;
   @tracked errorMessageAantalHouders;
   @tracked showMinMax = false;
@@ -26,9 +27,6 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
   constructor() {
     super(...arguments);
     this.selectedBestuursfunctie = this.args.availableBestuursfuncties[0];
-    this.showMinMax = this.args.orderedMandaten.some(
-      (obj) => obj.minAantalHouders !== undefined
-    );
   }
 
   createMandaat = task({ drop: true }, async () => {
@@ -90,6 +88,7 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
   @action
   startEditMandaat(mandaat) {
     this.editMandaat = mandaat;
+    this.withRangorde = mandaat.withRangorde;
   }
   @action
   updateAantalHouders(event) {
@@ -106,9 +105,16 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
 
     this.aantalHouders = aantal;
   }
+
+  @action
+  updateWithRangorde(hasRangorde) {
+    this.withRangorde = Boolean(hasRangorde);
+  }
+
   @action
   async saveMandaat() {
     this.editMandaat.aantalHouders = this.aantalHouders;
+    this.editMandaat.withRangorde = this.withRangorde;
     await this.editMandaat.save();
     this.aantalHouders = null;
     this.editMandaat = null;
@@ -116,6 +122,7 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
   @action
   cancelEditMandaat() {
     this.aantalHouders = null;
+    this.withRangorde = null;
     this.editMandaat = false;
   }
 
@@ -125,7 +132,11 @@ export default class MandatenbeheerBestuursorgaanMandatenComponent extends Compo
   }
 
   get disabled() {
-    return !this.aantalHouders || !this.isPositiveNumber(this.aantalHouders);
+    const withRangordeChanged =
+      this.withRangorde !== this.editMandaat.withRangorde;
+    const aantalHoudersValid =
+      this.aantalHouders && this.isPositiveNumber(this.aantalHouders);
+    return !aantalHoudersValid && !withRangordeChanged;
   }
 
   get toolTipText() {
