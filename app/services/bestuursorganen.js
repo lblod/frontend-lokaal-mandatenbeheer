@@ -38,9 +38,10 @@ export default class BestuursorganenService extends Service {
 
   async getFilteredRealPoliticalBestuursorganen(queryParams, bestuursperiode) {
     const queryOptions = {
-      sort: queryParams.sort,
+      sort: queryParams.sort ?? 'naam',
       page: {
-        size: this.pageSize,
+        number: queryParams.page ?? 0,
+        size: queryParams.size ?? 20,
       },
       'filter[:has-no:is-tijdsspecialisatie-van]': true,
       'filter[:has-no:original-bestuurseenheid]': true,

@@ -86,6 +86,8 @@
         <Organen::OrgaanTable
           @content={{@model.bestuursorganen}}
           @sort={{this.sort}}
+          @page={{this.page}}
+          @size={{this.size}}
           @bestuursperiodeId={{this.bestuursperiode}}
           @editRoute="organen.orgaan.mandatarissen"
         />
