@@ -27,7 +27,7 @@ export default class OrganenIndexController extends Controller {
   @tracked size = 20;
   @tracked page = 0;
   @tracked activeOrgans = false;
-  @tracked selectedTypes = ['decretaleIds', 'nietDecretaleIds'];
+  @tracked selectedTypes = ['decretaleIds'];
   @tracked bestuursperiode;
 
   @tracked isModalActive = false;
@@ -70,7 +70,7 @@ export default class OrganenIndexController extends Controller {
   @action
   clearFilters() {
     this.activeOrgans = false;
-    this.selectedTypes = ['decretaleIds', 'nietDecretaleIds'];
+    this.selectedTypes = ['decretaleIds'];
     this.bestuursperiode = null;
     this.page = 0;
   }
