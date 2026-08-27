@@ -10,15 +10,24 @@ import {
 import moment from 'moment';
 
 export default class OrganenIndexController extends Controller {
-  queryParams = ['sort', 'activeOrgans', 'selectedTypes', 'bestuursperiode'];
+  queryParams = [
+    'sort',
+    'size',
+    'page',
+    'activeOrgans',
+    'selectedTypes',
+    'bestuursperiode',
+  ];
   @service store;
   @service currentSession;
   @service decretaleOrganen;
   @service router;
 
   @tracked sort = 'naam';
+  @tracked size = 20;
+  @tracked page = 0;
   @tracked activeOrgans = false;
-  @tracked selectedTypes = ['decretaleIds', 'nietDecretaleIds'];
+  @tracked selectedTypes = ['decretaleIds'];
   @tracked bestuursperiode;
 
   @tracked isModalActive = false;
@@ -43,23 +52,27 @@ export default class OrganenIndexController extends Controller {
   @action
   filterActiveOrgans() {
     this.activeOrgans = !this.activeOrgans;
+    this.page = 0;
   }
 
   @action
   filterOrganTypes(values) {
     this.selectedTypes = values;
+    this.page = 0;
   }
 
   @action
   selectPeriod(period) {
     this.bestuursperiode = period.id;
+    this.page = 0;
   }
 
   @action
   clearFilters() {
     this.activeOrgans = false;
-    this.selectedTypes = ['decretaleIds', 'nietDecretaleIds'];
+    this.selectedTypes = ['decretaleIds'];
     this.bestuursperiode = null;
+    this.page = 0;
   }
 
   @action

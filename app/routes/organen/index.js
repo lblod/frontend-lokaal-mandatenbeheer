@@ -15,10 +15,10 @@ export default class OrganenIndexRoute extends Route {
   @service installatievergadering;
   @service semanticFormRepository;
 
-  // can't use pagination as we are filtering frontend side on optional properties, which seems to have limited support
-  pageSize = 20000;
   queryParams = {
     sort: { refreshModel: true },
+    page: { refreshModel: true },
+    size: { refreshModel: true },
     activeOrgans: { refreshModel: true },
     selectedTypes: { refreshModel: true },
     bestuursperiode: { refreshModel: true },
