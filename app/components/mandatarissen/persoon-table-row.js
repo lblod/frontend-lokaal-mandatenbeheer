@@ -24,7 +24,11 @@ export default class MandatarissenPersoonTableRowComponent extends Component {
   }
 
   get hasOnlyOneMandaat() {
-    return this.mandatarissen.length === 1;
+    const mandaatSet = new Set();
+    this.mandatarissen.forEach((m) => {
+      mandaatSet.add(m.bekleedt.id);
+    });
+    return mandaatSet.size === 1;
   }
 
   get showCombinedInfo() {
