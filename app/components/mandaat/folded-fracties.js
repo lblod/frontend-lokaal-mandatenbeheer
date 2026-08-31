@@ -122,10 +122,12 @@ export default class MandaatFoldedFractiesComponent extends Component {
       );
     }
     return {
-      latestFracties: Array.from(latestFracties).map(
-        (fractie) => fractie?.naam
-      ),
-      allFracties: Array.from(allFracties).map((fractie) => fractie?.naam),
+      latestFracties: [
+        ...new Set(Array.from(latestFracties).map((fractie) => fractie?.naam)),
+      ],
+      allFracties: [
+        ...new Set(Array.from(allFracties).map((fractie) => fractie?.naam)),
+      ],
       kieslijst,
     };
   }
