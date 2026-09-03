@@ -8,6 +8,7 @@ import {
   RESOURCE_CACHE_TIMEOUT,
   STATUS_CODE,
 } from 'frontend-lmb/utils/constants';
+import { isValidUri } from 'frontend-lmb/utils/is-valid-uri';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarisApiService extends Service {
@@ -154,5 +155,25 @@ export default class MandatarisApiService extends Service {
         message: jsonResponse.message,
       };
     }
+  }
+
+  async isDecisionLinkAccessible(decisionUrl) {
+    if (!decisionUrl || !isValidUri(decisionUrl)) {
+      return false;
+    }
+    const response = await fetch(
+      `${API.MANDATARIS_SERVICE}/validate-url?link=${encodeURIComponent(decisionUrl)}`
+    );
+
+    if (response.status !== STATUS_CODE.OK) {
+      console.error(
+        `Could not validate decision link, status: ${response.status}`
+      );
+      return false;
+    }
+
+    const jsonResponse = await response.json();
+
+    return Boolean(jsonResponse?.isAccessible);
   }
 }
