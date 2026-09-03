@@ -18,6 +18,7 @@ import {
 
 export default class MandatarissenMandatarisPublicationStatusSelectorComponent extends Component {
   @service store;
+  @service mandatarisApi;
 
   @tracked options = [];
   @tracked isDisabled = false;
@@ -25,6 +26,7 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   @tracked linkToDecision;
   @tracked selectedPublicationStatus;
   @tracked isInputLinkValid;
+  @tracked isLinkAccessible;
 
   get mandataris() {
     return this.args.mandataris;
@@ -105,10 +107,26 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
   }
 
   setLinkTodecision = restartableTask(async (event) => {
+    const link = event.target?.value;
+    this.linkToDecision = link;
+    this.isInputLinkValid = isValidUri(link);
+    this.isLinkAccessible = false;
+
     await timeout(INPUT_DEBOUNCE);
-    this.linkToDecision = event.target?.value;
-    this.isInputLinkValid = isValidUri(this.linkToDecision);
+
+    if (this.isInputLinkValid) {
+      this.isLinkAccessible =
+        await this.mandatarisApi.isDecisionLinkAccessible(link);
+    }
   });
+
+  get canSaveLinkToDecision() {
+    return (
+      !this.setLinkTodecision.isRunning &&
+      this.isInputLinkValid &&
+      this.isLinkAccessible
+    );
+  }
 
   addDecisionToMandataris = task(async () => {
     this.mandataris.linkToBesluit = this.linkToDecision;

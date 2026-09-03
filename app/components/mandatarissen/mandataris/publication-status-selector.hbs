@@ -64,13 +64,16 @@
       <span class="au-u-padding">
         <AuButtonGroup>
           <Shared::Tooltip
-            @showTooltip={{not this.isInputLinkValid}}
+            @showTooltip={{not this.canSaveLinkToDecision}}
             @tooltipText={{this.toolTipText}}
             @alignment="left"
           >
             <AuButton
-              @disabled={{not this.isInputLinkValid}}
-              @loading={{this.addDecisionToMandataris.isRunning}}
+              @disabled={{not this.canSaveLinkToDecision}}
+              @loading={{or
+                this.setLinkTodecision.isRunning
+                this.addDecisionToMandataris.isRunning
+              }}
               {{on "click" (perform this.addDecisionToMandataris)}}
             >
               Bewaar
