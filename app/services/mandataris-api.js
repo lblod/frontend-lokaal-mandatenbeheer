@@ -157,12 +157,12 @@ export default class MandatarisApiService extends Service {
     }
   }
 
-  async isDecisionLinkAccessible(decisionUrl) {
+  async isDecisionLinkAccessible(decisionUrl, follow = true) {
     if (!decisionUrl || !isValidUri(decisionUrl)) {
       return false;
     }
     const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/validate-url?link=${encodeURIComponent(decisionUrl)}`
+      `${API.MANDATARIS_SERVICE}/validate-url?link=${encodeURIComponent(decisionUrl)}&follow=${follow}`
     );
 
     if (response.status !== STATUS_CODE.OK) {
