@@ -5,13 +5,17 @@ import { isValidUri } from 'frontend-lmb/utils/is-valid-uri';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { task, timeout } from 'ember-concurrency';
+import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandaatPublicatieStatusPillComponent extends Component {
   @service toaster;
+  @service mandatarisApi;
 
   @tracked newLink;
   @tracked showEditLinkModal;
+  @tracked isLinkAccessible;
 
   get effectiefIsLastStatus() {
     return effectiefIsLastPublicationStatus(this.args.mandataris);
@@ -46,12 +50,32 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
   }
 
   get invalidLink() {
-    return !this.newLink || !isValidUri(this.newLink);
+    if (!this.newLink || !isValidUri(this.newLink)) {
+      return true;
+    }
+    if (this.onEditLink.isRunning) {
+      return false;
+    }
+    return this.isLinkAccessible === false;
+  }
+
+  get invalidLinkErrorMessage() {
+    if (!this.invalidLink) {
+      return null;
+    }
+
+    if (!this.isLinkAccessible && isValidUri(this.newLink)) {
+      return 'Deze link is niet bereikbaar. Controleer of de link correct is en of de pagina publiek toegankelijk is.';
+    }
+
+    return 'Start de url met http:// of https:// om te linken naar de besluit pagina.';
   }
 
   get saveDisabled() {
     return (
-      this.invalidLink || this.newLink === this.args.mandataris.linkToBesluit
+      this.onEditLink.isRunning ||
+      this.invalidLink ||
+      this.newLink === this.args.mandataris.linkToBesluit
     );
   }
 
@@ -92,13 +116,19 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
   @action
   editLink() {
     this.newLink = this.args.mandataris.linkToBesluit;
+    this.isLinkAccessible = undefined;
     this.showEditLinkModal = true;
   }
 
-  @action
-  onEditLink(e) {
-    this.newLink = e.target.value;
-  }
+  onEditLink = task({ restartable: true }, async (e) => {
+    const link = e.target.value;
+    this.newLink = link;
+
+    await timeout(INPUT_DEBOUNCE);
+
+    this.isLinkAccessible =
+      await this.mandatarisApi.isDecisionLinkAccessible(link);
+  });
 
   @action
   closeModal() {

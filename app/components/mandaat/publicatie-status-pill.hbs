@@ -60,12 +60,11 @@
       @error={{this.invalidLink}}
       value={{this.newLink}}
       @width="block"
-      {{on "input" this.onEditLink}}
+      {{on "input" (perform this.onEditLink)}}
     />
     {{#if this.invalidLink}}
       <AuHelpText @skin="secondary" @error={{true}}>
-        Start de url met http:// of https:// om te linken naar de besluit
-        pagina.
+        {{this.invalidLinkErrorMessage}}
       </AuHelpText>
     {{/if}}
   </div>

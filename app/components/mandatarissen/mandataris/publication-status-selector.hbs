@@ -46,7 +46,7 @@
       <span class="au-u-padding">
         <AuLabel for="link-to-page">Link naar pagina</AuLabel>
         <AuInput
-          @error={{and (not this.isInputLinkValid) this.linkToDecision}}
+          @error={{this.invalidLink}}
           @width="block"
           @iconAlignment="left"
           value={{this.linkToDecision}}
@@ -54,23 +54,25 @@
           placeholder="Link naar besluit pagina"
           {{on "keyup" (perform this.setLinkTodecision)}}
         />
-        {{#if (and (not this.isInputLinkValid) this.linkToDecision)}}
+        {{#if this.invalidLink}}
           <AuHelpText @skin="secondary" @error={{true}}>
-            Start de url met http:// of https:// om te linken naar de besluit
-            pagina.
+            {{this.invalidLinkErrorMessage}}
           </AuHelpText>
         {{/if}}
       </span>
       <span class="au-u-padding">
         <AuButtonGroup>
           <Shared::Tooltip
-            @showTooltip={{not this.isInputLinkValid}}
+            @showTooltip={{not this.canSaveLinkToDecision}}
             @tooltipText={{this.toolTipText}}
             @alignment="left"
           >
             <AuButton
-              @disabled={{not this.isInputLinkValid}}
-              @loading={{this.addDecisionToMandataris.isRunning}}
+              @disabled={{not this.canSaveLinkToDecision}}
+              @loading={{or
+                this.setLinkTodecision.isRunning
+                this.addDecisionToMandataris.isRunning
+              }}
               {{on "click" (perform this.addDecisionToMandataris)}}
             >
               Bewaar
