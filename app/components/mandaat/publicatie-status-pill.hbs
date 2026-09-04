@@ -64,8 +64,7 @@
     />
     {{#if this.invalidLink}}
       <AuHelpText @skin="secondary" @error={{true}}>
-        Start de url met http:// of https:// om te linken naar de besluit
-        pagina.
+        {{this.invalidLinkErrorMessage}}
       </AuHelpText>
     {{/if}}
   </div>

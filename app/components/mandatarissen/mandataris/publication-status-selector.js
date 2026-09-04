@@ -128,6 +128,31 @@ export default class MandatarissenMandatarisPublicationStatusSelectorComponent e
     );
   }
 
+  get invalidLink() {
+    if (!this.linkToDecision) {
+      return false;
+    }
+    if (!this.isInputLinkValid) {
+      return true;
+    }
+    if (this.setLinkTodecision.isRunning) {
+      return false;
+    }
+    return this.isLinkAccessible === false;
+  }
+
+  get invalidLinkErrorMessage() {
+    if (!this.invalidLink) {
+      return null;
+    }
+
+    if (this.isInputLinkValid && !this.isLinkAccessible) {
+      return 'Deze link is niet bereikbaar. Controleer of de link correct is en of de pagina publiek toegankelijk is.';
+    }
+
+    return 'Start de url met http:// of https:// om te linken naar de besluit pagina.';
+  }
+
   addDecisionToMandataris = task(async () => {
     this.mandataris.linkToBesluit = this.linkToDecision;
     await this.mandataris.save();

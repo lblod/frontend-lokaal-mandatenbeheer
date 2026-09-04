@@ -15,7 +15,7 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
 
   @tracked newLink;
   @tracked showEditLinkModal;
-  @tracked IsLinkAccessible;
+  @tracked isLinkAccessible;
 
   get effectiefIsLastStatus() {
     return effectiefIsLastPublicationStatus(this.args.mandataris);
@@ -56,7 +56,19 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
     if (this.onEditLink.isRunning) {
       return false;
     }
-    return this.IsLinkAccessible === false;
+    return this.isLinkAccessible === false;
+  }
+
+  get invalidLinkErrorMessage() {
+    if (!this.invalidLink) {
+      return null;
+    }
+
+    if (!this.isLinkAccessible && isValidUri(this.newLink)) {
+      return 'Deze link is niet bereikbaar. Controleer of de link correct is en of de pagina publiek toegankelijk is.';
+    }
+
+    return 'Start de url met http:// of https:// om te linken naar de besluit pagina.';
   }
 
   get saveDisabled() {
@@ -104,7 +116,7 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
   @action
   editLink() {
     this.newLink = this.args.mandataris.linkToBesluit;
-    this.IsLinkAccessible = undefined;
+    this.isLinkAccessible = undefined;
     this.showEditLinkModal = true;
   }
 
@@ -114,7 +126,7 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
 
     await timeout(INPUT_DEBOUNCE);
 
-    this.IsLinkAccessible =
+    this.isLinkAccessible =
       await this.mandatarisApi.isDecisionLinkAccessible(link);
   });
 
