@@ -25,10 +25,6 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
     return this.fetchedOptions?.value ?? [];
   }
 
-  get includeReplacedFracties() {
-    return this.args.mandatarisEndDate;
-  }
-
   loadFracties = task({ restartable: true }, async () => {
     if (this.args.limitPersonFractionsToCurrent) {
       // The current fractie is always the only one you can select if it is set!
@@ -41,17 +37,13 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
       }
 
       return await this.fractieApi.samenwerkingForBestuursperiode(
-        this.args.bestuursperiode.id,
-        null,
-        this.includeReplacedFracties
+        this.args.bestuursperiode.id
       );
     }
 
     const samenwerkingsFracties =
       await this.fractieApi.samenwerkingForBestuursperiode(
-        this.args.bestuursperiode.id,
-        null,
-        this.includeReplacedFracties
+        this.args.bestuursperiode.id
       );
     const availableFractions = [...samenwerkingsFracties];
     if (!this.args.isCreating) {

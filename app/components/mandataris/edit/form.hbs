@@ -52,8 +52,8 @@
       @startDate={{this.startDate}}
       @hideStartDate={{true}}
       @endDate={{this.endDate}}
-      @from={{@bestuursorgaanIT.bindingStart}}
-      @to={{@bestuursorgaanIT.bindingEinde}}
+      @from={{this.mandatarisMinStartDate}}
+      @to={{this.mandatarisMaxEndDate}}
       @onChange={{this.updateStartEndDate}}
       @onErrorStateUpdated={{this.updateErrorMap}}
     />
@@ -98,8 +98,8 @@
     <Mandataris::Edit::StartEndDate
       @startDate={{this.startDate}}
       @endDate={{this.endDate}}
-      @from={{@bestuursorgaanIT.bindingStart}}
-      @to={{@bestuursorgaanIT.bindingEinde}}
+      @from={{this.mandatarisMinStartDate}}
+      @to={{this.mandatarisMaxEndDate}}
       @onChange={{this.updateStartEndDate}}
       @onErrorStateUpdated={{this.updateErrorMap}}
     />
