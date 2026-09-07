@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import moment from 'moment';
+import { task as trackedTask } from 'reactiveweb/ember-concurrency';
 
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
@@ -18,21 +19,17 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service toaster;
 
   @tracked _fractie;
-  @tracked fractieOptions = [];
   @tracked showTempError = false;
 
-  constructor() {
-    super(...arguments);
-    this.load.perform();
+  get fractieOptions() {
+    return this.fetchedOptions?.value ?? [];
   }
 
-  load = task(async () => {
-    await this.loadFracties();
-  });
+  get includeReplacedFracties() {
+    return this.args.mandatarisEndDate;
+  }
 
-  async loadFracties() {
-    this.fractieOptions = [];
-
+  loadFracties = task({ restartable: true }, async () => {
     if (this.args.limitPersonFractionsToCurrent) {
       // The current fractie is always the only one you can select if it is set!
       const currentFractie = await this.persoonApi.getCurrentFractie(
@@ -40,19 +37,21 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         this.args.bestuursperiode.id
       );
       if (currentFractie) {
-        this.fractieOptions = [currentFractie];
-      } else {
-        this.fractieOptions =
-          await this.fractieApi.samenwerkingForBestuursperiode(
-            this.args.bestuursperiode.id
-          );
+        return [currentFractie];
       }
-      return;
+
+      return await this.fractieApi.samenwerkingForBestuursperiode(
+        this.args.bestuursperiode.id,
+        null,
+        this.includeReplacedFracties
+      );
     }
 
     const samenwerkingsFracties =
       await this.fractieApi.samenwerkingForBestuursperiode(
-        this.args.bestuursperiode.id
+        this.args.bestuursperiode.id,
+        null,
+        this.includeReplacedFracties
       );
     const availableFractions = [...samenwerkingsFracties];
     if (!this.args.isCreating) {
@@ -64,7 +63,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         );
       availableFractions.push(onafhankelijkeFractie);
     }
-    this.fractieOptions = availableFractions.filter((_fractie) => {
+    return availableFractions.filter((_fractie) => {
       const mandatarisStart = this.args.mandatarisStartDate;
       const mandatarisEnd = this.args.mandatarisEndDate;
 
@@ -86,7 +85,7 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         fractieStartsBeforeOrOnMandatarisStart && fractieCoversMandatarisEnd
       );
     });
-  }
+  });
 
   @action
   async select(fractie) {
@@ -141,4 +140,12 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   get title() {
     return this.args.title || 'Fractie';
   }
+
+  fetchedOptions = trackedTask(this, this.loadFracties, () => [
+    this.args.limitPersonFractionsToCurrent,
+    this.args.person,
+    this.args.bestuursperiode,
+    this.args.mandatarisStartDate,
+    this.args.mandatarisEndDate,
+  ]);
 }
