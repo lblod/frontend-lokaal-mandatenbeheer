@@ -15,18 +15,34 @@ export default class FractieApiService extends Service {
   @service store;
   @service toaster;
 
-  async samenwerkingForBestuursperiode(bestuursperiodeId, sort = null) {
-    return await this.forBestuursperiode(bestuursperiodeId, false, sort);
+  async samenwerkingForBestuursperiode(
+    bestuursperiodeId,
+    sort = null,
+    includeReplaced = false
+  ) {
+    return await this.forBestuursperiode(
+      bestuursperiodeId,
+      false,
+      includeReplaced,
+      sort
+    );
   }
 
   async onafhankelijkForBestuursperiode(bestuursperiodeId) {
     return await this.forBestuursperiode(bestuursperiodeId, true);
   }
 
-  async forBestuursperiode(bestuursperiodeId, onafhankelijk, sort = null) {
+  async forBestuursperiode(
+    bestuursperiodeId,
+    onafhankelijk,
+    includeReplaced,
+    sort = null
+  ) {
     const type = onafhankelijk ? 'onafhankelijk' : 'samenwerking';
+    const includeReplacedFilter = `?includeReplacedFracties=${Boolean(includeReplaced ?? false)}`;
+
     const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/fracties/${type}/${bestuursperiodeId}/bestuursperiode`
+      `${API.MANDATARIS_SERVICE}/fracties/${type}/${bestuursperiodeId}/bestuursperiode${includeReplacedFilter}`
     );
     const jsonResponse = await response.json();
 
