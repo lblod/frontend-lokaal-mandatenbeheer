@@ -202,6 +202,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action updateFractie(newFractie) {
     this.fractie = newFractie;
+    this.updateStartEndDate(null, null);
     this.updateErrorMap({ id: 'fractie', hasErrors: false });
     this.args.onChange({
       ...this.args.formValues,
@@ -272,11 +273,13 @@ export default class MandatarisEditFormComponent extends Component {
   }
 
   get mandatarisMinStartDate() {
+    const orgaanStartDate = this.args.bestuursorgaanIT?.bindingStart;
+    if (!this.fractie?.startDate) {
+      return orgaanStartDate;
+    }
+
     return moment
-      .max(
-        moment(this.fractie?.startDate),
-        moment(this.args.bestuursorgaanIT.bindingStart)
-      )
+      .max(moment(this.fractie.startDate), moment(orgaanStartDate))
       .toDate();
   }
 }
