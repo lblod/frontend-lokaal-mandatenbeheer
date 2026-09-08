@@ -2,7 +2,7 @@
   <AuLabel for="fractie" @error={{@hasErrors}} @required={{@isRequired}}>
     {{this.title}}
   </AuLabel>
-  {{#if this.load.isRunning}}
+  {{#if this.options.isRunning}}
     <p class="skeleton-input-full au-u-margin-top"></p>
   {{else}}
     {{#if @person}}
@@ -18,7 +18,7 @@
         @selected={{@fractie}}
         @onChange={{this.select}}
         @onClose={{@onClose}}
-        @options={{this.fractieOptions}}
+        @options={{this.options}}
         as |fractie|
       >
         {{fractie.naam}}
