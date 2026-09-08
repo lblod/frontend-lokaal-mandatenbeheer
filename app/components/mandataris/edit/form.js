@@ -202,6 +202,7 @@ export default class MandatarisEditFormComponent extends Component {
 
   @action updateFractie(newFractie) {
     this.fractie = newFractie;
+    this.updateStartEndDate(null, null);
     this.updateErrorMap({ id: 'fractie', hasErrors: false });
     this.args.onChange({
       ...this.args.formValues,
@@ -252,5 +253,33 @@ export default class MandatarisEditFormComponent extends Component {
       Het doorstromen van gegevens van de gemeente naar OCMW zal
       hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
       maken, gelieve dit te doen in de gemeente.`;
+  }
+
+  get mandatarisMaxEndDate() {
+    const orgaanEndDate = this.args.bestuursorgaanIT?.bindingEinde;
+    if (!this.fractie?.endDate) {
+      return orgaanEndDate;
+    }
+    if (!orgaanEndDate) {
+      return null;
+    }
+
+    return moment
+      .min(
+        moment(this.fractie?.endDate),
+        moment(this.args.bestuursorgaanIT?.bindingEinde)
+      )
+      .toDate();
+  }
+
+  get mandatarisMinStartDate() {
+    const orgaanStartDate = this.args.bestuursorgaanIT?.bindingStart;
+    if (!this.fractie?.startDate) {
+      return orgaanStartDate;
+    }
+
+    return moment
+      .max(moment(this.fractie.startDate), moment(orgaanStartDate))
+      .toDate();
   }
 }
