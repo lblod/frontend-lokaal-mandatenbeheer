@@ -16,31 +16,34 @@ export default class MandatarisEditStartEndDate extends Component {
 
   constructor() {
     super(...arguments);
-    setTimeout(() => {
-      const oldStartErrorMessage = this.startErrorMessage;
-      const oldEndErrorMessage = this.endErrorMessage;
-      this.startErrorMessage = this.getErrorMessage(
-        this.args.startDate,
-        this.startDateLabel
-      );
-      this.endErrorMessage = this.getErrorMessage(
-        this.args.endDate,
-        this.endDateLabel
-      );
-      if (
-        oldStartErrorMessage !== this.startErrorMessage ||
-        oldEndErrorMessage !== this.endErrorMessage
-      ) {
-        this.args.onErrorStateUpdated?.({
-          id: 'startDate',
-          hasErrors: !!this.startErrorMessage,
-        });
-        this.args.onErrorStateUpdated?.({
-          id: 'endDate',
-          hasErrors: !!this.endErrorMessage,
-        });
-      }
-    });
+    this.args.registerRevalidate?.(this.revalidate);
+  }
+
+  @action
+  revalidate() {
+    const oldStartErrorMessage = this.startErrorMessage;
+    const oldEndErrorMessage = this.endErrorMessage;
+    this.startErrorMessage = this.getErrorMessage(
+      this.args.startDate,
+      this.startDateLabel
+    );
+    this.endErrorMessage = this.getErrorMessage(
+      this.args.endDate,
+      this.endDateLabel
+    );
+    if (
+      oldStartErrorMessage !== this.startErrorMessage ||
+      oldEndErrorMessage !== this.endErrorMessage
+    ) {
+      this.args.onErrorStateUpdated?.({
+        id: 'startDate',
+        hasErrors: !!this.startErrorMessage,
+      });
+      this.args.onErrorStateUpdated?.({
+        id: 'endDate',
+        hasErrors: !!this.endErrorMessage,
+      });
+    }
   }
 
   get hardMinDate() {

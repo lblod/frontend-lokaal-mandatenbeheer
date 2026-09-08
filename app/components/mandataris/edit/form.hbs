@@ -56,6 +56,7 @@
       @to={{this.mandatarisMaxEndDate}}
       @onChange={{this.updateStartEndDate}}
       @onErrorStateUpdated={{this.updateErrorMap}}
+      @registerRevalidate={{this.registerRevalidateDates}}
     />
   {{else}}
     {{#if this.showRangordeField}}
@@ -100,6 +101,7 @@
       @to={{this.mandatarisMaxEndDate}}
       @onChange={{this.updateStartEndDate}}
       @onErrorStateUpdated={{this.updateErrorMap}}
+      @registerRevalidate={{this.registerRevalidateDates}}
     />
   {{/if}}
 </div>
