@@ -1,6 +1,7 @@
-import { EXT, LMB } from 'frontend-lmb/rdf/namespaces';
+import { EXT, LMB, ORG, RDF } from 'frontend-lmb/rdf/namespaces';
 import { NULL_DATE } from 'frontend-lmb/utils/constants';
 import { isRequiredForBestuursorgaan } from '../is-fractie-selector-required';
+import ApplicationRoute from 'frontend-lmb/routes/application';
 
 // Expects bestuursorgaan in de tijd
 export const getApplicationContextMetaTtl = async (bestuursorganen) => {
@@ -93,4 +94,44 @@ export const loadIsFractieRequiredFromContext = (storeOptions) => {
     metaGraph
   );
   return isRequired.value === '1' || isRequired.value === 'true';
+};
+
+export const loadFractieStartEndDateFromStore = async (storeOptions) => {
+  const membershipNode = storeOptions.store.any(
+    null,
+    RDF('type'),
+    ORG('Membership'),
+    storeOptions.sourceGraph
+  );
+
+  if (!membershipNode) {
+    return null;
+  }
+
+  const fractieNode = storeOptions.store.any(
+    membershipNode,
+    ORG('organisation'),
+    null,
+    storeOptions.sourceGraph
+  );
+
+  const fractieUri = fractieNode?.value;
+  if (!fractieUri) {
+    return null;
+  }
+
+  const fractieModel = (
+    await ApplicationRoute.store.query('fractie', {
+      'filter[:uri:]': fractieUri,
+      page: { size: 1 },
+    })
+  )?.[0];
+  if (!fractieModel) {
+    return null;
+  }
+
+  return {
+    startDate: fractieModel.startDate ? new Date(fractieModel.startDate) : null,
+    endDate: fractieModel.endDate ? new Date(fractieModel.endDate) : null,
+  };
 };
