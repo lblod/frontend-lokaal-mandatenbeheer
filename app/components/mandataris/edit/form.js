@@ -253,4 +253,30 @@ export default class MandatarisEditFormComponent extends Component {
       hierdoor ook niet meer gebeuren. Om een wijziging aan beide mandaten te
       maken, gelieve dit te doen in de gemeente.`;
   }
+
+  get mandatarisMaxEndDate() {
+    const orgaanEndDate = this.args.bestuursorgaanIT?.bindingEinde;
+    if (!this.fractie?.endDate) {
+      return orgaanEndDate;
+    }
+    if (!orgaanEndDate) {
+      return null;
+    }
+
+    return moment
+      .min(
+        moment(this.fractie?.endDate),
+        moment(this.args.bestuursorgaanIT?.bindingEinde)
+      )
+      .toDate();
+  }
+
+  get mandatarisMinStartDate() {
+    return moment
+      .max(
+        moment(this.fractie?.startDate),
+        moment(this.args.bestuursorgaanIT.bindingStart)
+      )
+      .toDate();
+  }
 }
