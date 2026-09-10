@@ -36,8 +36,6 @@ export default class MandatarisEditFormComponent extends Component {
 
   @tracked errorMap = new Map();
 
-  revalidateDates;
-
   @use(getStatusOptions) getStatusOptions;
 
   constructor() {
@@ -205,16 +203,10 @@ export default class MandatarisEditFormComponent extends Component {
   @action updateFractie(newFractie) {
     this.fractie = newFractie;
     this.updateErrorMap({ id: 'fractie', hasErrors: false });
-    this.revalidateDates?.();
     this.args.onChange({
       ...this.args.formValues,
       fractie: newFractie,
     });
-  }
-
-  @action
-  registerRevalidateDates(fn) {
-    this.revalidateDates = fn;
   }
 
   @action
