@@ -3,7 +3,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
 import moment from 'moment';
-import { tracked } from '@glimmer/tracking';
 
 import {
   isDateInRange,
