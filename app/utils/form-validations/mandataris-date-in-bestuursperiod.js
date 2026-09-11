@@ -1,24 +1,23 @@
-import moment from 'moment';
-import { NULL_DATE } from '../constants';
-import { loadBestuursorgaanPeriodFromContext } from '../form-context/application-context-meta-ttl';
+import {
+  loadBestuursorgaanPeriodFromContext,
+  loadFractieStartEndDateFromStore,
+} from '../form-context/application-context-meta-ttl';
 import { isDateInRange } from '../date-manipulation';
+import getMinMaxDateBetweenOrgaanAndFractiePeriod from '../getStartEndDateForFractiePeriod';
 
-export const isValidMandatarisDate = ([dateLiteral], options) => {
+export const isValidMandatarisDate = async ([dateLiteral], options) => {
   if (!dateLiteral) {
     return true;
   }
 
   const date = new Date(dateLiteral.value);
   const period = loadBestuursorgaanPeriodFromContext(options);
-  let maxDate = period.endDate;
-  let startDate = period.startDate;
+  const fractiePeriod = await loadFractieStartEndDateFromStore(options);
 
-  if (moment(period.endDate).isSame(moment(NULL_DATE))) {
-    maxDate = null;
-  }
-  if (moment(period.startDate).isSame(moment(NULL_DATE))) {
-    startDate = null;
-  }
+  const { minDate, maxDate } = getMinMaxDateBetweenOrgaanAndFractiePeriod(
+    period,
+    fractiePeriod
+  );
 
-  return isDateInRange(date, startDate, maxDate);
+  return isDateInRange(date, minDate, maxDate);
 };

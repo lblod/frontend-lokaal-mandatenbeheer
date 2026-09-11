@@ -3,7 +3,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
 import moment from 'moment';
-import { tracked } from '@glimmer/tracking';
 
 import {
   isDateInRange,
@@ -11,38 +10,6 @@ import {
 } from 'frontend-lmb/utils/date-manipulation';
 
 export default class MandatarisEditStartEndDate extends Component {
-  @tracked startErrorMessage;
-  @tracked endErrorMessage;
-
-  constructor() {
-    super(...arguments);
-    setTimeout(() => {
-      const oldStartErrorMessage = this.startErrorMessage;
-      const oldEndErrorMessage = this.endErrorMessage;
-      this.startErrorMessage = this.getErrorMessage(
-        this.args.startDate,
-        this.startDateLabel
-      );
-      this.endErrorMessage = this.getErrorMessage(
-        this.args.endDate,
-        this.endDateLabel
-      );
-      if (
-        oldStartErrorMessage !== this.startErrorMessage ||
-        oldEndErrorMessage !== this.endErrorMessage
-      ) {
-        this.args.onErrorStateUpdated?.({
-          id: 'startDate',
-          hasErrors: !!this.startErrorMessage,
-        });
-        this.args.onErrorStateUpdated?.({
-          id: 'endDate',
-          hasErrors: !!this.endErrorMessage,
-        });
-      }
-    });
-  }
-
   get hardMinDate() {
     return isValidDate(this.args.from) ? this.args.from : null;
   }
@@ -96,40 +63,37 @@ export default class MandatarisEditStartEndDate extends Component {
     if (date && !isValidDate(date)) {
       return 'Dit is geen geldige datum';
     }
-    if (!isDateInRange(date, this.minDate, this.maxDate) && isValidDate(date)) {
+    if (moment(date).isBefore(moment(this.minDate), 'day')) {
+      return `Kies een datum vanaf ${moment(this.minDate).format('DD-MM-YYYY')}`;
+    }
+    if (moment(date).isAfter(moment(this.maxDate), 'day')) {
+      return `Kies een datum tot ${moment(this.maxDate).format('DD-MM-YYYY')}`;
+    }
+
+    if (!isDateInRange(date, this.minDate, this.maxDate)) {
       const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
       const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
       if (this.minDate && this.maxDate) {
         return `Kies een datum tussen ${formattedMinDate} en ${formattedMaxDate}.`;
       }
-
-      if (this.minDate && !this.maxDate) {
-        return `Kies een datum vanaf ${formattedMinDate}`;
-      }
-
-      if (!this.minDate && this.maxDate) {
-        return `Kies een datum tot ${formattedMaxDate}`;
-      }
     }
     return null;
+  }
+
+  get startErrorMessage() {
+    return this.getErrorMessage(this.args.startDate, this.startDateLabel);
+  }
+
+  get endErrorMessage() {
+    return this.getErrorMessage(this.args.endDate, this.endDateLabel);
   }
 
   @action
   updateDates(fieldLabel, date) {
     if (fieldLabel === this.startDateLabel) {
       this.args.onChange?.(date, this.args.endDate);
-      this.startErrorMessage = this.getErrorMessage(date, this.startDateLabel);
-      this.endErrorMessage = this.getErrorMessage(
-        this.args.endDate,
-        this.endDateLabel
-      );
     } else {
       this.args.onChange?.(this.args.startDate, date);
-      this.startErrorMessage = this.getErrorMessage(
-        this.args.startDate,
-        this.startDateLabel
-      );
-      this.endErrorMessage = this.getErrorMessage(date, this.endDateLabel);
     }
 
     this.args.onErrorStateUpdated?.({
