@@ -3,7 +3,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
 import moment from 'moment';
-import { tracked } from '@glimmer/tracking';
 
 import {
   isDateInRange,
@@ -11,41 +10,6 @@ import {
 } from 'frontend-lmb/utils/date-manipulation';
 
 export default class MandatarisEditStartEndDate extends Component {
-  @tracked startErrorMessage;
-  @tracked endErrorMessage;
-
-  constructor() {
-    super(...arguments);
-    this.args.registerRevalidate?.(this.revalidate);
-  }
-
-  @action
-  revalidate() {
-    const oldStartErrorMessage = this.startErrorMessage;
-    const oldEndErrorMessage = this.endErrorMessage;
-    this.startErrorMessage = this.getErrorMessage(
-      this.args.startDate,
-      this.startDateLabel
-    );
-    this.endErrorMessage = this.getErrorMessage(
-      this.args.endDate,
-      this.endDateLabel
-    );
-    if (
-      oldStartErrorMessage !== this.startErrorMessage ||
-      oldEndErrorMessage !== this.endErrorMessage
-    ) {
-      this.args.onErrorStateUpdated?.({
-        id: 'startDate',
-        hasErrors: !!this.startErrorMessage,
-      });
-      this.args.onErrorStateUpdated?.({
-        id: 'endDate',
-        hasErrors: !!this.endErrorMessage,
-      });
-    }
-  }
-
   get hardMinDate() {
     return isValidDate(this.args.from) ? this.args.from : null;
   }
@@ -117,22 +81,20 @@ export default class MandatarisEditStartEndDate extends Component {
     return null;
   }
 
+  get startErrorMessage() {
+    return this.getErrorMessage(this.args.startDate, this.startDateLabel);
+  }
+
+  get endErrorMessage() {
+    return this.getErrorMessage(this.args.endDate, this.endDateLabel);
+  }
+
   @action
   updateDates(fieldLabel, date) {
     if (fieldLabel === this.startDateLabel) {
       this.args.onChange?.(date, this.args.endDate);
-      this.startErrorMessage = this.getErrorMessage(date, this.startDateLabel);
-      this.endErrorMessage = this.getErrorMessage(
-        this.args.endDate,
-        this.endDateLabel
-      );
     } else {
       this.args.onChange?.(this.args.startDate, date);
-      this.startErrorMessage = this.getErrorMessage(
-        this.args.startDate,
-        this.startDateLabel
-      );
-      this.endErrorMessage = this.getErrorMessage(date, this.endDateLabel);
     }
 
     this.args.onErrorStateUpdated?.({
