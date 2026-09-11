@@ -10,8 +10,6 @@ import {
   validationResultsForField,
 } from '@lblod/submission-form-helpers';
 
-import moment from 'moment';
-
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
 import { EXT, FIELD_OPTION, ORG, SHACL } from 'frontend-lmb/rdf/namespaces';
 import {
@@ -19,7 +17,7 @@ import {
   loadFractieStartEndDateFromStore,
 } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
 import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
-import { NULL_DATE } from 'frontend-lmb/utils/constants';
+import getMinMaxDateBetweenOrgaanAndFractiePeriod from 'frontend-lmb/utils/getStartEndDateForFractiePeriod';
 
 export default class RdfDateInputComponent extends InputFieldComponent {
   inputId = 'date-' + guidFor(this);
@@ -82,28 +80,12 @@ export default class RdfDateInputComponent extends InputFieldComponent {
       this.storeOptions
     );
 
-    let maxDate = moment(period.endDate).isSame(moment(NULL_DATE))
-      ? null
-      : period.endDate;
-    let startDate = moment(period.startDate).isSame(moment(NULL_DATE))
-      ? null
-      : period.startDate;
+    const { minDate, maxDate } = getMinMaxDateBetweenOrgaanAndFractiePeriod(
+      period,
+      fractiePeriod
+    );
 
-    if (fractiePeriod?.endDate) {
-      maxDate = maxDate
-        ? moment.min(moment(maxDate), moment(fractiePeriod.endDate)).toDate()
-        : moment(fractiePeriod.endDate).toDate();
-    }
-
-    if (fractiePeriod?.startDate) {
-      startDate = startDate
-        ? moment
-            .max(moment(startDate), moment(fractiePeriod.startDate))
-            .toDate()
-        : moment(fractiePeriod.startDate).toDate();
-    }
-
-    this.from = startDate;
+    this.from = minDate;
     this.to = maxDate;
   }
 
