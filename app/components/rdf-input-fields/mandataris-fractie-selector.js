@@ -50,19 +50,33 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
   @tracked isCreating = false;
   @tracked isDisabledForBestuursOrgaan;
 
+  @tracked mandatarisStart = null;
+  @tracked mandatarisEnd = null;
+
   emptySelectorOptions = [];
 
   constructor() {
     super(...arguments);
     this.load();
     this.storeOptions.store.registerObserver(async (formChange) => {
-      const mustTrigger = isPredicateInObserverChange(
+      const mustTriggerForPerson = isPredicateInObserverChange(
         formChange,
         new NamedNode(MANDATARIS_PREDICATE.persoon)
       );
+      const mustTriggerForStartDate = isPredicateInObserverChange(
+        formChange,
+        new NamedNode(MANDATARIS_PREDICATE.startDate)
+      );
+      const mustTriggerForEndDate = isPredicateInObserverChange(
+        formChange,
+        new NamedNode(MANDATARIS_PREDICATE.endDate)
+      );
 
-      if (mustTrigger) {
+      if (mustTriggerForPerson) {
         await this.findPersonInForm.perform();
+      }
+      if (mustTriggerForStartDate || mustTriggerForEndDate) {
+        await this.findStartEndDateInForm.perform();
       }
     });
   }
@@ -75,6 +89,7 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     await Promise.all([
       this.checkIfShouldLimitFractions(),
       this.findPersonInForm.perform(),
+      this.findStartEndDateInForm.perform(),
       this.loadBestuursorganen(),
       this.loadProvidedValue(),
     ]);
@@ -144,6 +159,27 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
     await this.clearFractieIfDifferentPerson(newPerson);
     this.previousPerson = newPerson;
     this.person = newPerson;
+  });
+
+  findStartEndDateInForm = restartableTask(async () => {
+    const possibleMandatarisStart = this.storeOptions.store.any(
+      this.storeOptions.sourceNode,
+      MANDAAT('start'),
+      undefined,
+      this.storeOptions.sourceGraph
+    );
+    const possibleMandatarisEnd = this.storeOptions.store.any(
+      this.storeOptions.sourceNode,
+      MANDAAT('einde'),
+      undefined,
+      this.storeOptions.sourceGraph
+    );
+    this.mandatarisStart = possibleMandatarisStart
+      ? new Date(possibleMandatarisStart.value)
+      : null;
+    this.mandatarisEnd = possibleMandatarisEnd
+      ? new Date(possibleMandatarisEnd.value)
+      : null;
   });
 
   async clearFractieIfDifferentPerson(newPerson) {

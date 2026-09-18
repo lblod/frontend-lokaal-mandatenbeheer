@@ -44,6 +44,8 @@ export const placeholderNietBeschikbaar = {
 export const MANDATARIS_PREDICATE = {
   persoon: 'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan',
   mandaat: 'http://www.w3.org/ns/org#holds',
+  startDate: 'http://data.vlaanderen.be/ns/mandaat#start',
+  endDate: 'http://data.vlaanderen.be/ns/mandaat#einde',
 };
 export const PERSON_PREDICATE = {
   identifier: 'http://www.w3.org/ns/adms#identifier',
