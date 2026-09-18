@@ -231,6 +231,4 @@ export default class MandatarisFractieSelector extends InputFieldComponent {
 
     return await mandatarisMatches.at(0).isBestuurlijkeAliasVan;
   }
-
-
 }
