@@ -63,14 +63,14 @@ export default class MandatarisEditStartEndDate extends Component {
     if (date && !isValidDate(date)) {
       return 'Dit is geen geldige datum';
     }
-    if (moment(date).isBefore(moment(this.minDate), 'day')) {
+    if (date && moment(date).isBefore(moment(this.minDate), 'day')) {
       return `Kies een datum vanaf ${moment(this.minDate).format('DD-MM-YYYY')}`;
     }
-    if (moment(date).isAfter(moment(this.maxDate), 'day')) {
+    if (date && moment(date).isAfter(moment(this.maxDate), 'day')) {
       return `Kies een datum tot ${moment(this.maxDate).format('DD-MM-YYYY')}`;
     }
 
-    if (!isDateInRange(date, this.minDate, this.maxDate)) {
+    if (date && !isDateInRange(date, this.minDate, this.maxDate)) {
       const formattedMinDate = moment(this.minDate).format('DD-MM-YYYY');
       const formattedMaxDate = moment(this.maxDate).format('DD-MM-YYYY');
       if (this.minDate && this.maxDate) {
