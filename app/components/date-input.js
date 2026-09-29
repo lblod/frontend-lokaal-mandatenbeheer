@@ -18,56 +18,40 @@ export default class DateInputComponent extends Component {
   elementId = `date-${guidFor(this)}`;
 
   @tracked dateInputString;
-  @tracked warningMessage;
-  @tracked errorMessage;
 
   constructor() {
     super(...arguments);
     if (this.args.value && isValidDate(this.args.value)) {
-      let date;
-      if (this.args?.endOfDay) {
-        date = this.args.value;
-        this.dateInputString = moment(date).format('DD-MM-YYYY');
-      } else {
-        date = moment(this.args.value).toDate();
-        this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
-      }
-      this.processDate(date);
+      this.dateInputString = moment(this.args.value).format('DD-MM-YYYY');
     }
   }
 
-  onChange = restartableTask(async (event) => {
-    await timeout(INPUT_DEBOUNCE);
-
-    const inputValue = event.target?.value;
-    this.dateInputString = inputValue;
-
-    const date = this.processDate(
-      moment(inputValue, 'DD-MM-YYYY', true).toDate()
-    );
-
-    if (!this.args.isRequired && !isValidDate(date)) {
-      this.errorMessage = null;
+  get parsedDate() {
+    if (!this.dateInputString) {
+      return null;
     }
-
-    if (!isValidDate(date)) {
-      this.args.onChange?.(null, this.errorMessage);
-      return;
-    }
-    this.args.onChange?.(date, this.errorMessage);
-  });
-
-  processDate(date) {
+    let date = moment(this.dateInputString, 'DD-MM-YYYY', true).toDate();
     if (this.args?.endOfDay) {
       date = endOfDay(date);
     }
-    if (!isValidDate(date)) {
-      this.errorMessage = `Datum is ongeldig.`;
-      this.warningMessage = null;
+    return date;
+  }
 
-      return date;
+  get errorMessage() {
+    if (this.dateInputString === undefined) {
+      return null;
     }
-    this.errorMessage = null;
+    if (!isValidDate(this.parsedDate)) {
+      return this.args.isRequired ? `Datum is ongeldig.` : null;
+    }
+    return null;
+  }
+
+  get warningMessage() {
+    const date = this.parsedDate;
+    if (!isValidDate(date)) {
+      return null;
+    }
 
     const minDate = isValidDate(this.args.from) ? this.args.from : null;
     const maxDate =
@@ -76,24 +60,29 @@ export default class DateInputComponent extends Component {
         ? this.args.to
         : null;
 
-    if (!isDateInRange(date, minDate, maxDate)) {
-      const stringMinDate = isValidDate(minDate)
-        ? moment(minDate).format('DD-MM-YYYY')
-        : null;
-      const stringMaxDate = isValidDate(maxDate)
-        ? moment(maxDate).format('DD-MM-YYYY')
-        : null;
-
-      this.warningMessage = this.getErrorMessageForDateRange(
-        stringMinDate,
-        stringMaxDate
-      );
-    } else {
-      this.warningMessage = null;
+    if (isDateInRange(date, minDate, maxDate)) {
+      return null;
     }
 
-    return date;
+    const stringMinDate = isValidDate(minDate)
+      ? moment(minDate).format('DD-MM-YYYY')
+      : null;
+    const stringMaxDate = isValidDate(maxDate)
+      ? moment(maxDate).format('DD-MM-YYYY')
+      : null;
+
+    return this.getErrorMessageForDateRange(stringMinDate, stringMaxDate);
   }
+
+  onChange = restartableTask(async (event) => {
+    await timeout(INPUT_DEBOUNCE);
+
+    const inputValue = event.target?.value;
+    this.dateInputString = inputValue;
+
+    const date = this.parsedDate;
+    this.args.onChange?.(isValidDate(date) ? date : null, this.errorMessage);
+  });
 
   getErrorMessageForDateRange(minDate, maxDate) {
     if (minDate && maxDate) {

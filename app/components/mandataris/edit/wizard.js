@@ -719,7 +719,21 @@ export default class MandatarisEditWizard extends Component {
   }
 
   get replacementLimitTo() {
-    return this.formValues.einde || this.args.bestuursorgaanIT.bindingEinde;
+    if (this.formValues.einde) {
+      return this.formValues.eindes;
+    }
+
+    const orgaanEndDate = this.args.bestuursorgaanIT?.bindingEinde;
+    const fractieEndDate = this.fractieForReplacement?.endDate;
+
+    if (!fractieEndDate) {
+      return orgaanEndDate;
+    }
+    if (!orgaanEndDate) {
+      return fractieEndDate;
+    }
+
+    return moment.min(moment(fractieEndDate), moment(orgaanEndDate)).toDate();
   }
 
   @action

@@ -11,8 +11,13 @@ import {
 } from '@lblod/submission-form-helpers';
 
 import { replaceSingleFormValue } from 'frontend-lmb/utils/replaceSingleFormValue';
-import { EXT, FIELD_OPTION, SHACL } from 'frontend-lmb/rdf/namespaces';
-import { loadBestuursorgaanPeriodFromContext } from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
+import { EXT, FIELD_OPTION, ORG, SHACL } from 'frontend-lmb/rdf/namespaces';
+import {
+  loadBestuursorgaanPeriodFromContext,
+  loadFractieStartEndDateFromStore,
+} from 'frontend-lmb/utils/form-context/application-context-meta-ttl';
+import { isPredicateInObserverChange } from 'frontend-lmb/utils/is-predicate-in-observer-change';
+import getMinMaxDateBetweenOrgaanAndFractiePeriod from 'frontend-lmb/utils/getStartEndDateForFractiePeriod';
 
 export default class RdfDateInputComponent extends InputFieldComponent {
   inputId = 'date-' + guidFor(this);
@@ -22,11 +27,23 @@ export default class RdfDateInputComponent extends InputFieldComponent {
   @tracked from;
   @tracked to;
   @tracked endOfDay;
+  @tracked hasMandatarisDateValidation = false;
 
   constructor() {
     super(...arguments);
     this.loadProvidedValue();
     this.loadOptions();
+
+    this.storeOptions.store.registerObserver(async (formChange) => {
+      const triggerForFractie = isPredicateInObserverChange(
+        formChange,
+        ORG('organisation')
+      );
+
+      if (triggerForFractie && this.hasMandatarisDateValidation) {
+        await this.loadDateBounds();
+      }
+    });
   }
 
   async loadProvidedValue() {
@@ -48,17 +65,28 @@ export default class RdfDateInputComponent extends InputFieldComponent {
       }),
     ]);
 
-    const hasMandatarisDateValidation = [...results[0], ...results[1]].some(
+    this.hasMandatarisDateValidation = [...results[0], ...results[1]].some(
       (validation) =>
         validation.validationType === EXT('ValidMandatarisDate').value
     );
-    if (hasMandatarisDateValidation) {
-      const { startDate, endDate } = loadBestuursorgaanPeriodFromContext(
-        this.storeOptions
-      );
-      this.from = startDate;
-      this.to = endDate;
+    if (this.hasMandatarisDateValidation) {
+      await this.loadDateBounds();
     }
+  }
+
+  async loadDateBounds() {
+    const period = loadBestuursorgaanPeriodFromContext(this.storeOptions);
+    const fractiePeriod = await loadFractieStartEndDateFromStore(
+      this.storeOptions
+    );
+
+    const { minDate, maxDate } = getMinMaxDateBetweenOrgaanAndFractiePeriod(
+      period,
+      fractiePeriod
+    );
+
+    this.from = minDate;
+    this.to = maxDate;
   }
 
   loadOptions() {

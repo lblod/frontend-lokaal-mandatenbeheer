@@ -4,6 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
+import { task as trackedTask } from 'reactiveweb/ember-concurrency';
 import { task } from 'ember-concurrency';
 import { showErrorToast } from 'frontend-lmb/utils/toasts';
 import { JSON_API_TYPE } from 'frontend-lmb/utils/constants';
@@ -17,21 +18,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   @service toaster;
 
   @tracked _fractie;
-  @tracked fractieOptions = [];
   @tracked showTempError = false;
 
-  constructor() {
-    super(...arguments);
-    this.load.perform();
-  }
-
-  load = task(async () => {
-    await this.loadFracties();
-  });
-
-  async loadFracties() {
-    this.fractieOptions = [];
-
+  loadFracties = task({ restartable: true }, async () => {
     if (this.args.limitPersonFractionsToCurrent) {
       // The current fractie is always the only one you can select if it is set!
       const currentFractie = await this.persoonApi.getCurrentFractie(
@@ -39,14 +28,12 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         this.args.bestuursperiode.id
       );
       if (currentFractie) {
-        this.fractieOptions = [currentFractie];
-      } else {
-        this.fractieOptions =
-          await this.fractieApi.samenwerkingForBestuursperiode(
-            this.args.bestuursperiode.id
-          );
+        return [currentFractie];
       }
-      return;
+
+      return await this.fractieApi.samenwerkingForBestuursperiode(
+        this.args.bestuursperiode.id
+      );
     }
 
     const samenwerkingsFracties =
@@ -63,8 +50,8 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
         );
       availableFractions.push(onafhankelijkeFractie);
     }
-    this.fractieOptions = availableFractions;
-  }
+    return availableFractions;
+  });
 
   @action
   async select(fractie) {
@@ -119,4 +106,9 @@ export default class MandatenbeheerFractieSelectorComponent extends Component {
   get title() {
     return this.args.title || 'Fractie';
   }
+
+  options = trackedTask(this, this.loadFracties, () => [
+    this.args.person,
+    this.args.bestuursperiode,
+  ]);
 }
