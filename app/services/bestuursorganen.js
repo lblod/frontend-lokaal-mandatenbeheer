@@ -45,6 +45,7 @@ export default class BestuursorganenService extends Service {
       },
       'filter[:has-no:is-tijdsspecialisatie-van]': true,
       'filter[:has-no:original-bestuurseenheid]': true,
+      'filter[bestuurseenheid][:id:]': this.currentSession.group.id,
       'filter[heeft-tijdsspecialisaties][heeft-bestuursperiode][:id:]':
         bestuursperiode.id,
       include: 'classificatie,heeft-tijdsspecialisaties',
