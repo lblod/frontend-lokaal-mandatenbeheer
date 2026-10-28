@@ -34,7 +34,7 @@ module.exports = function (environment) {
     },
     features: {
       'custom-organen': false,
-      politieraad: true,
+      politieraad: false,
       'editable-forms': false,
       'can-create-custom-form-field': false,
       'shacl-report': true,
