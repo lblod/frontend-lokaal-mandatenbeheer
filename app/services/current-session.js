@@ -11,10 +11,6 @@ import {
   BESTUURSEENHEID_CLASSIFICATIECODE_PROVINCIE,
 } from 'frontend-lmb/utils/well-known-uris';
 
-const MODULE = {
-  MANDATENBEHEER: 'LoketLB-mandaatGebruiker',
-};
-
 const ADMIN_ROLE = 'LoketLB-admin';
 
 export default class CurrentSessionService extends Service {
@@ -128,8 +124,9 @@ export default class CurrentSessionService extends Service {
     );
   }
 
+  // This can be removed?
   get canAccessMandaat() {
-    return this.canAccess(MODULE.MANDATENBEHEER);
+    return true;
   }
 
   get isLokaalBeheerd() {
