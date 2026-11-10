@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
-import { INPUT_DEBOUNCE } from 'frontend-lmb/utils/constants';
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandaatPublicatieStatusPillComponent extends Component {
@@ -124,7 +124,12 @@ export default class MandaatPublicatieStatusPillComponent extends Component {
     const link = e.target.value;
     this.newLink = link;
 
-    await timeout(INPUT_DEBOUNCE);
+    await timeout(SEARCH_TIMEOUT);
+
+    if (!isValidUri(link)) {
+      this.isLinkAccessible = false;
+      return;
+    }
 
     this.isLinkAccessible =
       await this.mandatarisApi.isDecisionLinkAccessible(link);
