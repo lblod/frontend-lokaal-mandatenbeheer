@@ -84,6 +84,9 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 
         if (response.ok) {
           return response;
+        } else if (response?.status >= 400 || response?.status < 500) {
+          // 400 is the server claiming it's our fault, let's believe it
+          retries = 0;
         } else {
           retries = retries - 1;
         }
