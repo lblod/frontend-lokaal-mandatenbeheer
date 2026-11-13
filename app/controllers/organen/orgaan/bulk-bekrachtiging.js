@@ -5,6 +5,8 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 
 import { isValidUri } from 'frontend-lmb/utils/is-valid-uri';
+import { task, timeout } from 'ember-concurrency';
+import { SEARCH_TIMEOUT } from 'frontend-lmb/utils/constants';
 
 export default class BulkBekrachtigingController extends Controller {
   @service mandatarisApi;
@@ -25,7 +27,6 @@ export default class BulkBekrachtigingController extends Controller {
   @tracked status;
 
   @tracked linkToBesluit;
-  @tracked invalidLink = false;
 
   @tracked burgemeesterSelected = 0;
 
@@ -59,26 +60,31 @@ export default class BulkBekrachtigingController extends Controller {
     return 'Alle mandatarissen hebben hun finale publicatiestatus';
   }
 
+  get invalidLink() {
+    return (
+      this.linkToBesluit &&
+      (this.onEditLink.isRunning || !this.isLinkAccessible)
+    );
+  }
+
   @action
   updateStatus(status) {
     this.status = status;
   }
 
-  @action
-  updateLink(event) {
-    if (event && typeof event.preventDefault === 'function') {
-      event.preventDefault();
-    }
-    const link = event.target.value;
+  onEditLink = task({ restartable: true }, async (e) => {
+    const link = e.target.value;
+    this.linkToBesluit = link;
+
+    await timeout(SEARCH_TIMEOUT);
 
     if (!isValidUri(link)) {
-      this.invalidLink = true;
-    } else {
-      this.invalidLink = false;
+      this.isLinkAccessible = false;
+      return;
     }
-
-    this.linkToBesluit = link;
-  }
+    this.isLinkAccessible =
+      await this.mandatarisApi.isDecisionLinkAccessible(link);
+  });
 
   get executeDisabled() {
     if (!this.status) {

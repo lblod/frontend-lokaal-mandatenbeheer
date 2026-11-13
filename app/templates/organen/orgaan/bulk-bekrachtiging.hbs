@@ -111,7 +111,7 @@
           value={{this.linkToBesluit}}
           id="link-to-page"
           placeholder="Link naar de besluitpagina"
-          {{on "input" this.updateLink}}
+          {{on "input" (perform this.onEditLink)}}
         />
         {{#if this.invalidLink}}
           <AuHelpText @skin="secondary" @error={{true}}>
