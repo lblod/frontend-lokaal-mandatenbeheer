@@ -1,39 +1,13 @@
 import Service from '@ember/service';
 
 import { service } from '@ember/service';
-import { timeout } from 'ember-concurrency';
-import {
-  API,
-  JSON_API_TYPE,
-  RESOURCE_CACHE_TIMEOUT,
-  STATUS_CODE,
-} from 'frontend-lmb/utils/constants';
+import { API, JSON_API_TYPE, STATUS_CODE } from 'frontend-lmb/utils/constants';
 import { isValidUri } from 'frontend-lmb/utils/is-valid-uri';
 import { showErrorToast, showSuccessToast } from 'frontend-lmb/utils/toasts';
 
 export default class MandatarisApiService extends Service {
   @service store;
   @service toaster;
-
-  async copyOverNonDomainResourceProperties(oldMandatarisId, newMandatarisId) {
-    const response = await fetch(
-      `${API.MANDATARIS_SERVICE}/mandatarissen/${oldMandatarisId}/copy/${newMandatarisId}`,
-      {
-        method: 'PUT',
-      }
-    );
-    const jsonResponse = await response.json();
-
-    if (response.status !== STATUS_CODE.OK) {
-      console.error(jsonResponse.message);
-      throw {
-        status: response.status,
-        message: jsonResponse.message,
-      };
-    }
-
-    await timeout(RESOURCE_CACHE_TIMEOUT);
-  }
 
   async bulkSetPublicationStatus(mandatarissen, status, decision) {
     const response = await fetch(
